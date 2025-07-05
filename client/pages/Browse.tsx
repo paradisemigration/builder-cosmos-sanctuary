@@ -123,8 +123,10 @@ export default function Browse() {
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (searchQuery) params.set("q", searchQuery);
-    if (selectedCategory) params.set("category", selectedCategory);
-    if (selectedZone) params.set("zone", selectedZone);
+    if (selectedCategory && selectedCategory !== "all")
+      params.set("category", selectedCategory);
+    if (selectedZone && selectedZone !== "all")
+      params.set("zone", selectedZone);
     setSearchParams(params);
   };
 
@@ -196,7 +198,7 @@ export default function Browse() {
                 <SelectValue placeholder="Service Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {businessCategories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -211,7 +213,7 @@ export default function Browse() {
                 <SelectValue placeholder="Dubai Zone" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Areas</SelectItem>
+                <SelectItem value="all">All Areas</SelectItem>
                 {dubaiZones.map((zone) => (
                   <SelectItem key={zone} value={zone}>
                     {zone}
@@ -258,8 +260,8 @@ export default function Browse() {
                   variant="outline"
                   onClick={() => {
                     setSearchQuery("");
-                    setSelectedCategory("");
-                    setSelectedZone("");
+                    setSelectedCategory("all");
+                    setSelectedZone("all");
                     setFilters({
                       categories: [],
                       zones: [],

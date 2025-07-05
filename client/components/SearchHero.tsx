@@ -21,7 +21,11 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   const [selectedZone, setSelectedZone] = useState<string>("");
 
   const handleSearch = () => {
-    onSearch?.(searchQuery, selectedCategory, selectedZone);
+    onSearch?.(
+      searchQuery,
+      selectedCategory === "all" ? "" : selectedCategory,
+      selectedZone === "all" ? "" : selectedZone,
+    );
   };
 
   return (
@@ -69,7 +73,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                   <SelectValue placeholder="Service Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {businessCategories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -84,7 +88,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                   <SelectValue placeholder="Dubai Zone" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Areas</SelectItem>
+                  <SelectItem value="all">All Areas</SelectItem>
                   {dubaiZones.map((zone) => (
                     <SelectItem key={zone} value={zone}>
                       {zone}
