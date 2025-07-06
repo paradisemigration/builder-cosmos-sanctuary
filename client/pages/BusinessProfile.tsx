@@ -34,8 +34,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Navigation as Nav } from "@/components/Navigation";
 import { sampleBusinesses, Business, Review } from "@/lib/data";
 import { ReviewModal } from "@/components/ReviewModal";
@@ -43,15 +41,12 @@ import { ReviewModal } from "@/components/ReviewModal";
 export default function BusinessProfile() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("overview");
-  const [newReview, setNewReview] = useState("");
-  const [newRating, setNewRating] = useState(5);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [businessReviews, setBusinessReviews] = useState<Review[]>([]);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -59,11 +54,6 @@ export default function BusinessProfile() {
 
   // Scroll animations
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
-    window.addEventListener("scroll", handleScroll);
-
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -84,7 +74,6 @@ export default function BusinessProfile() {
     });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       observerRef.current?.disconnect();
     };
   }, []);
@@ -200,10 +189,10 @@ export default function BusinessProfile() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-16 relative">
           {/* Back Navigation */}
           <div
-            className={`mb-8 transition-all duration-1000 ${
+            className={`mb-6 transition-all duration-1000 ${
               visibleSections.includes("hero")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-10"
@@ -220,7 +209,7 @@ export default function BusinessProfile() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Business Info */}
             <div
               className={`lg:col-span-2 transition-all duration-1000 ${
@@ -230,11 +219,11 @@ export default function BusinessProfile() {
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              <div className="flex flex-col md:flex-row items-start gap-6 mb-8">
+              <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 mb-6">
                 {business.logo && (
                   <div className="relative group">
                     <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
-                    <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-white border-4 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105 group-hover:rotate-3">
+                    <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden bg-white border-4 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105 group-hover:rotate-3">
                       <img
                         src={business.logo}
                         alt={`${business.name} logo`}
@@ -246,7 +235,7 @@ export default function BusinessProfile() {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight">
                       {business.name}
                     </h1>
 
@@ -264,73 +253,65 @@ export default function BusinessProfile() {
                           Reported
                         </Badge>
                       )}
-
-                      {business.importedFromGoogle && (
-                        <Badge className="bg-white/10 text-white border-white/20 backdrop-blur-sm">
-                          <Globe className="w-3 h-3 mr-1" />
-                          Google Import
-                        </Badge>
-                      )}
                     </div>
                   </div>
 
-                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm mb-6 text-base px-4 py-2">
+                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm mb-4 text-sm md:text-base px-3 py-1">
                     {business.category}
                   </Badge>
 
-                  <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-3 mb-4">
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-6 h-6 transition-all duration-300 ${
+                          className={`w-4 h-4 md:w-5 md:h-5 transition-all duration-300 ${
                             i < Math.floor(business.rating)
                               ? "text-yellow-400 fill-yellow-400 drop-shadow-sm scale-110"
                               : "text-gray-400"
                           }`}
-                          style={{ animationDelay: `${i * 100}ms` }}
                         />
                       ))}
                     </div>
-                    <span className="text-2xl font-bold text-white">
+                    <span className="text-lg md:text-xl font-bold text-white">
                       {business.rating}
                     </span>
-                    <span className="text-blue-200 text-lg">
+                    <span className="text-blue-200">
                       ({business.reviewCount} reviews)
                     </span>
                   </div>
 
-                  <p className="text-blue-100 text-lg leading-relaxed mb-8">
+                  <p className="text-blue-100 leading-relaxed mb-6 text-sm md:text-base">
                     {business.description}
                   </p>
 
                   {/* Contact Info Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3 text-blue-200">
-                      <MapPin className="w-5 h-5 text-cyan-400" />
-                      <span className="text-sm">{business.address}</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="flex items-center gap-2 text-blue-200 text-sm">
+                      <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span className="truncate">{business.address}</span>
                     </div>
 
-                    <div className="flex items-center gap-3 text-blue-200">
-                      <Phone className="w-5 h-5 text-green-400" />
-                      <span className="text-sm">{business.phone}</span>
+                    <div className="flex items-center gap-2 text-blue-200 text-sm">
+                      <Phone className="w-4 h-4 text-green-400 flex-shrink-0" />
+                      <span>{business.phone}</span>
                     </div>
 
                     {business.email && (
-                      <div className="flex items-center gap-3 text-blue-200">
-                        <Mail className="w-5 h-5 text-purple-400" />
-                        <span className="text-sm">{business.email}</span>
+                      <div className="flex items-center gap-2 text-blue-200 text-sm">
+                        <Mail className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                        <span className="truncate">{business.email}</span>
                       </div>
                     )}
 
                     {business.website && (
-                      <div className="flex items-center gap-3 text-blue-200">
-                        <Globe className="w-5 h-5 text-blue-400" />
+                      <div className="flex items-center gap-2 text-blue-200 text-sm">
+                        <Globe className="w-4 h-4 text-blue-400 flex-shrink-0" />
                         <a
                           href={business.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-cyan-300 hover:text-white transition-colors duration-300 text-sm hover:underline"
+                          className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline"
                         >
                           Visit Website
                         </a>
@@ -352,50 +333,48 @@ export default function BusinessProfile() {
             >
               <div className="sticky top-24">
                 <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
-                  <CardContent className="p-6 lg:p-8">
-                    <div className="space-y-4">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="space-y-3 md:space-y-4">
                       <Button
-                        className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                        className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                         size="lg"
                         onClick={() =>
                           window.open(`tel:${business.phone}`, "_self")
                         }
                       >
-                        <Phone className="w-5 h-5 mr-3 group-hover:animate-bounce" />
+                        <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
                         📞 Call Now
                       </Button>
 
                       {business.whatsapp && (
                         <Button
-                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="lg"
                           onClick={handleWhatsAppClick}
                         >
-                          <MessageCircle className="w-5 h-5 mr-3 group-hover:animate-bounce" />
+                          <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
                           💬 WhatsApp
                         </Button>
                       )}
 
                       <Button
-                        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                         size="lg"
                         onClick={() => {
-                          // Open directions in Google Maps
                           const address = encodeURIComponent(business.address);
                           const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
                           window.open(mapsUrl, "_blank");
                         }}
                       >
-                        <Navigation className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+                        <Navigation className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-pulse" />
                         🗺️ Get Directions
                       </Button>
 
-                      <div className="grid grid-cols-3 gap-2 lg:gap-3 mt-6">
+                      <div className="grid grid-cols-3 gap-2 mt-4 md:mt-6">
                         <Button
-                          className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                          className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
                           onClick={() => {
-                            // Share functionality
                             if (navigator.share) {
                               navigator.share({
                                 title: business.name,
@@ -410,14 +389,13 @@ export default function BusinessProfile() {
                             }
                           }}
                         >
-                          <Share2 className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
+                          <Share2 className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
                           <span className="text-xs block">Share</span>
                         </Button>
                         <Button
-                          className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                          className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
                           onClick={() => {
-                            // Save/bookmark functionality
                             const saved =
                               localStorage.getItem("savedBusinesses");
                             const savedList = saved ? JSON.parse(saved) : [];
@@ -433,14 +411,13 @@ export default function BusinessProfile() {
                             }
                           }}
                         >
-                          <Heart className="w-4 h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
+                          <Heart className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
                           <span className="text-xs block">Save</span>
                         </Button>
                         <Button
-                          className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                          className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
                           onClick={() => {
-                            // Report functionality
                             const reason = prompt(
                               "Please tell us why you want to report this business:",
                             );
@@ -448,11 +425,10 @@ export default function BusinessProfile() {
                               alert(
                                 "Thank you for your report. We will review it shortly.",
                               );
-                              // Here you would typically send the report to your backend
                             }
                           }}
                         >
-                          <Flag className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
+                          <Flag className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
                           <span className="text-xs block">Report</span>
                         </Button>
                       </div>
@@ -462,25 +438,25 @@ export default function BusinessProfile() {
 
                 {/* Opening Hours Card */}
                 {business.openingHours && (
-                  <Card className="mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="flex items-center text-white text-lg">
-                        <Clock className="w-5 h-5 mr-2 text-cyan-400" />⏰
-                        Opening Hours
+                  <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center text-white text-base md:text-lg">
+                        <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 text-cyan-400" />
+                        ⏰ Opening Hours
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
+                    <CardContent className="pt-0">
+                      <div className="space-y-1 md:space-y-2">
                         {Object.entries(business.openingHours).map(
                           ([day, hours]) => (
                             <div
                               key={day}
                               className="flex justify-between items-center py-1"
                             >
-                              <span className="font-medium text-blue-200">
+                              <span className="font-medium text-blue-200 text-sm">
                                 {day}
                               </span>
-                              <span className="text-white text-sm bg-white/10 px-3 py-1 rounded-lg">
+                              <span className="text-white text-xs md:text-sm bg-white/10 px-2 py-1 rounded-lg">
                                 {hours}
                               </span>
                             </div>
@@ -498,15 +474,11 @@ export default function BusinessProfile() {
 
       {/* Enhanced Content Tabs - Mobile Responsive Design */}
       <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12"
         data-section="content"
       >
         <div
-          className={`transition-all duration-1000 ${
-            visibleSections.includes("content")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-10"
-          }`}
+          className={`transition-all duration-1000 ${visibleSections.includes("content") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
           <Tabs
             value={activeTab}
@@ -514,35 +486,35 @@ export default function BusinessProfile() {
             className="w-full"
           >
             {/* Enhanced Mobile-First TabsList */}
-            <div className="sticky top-24 z-40 mb-8">
-              <TabsList className="w-full h-auto bg-gradient-to-r from-white via-blue-50 to-purple-50 backdrop-blur-xl border-2 border-blue-200/50 rounded-2xl p-3 shadow-2xl">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
+            <div className="sticky top-16 md:top-20 z-40 mb-6 md:mb-8">
+              <TabsList className="w-full h-auto bg-gradient-to-r from-white via-blue-50 to-purple-50 backdrop-blur-xl border-2 border-blue-200/50 rounded-2xl p-2 md:p-3 shadow-2xl">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2 w-full">
                   <TabsTrigger
                     value="overview"
-                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-blue-50"
+                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-blue-50"
                   >
-                    <Award className="w-4 h-4 md:w-5 md:h-5" />
+                    <Award className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Overview</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="services"
-                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-green-50"
+                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-green-50"
                   >
-                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5" />
+                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Services</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="reviews"
-                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-yellow-50"
+                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-yellow-50"
                   >
-                    <Star className="w-4 h-4 md:w-5 md:h-5" />
+                    <Star className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Reviews</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="photos"
-                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-pink-50"
+                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-pink-50"
                   >
-                    <Camera className="w-4 h-4 md:w-5 md:h-5" />
+                    <Camera className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Photos</span>
                   </TabsTrigger>
                 </div>
@@ -550,56 +522,54 @@ export default function BusinessProfile() {
             </div>
 
             {/* Overview Tab Content */}
-            <TabsContent value="overview" className="w-full">
-              <div className="space-y-6 md:space-y-8">
-                {/* About Section */}
-                <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
-                      <Award className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+            <TabsContent value="overview" className="w-full mt-0">
+              <div className="space-y-4 md:space-y-6">
+                <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl">
+                  <CardHeader className="pb-3 md:pb-4">
+                    <CardTitle className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                      <Award className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-blue-600" />
                       💼 About This Business
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <p className="text-gray-700 leading-relaxed text-base md:text-lg">
+                  <CardContent className="space-y-4 md:space-y-6">
+                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
                       {business.description}
                     </p>
 
                     {business.licenseNo && (
-                      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 md:p-6 rounded-2xl border border-green-200/50">
-                        <h4 className="font-bold text-green-800 mb-3 flex items-center gap-2 text-sm md:text-base">
-                          <Shield className="w-4 h-4 md:w-5 md:h-5" />
+                      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 md:p-4 lg:p-6 rounded-xl md:rounded-2xl border border-green-200/50">
+                        <h4 className="font-bold text-green-800 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
+                          <Shield className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                           🏛️ License Information
                         </h4>
-                        <p className="text-green-700 font-medium text-sm md:text-base">
+                        <p className="text-green-700 font-medium text-xs md:text-sm lg:text-base">
                           License No: {business.licenseNo}
                         </p>
                       </div>
                     )}
 
-                    {/* Mobile-Optimized Trust Indicators */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-3 md:p-4 rounded-xl border border-blue-200/50 text-center">
-                        <Users className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mx-auto mb-2" />
-                        <div className="text-lg md:text-2xl font-bold text-blue-800">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 lg:gap-4">
+                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-blue-200/50 text-center">
+                        <Users className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-blue-600 mx-auto mb-1 md:mb-2" />
+                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-blue-800">
                           {business.reviewCount}
                         </div>
                         <div className="text-blue-600 text-xs md:text-sm">
                           Happy Customers
                         </div>
                       </div>
-                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 md:p-4 rounded-xl border border-green-200/50 text-center">
-                        <Star className="w-6 h-6 md:w-8 md:h-8 text-green-600 mx-auto mb-2" />
-                        <div className="text-lg md:text-2xl font-bold text-green-800">
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-green-200/50 text-center">
+                        <Star className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-green-600 mx-auto mb-1 md:mb-2" />
+                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-green-800">
                           {business.rating}
                         </div>
                         <div className="text-green-600 text-xs md:text-sm">
                           Average Rating
                         </div>
                       </div>
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 md:p-4 rounded-xl border border-purple-200/50 text-center col-span-2 md:col-span-1">
-                        <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-purple-600 mx-auto mb-2" />
-                        <div className="text-lg md:text-2xl font-bold text-purple-800">
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-purple-200/50 text-center col-span-2 md:col-span-1">
+                        <TrendingUp className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-purple-600 mx-auto mb-1 md:mb-2" />
+                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-purple-800">
                           {business.isVerified ? "✓" : "✗"}
                         </div>
                         <div className="text-purple-600 text-xs md:text-sm">
@@ -610,138 +580,51 @@ export default function BusinessProfile() {
                   </CardContent>
                 </Card>
 
-                {/* Location & Contact */}
-                  <Card className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                        <MapPin className="w-6 h-6 text-purple-600" />
-                        📍 Location & Contact
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="aspect-video bg-gradient-to-br from-gray-100 to-blue-100 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20"></div>
-                        <div className="relative text-center">
-                          <MapPin className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                          <span className="text-gray-700 font-semibold text-lg">
-                            🗺️ Interactive Map
-                          </span>
-                          <p className="text-gray-600 mt-2">
-                            {business.address}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-200/50">
-                            <MapPin className="w-5 h-5 text-blue-600" />
-                            <span className="text-gray-700 font-medium">
-                              {business.address}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200/50">
-                            <Phone className="w-5 h-5 text-green-600" />
-                            <span className="text-gray-700 font-medium">
-                              {business.phone}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="space-y-4">
-                          {business.email && (
-                            <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200/50">
-                              <Mail className="w-5 h-5 text-purple-600" />
-                              <span className="text-gray-700 font-medium">
-                                {business.email}
-                              </span>
-                            </div>
-                          )}
-
-                          {business.website && (
-                            <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border border-orange-200/50">
-                              <Globe className="w-5 h-5 text-orange-600" />
-                              <a
-                                href={business.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-700 font-medium hover:text-orange-600 transition-colors duration-300"
-                              >
-                                Visit Website
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Quick Actions Sidebar */}
-                <div className="space-y-6">
-                  <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
-                    <CardHeader>
-                      <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-3">
-                        <Sparkles className="w-5 h-5 text-green-600" />⚡ Quick
-                        Actions
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <Button className="w-full justify-start bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
-                          <Calendar className="w-5 h-5 mr-3 group-hover:animate-bounce" />
-                          📅 Book Consultation
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start border-2 border-purple-200 text-purple-700 hover:bg-purple-50 font-semibold py-3 rounded-xl transition-all duration-300 group"
-                        >
-                          <MessageCircle className="w-5 h-5 mr-3 group-hover:animate-bounce" />
-                          💬 Send Message
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start border-2 border-orange-200 text-orange-700 hover:bg-orange-50 font-semibold py-3 rounded-xl transition-all duration-300 group"
-                        >
-                          <ExternalLink className="w-5 h-5 mr-3 group-hover:animate-bounce" />
-                          📄 Request Quote
-                        </Button>
-
-                        <Button
-                          onClick={handleSubmitReview}
-                          className="w-full justify-start bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                        >
-                          <Star className="w-5 h-5 mr-3 group-hover:animate-bounce" />
-                          ⭐ Write Review
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                {/* Quick Actions */}
+                <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl">
+                  <CardHeader className="pb-3 md:pb-4">
+                    <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                      <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
+                      ⚡ Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                      <Button className="justify-start bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 md:py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
+                        <Calendar className="w-4 h-4 mr-2 md:mr-3 group-hover:animate-bounce" />
+                        ��� Book Consultation
+                      </Button>
+                      <Button
+                        onClick={handleSubmitReview}
+                        className="justify-start bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-2 md:py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      >
+                        <Star className="w-4 h-4 mr-2 md:mr-3 group-hover:animate-bounce" />
+                        ⭐ Write Review
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
             {/* Services Tab Content */}
-            <TabsContent value="services" className="w-full">
+            <TabsContent value="services" className="w-full mt-0">
               <div className="space-y-4 md:space-y-6">
                 <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+                  <CardHeader className="pb-3 md:pb-4">
+                    <CardTitle className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                      <CheckCircle className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-green-600" />
                       🛠️ Services Offered
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
                       {business.services.map((service, index) => (
                         <div
                           key={index}
-                          className="group p-4 md:p-6 bg-gradient-to-br from-white to-green-50/50 border-2 border-green-100/50 rounded-xl md:rounded-2xl hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+                          className="group p-3 md:p-4 lg:p-6 bg-gradient-to-br from-white to-green-50/50 border-2 border-green-100/50 rounded-xl md:rounded-2xl hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
                         >
-                          <div className="text-2xl md:text-3xl mb-3 md:mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                          <div className="text-xl md:text-2xl lg:text-3xl mb-2 md:mb-3 lg:mb-4 transform group-hover:scale-110 transition-transform duration-300">
                             {index % 6 === 0
                               ? "🛂"
                               : index % 6 === 1
@@ -754,11 +637,12 @@ export default function BusinessProfile() {
                                       ? "📝"
                                       : "✈️"}
                           </div>
-                          <h4 className="font-bold text-gray-800 mb-2 md:mb-3 text-base md:text-lg group-hover:text-green-600 transition-colors duration-300">
+                          <h4 className="font-bold text-gray-800 mb-2 md:mb-3 text-sm md:text-base lg:text-lg group-hover:text-green-600 transition-colors duration-300">
                             {service}
                           </h4>
-                          <p className="text-gray-600 leading-relaxed text-sm md:text-base mb-3 md:mb-4">
-                            Professional {service.toLowerCase()} services with expert guidance and verified credentials.
+                          <p className="text-gray-600 leading-relaxed text-xs md:text-sm lg:text-base mb-2 md:mb-3 lg:mb-4">
+                            Professional {service.toLowerCase()} services with
+                            expert guidance and verified credentials.
                           </p>
                           <Badge className="bg-green-100 text-green-700 font-medium text-xs md:text-sm">
                             ✅ Expert Service
@@ -771,23 +655,20 @@ export default function BusinessProfile() {
               </div>
             </TabsContent>
 
-            <TabsContent value="reviews" className="mt-8">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-6">
+            {/* Reviews Tab Content */}
+            <TabsContent value="reviews" className="w-full mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                <div className="lg:col-span-2 space-y-4 md:space-y-6">
                   {visibleReviews.map((review, index) => (
                     <Card
                       key={review.id}
-                      className={`bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02] opacity-0 animate-fadeInUp`}
-                      style={{
-                        animationDelay: `${index * 150}ms`,
-                        animationFillMode: "forwards",
-                      }}
+                      className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
                     >
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <Avatar className="w-12 h-12 border-2 border-purple-200">
+                      <CardContent className="p-4 md:p-6">
+                        <div className="flex items-start gap-3 md:gap-4">
+                          <Avatar className="w-10 h-10 md:w-12 md:h-12 border-2 border-purple-200">
                             <AvatarImage src={review.userAvatar} />
-                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs md:text-sm">
                               {review.userName
                                 .split(" ")
                                 .map((n) => n[0])
@@ -795,80 +676,60 @@ export default function BusinessProfile() {
                             </AvatarFallback>
                           </Avatar>
 
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-3">
-                                <h4 className="font-bold text-gray-800">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-2 md:mb-3">
+                              <div className="flex items-center gap-2 md:gap-3">
+                                <h4 className="font-bold text-gray-800 text-sm md:text-base">
                                   {review.userName}
                                 </h4>
                                 {review.isVerified && (
-                                  <Badge className="bg-green-100 text-green-700 border-green-200 font-medium">
-                                    <CheckCircle className="w-3 h-3 mr-1" />
+                                  <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-xs">
+                                    <CheckCircle className="w-2 h-2 md:w-3 md:h-3 mr-1" />
                                     Verified
                                   </Badge>
                                 )}
                               </div>
-                              <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                              <span className="text-xs md:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                                 {review.date}
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2 mb-4">
+                            <div className="flex items-center gap-2 mb-3 md:mb-4">
                               {[...Array(5)].map((_, i) => (
                                 <Star
                                   key={i}
-                                  className={`w-5 h-5 transition-all duration-300 ${
+                                  className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-all duration-300 ${
                                     i < review.rating
                                       ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
                                       : "text-gray-300"
                                   }`}
                                 />
                               ))}
-                              <span className="text-lg font-bold text-gray-800 ml-2">
+                              <span className="text-sm md:text-base lg:text-lg font-bold text-gray-800 ml-1 md:ml-2">
                                 {review.rating}.0
                               </span>
                             </div>
 
-                            <p className="text-gray-700 mb-6 leading-relaxed">
+                            <p className="text-gray-700 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                               {review.comment}
                             </p>
 
-                            {review.businessResponse && (
-                              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-xl border border-blue-200/50 mb-4">
-                                <h5 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
-                                  <MessageCircle className="w-4 h-4" />
-                                  Business Response:
-                                </h5>
-                                <p className="text-blue-700">
-                                  {review.businessResponse}
-                                </p>
-                              </div>
-                            )}
-
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-3 md:gap-4">
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => toggleLikeReview(review.id)}
-                                className={`transition-all duration-300 ${
+                                className={`transition-all duration-300 text-xs md:text-sm ${
                                   likedReviews.has(review.id)
                                     ? "text-red-600 bg-red-50"
                                     : "text-gray-600 hover:text-red-600 hover:bg-red-50"
                                 }`}
                               >
                                 <ThumbsUp
-                                  className={`w-4 h-4 mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
+                                  className={`w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
                                 />
                                 Helpful{" "}
                                 {likedReviews.has(review.id) ? "(1)" : ""}
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-gray-600 hover:text-blue-600"
-                              >
-                                <MessageCircle className="w-4 h-4 mr-2" />
-                                Reply
                               </Button>
                             </div>
                           </div>
@@ -882,16 +743,16 @@ export default function BusinessProfile() {
                       <Button
                         onClick={() => setShowAllReviews(!showAllReviews)}
                         variant="outline"
-                        className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-8 py-3 rounded-xl transition-all duration-300 group"
+                        className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-6 md:px-8 py-2 md:py-3 rounded-xl transition-all duration-300 group"
                       >
                         {showAllReviews ? (
                           <>
-                            <ChevronUp className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                            <ChevronUp className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
                             Show Less Reviews
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                            <ChevronDown className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
                             Show All {businessReviews.length} Reviews
                           </>
                         )}
@@ -900,38 +761,37 @@ export default function BusinessProfile() {
                   )}
                 </div>
 
-                {/* Enhanced Review Writing Section */}
+                {/* Review Writing Section */}
                 <div>
                   <Card className="sticky top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border-2 border-yellow-200/50 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-3">
-                        <Star className="w-6 h-6 text-yellow-600" />⭐ Write a
-                        Review
+                    <CardHeader className="pb-3 md:pb-4">
+                      <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                        <Star className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-yellow-600" />
+                        ⭐ Write a Review
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-center py-6">
-                        <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
-                          <Star className="w-10 h-10 text-white" />
+                      <div className="text-center py-4 md:py-6">
+                        <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
+                          <Star className="w-8 h-8 md:w-10 md:h-10 text-white" />
                         </div>
-                        <h3 className="text-lg font-bold text-gray-800 mb-3">
+                        <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 md:mb-3">
                           Share Your Experience
                         </h3>
-                        <p className="text-gray-600 mb-6 leading-relaxed">
+                        <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                           Help others by sharing your experience with{" "}
-                          {business.name}. Your review makes a difference!
+                          {business.name}.
                         </p>
                         <Button
                           onClick={handleSubmitReview}
-                          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 md:py-4 text-sm md:text-base lg:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="lg"
                         >
-                          <Send className="w-5 h-5 mr-3 group-hover:animate-bounce" />
+                          <Send className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
                           ✍️ Write Review
                         </Button>
-                        <p className="text-xs text-gray-500 mt-4 bg-white/50 p-3 rounded-lg">
+                        <p className="text-xs text-gray-500 mt-3 md:mt-4 bg-white/50 p-2 md:p-3 rounded-lg">
                           Sign in with Google or Facebook to verify your review
-                          and build trust in our community
                         </p>
                       </div>
                     </CardContent>
@@ -940,61 +800,61 @@ export default function BusinessProfile() {
               </div>
             </TabsContent>
 
-            <TabsContent value="photos" className="mt-8">
-              <Card className="bg-gradient-to-br from-white via-white to-pink-50/30 border-2 border-pink-100/50 shadow-xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                      <Camera className="w-6 h-6 text-pink-600" />
-                      📸 Photos
-                    </span>
-                    <Button
-                      variant="outline"
-                      className="border-2 border-pink-200 text-pink-700 hover:bg-pink-50 font-semibold rounded-xl transition-all duration-300 group"
-                    >
-                      <Camera className="w-4 h-4 mr-2 group-hover:animate-bounce" />
-                      📷 Add Photos
-                    </Button>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {business.gallery?.map((photo, index) => (
-                      <div
-                        key={index}
-                        className="group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                        onClick={() => {
-                          setSelectedImage(photo);
-                          setIsImageModalOpen(true);
-                        }}
+            {/* Photos Tab Content */}
+            <TabsContent value="photos" className="w-full mt-0">
+              <div className="space-y-4 md:space-y-6">
+                <Card className="bg-gradient-to-br from-white via-white to-pink-50/30 border-2 border-pink-100/50 shadow-xl">
+                  <CardHeader className="pb-3 md:pb-4">
+                    <CardTitle className="flex items-center justify-between">
+                      <span className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                        <Camera className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-pink-600" />
+                        📸 Photos
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-2 border-pink-200 text-pink-700 hover:bg-pink-50 font-semibold rounded-xl transition-all duration-300 group"
                       >
-                        <img
-                          src={photo}
-                          alt={`${business.name} photo ${index + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                    ))}
-
-                    {/* Placeholder photos with animations */}
-                    {[...Array(8)].map((_, index) => (
-                      <div
-                        key={`placeholder-${index}`}
-                        className={`group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl opacity-0 animate-fadeInUp`}
-                        style={{
-                          animationDelay: `${index * 100}ms`,
-                          animationFillMode: "forwards",
-                        }}
-                      >
-                        <div className="text-center">
-                          <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2 group-hover:animate-bounce" />
-                          <p className="text-xs text-gray-500">Add Photo</p>
+                        <Camera className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 group-hover:animate-bounce" />
+                        📷 Add
+                      </Button>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4">
+                      {business.gallery?.map((photo, index) => (
+                        <div
+                          key={index}
+                          className="group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl md:rounded-2xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                          onClick={() => {
+                            setSelectedImage(photo);
+                            setIsImageModalOpen(true);
+                          }}
+                        >
+                          <img
+                            src={photo}
+                            alt={`${business.name} photo ${index + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+
+                      {/* Placeholder photos */}
+                      {[...Array(8)].map((_, index) => (
+                        <div
+                          key={`placeholder-${index}`}
+                          className="group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                        >
+                          <div className="text-center">
+                            <Camera className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mx-auto mb-1 md:mb-2 group-hover:animate-bounce" />
+                            <p className="text-xs text-gray-500">Add Photo</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
