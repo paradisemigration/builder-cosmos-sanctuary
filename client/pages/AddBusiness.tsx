@@ -121,6 +121,53 @@ export default function AddBusiness() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Business name search handlers
+  const handleBusinessSearchChange = (value: string) => {
+    setBusinessSearchQuery(value);
+    setBusinessNameVerified(false);
+    setExistingBusiness(null);
+
+    if (value.length >= 3) {
+      const filteredBusinesses = sampleBusinesses
+        .filter((business) =>
+          business.name.toLowerCase().includes(value.toLowerCase()),
+        )
+        .slice(0, 5);
+
+      setBusinessSuggestions(filteredBusinesses);
+      setShowBusinessSuggestions(true);
+    } else {
+      setShowBusinessSuggestions(false);
+      setBusinessSuggestions([]);
+    }
+  };
+
+  const handleBusinessSelection = (business: any) => {
+    setBusinessSearchQuery(business.name);
+    setExistingBusiness(business);
+    setShowBusinessSuggestions(false);
+    setBusinessNameVerified(false);
+  };
+
+  const handleBusinessNameVerification = () => {
+    const exactMatch = sampleBusinesses.find(
+      (business) =>
+        business.name.toLowerCase() === businessSearchQuery.toLowerCase(),
+    );
+
+    if (exactMatch) {
+      setExistingBusiness(exactMatch);
+      setBusinessNameVerified(false);
+    } else {
+      setBusinessNameVerified(true);
+      setFormData((prev) => ({ ...prev, name: businessSearchQuery }));
+    }
+  };
+
+  const proceedWithNewBusiness = () => {
+    setCurrentStep(1);
+  };
+
   const addService = () => {
     if (newService.trim() && !formData.services.includes(newService.trim())) {
       setFormData((prev) => ({
