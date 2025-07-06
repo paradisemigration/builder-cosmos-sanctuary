@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/dialog";
 import { sampleBusinesses, Business } from "@/lib/data";
 import { ReviewManagement } from "@/components/ReviewManagement";
+import { Navigation } from "@/components/Navigation";
 
 const businessStatuses = {
   pending: { label: "Pending Review", color: "bg-yellow-100 text-yellow-800" },
@@ -307,45 +308,38 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Enhanced Mobile Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      {/* Navigation */}
+      <Navigation />
+
+      {/* Admin Header */}
+      <div className="bg-gradient-to-r from-orange-50 to-purple-50 border-b border-orange-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0">
-                <h1 className="text-lg sm:text-2xl font-bold text-primary">
-                  Admin<span className="text-dubai-gold">Panel</span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-800">
+                  Admin Panel
                 </h1>
-              </Link>
+                <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="hidden sm:block text-sm text-muted-foreground">
-                Admin: {user?.name}
-              </div>
-              <div className="sm:hidden text-xs text-muted-foreground">
-                {user?.name}
-              </div>
-              <Link to="/">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="hidden sm:inline-flex"
-                >
-                  Back to Site
-                </Button>
-                <Button variant="outline" size="sm" className="sm:hidden px-2">
-                  Back
-                </Button>
-              </Link>
-              <Button size="sm" onClick={handleLogout} className="px-3 sm:px-4">
+              <Button
+                size="sm"
+                onClick={handleLogout}
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+              >
                 <span className="hidden sm:inline">Logout</span>
                 <span className="sm:hidden">Exit</span>
               </Button>
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
