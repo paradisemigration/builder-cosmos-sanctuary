@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
+import { EmailService } from "@/lib/emailService";
+import { toast } from "sonner";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -116,15 +118,38 @@ export default function Login() {
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (registerData.password !== registerData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    // In a real app, this would register with backend
-    console.log("Registration attempt:", registerData);
-    alert("Registration functionality would be implemented here!");
+
+    try {
+      // In a real app, this would register with backend
+      console.log("Registration attempt:", registerData);
+
+      // Simulate successful registration and send welcome email
+      const emailSent = await EmailService.sendWelcomeEmail({
+        userName: registerData.name,
+        userEmail: registerData.email,
+        provider: "email",
+        isNewUser: true,
+      });
+
+      if (emailSent) {
+        toast.success(
+          `Welcome ${registerData.name}! 🎉 Thank you email sent to ${registerData.email}`,
+        );
+        alert(
+          `Registration successful! Welcome email sent to ${registerData.email}`,
+        );
+      } else {
+        alert("Registration successful! (Email notification failed)");
+      }
+    } catch (error) {
+      alert("Registration failed. Please try again.");
+    }
   };
 
   const handleSocialLogin = async (provider: string) => {
