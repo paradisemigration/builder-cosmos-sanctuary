@@ -60,7 +60,7 @@ export default function Index() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex lg:items-center">
+            <div className="flex items-center">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
                   to="/"
