@@ -248,10 +248,10 @@ export default function BusinessProfile() {
             }`}
             style={{ transitionDelay: "200ms" }}
           >
-            <div className="text-center mb-8 max-w-4xl mx-auto">
+            <div className="text-center mb-6 md:mb-8 max-w-4xl mx-auto px-4">
               {business.logo && (
-                <div className="relative mx-auto mb-6">
-                  <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl">
+                <div className="relative mx-auto mb-4 md:mb-6">
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-4 md:border-6 border-white shadow-2xl mx-auto">
                     <img
                       src={business.logo}
                       alt={`${business.name} logo`}
@@ -261,26 +261,26 @@ export default function BusinessProfile() {
                 </div>
               )}
 
-              <div className="space-y-4">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
+              <div className="space-y-3 md:space-y-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight px-2">
                   {business.name}
                 </h1>
 
-                <div className="flex flex-wrap items-center justify-center gap-3">
-                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
+                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
+                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
                     {business.category}
                   </Badge>
 
                   {business.isVerified && (
-                    <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-base md:text-lg px-4 py-2">
-                      <Shield className="w-5 h-5 mr-2" />
+                    <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
+                      <Shield className="w-4 h-4 md:w-5 md:h-5 mr-1.5 md:mr-2" />
                       Verified
                     </Badge>
                   )}
 
                   {business.isScamReported && (
-                    <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
-                      <AlertTriangle className="w-5 h-5 mr-2" />
+                    <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
+                      <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 mr-1.5 md:mr-2" />
                       Reported
                     </Badge>
                   )}
@@ -288,15 +288,15 @@ export default function BusinessProfile() {
               </div>
 
               {/* Business Details Section */}
-              <div className="space-y-6 mt-8">
+              <div className="space-y-4 md:space-y-6 mt-6 md:mt-8 px-4">
                 {/* Rating Section */}
-                <div className="text-center mb-6">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="flex items-center gap-1">
+                <div className="text-center mb-4 md:mb-6">
+                  <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <div className="flex items-center gap-0.5 md:gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${
+                          className={`w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-all duration-300 ${
                             i < Math.floor(business.rating)
                               ? "text-yellow-400 fill-yellow-400 drop-shadow-sm scale-110"
                               : "text-gray-400"
@@ -304,49 +304,53 @@ export default function BusinessProfile() {
                         />
                       ))}
                     </div>
-                    <span className="text-xl md:text-2xl font-bold text-white">
+                    <span className="text-lg md:text-xl lg:text-2xl font-bold text-white">
                       {business.rating}
                     </span>
-                    <span className="text-blue-200 text-lg">
+                    <span className="text-blue-200 text-sm md:text-lg">
                       ({business.reviewCount} reviews)
                     </span>
                   </div>
                 </div>
 
                 {/* Description */}
-                <div className="text-center mb-8">
-                  <p className="text-blue-100 leading-relaxed text-base md:text-lg max-w-3xl mx-auto">
+                <div className="text-center mb-6 md:mb-8">
+                  <p className="text-blue-100 leading-relaxed text-sm md:text-base lg:text-lg max-w-3xl mx-auto px-2">
                     {business.description}
                   </p>
                 </div>
 
                 {/* Contact Info Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                  <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                    <span className="truncate">{business.address}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-w-2xl mx-auto">
+                  <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
+                    <MapPin className="w-4 h-4 md:w-5 md:h-5 text-cyan-400 flex-shrink-0" />
+                    <span className="truncate text-center">
+                      {business.address}
+                    </span>
                   </div>
 
-                  <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <Phone className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span>{business.phone}</span>
+                  <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
+                    <Phone className="w-4 h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
+                    <span className="text-center">{business.phone}</span>
                   </div>
 
                   {business.email && (
-                    <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                      <Mail className="w-5 h-5 text-purple-400 flex-shrink-0" />
-                      <span className="truncate">{business.email}</span>
+                    <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
+                      <Mail className="w-4 h-4 md:w-5 md:h-5 text-purple-400 flex-shrink-0" />
+                      <span className="truncate text-center">
+                        {business.email}
+                      </span>
                     </div>
                   )}
 
                   {business.website && (
-                    <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                      <Globe className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                    <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
+                      <Globe className="w-4 h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
                       <a
                         href={business.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline"
+                        className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline text-center"
                       >
                         Visit Website
                       </a>
