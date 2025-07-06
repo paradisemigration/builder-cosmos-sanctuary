@@ -169,14 +169,17 @@ export default function Index() {
               return (
                 <Card
                   key={category}
-                  className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-border/50 hover:border-primary/30 bg-gradient-to-br from-white to-primary/5"
                 >
-                  <CardHeader>
+                  <CardHeader className="pb-4">
                     <CardTitle className="flex items-center justify-between">
-                      <span className="group-hover:text-primary transition-colors">
+                      <span className="group-hover:text-primary transition-colors text-foreground font-bold">
                         {category}
                       </span>
-                      <Badge variant="secondary">
+                      <Badge
+                        variant="secondary"
+                        className="bg-primary/10 text-primary border-primary/20"
+                      >
                         {categoryBusinesses.length}
                       </Badge>
                     </CardTitle>
@@ -184,8 +187,8 @@ export default function Index() {
                   <CardContent>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-accent fill-accent" />
-                        <span className="text-sm font-medium">
+                        <Star className="w-4 h-4 text-dubai-gold fill-dubai-gold" />
+                        <span className="text-sm font-medium text-foreground">
                           {avgRating.toFixed(1)}
                         </span>
                       </div>
@@ -194,7 +197,7 @@ export default function Index() {
                       </span>
                     </div>
 
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                       Professional {category.toLowerCase()} services with
                       verified credentials and customer reviews.
                     </p>
@@ -202,7 +205,7 @@ export default function Index() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full"
+                      className="w-full border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-200"
                       onClick={() => handleSearch("", category, "")}
                     >
                       Browse {category}
