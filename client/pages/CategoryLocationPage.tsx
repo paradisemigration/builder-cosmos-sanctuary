@@ -60,6 +60,39 @@ export default function CategoryLocationPage() {
   const locationName = location ? getDisplayName(location, "location") : "";
   const categoryName = category ? getDisplayName(category, "category") : "";
 
+  // Generate dynamic page title
+  const generatePageTitle = () => {
+    const websiteTitle = "TrustedImmigration";
+    let title = "";
+
+    if (category && location) {
+      // Best Study Visa Consultant in Dubai - TrustedImmigration
+      title = `Best ${categoryName} Consultant in ${locationName} - ${websiteTitle}`;
+    } else if (category) {
+      // Best Study Visa Services - TrustedImmigration
+      title = `Best ${categoryName} Services - ${websiteTitle}`;
+    } else if (location) {
+      // Immigration Services in Dubai - TrustedImmigration
+      title = `Immigration Services in ${locationName} - ${websiteTitle}`;
+    } else {
+      // Immigration Services Directory - TrustedImmigration
+      title = `Immigration Services Directory - ${websiteTitle}`;
+    }
+
+    return title;
+  };
+
+  // Set page title
+  useEffect(() => {
+    const title = generatePageTitle();
+    document.title = title;
+
+    // Cleanup: Reset title when component unmounts
+    return () => {
+      document.title = "TrustedImmigration - Dubai's #1 Immigration Directory";
+    };
+  }, [location, category, locationName, categoryName]);
+
   useEffect(() => {
     let filtered = sampleBusinesses;
 
