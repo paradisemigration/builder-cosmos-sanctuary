@@ -378,8 +378,14 @@ export default function BusinessProfile() {
 
                       <Button
                         variant="outline"
-                        className="w-full border-2 border-white/30 text-white hover:bg-white/20 font-semibold py-4 text-lg rounded-xl backdrop-blur-sm transition-all duration-300 group"
+                        className="w-full border-2 border-white/50 text-white hover:bg-white/30 hover:border-white/70 font-bold py-4 text-lg rounded-xl backdrop-blur-sm shadow-lg transition-all duration-300 group"
                         size="lg"
+                        onClick={() => {
+                          // Open directions in Google Maps
+                          const address = encodeURIComponent(business.address);
+                          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
+                          window.open(mapsUrl, "_blank");
+                        }}
                       >
                         <Navigation className="w-5 h-5 mr-3 group-hover:animate-pulse" />
                         🗺️ Get Directions
