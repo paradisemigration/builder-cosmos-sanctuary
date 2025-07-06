@@ -36,10 +36,54 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   const [selectedZone, setSelectedZone] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
+  const [locationDisplayText, setLocationDisplayText] = useState<string>(
+    "Detecting your location...",
+  );
+
+  // Use geolocation hook
+  const {
+    location,
+    isLoading: locationLoading,
+    error: locationError,
+  } = useGeolocation();
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  // Update location display when geolocation data is available
+  useEffect(() => {
+    if (location) {
+      // Format location display based on detected location
+      const locationText =
+        location.country === "United Arab Emirates" ||
+        location.countryCode === "AE"
+          ? `${location.city}, UAE`
+          : `${location.city}, ${location.country}`;
+
+      setLocationDisplayText(locationText);
+
+      // Auto-set Dubai zones if user is in UAE, otherwise keep it general
+      if (
+        location.country === "United Arab Emirates" ||
+        location.countryCode === "AE"
+      ) {
+        // If in UAE, try to match with Dubai zones
+        const matchingZone = dubaiZones.find(
+          (zone) =>
+            location.city.toLowerCase().includes(zone.toLowerCase()) ||
+            zone.toLowerCase().includes(location.city.toLowerCase()),
+        );
+        if (matchingZone) {
+          setSelectedZone(matchingZone);
+        }
+      }
+    } else if (locationError) {
+      setLocationDisplayText("Location not available");
+    } else if (locationLoading) {
+      setLocationDisplayText("Detecting your location...");
+    }
+  }, [location, locationError, locationLoading]);
 
   const handleSearch = () => {
     onSearch?.(
