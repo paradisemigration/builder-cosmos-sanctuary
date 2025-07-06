@@ -398,12 +398,14 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 <Button
                   onClick={handleSearch}
                   size="lg"
-                  className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 text-white font-bold px-8 md:px-12 lg:px-16 py-4 md:py-5 lg:py-6 text-base md:text-lg lg:text-xl h-auto rounded-xl md:rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group overflow-hidden w-full"
+                  className="relative bg-gradient-to-r from-orange-600 via-purple-600 to-orange-600 hover:from-orange-700 hover:via-purple-700 hover:to-orange-700 text-white font-bold px-8 md:px-12 lg:px-16 py-4 md:py-5 lg:py-6 text-base md:text-lg lg:text-xl h-auto rounded-xl md:rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group overflow-hidden w-full"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   <Search className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mr-2 md:mr-4" />
                   <span className="font-extrabold">
-                    🔍 Find Your Immigration Partner
+                    {location && location.countryCode !== "AE"
+                      ? `🔍 Find Services in ${location.city}`
+                      : "🔍 Find Your Immigration Partner"}
                   </span>
                 </Button>
               </div>
