@@ -1,3 +1,5 @@
+import { businessLogos, coverImages } from "./logoUrls";
+
 export interface Business {
   id: string;
   name: string;
@@ -116,7 +118,7 @@ export const sampleBusinesses: Business[] = [
     id: "2",
     name: "Emirates Immigration Consultants",
     category: "Immigration Consultants",
-    logo: "/api/placeholder/80/80",
+    logo: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=80&h=80&fit=crop&crop=center",
     coverImage: "/api/placeholder/400/200",
     description:
       "Certified immigration consultants specializing in UAE residence visas, golden visas, and citizenship services.",
