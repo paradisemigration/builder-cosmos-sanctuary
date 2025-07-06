@@ -262,7 +262,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                       <Search className="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-hover:text-orange-500 transition-colors duration-300" />
                     </div>
                     <Input
-                      placeholder="Search visa services, immigration consultants..."
+                      placeholder="Search by company name..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-12 md:pl-16 h-12 md:h-14 lg:h-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium transition-all duration-300 hover:border-gray-300"
