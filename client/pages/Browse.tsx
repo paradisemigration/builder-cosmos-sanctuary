@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { Search, MapPin, Filter } from "lucide-react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { BusinessCard } from "@/components/BusinessCard";
@@ -378,9 +378,7 @@ export default function Browse() {
                     >
                       <BusinessCard
                         business={business}
-                        onClick={() =>
-                          (window.location.href = `/business/${business.id}`)
-                        }
+                        onClick={() => navigate(`/business/${business.id}`)}
                       />
                     </div>
                   ))}
