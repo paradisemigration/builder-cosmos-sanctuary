@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Star,
@@ -29,14 +29,14 @@ export default function Index() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // Handle window resize to update mobile state
-  useState(() => {
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  });
+  }, []);
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
