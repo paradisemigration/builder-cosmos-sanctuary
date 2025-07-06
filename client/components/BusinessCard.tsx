@@ -6,6 +6,8 @@ import {
   CheckCircle,
   AlertTriangle,
   MessageCircle,
+  ExternalLink,
+  Eye,
 } from "lucide-react";
 import { Business } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
