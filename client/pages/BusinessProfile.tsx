@@ -389,26 +389,69 @@ export default function BusinessProfile() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-white/20 text-white hover:bg-white/20 backdrop-blur-sm rounded-xl py-3 transition-all duration-300 group"
+                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
+                          onClick={() => {
+                            // Share functionality
+                            if (navigator.share) {
+                              navigator.share({
+                                title: business.name,
+                                text: `Check out ${business.name} on Trusted Immigration`,
+                                url: window.location.href,
+                              });
+                            } else {
+                              navigator.clipboard.writeText(
+                                window.location.href,
+                              );
+                              alert("Link copied to clipboard!");
+                            }
+                          }}
                         >
                           <Share2 className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          Share
+                          <span className="text-xs">Share</span>
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-white/20 text-white hover:bg-white/20 backdrop-blur-sm rounded-xl py-3 transition-all duration-300 group"
+                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
+                          onClick={() => {
+                            // Save/bookmark functionality
+                            const saved =
+                              localStorage.getItem("savedBusinesses");
+                            const savedList = saved ? JSON.parse(saved) : [];
+                            if (!savedList.includes(business.id)) {
+                              savedList.push(business.id);
+                              localStorage.setItem(
+                                "savedBusinesses",
+                                JSON.stringify(savedList),
+                              );
+                              alert("Business saved to your favorites!");
+                            } else {
+                              alert("Business already saved!");
+                            }
+                          }}
                         >
                           <Heart className="w-4 h-4 mb-1 group-hover:scale-110 group-hover:text-red-400 transition-all duration-300" />
-                          Save
+                          <span className="text-xs">Save</span>
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-white/20 text-white hover:bg-white/20 backdrop-blur-sm rounded-xl py-3 transition-all duration-300 group"
+                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
+                          onClick={() => {
+                            // Report functionality
+                            const reason = prompt(
+                              "Please tell us why you want to report this business:",
+                            );
+                            if (reason) {
+                              alert(
+                                "Thank you for your report. We will review it shortly.",
+                              );
+                              // Here you would typically send the report to your backend
+                            }
+                          }}
                         >
                           <Flag className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          Report
+                          <span className="text-xs">Report</span>
                         </Button>
                       </div>
                     </div>
