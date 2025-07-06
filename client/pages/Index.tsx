@@ -81,19 +81,75 @@ export default function Index() {
       <SearchHero onSearch={handleSearch} />
 
       {/* Stats Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section
+        className="py-20 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden"
+        data-section="stats"
+      >
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 opacity-20">
+            <svg className="w-full h-full" viewBox="0 0 100 100">
+              <defs>
+                <radialGradient id="statsGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#1e40af" stopOpacity="0.1" />
+                </radialGradient>
+              </defs>
+              <rect width="100" height="100" fill="url(#statsGrad)" />
+            </svg>
+          </div>
+
+          {/* Floating Elements */}
+          <div className="absolute top-8 left-8 w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+          <div
+            className="absolute top-16 right-12 w-6 h-6 bg-cyan-400 rounded-full animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute bottom-12 left-16 w-3 h-3 bg-purple-400 rounded-full animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div
+            className={`text-center mb-16 transition-all duration-1000 ${visibleSections.includes("stats") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              Trusted by <span className="gradient-text">Thousands</span>
+            </h2>
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+              Join our growing community of successful immigration stories
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg mb-4">
-                  <stat.icon className="w-6 h-6 text-primary" />
-                </div>
-                <div className="text-3xl font-bold text-foreground mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {stat.label}
+              <div
+                key={index}
+                className={`group text-center transition-all duration-700 ${
+                  visibleSections.includes("stats")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500 transform scale-110"></div>
+
+                  <div className="relative bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 group-hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                      <stat.icon className="w-8 h-8 text-white" />
+                    </div>
+
+                    <div className="text-4xl lg:text-5xl font-black text-white mb-3 group-hover:text-cyan-200 transition-colors">
+                      {stat.value}
+                    </div>
+
+                    <div className="text-lg text-blue-200 font-medium group-hover:text-white transition-colors">
+                      {stat.label}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -102,33 +158,81 @@ export default function Index() {
       </section>
 
       {/* Featured Businesses */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Top Rated Services
+      <section
+        className="py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden"
+        data-section="featured"
+      >
+        {/* Background Decoration */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-400 rounded-full animate-float"></div>
+          <div
+            className="absolute top-40 right-32 w-24 h-24 bg-purple-400 rounded-full animate-float"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute bottom-32 left-1/3 w-20 h-20 bg-cyan-400 rounded-full animate-float"
+            style={{ animationDelay: "2s" }}
+          ></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div
+            className={`flex flex-col lg:flex-row items-center justify-between mb-16 transition-all duration-1000 ${visibleSections.includes("featured") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+          >
+            <div className="text-center lg:text-left mb-8 lg:mb-0">
+              <div className="inline-flex items-center justify-center mb-4">
+                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-blue-200 rounded-full px-6 py-2">
+                  <span className="text-blue-700 font-semibold text-sm">
+                    ⭐ TOP RATED
+                  </span>
+                </div>
+              </div>
+
+              <h2 className="text-4xl lg:text-5xl font-black text-gray-800 mb-4">
+                <span className="block">Featured</span>
+                <span className="gradient-text">Immigration Partners</span>
               </h2>
-              <p className="text-muted-foreground text-lg">
-                Discover the most trusted visa and immigration services in Dubai
+
+              <p className="text-xl text-gray-600 max-w-2xl">
+                Handpicked professionals with proven track records and excellent
+                customer satisfaction ratings
               </p>
             </div>
 
-            <Link to="/browse">
-              <Button variant="outline" size="lg">
-                View All
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+            <div
+              className={`transition-all duration-1000 ${visibleSections.includes("featured") ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
+              style={{ transitionDelay: "0.3s" }}
+            >
+              <Link to="/browse">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
+                  <span>Explore All Services</span>
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredBusinesses.slice(0, 6).map((business) => (
-              <BusinessCard
+            {featuredBusinesses.slice(0, 6).map((business, index) => (
+              <div
                 key={business.id}
-                business={business}
-                onClick={() => navigate(`/business/${business.id}`)}
-              />
+                className={`group transition-all duration-700 ${
+                  visibleSections.includes("featured")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: `${index * 150 + 500}ms` }}
+              >
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 rounded-xl blur opacity-0 group-hover:opacity-25 transition duration-500"></div>
+                  <div className="relative transform group-hover:scale-105 transition-transform duration-300">
+                    <BusinessCard
+                      business={business}
+                      onClick={() => navigate(`/business/${business.id}`)}
+                    />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
