@@ -39,6 +39,8 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   const [locationDisplayText, setLocationDisplayText] = useState<string>(
     "Detecting your location...",
   );
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<typeof sampleBusinesses>([]);
 
   // Use geolocation hook
   const {
