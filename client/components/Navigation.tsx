@@ -106,6 +106,20 @@ export function Navigation({ className = "" }: NavigationProps) {
                 )}
               </Link>
 
+              <Link
+                to="/report"
+                className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
+                  isCurrentPage("/report")
+                    ? "text-white bg-gradient-to-r from-red-500 to-orange-500 shadow-lg shadow-red-500/25"
+                    : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                }`}
+              >
+                <span className="relative z-10">⚠️ Report Scam</span>
+                {!isCurrentPage("/report") && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                )}
+              </Link>
+
               {/* Enhanced Authentication Section */}
               {isAuthenticated ? (
                 <div className="flex items-center space-x-3 ml-6">
