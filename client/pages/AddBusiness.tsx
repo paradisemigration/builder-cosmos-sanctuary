@@ -205,7 +205,7 @@ export default function AddBusiness() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
       {/* Navigation */}
       <Navigation />
-            <div className="flex items-center">
+
       {/* Enhanced Hero Header */}
       <div
         className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden"
