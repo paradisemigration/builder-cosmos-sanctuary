@@ -57,13 +57,48 @@ export default function Index() {
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
-    // Navigate to browse page with filters using React Router
-    const params = new URLSearchParams();
-    if (query) params.set("q", query);
-    if (category) params.set("category", category);
-    if (zone) params.set("zone", zone);
 
-    navigate(`/browse?${params.toString()}`);
+    // Generate SEO-friendly URLs for category and location searches
+    if (category && zone && category !== "all" && zone !== "all") {
+      // Format location and category for URL
+      const locationSlug = zone
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+      const categorySlug = category
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      // Navigate to SEO-friendly URL: /location/category
+      navigate(`/${locationSlug}/${categorySlug}`);
+    } else if (category && category !== "all") {
+      // Category only search
+      const categorySlug = category
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+      navigate(`/category/${categorySlug}`);
+    } else if (zone && zone !== "all") {
+      // Location only search
+      const locationSlug = zone
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+      navigate(`/location/${locationSlug}`);
+    } else {
+      // Fallback to browse page with query parameters for text searches
+      const params = new URLSearchParams();
+      if (query) params.set("q", query);
+      if (category && category !== "all") params.set("category", category);
+      if (zone && zone !== "all") params.set("zone", zone);
+
+      navigate(`/browse?${params.toString()}`);
+    }
   };
 
   const stats = [
