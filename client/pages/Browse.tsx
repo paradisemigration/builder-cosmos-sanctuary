@@ -416,7 +416,7 @@ export default function Browse() {
                       <SelectTrigger className="h-14 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-white/30 hover:border-white/50 transition-all duration-300 group-hover:shadow-lg">
                         <div className="flex items-center">
                           <MapPin className="w-5 h-5 mr-3 text-green-500" />
-                          <SelectValue placeholder="Dubai Zone" />
+                          <SelectValue placeholder="Select City" />
                         </div>
                       </SelectTrigger>
                       <SelectContent>
