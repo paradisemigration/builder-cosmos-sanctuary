@@ -52,32 +52,6 @@ export default function BusinessProfile() {
 
   const business = sampleBusinesses.find((b) => b.id === id);
 
-  // Scroll animations
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => [
-              ...prev,
-              entry.target.getAttribute("data-section") || "",
-            ]);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-
-    const sections = document.querySelectorAll("[data-section]");
-    sections.forEach((section) => {
-      observerRef.current?.observe(section);
-    });
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, []);
-
   // Function declarations
   const handleSubmitReview = () => {
     setIsReviewModalOpen(true);
@@ -104,7 +78,7 @@ export default function BusinessProfile() {
   };
 
   const handleWhatsAppClick = () => {
-    if (business.whatsapp) {
+    if (business?.whatsapp) {
       const message = `Hi! I found your business "${business.name}" on Trusted Immigration. I'd like to know more about your services.`;
       const whatsappUrl = `https://wa.me/${business.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
@@ -122,6 +96,32 @@ export default function BusinessProfile() {
       return newSet;
     });
   };
+
+  // Scroll animations
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => [
+              ...prev,
+              entry.target.getAttribute("data-section") || "",
+            ]);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    const sections = document.querySelectorAll("[data-section]");
+    sections.forEach((section) => {
+      observerRef.current?.observe(section);
+    });
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
 
   // Initialize business reviews
   useEffect(() => {
@@ -186,9 +186,11 @@ export default function BusinessProfile() {
               <div
                 key={i}
                 className={`absolute rounded-full animate-twinkle ${
-                  i % 3 === 0 ? 'w-2 h-2 bg-white/40' :
-                  i % 3 === 1 ? 'w-1 h-1 bg-cyan-300/50' :
-                  'w-1.5 h-1.5 bg-purple-300/40'
+                  i % 3 === 0
+                    ? "w-2 h-2 bg-white/40"
+                    : i % 3 === 1
+                      ? "w-1 h-1 bg-cyan-300/50"
+                      : "w-1.5 h-1.5 bg-purple-300/40"
                 }`}
                 style={{
                   left: `${Math.random() * 100}%`,
@@ -247,50 +249,47 @@ export default function BusinessProfile() {
             style={{ transitionDelay: "200ms" }}
           >
             <div className="text-center mb-8 max-w-4xl mx-auto">
-                {business.logo && (
-                  <div className="relative group mx-auto mb-6">
-                    <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
-                    <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105">
-                      <img
-                        src={business.logo}
-                        alt={`${business.name} logo`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
+              {business.logo && (
+                <div className="relative group mx-auto mb-6">
+                  <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105">
+                    <img
+                      src={business.logo}
+                      alt={`${business.name} logo`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
                   </div>
-                )}
+                </div>
+              )}
 
-                <div className="space-y-4">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
-                    {business.name}
-                  </h1>
+              <div className="space-y-4">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
+                  {business.name}
+                </h1>
 
-                  <div className="flex flex-wrap items-center justify-center gap-3">
-                    <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
-                      {business.category}
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
+                    {business.category}
+                  </Badge>
+
+                  {business.isVerified && (
+                    <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-base md:text-lg px-4 py-2">
+                      <Shield className="w-5 h-5 mr-2" />
+                      Verified
                     </Badge>
+                  )}
 
-                    {business.isVerified && (
-                      <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-base md:text-lg px-4 py-2">
-                        <Shield className="w-5 h-5 mr-2" />
-                        Verified
-                      </Badge>
-                    )}
-
-                    {business.isScamReported && (
-                      <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
-                        <AlertTriangle className="w-5 h-5 mr-2" />
-                        Reported
-                      </Badge>
-                    )}
-                  </div>
+                  {business.isScamReported && (
+                    <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
+                      <AlertTriangle className="w-5 h-5 mr-2" />
+                      Reported
+                    </Badge>
+                  )}
                 </div>
               </div>
 
               {/* Business Details Section */}
-              <div className="space-y-6">
-                {/* Moved to separate section for better organization */}
-
+              <div className="space-y-6 mt-8">
                 {/* Rating Section */}
                 <div className="text-center mb-6">
                   <div className="flex items-center justify-center gap-3 mb-4">
@@ -368,141 +367,137 @@ export default function BusinessProfile() {
             }`}
             style={{ transitionDelay: "400ms" }}
           >
-              <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
-                <CardContent className="p-4 md:p-6">
-                    <div className="space-y-3 md:space-y-4">
-                      <Button
-                        className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                        size="lg"
-                        onClick={() =>
-                          window.open(`tel:${business.phone}`, "_self")
+            <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
+              <CardContent className="p-4 md:p-6">
+                <div className="space-y-3 md:space-y-4">
+                  <Button
+                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                    size="lg"
+                    onClick={() =>
+                      window.open(`tel:${business.phone}`, "_self")
+                    }
+                  >
+                    <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
+                    📞 Call Now
+                  </Button>
+
+                  {business.whatsapp && (
+                    <Button
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      size="lg"
+                      onClick={handleWhatsAppClick}
+                    >
+                      <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
+                      💬 WhatsApp
+                    </Button>
+                  )}
+
+                  <Button
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                    size="lg"
+                    onClick={() => {
+                      const address = encodeURIComponent(business.address);
+                      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
+                      window.open(mapsUrl, "_blank");
+                    }}
+                  >
+                    <Navigation className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-pulse" />
+                    🗺️ Get Directions
+                  </Button>
+
+                  <div className="grid grid-cols-3 gap-2 mt-4 md:mt-6">
+                    <Button
+                      className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      size="sm"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: business.name,
+                            text: `Check out ${business.name} on Trusted Immigration`,
+                            url: window.location.href,
+                          });
+                        } else {
+                          navigator.clipboard.writeText(window.location.href);
+                          alert("Link copied to clipboard!");
                         }
-                      >
-                        <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
-                        📞 Call Now
-                      </Button>
+                      }}
+                    >
+                      <Share2 className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
+                      <span className="text-xs block">Share</span>
+                    </Button>
+                    <Button
+                      className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      size="sm"
+                      onClick={() => {
+                        const saved = localStorage.getItem("savedBusinesses");
+                        const savedList = saved ? JSON.parse(saved) : [];
+                        if (!savedList.includes(business.id)) {
+                          savedList.push(business.id);
+                          localStorage.setItem(
+                            "savedBusinesses",
+                            JSON.stringify(savedList),
+                          );
+                          alert("Business saved to your favorites!");
+                        } else {
+                          alert("Business already saved!");
+                        }
+                      }}
+                    >
+                      <Heart className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
+                      <span className="text-xs block">Save</span>
+                    </Button>
+                    <Button
+                      className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      size="sm"
+                      onClick={() => {
+                        const reason = prompt(
+                          "Please tell us why you want to report this business:",
+                        );
+                        if (reason) {
+                          alert(
+                            "Thank you for your report. We will review it shortly.",
+                          );
+                        }
+                      }}
+                    >
+                      <Flag className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
+                      <span className="text-xs block">Report</span>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-                      {business.whatsapp && (
-                        <Button
-                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                          size="lg"
-                          onClick={handleWhatsAppClick}
+            {/* Opening Hours Card */}
+            {business.openingHours && (
+              <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center text-white text-base md:text-lg">
+                    <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 text-cyan-400" />
+                    ⏰ Opening Hours
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-1 md:space-y-2">
+                    {Object.entries(business.openingHours).map(
+                      ([day, hours]) => (
+                        <div
+                          key={day}
+                          className="flex justify-between items-center py-1"
                         >
-                          <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
-                          💬 WhatsApp
-                        </Button>
-                      )}
-
-                      <Button
-                        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                        size="lg"
-                        onClick={() => {
-                          const address = encodeURIComponent(business.address);
-                          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
-                          window.open(mapsUrl, "_blank");
-                        }}
-                      >
-                        <Navigation className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-pulse" />
-                        🗺️ Get Directions
-                      </Button>
-
-                      <div className="grid grid-cols-3 gap-2 mt-4 md:mt-6">
-                        <Button
-                          className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                          size="sm"
-                          onClick={() => {
-                            if (navigator.share) {
-                              navigator.share({
-                                title: business.name,
-                                text: `Check out ${business.name} on Trusted Immigration`,
-                                url: window.location.href,
-                              });
-                            } else {
-                              navigator.clipboard.writeText(
-                                window.location.href,
-                              );
-                              alert("Link copied to clipboard!");
-                            }
-                          }}
-                        >
-                          <Share2 className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          <span className="text-xs block">Share</span>
-                        </Button>
-                        <Button
-                          className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                          size="sm"
-                          onClick={() => {
-                            const saved =
-                              localStorage.getItem("savedBusinesses");
-                            const savedList = saved ? JSON.parse(saved) : [];
-                            if (!savedList.includes(business.id)) {
-                              savedList.push(business.id);
-                              localStorage.setItem(
-                                "savedBusinesses",
-                                JSON.stringify(savedList),
-                              );
-                              alert("Business saved to your favorites!");
-                            } else {
-                              alert("Business already saved!");
-                            }
-                          }}
-                        >
-                          <Heart className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
-                          <span className="text-xs block">Save</span>
-                        </Button>
-                        <Button
-                          className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                          size="sm"
-                          onClick={() => {
-                            const reason = prompt(
-                              "Please tell us why you want to report this business:",
-                            );
-                            if (reason) {
-                              alert(
-                                "Thank you for your report. We will review it shortly.",
-                              );
-                            }
-                          }}
-                        >
-                          <Flag className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          <span className="text-xs block">Report</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-              {/* Opening Hours Card */}
-              {business.openingHours && (
-                <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center text-white text-base md:text-lg">
-                        <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 text-cyan-400" />
-                        ⏰ Opening Hours
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <div className="space-y-1 md:space-y-2">
-                        {Object.entries(business.openingHours).map(
-                          ([day, hours]) => (
-                            <div
-                              key={day}
-                              className="flex justify-between items-center py-1"
-                            >
-                              <span className="font-medium text-blue-200 text-sm">
-                                {day}
-                              </span>
-                              <span className="text-white text-xs md:text-sm bg-white/10 px-2 py-1 rounded-lg">
-                                {hours}
-                              </span>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                    </CardContent>
-                </Card>
-              )}
-            </div>
+                          <span className="font-medium text-blue-200 text-sm">
+                            {day}
+                          </span>
+                          <span className="text-white text-xs md:text-sm bg-white/10 px-2 py-1 rounded-lg">
+                            {hours}
+                          </span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
@@ -620,7 +615,7 @@ export default function BusinessProfile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                       <Button className="justify-start bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 md:py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
                         <Calendar className="w-4 h-4 mr-2 md:mr-3 group-hover:animate-bounce" />
-                        ��� Book Consultation
+                        📅 Book Consultation
                       </Button>
                       <Button
                         onClick={handleSubmitReview}
