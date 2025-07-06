@@ -82,18 +82,22 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
           <div className="flex items-start gap-4 sm:w-auto w-full">
             {business.logo && (
               <div className="relative group/logo">
-                {/* Attractive round border with gradient */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm"></div>
+                {/* Attractive round border with animated gradient */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-75 transition-opacity duration-500 blur-md animate-pulse"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
 
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-white to-gray-50 border-4 border-white shadow-xl group-hover:shadow-2xl transition-all duration-500 transform group-hover:scale-105">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-white via-blue-50 to-purple-50 border-4 border-white shadow-xl group-hover:shadow-2xl group-hover:shadow-blue-500/20 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3">
                   <img
                     src={business.logo}
                     alt={`${business.name} logo`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
 
-                  {/* Inner gradient border */}
-                  <div className="absolute inset-0 rounded-full border-2 border-gradient-to-r from-blue-400/30 to-purple-400/30"></div>
+                  {/* Inner animated border */}
+                  <div className="absolute inset-0 rounded-full border-2 border-gradient-to-r from-blue-400/50 to-purple-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  {/* Sparkle effect */}
+                  <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
                 </div>
               </div>
             )}
