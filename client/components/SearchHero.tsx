@@ -304,33 +304,86 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 <div className="lg:col-span-3">
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none z-10">
-                      <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                      {locationLoading ? (
+                        <Loader2 className="h-4 w-4 md:h-5 md:w-5 text-blue-500 animate-spin" />
+                      ) : (
+                        <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                      )}
                     </div>
-                    <Select
-                      value={selectedZone}
-                      onValueChange={setSelectedZone}
-                    >
-                      <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
-                        <SelectValue placeholder="Dubai Area" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl md:rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-xl">
-                        <SelectItem
-                          value="all"
-                          className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
-                        >
-                          All Areas
-                        </SelectItem>
-                        {dubaiZones.map((zone) => (
+
+                    {location &&
+                    (location.country === "United Arab Emirates" ||
+                      location.countryCode === "AE") ? (
+                      // Show Dubai zones selector if user is in UAE
+                      <Select
+                        value={selectedZone}
+                        onValueChange={setSelectedZone}
+                      >
+                        <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
+                          <SelectValue placeholder={locationDisplayText} />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl md:rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-xl">
                           <SelectItem
-                            key={zone}
-                            value={zone}
+                            value="all"
                             className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
                           >
-                            {zone}
+                            All UAE Areas
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                          {dubaiZones.map((zone) => (
+                            <SelectItem
+                              key={zone}
+                              value={zone}
+                              className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
+                            >
+                              {zone}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      // Show location display input for international users
+                      <div className="relative">
+                        <Input
+                          value={locationDisplayText}
+                          readOnly
+                          className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 cursor-default"
+                          placeholder="Your location"
+                        />
+                        {location && location.countryCode && (
+                          <div className="absolute inset-y-0 right-0 pr-4 md:pr-6 flex items-center">
+                            <span
+                              className="text-lg md:text-xl"
+                              title={location.country}
+                            >
+                              {location.countryCode === "IN"
+                                ? "🇮🇳"
+                                : location.countryCode === "PK"
+                                  ? "🇵🇰"
+                                  : location.countryCode === "BD"
+                                    ? "🇧🇩"
+                                    : location.countryCode === "LK"
+                                      ? "🇱🇰"
+                                      : location.countryCode === "PH"
+                                        ? "🇵🇭"
+                                        : location.countryCode === "US"
+                                          ? "🇺🇸"
+                                          : location.countryCode === "GB"
+                                            ? "🇬🇧"
+                                            : location.countryCode === "CA"
+                                              ? "🇨🇦"
+                                              : location.countryCode === "AU"
+                                                ? "🇦🇺"
+                                                : location.countryCode === "DE"
+                                                  ? "🇩🇪"
+                                                  : location.countryCode ===
+                                                      "FR"
+                                                    ? "🇫🇷"
+                                                    : "🌍"}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
