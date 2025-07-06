@@ -310,6 +310,222 @@
   animation: shimmer 2s infinite;
 }
 
+/* Enhanced Navigation Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Advanced Floating Animations */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+/* Section Background Animations */
+@keyframes background-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-background-shift {
+  background-size: 200% 200%;
+  animation: background-shift 10s ease infinite;
+}
+
+/* Interactive Card Hover Effects */
+@keyframes card-float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.02);
+  }
+}
+
+.animate-card-float {
+  animation: card-float 6s ease-in-out infinite;
+}
+
+/* Glow Effects for Interactive Elements */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(59, 130, 246, 0.6),
+      0 0 60px rgba(147, 51, 234, 0.4);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Text Reveal Animations */
+@keyframes text-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-text-reveal {
+  animation: text-reveal 0.8s ease-out forwards;
+}
+
+/* Advanced Gradient Animations */
+@keyframes gradient-wave {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+.animate-gradient-wave {
+  background-size: 400% 400%;
+  animation: gradient-wave 8s ease infinite;
+}
+
+/* Magnetic Hover Effects */
+.magnetic-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.magnetic-hover:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Enhanced Button Animations */
+@keyframes button-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(59, 130, 246, 0.8),
+      0 0 45px rgba(147, 51, 234, 0.6);
+  }
+}
+
+.button-glow {
+  animation: button-glow 2s ease-in-out infinite;
+}
+
+/* Particle Animation for Backgrounds */
+@keyframes particle-float {
+  0% {
+    transform: translateY(100vh) translateX(-50px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-particle-float {
+  animation: particle-float 15s linear infinite;
+}
+
+/* Section Separator Waves */
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-wave {
+  animation: wave 10s ease-in-out infinite;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .mobile-search-spacing {
+    padding: 0.5rem;
+  }
+
+  .mobile-card-padding {
+    padding: 1rem;
+  }
+
+  .mobile-button-text {
+    font-size: 0.875rem;
+  }
+}
+
+/* Navigation enhancements */
+.nav-glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Footer enhancements */
+.footer-gradient {
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #475569 75%,
+    #64748b 100%
+  );
+}
+
 /* Responsive breakpoints */
 @media (min-width: 768px) {
   .md-enhanced-padding {
