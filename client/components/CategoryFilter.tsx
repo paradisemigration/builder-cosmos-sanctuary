@@ -81,13 +81,24 @@ export function CategoryFilter({
       <div className="p-3 sm:p-4 lg:p-6 border-b border-gray-200">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <Collapsible open={isOpen} onOpenChange={setIsOpen} className="lg:hidden">
+            <Collapsible
+              open={isOpen}
+              onOpenChange={setIsOpen}
+              className="lg:hidden"
+            >
               <CollapsibleTrigger asChild>
-                <Button variant="outline" size="sm" className="rounded-lg w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-lg w-full sm:w-auto"
+                >
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
                   🔧 Filters
                   {activeFilterCount > 0 && (
-                    <Badge variant="secondary" className="ml-2 text-xs bg-blue-100 text-blue-700">
+                    <Badge
+                      variant="secondary"
+                      className="ml-2 text-xs bg-blue-100 text-blue-700"
+                    >
                       {activeFilterCount}
                     </Badge>
                   )}
@@ -103,7 +114,7 @@ export function CategoryFilter({
             </div>
 
             <div className="text-right">
-              <span className="text-sm font-medium text-gray-700">{resultCount} found</span>
+              <span className="text-sm font-medium text-gray-700">
                 {resultCount} business{resultCount !== 1 ? "es" : ""} found
               </span>
             </div>
