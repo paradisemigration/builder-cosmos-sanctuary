@@ -763,6 +763,9 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {/* Debug Info - Remove before production */}
+      <DebugPageInfo />
     </div>
   );
 }
