@@ -1003,16 +1003,16 @@ export default function AddBusiness() {
                         onValueChange={(value) => updateFormData("zone", value)}
                       >
                         <SelectTrigger className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500">
-                          <SelectValue placeholder="Select zone" />
+                          <SelectValue placeholder="Select city" />
                         </SelectTrigger>
                         <SelectContent>
-                          {dubaiZones.map((zone) => (
+                          {uaeCities.map((city) => (
                             <SelectItem
-                              key={zone}
-                              value={zone}
+                              key={city}
+                              value={city}
                               className="text-lg"
                             >
-                              {zone}
+                              {city}
                             </SelectItem>
                           ))}
                         </SelectContent>
