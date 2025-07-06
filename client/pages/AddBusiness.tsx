@@ -82,6 +82,15 @@ export default function AddBusiness() {
   const [newService, setNewService] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
+  // Business name search state
+  const [businessSearchQuery, setBusinessSearchQuery] = useState("");
+  const [showBusinessSuggestions, setShowBusinessSuggestions] = useState(false);
+  const [businessSuggestions, setBusinessSuggestions] = useState<
+    typeof sampleBusinesses
+  >([]);
+  const [businessNameVerified, setBusinessNameVerified] = useState(false);
+  const [existingBusiness, setExistingBusiness] = useState<any>(null);
+
   // Scroll animations
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
