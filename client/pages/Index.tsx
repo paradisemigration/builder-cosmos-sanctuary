@@ -76,7 +76,9 @@ export default function Index() {
                 >
                   Add Business
                 </Link>
-                <Button size="sm">Sign In</Button>
+                <Link to="/login">
+                  <Button size="sm">Sign In</Button>
+                </Link>
               </div>
             </div>
           </div>
