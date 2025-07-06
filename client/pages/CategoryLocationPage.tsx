@@ -20,6 +20,7 @@ import {
   sampleBusinesses,
   businessCategories,
   dubaiZones,
+  uaeCities,
   type Business,
 } from "@/lib/data";
 
