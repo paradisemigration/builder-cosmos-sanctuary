@@ -27,6 +27,7 @@ import {
   sampleBusinesses,
   businessCategories,
   dubaiZones,
+  uaeCities,
   Business,
 } from "@/lib/data";
 
