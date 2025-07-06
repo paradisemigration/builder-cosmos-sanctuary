@@ -13,6 +13,7 @@ import {
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Navigation } from "@/components/Navigation";
+import { EmailPreview } from "@/components/EmailPreview";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
