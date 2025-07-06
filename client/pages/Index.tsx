@@ -9,6 +9,7 @@ import {
   Building,
   Shield,
   Clock,
+  Globe,
 } from "lucide-react";
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
