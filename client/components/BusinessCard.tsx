@@ -254,11 +254,11 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
               <Button
                 size="sm"
                 variant="outline"
-                className="flex-1 sm:flex-none rounded-xl font-semibold border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/phone"
+                className="flex-1 sm:flex-none rounded-xl font-semibold border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:border-blue-300 hover:text-blue-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/phone"
                 onClick={handlePhoneClick}
               >
-                <Phone className="w-4 h-4 mr-2 group-hover/phone:scale-110 transition-transform duration-300" />
-                Call Now
+                <Phone className="w-4 h-4 mr-2 group-hover/phone:scale-110 group-hover/phone:rotate-12 transition-transform duration-300" />
+                📞 Call Now
               </Button>
             </div>
           </div>
