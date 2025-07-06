@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/lib/auth";
 import {
   Eye,
   Edit,
@@ -21,9 +22,18 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { sampleBusinesses } from "@/lib/data";
 
 export default function BusinessDashboard() {
-  // Assuming user owns the first business for demo
-  const business = sampleBusinesses[0];
+  const { user, logout } = useAuth();
+
+  // Get business for the logged-in user
+  const business =
+    sampleBusinesses.find((b) => b.id === user?.businessId) ||
+    sampleBusinesses[0];
   const [activeTab, setActiveTab] = useState("overview");
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/";
+  };
 
   const stats = [
     { label: "Profile Views", value: "1,234", change: "+12%", icon: Eye },
@@ -67,15 +77,17 @@ export default function BusinessDashboard() {
             </div>
 
             <div className="flex items-center gap-4">
+              <div className="hidden md:block text-sm text-muted-foreground">
+                Welcome, {user?.name}
+              </div>
               <Link to={`/business/${business.id}`}>
                 <Button variant="outline" size="sm">
                   <Eye className="w-4 h-4 mr-2" />
                   View Public Page
                 </Button>
               </Link>
-              <Button size="sm">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
+              <Button size="sm" onClick={handleLogout}>
+                Logout
               </Button>
             </div>
           </div>

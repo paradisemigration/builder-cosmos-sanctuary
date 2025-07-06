@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/lib/auth";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,10 @@ const LinkedInIcon = () => (
 );
 
 export default function Login() {
+  const { login, isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginData, setLoginData] = useState({
@@ -53,6 +58,16 @@ export default function Login() {
     password: "",
     rememberMe: false,
   });
+  const [loginError, setLoginError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = location.state?.from || "/dashboard";
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location.state]);
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
@@ -62,11 +77,25 @@ export default function Login() {
     agreeToTerms: false,
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would authenticate with backend
-    console.log("Login attempt:", loginData);
-    alert("Login functionality would be implemented here!");
+    setIsSubmitting(true);
+    setLoginError("");
+
+    try {
+      const success = await login(loginData.email, loginData.password);
+
+      if (success) {
+        const from = location.state?.from || "/dashboard";
+        navigate(from, { replace: true });
+      } else {
+        setLoginError("Invalid email or password. Please try again.");
+      }
+    } catch (error) {
+      setLoginError("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleRegister = (e: React.FormEvent) => {
@@ -137,6 +166,24 @@ export default function Login() {
             </p>
           </div>
 
+          {/* Demo Credentials Info */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-2">
+              Demo Credentials:
+            </h3>
+            <div className="text-sm text-blue-800 space-y-1">
+              <p>
+                <strong>Regular User:</strong> user@demo.com / password123
+              </p>
+              <p>
+                <strong>Business Owner:</strong> business@demo.com / business123
+              </p>
+              <p>
+                <strong>Admin:</strong> admin@demo.com / admin123
+              </p>
+            </div>
+          </div>
+
           {/* Social Login Buttons */}
           <div className="space-y-3">
             <Button
@@ -192,6 +239,11 @@ export default function Login() {
                   <CardTitle>Sign In</CardTitle>
                 </CardHeader>
                 <CardContent>
+                  {loginError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                      <p className="text-sm text-red-700">{loginError}</p>
+                    </div>
+                  )}
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                       <Label htmlFor="login-email">Email</Label>
@@ -272,8 +324,12 @@ export default function Login() {
                       </Link>
                     </div>
 
-                    <Button type="submit" className="w-full">
-                      Sign In
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Signing In..." : "Sign In"}
                     </Button>
                   </form>
                 </CardContent>

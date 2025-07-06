@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/lib/auth";
 import {
   Search,
   Edit,
@@ -50,8 +51,14 @@ const businessStatuses = {
 };
 
 export default function AdminPanel() {
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/";
+  };
   const [businesses, setBusinesses] = useState(
     sampleBusinesses.map((business) => ({
       ...business,
@@ -129,14 +136,16 @@ export default function AdminPanel() {
             </div>
 
             <div className="flex items-center gap-4">
+              <div className="hidden md:block text-sm text-muted-foreground">
+                Admin: {user?.name}
+              </div>
               <Link to="/">
                 <Button variant="outline" size="sm">
                   Back to Site
                 </Button>
               </Link>
-              <Button size="sm">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Business
+              <Button size="sm" onClick={handleLogout}>
+                Logout
               </Button>
             </div>
           </div>
