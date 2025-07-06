@@ -35,15 +35,15 @@ export function Navigation({ className = "" }: NavigationProps) {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-2xl border-b border-blue-100/50"
-          : "bg-white/80 backdrop-blur-lg border-b border-white/20"
+          ? "bg-white/95 backdrop-blur-xl shadow-2xl border-b border-blue-100/50"
+          : "bg-white/85 backdrop-blur-lg border-b border-white/20"
       } ${className}`}
     >
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex justify-between items-center h-16 lg:h-18">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative">
+        <div className="flex justify-between items-center h-14 sm:h-16 lg:h-18">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 group">
               <div className="relative">
