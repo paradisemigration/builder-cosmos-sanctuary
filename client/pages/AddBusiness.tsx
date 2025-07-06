@@ -287,14 +287,7 @@ export default function AddBusiness() {
                   </Link>
                 ))}
                 <div className="px-3 py-2">
-                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600">
-                      🔐 Sign In
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
+
 
 
       {/* Enhanced Hero Header */}
