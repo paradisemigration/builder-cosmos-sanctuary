@@ -12,6 +12,7 @@ import {
   Star,
   Building,
   CheckCircle,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { businessCategories, dubaiZones } from "@/lib/data";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 interface SearchHeroProps {
   onSearch?: (query: string, category?: string, zone?: string) => void;
