@@ -26,14 +26,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { sampleBusinesses, Business, Review } from "@/lib/data";
+import { ReviewModal } from "@/components/ReviewModal";
 
 export default function BusinessProfile() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("overview");
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(5);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [businessReviews, setBusinessReviews] = useState<Review[]>([]);
 
   const business = sampleBusinesses.find((b) => b.id === id);
+
+  // Initialize business reviews on component mount
+  useState(() => {
+    if (business) {
+      setBusinessReviews(business.reviews);
+    }
+  });
 
   if (!business) {
     return (
@@ -54,10 +64,30 @@ export default function BusinessProfile() {
   }
 
   const handleSubmitReview = () => {
-    // In a real app, this would submit to an API
-    console.log("Review submitted:", { rating: newRating, comment: newReview });
-    setNewReview("");
-    setNewRating(5);
+    // Open the review modal instead of direct submission
+    setIsReviewModalOpen(true);
+  };
+
+  const handleReviewSubmitted = (reviewData: {
+    rating: number;
+    comment: string;
+    userName: string;
+    userAvatar?: string;
+  }) => {
+    // Create new review object
+    const newReview: Review = {
+      id: `review_${Date.now()}`,
+      userId: `user_${Date.now()}`,
+      userName: reviewData.userName,
+      userAvatar: reviewData.userAvatar,
+      rating: reviewData.rating,
+      comment: reviewData.comment,
+      isVerified: true, // Social login users are verified
+      date: new Date().toLocaleDateString(),
+    };
+
+    // Add to business reviews
+    setBusinessReviews((prev) => [newReview, ...prev]);
   };
 
   return (
@@ -407,7 +437,7 @@ export default function BusinessProfile() {
           <TabsContent value="reviews" className="mt-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-6">
-                {business.reviews.map((review) => (
+                {businessReviews.map((review) => (
                   <Card key={review.id}>
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
