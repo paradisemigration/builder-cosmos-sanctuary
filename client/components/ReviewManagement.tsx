@@ -421,7 +421,17 @@ export function ReviewManagement() {
       </div>
 
       {/* Edit Review Modal */}
-      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+      <Dialog
+        open={isEditModalOpen}
+        onOpenChange={(open) => {
+          setIsEditModalOpen(open);
+          if (!open) {
+            // Reset state when dialog closes
+            setSelectedReview(null);
+            setEditingComment("");
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Review</DialogTitle>
@@ -470,7 +480,14 @@ export function ReviewManagement() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsEditModalOpen(false);
+                setSelectedReview(null);
+                setEditingComment("");
+              }}
+            >
               Cancel
             </Button>
             <Button onClick={handleUpdateReview}>Save Changes</Button>
