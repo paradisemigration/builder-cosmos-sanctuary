@@ -420,13 +420,7 @@ export default function Browse() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
         data-section="content"
       >
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 transition-all duration-1000 ${
-            visibleSections.includes("content")
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-10"
-          }`}
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Enhanced Filters Sidebar */}
           <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="sticky top-24">
