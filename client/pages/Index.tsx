@@ -147,39 +147,6 @@ export default function Index() {
         </div>
       </nav>
 
-      {/* Navigation Test Section - Temporary for debugging */}
-      <div className="bg-red-50 border border-red-200 p-4 m-4">
-        <h3 className="font-bold text-red-800 mb-2">
-          Navigation Test (Temporary)
-        </h3>
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
-          >
-            Test Login (navigate)
-          </button>
-          <button
-            onClick={() => navigate("/browse")}
-            className="bg-green-500 text-white px-3 py-1 rounded text-sm"
-          >
-            Test Browse (navigate)
-          </button>
-          <button
-            onClick={() => (window.location.href = "#/login")}
-            className="bg-purple-500 text-white px-3 py-1 rounded text-sm"
-          >
-            Test Login (window.location)
-          </button>
-          <Link
-            to="/login"
-            className="bg-orange-500 text-white px-3 py-1 rounded text-sm"
-          >
-            Test Login (Link)
-          </Link>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <SearchHero onSearch={handleSearch} />
 
