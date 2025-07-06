@@ -232,6 +232,17 @@ export function Navigation({ className = "" }: NavigationProps) {
               >
                 ➕ Add Business
               </Link>
+              <Link
+                to="/report"
+                className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
+                  isCurrentPage("/report")
+                    ? "text-white bg-gradient-to-r from-red-500 to-orange-500 shadow-lg"
+                    : "text-gray-700 hover:text-red-600 hover:bg-red-50 transform hover:scale-105"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                ⚠️ Report Scam
+              </Link>
 
               {/* Enhanced Mobile Authentication Section */}
               {isAuthenticated ? (
