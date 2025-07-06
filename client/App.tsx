@@ -18,6 +18,7 @@ import EditBusiness from "./pages/EditBusiness";
 import BusinessDashboard from "./pages/BusinessDashboard";
 import ReportScam from "./pages/ReportScam";
 import ScamReview from "./pages/ScamReview";
+import CategoryLocationPage from "./pages/CategoryLocationPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
