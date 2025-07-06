@@ -710,6 +710,9 @@ export default function Browse() {
           </div>
         </div>
       </footer>
+
+      {/* Debug Info - Remove before production */}
+      <DebugPageInfo />
     </div>
   );
 }
