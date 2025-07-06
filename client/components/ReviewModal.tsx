@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Star, X } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { EmailService } from "@/lib/emailService";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -84,6 +86,11 @@ export function ReviewModal({
 
       if (!success) {
         alert(`Failed to login with ${provider}. Please try again.`);
+      } else {
+        // Additional welcome message for review system signup
+        toast.success(
+          `Signed in successfully! You can now write authentic reviews. 📧 Welcome email sent!`,
+        );
       }
     } catch (error) {
       alert(`Error logging in with ${provider}. Please try again.`);
