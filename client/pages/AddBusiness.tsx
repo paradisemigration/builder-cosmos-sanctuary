@@ -254,38 +254,6 @@ export default function AddBusiness() {
               >
                 <Menu className="h-5 w-5" />
               </Button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation Menu */}
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-sm border-t border-gray-200 rounded-b-2xl shadow-xl">
-                {[
-                  { to: "/", text: "🏠 Home" },
-                  { to: "/browse", text: "🔍 Browse Services" },
-                  {
-                    to: "/add-business",
-                    text: "➕ Add Business",
-                    active: true,
-                  },
-                ].map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`block px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 ${
-                      link.active
-                        ? "text-white bg-gradient-to-r from-blue-600 to-purple-600"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.text}
-                  </Link>
-                ))}
-                <div className="px-3 py-2">
-
-
-
       {/* Enhanced Hero Header */}
       <div
         className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden"
