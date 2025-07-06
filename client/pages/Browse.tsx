@@ -541,14 +541,9 @@ export default function Browse() {
                   ).map((business, index) => (
                     <div
                       key={business.id}
-                      className={`group transition-all duration-700 ${
-                        visibleSections.includes("content")
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-10"
-                      }`}
-                      style={{ transitionDelay: `${index * 100}ms` }}
+                      className="group opacity-100 translate-y-0"
                     >
-                      <div className="transform hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 hover:shadow-xl sm:hover:shadow-2xl">
+                      <div className="hover:shadow-xl transition-shadow duration-300">
                         <BusinessCard
                           business={business}
                           onClick={() => navigate(`/business/${business.id}`)}
