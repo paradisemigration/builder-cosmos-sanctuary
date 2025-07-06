@@ -59,6 +59,14 @@ export function ReviewManagement() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingComment, setEditingComment] = useState("");
 
+  // Force close modal function
+  const forceCloseModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedReview(null);
+    setEditingComment("");
+    console.log("Modal force closed");
+  };
+
   // Initialize reviews from sample businesses
   useEffect(() => {
     const allReviews: AdminReview[] = [];
@@ -439,11 +447,11 @@ export function ReviewManagement() {
       <Dialog
         open={isEditModalOpen}
         onOpenChange={(open) => {
-          setIsEditModalOpen(open);
+          console.log("Dialog onOpenChange:", open);
           if (!open) {
-            // Reset state when dialog closes
-            setSelectedReview(null);
-            setEditingComment("");
+            forceCloseModal();
+          } else {
+            setIsEditModalOpen(true);
           }
         }}
       >
@@ -495,14 +503,7 @@ export function ReviewManagement() {
             )}
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditModalOpen(false);
-                setSelectedReview(null);
-                setEditingComment("");
-              }}
-            >
+            <Button variant="outline" onClick={forceCloseModal}>
               Cancel
             </Button>
             <Button
