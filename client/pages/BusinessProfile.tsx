@@ -724,52 +724,51 @@ export default function BusinessProfile() {
               </div>
             </TabsContent>
 
-            <TabsContent value="services" className="mt-8">
-              <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                    <Award className="w-6 h-6 text-blue-600" />
-                    🛠️ Services Offered
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {business.services.map((service, index) => (
-                      <div
-                        key={index}
-                        className={`group p-6 bg-gradient-to-br from-white to-blue-50/50 border-2 border-blue-100/50 rounded-2xl hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
-                        <div className="text-3xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                          {index % 6 === 0
-                            ? "🛂"
-                            : index % 6 === 1
-                              ? "📋"
-                              : index % 6 === 2
-                                ? "🛡️"
-                                : index % 6 === 3
-                                  ? "👨‍💼"
-                                  : index % 6 === 4
-                                    ? "📝"
-                                    : "✈️"}
-                        </div>
-                        <h4 className="font-bold text-gray-800 mb-3 text-lg group-hover:text-blue-600 transition-colors duration-300">
-                          {service}
-                        </h4>
-                        <p className="text-gray-600 leading-relaxed">
-                          Professional {service.toLowerCase()} services with
-                          expert guidance and verified credentials.
-                        </p>
-                        <div className="mt-4 pt-4 border-t border-blue-100">
-                          <Badge className="bg-blue-100 text-blue-700 font-medium">
-                            Expert Service
+            {/* Services Tab Content */}
+            <TabsContent value="services" className="w-full">
+              <div className="space-y-4 md:space-y-6">
+                <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+                      🛠️ Services Offered
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                      {business.services.map((service, index) => (
+                        <div
+                          key={index}
+                          className="group p-4 md:p-6 bg-gradient-to-br from-white to-green-50/50 border-2 border-green-100/50 rounded-xl md:rounded-2xl hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+                        >
+                          <div className="text-2xl md:text-3xl mb-3 md:mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                            {index % 6 === 0
+                              ? "🛂"
+                              : index % 6 === 1
+                                ? "📋"
+                                : index % 6 === 2
+                                  ? "🛡️"
+                                  : index % 6 === 3
+                                    ? "👨‍💼"
+                                    : index % 6 === 4
+                                      ? "📝"
+                                      : "✈️"}
+                          </div>
+                          <h4 className="font-bold text-gray-800 mb-2 md:mb-3 text-base md:text-lg group-hover:text-green-600 transition-colors duration-300">
+                            {service}
+                          </h4>
+                          <p className="text-gray-600 leading-relaxed text-sm md:text-base mb-3 md:mb-4">
+                            Professional {service.toLowerCase()} services with expert guidance and verified credentials.
+                          </p>
+                          <Badge className="bg-green-100 text-green-700 font-medium text-xs md:text-sm">
+                            ✅ Expert Service
                           </Badge>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
 
             <TabsContent value="reviews" className="mt-8">
