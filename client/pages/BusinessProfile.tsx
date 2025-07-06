@@ -507,39 +507,20 @@ export default function BusinessProfile() {
                     <CardTitle>Write a Review</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="rating">Rating</Label>
-                        <div className="flex items-center gap-1 mt-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-6 h-6 cursor-pointer ${i < newRating ? "text-accent fill-accent" : "text-muted-foreground"}`}
-                              onClick={() => setNewRating(i + 1)}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="review">Your Review</Label>
-                        <Textarea
-                          id="review"
-                          placeholder="Share your experience..."
-                          value={newReview}
-                          onChange={(e) => setNewReview(e.target.value)}
-                          className="mt-2"
-                          rows={4}
-                        />
-                      </div>
-
+                    <div className="text-center py-6">
+                      <p className="text-muted-foreground mb-4">
+                        Share your experience with {business.name}
+                      </p>
                       <Button
                         onClick={handleSubmitReview}
                         className="w-full"
-                        disabled={!newReview.trim()}
+                        size="lg"
                       >
-                        Submit Review
+                        Write a Review
                       </Button>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Sign in with Google or Facebook to verify your review
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -588,6 +569,15 @@ export default function BusinessProfile() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Review Modal */}
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        businessName={business.name}
+        businessId={business.id}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
     </div>
   );
 }
