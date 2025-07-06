@@ -57,13 +57,13 @@ export default function Index() {
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
-    // Navigate to browse page with filters
+    // Navigate to browse page with filters using React Router
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     if (category) params.set("category", category);
     if (zone) params.set("zone", zone);
 
-    window.location.href = `/browse?${params.toString()}`;
+    navigate(`/browse?${params.toString()}`);
   };
 
   const stats = [
@@ -888,7 +888,7 @@ export default function Index() {
               <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-white/20 rounded-full px-8 py-4">
                 <span className="text-cyan-300 font-bold text-lg flex items-center gap-3">
                   <Star className="w-6 h-6 animate-spin-slow" />
-                  🚀 START YOUR JOURNEY
+                  �� START YOUR JOURNEY
                   <CheckCircle className="w-5 h-5" />
                 </span>
               </div>
