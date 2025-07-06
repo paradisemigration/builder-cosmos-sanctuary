@@ -239,12 +239,11 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
               {business.whatsapp && (
                 <Button
                   size="sm"
-                  variant="outline"
-                  className="flex-1 sm:flex-none rounded-xl font-semibold border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:text-green-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/whatsapp"
+                  className="flex-1 sm:flex-none rounded-xl font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/whatsapp"
                   onClick={handleWhatsAppClick}
                 >
                   <MessageCircle className="w-4 h-4 mr-2 group-hover/whatsapp:scale-110 transition-transform duration-300" />
-                  WhatsApp
+                  💬 WhatsApp
                 </Button>
               )}
 
