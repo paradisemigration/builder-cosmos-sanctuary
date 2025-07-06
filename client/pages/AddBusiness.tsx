@@ -55,7 +55,6 @@ interface BusinessFormData {
 
 export default function AddBusiness() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
