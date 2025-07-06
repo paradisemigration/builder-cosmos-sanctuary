@@ -52,12 +52,11 @@ export type BusinessCategory =
   | "Travel Agencies (Visa-related)";
 
 export const businessCategories: BusinessCategory[] = [
-  "Visa Agent",
-  "Visa Services",
-  "Visa & Passport Services",
-  "Immigration Consultants",
-  "Document Clearing / Typing Centers",
-  "Travel Agencies (Visa-related)",
+  "Visit Visa",
+  "Work Visa",
+  "Study Visa",
+  "PR Visa",
+  "Citizenship & Immigration",
 ];
 
 const originalBusinesses: Business[] = [
