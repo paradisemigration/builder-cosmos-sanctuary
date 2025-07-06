@@ -238,6 +238,45 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Email Notification Demo Section */}
+      <section className="py-16 bg-gradient-to-r from-blue-50 to-yellow-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              📧 Welcome Email Notifications
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Get instant welcome emails when you sign up or login via
+              Google/Facebook!
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              <EmailPreview
+                userName="New User"
+                userEmail="user@example.com"
+                provider="google"
+                isNewUser={true}
+              />
+              <EmailPreview
+                userName="Returning User"
+                userEmail="user@example.com"
+                provider="facebook"
+                isNewUser={false}
+              />
+              <EmailPreview
+                userName="Email User"
+                userEmail="user@example.com"
+                provider="email"
+                isNewUser={true}
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              ✨ All users receive personalized welcome emails with platform
+              guidance and support information
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-primary to-dubai-blue text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
