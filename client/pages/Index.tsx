@@ -1189,7 +1189,7 @@ export default function Index() {
                 <div className="text-center md:text-left mb-4 md:mb-0">
                   <p className="text-blue-200 flex items-center gap-2">
                     <span className="text-lg">©</span>
-                    2024 Dubai Visa Directory. All rights reserved.
+                    2024 Trusted Immigration. All rights reserved.
                     <span className="text-lg">🇦🇪</span>
                   </p>
                 </div>
