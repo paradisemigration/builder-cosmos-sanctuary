@@ -106,44 +106,54 @@ export function Navigation({ className = "" }: NavigationProps) {
                 )}
               </Link>
 
-              {/* Authentication Section */}
+              {/* Enhanced Authentication Section */}
               {isAuthenticated ? (
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm text-muted-foreground">
-                    Welcome, {user?.name}
-                  </span>
+                <div className="flex items-center space-x-3 ml-6">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-green-50 to-blue-50 px-3 py-2 rounded-xl border border-green-200">
+                    <Shield className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-700">
+                      Welcome, {user?.name}
+                    </span>
+                  </div>
+
                   {user?.role === "admin" && (
                     <Link
                       to="/admin"
-                      className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      className="group relative px-4 py-2 rounded-xl text-sm font-semibold text-purple-700 hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 transition-all duration-300 border border-purple-200 hover:border-transparent"
                     >
-                      Admin
+                      👑 Admin
                     </Link>
                   )}
+
                   {user?.role === "business_owner" && (
                     <Link
                       to="/dashboard"
-                      className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      className="group relative px-4 py-2 rounded-xl text-sm font-semibold text-blue-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 border border-blue-200 hover:border-transparent"
                     >
-                      Dashboard
+                      📊 Dashboard
                     </Link>
                   )}
+
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleSignOut}
-                    className="h-9"
+                    className="h-10 px-4 rounded-xl border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-all duration-300"
                   >
-                    Sign Out
+                    🚪 Sign Out
                   </Button>
                 </div>
               ) : (
-                <Link
-                  to="/login"
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
-                >
-                  Sign In
-                </Link>
+                <div className="ml-6">
+                  <Link to="/login">
+                    <Button className="h-10 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
+                      <span className="flex items-center gap-2">
+                        ✨ Sign In
+                        <Sparkles className="w-4 h-4 group-hover:animate-spin" />
+                      </span>
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
