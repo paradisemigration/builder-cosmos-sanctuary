@@ -165,24 +165,51 @@ export default function BusinessProfile() {
         className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden pt-20"
         data-section="hero"
       >
-        {/* Animated Background */}
+        {/* Enhanced Animated Background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20"></div>
-          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute top-20 right-20 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl animate-float-medium"></div>
-          <div className="absolute bottom-10 left-1/3 w-36 h-36 bg-cyan-500/20 rounded-full blur-3xl animate-float-fast"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-800/40 to-blue-900/50"></div>
 
-          {/* Particle System */}
+          {/* Floating Geometric Shapes */}
+          <div className="absolute top-16 left-8 w-48 h-48 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
+          <div className="absolute top-32 right-12 w-36 h-36 bg-gradient-to-br from-purple-400/25 to-pink-500/25 rounded-full blur-2xl animate-float-medium"></div>
+          <div className="absolute bottom-20 left-1/4 w-44 h-44 bg-gradient-to-br from-green-400/20 to-teal-500/20 rounded-full blur-3xl animate-float-fast"></div>
+          <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full blur-2xl animate-float-slow"></div>
+          <div className="absolute bottom-32 right-8 w-40 h-40 bg-gradient-to-br from-rose-400/20 to-red-500/20 rounded-full blur-3xl animate-float-medium"></div>
+
+          {/* Moving Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse opacity-50"></div>
+
+          {/* Enhanced Particle System */}
           <div className="absolute inset-0">
-            {Array.from({ length: 30 }).map((_, i) => (
+            {Array.from({ length: 50 }).map((_, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-white/30 rounded-full animate-twinkle"
+                className={`absolute rounded-full animate-twinkle ${
+                  i % 3 === 0 ? 'w-2 h-2 bg-white/40' :
+                  i % 3 === 1 ? 'w-1 h-1 bg-cyan-300/50' :
+                  'w-1.5 h-1.5 bg-purple-300/40'
+                }`}
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${2 + Math.random() * 2}s`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  animationDuration: `${3 + Math.random() * 3}s`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Floating Lines */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent animate-float-slow"
+                style={{
+                  left: `${10 + i * 12}%`,
+                  top: `${Math.random() * 80}%`,
+                  animationDelay: `${i * 0.5}s`,
+                  transform: `rotate(${Math.random() * 45}deg)`,
                 }}
               />
             ))}
@@ -209,18 +236,16 @@ export default function BusinessProfile() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Business Info */}
-            <div
-              className={`lg:col-span-2 transition-all duration-1000 ${
-                visibleSections.includes("hero")
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
-              }`}
-              style={{ transitionDelay: "200ms" }}
-            >
-              {/* Centered Business Header Section */}
-              <div className="text-center mb-8">
+          {/* Centered Business Header Section - Full Width */}
+          <div
+            className={`transition-all duration-1000 ${
+              visibleSections.includes("hero")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "200ms" }}
+          >
+            <div className="text-center mb-8 max-w-4xl mx-auto">
                 {business.logo && (
                   <div className="relative group mx-auto mb-6">
                     <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
@@ -331,19 +356,19 @@ export default function BusinessProfile() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Enhanced Action Buttons */}
-            <div
-              className={`transition-all duration-1000 ${
-                visibleSections.includes("hero")
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
-              }`}
-              style={{ transitionDelay: "400ms" }}
-            >
-              <div className="sticky top-24">
-                <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
-                  <CardContent className="p-4 md:p-6">
+          {/* Enhanced Action Buttons - Centered */}
+          <div
+            className={`max-w-lg mx-auto mt-8 transition-all duration-1000 ${
+              visibleSections.includes("hero")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "400ms" }}
+          >
+              <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
+                <CardContent className="p-4 md:p-6">
                     <div className="space-y-3 md:space-y-4">
                       <Button
                         className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -446,9 +471,9 @@ export default function BusinessProfile() {
                   </CardContent>
                 </Card>
 
-                {/* Opening Hours Card */}
-                {business.openingHours && (
-                  <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
+              {/* Opening Hours Card */}
+              {business.openingHours && (
+                <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center text-white text-base md:text-lg">
                         <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 text-cyan-400" />
@@ -474,9 +499,8 @@ export default function BusinessProfile() {
                         )}
                       </div>
                     </CardContent>
-                  </Card>
-                )}
-              </div>
+                </Card>
+              )}
             </div>
           </div>
         </div>
