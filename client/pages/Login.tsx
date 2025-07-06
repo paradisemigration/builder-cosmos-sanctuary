@@ -25,6 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Navigation } from "@/components/Navigation";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
 
 // Google Icon Component
 const GoogleIcon = () => (
