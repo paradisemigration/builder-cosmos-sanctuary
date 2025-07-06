@@ -76,18 +76,18 @@ export function CategoryFilter({
     (filters.hasReviews ? 1 : 0);
 
   return (
-    <div className="bg-white/50 backdrop-blur-sm border border-border/30 rounded-xl shadow-sm">
-      {/* Enhanced Header */}
-      <div className="p-4 lg:p-6 border-b border-border/30">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl sm:rounded-2xl shadow-lg">
+      {/* Enhanced Header - Mobile Responsive */}
+      <div className="p-3 sm:p-4 lg:p-6 border-b border-gray-200">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <Collapsible open={isOpen} onOpenChange={setIsOpen} className="lg:hidden">
               <CollapsibleTrigger asChild>
-                <Button variant="outline" size="sm" className="rounded-lg">
+                <Button variant="outline" size="sm" className="rounded-lg w-full sm:w-auto">
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
+                  🔧 Filters
                   {activeFilterCount > 0 && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
+                    <Badge variant="secondary" className="ml-2 text-xs bg-blue-100 text-blue-700">
                       {activeFilterCount}
                     </Badge>
                   )}
@@ -95,8 +95,15 @@ export function CategoryFilter({
               </CollapsibleTrigger>
             </Collapsible>
 
-            <div className="hidden sm:block">
-              <span className="text-sm text-muted-foreground">
+            <div className="hidden lg:block">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <SlidersHorizontal className="w-5 h-5 text-blue-600" />
+                🔧 Filter Results
+              </h3>
+            </div>
+
+            <div className="text-right">
+              <span className="text-sm font-medium text-gray-700">{resultCount} found</span>
                 {resultCount} business{resultCount !== 1 ? "es" : ""} found
               </span>
             </div>
