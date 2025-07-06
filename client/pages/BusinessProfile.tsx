@@ -130,6 +130,10 @@ export default function BusinessProfile() {
     }
   }, [business]);
 
+  const visibleReviews = showAllReviews
+    ? businessReviews
+    : businessReviews.slice(0, 3);
+
   if (!business) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
@@ -151,10 +155,6 @@ export default function BusinessProfile() {
       </div>
     );
   }
-
-  const visibleReviews = showAllReviews
-    ? businessReviews
-    : businessReviews.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
