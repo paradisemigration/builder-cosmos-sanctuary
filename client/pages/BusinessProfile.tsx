@@ -377,8 +377,7 @@ export default function BusinessProfile() {
                       )}
 
                       <Button
-                        variant="outline"
-                        className="w-full border-2 border-white/50 text-white hover:bg-white/30 hover:border-white/70 font-bold py-4 text-lg rounded-xl backdrop-blur-sm shadow-lg transition-all duration-300 group"
+                        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                         size="lg"
                         onClick={() => {
                           // Open directions in Google Maps
