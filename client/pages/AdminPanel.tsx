@@ -57,7 +57,7 @@ export default function AdminPanel() {
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/';
+    window.location.href = "/";
   };
   const [businesses, setBusinesses] = useState(
     sampleBusinesses.map((business) => ({
@@ -143,7 +143,11 @@ export default function AdminPanel() {
                 {user?.name}
               </div>
               <Link to="/">
-                <Button variant="outline" size="sm" className="hidden sm:inline-flex">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden sm:inline-flex"
+                >
                   Back to Site
                 </Button>
                 <Button variant="outline" size="sm" className="sm:hidden px-2">
@@ -184,7 +188,9 @@ export default function AdminPanel() {
                       {stat.value}
                     </p>
                   </div>
-                  <div className="text-lg sm:text-2xl opacity-70">{stat.icon}</div>
+                  <div className="text-lg sm:text-2xl opacity-70">
+                    {stat.icon}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -196,16 +202,26 @@ export default function AdminPanel() {
           <CardHeader className="pb-4">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg sm:text-xl">Business Listings</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">
+                  Business Listings
+                </CardTitle>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="hidden sm:inline-flex">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hidden sm:inline-flex"
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Export
                   </Button>
                   <Button variant="outline" size="sm" className="sm:hidden">
                     <Download className="w-4 h-4" />
                   </Button>
-                  <Button variant="outline" size="sm" className="hidden sm:inline-flex">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hidden sm:inline-flex"
+                  >
                     <Filter className="w-4 h-4 mr-2" />
                     Filters
                   </Button>
@@ -226,46 +242,66 @@ export default function AdminPanel() {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="mb-6">
-
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
               {/* Mobile: Scrollable tabs */}
               <div className="w-full overflow-x-auto pb-2">
                 <TabsList className="grid grid-cols-5 min-w-[600px] sm:min-w-0 sm:w-full">
                   <TabsTrigger value="all" className="text-xs sm:text-sm">
-                    <span className="hidden sm:inline">All ({businesses.length})</span>
+                    <span className="hidden sm:inline">
+                      All ({businesses.length})
+                    </span>
                     <span className="sm:hidden">All</span>
                   </TabsTrigger>
                   <TabsTrigger value="pending" className="text-xs sm:text-sm">
                     <span className="hidden sm:inline">
-                      Pending ({businesses.filter((b) => b.status === "pending").length})
+                      Pending (
+                      {businesses.filter((b) => b.status === "pending").length})
                     </span>
                     <span className="sm:hidden">
-                      Pending ({businesses.filter((b) => b.status === "pending").length})
+                      Pending (
+                      {businesses.filter((b) => b.status === "pending").length})
                     </span>
                   </TabsTrigger>
                   <TabsTrigger value="approved" className="text-xs sm:text-sm">
                     <span className="hidden sm:inline">
-                      Approved ({businesses.filter((b) => b.status === "approved").length})
+                      Approved (
+                      {businesses.filter((b) => b.status === "approved").length}
+                      )
                     </span>
                     <span className="sm:hidden">
-                      OK ({businesses.filter((b) => b.status === "approved").length})
+                      OK (
+                      {businesses.filter((b) => b.status === "approved").length}
+                      )
                     </span>
                   </TabsTrigger>
                   <TabsTrigger value="rejected" className="text-xs sm:text-sm">
                     <span className="hidden sm:inline">
-                      Rejected ({businesses.filter((b) => b.status === "rejected").length})
+                      Rejected (
+                      {businesses.filter((b) => b.status === "rejected").length}
+                      )
                     </span>
                     <span className="sm:hidden">
-                      No ({businesses.filter((b) => b.status === "rejected").length})
+                      No (
+                      {businesses.filter((b) => b.status === "rejected").length}
+                      )
                     </span>
                   </TabsTrigger>
                   <TabsTrigger value="suspended" className="text-xs sm:text-sm">
                     <span className="hidden sm:inline">
-                      Suspended ({businesses.filter((b) => b.status === "suspended").length})
+                      Suspended (
+                      {
+                        businesses.filter((b) => b.status === "suspended")
+                          .length
+                      }
+                      )
                     </span>
                     <span className="sm:hidden">
-                      Sus ({businesses.filter((b) => b.status === "suspended").length})
+                      Sus (
+                      {
+                        businesses.filter((b) => b.status === "suspended")
+                          .length
+                      }
+                      )
                     </span>
                   </TabsTrigger>
                 </TabsList>
@@ -286,33 +322,79 @@ export default function AdminPanel() {
                         )}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-2">
-                            <h3 className="font-medium truncate">{business.name}</h3>
+                            <h3 className="font-medium truncate">
+                              {business.name}
+                            </h3>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0"
+                                >
                                   <MoreHorizontal className="w-4 h-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => window.open(`/business/${business.id}`, "_blank")}>
-                                  <Eye className="w-4 h-4 mr-2" />View
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    window.open(
+                                      `/business/${business.id}`,
+                                      "_blank",
+                                    )
+                                  }
+                                >
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  View
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => window.open(`/admin/business/${business.id}/edit`, "_blank")}>
-                                  <Edit className="w-4 h-4 mr-2" />Edit
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    window.open(
+                                      `/admin/business/${business.id}/edit`,
+                                      "_blank",
+                                    )
+                                  }
+                                >
+                                  <Edit className="w-4 h-4 mr-2" />
+                                  Edit
                                 </DropdownMenuItem>
                                 {business.status === "pending" && (
                                   <>
-                                    <DropdownMenuItem onClick={() => handleStatusChange(business.id, "approved")}>
-                                      <CheckCircle className="w-4 h-4 mr-2" />Approve
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          business.id,
+                                          "approved",
+                                        )
+                                      }
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      Approve
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleStatusChange(business.id, "rejected")}>
-                                      <XCircle className="w-4 h-4 mr-2" />Reject
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          business.id,
+                                          "rejected",
+                                        )
+                                      }
+                                    >
+                                      <XCircle className="w-4 h-4 mr-2" />
+                                      Reject
                                     </DropdownMenuItem>
                                   </>
                                 )}
                                 {business.status === "approved" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(business.id, "suspended")}>
-                                    <AlertTriangle className="w-4 h-4 mr-2" />Suspend
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        business.id,
+                                        "suspended",
+                                      )
+                                    }
+                                  >
+                                    <AlertTriangle className="w-4 h-4 mr-2" />
+                                    Suspend
                                   </DropdownMenuItem>
                                 )}
                                 <DropdownMenuItem
@@ -322,7 +404,8 @@ export default function AdminPanel() {
                                   }}
                                   className="text-red-600"
                                 >
-                                  <Trash2 className="w-4 h-4 mr-2" />Delete
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Delete
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -330,22 +413,34 @@ export default function AdminPanel() {
 
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <Badge variant="outline" className="text-xs">{business.category}</Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {business.category}
+                              </Badge>
                               <Badge
                                 className={`text-xs ${
-                                  businessStatuses[business.status as keyof typeof businessStatuses]?.color
+                                  businessStatuses[
+                                    business.status as keyof typeof businessStatuses
+                                  ]?.color
                                 }`}
                               >
-                                {businessStatuses[business.status as keyof typeof businessStatuses]?.label}
+                                {
+                                  businessStatuses[
+                                    business.status as keyof typeof businessStatuses
+                                  ]?.label
+                                }
                               </Badge>
                             </div>
 
                             <div className="flex items-center justify-between text-sm text-muted-foreground">
-                              <span>{business.rating} ⭐ ({business.reviewCount})</span>
+                              <span>
+                                {business.rating} ⭐ ({business.reviewCount})
+                              </span>
                               <span>{business.submissionDate}</span>
                             </div>
 
-                            <p className="text-sm text-muted-foreground line-clamp-1">{business.address}</p>
+                            <p className="text-sm text-muted-foreground line-clamp-1">
+                              {business.address}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -379,7 +474,9 @@ export default function AdminPanel() {
                                 />
                               )}
                               <div>
-                                <div className="font-medium">{business.name}</div>
+                                <div className="font-medium">
+                                  {business.name}
+                                </div>
                                 <div className="text-sm text-muted-foreground line-clamp-1">
                                   {business.address}
                                 </div>
@@ -392,16 +489,24 @@ export default function AdminPanel() {
                           <TableCell>
                             <Badge
                               className={
-                                businessStatuses[business.status as keyof typeof businessStatuses]?.color
+                                businessStatuses[
+                                  business.status as keyof typeof businessStatuses
+                                ]?.color
                               }
                             >
-                              {businessStatuses[business.status as keyof typeof businessStatuses]?.label}
+                              {
+                                businessStatuses[
+                                  business.status as keyof typeof businessStatuses
+                                ]?.label
+                              }
                             </Badge>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-1">
                               <span>{business.rating}</span>
-                              <span className="text-sm text-muted-foreground">({business.reviewCount})</span>
+                              <span className="text-sm text-muted-foreground">
+                                ({business.reviewCount})
+                              </span>
                             </div>
                           </TableCell>
                           <TableCell>{business.submissionDate}</TableCell>
@@ -413,25 +518,65 @@ export default function AdminPanel() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => window.open(`/business/${business.id}`, "_blank")}>
-                                  <Eye className="w-4 h-4 mr-2" />View
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    window.open(
+                                      `/business/${business.id}`,
+                                      "_blank",
+                                    )
+                                  }
+                                >
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  View
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => window.open(`/admin/business/${business.id}/edit`, "_blank")}>
-                                  <Edit className="w-4 h-4 mr-2" />Edit
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    window.open(
+                                      `/admin/business/${business.id}/edit`,
+                                      "_blank",
+                                    )
+                                  }
+                                >
+                                  <Edit className="w-4 h-4 mr-2" />
+                                  Edit
                                 </DropdownMenuItem>
                                 {business.status === "pending" && (
                                   <>
-                                    <DropdownMenuItem onClick={() => handleStatusChange(business.id, "approved")}>
-                                      <CheckCircle className="w-4 h-4 mr-2" />Approve
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          business.id,
+                                          "approved",
+                                        )
+                                      }
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      Approve
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleStatusChange(business.id, "rejected")}>
-                                      <XCircle className="w-4 h-4 mr-2" />Reject
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          business.id,
+                                          "rejected",
+                                        )
+                                      }
+                                    >
+                                      <XCircle className="w-4 h-4 mr-2" />
+                                      Reject
                                     </DropdownMenuItem>
                                   </>
                                 )}
                                 {business.status === "approved" && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(business.id, "suspended")}>
-                                    <AlertTriangle className="w-4 h-4 mr-2" />Suspend
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        business.id,
+                                        "suspended",
+                                      )
+                                    }
+                                  >
+                                    <AlertTriangle className="w-4 h-4 mr-2" />
+                                    Suspend
                                   </DropdownMenuItem>
                                 )}
                                 <DropdownMenuItem
@@ -441,7 +586,8 @@ export default function AdminPanel() {
                                   }}
                                   className="text-red-600"
                                 >
-                                  <Trash2 className="w-4 h-4 mr-2" />Delete
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Delete
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
