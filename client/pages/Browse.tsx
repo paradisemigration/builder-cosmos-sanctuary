@@ -30,6 +30,7 @@ interface FilterState {
 
 export default function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get("category") || "",
