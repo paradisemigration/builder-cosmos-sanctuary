@@ -390,11 +390,10 @@ export default function BusinessProfile() {
                         🗺️ Get Directions
                       </Button>
 
-                      <div className="grid grid-cols-3 gap-3 mt-6">
+                      <div className="grid grid-cols-3 gap-2 lg:gap-3 mt-6">
                         <Button
-                          variant="outline"
+                          className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
-                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
                           onClick={() => {
                             // Share functionality
                             if (navigator.share) {
@@ -412,12 +411,11 @@ export default function BusinessProfile() {
                           }}
                         >
                           <Share2 className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          <span className="text-xs">Share</span>
+                          <span className="text-xs block">Share</span>
                         </Button>
                         <Button
-                          variant="outline"
+                          className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
-                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
                           onClick={() => {
                             // Save/bookmark functionality
                             const saved =
@@ -435,13 +433,12 @@ export default function BusinessProfile() {
                             }
                           }}
                         >
-                          <Heart className="w-4 h-4 mb-1 group-hover:scale-110 group-hover:text-red-400 transition-all duration-300" />
-                          <span className="text-xs">Save</span>
+                          <Heart className="w-4 h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
+                          <span className="text-xs block">Save</span>
                         </Button>
                         <Button
-                          variant="outline"
+                          className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-3 px-2 lg:px-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                           size="sm"
-                          className="border-2 border-white/40 text-white hover:bg-white/30 hover:border-white/60 backdrop-blur-sm rounded-xl py-3 font-semibold transition-all duration-300 group shadow-lg"
                           onClick={() => {
                             // Report functionality
                             const reason = prompt(
@@ -456,7 +453,7 @@ export default function BusinessProfile() {
                           }}
                         >
                           <Flag className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                          <span className="text-xs">Report</span>
+                          <span className="text-xs block">Report</span>
                         </Button>
                       </div>
                     </div>
