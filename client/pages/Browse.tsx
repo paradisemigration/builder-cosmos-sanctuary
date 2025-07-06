@@ -342,8 +342,7 @@ export default function Browse() {
                 </h3>
                 <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                   Try adjusting your search criteria or filters to find more
-                  results. We have {sampleBusinesses.length} businesses in our
-                  directory.
+                  results. We have 50+ verified businesses in our directory.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button
