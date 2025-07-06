@@ -87,7 +87,35 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
     }
   }, [location, locationError, locationLoading]);
 
+  // Handle search input changes and filter suggestions
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+
+    if (value.length >= 3) {
+      const filteredBusinesses = sampleBusinesses
+        .filter((business) =>
+          business.name.toLowerCase().includes(value.toLowerCase()),
+        )
+        .slice(0, 8); // Limit to 8 suggestions
+
+      setSuggestions(filteredBusinesses);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+      setSuggestions([]);
+    }
+  };
+
+  // Handle suggestion selection
+  const handleSuggestionSelect = (businessName: string) => {
+    setSearchQuery(businessName);
+    setShowSuggestions(false);
+    setSuggestions([]);
+  };
+
+  // Handle search submission
   const handleSearch = () => {
+    setShowSuggestions(false);
     onSearch?.(
       searchQuery,
       selectedCategory === "all" ? "" : selectedCategory,
