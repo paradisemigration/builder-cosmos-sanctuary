@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { EmailService } from "./emailService";
+import { toast } from "sonner";
 
 export interface User {
   id: string;
@@ -88,6 +90,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+
+      // Send welcome email notification
+      EmailService.sendWelcomeEmail({
+        userName: userData.name,
+        userEmail: userData.email,
+        provider: "email",
+        isNewUser: false, // Regular login is returning user
+      }).then((success) => {
+        if (success) {
+          toast.success(
+            `Welcome back, ${userData.name}! 📧 Check your email for updates.`,
+          );
+        }
+      });
+
       setIsLoading(false);
       return true;
     }
