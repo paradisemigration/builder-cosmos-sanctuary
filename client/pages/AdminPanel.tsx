@@ -263,24 +263,47 @@ export default function AdminPanel() {
     return matchesSearch && matchesTab;
   });
 
-  const stats = [
-    { label: "Total Businesses", value: businesses.length, icon: "📊" },
-    {
-      label: "Pending Review",
-      value: businesses.filter((b) => b.status === "pending").length,
-      icon: "⏳",
-    },
-    {
-      label: "Approved",
-      value: businesses.filter((b) => b.status === "approved").length,
-      icon: "✅",
-    },
-    {
-      label: "Rejected",
-      value: businesses.filter((b) => b.status === "rejected").length,
-      icon: "❌",
-    },
-  ];
+  const stats =
+    activeSection === "businesses"
+      ? [
+          { label: "Total Businesses", value: businesses.length, icon: "📊" },
+          {
+            label: "Pending Review",
+            value: businesses.filter((b) => b.status === "pending").length,
+            icon: "⏳",
+          },
+          {
+            label: "Approved",
+            value: businesses.filter((b) => b.status === "approved").length,
+            icon: "✅",
+          },
+          {
+            label: "Rejected",
+            value: businesses.filter((b) => b.status === "rejected").length,
+            icon: "❌",
+          },
+        ]
+      : activeSection === "scam-reports"
+        ? [
+            { label: "Total Reports", value: scamReports.length, icon: "🚨" },
+            {
+              label: "Pending Review",
+              value: scamReports.filter((r) => r.status === "pending").length,
+              icon: "⏳",
+            },
+            {
+              label: "Published",
+              value: scamReports.filter((r) => r.status === "approved").length,
+              icon: "✅",
+            },
+            {
+              label: "Under Investigation",
+              value: scamReports.filter((r) => r.status === "investigating")
+                .length,
+              icon: "🔍",
+            },
+          ]
+        : [];
 
   return (
     <div className="min-h-screen bg-background">
