@@ -55,6 +55,7 @@ export default function AdminPanel() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
+  const [activeSection, setActiveSection] = useState("businesses");
 
   const handleLogout = () => {
     logout();
