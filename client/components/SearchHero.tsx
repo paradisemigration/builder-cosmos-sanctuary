@@ -69,7 +69,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
               >
-                <SelectTrigger className="h-12 flex lg:flex md:flex sm:flex">
+                <SelectTrigger className="h-12 flex lg:flex md:flex sm:flex bg-white/90 text-foreground border-white/30">
                   <SelectValue placeholder="Service Category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -83,8 +83,8 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
               </Select>
 
               <Select value={selectedZone} onValueChange={setSelectedZone}>
-                <SelectTrigger className="h-12 flex lg:flex md:flex sm:flex">
-                  <MapPin className="w-4 h-4 mr-2" />
+                <SelectTrigger className="h-12 flex lg:flex md:flex sm:flex bg-white/90 text-foreground border-white/30">
+                  <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Dubai Zone" />
                 </SelectTrigger>
                 <SelectContent>
