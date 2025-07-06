@@ -735,7 +735,7 @@ export default function Index() {
                   user: "Email User",
                   isNew: true,
                   color: "from-purple-500 to-pink-500",
-                  icon: "✉️",
+                  icon: "��️",
                 },
               ].map((email, index) => (
                 <div
@@ -1030,8 +1030,8 @@ export default function Index() {
                       <h3 className="relative text-2xl lg:text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:via-blue-300 group-hover:to-purple-300 transition-all duration-500">
                         <span className="flex items-center gap-2">
                           <Globe className="w-8 h-8 text-blue-400 animate-spin-slow" />
-                          Dubai<span className="text-yellow-400">Visa</span>
-                          Directory
+                          Trusted
+                          <span className="text-yellow-400">Immigration</span>
                         </span>
                       </h3>
                     </div>
