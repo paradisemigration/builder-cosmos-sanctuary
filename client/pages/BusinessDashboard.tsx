@@ -64,30 +64,41 @@ export default function BusinessDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* Enhanced Mobile Navigation */}
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-primary">
+                <h1 className="text-lg sm:text-2xl font-bold text-primary">
                   Business<span className="text-dubai-gold">Dashboard</span>
                 </h1>
               </Link>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="hidden md:block text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="hidden sm:block text-sm text-muted-foreground">
                 Welcome, {user?.name}
               </div>
+              <div className="sm:hidden text-xs text-muted-foreground truncate max-w-20">
+                {user?.name}
+              </div>
               <Link to={`/business/${business.id}`}>
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden sm:inline-flex"
+                >
                   <Eye className="w-4 h-4 mr-2" />
                   View Public Page
                 </Button>
+                <Button variant="outline" size="sm" className="sm:hidden px-2">
+                  <Eye className="w-4 h-4" />
+                </Button>
               </Link>
-              <Button size="sm" onClick={handleLogout}>
-                Logout
+              <Button size="sm" onClick={handleLogout} className="px-3 sm:px-4">
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </Button>
             </div>
           </div>
@@ -95,11 +106,11 @@ export default function BusinessDashboard() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          <div className="flex items-start gap-4">
+        {/* Responsive Header */}
+        <div className="flex flex-col gap-6 mb-8">
+          <div className="flex flex-col sm:flex-row items-start gap-4">
             {business.logo && (
-              <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted border flex-shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-muted border flex-shrink-0">
                 <img
                   src={business.logo}
                   alt={business.name}
@@ -107,30 +118,36 @@ export default function BusinessDashboard() {
                 />
               </div>
             )}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2 line-clamp-2">
                 {business.name}
               </h2>
-              <div className="flex items-center gap-3 mb-2">
-                <Badge variant="outline">{business.category}</Badge>
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <Badge variant="outline" className="text-xs sm:text-sm">
+                  {business.category}
+                </Badge>
                 {business.isVerified ? (
-                  <Badge className="bg-green-100 text-green-800">
+                  <Badge className="bg-green-100 text-green-800 text-xs sm:text-sm">
                     Verified
                   </Badge>
                 ) : (
-                  <Badge variant="secondary">Pending Verification</Badge>
+                  <Badge variant="secondary" className="text-xs sm:text-sm">
+                    Pending Verification
+                  </Badge>
                 )}
               </div>
-              <p className="text-muted-foreground">{business.address}</p>
+              <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">
+                {business.address}
+              </p>
             </div>
           </div>
 
-          <div className="lg:ml-auto flex gap-3">
-            <Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button className="flex-1 sm:flex-none">
               <Edit className="w-4 h-4 mr-2" />
               Edit Profile
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" className="flex-1 sm:flex-none">
               <Camera className="w-4 h-4 mr-2" />
               Add Photos
             </Button>
@@ -151,39 +168,51 @@ export default function BusinessDashboard() {
           </Alert>
         )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Responsive Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
           {stats.map((stat, index) => (
-            <Card key={index}>
-              <CardContent className="p-6">
+            <Card key={index} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                       {stat.label}
                     </p>
-                    <p className="text-2xl font-bold text-foreground">
+                    <p className="text-lg sm:text-2xl font-bold text-foreground">
                       {stat.value}
                     </p>
-                    <p className="text-sm text-green-600">{stat.change}</p>
+                    <p className="text-xs sm:text-sm text-green-600">
+                      {stat.change}
+                    </p>
                   </div>
-                  <stat.icon className="w-8 h-8 text-muted-foreground" />
+                  <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground opacity-70" />
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Main Content */}
+        {/* Responsive Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto pb-2">
+            <TabsList className="grid grid-cols-4 min-w-[400px] sm:min-w-0 sm:w-full">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm">
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="text-xs sm:text-sm">
+                Reviews
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="text-xs sm:text-sm">
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="text-xs sm:text-sm">
+                Settings
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="lg:col-span-2 space-y-6">
                 {/* Recent Activity */}
                 <Card>
@@ -281,37 +310,39 @@ export default function BusinessDashboard() {
               </div>
 
               <div className="space-y-6">
-                {/* Quick Actions */}
+                {/* Responsive Quick Actions */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">
+                      Quick Actions
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      <Button className="w-full justify-start">
+                    <div className="grid grid-cols-1 gap-3">
+                      <Button className="w-full justify-center sm:justify-start h-12 sm:h-10">
                         <Edit className="w-4 h-4 mr-2" />
-                        Update Business Info
+                        <span className="truncate">Update Business Info</span>
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full justify-start"
+                        className="w-full justify-center sm:justify-start h-12 sm:h-10"
                       >
                         <Camera className="w-4 h-4 mr-2" />
-                        Manage Photos
+                        <span className="truncate">Manage Photos</span>
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full justify-start"
+                        className="w-full justify-center sm:justify-start h-12 sm:h-10"
                       >
                         <MessageSquare className="w-4 h-4 mr-2" />
-                        Respond to Reviews
+                        <span className="truncate">Respond to Reviews</span>
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full justify-start"
+                        className="w-full justify-center sm:justify-start h-12 sm:h-10"
                       >
                         <Download className="w-4 h-4 mr-2" />
-                        Download Analytics
+                        <span className="truncate">Download Analytics</span>
                       </Button>
                     </div>
                   </CardContent>
@@ -358,7 +389,9 @@ export default function BusinessDashboard() {
           <TabsContent value="reviews" className="mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Customer Reviews</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">
+                  Customer Reviews
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
@@ -367,10 +400,10 @@ export default function BusinessDashboard() {
                       key={review.id}
                       className="border-b border-border last:border-0 pb-6 last:pb-0"
                     >
-                      <div className="flex items-start gap-4">
-                        <Avatar>
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                           <AvatarImage src={review.userAvatar} />
-                          <AvatarFallback>
+                          <AvatarFallback className="text-xs sm:text-sm">
                             {review.userName
                               .split(" ")
                               .map((n) => n[0])
@@ -378,10 +411,10 @@ export default function BusinessDashboard() {
                           </AvatarFallback>
                         </Avatar>
 
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                             <div className="flex items-center gap-2">
-                              <h4 className="font-semibold">
+                              <h4 className="font-semibold text-sm sm:text-base truncate">
                                 {review.userName}
                               </h4>
                               {review.isVerified && (
@@ -390,7 +423,7 @@ export default function BusinessDashboard() {
                                 </Badge>
                               )}
                             </div>
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-xs sm:text-sm text-muted-foreground">
                               {review.date}
                             </span>
                           </div>
@@ -399,26 +432,30 @@ export default function BusinessDashboard() {
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${i < review.rating ? "text-accent fill-accent" : "text-muted-foreground"}`}
+                                className={`w-3 h-3 sm:w-4 sm:h-4 ${i < review.rating ? "text-accent fill-accent" : "text-muted-foreground"}`}
                               />
                             ))}
                           </div>
 
-                          <p className="text-muted-foreground mb-4">
+                          <p className="text-sm sm:text-base text-muted-foreground mb-4 leading-relaxed">
                             {review.comment}
                           </p>
 
                           {review.businessResponse ? (
-                            <div className="bg-muted/30 p-4 rounded-lg">
-                              <h5 className="font-semibold text-sm mb-2">
+                            <div className="bg-muted/30 p-3 sm:p-4 rounded-lg">
+                              <h5 className="font-semibold text-xs sm:text-sm mb-2">
                                 Your Response:
                               </h5>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                                 {review.businessResponse}
                               </p>
                             </div>
                           ) : (
-                            <Button variant="outline" size="sm">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full sm:w-auto"
+                            >
                               <MessageSquare className="w-4 h-4 mr-2" />
                               Respond
                             </Button>
