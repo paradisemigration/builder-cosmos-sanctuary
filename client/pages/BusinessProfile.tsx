@@ -496,7 +496,7 @@ export default function BusinessProfile() {
         </div>
       </div>
 
-      {/* Enhanced Content Tabs */}
+      {/* Enhanced Content Tabs - Mobile Responsive Design */}
       <div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12"
         data-section="content"
@@ -511,34 +511,43 @@ export default function BusinessProfile() {
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
-            className="space-y-8"
+            className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-white/80 backdrop-blur-sm border border-blue-200/50 rounded-2xl p-2 shadow-lg">
-              <TabsTrigger
-                value="overview"
-                className="rounded-xl font-semibold text-gray-700 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300"
-              >
-                📋 Overview
-              </TabsTrigger>
-              <TabsTrigger
-                value="services"
-                className="rounded-xl font-semibold text-gray-700 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300"
-              >
-                🛠️ Services
-              </TabsTrigger>
-              <TabsTrigger
-                value="reviews"
-                className="rounded-xl font-semibold text-gray-700 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300"
-              >
-                ⭐ Reviews
-              </TabsTrigger>
-              <TabsTrigger
-                value="photos"
-                className="rounded-xl font-semibold text-gray-700 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all duration-300"
-              >
-                📸 Photos
-              </TabsTrigger>
-            </TabsList>
+            {/* Enhanced Mobile-First TabsList */}
+            <div className="sticky top-24 z-40 mb-8">
+              <TabsList className="w-full h-auto bg-gradient-to-r from-white via-blue-50 to-purple-50 backdrop-blur-xl border-2 border-blue-200/50 rounded-2xl p-3 shadow-2xl">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
+                  <TabsTrigger
+                    value="overview"
+                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-blue-50"
+                  >
+                    <Award className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Overview</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="services"
+                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-green-50"
+                  >
+                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Services</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="reviews"
+                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-yellow-50"
+                  >
+                    <Star className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Reviews</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="photos"
+                    className="flex flex-col items-center gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-3 md:py-4 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-pink-50"
+                  >
+                    <Camera className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Photos</span>
+                  </TabsTrigger>
+                </div>
+              </TabsList>
+            </div>
 
             <TabsContent value="overview" className="mt-8">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
