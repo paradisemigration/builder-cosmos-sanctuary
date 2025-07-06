@@ -1,4 +1,4 @@
-import { businessLogos, coverImages } from "./logoUrls";
+import { updateBusinessLogos } from "./updateBusinessLogos";
 
 export interface Business {
   id: string;
@@ -2309,7 +2309,11 @@ export const sampleBusinesses: Business[] = [
   },
 ];
 
-export const featuredBusinesses = sampleBusinesses.filter(
+// Update all business logos with working URLs
+const businessesWithLogos = updateBusinessLogos(sampleBusinesses);
+export { businessesWithLogos as sampleBusinesses };
+
+export const featuredBusinesses = businessesWithLogos.filter(
   (business) => business.isVerified && business.rating >= 4.5,
 );
 
