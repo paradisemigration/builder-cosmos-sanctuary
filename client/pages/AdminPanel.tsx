@@ -168,12 +168,21 @@ export default function AdminPanel() {
         {/* Header */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Business Management
+            Admin Panel
           </h2>
           <p className="text-muted-foreground">
-            Manage and moderate business listings in the directory
+            Manage business listings, reviews, and directory content
           </p>
         </div>
+
+        {/* Main Navigation Tabs */}
+        <Tabs value={activeSection} onValueChange={setActiveSection} className="mb-8">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="businesses">Business Management</TabsTrigger>
+            <TabsTrigger value="reviews">Review Management</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="businesses">{/* Business Management Content */}
 
         {/* Responsive Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
