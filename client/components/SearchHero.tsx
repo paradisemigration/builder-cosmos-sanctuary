@@ -111,7 +111,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-12 text-base px-6"
+                className="h-12 text-base px-6 bg-white/80 border-white/30 text-foreground hover:bg-white hover:text-primary"
               >
                 <Filter className="w-5 h-5 mr-2" />
                 Advanced Filters
