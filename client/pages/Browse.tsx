@@ -14,6 +14,7 @@ import {
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Navigation } from "@/components/Navigation";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
