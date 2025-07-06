@@ -42,6 +42,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { sampleBusinesses, Business } from "@/lib/data";
+import { ReviewManagement } from "@/components/ReviewManagement";
 
 const businessStatuses = {
   pending: { label: "Pending Review", color: "bg-yellow-100 text-yellow-800" },
