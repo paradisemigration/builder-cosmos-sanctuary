@@ -219,11 +219,12 @@ export default function BusinessProfile() {
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 mb-6">
+              {/* Centered Business Header Section */}
+              <div className="text-center mb-8">
                 {business.logo && (
-                  <div className="relative group">
-                    <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
-                    <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden bg-white border-4 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105 group-hover:rotate-3">
+                  <div className="relative group mx-auto mb-6">
+                    <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
+                    <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105">
                       <img
                         src={business.logo}
                         alt={`${business.name} logo`}
@@ -233,39 +234,44 @@ export default function BusinessProfile() {
                   </div>
                 )}
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight">
-                      {business.name}
-                    </h1>
+                <div className="space-y-4">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
+                    {business.name}
+                  </h1>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      {business.isVerified && (
-                        <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse">
-                          <Shield className="w-4 h-4 mr-1" />
-                          Verified
-                        </Badge>
-                      )}
+                  <div className="flex flex-wrap items-center justify-center gap-3">
+                    <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
+                      {business.category}
+                    </Badge>
 
-                      {business.isScamReported && (
-                        <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm">
-                          <AlertTriangle className="w-4 h-4 mr-1" />
-                          Reported
-                        </Badge>
-                      )}
-                    </div>
+                    {business.isVerified && (
+                      <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-base md:text-lg px-4 py-2">
+                        <Shield className="w-5 h-5 mr-2" />
+                        Verified
+                      </Badge>
+                    )}
+
+                    {business.isScamReported && (
+                      <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-base md:text-lg px-4 py-2">
+                        <AlertTriangle className="w-5 h-5 mr-2" />
+                        Reported
+                      </Badge>
+                    )}
                   </div>
+                </div>
+              </div>
 
-                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm mb-4 text-sm md:text-base px-3 py-1">
-                    {business.category}
-                  </Badge>
+              {/* Business Details Section */}
+              <div className="space-y-6">{/* Moved to separate section for better organization */}
 
-                  <div className="flex items-center gap-3 mb-4">
+                {/* Rating Section */}
+                <div className="text-center mb-6">
+                  <div className="flex items-center justify-center gap-3 mb-4">
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-4 h-4 md:w-5 md:h-5 transition-all duration-300 ${
+                          className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${
                             i < Math.floor(business.rating)
                               ? "text-yellow-400 fill-yellow-400 drop-shadow-sm scale-110"
                               : "text-gray-400"
@@ -273,52 +279,56 @@ export default function BusinessProfile() {
                         />
                       ))}
                     </div>
-                    <span className="text-lg md:text-xl font-bold text-white">
+                    <span className="text-xl md:text-2xl font-bold text-white">
                       {business.rating}
                     </span>
-                    <span className="text-blue-200">
+                    <span className="text-blue-200 text-lg">
                       ({business.reviewCount} reviews)
                     </span>
                   </div>
+                </div>
 
-                  <p className="text-blue-100 leading-relaxed mb-6 text-sm md:text-base">
+                {/* Description */}
+                <div className="text-center mb-8">
+                  <p className="text-blue-100 leading-relaxed text-base md:text-lg max-w-3xl mx-auto">
                     {business.description}
                   </p>
-
-                  {/* Contact Info Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 text-blue-200 text-sm">
-                      <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <span className="truncate">{business.address}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-blue-200 text-sm">
-                      <Phone className="w-4 h-4 text-green-400 flex-shrink-0" />
-                      <span>{business.phone}</span>
-                    </div>
-
-                    {business.email && (
-                      <div className="flex items-center gap-2 text-blue-200 text-sm">
-                        <Mail className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                        <span className="truncate">{business.email}</span>
-                      </div>
-                    )}
-
-                    {business.website && (
-                      <div className="flex items-center gap-2 text-blue-200 text-sm">
-                        <Globe className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                        <a
-                          href={business.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline"
-                        >
-                          Visit Website
-                        </a>
-                      </div>
-                    )}
-                  </div>
                 </div>
+
+                {/* Contact Info Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                  <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                    <span className="truncate">{business.address}</span>
+                  </div>
+
+                  <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <Phone className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <span>{business.phone}</span>
+                  </div>
+
+                  {business.email && (
+                    <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                      <Mail className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                      <span className="truncate">{business.email}</span>
+                    </div>
+                  )}
+
+                  {business.website && (
+                    <div className="flex items-center justify-center gap-3 text-blue-200 text-base bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                      <Globe className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <a
+                        href={business.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline"
+                      >
+                        Visit Website
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
               </div>
             </div>
 
