@@ -1659,6 +1659,46 @@ export default function AdminPanel() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Scam Report Delete Confirmation Dialog */}
+      <Dialog
+        open={showScamDeleteDialog}
+        onOpenChange={setShowScamDeleteDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-800">
+              <AlertTriangle className="w-5 h-5" />
+              Delete Scam Report
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              Are you sure you want to delete the scam report for "
+              {selectedScamReport?.companyName}"? This action cannot be undone
+              and will remove the report from both the admin panel and any live
+              pages.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowScamDeleteDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() =>
+                selectedScamReport &&
+                handleDeleteScamReport(selectedScamReport.id)
+              }
+            >
+              Delete Report
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
