@@ -68,7 +68,6 @@ export default function Browse() {
 
   // Initialize businesses on mount
   useEffect(() => {
-    console.log("Initializing businesses:", sampleBusinesses.length);
     setFilteredBusinesses(sampleBusinesses);
   }, []);
 
@@ -99,10 +98,6 @@ export default function Browse() {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "Filtering businesses. Initial count:",
-      sampleBusinesses.length,
-    );
     let filtered = [...sampleBusinesses];
 
     // Text search
@@ -167,7 +162,6 @@ export default function Browse() {
         break;
     }
 
-    console.log("Filtered businesses count:", filtered.length);
     setFilteredBusinesses(filtered);
   }, [searchQuery, filters]);
 
@@ -436,30 +430,13 @@ export default function Browse() {
 
           {/* Enhanced Business Listings */}
           <div className="lg:col-span-3 order-1 lg:order-2">
-            {/* Debug Info */}
-            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                🔧 Debug: Total businesses available: {sampleBusinesses.length},
-                Filtered: {filteredBusinesses.length}
-              </p>
-              {sampleBusinesses.length > 0 && (
-                <p className="text-xs text-yellow-700 mt-1">
-                  First business: {sampleBusinesses[0].name}
-                </p>
-              )}
-            </div>
             {/* Enhanced Results Header */}
             <div className="bg-gradient-to-r from-white/90 to-blue-50/90 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg border border-white/50">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    ��� {filteredBusinesses.length} Business
+                    🎯 {filteredBusinesses.length} Business
                     {filteredBusinesses.length !== 1 ? "es" : ""} Found
-                    {filteredBusinesses.length === 0 && (
-                      <span className="text-red-500 text-sm block">
-                        Debug: Total available: {sampleBusinesses.length}
-                      </span>
-                    )}
                   </h2>
                   <p className="text-gray-600 flex items-center gap-2">
                     <Eye className="w-4 h-4" />
