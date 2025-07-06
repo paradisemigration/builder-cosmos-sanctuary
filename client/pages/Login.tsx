@@ -47,7 +47,13 @@ const LinkedInIcon = () => (
 );
 
 export default function Login() {
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const {
+    login,
+    loginWithGoogle,
+    loginWithFacebook,
+    isAuthenticated,
+    isLoading,
+  } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -109,10 +115,24 @@ export default function Login() {
     alert("Registration functionality would be implemented here!");
   };
 
-  const handleSocialLogin = (provider: string) => {
-    // In a real app, this would initiate OAuth flow
-    console.log(`${provider} login initiated`);
-    alert(`${provider} login would be implemented here!`);
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      let success = false;
+      if (provider === "Google") {
+        success = await loginWithGoogle();
+      } else if (provider === "Facebook") {
+        success = await loginWithFacebook();
+      }
+
+      if (success) {
+        const from = location.state?.from || "/dashboard";
+        navigate(from, { replace: true });
+      } else {
+        alert(`Failed to login with ${provider}. Please try again.`);
+      }
+    } catch (error) {
+      alert(`Error logging in with ${provider}. Please try again.`);
+    }
   };
 
   return (
