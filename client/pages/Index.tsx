@@ -9,6 +9,8 @@ import {
   Building,
   Shield,
   Clock,
+  Menu,
+  X,
 } from "lucide-react";
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
@@ -23,6 +25,7 @@ import {
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
@@ -49,13 +52,14 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-primary">
+              <Link to="/" className="flex-shrink-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">
                   Dubai<span className="text-dubai-gold">Visa</span>Directory
                 </h1>
-              </div>
+              </Link>
             </div>
 
+            {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
@@ -81,7 +85,59 @@ export default function Index() {
                 </Link>
               </div>
             </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2"
+              >
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
+            </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+                <Link
+                  to="/"
+                  className="text-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/browse"
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Browse Services
+                </Link>
+                <Link
+                  to="/add-business"
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Add Business
+                </Link>
+                <div className="px-3 py-2">
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Button size="sm" className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
