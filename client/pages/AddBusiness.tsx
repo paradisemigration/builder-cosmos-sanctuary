@@ -206,54 +206,6 @@ export default function AddBusiness() {
       {/* Navigation */}
       <Navigation />
             <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0">
-                <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  �� Trusted<span className="text-yellow-500">Immigration</span>
-                </h1>
-              </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                {[
-                  { to: "/", text: "🏠 Home" },
-                  { to: "/browse", text: "🔍 Browse Services" },
-                  {
-                    to: "/add-business",
-                    text: "➕ Add Business",
-                    active: true,
-                  },
-                ].map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                      link.active
-                        ? "text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
-                  >
-                    {link.text}
-                  </Link>
-                ))}
-                <Link to="/login">
-                  <Button className="rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg">
-                    🔐 Sign In
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-xl"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
       {/* Enhanced Hero Header */}
       <div
         className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden"
