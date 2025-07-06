@@ -133,6 +133,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setUser(googleUser);
     localStorage.setItem("user", JSON.stringify(googleUser));
+
+    // Send welcome email for Google signup
+    EmailService.sendWelcomeEmail({
+      userName: googleUser.name,
+      userEmail: googleUser.email,
+      provider: "google",
+      isNewUser: true, // Google login creates new user
+    }).then((success) => {
+      if (success) {
+        toast.success(
+          `Welcome ${googleUser.name}! 🎉 Thank you email sent to ${googleUser.email}`,
+        );
+      }
+    });
+
     setIsLoading(false);
     return true;
   };
@@ -157,6 +172,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setUser(facebookUser);
     localStorage.setItem("user", JSON.stringify(facebookUser));
+
+    // Send welcome email for Facebook signup
+    EmailService.sendWelcomeEmail({
+      userName: facebookUser.name,
+      userEmail: facebookUser.email,
+      provider: "facebook",
+      isNewUser: true, // Facebook login creates new user
+    }).then((success) => {
+      if (success) {
+        toast.success(
+          `Welcome ${facebookUser.name}! 🎉 Thank you email sent to ${facebookUser.email}`,
+        );
+      }
+    });
+
     setIsLoading(false);
     return true;
   };
