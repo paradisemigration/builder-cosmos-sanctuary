@@ -760,19 +760,19 @@ export default function BusinessProfile() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8 xl:gap-12">
             {/* Reviews List */}
-            <div className="lg:col-span-2 space-y-6 md:space-y-8">
+            <div className="xl:col-span-2 space-y-4 md:space-y-6 lg:space-y-8">
               {visibleReviews.map((review, index) => (
                 <Card
                   key={review.id}
-                  className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
+                  className="bg-gradient-to-br from-white via-white to-purple-50/30 border border-purple-100/50 md:border-2 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
                 >
-                  <CardContent className="p-6 md:p-8">
-                    <div className="flex items-start gap-4 md:gap-6">
-                      <Avatar className="w-12 h-12 md:w-16 md:h-16 border-3 border-purple-200 shadow-lg">
+                  <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8">
+                    <div className="flex items-start gap-3 sm:gap-4 md:gap-6">
+                      <Avatar className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 border-2 md:border-3 border-purple-200 shadow-lg flex-shrink-0">
                         <AvatarImage src={review.userAvatar} />
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm md:text-lg">
+                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs sm:text-sm md:text-lg">
                           {review.userName
                             .split(" ")
                             .map((n) => n[0])
@@ -781,68 +781,70 @@ export default function BusinessProfile() {
                       </Avatar>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-3 md:mb-4">
-                          <div className="flex items-center gap-3 md:gap-4">
-                            <h4 className="font-bold text-gray-800 text-base md:text-lg">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 md:mb-3 lg:mb-4 gap-2 sm:gap-0">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
+                            <h4 className="font-bold text-gray-800 text-sm sm:text-base md:text-lg">
                               {review.userName}
                             </h4>
                             {review.isVerified && (
-                              <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-sm">
-                                <CheckCircle className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+                              <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-xs sm:text-sm w-fit">
+                                <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                                 Verified Customer
                               </Badge>
                             )}
                           </div>
-                          <span className="text-sm md:text-base text-gray-500 bg-gray-100 px-3 py-2 rounded-full font-medium">
+                          <span className="text-xs sm:text-sm md:text-base text-gray-500 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-full font-medium self-start sm:self-auto">
                             {review.date}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-3 mb-4 md:mb-6">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${
-                                i < review.rating
-                                  ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                          <span className="text-lg md:text-xl font-bold text-gray-800 ml-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3 md:mb-4 lg:mb-6">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-all duration-300 ${
+                                  i < review.rating
+                                    ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-base sm:text-lg md:text-xl font-bold text-gray-800">
                             {review.rating}.0 / 5.0
                           </span>
                         </div>
 
-                        <p className="text-gray-700 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">
+                        <p className="text-gray-700 mb-4 sm:mb-6 md:mb-8 leading-relaxed text-sm sm:text-base md:text-lg">
                           "{review.comment}"
                         </p>
 
-                        <div className="flex items-center gap-4 md:gap-6">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 md:gap-6">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => toggleLikeReview(review.id)}
-                            className={`transition-all duration-300 text-sm md:text-base ${
+                            className={`transition-all duration-300 text-xs sm:text-sm md:text-base w-fit ${
                               likedReviews.has(review.id)
                                 ? "text-red-600 bg-red-50"
                                 : "text-gray-600 hover:text-red-600 hover:bg-red-50"
                             }`}
                           >
                             <ThumbsUp
-                              className={`w-4 h-4 md:w-5 md:h-5 mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
+                              className={`w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
                             />
                             Helpful {likedReviews.has(review.id) ? "(1)" : ""}
                           </Button>
-                          <span className="text-gray-400 text-sm md:text-base">
+                          <span className="text-gray-400 text-xs sm:text-sm md:text-base hidden sm:inline">
                             |
                           </span>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 text-sm md:text-base"
+                            className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 text-xs sm:text-sm md:text-base w-fit"
                           >
-                            <Eye className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                            <Eye className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
                             View Response
                           </Button>
                         </div>
@@ -857,17 +859,25 @@ export default function BusinessProfile() {
                   <Button
                     onClick={() => setShowAllReviews(!showAllReviews)}
                     variant="outline"
-                    className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-8 md:px-12 py-3 md:py-4 rounded-xl transition-all duration-300 group text-base md:text-lg"
+                    className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 md:border-2 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-4 sm:px-6 md:px-8 lg:px-12 py-2 sm:py-3 md:py-4 rounded-lg md:rounded-xl transition-all duration-300 group text-sm sm:text-base md:text-lg"
                   >
                     {showAllReviews ? (
                       <>
-                        <ChevronUp className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
-                        Show Less Reviews
+                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
+                        <span className="hidden sm:inline">
+                          Show Less Reviews
+                        </span>
+                        <span className="sm:hidden">Show Less</span>
                       </>
                     ) : (
                       <>
-                        <ChevronDown className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
-                        Show All {businessReviews.length} Reviews
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
+                        <span className="hidden sm:inline">
+                          Show All {businessReviews.length} Reviews
+                        </span>
+                        <span className="sm:hidden">
+                          Show All ({businessReviews.length})
+                        </span>
                       </>
                     )}
                   </Button>
@@ -876,24 +886,24 @@ export default function BusinessProfile() {
             </div>
 
             {/* Review Writing Section & Stats */}
-            <div className="space-y-6 md:space-y-8">
+            <div className="space-y-4 md:space-y-6 lg:space-y-8">
               {/* Review Stats Card */}
-              <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-2 border-blue-200/50 shadow-xl">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg md:text-xl font-bold text-gray-800 text-center">
+              <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border border-blue-200/50 md:border-2 shadow-xl">
+                <CardHeader className="pb-3 md:pb-4">
+                  <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-gray-800 text-center">
                     📊 Review Summary
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <div className="mb-6">
-                    <div className="text-4xl md:text-5xl font-black text-blue-600 mb-2">
+                  <div className="mb-4 md:mb-6">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-black text-blue-600 mb-2">
                       {business.rating}
                     </div>
                     <div className="flex justify-center mb-2">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 md:w-6 md:h-6 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${
                             i < Math.floor(business.rating)
                               ? "text-yellow-400 fill-yellow-400"
                               : "text-gray-300"
@@ -901,26 +911,29 @@ export default function BusinessProfile() {
                         />
                       ))}
                     </div>
-                    <p className="text-gray-600 font-medium">
+                    <p className="text-gray-600 font-medium text-sm sm:text-base">
                       Based on {business.reviewCount} reviews
                     </p>
                   </div>
 
-                  <div className="space-y-2 text-left">
+                  <div className="space-y-1.5 md:space-y-2 text-left">
                     {[5, 4, 3, 2, 1].map((stars) => {
                       const percentage = Math.random() * 60 + 20; // Mock percentage
                       return (
-                        <div key={stars} className="flex items-center gap-2">
-                          <span className="text-sm font-medium w-8">
+                        <div
+                          key={stars}
+                          className="flex items-center gap-1.5 md:gap-2"
+                        >
+                          <span className="text-xs sm:text-sm font-medium w-6 sm:w-8">
                             {stars}★
                           </span>
-                          <div className="flex-1 bg-gray-200 rounded-full h-2">
+                          <div className="flex-1 bg-gray-200 rounded-full h-1.5 md:h-2">
                             <div
-                              className="bg-gradient-to-r from-yellow-400 to-orange-400 h-2 rounded-full"
+                              className="bg-gradient-to-r from-yellow-400 to-orange-400 h-1.5 md:h-2 rounded-full"
                               style={{ width: `${percentage}%` }}
                             ></div>
                           </div>
-                          <span className="text-sm text-gray-600 w-10">
+                          <span className="text-xs sm:text-sm text-gray-600 w-8 sm:w-10">
                             {Math.round(percentage)}%
                           </span>
                         </div>
@@ -931,35 +944,39 @@ export default function BusinessProfile() {
               </Card>
 
               {/* Write Review Card */}
-              <Card className="sticky top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border-2 border-yellow-200/50 shadow-xl">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-3 justify-center">
-                    <Star className="w-6 h-6 text-yellow-600" />⭐ Write a
-                    Review
+              <Card className="xl:sticky xl:top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border border-yellow-200/50 md:border-2 shadow-xl">
+                <CardHeader className="pb-3 md:pb-4">
+                  <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3 justify-center">
+                    <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
+                    <span className="hidden sm:inline">⭐ Write a Review</span>
+                    <span className="sm:hidden">⭐ Write Review</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-6">
-                    <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-xl">
-                      <Star className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                  <div className="text-center py-4 md:py-6">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 md:mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-xl">
+                      <Star className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3">
                       Share Your Experience
                     </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed text-sm md:text-base">
+                    <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-xs sm:text-sm md:text-base px-2">
                       Help others by sharing your experience with{" "}
                       {business.name}. Your honest feedback helps build trust in
                       our community.
                     </p>
                     <Button
                       onClick={handleSubmitReview}
-                      className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 md:py-5 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg rounded-lg md:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                       size="lg"
                     >
-                      <Send className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
-                      ✍️ Write Your Review
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
+                      <span className="hidden sm:inline">
+                        ✍️ Write Your Review
+                      </span>
+                      <span className="sm:hidden">✍️ Write Review</span>
                     </Button>
-                    <p className="text-xs text-gray-500 mt-4 bg-white/60 p-3 rounded-lg">
+                    <p className="text-xs text-gray-500 mt-3 md:mt-4 bg-white/60 p-2 md:p-3 rounded-lg">
                       🔐 Sign in with Google or Facebook to verify your review
                       and build trust
                     </p>
