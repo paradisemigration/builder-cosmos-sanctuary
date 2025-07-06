@@ -173,70 +173,86 @@ export default function Browse() {
         </div>
       </nav>
 
-      {/* Search Header */}
-      <div className="bg-muted/30 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-foreground mb-6">
-            Browse Immigration Services
-          </h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-2 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                placeholder="Search for visa services, agents, consultants..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12"
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-              />
-            </div>
-
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger className="h-12">
-                <SelectValue placeholder="Service Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {businessCategories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedZone} onValueChange={setSelectedZone}>
-              <SelectTrigger className="h-12">
-                <MapPin className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Dubai Zone" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Areas</SelectItem>
-                {dubaiZones.map((zone) => (
-                  <SelectItem key={zone} value={zone}>
-                    {zone}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      {/* Enhanced Search Header */}
+      <div className="bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Browse Immigration Services
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Discover verified professionals and trusted service providers in
+              Dubai
+            </p>
           </div>
 
-          <Button onClick={handleSearch} className="mt-4 w-full md:w-auto">
-            <Search className="w-4 h-4 mr-2" />
-            Search Services
-          </Button>
+          {/* Modern Search Card */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg border border-white/20">
+            <div className="space-y-4">
+              {/* Main Search Input */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <Input
+                  placeholder="Search for visa services, agents, consultants..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-4 h-14 text-base rounded-xl border-2 border-border/20 focus:border-primary/50 bg-white/50"
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+
+              {/* Filter Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
+                  <SelectTrigger className="h-12 rounded-xl bg-white/50 border-2 border-border/20">
+                    <SelectValue placeholder="Service Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {businessCategories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedZone} onValueChange={setSelectedZone}>
+                  <SelectTrigger className="h-12 rounded-xl bg-white/50 border-2 border-border/20">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Dubai Zone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Areas</SelectItem>
+                    {dubaiZones.map((zone) => (
+                      <SelectItem key={zone} value={zone}>
+                        {zone}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  onClick={handleSearch}
+                  className="h-12 rounded-xl bg-primary hover:bg-primary/90 text-base font-semibold px-8"
+                >
+                  <Search className="w-5 h-5 mr-2" />
+                  Search
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
+      {/* Enhanced Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* Mobile-First Filters */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="sticky top-24">
               <CategoryFilter
                 filters={filters}
@@ -246,58 +262,114 @@ export default function Browse() {
             </div>
           </div>
 
-          {/* Business Listings */}
-          <div className="lg:col-span-3">
+          {/* Enhanced Business Listings */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
+            {/* Results Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-foreground">
+                  {filteredBusinesses.length} Business
+                  {filteredBusinesses.length !== 1 ? "es" : ""} Found
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Showing verified immigration services in Dubai
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-muted-foreground hidden sm:inline">
+                  Sort by:
+                </span>
+                <Select
+                  value={filters.sortBy}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({ ...prev, sortBy: value }))
+                  }
+                >
+                  <SelectTrigger className="w-40 h-10 rounded-lg">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                    <SelectItem value="reviews">Most Reviews</SelectItem>
+                    <SelectItem value="name">Name A-Z</SelectItem>
+                    <SelectItem value="verified">Verified First</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             {filteredBusinesses.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
+              <div className="text-center py-16 lg:py-24">
+                <div className="w-24 h-24 mx-auto mb-6 bg-muted/30 rounded-full flex items-center justify-center">
+                  <Search className="w-12 h-12 text-muted-foreground" />
+                </div>
+                <h3 className="text-2xl font-semibold text-foreground mb-3">
                   No businesses found
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                   Try adjusting your search criteria or filters to find more
-                  results.
+                  results. We have {sampleBusinesses.length} businesses in our
+                  directory.
                 </p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedCategory("all");
-                    setSelectedZone("all");
-                    setFilters({
-                      categories: [],
-                      zones: [],
-                      rating: "",
-                      verified: false,
-                      hasReviews: false,
-                      sortBy: "rating",
-                    });
-                  }}
-                >
-                  Clear All Filters
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("all");
+                      setSelectedZone("all");
+                      setFilters({
+                        categories: [],
+                        zones: [],
+                        rating: "",
+                        verified: false,
+                        hasReviews: false,
+                        sortBy: "rating",
+                      });
+                    }}
+                    className="rounded-lg"
+                  >
+                    Clear All Filters
+                  </Button>
+                  <Button className="rounded-lg">View All Businesses</Button>
+                </div>
               </div>
             ) : (
-              <div className="space-y-6">
-                {filteredBusinesses.map((business) => (
-                  <BusinessCard
-                    key={business.id}
-                    business={business}
-                    onClick={() =>
-                      (window.location.href = `/business/${business.id}`)
-                    }
-                  />
-                ))}
-              </div>
-            )}
+              <>
+                {/* Business Grid */}
+                <div className="grid grid-cols-1 gap-6">
+                  {filteredBusinesses.map((business) => (
+                    <div
+                      key={business.id}
+                      className="group hover:scale-[1.01] transition-all duration-300"
+                    >
+                      <BusinessCard
+                        business={business}
+                        onClick={() =>
+                          (window.location.href = `/business/${business.id}`)
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
 
-            {/* Load More Button */}
-            {filteredBusinesses.length > 0 && (
-              <div className="text-center mt-12">
-                <Button variant="outline" size="lg">
-                  Load More Results
-                </Button>
-              </div>
+                {/* Enhanced Load More Section */}
+                <div className="text-center mt-12 pt-8 border-t border-border/50">
+                  <div className="mb-4">
+                    <p className="text-sm text-muted-foreground">
+                      Showing {filteredBusinesses.length} of{" "}
+                      {sampleBusinesses.length} businesses
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="rounded-lg min-w-[200px]"
+                  >
+                    Load More Results
+                  </Button>
+                </div>
+              </>
             )}
           </div>
         </div>

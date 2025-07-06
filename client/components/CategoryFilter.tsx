@@ -76,14 +76,14 @@ export function CategoryFilter({
     (filters.hasReviews ? 1 : 0);
 
   return (
-    <div className="bg-card border rounded-lg shadow-sm">
-      {/* Header */}
-      <div className="p-4 border-b">
-        <div className="flex items-center justify-between">
+    <div className="bg-white/50 backdrop-blur-sm border border-border/30 rounded-xl shadow-sm">
+      {/* Enhanced Header */}
+      <div className="p-4 lg:p-6 border-b border-border/30">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Collapsible open={isOpen} onOpenChange={setIsOpen}>
               <CollapsibleTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="rounded-lg">
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
                   Filters
                   {activeFilterCount > 0 && (
@@ -95,33 +95,49 @@ export function CategoryFilter({
               </CollapsibleTrigger>
             </Collapsible>
 
-            <span className="text-sm text-muted-foreground">
-              {resultCount} businesses found
-            </span>
+            <div className="hidden sm:block">
+              <span className="text-sm text-muted-foreground">
+                {resultCount} business{resultCount !== 1 ? "es" : ""} found
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
             {activeFilterCount > 0 && (
-              <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearAllFilters}
+                className="rounded-lg"
+              >
                 Clear all
               </Button>
             )}
 
-            <Select
-              value={filters.sortBy}
-              onValueChange={(value) => updateFilter("sortBy", value)}
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="rating">Highest Rated</SelectItem>
-                <SelectItem value="reviews">Most Reviews</SelectItem>
-                <SelectItem value="name">Name A-Z</SelectItem>
-                <SelectItem value="verified">Verified First</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="lg:hidden">
+              <Select
+                value={filters.sortBy}
+                onValueChange={(value) => updateFilter("sortBy", value)}
+              >
+                <SelectTrigger className="w-36 h-9 rounded-lg">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="reviews">Most Reviews</SelectItem>
+                  <SelectItem value="name">Name A-Z</SelectItem>
+                  <SelectItem value="verified">Verified First</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+        </div>
+
+        {/* Mobile Results Count */}
+        <div className="sm:hidden mt-2">
+          <span className="text-sm text-muted-foreground">
+            {resultCount} business{resultCount !== 1 ? "es" : ""} found
+          </span>
         </div>
 
         {/* Active Filters */}
