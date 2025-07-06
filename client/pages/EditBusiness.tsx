@@ -9,6 +9,7 @@ import {
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
