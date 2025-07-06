@@ -15,8 +15,21 @@ import {
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 
-// Mock data - In a real app, this would come from your backend
+// Mock approved scam reports - In a real app, this would come from your backend API
+// Only reports with status "approved" are shown on live pages
 const mockScamReports = {
+  "abu-dhabi/quick-visa-solutions": {
+    companyName: "Quick Visa Solutions",
+    location: "Abu Dhabi, UAE",
+    contactNumber: "+971-2-987-6543",
+    emailId: "info@quickvisascam.com",
+    scamDescription:
+      "Paid 8000 AED for family visa processing. They provided fake documents and disappeared after 3 months. When I tried to verify the documents with immigration authorities, they were completely fake. The company office was closed and phone numbers disconnected.",
+    reportDate: "2024-01-20",
+    verificationStatus: "verified",
+    evidenceCount: 2,
+    status: "approved", // Only approved reports are accessible
+  },
   "dubai/fake-immigration-services": {
     companyName: "Fake Immigration Services",
     location: "Dubai, UAE",
@@ -27,6 +40,7 @@ const mockScamReports = {
     reportDate: "2024-01-15",
     verificationStatus: "verified",
     evidenceCount: 3,
+    status: "approved", // Only approved reports are accessible
   },
 };
 
