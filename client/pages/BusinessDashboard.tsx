@@ -66,11 +66,13 @@ export default function BusinessDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
       <Navigation />
-
-      {/* Business Owner Header */}
-      <div className="bg-gradient-to-r from-orange-50 to-purple-50 border-b border-orange-100">
+      <div className="p-8">
+        <h1>Business Dashboard</h1>
+      </div>
+    </div>
+  );
+}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
