@@ -106,9 +106,14 @@ export function ReviewManagement() {
   }, [reviews, searchQuery, statusFilter, providerFilter]);
 
   const handleEditReview = (review: AdminReview) => {
-    setSelectedReview(review);
-    setEditingComment(review.comment);
-    setIsEditModalOpen(true);
+    try {
+      setSelectedReview(review);
+      setEditingComment(review.comment);
+      setIsEditModalOpen(true);
+      console.log("Opening edit modal for review:", review.id);
+    } catch (error) {
+      console.error("Error opening edit modal:", error);
+    }
   };
 
   const handleUpdateReview = () => {
@@ -500,7 +505,12 @@ export function ReviewManagement() {
             >
               Cancel
             </Button>
-            <Button onClick={handleUpdateReview}>Save Changes</Button>
+            <Button
+              onClick={handleUpdateReview}
+              disabled={!editingComment.trim()}
+            >
+              Save Changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
