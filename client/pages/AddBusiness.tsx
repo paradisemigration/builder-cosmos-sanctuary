@@ -1279,8 +1279,8 @@ export default function AddBusiness() {
         >
           <Button
             variant="outline"
-            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-            disabled={currentStep === 1}
+            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+            disabled={currentStep === 0}
             className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-2xl border-2 border-gray-300 hover:border-gray-400"
           >
             ⬅️ Previous Step
