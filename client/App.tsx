@@ -101,14 +101,10 @@ const App = () => (
                 </div>
               }
             />
+            <Route path="/report" element={<ReportScam />} />
             <Route
-              path="/report"
-              element={
-                <div className="p-8 text-center">
-                  <h1 className="text-2xl font-bold">Report Scam</h1>
-                  <p className="text-muted-foreground">Coming soon...</p>
-                </div>
-              }
+              path="/reviews/:location/:companyName"
+              element={<ScamReview />}
             />
             <Route
               path="/privacy"
