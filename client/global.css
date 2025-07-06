@@ -114,6 +114,74 @@
   transform: translateY(0);
 }
 
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .mobile-search-spacing {
+    padding: 0.5rem;
+  }
+
+  .mobile-card-padding {
+    padding: 1rem;
+  }
+
+  .mobile-button-text {
+    font-size: 0.875rem;
+  }
+}
+
+/* Enhanced button-like card styling */
+.business-card-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.business-card-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+  border-radius: inherit;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.business-card-gradient:hover::before {
+  opacity: 1;
+}
+
+/* WhatsApp button styling */
+.whatsapp-button {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+  border: none;
+}
+
+.whatsapp-button:hover {
+  background: linear-gradient(135deg, #128c7e 0%, #075e54 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+}
+
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+  .md-enhanced-padding {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg-enhanced-padding {
+    padding: 2rem;
+  }
+}
+
 @layer base {
   /**
    * Dubai Immigration & Visa Services Directory Theme
