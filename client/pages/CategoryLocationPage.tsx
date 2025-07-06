@@ -16,7 +16,12 @@ import {
   Search,
   CheckCircle,
 } from "lucide-react";
-import { sampleBusinesses, businessCategories, dubaiZones } from "@/lib/data";
+import {
+  sampleBusinesses,
+  businessCategories,
+  dubaiZones,
+  type Business,
+} from "@/lib/data";
 
 export default function CategoryLocationPage() {
   const { location, category } = useParams();
