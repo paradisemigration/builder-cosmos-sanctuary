@@ -259,7 +259,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 <div className="lg:col-span-6">
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none">
-                      <Search className="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                      <Search className="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-hover:text-orange-500 transition-colors duration-300" />
                     </div>
                     <Input
                       placeholder="Search visa services, immigration consultants..."
