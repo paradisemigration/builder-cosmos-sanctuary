@@ -1322,6 +1322,9 @@ export default function AddBusiness() {
           )}
         </div>
       </div>
+
+      {/* Debug Info - Remove before production */}
+      <DebugPageInfo />
     </div>
   );
 }
