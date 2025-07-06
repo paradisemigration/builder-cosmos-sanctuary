@@ -250,13 +250,12 @@ export default function BusinessProfile() {
           >
             <div className="text-center mb-8 max-w-4xl mx-auto">
               {business.logo && (
-                <div className="relative group mx-auto mb-6">
-                  <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-sm animate-pulse"></div>
-                  <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-500 transform group-hover:scale-105">
+                <div className="relative mx-auto mb-6">
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-6 border-white shadow-2xl">
                     <img
                       src={business.logo}
                       alt={`${business.name} logo`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
