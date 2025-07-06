@@ -170,46 +170,196 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/50" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-        {/* Header Section with Animations */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
+        {/* Enhanced Search Form - Moved to Top */}
         <div
-          className={`text-center mb-16 transition-all duration-1000 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+          className={`max-w-6xl mx-auto mb-8 md:mb-12 transition-all duration-1000 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          {/* Trust Badge */}
-          <div className="inline-flex items-center justify-center mb-6">
-            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold tracking-wide">
-                  🇦🇪 DUBAI'S #1 IMMIGRATION DIRECTORY
-                </span>
-                <CheckCircle className="w-4 h-4 text-green-400" />
+          <div className="relative group">
+            {/* Animated Border */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500 rounded-2xl md:rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 animate-pulse"></div>
+
+            <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 shadow-2xl border border-white/30">
+              {/* Form Header */}
+              <div className="text-center mb-6 md:mb-8">
+                <div className="inline-flex items-center justify-center mb-3 md:mb-4">
+                  <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-200 rounded-full px-4 md:px-6 py-2">
+                    <div className="flex items-center space-x-2 md:space-x-3">
+                      <div className="w-2 h-2 md:w-3 md:h-3 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-xs md:text-sm font-semibold tracking-wide text-blue-700">
+                        🇦🇪 DUBAI'S #1 IMMIGRATION DIRECTORY
+                      </span>
+                      <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-green-400" />
+                    </div>
+                  </div>
+                </div>
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 md:mb-3">
+                  Find Your Immigration Partner Today
+                </h3>
+                <p className="text-sm md:text-base lg:text-lg text-gray-600">
+                  Search verified professionals who will guide you every step of
+                  the way
+                </p>
+              </div>
+
+              {/* Search Fields */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8">
+                {/* Main Search */}
+                <div className="lg:col-span-6">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none">
+                      <Search className="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                    </div>
+                    <Input
+                      placeholder="Search visa services, immigration consultants..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 md:pl-16 h-12 md:h-14 lg:h-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium transition-all duration-300 hover:border-gray-300"
+                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    />
+                  </div>
+                </div>
+
+                {/* Category Select */}
+                <div className="lg:col-span-3">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none z-10">
+                      <Filter className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                    </div>
+                    <Select
+                      value={selectedCategory}
+                      onValueChange={setSelectedCategory}
+                    >
+                      <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
+                        <SelectValue placeholder="Service Type" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl md:rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-xl">
+                        <SelectItem
+                          value="all"
+                          className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
+                        >
+                          All Services
+                        </SelectItem>
+                        {businessCategories.map((category) => (
+                          <SelectItem
+                            key={category}
+                            value={category}
+                            className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
+                          >
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Location Select */}
+                <div className="lg:col-span-3">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none z-10">
+                      <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                    </div>
+                    <Select
+                      value={selectedZone}
+                      onValueChange={setSelectedZone}
+                    >
+                      <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
+                        <SelectValue placeholder="Dubai Area" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl md:rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-xl">
+                        <SelectItem
+                          value="all"
+                          className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
+                        >
+                          All Areas
+                        </SelectItem>
+                        {dubaiZones.map((zone) => (
+                          <SelectItem
+                            key={zone}
+                            value={zone}
+                            className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
+                          >
+                            {zone}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Search Button */}
+              <div className="text-center mb-4 md:mb-6">
+                <Button
+                  onClick={handleSearch}
+                  size="lg"
+                  className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 text-white font-bold px-8 md:px-12 lg:px-16 py-3 md:py-4 lg:py-6 text-base md:text-lg lg:text-xl h-auto rounded-xl md:rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group overflow-hidden w-full md:w-auto"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <Search className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 mr-2 md:mr-4" />
+                  <span>Find Your Immigration Partner</span>
+                </Button>
+              </div>
+
+              {/* Quick Search Tags */}
+              <div className="text-center">
+                <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4 font-medium">
+                  ✨ Popular searches:
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3">
+                  {[
+                    "Tourist Visa",
+                    "Work Permit",
+                    "Family Visa",
+                    "Document Clearing",
+                    "Immigration Consultants",
+                    "Visa Renewal",
+                  ].map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => {
+                        setSearchQuery(tag);
+                        handleSearch();
+                      }}
+                      className="group px-3 md:px-4 lg:px-6 py-2 md:py-3 bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 text-blue-700 hover:text-blue-800 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 hover:scale-105 transform border border-blue-200 hover:border-blue-300 hover:shadow-lg"
+                    >
+                      <span className="group-hover:animate-pulse">{tag}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
+        {/* Header Section with Animations */}
+        <div
+          className={`text-center mb-8 md:mb-12 lg:mb-16 transition-all duration-1000 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+          style={{ transitionDelay: "0.3s" }}
+        >
           {/* Main Heading */}
-          <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black mb-8 leading-none">
-            <span className="block mb-2">Find Your</span>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 md:mb-6 lg:mb-8 leading-none">
+            <span className="block mb-1 md:mb-2">Find Your</span>
             <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-gradient-x">
               Immigration
             </span>
-            <span className="block text-4xl sm:text-5xl lg:text-6xl mt-4 text-slate-200">
+            <span className="block text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-2 md:mt-4 text-slate-200">
               Partner in Dubai
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl lg:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-12">
+          <p className="text-sm md:text-base lg:text-xl xl:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-8 md:mb-10 lg:mb-12">
             Connect with verified visa agents, immigration consultants, and
             document services.
-            <span className="block mt-2 text-cyan-300">
+            <span className="block mt-1 md:mt-2 text-cyan-300">
               Join thousands who found their perfect immigration solution.
             </span>
           </p>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 max-w-4xl mx-auto mb-6 md:mb-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
@@ -219,14 +369,16 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 onMouseEnter={() => setHoveredStat(index)}
                 onMouseLeave={() => setHoveredStat(null)}
               >
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 lg:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
                   <stat.icon
-                    className={`w-8 h-8 ${stat.color} mx-auto mb-3 transition-transform group-hover:scale-110`}
+                    className={`w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 ${stat.color} mx-auto mb-2 md:mb-3 transition-transform group-hover:scale-110`}
                   />
-                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                  <div className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-slate-300">{stat.label}</div>
+                  <div className="text-xs md:text-sm text-slate-300">
+                    {stat.label}
+                  </div>
                 </div>
               </div>
             ))}
