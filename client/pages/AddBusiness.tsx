@@ -232,6 +232,12 @@ export default function AddBusiness() {
 
   const steps = [
     {
+      number: 0,
+      title: "Business Name",
+      icon: <Building className="w-5 h-5" />,
+      description: "Search & verify your business name",
+    },
+    {
       number: 1,
       title: "Basic Information",
       icon: <Building className="w-5 h-5" />,
