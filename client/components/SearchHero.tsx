@@ -1,5 +1,15 @@
-import { useState } from "react";
-import { Search, MapPin, Filter } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Search,
+  MapPin,
+  Filter,
+  Plane,
+  Globe,
+  Users,
+  Award,
+  Clock,
+  Shield,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
