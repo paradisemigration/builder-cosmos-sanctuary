@@ -143,25 +143,15 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
             {/* Desktop Title Row - Hidden on Mobile */}
             <div className="hidden sm:block">
               <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="font-bold text-xl text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                <h3 className="font-bold text-xl lg:text-2xl text-foreground group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-500 line-clamp-2">
                   {business.name}
                 </h3>
 
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  {business.isVerified && (
-                    <Badge
-                      variant="outline"
-                      className="bg-verified/10 text-verified border-verified/20"
-                    >
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Verified
-                    </Badge>
-                  )}
-
                   {business.isScamReported && (
                     <Badge
                       variant="outline"
-                      className="bg-warning/10 text-warning border-warning/20"
+                      className="bg-red-50 text-red-600 border-red-200 animate-pulse"
                     >
                       <AlertTriangle className="w-3 h-3 mr-1" />
                       Reported
@@ -170,7 +160,10 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
                 </div>
               </div>
 
-              <Badge variant="outline" className="mb-3 text-xs">
+              <Badge
+                variant="outline"
+                className="mb-3 text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 border-blue-200 hover:from-blue-100 hover:to-purple-100 transition-colors duration-300"
+              >
                 {business.category}
               </Badge>
 
@@ -179,11 +172,11 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 ${i < Math.floor(business.rating) ? "text-accent fill-accent" : "text-muted-foreground"}`}
+                      className={`w-4 h-4 transition-all duration-300 ${i < Math.floor(business.rating) ? "text-yellow-400 fill-yellow-400 drop-shadow-sm" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
-                <span className="text-sm font-medium text-foreground ml-1">
+                <span className="text-sm font-bold text-foreground ml-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   {business.rating}
                 </span>
                 <span className="text-sm text-muted-foreground">
@@ -192,57 +185,78 @@ export function BusinessCard({ business, onClick }: BusinessCardProps) {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
+            <p className="text-sm lg:text-base text-muted-foreground mb-4 line-clamp-2 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
               {business.description}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-3 mb-4 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground group-hover:text-blue-600 transition-colors duration-300">
                 <MapPin className="w-4 h-4 flex-shrink-0" />
                 <span className="line-clamp-1">{business.address}</span>
               </div>
 
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="flex items-center gap-2 text-muted-foreground group-hover:text-green-600 transition-colors duration-300">
                 <Phone className="w-4 h-4 flex-shrink-0" />
                 <span>{business.phone}</span>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="flex flex-wrap gap-1.5 mb-6">
               {business.services.slice(0, 4).map((service, index) => (
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="text-xs px-2 py-1"
+                  className="text-xs px-3 py-1 bg-gradient-to-r from-gray-50 to-blue-50 text-gray-700 border-gray-200 hover:from-blue-50 hover:to-purple-50 hover:text-blue-700 transition-all duration-300"
                 >
                   {service}
                 </Badge>
               ))}
               {business.services.length > 4 && (
-                <Badge variant="secondary" className="text-xs px-2 py-1">
+                <Badge
+                  variant="secondary"
+                  className="text-xs px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200"
+                >
                   +{business.services.length - 4} more
                 </Badge>
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
               <Button
                 size="sm"
-                className="flex-1 sm:flex-none sm:min-w-[140px] rounded-lg font-medium"
+                className="flex-1 sm:flex-none sm:min-w-[140px] lg:min-w-[160px] rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group/btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClick?.();
+                }}
               >
+                <Eye className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-300" />
                 View Details
+                <ExternalLink className="w-3 h-3 ml-2 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
               </Button>
 
               {business.whatsapp && (
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 sm:flex-none rounded-lg"
+                  className="flex-1 sm:flex-none rounded-xl font-semibold border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:text-green-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/whatsapp"
+                  onClick={handleWhatsAppClick}
                 >
-                  <MessageCircle className="w-4 h-4 mr-2" />
+                  <MessageCircle className="w-4 h-4 mr-2 group-hover/whatsapp:scale-110 transition-transform duration-300" />
                   WhatsApp
                 </Button>
               )}
+
+              <Button
+                size="sm"
+                variant="outline"
+                className="flex-1 sm:flex-none rounded-xl font-semibold border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/phone"
+                onClick={handlePhoneClick}
+              >
+                <Phone className="w-4 h-4 mr-2 group-hover/phone:scale-110 transition-transform duration-300" />
+                Call Now
+              </Button>
             </div>
           </div>
         </div>
