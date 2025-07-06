@@ -48,6 +48,7 @@ const LinkedInIcon = () => (
 
 export default function Login() {
   const {
+    user,
     login,
     loginWithGoogle,
     loginWithFacebook,
@@ -69,11 +70,22 @@ export default function Login() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from || "/dashboard";
-      navigate(from, { replace: true });
+    if (isAuthenticated && user) {
+      let redirectPath = "/";
+
+      // Determine redirect path based on user role
+      if (user.role === "admin") {
+        redirectPath = "/admin";
+      } else if (user.role === "business_owner") {
+        redirectPath = "/dashboard";
+      } else {
+        // Regular users go back to where they came from or home
+        redirectPath = location.state?.from || "/";
+      }
+
+      navigate(redirectPath, { replace: true });
     }
-  }, [isAuthenticated, navigate, location.state]);
+  }, [isAuthenticated, user, navigate, location.state]);
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
@@ -92,8 +104,8 @@ export default function Login() {
       const success = await login(loginData.email, loginData.password);
 
       if (success) {
-        const from = location.state?.from || "/dashboard";
-        navigate(from, { replace: true });
+        // Let the useEffect handle the redirect based on user role
+        // Don't navigate here as useEffect will handle it
       } else {
         setLoginError("Invalid email or password. Please try again.");
       }
@@ -125,8 +137,8 @@ export default function Login() {
       }
 
       if (success) {
-        const from = location.state?.from || "/dashboard";
-        navigate(from, { replace: true });
+        // Let the useEffect handle the redirect based on user role
+        // Don't navigate here as useEffect will handle it
       } else {
         alert(`Failed to login with ${provider}. Please try again.`);
       }
