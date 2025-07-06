@@ -324,7 +324,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                         value={selectedZone}
                         onValueChange={setSelectedZone}
                       >
-                        <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
+                        <SelectTrigger className="h-12 md:h-14 lg:h-16 pl-12 md:pl-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all duration-300 hover:border-gray-300">
                           <SelectValue placeholder={locationDisplayText} />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl md:rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-xl">
