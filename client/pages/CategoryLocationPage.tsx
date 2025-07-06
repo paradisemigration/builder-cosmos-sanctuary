@@ -382,6 +382,9 @@ export default function CategoryLocationPage() {
           </div>
         )}
       </div>
+
+      {/* Debug Info - Remove before production */}
+      <DebugPageInfo />
     </div>
   );
 }
