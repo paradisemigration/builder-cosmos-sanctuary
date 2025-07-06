@@ -72,35 +72,34 @@ export default function BusinessDashboard() {
       <div className="bg-gradient-to-r from-orange-50 to-purple-50 border-b border-orange-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0">
-                <h1 className="text-lg sm:text-2xl font-bold text-primary">
-                  Business<span className="text-dubai-gold">Dashboard</span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <Building className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-800">
+                  Business Dashboard
                 </h1>
-              </Link>
+                <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="hidden sm:block text-sm text-muted-foreground">
-                Welcome, {user?.name}
-              </div>
-              <div className="sm:hidden text-xs text-muted-foreground truncate max-w-20">
-                {user?.name}
-              </div>
               <Link to={`/business/${business.id}`}>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="hidden sm:inline-flex"
+                  className="border-blue-300 text-blue-600 hover:bg-blue-50"
                 >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Public Page
-                </Button>
-                <Button variant="outline" size="sm" className="sm:hidden px-2">
-                  <Eye className="w-4 h-4" />
+                  <span className="hidden sm:inline">View Public Page</span>
+                  <span className="sm:hidden">View</span>
                 </Button>
               </Link>
-              <Button size="sm" onClick={handleLogout} className="px-3 sm:px-4">
+              <Button
+                size="sm"
+                onClick={handleLogout}
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+              >
                 <span className="hidden sm:inline">Logout</span>
                 <span className="sm:hidden">Exit</span>
               </Button>
