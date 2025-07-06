@@ -9,6 +9,7 @@ import {
   Mail,
   Globe,
   Building,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,7 @@ interface BusinessFormData {
 
 export default function AddBusiness() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
     category: "",
@@ -139,17 +141,18 @@ export default function AddBusiness() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-primary">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">
                   Dubai<span className="text-dubai-gold">Visa</span>Directory
                 </h1>
               </Link>
             </div>
 
+            {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
@@ -175,18 +178,65 @@ export default function AddBusiness() {
                 </Link>
               </div>
             </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+                <Link
+                  to="/"
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/browse"
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Browse Services
+                </Link>
+                <Link
+                  to="/add-business"
+                  className="text-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Add Business
+                </Link>
+                <div className="px-3 py-2">
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Button size="sm" className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* Header */}
       <div className="bg-gradient-to-r from-primary/10 to-accent/10 border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4">
               Add Your Business
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
               Join Dubai's trusted directory of immigration and visa services.
               Reach more customers and grow your business.
             </p>
@@ -195,8 +245,35 @@ export default function AddBusiness() {
       </div>
 
       {/* Progress Steps */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Mobile Progress */}
+        <div className="block sm:hidden mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+                {currentStep}
+              </div>
+              <span className="ml-2 text-sm font-medium text-foreground">
+                Step {currentStep} of {steps.length}
+              </span>
+            </div>
+            <span className="text-xs text-muted-foreground">
+              {Math.round((currentStep / steps.length) * 100)}%
+            </span>
+          </div>
+          <div className="w-full bg-muted rounded-full h-2">
+            <div
+              className="bg-primary h-2 rounded-full transition-all duration-300"
+              style={{ width: `${(currentStep / steps.length) * 100}%` }}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            {steps[currentStep - 1].title}
+          </p>
+        </div>
+
+        {/* Desktop Progress */}
+        <div className="hidden sm:flex items-center justify-between mb-8">
           {steps.map((step, index) => (
             <div key={step.number} className="flex items-center flex-1">
               <div className="flex items-center">
@@ -210,7 +287,7 @@ export default function AddBusiness() {
                   {step.number}
                 </div>
                 <span
-                  className={`ml-3 text-sm font-medium ${
+                  className={`ml-3 text-sm font-medium hidden lg:block ${
                     step.number <= currentStep
                       ? "text-foreground"
                       : "text-muted-foreground"
@@ -232,12 +309,12 @@ export default function AddBusiness() {
 
         {/* Form Content */}
         <Card>
-          <CardHeader>
-            <CardTitle>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg sm:text-xl">
               Step {currentStep}: {steps[currentStep - 1].title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6">
             {currentStep === 1 && (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -338,12 +415,12 @@ export default function AddBusiness() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
                     <Label>Business Logo</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
-                      <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground mb-2">
+                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
+                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                         Upload logo (optional)
                       </p>
                       <input
@@ -357,12 +434,17 @@ export default function AddBusiness() {
                         id="logo-upload"
                       />
                       <Label htmlFor="logo-upload" className="cursor-pointer">
-                        <Button variant="outline" size="sm" asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="text-xs"
+                        >
                           <span>Choose File</span>
                         </Button>
                       </Label>
                       {logo && (
-                        <p className="text-xs text-muted-foreground mt-2">
+                        <p className="text-xs text-muted-foreground mt-2 truncate">
                           {logo.name}
                         </p>
                       )}
@@ -371,9 +453,9 @@ export default function AddBusiness() {
 
                   <div>
                     <Label>Cover Image</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
-                      <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground mb-2">
+                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
+                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                         Upload cover (optional)
                       </p>
                       <input
@@ -387,23 +469,28 @@ export default function AddBusiness() {
                         id="cover-upload"
                       />
                       <Label htmlFor="cover-upload" className="cursor-pointer">
-                        <Button variant="outline" size="sm" asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="text-xs"
+                        >
                           <span>Choose File</span>
                         </Button>
                       </Label>
                       {coverImage && (
-                        <p className="text-xs text-muted-foreground mt-2">
+                        <p className="text-xs text-muted-foreground mt-2 truncate">
                           {coverImage.name}
                         </p>
                       )}
                     </div>
                   </div>
 
-                  <div>
+                  <div className="sm:col-span-2 lg:col-span-1">
                     <Label>Gallery Images</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
-                      <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground mb-2">
+                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
+                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                         Upload photos (max 5)
                       </p>
                       <input
@@ -422,22 +509,29 @@ export default function AddBusiness() {
                         htmlFor="gallery-upload"
                         className="cursor-pointer"
                       >
-                        <Button variant="outline" size="sm" asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="text-xs"
+                        >
                           <span>Choose Files</span>
                         </Button>
                       </Label>
                       {galleryImages.length > 0 && (
-                        <div className="mt-2">
+                        <div className="mt-2 space-y-1">
                           {galleryImages.map((file, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between text-xs text-muted-foreground"
+                              className="flex items-center justify-between text-xs text-muted-foreground bg-muted/30 rounded px-2 py-1"
                             >
-                              <span>{file.name}</span>
+                              <span className="truncate flex-1 mr-2">
+                                {file.name}
+                              </span>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-auto p-0"
+                                className="h-auto p-0 flex-shrink-0"
                                 onClick={() => removeGalleryImage(index)}
                               >
                                 <X className="w-3 h-3" />
@@ -602,23 +696,27 @@ export default function AddBusiness() {
                         <p className="text-sm">{formData.description}</p>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          <span>{formData.address}</span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          <span className="break-words">
+                            {formData.address}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          <span>{formData.phone}</span>
+                          <Phone className="w-4 h-4 flex-shrink-0" />
+                          <span className="break-all">{formData.phone}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          <span>{formData.email}</span>
+                          <Mail className="w-4 h-4 flex-shrink-0" />
+                          <span className="break-all">{formData.email}</span>
                         </div>
                         {formData.website && (
                           <div className="flex items-center gap-2">
-                            <Globe className="w-4 h-4" />
-                            <span>{formData.website}</span>
+                            <Globe className="w-4 h-4 flex-shrink-0" />
+                            <span className="break-all">
+                              {formData.website}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -671,11 +769,12 @@ export default function AddBusiness() {
         </Card>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 mt-6 sm:mt-8">
           <Button
             variant="outline"
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
+            className="w-full sm:w-auto order-2 sm:order-1"
           >
             Previous
           </Button>
@@ -684,6 +783,7 @@ export default function AddBusiness() {
             <Button
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={!canProceedToNext()}
+              className="w-full sm:w-auto order-1 sm:order-2"
             >
               Next Step
             </Button>
@@ -692,6 +792,7 @@ export default function AddBusiness() {
               onClick={handleSubmit}
               disabled={!canProceedToNext()}
               size="lg"
+              className="w-full sm:w-auto order-1 sm:order-2"
             >
               Submit for Review
             </Button>
