@@ -166,7 +166,7 @@ export default function Index() {
             Test Browse (navigate)
           </button>
           <button
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => (window.location.href = "#/login")}
             className="bg-purple-500 text-white px-3 py-1 rounded text-sm"
           >
             Test Login (window.location)
