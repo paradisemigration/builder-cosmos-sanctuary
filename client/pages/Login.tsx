@@ -68,24 +68,24 @@ export default function Login() {
   const [loginError, setLoginError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      let redirectPath = "/";
+  // Redirect if already authenticated - TEMPORARILY DISABLED FOR DEBUGGING
+  // useEffect(() => {
+  //   if (isAuthenticated && user) {
+  //     let redirectPath = "/";
 
-      // Determine redirect path based on user role
-      if (user.role === "admin") {
-        redirectPath = "/admin";
-      } else if (user.role === "business_owner") {
-        redirectPath = "/dashboard";
-      } else {
-        // Regular users go back to where they came from or home
-        redirectPath = location.state?.from || "/";
-      }
+  //     // Determine redirect path based on user role
+  //     if (user.role === "admin") {
+  //       redirectPath = "/admin";
+  //     } else if (user.role === "business_owner") {
+  //       redirectPath = "/dashboard";
+  //     } else {
+  //       // Regular users go back to where they came from or home
+  //       redirectPath = location.state?.from || "/";
+  //     }
 
-      navigate(redirectPath, { replace: true });
-    }
-  }, [isAuthenticated, user, navigate, location.state]);
+  //     navigate(redirectPath, { replace: true });
+  //   }
+  // }, [isAuthenticated, user, navigate, location.state]);
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
