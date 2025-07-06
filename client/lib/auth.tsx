@@ -6,12 +6,17 @@ export interface User {
   email: string;
   role: "user" | "business_owner" | "admin";
   businessId?: string; // For business owners
+  avatar?: string;
+  provider?: "email" | "google" | "facebook"; // OAuth provider
+  providerId?: string; // OAuth provider user ID
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<boolean>;
+  loginWithFacebook: () => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -78,6 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email: foundUser.email,
         role: foundUser.role,
         businessId: foundUser.businessId,
+        provider: "email",
       };
 
       setUser(userData);
@@ -90,6 +96,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return false;
   };
 
+  const loginWithGoogle = async (): Promise<boolean> => {
+    setIsLoading(true);
+
+    // Simulate Google OAuth flow
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Simulate Google user data
+    const googleUser: User = {
+      id: `google_${Date.now()}`,
+      name: "John Google User",
+      email: "user@gmail.com",
+      role: "user",
+      provider: "google",
+      providerId: "google_123456",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    };
+
+    setUser(googleUser);
+    localStorage.setItem("user", JSON.stringify(googleUser));
+    setIsLoading(false);
+    return true;
+  };
+
+  const loginWithFacebook = async (): Promise<boolean> => {
+    setIsLoading(true);
+
+    // Simulate Facebook OAuth flow
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Simulate Facebook user data
+    const facebookUser: User = {
+      id: `facebook_${Date.now()}`,
+      name: "Jane Facebook User",
+      email: "user@facebook.com",
+      role: "user",
+      provider: "facebook",
+      providerId: "facebook_789012",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b3c2?w=150&h=150&fit=crop&crop=face",
+    };
+
+    setUser(facebookUser);
+    localStorage.setItem("user", JSON.stringify(facebookUser));
+    setIsLoading(false);
+    return true;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
@@ -99,6 +153,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     isAuthenticated: !!user,
     login,
+    loginWithGoogle,
+    loginWithFacebook,
     logout,
     isLoading,
   };
