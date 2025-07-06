@@ -1031,7 +1031,7 @@ export default function Index() {
                         <span className="flex items-center gap-2">
                           <Globe className="w-8 h-8 text-blue-400 animate-spin-slow" />
                           Trusted
-                          <span className="text-yellow-400">Immigration</span>
+                          <span className="text-gray-800">Immigration</span>
                         </span>
                       </h3>
                     </div>
