@@ -248,22 +248,22 @@ export function CategoryFilter({
               </div>
             </div>
 
-            {/* Zones */}
+            {/* Cities */}
             <div>
-              <h4 className="font-semibold mb-3">Dubai Areas</h4>
+              <h4 className="font-semibold mb-3">UAE Cities</h4>
               <div className="space-y-2 max-h-48 overflow-y-auto">
-                {dubaiZones.map((zone) => (
-                  <div key={zone} className="flex items-center space-x-2">
+                {uaeCities.map((city) => (
+                  <div key={city} className="flex items-center space-x-2">
                     <Checkbox
-                      id={zone}
-                      checked={filters.zones.includes(zone)}
-                      onCheckedChange={() => toggleZone(zone)}
+                      id={city}
+                      checked={filters.zones.includes(city)}
+                      onCheckedChange={() => toggleZone(city)}
                     />
                     <label
-                      htmlFor={zone}
+                      htmlFor={city}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                     >
-                      {zone}
+                      {city}
                     </label>
                   </div>
                 ))}
