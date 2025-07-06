@@ -181,42 +181,42 @@ export function Navigation({ className = "" }: NavigationProps) {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
+        {/* Enhanced Mobile Navigation Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+            <div className="px-4 pt-4 pb-6 space-y-3 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border-t border-blue-100/50 shadow-2xl">
               <Link
                 to="/"
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Home
+                🏠 Home
               </Link>
               <Link
                 to="/browse"
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/browse")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Browse Services
+                🔍 Browse Services
               </Link>
               <Link
                 to="/add-business"
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/add-business")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Add Business
+                ➕ Add Business
               </Link>
 
               {/* Mobile Authentication Section */}
