@@ -430,7 +430,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                         setSearchQuery(tag);
                         handleSearch();
                       }}
-                      className="group px-3 md:px-4 lg:px-6 py-2 md:py-3 bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 text-blue-700 hover:text-blue-800 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 hover:scale-105 transform border border-blue-200 hover:border-blue-300 hover:shadow-lg"
+                      className="group px-3 md:px-4 lg:px-6 py-2 md:py-3 bg-gradient-to-r from-orange-50 to-purple-50 hover:from-orange-100 hover:to-purple-100 text-orange-700 hover:text-orange-800 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 hover:scale-105 transform border border-orange-200 hover:border-orange-300 hover:shadow-lg"
                     >
                       <span className="group-hover:animate-pulse">{tag}</span>
                     </button>
