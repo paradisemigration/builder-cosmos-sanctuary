@@ -1489,6 +1489,9 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      {/* Debug Info - Remove before production */}
+      <DebugPageInfo />
     </div>
   );
 }
