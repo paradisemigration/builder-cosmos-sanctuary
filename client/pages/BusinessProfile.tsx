@@ -262,7 +262,8 @@ export default function BusinessProfile() {
               </div>
 
               {/* Business Details Section */}
-              <div className="space-y-6">{/* Moved to separate section for better organization */}
+              <div className="space-y-6">
+                {/* Moved to separate section for better organization */}
 
                 {/* Rating Section */}
                 <div className="text-center mb-6">
@@ -328,7 +329,6 @@ export default function BusinessProfile() {
                     </div>
                   )}
                 </div>
-              </div>
               </div>
             </div>
 
