@@ -25,7 +25,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { sampleBusinesses, businessCategories, dubaiZones } from "@/lib/data";
+import {
+  sampleBusinesses,
+  businessCategories,
+  dubaiZones,
+  uaeCities,
+} from "@/lib/data";
 
 export default function EditBusiness() {
   const { id } = useParams();
