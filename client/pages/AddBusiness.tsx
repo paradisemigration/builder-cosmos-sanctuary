@@ -215,6 +215,9 @@ export default function AddBusiness() {
   };
 
   const canProceedToNext = () => {
+    if (currentStep === 0) {
+      return businessNameVerified;
+    }
     if (currentStep === 1) {
       return formData.name && formData.category && formData.description;
     }
