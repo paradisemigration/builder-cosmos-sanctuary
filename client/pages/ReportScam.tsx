@@ -210,19 +210,26 @@ export default function ReportScam() {
                 Thank you for reporting this scam. Your report helps protect
                 others in our community.
               </p>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
-                <p className="text-sm text-green-700">
-                  <strong>
-                    Your report is being reviewed and will be published at:
-                  </strong>
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                <p className="text-sm text-blue-700">
+                  <strong>🔍 Review Process:</strong>
                   <br />
-                  <span className="font-mono text-orange-600">
+                  Your report has been submitted to our administrators for
+                  review. Once verified and approved, it will be published at:
+                  <br />
+                  <span className="font-mono text-orange-600 block mt-2">
                     /{createReviewUrl(formData.companyName, formData.location)}
                   </span>
                 </p>
               </div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+                <p className="text-sm text-yellow-700">
+                  <strong>⏰ Timeline:</strong> Admin review typically takes
+                  24-48 hours. You'll be notified once your report is live.
+                </p>
+              </div>
               <p className="text-sm text-gray-500">
-                Redirecting you to the review page in a few seconds...
+                Thank you for helping keep our community safe!
               </p>
             </div>
           </div>
