@@ -60,7 +60,7 @@ export const businessCategories: BusinessCategory[] = [
   "Travel Agencies (Visa-related)",
 ];
 
-export const sampleBusinesses: Business[] = [
+const originalBusinesses: Business[] = [
   {
     id: "1",
     name: "Dubai Visa Express",
@@ -2310,10 +2310,9 @@ export const sampleBusinesses: Business[] = [
 ];
 
 // Update all business logos with working URLs
-const businessesWithLogos = updateBusinessLogos(sampleBusinesses);
-export { businessesWithLogos as sampleBusinesses };
+export const sampleBusinesses = updateBusinessLogos(originalBusinesses);
 
-export const featuredBusinesses = businessesWithLogos.filter(
+export const featuredBusinesses = sampleBusinesses.filter(
   (business) => business.isVerified && business.rating >= 4.5,
 );
 
