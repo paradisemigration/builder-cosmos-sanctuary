@@ -10,8 +10,17 @@ interface NavigationProps {
 
 export function Navigation({ className = "" }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isCurrentPage = (path: string) => {
     return location.pathname === path;
@@ -24,15 +33,31 @@ export function Navigation({ className = "" }: NavigationProps) {
 
   return (
     <nav
-      className={`border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 ${className}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/90 backdrop-blur-xl shadow-2xl border-b border-blue-100/50"
+          : "bg-white/80 backdrop-blur-lg border-b border-white/20"
+      } ${className}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      {/* Animated Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="flex justify-between items-center h-16 lg:h-18">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-primary">
-                Dubai<span className="text-dubai-gold">Visa</span>Directory
-              </h1>
+            <Link to="/" className="flex-shrink-0 group">
+              <div className="relative">
+                {/* Animated Logo Background */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-sm"></div>
+
+                <h1 className="relative text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 transition-all duration-500 transform group-hover:scale-105">
+                  <span className="inline-flex items-center gap-2">
+                    <Globe className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600 animate-spin-slow" />
+                    Dubai<span className="text-yellow-500">Visa</span>Directory
+                    <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500 animate-pulse" />
+                  </span>
+                </h1>
+              </div>
             </Link>
           </div>
 
