@@ -13,6 +13,13 @@ import {
   MoreHorizontal,
   Download,
   Plus,
+  Shield,
+  FileText,
+  Calendar,
+  MapPin,
+  Phone,
+  Mail,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -182,9 +189,10 @@ export default function AdminPanel() {
           onValueChange={setActiveSection}
           className="mb-8"
         >
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="businesses">Business Management</TabsTrigger>
             <TabsTrigger value="reviews">Review Management</TabsTrigger>
+            <TabsTrigger value="scam-reports">Scam Reports</TabsTrigger>
           </TabsList>
 
           <TabsContent value="businesses">
