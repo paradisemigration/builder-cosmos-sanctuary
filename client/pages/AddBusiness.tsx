@@ -34,7 +34,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { businessCategories, dubaiZones, sampleBusinesses } from "@/lib/data";
+import {
+  businessCategories,
+  dubaiZones,
+  uaeCities,
+  sampleBusinesses,
+} from "@/lib/data";
 
 interface BusinessFormData {
   name: string;
