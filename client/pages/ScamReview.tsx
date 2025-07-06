@@ -141,11 +141,15 @@ export default function ScamReview() {
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                <div className="text-right space-y-2">
+                  <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                     <Shield className="w-4 h-4" />
+                    Admin Verified
+                  </div>
+                  <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                    <CheckCircle className="w-4 h-4" />
                     {report.verificationStatus === "verified"
-                      ? "Verified Report"
+                      ? "Evidence Verified"
                       : "Under Review"}
                   </div>
                 </div>
