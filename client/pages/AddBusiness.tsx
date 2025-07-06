@@ -416,16 +416,16 @@ export default function AddBusiness() {
                   </div>
                   <div>
                     <div className="font-bold text-gray-800">
-                      Step {currentStep} of {steps.length}
+                      Step {currentStep + 1} of {steps.length}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {steps[currentStep - 1].title}
+                      {steps[currentStep].title}
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-blue-600">
-                    {Math.round((currentStep / steps.length) * 100)}%
+                    {Math.round(((currentStep + 1) / steps.length) * 100)}%
                   </div>
                   <div className="text-xs text-gray-500">Complete</div>
                 </div>
@@ -433,11 +433,13 @@ export default function AddBusiness() {
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
                   className="bg-gradient-to-r from-blue-600 to-purple-600 h-3 rounded-full transition-all duration-500 ease-out shadow-inner"
-                  style={{ width: `${(currentStep / steps.length) * 100}%` }}
+                  style={{
+                    width: `${((currentStep + 1) / steps.length) * 100}%`,
+                  }}
                 />
               </div>
               <p className="text-sm text-gray-600 mt-3">
-                {steps[currentStep - 1].description}
+                {steps[currentStep].description}
               </p>
             </div>
           </div>
