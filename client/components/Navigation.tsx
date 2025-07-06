@@ -219,51 +219,58 @@ export function Navigation({ className = "" }: NavigationProps) {
                 ➕ Add Business
               </Link>
 
-              {/* Mobile Authentication Section */}
+              {/* Enhanced Mobile Authentication Section */}
               {isAuthenticated ? (
-                <div className="space-y-1 pt-2 border-t border-border">
-                  <div className="px-3 py-2">
-                    <p className="text-sm text-muted-foreground">
-                      Welcome, {user?.name}
-                    </p>
+                <div className="space-y-3 pt-4 border-t border-blue-100/50">
+                  <div className="px-4 py-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-green-600" />
+                      <p className="text-sm font-medium text-green-700">
+                        Welcome, {user?.name}
+                      </p>
+                    </div>
                   </div>
+
                   {user?.role === "admin" && (
                     <Link
                       to="/admin"
-                      className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+                      className="block px-4 py-3 rounded-xl text-base font-semibold text-purple-700 hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 transition-all duration-300 border border-purple-200 hover:border-transparent transform hover:scale-105"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Admin Panel
+                      👑 Admin Panel
                     </Link>
                   )}
+
                   {user?.role === "business_owner" && (
                     <Link
                       to="/dashboard"
-                      className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+                      className="block px-4 py-3 rounded-xl text-base font-semibold text-blue-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 border border-blue-200 hover:border-transparent transform hover:scale-105"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Dashboard
+                      📊 Dashboard
                     </Link>
                   )}
-                  <div className="px-3 py-2">
+
+                  <div className="px-0 py-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleSignOut}
-                      className="w-full"
+                      className="w-full h-12 rounded-xl border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-all duration-300 font-semibold"
                     >
-                      Sign Out
+                      🚪 Sign Out
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="px-3 py-2 pt-4 border-t border-border">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 w-full"
-                  >
-                    Sign In
+                <div className="px-0 py-4 pt-6 border-t border-blue-100/50">
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Button className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                      <span className="flex items-center justify-center gap-2">
+                        ✨ Sign In
+                        <Sparkles className="w-4 h-4" />
+                      </span>
+                    </Button>
                   </Link>
                 </div>
               )}
