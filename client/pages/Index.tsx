@@ -971,76 +971,236 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-muted py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <h3 className="text-2xl font-bold text-primary mb-4">
-                Dubai<span className="text-dubai-gold">Visa</span>Directory
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Your trusted source for finding legitimate visa and immigration
-                services in Dubai. We help connect customers with verified
-                professionals.
-              </p>
-            </div>
+      {/* Enhanced Footer */}
+      <footer
+        className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden"
+        data-section="footer"
+      >
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-900/50 via-purple-900/50 to-indigo-900/50"></div>
 
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link to="/browse" className="hover:text-primary">
-                    Browse Services
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/add-business" className="hover:text-primary">
-                    Add Business
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-primary">
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-primary">
-                    About
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Floating Elements */}
+          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl animate-float-slow"></div>
+          <div className="absolute bottom-10 right-10 w-28 h-28 bg-purple-500/20 rounded-full blur-xl animate-float-medium"></div>
 
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link to="/help" className="hover:text-primary">
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/report" className="hover:text-primary">
-                    Report Scam
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/privacy" className="hover:text-primary">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terms" className="hover:text-primary">
-                    Terms of Service
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <svg
+              className="w-full h-full"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <pattern
+                  id="footerGrid"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="0.5"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#footerGrid)" />
+            </svg>
           </div>
+        </div>
 
-          <div className="border-t mt-12 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 Dubai Visa Directory. All rights reserved.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative">
+          <div
+            className={`transition-all duration-1000 ${
+              visibleSections.includes("footer")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+              {/* Enhanced Brand Section */}
+              <div className="md:col-span-2 lg:col-span-1">
+                <div className="group">
+                  <Link to="/" className="inline-block mb-6">
+                    <div className="relative">
+                      <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-sm"></div>
+                      <h3 className="relative text-2xl lg:text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:via-blue-300 group-hover:to-purple-300 transition-all duration-500">
+                        <span className="flex items-center gap-2">
+                          <Globe className="w-8 h-8 text-blue-400 animate-spin-slow" />
+                          Dubai<span className="text-yellow-400">Visa</span>
+                          Directory
+                        </span>
+                      </h3>
+                    </div>
+                  </Link>
+
+                  <p className="text-blue-100 mb-6 leading-relaxed">
+                    Your trusted source for finding legitimate visa and
+                    immigration services in Dubai. We help connect customers
+                    with verified professionals.
+                  </p>
+
+                  {/* Social Links */}
+                  <div className="flex space-x-4">
+                    {["📘", "📸", "🐦", "💼"].map((icon, index) => (
+                      <div
+                        key={index}
+                        className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center text-xl hover:bg-white/20 hover:scale-110 transition-all duration-300 cursor-pointer group"
+                      >
+                        <span className="group-hover:scale-110 transition-transform duration-300">
+                          {icon}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div
+                className={`transition-all duration-700 ${
+                  visibleSections.includes("footer")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: "200ms" }}
+              >
+                <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <ArrowRight className="w-5 h-5 text-cyan-400" />
+                  Quick Links
+                </h4>
+                <ul className="space-y-3">
+                  {[
+                    { to: "/browse", label: "Browse Services", icon: "🔍" },
+                    { to: "/add-business", label: "Add Business", icon: "➕" },
+                    { to: "/contact", label: "Contact Us", icon: "📞" },
+                    { to: "/about", label: "About", icon: "ℹ️" },
+                  ].map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.to}
+                        className="group flex items-center gap-3 text-blue-200 hover:text-white transition-all duration-300 hover:translate-x-2"
+                      >
+                        <span className="text-lg group-hover:scale-110 transition-transform duration-300">
+                          {link.icon}
+                        </span>
+                        <span className="group-hover:text-cyan-300 transition-colors duration-300">
+                          {link.label}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Support Links */}
+              <div
+                className={`transition-all duration-700 ${
+                  visibleSections.includes("footer")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: "400ms" }}
+              >
+                <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-green-400" />
+                  Support
+                </h4>
+                <ul className="space-y-3">
+                  {[
+                    { to: "/help", label: "Help Center", icon: "❓" },
+                    { to: "/report", label: "Report Scam", icon: "🚨" },
+                    { to: "/privacy", label: "Privacy Policy", icon: "🔒" },
+                    { to: "/terms", label: "Terms of Service", icon: "📋" },
+                  ].map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.to}
+                        className="group flex items-center gap-3 text-blue-200 hover:text-white transition-all duration-300 hover:translate-x-2"
+                      >
+                        <span className="text-lg group-hover:scale-110 transition-transform duration-300">
+                          {link.icon}
+                        </span>
+                        <span className="group-hover:text-cyan-300 transition-colors duration-300">
+                          {link.label}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div
+                className={`transition-all duration-700 ${
+                  visibleSections.includes("footer")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: "600ms" }}
+              >
+                <h4 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <Building className="w-5 h-5 text-purple-400" />
+                  Contact
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-blue-200">
+                    <span className="text-lg">🏢</span>
+                    <span>Dubai, UAE</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-blue-200">
+                    <span className="text-lg">📧</span>
+                    <span>info@dubaivisadirectory.com</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-blue-200">
+                    <span className="text-lg">📱</span>
+                    <span>+971 4 123 4567</span>
+                  </div>
+
+                  {/* Newsletter Signup */}
+                  <div className="mt-6 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl">
+                    <h5 className="text-white font-semibold mb-2">
+                      📬 Newsletter
+                    </h5>
+                    <p className="text-blue-200 text-sm mb-3">
+                      Get updates on new services
+                    </p>
+                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+                      Subscribe
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Bottom Section */}
+            <div
+              className={`border-t border-white/20 mt-12 pt-8 transition-all duration-1000 ${
+                visibleSections.includes("footer")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
+              style={{ transitionDelay: "800ms" }}
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between">
+                <div className="text-center md:text-left mb-4 md:mb-0">
+                  <p className="text-blue-200 flex items-center gap-2">
+                    <span className="text-lg">©</span>
+                    2024 Dubai Visa Directory. All rights reserved.
+                    <span className="text-lg">🇦🇪</span>
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 text-green-400">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm">All systems operational</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
