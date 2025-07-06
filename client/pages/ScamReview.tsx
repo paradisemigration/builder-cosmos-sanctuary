@@ -11,6 +11,7 @@ import {
   Shield,
   ArrowLeft,
   Flag,
+  CheckCircle,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
