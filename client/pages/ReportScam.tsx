@@ -13,7 +13,7 @@ import {
   Building2,
   Camera,
   Receipt,
-  FileContract,
+  FileText as FileContract,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
