@@ -418,7 +418,7 @@ export default function Index() {
           >
             <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/30 rounded-3xl p-8 max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                ��� Can't Find What You're Looking For?
+                🎯 Can't Find What You're Looking For?
               </h3>
               <p className="text-gray-600 mb-6">
                 Explore our complete directory of verified immigration
@@ -618,41 +618,201 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Email Notification Demo Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-50 to-yellow-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              📧 Welcome Email Notifications
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Get instant welcome emails when you sign up or login via
-              Google/Facebook!
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              <EmailPreview
-                userName="New User"
-                userEmail="user@example.com"
-                provider="google"
-                isNewUser={true}
-              />
-              <EmailPreview
-                userName="Returning User"
-                userEmail="user@example.com"
-                provider="facebook"
-                isNewUser={false}
-              />
-              <EmailPreview
-                userName="Email User"
-                userEmail="user@example.com"
-                provider="email"
-                isNewUser={true}
-              />
+      {/* Enhanced Email Notification Demo Section */}
+      <section
+        className="py-20 bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 relative overflow-hidden"
+        data-section="email-demo"
+      >
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-orange-400 rounded-full animate-float-slow"></div>
+          <div className="absolute top-20 right-20 w-24 h-24 bg-yellow-400 rounded-full animate-float-medium"></div>
+          <div className="absolute bottom-20 left-1/4 w-28 h-28 bg-pink-400 rounded-full animate-float-fast"></div>
+          <div className="absolute bottom-10 right-1/3 w-20 h-20 bg-purple-400 rounded-full animate-float-slow"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div
+            className={`text-center mb-16 transition-all duration-1000 ${
+              visibleSections.includes("email-demo")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Enhanced Header */}
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="bg-gradient-to-r from-orange-500/20 to-pink-500/20 backdrop-blur-sm border border-orange-200 rounded-full px-8 py-3">
+                <span className="text-orange-700 font-bold text-sm flex items-center gap-2">
+                  <Building className="w-5 h-5" />
+                  📧 EMAIL NOTIFICATIONS
+                  <CheckCircle className="w-4 h-4" />
+                </span>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              ✨ All users receive personalized welcome emails with platform
-              guidance and support information
+
+            <h2 className="text-4xl lg:text-5xl font-black text-gray-800 mb-6">
+              <span className="block">Welcome</span>
+              <span className="bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+                Email Magic
+              </span>
+            </h2>
+
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+              Experience instant, personalized welcome emails when you join our
+              platform through any method
             </p>
+
+            {/* Animated Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+              {[
+                {
+                  icon: "🚀",
+                  title: "Instant Delivery",
+                  desc: "Emails sent within seconds",
+                },
+                {
+                  icon: "🎨",
+                  title: "Beautiful Design",
+                  desc: "Professional HTML templates",
+                },
+                {
+                  icon: "🔒",
+                  title: "Secure & Private",
+                  desc: "Your data is protected",
+                },
+              ].map((feature, index) => (
+                <div
+                  key={index}
+                  className={`group transition-all duration-700 ${
+                    visibleSections.includes("email-demo")
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 150 + 200}ms` }}
+                >
+                  <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-2xl p-6 hover:bg-white/90 hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <div className="text-3xl mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                      {feature.icon}
+                    </div>
+                    <h3 className="font-bold text-gray-800 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{feature.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Enhanced Email Preview Cards */}
+          <div
+            className={`transition-all duration-1000 ${
+              visibleSections.includes("email-demo")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "500ms" }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+              {[
+                {
+                  provider: "google",
+                  user: "New User",
+                  isNew: true,
+                  color: "from-red-500 to-yellow-500",
+                  icon: "📱",
+                },
+                {
+                  provider: "facebook",
+                  user: "Returning User",
+                  isNew: false,
+                  color: "from-blue-500 to-cyan-500",
+                  icon: "👤",
+                },
+                {
+                  provider: "email",
+                  user: "Email User",
+                  isNew: true,
+                  color: "from-purple-500 to-pink-500",
+                  icon: "✉️",
+                },
+              ].map((email, index) => (
+                <div
+                  key={index}
+                  className="group transition-all duration-700"
+                  style={{ transitionDelay: `${index * 200 + 700}ms` }}
+                >
+                  <div className="relative">
+                    {/* Animated Border */}
+                    <div
+                      className={`absolute -inset-1 bg-gradient-to-r ${email.color} rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500`}
+                    ></div>
+
+                    <div className="relative bg-white/90 backdrop-blur-xl border border-white/50 rounded-2xl p-6 lg:p-8 hover:bg-white/95 transition-all duration-500 transform group-hover:scale-105 group-hover:-translate-y-2">
+                      {/* Email Icon */}
+                      <div className="text-center mb-6">
+                        <div
+                          className={`w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-r ${email.color} rounded-2xl flex items-center justify-center text-3xl lg:text-4xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl mx-auto mb-4`}
+                        >
+                          {email.icon}
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">
+                          {email.provider.charAt(0).toUpperCase() +
+                            email.provider.slice(1)}{" "}
+                          Login
+                        </h3>
+                        <p className="text-gray-600">
+                          {email.user} •{" "}
+                          {email.isNew ? "New User" : "Returning"}
+                        </p>
+                      </div>
+
+                      {/* Preview Button */}
+                      <div className="text-center">
+                        <EmailPreview
+                          userName={email.user}
+                          userEmail="user@example.com"
+                          provider={email.provider as any}
+                          isNewUser={email.isNew}
+                        />
+                      </div>
+
+                      {/* Decorative Elements */}
+                      <div className="absolute top-4 right-4 w-2 h-2 bg-orange-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Enhanced CTA */}
+          <div
+            className={`text-center transition-all duration-1000 ${
+              visibleSections.includes("email-demo")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "1200ms" }}
+          >
+            <div className="bg-gradient-to-r from-orange-500/10 to-pink-500/10 backdrop-blur-sm border border-white/30 rounded-3xl p-8 lg:p-10 max-w-2xl mx-auto">
+              <div className="text-4xl lg:text-5xl mb-4">✨</div>
+              <h3 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4">
+                Join the Experience
+              </h3>
+              <p className="text-gray-600 mb-6 text-lg">
+                All users receive personalized welcome emails with platform
+                guidance and support information
+              </p>
+              <Link to="/login">
+                <Button className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
+                  <span className="flex items-center gap-2">
+                    🎯 Try It Now
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
