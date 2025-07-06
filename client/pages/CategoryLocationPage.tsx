@@ -34,7 +34,16 @@ export default function CategoryLocationPage() {
   // Convert URL slugs back to display names
   const getDisplayName = (slug: string, type: "location" | "category") => {
     if (type === "location") {
+      // Check UAE cities first, then Dubai zones for backward compatibility
       return (
+        uaeCities.find(
+          (city) =>
+            city
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "-")
+              .replace(/-+/g, "-")
+              .replace(/^-|-$/g, "") === slug,
+        ) ||
         dubaiZones.find(
           (zone) =>
             zone
@@ -42,7 +51,8 @@ export default function CategoryLocationPage() {
               .replace(/[^a-z0-9]/g, "-")
               .replace(/-+/g, "-")
               .replace(/^-|-$/g, "") === slug,
-        ) || slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+        ) ||
+        slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
       );
     } else {
       return (
