@@ -420,10 +420,10 @@ export default function Browse() {
                         </div>
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Areas</SelectItem>
-                        {dubaiZones.map((zone) => (
-                          <SelectItem key={zone} value={zone}>
-                            {zone}
+                        <SelectItem value="all">All Cities</SelectItem>
+                        {uaeCities.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
                           </SelectItem>
                         ))}
                       </SelectContent>
