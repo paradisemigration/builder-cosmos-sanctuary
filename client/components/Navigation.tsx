@@ -35,12 +35,12 @@ export function Navigation({ className = "" }: NavigationProps) {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-xl shadow-2xl border-b border-blue-100/50"
+          ? "bg-white/95 backdrop-blur-xl shadow-2xl border-b border-orange-100/50"
           : "bg-white/85 backdrop-blur-lg border-b border-white/20"
       } ${className}`}
     >
       {/* Animated Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-purple-500/5 to-orange-600/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative">
         <div className="flex justify-between items-center h-14 sm:h-16 lg:h-18">
@@ -48,11 +48,11 @@ export function Navigation({ className = "" }: NavigationProps) {
             <Link to="/" className="flex-shrink-0 group">
               <div className="relative">
                 {/* Animated Logo Background */}
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-sm"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-orange-500 via-purple-500 to-orange-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-sm"></div>
 
-                <h1 className="relative text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 transition-all duration-500 transform group-hover:scale-105">
+                <h1 className="relative text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-orange-500 via-purple-600 to-orange-600 bg-clip-text text-transparent hover:from-orange-600 hover:via-purple-700 hover:to-orange-700 transition-all duration-500 transform group-hover:scale-105">
                   <span className="inline-flex items-center gap-2">
-                    <Globe className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600 animate-spin-slow" />
+                    <Globe className="w-6 h-6 lg:w-8 lg:h-8 text-orange-500 animate-spin-slow" />
                     Trusted<span className="text-gray-800">Immigration</span>
                     <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500 animate-pulse" />
                   </span>
@@ -68,8 +68,8 @@ export function Navigation({ className = "" }: NavigationProps) {
                 to="/"
                 className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg shadow-orange-500/25"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
                 }`}
               >
                 <span className="relative z-10">🏠 Home</span>
@@ -82,8 +82,8 @@ export function Navigation({ className = "" }: NavigationProps) {
                 to="/browse"
                 className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/browse")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg shadow-orange-500/25"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
                 }`}
               >
                 <span className="relative z-10">🔍 Browse Services</span>
@@ -96,8 +96,8 @@ export function Navigation({ className = "" }: NavigationProps) {
                 to="/add-business"
                 className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/add-business")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg shadow-orange-500/25"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
                 }`}
               >
                 <span className="relative z-10">➕ Add Business</span>
@@ -128,7 +128,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   {user?.role === "business_owner" && (
                     <Link
                       to="/dashboard"
-                      className="group relative px-4 py-2 rounded-xl text-sm font-semibold text-blue-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 border border-blue-200 hover:border-transparent"
+                      className="group relative px-4 py-2 rounded-xl text-sm font-semibold text-orange-700 hover:text-white hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 transition-all duration-300 border border-orange-200 hover:border-transparent"
                     >
                       📊 Dashboard
                     </Link>
@@ -146,7 +146,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               ) : (
                 <div className="ml-6">
                   <Link to="/login">
-                    <Button className="h-10 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
+                    <Button className="h-10 px-6 rounded-xl bg-gradient-to-r from-orange-600 to-purple-600 hover:from-orange-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
                       <span className="flex items-center gap-2">
                         ✨ Sign In
                         <Sparkles className="w-4 h-4 group-hover:animate-spin" />
@@ -164,7 +164,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               variant="ghost"
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 group"
+              className="p-3 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-purple-50 transition-all duration-300 group"
             >
               <div className="relative">
                 <div
@@ -173,7 +173,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   {mobileMenuOpen ? (
                     <X className="h-6 w-6 text-red-600" />
                   ) : (
-                    <Menu className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
+                    <Menu className="h-6 w-6 text-orange-600 group-hover:scale-110 transition-transform duration-300" />
                   )}
                 </div>
               </div>
@@ -184,13 +184,13 @@ export function Navigation({ className = "" }: NavigationProps) {
         {/* Enhanced Mobile Navigation Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-4 pt-4 pb-6 space-y-3 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border-t border-blue-100/50 shadow-2xl">
+            <div className="px-4 pt-4 pb-6 space-y-3 bg-gradient-to-br from-white via-orange-50/30 to-purple-50/30 backdrop-blur-xl border-t border-orange-100/50 shadow-2xl">
               <Link
                 to="/"
                 className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -200,8 +200,8 @@ export function Navigation({ className = "" }: NavigationProps) {
                 to="/browse"
                 className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/browse")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -211,8 +211,8 @@ export function Navigation({ className = "" }: NavigationProps) {
                 to="/add-business"
                 className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/add-business")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transform hover:scale-105"
+                    ? "text-white bg-gradient-to-r from-orange-500 to-purple-500 shadow-lg"
+                    : "text-gray-700 hover:text-orange-600 hover:bg-orange-50 transform hover:scale-105"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -221,7 +221,7 @@ export function Navigation({ className = "" }: NavigationProps) {
 
               {/* Enhanced Mobile Authentication Section */}
               {isAuthenticated ? (
-                <div className="space-y-3 pt-4 border-t border-blue-100/50">
+                <div className="space-y-3 pt-4 border-t border-orange-100/50">
                   <div className="px-4 py-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5 text-green-600" />
@@ -244,7 +244,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   {user?.role === "business_owner" && (
                     <Link
                       to="/dashboard"
-                      className="block px-4 py-3 rounded-xl text-base font-semibold text-blue-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 transition-all duration-300 border border-blue-200 hover:border-transparent transform hover:scale-105"
+                      className="block px-4 py-3 rounded-xl text-base font-semibold text-orange-700 hover:text-white hover:bg-gradient-to-r hover:from-orange-500 hover:to-purple-500 transition-all duration-300 border border-orange-200 hover:border-transparent transform hover:scale-105"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       📊 Dashboard
@@ -263,9 +263,9 @@ export function Navigation({ className = "" }: NavigationProps) {
                   </div>
                 </div>
               ) : (
-                <div className="px-0 py-4 pt-6 border-t border-blue-100/50">
+                <div className="px-0 py-4 pt-6 border-t border-orange-100/50">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <Button className="w-full h-12 rounded-xl bg-gradient-to-r from-orange-600 to-purple-600 hover:from-orange-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                       <span className="flex items-center justify-center gap-2">
                         ✨ Sign In
                         <Sparkles className="w-4 h-4" />
