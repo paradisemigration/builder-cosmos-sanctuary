@@ -295,9 +295,7 @@ export default function AddBusiness() {
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      </nav>
+
 
       {/* Enhanced Hero Header */}
       <div
