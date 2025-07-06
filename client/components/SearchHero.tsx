@@ -405,7 +405,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                     {location &&
                     (location.country === "United Arab Emirates" ||
                       location.countryCode === "AE") ? (
-                      // Show Dubai zones selector if user is in UAE
+                      // Show UAE cities selector if user is in UAE
                       <Select
                         value={selectedZone}
                         onValueChange={setSelectedZone}
@@ -418,15 +418,15 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                             value="all"
                             className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
                           >
-                            All UAE Areas
+                            All UAE Cities
                           </SelectItem>
-                          {dubaiZones.map((zone) => (
+                          {uaeCities.map((city) => (
                             <SelectItem
-                              key={zone}
-                              value={zone}
+                              key={city}
+                              value={city}
                               className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
                             >
-                              {zone}
+                              {city}
                             </SelectItem>
                           ))}
                         </SelectContent>
