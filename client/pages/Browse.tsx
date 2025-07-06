@@ -473,27 +473,28 @@ export default function Browse() {
             </div>
 
             {filteredBusinesses.length === 0 ? (
-              <div className="text-center py-20 lg:py-32">
-                <div className="relative">
-                  <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg">
-                    <Search className="w-16 h-16 text-gray-400" />
+              <div className="text-center py-12 sm:py-16 lg:py-24">
+                <div className="relative mx-auto w-fit">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-6 sm:mb-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg">
+                    <Search className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full animate-bounce"></div>
+                  <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-yellow-400 rounded-full animate-bounce"></div>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-800 mb-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3 sm:mb-4 px-4">
                   🔍 No businesses found
                 </h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg leading-relaxed">
+                <p className="text-gray-600 mb-6 sm:mb-8 max-w-md mx-auto text-base sm:text-lg leading-relaxed px-4">
                   Don't worry! Try adjusting your search criteria or filters. We
-                  have 50+ verified businesses waiting to help you.
+                  have {sampleBusinesses.length}+ verified businesses waiting to
+                  help you.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
                   <Button
                     variant="outline"
                     onClick={() => {
                       setSearchQuery("");
-                      setSelectedCategory("all");
-                      setSelectedZone("all");
+                      setSelectedCategory("");
+                      setSelectedZone("");
                       setFilters({
                         categories: [],
                         zones: [],
@@ -503,19 +504,22 @@ export default function Browse() {
                         sortBy: "rating",
                       });
                     }}
-                    className="rounded-xl border-2 border-blue-200 hover:border-blue-400 px-8 py-3 font-semibold"
+                    className="rounded-xl border-2 border-blue-200 hover:border-blue-400 px-6 sm:px-8 py-3 font-semibold"
                   >
                     🔄 Clear All Filters
                   </Button>
-                  <Button className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                  <Button
+                    onClick={() => window.location.reload()}
+                    className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 sm:px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  >
                     👀 View All Businesses
                   </Button>
                 </div>
               </div>
             ) : (
               <>
-                {/* Enhanced Business Grid */}
-                <div className="space-y-6">
+                {/* Enhanced Business Grid - Mobile Responsive */}
+                <div className="space-y-4 sm:space-y-6 lg:space-y-8">
                   {filteredBusinesses.map((business, index) => (
                     <div
                       key={business.id}
@@ -526,7 +530,7 @@ export default function Browse() {
                       }`}
                       style={{ transitionDelay: `${index * 100}ms` }}
                     >
-                      <div className="transform hover:scale-[1.02] transition-all duration-500 hover:shadow-2xl">
+                      <div className="transform hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 hover:shadow-xl sm:hover:shadow-2xl">
                         <BusinessCard
                           business={business}
                           onClick={() => navigate(`/business/${business.id}`)}
@@ -536,28 +540,28 @@ export default function Browse() {
                   ))}
                 </div>
 
-                {/* Enhanced Load More Section */}
-                <div className="text-center mt-16 pt-12 border-t-2 border-gradient-to-r from-blue-200 to-purple-200">
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 mb-8">
-                    <div className="flex items-center justify-center gap-4 mb-4">
-                      <Users className="w-8 h-8 text-blue-600" />
+                {/* Enhanced Load More Section - Mobile Responsive */}
+                <div className="text-center mt-12 sm:mt-16 pt-8 sm:pt-12 border-t-2 border-gray-200">
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                      <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 flex-shrink-0" />
                       <div className="text-center">
-                        <p className="text-lg font-semibold text-gray-800">
+                        <p className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">
                           📊 Showing {filteredBusinesses.length} of{" "}
                           {sampleBusinesses.length} businesses
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600 px-2">
                           🎯 Found exactly what you're looking for? Great! Want
                           to see more options?
                         </p>
                       </div>
-                      <TrendingUp className="w-8 h-8 text-purple-600" />
+                      <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 flex-shrink-0" />
                     </div>
                     <Button
                       size="lg"
-                      className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-12 py-4 text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      className="w-full sm:w-auto rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                     >
-                      <ChevronDown className="w-6 h-6 mr-3 group-hover:animate-bounce" />
+                      <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
                       🚀 Load More Amazing Services
                     </Button>
                   </div>
