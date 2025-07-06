@@ -735,7 +735,7 @@ export default function Index() {
                   user: "Email User",
                   isNew: true,
                   color: "from-purple-500 to-pink-500",
-                  icon: "��️",
+                  icon: "✉️",
                 },
               ].map((email, index) => (
                 <div
@@ -1153,7 +1153,7 @@ export default function Index() {
                   </div>
                   <div className="flex items-center gap-3 text-blue-200">
                     <span className="text-lg">📧</span>
-                    <span>info@dubaivisadirectory.com</span>
+                    <span>info@trustedimmigration.com</span>
                   </div>
                   <div className="flex items-center gap-3 text-blue-200">
                     <span className="text-lg">📱</span>
