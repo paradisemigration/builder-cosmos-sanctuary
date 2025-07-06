@@ -112,19 +112,29 @@ export function ReviewManagement() {
   };
 
   const handleUpdateReview = () => {
-    if (!selectedReview) return;
+    if (!selectedReview) {
+      console.error("No review selected for update");
+      return;
+    }
 
-    setReviews((prev) =>
-      prev.map((review) =>
-        review.id === selectedReview.id
-          ? { ...review, comment: editingComment }
-          : review,
-      ),
-    );
+    try {
+      setReviews((prev) =>
+        prev.map((review) =>
+          review.id === selectedReview.id
+            ? { ...review, comment: editingComment }
+            : review,
+        ),
+      );
 
-    setIsEditModalOpen(false);
-    setSelectedReview(null);
-    setEditingComment("");
+      // Close modal and reset state
+      setIsEditModalOpen(false);
+      setSelectedReview(null);
+      setEditingComment("");
+
+      console.log("Review updated successfully");
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
   };
 
   const handleDeleteReview = (reviewId: string) => {
