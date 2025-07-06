@@ -335,78 +335,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
           </div>
         </div>
 
-        {/* Header Section with Animations */}
-        <div
-          className={`text-center mb-8 md:mb-12 lg:mb-16 transition-all duration-1000 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-          style={{ transitionDelay: "0.3s" }}
-        >
-          {/* Main Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 md:mb-6 lg:mb-8 leading-none">
-            <span className="block mb-1 md:mb-2">Find Your</span>
-            <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-gradient-x">
-              Immigration
-            </span>
-            <span className="block text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-2 md:mt-4 text-slate-200">
-              Partner in Dubai
-            </span>
-          </h1>
 
-          {/* Subtitle */}
-          <p className="text-sm md:text-base lg:text-xl xl:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-8 md:mb-10 lg:mb-12">
-            Connect with verified visa agents, immigration consultants, and
-            document services.
-            <span className="block mt-1 md:mt-2 text-cyan-300">
-              Join thousands who found their perfect immigration solution.
-            </span>
-          </p>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 max-w-4xl mx-auto mb-6 md:mb-8">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className={`group cursor-pointer transform transition-all duration-300 ${
-                  hoveredStat === index ? "scale-110" : "hover:scale-105"
-                }`}
-                onMouseEnter={() => setHoveredStat(index)}
-                onMouseLeave={() => setHoveredStat(null)}
-              >
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 lg:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
-                  <stat.icon
-                    className={`w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 ${stat.color} mx-auto mb-2 md:mb-3 transition-transform group-hover:scale-110`}
-                  />
-                  <div className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs md:text-sm text-slate-300">
-                    {stat.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Enhanced Search Form */}
-        <div
-          className={`max-w-6xl mx-auto transition-all duration-1000 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-          style={{ transitionDelay: "0.5s" }}
-        >
-          <div className="relative group">
-            {/* Animated Border */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 animate-pulse"></div>
-
-            <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-white/30">
-              {/* Form Header */}
-              <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-gray-800 mb-3">
-                  Start Your Immigration Journey Today
-                </h3>
-                <p className="text-lg text-gray-600">
-                  Find verified professionals who will guide you every step of
-                  the way
-                </p>
-              </div>
 
               {/* Search Fields */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
