@@ -2327,3 +2327,15 @@ export const dubaiZones = [
   "Al Barsha",
   "Jebel Ali",
 ];
+
+// UAE Cities for location search
+export const uaeCities = [
+  "Dubai",
+  "Abu Dhabi",
+  "Sharjah",
+  "Ajman",
+  "Ras Al Khaimah",
+  "Fujairah",
+  "Umm Al Quwain",
+  "Al Ain",
+];
