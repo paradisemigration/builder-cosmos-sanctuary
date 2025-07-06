@@ -294,10 +294,58 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                     <Input
                       placeholder="Search by company name..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12 md:pl-16 h-12 md:h-14 lg:h-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium transition-all duration-300 hover:border-gray-300"
+                      onChange={(e) => handleSearchChange(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                      onFocus={() =>
+                        searchQuery.length >= 3 && setShowSuggestions(true)
+                      }
+                      onBlur={() =>
+                        setTimeout(() => setShowSuggestions(false), 150)
+                      }
+                      className="pl-12 md:pl-16 h-12 md:h-14 lg:h-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium transition-all duration-300 hover:border-gray-300"
                     />
+
+                    {/* Autocomplete Suggestions Dropdown */}
+                    {showSuggestions && suggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white/95 backdrop-blur-xl border border-orange-200 rounded-xl md:rounded-2xl shadow-2xl max-h-80 overflow-y-auto">
+                        {suggestions.map((business) => (
+                          <div
+                            key={business.id}
+                            onClick={() =>
+                              handleSuggestionSelect(business.name)
+                            }
+                            className="flex items-center gap-3 p-3 md:p-4 hover:bg-orange-50 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0"
+                          >
+                            {business.logo && (
+                              <img
+                                src={business.logo}
+                                alt={business.name}
+                                className="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover flex-shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-gray-800 text-sm md:text-base truncate">
+                                {business.name}
+                              </h4>
+                              <p className="text-xs md:text-sm text-gray-600 truncate">
+                                {business.category} •{" "}
+                                {business.address.split(",")[0]}
+                              </p>
+                              <div className="flex items-center gap-1 mt-1">
+                                <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                                <span className="text-xs text-gray-600">
+                                  {business.rating} ({business.reviewCount}{" "}
+                                  reviews)
+                                </span>
+                                {business.isVerified && (
+                                  <CheckCircle className="w-3 h-3 text-green-500 ml-1" />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
