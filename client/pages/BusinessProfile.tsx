@@ -488,7 +488,7 @@ export default function BusinessProfile() {
             {/* Enhanced Mobile-First TabsList */}
             <div className="sticky top-16 md:top-20 z-40 mb-6 md:mb-8">
               <TabsList className="w-full h-auto bg-gradient-to-r from-white via-blue-50 to-purple-50 backdrop-blur-xl border-2 border-blue-200/50 rounded-2xl p-2 md:p-3 shadow-2xl">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2 w-full">
+                <div className="grid grid-cols-3 gap-1 md:gap-2 w-full">
                   <TabsTrigger
                     value="overview"
                     className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-blue-50"
@@ -502,13 +502,6 @@ export default function BusinessProfile() {
                   >
                     <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Services</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="reviews"
-                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-yellow-50"
-                  >
-                    <Star className="w-3 h-3 md:w-4 md:h-4" />
-                    <span>Reviews</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="photos"
@@ -655,151 +648,6 @@ export default function BusinessProfile() {
               </div>
             </TabsContent>
 
-            {/* Reviews Tab Content */}
-            <TabsContent value="reviews" className="w-full mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-                <div className="lg:col-span-2 space-y-4 md:space-y-6">
-                  {visibleReviews.map((review, index) => (
-                    <Card
-                      key={review.id}
-                      className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
-                    >
-                      <CardContent className="p-4 md:p-6">
-                        <div className="flex items-start gap-3 md:gap-4">
-                          <Avatar className="w-10 h-10 md:w-12 md:h-12 border-2 border-purple-200">
-                            <AvatarImage src={review.userAvatar} />
-                            <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs md:text-sm">
-                              {review.userName
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-2 md:mb-3">
-                              <div className="flex items-center gap-2 md:gap-3">
-                                <h4 className="font-bold text-gray-800 text-sm md:text-base">
-                                  {review.userName}
-                                </h4>
-                                {review.isVerified && (
-                                  <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-xs">
-                                    <CheckCircle className="w-2 h-2 md:w-3 md:h-3 mr-1" />
-                                    Verified
-                                  </Badge>
-                                )}
-                              </div>
-                              <span className="text-xs md:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                                {review.date}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 mb-3 md:mb-4">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-all duration-300 ${
-                                    i < review.rating
-                                      ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
-                                      : "text-gray-300"
-                                  }`}
-                                />
-                              ))}
-                              <span className="text-sm md:text-base lg:text-lg font-bold text-gray-800 ml-1 md:ml-2">
-                                {review.rating}.0
-                              </span>
-                            </div>
-
-                            <p className="text-gray-700 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                              {review.comment}
-                            </p>
-
-                            <div className="flex items-center gap-3 md:gap-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => toggleLikeReview(review.id)}
-                                className={`transition-all duration-300 text-xs md:text-sm ${
-                                  likedReviews.has(review.id)
-                                    ? "text-red-600 bg-red-50"
-                                    : "text-gray-600 hover:text-red-600 hover:bg-red-50"
-                                }`}
-                              >
-                                <ThumbsUp
-                                  className={`w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
-                                />
-                                Helpful{" "}
-                                {likedReviews.has(review.id) ? "(1)" : ""}
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-
-                  {businessReviews.length > 3 && (
-                    <div className="text-center">
-                      <Button
-                        onClick={() => setShowAllReviews(!showAllReviews)}
-                        variant="outline"
-                        className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-6 md:px-8 py-2 md:py-3 rounded-xl transition-all duration-300 group"
-                      >
-                        {showAllReviews ? (
-                          <>
-                            <ChevronUp className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
-                            Show Less Reviews
-                          </>
-                        ) : (
-                          <>
-                            <ChevronDown className="w-4 h-4 md:w-5 md:h-5 mr-2 group-hover:animate-bounce" />
-                            Show All {businessReviews.length} Reviews
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Review Writing Section */}
-                <div>
-                  <Card className="sticky top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border-2 border-yellow-200/50 shadow-xl">
-                    <CardHeader className="pb-3 md:pb-4">
-                      <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
-                        <Star className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-yellow-600" />
-                        ⭐ Write a Review
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-center py-4 md:py-6">
-                        <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
-                          <Star className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                        </div>
-                        <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 md:mb-3">
-                          Share Your Experience
-                        </h3>
-                        <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                          Help others by sharing your experience with{" "}
-                          {business.name}.
-                        </p>
-                        <Button
-                          onClick={handleSubmitReview}
-                          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 md:py-4 text-sm md:text-base lg:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                          size="lg"
-                        >
-                          <Send className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
-                          ✍️ Write Review
-                        </Button>
-                        <p className="text-xs text-gray-500 mt-3 md:mt-4 bg-white/50 p-2 md:p-3 rounded-lg">
-                          Sign in with Google or Facebook to verify your review
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </TabsContent>
-
             {/* Photos Tab Content */}
             <TabsContent value="photos" className="w-full mt-0">
               <div className="space-y-4 md:space-y-6">
@@ -857,6 +705,236 @@ export default function BusinessProfile() {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </div>
+
+      {/* Separate Reviews Section */}
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12 bg-gradient-to-br from-slate-50 via-blue-50/20 to-purple-50/10"
+        data-section="reviews"
+      >
+        <div
+          className={`transition-all duration-1000 ${visibleSections.includes("reviews") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        >
+          {/* Reviews Section Header */}
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-800 mb-4 md:mb-6">
+              ⭐ Customer Reviews & Testimonials
+            </h2>
+            <p className="text-gray-600 text-base md:text-lg lg:text-xl max-w-3xl mx-auto">
+              See what our valued customers have to say about their experience
+              with {business.name}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+            {/* Reviews List */}
+            <div className="lg:col-span-2 space-y-6 md:space-y-8">
+              {visibleReviews.map((review, index) => (
+                <Card
+                  key={review.id}
+                  className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
+                >
+                  <CardContent className="p-6 md:p-8">
+                    <div className="flex items-start gap-4 md:gap-6">
+                      <Avatar className="w-12 h-12 md:w-16 md:h-16 border-3 border-purple-200 shadow-lg">
+                        <AvatarImage src={review.userAvatar} />
+                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm md:text-lg">
+                          {review.userName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-3 md:mb-4">
+                          <div className="flex items-center gap-3 md:gap-4">
+                            <h4 className="font-bold text-gray-800 text-base md:text-lg">
+                              {review.userName}
+                            </h4>
+                            {review.isVerified && (
+                              <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-sm">
+                                <CheckCircle className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+                                Verified Customer
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-sm md:text-base text-gray-500 bg-gray-100 px-3 py-2 rounded-full font-medium">
+                            {review.date}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3 mb-4 md:mb-6">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ${
+                                i < review.rating
+                                  ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                          <span className="text-lg md:text-xl font-bold text-gray-800 ml-2">
+                            {review.rating}.0 / 5.0
+                          </span>
+                        </div>
+
+                        <p className="text-gray-700 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">
+                          "{review.comment}"
+                        </p>
+
+                        <div className="flex items-center gap-4 md:gap-6">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleLikeReview(review.id)}
+                            className={`transition-all duration-300 text-sm md:text-base ${
+                              likedReviews.has(review.id)
+                                ? "text-red-600 bg-red-50"
+                                : "text-gray-600 hover:text-red-600 hover:bg-red-50"
+                            }`}
+                          >
+                            <ThumbsUp
+                              className={`w-4 h-4 md:w-5 md:h-5 mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
+                            />
+                            Helpful {likedReviews.has(review.id) ? "(1)" : ""}
+                          </Button>
+                          <span className="text-gray-400 text-sm md:text-base">
+                            |
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 text-sm md:text-base"
+                          >
+                            <Eye className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                            View Response
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {businessReviews.length > 3 && (
+                <div className="text-center">
+                  <Button
+                    onClick={() => setShowAllReviews(!showAllReviews)}
+                    variant="outline"
+                    className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-8 md:px-12 py-3 md:py-4 rounded-xl transition-all duration-300 group text-base md:text-lg"
+                  >
+                    {showAllReviews ? (
+                      <>
+                        <ChevronUp className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
+                        Show Less Reviews
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
+                        Show All {businessReviews.length} Reviews
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Review Writing Section & Stats */}
+            <div className="space-y-6 md:space-y-8">
+              {/* Review Stats Card */}
+              <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-2 border-blue-200/50 shadow-xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg md:text-xl font-bold text-gray-800 text-center">
+                    📊 Review Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="mb-6">
+                    <div className="text-4xl md:text-5xl font-black text-blue-600 mb-2">
+                      {business.rating}
+                    </div>
+                    <div className="flex justify-center mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 md:w-6 md:h-6 ${
+                            i < Math.floor(business.rating)
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-gray-600 font-medium">
+                      Based on {business.reviewCount} reviews
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 text-left">
+                    {[5, 4, 3, 2, 1].map((stars) => {
+                      const percentage = Math.random() * 60 + 20; // Mock percentage
+                      return (
+                        <div key={stars} className="flex items-center gap-2">
+                          <span className="text-sm font-medium w-8">
+                            {stars}★
+                          </span>
+                          <div className="flex-1 bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-gradient-to-r from-yellow-400 to-orange-400 h-2 rounded-full"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm text-gray-600 w-10">
+                            {Math.round(percentage)}%
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Write Review Card */}
+              <Card className="sticky top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border-2 border-yellow-200/50 shadow-xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-3 justify-center">
+                    <Star className="w-6 h-6 text-yellow-600" />⭐ Write a
+                    Review
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6">
+                    <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-xl">
+                      <Star className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3">
+                      Share Your Experience
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed text-sm md:text-base">
+                      Help others by sharing your experience with{" "}
+                      {business.name}. Your honest feedback helps build trust in
+                      our community.
+                    </p>
+                    <Button
+                      onClick={handleSubmitReview}
+                      className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 md:py-5 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      size="lg"
+                    >
+                      <Send className="w-5 h-5 md:w-6 md:h-6 mr-3 group-hover:animate-bounce" />
+                      ✍️ Write Your Review
+                    </Button>
+                    <p className="text-xs text-gray-500 mt-4 bg-white/60 p-3 rounded-lg">
+                      🔐 Sign in with Google or Facebook to verify your review
+                      and build trust
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
 
