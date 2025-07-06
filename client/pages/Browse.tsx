@@ -449,6 +449,11 @@ export default function Browse() {
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">
                     🎯 {filteredBusinesses.length} Business
                     {filteredBusinesses.length !== 1 ? "es" : ""} Found
+                    {filteredBusinesses.length === 0 && (
+                      <span className="text-red-500 text-sm block">
+                        Debug: Total available: {sampleBusinesses.length}
+                      </span>
+                    )}
                   </h2>
                   <p className="text-gray-600 flex items-center gap-2">
                     <Eye className="w-4 h-4" />
