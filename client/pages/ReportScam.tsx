@@ -182,10 +182,7 @@ export default function ReportScam() {
 
       setIsSubmitted(true);
 
-      // Redirect after a brief success message
-      setTimeout(() => {
-        navigate(`/${reviewUrl}`);
-      }, 3000);
+      // Note: Don't redirect immediately since reports need admin approval first
     } catch (error) {
       console.error("Error submitting scam report:", error);
     } finally {
