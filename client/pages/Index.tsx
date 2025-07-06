@@ -238,20 +238,51 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Browse by Service Category
+      {/* Enhanced Categories Section with JavaScript Animations */}
+      <section
+        className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/50 to-purple-50/30 relative overflow-hidden"
+        data-section="categories"
+      >
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-400 rounded-full animate-float-slow"></div>
+          <div className="absolute top-20 right-20 w-24 h-24 bg-purple-400 rounded-full animate-float-medium"></div>
+          <div className="absolute bottom-20 left-1/4 w-28 h-28 bg-cyan-400 rounded-full animate-float-fast"></div>
+          <div className="absolute bottom-10 right-1/3 w-20 h-20 bg-green-400 rounded-full animate-float-slow"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div
+            className={`text-center mb-16 transition-all duration-1000 ${
+              visibleSections.includes("categories")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Enhanced Header with Icons */}
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200 rounded-full px-8 py-3">
+                <span className="text-blue-700 font-bold text-sm flex items-center gap-2">
+                  <Building className="w-5 h-5" />
+                  ⭐ EXPLORE SERVICES
+                  <CheckCircle className="w-4 h-4" />
+                </span>
+              </div>
+            </div>
+
+            <h2 className="text-4xl lg:text-5xl font-black text-gray-800 mb-6">
+              <span className="block">Browse by</span>
+              <span className="gradient-text">Service Category</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Find specialized professionals for all your visa and immigration
-              needs
+
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Discover specialized professionals across Dubai's most trusted
+              immigration services
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Enhanced Animated Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {businessCategories.map((category, index) => {
               const categoryBusinesses = sampleBusinesses.filter(
                 (b) => b.category === category,
@@ -260,54 +291,146 @@ export default function Index() {
                 categoryBusinesses.reduce((acc, b) => acc + b.rating, 0) /
                 categoryBusinesses.length;
 
+              // Dynamic icons for each category
+              const getCategoryIcon = (cat: string) => {
+                switch (cat) {
+                  case "Visa Agent":
+                    return "🛂";
+                  case "Visa Services":
+                    return "📋";
+                  case "Visa & Passport Services":
+                    return "🛡️";
+                  case "Immigration Consultants":
+                    return "👨‍💼";
+                  case "Document Clearing / Typing Centers":
+                    return "📝";
+                  case "Travel Agencies (Visa-related)":
+                    return "✈️";
+                  default:
+                    return "🏢";
+                }
+              };
+
               return (
-                <Card
+                <div
                   key={category}
-                  className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-border/50 hover:border-primary/30 bg-gradient-to-br from-white to-primary/5"
+                  className={`group transition-all duration-700 ${
+                    visibleSections.includes("categories")
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 150 + 200}ms` }}
                 >
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center justify-between">
-                      <span className="group-hover:text-primary transition-colors text-foreground font-bold">
-                        {category}
-                      </span>
-                      <Badge
-                        variant="secondary"
-                        className="bg-primary/10 text-primary border-primary/20"
-                      >
-                        {categoryBusinesses.length}
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-dubai-gold fill-dubai-gold" />
-                        <span className="text-sm font-medium text-foreground">
-                          {avgRating.toFixed(1)}
-                        </span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">
-                        avg rating
-                      </span>
-                    </div>
+                  <div className="relative">
+                    {/* Animated Gradient Border */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500"></div>
 
-                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                      Professional {category.toLowerCase()} services with
-                      verified credentials and customer reviews.
-                    </p>
+                    <Card className="relative h-full bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-white/50 hover:border-transparent rounded-2xl shadow-lg hover:shadow-2xl transform group-hover:scale-[1.02] group-hover:-translate-y-2 transition-all duration-500 cursor-pointer overflow-hidden">
+                      {/* Card Glow Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-200"
-                      onClick={() => handleSearch("", category, "")}
-                    >
-                      Browse {category}
-                    </Button>
-                  </CardContent>
-                </Card>
+                      <CardHeader className="pb-6 relative">
+                        {/* Floating Icon */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="relative">
+                            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center text-3xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                              {getCategoryIcon(category)}
+                            </div>
+                            <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                              <CheckCircle className="w-4 h-4 text-white" />
+                            </div>
+                          </div>
+
+                          <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 shadow-md transform group-hover:scale-110 transition-transform duration-300">
+                            {categoryBusinesses.length}
+                          </Badge>
+                        </div>
+
+                        <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-500">
+                          {category}
+                        </CardTitle>
+                      </CardHeader>
+
+                      <CardContent className="relative">
+                        {/* Animated Rating */}
+                        <div className="flex items-center gap-3 mb-6 group-hover:scale-105 transition-transform duration-300">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 transition-all duration-300 ${
+                                  i < Math.floor(avgRating)
+                                    ? "text-yellow-400 fill-yellow-400 transform group-hover:scale-110"
+                                    : "text-gray-300"
+                                }`}
+                                style={{ transitionDelay: `${i * 50}ms` }}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            {avgRating.toFixed(1)}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            avg rating
+                          </span>
+                        </div>
+
+                        <p className="text-gray-600 mb-8 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                          Professional {category.toLowerCase()} services with
+                          verified credentials and customer reviews.
+                        </p>
+
+                        {/* Enhanced Interactive Button */}
+                        <Button
+                          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-300 group-hover:scale-105 relative overflow-hidden"
+                          onClick={() => handleSearch("", category, "")}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+
+                          <span className="relative flex items-center justify-center gap-2">
+                            🔍 Browse {category.split(" ")[0]}
+                            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                          </span>
+                        </Button>
+
+                        {/* Decorative Elements */}
+                        <div className="absolute top-4 right-4 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+                        <div className="absolute bottom-4 left-4 w-1 h-1 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
+                      </CardContent>
+
+                      {/* Hover Reveal Stats */}
+                      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                    </Card>
+                  </div>
+                </div>
               );
             })}
+          </div>
+
+          {/* Enhanced CTA Section */}
+          <div
+            className={`text-center mt-16 transition-all duration-1000 ${
+              visibleSections.includes("categories")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "1000ms" }}
+          >
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/30 rounded-3xl p-8 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                🎯 Can't Find What You're Looking For?
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Explore our complete directory of verified immigration
+                professionals
+              </p>
+              <Link to="/browse">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
+                  <span>🌟 View All Categories</span>
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
