@@ -82,14 +82,43 @@ export default function CategoryLocationPage() {
     return title;
   };
 
-  // Set page title
+  // Generate dynamic meta description
+  const generateMetaDescription = () => {
+    if (category && location) {
+      return `Find the best ${categoryName.toLowerCase()} consultants in ${locationName}. Compare verified ${categoryName.toLowerCase()} service providers with reviews, ratings, and contact details. Get expert immigration assistance today.`;
+    } else if (category) {
+      return `Discover top-rated ${categoryName.toLowerCase()} services across Dubai and UAE. Compare verified providers offering professional ${categoryName.toLowerCase()} assistance with competitive rates.`;
+    } else if (location) {
+      return `Find trusted immigration services in ${locationName}. Browse verified visa consultants, document clearing services, and immigration experts in your area.`;
+    } else {
+      return "Dubai's largest directory of verified immigration services. Find trusted visa consultants, document clearing, and immigration experts across UAE.";
+    }
+  };
+
+  // Set page title and meta description
   useEffect(() => {
     const title = generatePageTitle();
+    const description = generateMetaDescription();
+
     document.title = title;
+
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute("content", description);
 
     // Cleanup: Reset title when component unmounts
     return () => {
       document.title = "TrustedImmigration - Dubai's #1 Immigration Directory";
+      const defaultDescription =
+        "Dubai's largest directory of verified immigration services. Find trusted visa consultants, document clearing, and immigration experts.";
+      if (metaDescription) {
+        metaDescription.setAttribute("content", defaultDescription);
+      }
     };
   }, [location, category, locationName, categoryName]);
 
