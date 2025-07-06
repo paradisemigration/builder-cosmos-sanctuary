@@ -75,7 +75,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   ];
 
   return (
-    <div className="relative min-h-[600px] md:min-h-[700px] lg:min-h-[800px] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+    <div className="relative min-h-[600px] md:min-h-[700px] lg:min-h-[800px] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden pt-16 lg:pt-20">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         {/* Geometric Patterns */}
