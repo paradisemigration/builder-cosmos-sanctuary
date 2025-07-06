@@ -840,6 +840,792 @@ export default function AdminPanel() {
           <TabsContent value="reviews">
             <ReviewManagement />
           </TabsContent>
+
+          <TabsContent value="scam-reports">
+            {/* Scam Reports Management Content */}
+
+            {/* Scam Reports Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
+              {stats.map((stat, index) => (
+                <Card key={index} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                          {stat.label}
+                        </p>
+                        <p className="text-lg sm:text-2xl font-bold text-foreground">
+                          {stat.value}
+                        </p>
+                      </div>
+                      <div className="text-lg sm:text-2xl opacity-70">
+                        {stat.icon}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Scam Reports Search and Filters */}
+            <Card className="mb-6">
+              <CardHeader className="pb-4">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-red-600" />
+                      Scam Reports
+                    </CardTitle>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="hidden sm:inline-flex"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export
+                      </Button>
+                      <Button variant="outline" size="sm" className="sm:hidden">
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      placeholder="Search scam reports..."
+                      value={scamSearchQuery}
+                      onChange={(e) => setScamSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <Tabs
+                  value={selectedScamTab}
+                  onValueChange={setSelectedScamTab}
+                >
+                  {/* Mobile: Scrollable tabs */}
+                  <div className="w-full overflow-x-auto pb-2">
+                    <TabsList className="grid grid-cols-5 min-w-[600px] sm:min-w-0 sm:w-full">
+                      <TabsTrigger value="all" className="text-xs sm:text-sm">
+                        All ({scamReports.length})
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="pending"
+                        className="text-xs sm:text-sm"
+                      >
+                        <span className="hidden sm:inline">
+                          Pending (
+                          {
+                            scamReports.filter((r) => r.status === "pending")
+                              .length
+                          }
+                          )
+                        </span>
+                        <span className="sm:hidden">
+                          Pending (
+                          {
+                            scamReports.filter((r) => r.status === "pending")
+                              .length
+                          }
+                          )
+                        </span>
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="approved"
+                        className="text-xs sm:text-sm"
+                      >
+                        <span className="hidden sm:inline">
+                          Published (
+                          {
+                            scamReports.filter((r) => r.status === "approved")
+                              .length
+                          }
+                          )
+                        </span>
+                        <span className="sm:hidden">
+                          Live (
+                          {
+                            scamReports.filter((r) => r.status === "approved")
+                              .length
+                          }
+                          )
+                        </span>
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="investigating"
+                        className="text-xs sm:text-sm"
+                      >
+                        <span className="hidden sm:inline">
+                          Investigating (
+                          {
+                            scamReports.filter(
+                              (r) => r.status === "investigating",
+                            ).length
+                          }
+                          )
+                        </span>
+                        <span className="sm:hidden">
+                          Investigating (
+                          {
+                            scamReports.filter(
+                              (r) => r.status === "investigating",
+                            ).length
+                          }
+                          )
+                        </span>
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="rejected"
+                        className="text-xs sm:text-sm"
+                      >
+                        <span className="hidden sm:inline">
+                          Rejected (
+                          {
+                            scamReports.filter((r) => r.status === "rejected")
+                              .length
+                          }
+                          )
+                        </span>
+                        <span className="sm:hidden">
+                          Rejected (
+                          {
+                            scamReports.filter((r) => r.status === "rejected")
+                              .length
+                          }
+                          )
+                        </span>
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+
+                  <TabsContent value={selectedScamTab} className="mt-6">
+                    {/* Mobile: Card Layout */}
+                    <div className="space-y-4 sm:hidden">
+                      {filteredScamReports.map((report) => (
+                        <Card
+                          key={report.id}
+                          className="p-4 border-l-4 border-l-red-500"
+                        >
+                          <div className="space-y-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-medium text-red-800 truncate flex items-center gap-2">
+                                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                                  {report.companyName}
+                                </h3>
+                                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                                  <MapPin className="w-3 h-3" />
+                                  {report.location}
+                                </p>
+                              </div>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 p-0"
+                                  >
+                                    <MoreHorizontal className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                      >
+                                        <Eye className="w-4 h-4 mr-2" />
+                                        View Details
+                                      </DropdownMenuItem>
+                                    </DialogTrigger>
+                                    <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                                      <DialogHeader>
+                                        <DialogTitle className="flex items-center gap-2 text-red-800">
+                                          <AlertTriangle className="w-5 h-5" />
+                                          Scam Report Details
+                                        </DialogTitle>
+                                      </DialogHeader>
+                                      <div className="space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Company Name
+                                            </label>
+                                            <p className="text-red-800 font-medium">
+                                              {report.companyName}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Location
+                                            </label>
+                                            <p className="flex items-center gap-1">
+                                              <MapPin className="w-4 h-4" />
+                                              {report.location}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Contact Number
+                                            </label>
+                                            <p className="flex items-center gap-1">
+                                              <Phone className="w-4 h-4" />
+                                              {report.contactNumber}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Email
+                                            </label>
+                                            <p className="flex items-center gap-1">
+                                              <Mail className="w-4 h-4" />
+                                              {report.emailId}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Report Date
+                                            </label>
+                                            <p className="flex items-center gap-1">
+                                              <Calendar className="w-4 h-4" />
+                                              {report.reportDate}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Status
+                                            </label>
+                                            <Badge
+                                              className={
+                                                scamReportStatuses[
+                                                  report.status
+                                                ]?.color
+                                              }
+                                            >
+                                              {
+                                                scamReportStatuses[
+                                                  report.status
+                                                ]?.label
+                                              }
+                                            </Badge>
+                                          </div>
+                                        </div>
+
+                                        <div>
+                                          <label className="text-sm font-medium text-gray-600">
+                                            Scam Description
+                                          </label>
+                                          <div className="mt-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                            <p className="text-gray-800 leading-relaxed">
+                                              {report.scamDescription}
+                                            </p>
+                                          </div>
+                                        </div>
+
+                                        <div>
+                                          <label className="text-sm font-medium text-gray-600">
+                                            Evidence Files
+                                          </label>
+                                          <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                            {report.evidenceFiles
+                                              .paymentReceipt && (
+                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                <FileText className="w-4 h-4" />
+                                                <span className="text-sm">
+                                                  Payment Receipt
+                                                </span>
+                                              </div>
+                                            )}
+                                            {report.evidenceFiles.agreement && (
+                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                <FileText className="w-4 h-4" />
+                                                <span className="text-sm">
+                                                  Agreement
+                                                </span>
+                                              </div>
+                                            )}
+                                            {report.evidenceFiles
+                                              .companyPicture && (
+                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                <FileText className="w-4 h-4" />
+                                                <span className="text-sm">
+                                                  Company Picture
+                                                </span>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+
+                                        {report.reviewUrl && (
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Published URL
+                                            </label>
+                                            <div className="mt-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                              <ExternalLink className="w-4 h-4 text-green-600" />
+                                              <span className="text-green-700 font-mono text-sm">
+                                                /{report.reviewUrl}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {report.adminNotes && (
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Admin Notes
+                                            </label>
+                                            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                              <p className="text-blue-800">
+                                                {report.adminNotes}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </DialogContent>
+                                  </Dialog>
+
+                                  {report.status === "pending" && (
+                                    <>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleScamReportStatusChange(
+                                            report.id,
+                                            "approved",
+                                          )
+                                        }
+                                        className="text-green-600"
+                                      >
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Approve & Publish
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleScamReportStatusChange(
+                                            report.id,
+                                            "investigating",
+                                          )
+                                        }
+                                        className="text-blue-600"
+                                      >
+                                        <Shield className="w-4 h-4 mr-2" />
+                                        Mark as Investigating
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          handleScamReportStatusChange(
+                                            report.id,
+                                            "rejected",
+                                          )
+                                        }
+                                        className="text-red-600"
+                                      >
+                                        <XCircle className="w-4 h-4 mr-2" />
+                                        Reject
+                                      </DropdownMenuItem>
+                                    </>
+                                  )}
+
+                                  {report.status === "approved" && (
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        window.open(
+                                          `/${report.reviewUrl}`,
+                                          "_blank",
+                                        )
+                                      }
+                                      className="text-blue-600"
+                                    >
+                                      <ExternalLink className="w-4 h-4 mr-2" />
+                                      View Live Page
+                                    </DropdownMenuItem>
+                                  )}
+
+                                  <DropdownMenuItem
+                                    onClick={() => {
+                                      setSelectedScamReport(report);
+                                      setShowScamDeleteDialog(true);
+                                    }}
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete Report
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <Badge
+                                  className={`text-xs ${scamReportStatuses[report.status]?.color}`}
+                                >
+                                  {scamReportStatuses[report.status]?.label}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {report.reportDate}
+                                </span>
+                              </div>
+
+                              <p className="text-sm text-muted-foreground line-clamp-2">
+                                {report.scamDescription}
+                              </p>
+
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span className="flex items-center gap-1">
+                                  <Phone className="w-3 h-3" />
+                                  {report.contactNumber}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Mail className="w-3 h-3" />
+                                  {report.emailId}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+
+                    {/* Desktop: Table Layout */}
+                    <div className="hidden sm:block rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Company</TableHead>
+                            <TableHead>Contact Info</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Report Date</TableHead>
+                            <TableHead>Evidence</TableHead>
+                            <TableHead>Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredScamReports.map((report) => (
+                            <TableRow
+                              key={report.id}
+                              className="border-l-4 border-l-red-500"
+                            >
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium text-red-800 flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4" />
+                                    {report.companyName}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" />
+                                    {report.location}
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="space-y-1">
+                                  <div className="text-sm flex items-center gap-1">
+                                    <Phone className="w-3 h-3" />
+                                    {report.contactNumber}
+                                  </div>
+                                  <div className="text-sm flex items-center gap-1">
+                                    <Mail className="w-3 h-3" />
+                                    {report.emailId}
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <Badge
+                                  className={
+                                    scamReportStatuses[report.status]?.color
+                                  }
+                                >
+                                  {scamReportStatuses[report.status]?.label}
+                                </Badge>
+                                {report.reviewUrl && (
+                                  <div className="mt-1">
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="h-6 px-2 text-xs"
+                                      onClick={() =>
+                                        window.open(
+                                          `/${report.reviewUrl}`,
+                                          "_blank",
+                                        )
+                                      }
+                                    >
+                                      <ExternalLink className="w-3 h-3 mr-1" />
+                                      Live
+                                    </Button>
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-4 h-4" />
+                                  {report.reportDate}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <FileText className="w-4 h-4" />
+                                  <span className="text-sm">
+                                    {
+                                      Object.values(
+                                        report.evidenceFiles,
+                                      ).filter(Boolean).length
+                                    }{" "}
+                                    files
+                                  </span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <MoreHorizontal className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <DropdownMenuItem
+                                          onSelect={(e) => e.preventDefault()}
+                                        >
+                                          <Eye className="w-4 h-4 mr-2" />
+                                          View Details
+                                        </DropdownMenuItem>
+                                      </DialogTrigger>
+                                      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                                        <DialogHeader>
+                                          <DialogTitle className="flex items-center gap-2 text-red-800">
+                                            <AlertTriangle className="w-5 h-5" />
+                                            Scam Report Details
+                                          </DialogTitle>
+                                        </DialogHeader>
+                                        <div className="space-y-6">
+                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Company Name
+                                              </label>
+                                              <p className="text-red-800 font-medium">
+                                                {report.companyName}
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Location
+                                              </label>
+                                              <p className="flex items-center gap-1">
+                                                <MapPin className="w-4 h-4" />
+                                                {report.location}
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Contact Number
+                                              </label>
+                                              <p className="flex items-center gap-1">
+                                                <Phone className="w-4 h-4" />
+                                                {report.contactNumber}
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Email
+                                              </label>
+                                              <p className="flex items-center gap-1">
+                                                <Mail className="w-4 h-4" />
+                                                {report.emailId}
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Report Date
+                                              </label>
+                                              <p className="flex items-center gap-1">
+                                                <Calendar className="w-4 h-4" />
+                                                {report.reportDate}
+                                              </p>
+                                            </div>
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Status
+                                              </label>
+                                              <Badge
+                                                className={
+                                                  scamReportStatuses[
+                                                    report.status
+                                                  ]?.color
+                                                }
+                                              >
+                                                {
+                                                  scamReportStatuses[
+                                                    report.status
+                                                  ]?.label
+                                                }
+                                              </Badge>
+                                            </div>
+                                          </div>
+
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Scam Description
+                                            </label>
+                                            <div className="mt-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                              <p className="text-gray-800 leading-relaxed">
+                                                {report.scamDescription}
+                                              </p>
+                                            </div>
+                                          </div>
+
+                                          <div>
+                                            <label className="text-sm font-medium text-gray-600">
+                                              Evidence Files
+                                            </label>
+                                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                              {report.evidenceFiles
+                                                .paymentReceipt && (
+                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                  <FileText className="w-4 h-4" />
+                                                  <span className="text-sm">
+                                                    Payment Receipt
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {report.evidenceFiles
+                                                .agreement && (
+                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                  <FileText className="w-4 h-4" />
+                                                  <span className="text-sm">
+                                                    Agreement
+                                                  </span>
+                                                </div>
+                                              )}
+                                              {report.evidenceFiles
+                                                .companyPicture && (
+                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                                                  <FileText className="w-4 h-4" />
+                                                  <span className="text-sm">
+                                                    Company Picture
+                                                  </span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </div>
+
+                                          {report.reviewUrl && (
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Published URL
+                                              </label>
+                                              <div className="mt-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                                <ExternalLink className="w-4 h-4 text-green-600" />
+                                                <span className="text-green-700 font-mono text-sm">
+                                                  /{report.reviewUrl}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          )}
+
+                                          {report.adminNotes && (
+                                            <div>
+                                              <label className="text-sm font-medium text-gray-600">
+                                                Admin Notes
+                                              </label>
+                                              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                                <p className="text-blue-800">
+                                                  {report.adminNotes}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </DialogContent>
+                                    </Dialog>
+
+                                    {report.status === "pending" && (
+                                      <>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            handleScamReportStatusChange(
+                                              report.id,
+                                              "approved",
+                                            )
+                                          }
+                                          className="text-green-600"
+                                        >
+                                          <CheckCircle className="w-4 h-4 mr-2" />
+                                          Approve & Publish
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            handleScamReportStatusChange(
+                                              report.id,
+                                              "investigating",
+                                            )
+                                          }
+                                          className="text-blue-600"
+                                        >
+                                          <Shield className="w-4 h-4 mr-2" />
+                                          Mark as Investigating
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            handleScamReportStatusChange(
+                                              report.id,
+                                              "rejected",
+                                            )
+                                          }
+                                          className="text-red-600"
+                                        >
+                                          <XCircle className="w-4 h-4 mr-2" />
+                                          Reject
+                                        </DropdownMenuItem>
+                                      </>
+                                    )}
+
+                                    {report.status === "approved" && (
+                                      <DropdownMenuItem
+                                        onClick={() =>
+                                          window.open(
+                                            `/${report.reviewUrl}`,
+                                            "_blank",
+                                          )
+                                        }
+                                        className="text-blue-600"
+                                      >
+                                        <ExternalLink className="w-4 h-4 mr-2" />
+                                        View Live Page
+                                      </DropdownMenuItem>
+                                    )}
+
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setSelectedScamReport(report);
+                                        setShowScamDeleteDialog(true);
+                                      }}
+                                      className="text-red-600"
+                                    >
+                                      <Trash2 className="w-4 h-4 mr-2" />
+                                      Delete Report
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
 
