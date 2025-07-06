@@ -610,7 +610,7 @@ export default function BusinessProfile() {
                   </CardContent>
                 </Card>
 
-                  {/* Location & Contact */}
+                {/* Location & Contact */}
                   <Card className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
                     <CardHeader>
                       <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
