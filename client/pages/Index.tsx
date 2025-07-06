@@ -418,7 +418,7 @@ export default function Index() {
           >
             <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/30 rounded-3xl p-8 max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                🎯 Can't Find What You're Looking For?
+                ��� Can't Find What You're Looking For?
               </h3>
               <p className="text-gray-600 mb-6">
                 Explore our complete directory of verified immigration
@@ -435,57 +435,184 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Why Choose Our Directory?
+      {/* Enhanced Why Choose Us Section */}
+      <section
+        className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden"
+        data-section="why-choose"
+      >
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
+          <div className="absolute top-20 right-20 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl animate-float-medium"></div>
+          <div className="absolute bottom-10 left-1/3 w-36 h-36 bg-cyan-500/20 rounded-full blur-3xl animate-float-fast"></div>
+
+          {/* Particle System */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white/30 rounded-full animate-twinkle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div
+            className={`text-center mb-16 transition-all duration-1000 ${
+              visibleSections.includes("why-choose")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Enhanced Header */}
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-white/20 rounded-full px-8 py-3">
+                <span className="text-cyan-300 font-bold text-sm flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  🏆 OUR ADVANTAGES
+                  <CheckCircle className="w-4 h-4" />
+                </span>
+              </div>
+            </div>
+
+            <h2 className="text-4xl lg:text-5xl font-black mb-6">
+              <span className="block">Why Choose</span>
+              <span className="gradient-text">Our Directory?</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              We ensure you connect with legitimate, verified professionals for
-              your visa and immigration needs
+
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Experience the difference with Dubai's most trusted and
+              comprehensive immigration services platform
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-verified/10 rounded-lg mb-6">
-                <Shield className="w-8 h-8 text-verified" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                Verified Businesses
-              </h3>
-              <p className="text-muted-foreground">
-                All listed businesses are verified with valid licenses and
-                credentials to ensure your safety.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {[
+              {
+                icon: Shield,
+                title: "Verified Businesses",
+                description:
+                  "All listed businesses are verified with valid licenses and credentials to ensure your safety.",
+                color: "from-green-500 to-emerald-500",
+                emoji: "🛡️",
+                stats: "150+ Verified",
+              },
+              {
+                icon: Users,
+                title: "Real Reviews",
+                description:
+                  "Read authentic reviews from real customers to make informed decisions about your service provider.",
+                color: "from-blue-500 to-cyan-500",
+                emoji: "⭐",
+                stats: "2.5k+ Reviews",
+              },
+              {
+                icon: CheckCircle,
+                title: "Scam Protection",
+                description:
+                  "Our reporting system helps identify and flag suspicious businesses to protect the community.",
+                color: "from-purple-500 to-pink-500",
+                emoji: "🔒",
+                stats: "98% Safe",
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className={`group transition-all duration-700 ${
+                  visibleSections.includes("why-choose")
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: `${index * 200 + 300}ms` }}
+              >
+                <div className="relative h-full">
+                  {/* Animated Gradient Border */}
+                  <div
+                    className={`absolute -inset-1 bg-gradient-to-r ${feature.color} rounded-2xl blur opacity-0 group-hover:opacity-60 transition duration-500`}
+                  ></div>
 
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-6">
-                <Users className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                Real Reviews
-              </h3>
-              <p className="text-muted-foreground">
-                Read authentic reviews from real customers to make informed
-                decisions about your service provider.
-              </p>
-            </div>
+                  <div className="relative h-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 lg:p-10 hover:bg-white/20 transition-all duration-500 transform group-hover:scale-105 group-hover:-translate-y-2">
+                    {/* Floating Icon Container */}
+                    <div className="text-center mb-8">
+                      <div className="relative inline-block">
+                        <div
+                          className={`w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center text-4xl lg:text-5xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl mb-4`}
+                        >
+                          {feature.emoji}
+                        </div>
 
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-accent/10 rounded-lg mb-6">
-                <CheckCircle className="w-8 h-8 text-accent" />
+                        {/* Pulse Ring */}
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-r ${feature.color} rounded-2xl opacity-20 animate-ping group-hover:animate-pulse`}
+                        ></div>
+
+                        {/* Stats Badge */}
+                        <div className="absolute -top-2 -right-2 bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                          {feature.stats}
+                        </div>
+                      </div>
+                    </div>
+
+                    <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-500">
+                      {feature.title}
+                    </h3>
+
+                    <p className="text-blue-100 text-base lg:text-lg leading-relaxed group-hover:text-white transition-colors duration-300">
+                      {feature.description}
+                    </p>
+
+                    {/* Interactive Elements */}
+                    <div className="mt-8 flex items-center justify-center">
+                      <Button
+                        className={`bg-gradient-to-r ${feature.color} hover:shadow-xl hover:shadow-blue-500/25 text-white font-semibold px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300 opacity-0 group-hover:opacity-100`}
+                      >
+                        Learn More
+                      </Button>
+                    </div>
+
+                    {/* Decorative Elements */}
+                    <div className="absolute top-4 right-4 w-2 h-2 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+                    <div className="absolute bottom-4 left-4 w-1 h-1 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                Scam Protection
-              </h3>
-              <p className="text-muted-foreground">
-                Our reporting system helps identify and flag suspicious
-                businesses to protect the community.
-              </p>
+            ))}
+          </div>
+
+          {/* Enhanced Trust Indicators */}
+          <div
+            className={`mt-16 text-center transition-all duration-1000 ${
+              visibleSections.includes("why-choose")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: "1000ms" }}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 max-w-4xl mx-auto">
+              {[
+                { label: "Success Rate", value: "98%", icon: "🎯" },
+                { label: "Happy Customers", value: "5k+", icon: "😊" },
+                { label: "Years Experience", value: "15+", icon: "📅" },
+                { label: "Response Time", value: "<2hrs", icon: "⚡" },
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 lg:p-6 hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="text-2xl lg:text-3xl mb-2">{stat.icon}</div>
+                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-blue-200">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
