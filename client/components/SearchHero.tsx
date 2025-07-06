@@ -312,7 +312,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                       {locationLoading ? (
                         <Loader2 className="h-4 w-4 md:h-5 md:w-5 text-blue-500 animate-spin" />
                       ) : (
-                        <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                        <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-orange-500 transition-colors duration-300" />
                       )}
                     </div>
 
