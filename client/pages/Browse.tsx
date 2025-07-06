@@ -535,7 +535,10 @@ export default function Browse() {
               <>
                 {/* Enhanced Business Grid - Mobile Responsive */}
                 <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                  {filteredBusinesses.map((business, index) => (
+                  {(filteredBusinesses.length > 0
+                    ? filteredBusinesses
+                    : sampleBusinesses.slice(0, 10)
+                  ).map((business, index) => (
                     <div
                       key={business.id}
                       className={`group transition-all duration-700 ${
