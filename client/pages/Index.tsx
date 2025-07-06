@@ -26,6 +26,17 @@ import {
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Handle window resize to update mobile state
+  useState(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
@@ -60,7 +71,12 @@ export default function Index() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex md:items-center">
+            <div
+              className="flex items-center"
+              style={{
+                display: isMobile ? "none" : "flex",
+              }}
+            >
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
                   to="/"
@@ -87,7 +103,12 @@ export default function Index() {
             </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden">
+            <div
+              className="flex"
+              style={{
+                display: isMobile ? "flex" : "none",
+              }}
+            >
               <Button
                 variant="ghost"
                 size="sm"
