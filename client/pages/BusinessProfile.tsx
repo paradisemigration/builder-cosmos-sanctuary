@@ -549,66 +549,66 @@ export default function BusinessProfile() {
               </TabsList>
             </div>
 
-            <TabsContent value="overview" className="mt-8">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
-                  {/* About Section */}
-                  <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                        <Award className="w-6 h-6 text-blue-600" />
-                        About This Business
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <p className="text-gray-700 leading-relaxed text-lg">
-                        {business.description}
-                      </p>
+            {/* Overview Tab Content */}
+            <TabsContent value="overview" className="w-full">
+              <div className="space-y-6 md:space-y-8">
+                {/* About Section */}
+                <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
+                      <Award className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                      💼 About This Business
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <p className="text-gray-700 leading-relaxed text-base md:text-lg">
+                      {business.description}
+                    </p>
 
-                      {business.licenseNo && (
-                        <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-2xl border border-green-200/50">
-                          <h4 className="font-bold text-green-800 mb-3 flex items-center gap-2">
-                            <Shield className="w-5 h-5" />
-                            🏛️ License Information
-                          </h4>
-                          <p className="text-green-700 font-medium">
-                            License No: {business.licenseNo}
-                          </p>
-                        </div>
-                      )}
+                    {business.licenseNo && (
+                      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 md:p-6 rounded-2xl border border-green-200/50">
+                        <h4 className="font-bold text-green-800 mb-3 flex items-center gap-2 text-sm md:text-base">
+                          <Shield className="w-4 h-4 md:w-5 md:h-5" />
+                          🏛️ License Information
+                        </h4>
+                        <p className="text-green-700 font-medium text-sm md:text-base">
+                          License No: {business.licenseNo}
+                        </p>
+                      </div>
+                    )}
 
-                      {/* Trust Indicators */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-xl border border-blue-200/50 text-center">
-                          <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                          <div className="text-2xl font-bold text-blue-800">
-                            {business.reviewCount}
-                          </div>
-                          <div className="text-blue-600 text-sm">
-                            Happy Customers
-                          </div>
+                    {/* Mobile-Optimized Trust Indicators */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-3 md:p-4 rounded-xl border border-blue-200/50 text-center">
+                        <Users className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mx-auto mb-2" />
+                        <div className="text-lg md:text-2xl font-bold text-blue-800">
+                          {business.reviewCount}
                         </div>
-                        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200/50 text-center">
-                          <Star className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                          <div className="text-2xl font-bold text-green-800">
-                            {business.rating}
-                          </div>
-                          <div className="text-green-600 text-sm">
-                            Average Rating
-                          </div>
-                        </div>
-                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200/50 text-center">
-                          <TrendingUp className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                          <div className="text-2xl font-bold text-purple-800">
-                            {business.isVerified ? "✓" : "✗"}
-                          </div>
-                          <div className="text-purple-600 text-sm">
-                            Verified Status
-                          </div>
+                        <div className="text-blue-600 text-xs md:text-sm">
+                          Happy Customers
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 md:p-4 rounded-xl border border-green-200/50 text-center">
+                        <Star className="w-6 h-6 md:w-8 md:h-8 text-green-600 mx-auto mb-2" />
+                        <div className="text-lg md:text-2xl font-bold text-green-800">
+                          {business.rating}
+                        </div>
+                        <div className="text-green-600 text-xs md:text-sm">
+                          Average Rating
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 md:p-4 rounded-xl border border-purple-200/50 text-center col-span-2 md:col-span-1">
+                        <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-purple-600 mx-auto mb-2" />
+                        <div className="text-lg md:text-2xl font-bold text-purple-800">
+                          {business.isVerified ? "✓" : "✗"}
+                        </div>
+                        <div className="text-purple-600 text-xs md:text-sm">
+                          Verified Status
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
                   {/* Location & Contact */}
                   <Card className="bg-gradient-to-br from-white via-white to-purple-50/30 border-2 border-purple-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
