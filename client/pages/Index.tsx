@@ -77,7 +77,7 @@ export default function Index() {
       {/* Navigation */}
       <Navigation />
 
-      {/* Hero Section */}
+      {/* Hero Section with Enhanced Search at Top */}
       <SearchHero onSearch={handleSearch} />
 
       {/* Stats Section */}
