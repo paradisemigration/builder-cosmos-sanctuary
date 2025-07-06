@@ -58,6 +58,38 @@ const businessStatuses = {
   suspended: { label: "Suspended", color: "bg-gray-100 text-gray-800" },
 };
 
+const scamReportStatuses = {
+  pending: { label: "Pending Review", color: "bg-yellow-100 text-yellow-800" },
+  approved: { label: "Published", color: "bg-green-100 text-green-800" },
+  rejected: { label: "Rejected", color: "bg-red-100 text-red-800" },
+  investigating: {
+    label: "Under Investigation",
+    color: "bg-blue-100 text-blue-800",
+  },
+};
+
+interface ScamReport {
+  id: string;
+  companyName: string;
+  location: string;
+  contactNumber: string;
+  emailId: string;
+  scamDescription: string;
+  reportDate: string;
+  status: "pending" | "approved" | "rejected" | "investigating";
+  reporterInfo: {
+    name: string;
+    email: string;
+  };
+  evidenceFiles: {
+    paymentReceipt?: string;
+    agreement?: string;
+    companyPicture?: string;
+  };
+  reviewUrl?: string;
+  adminNotes?: string;
+}
+
 export default function AdminPanel() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,6 +112,78 @@ export default function AdminPanel() {
     null,
   );
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  // Scam Reports State
+  const [scamReports, setScamReports] = useState<ScamReport[]>([
+    {
+      id: "scam-1",
+      companyName: "Fake Immigration Services",
+      location: "Dubai, UAE",
+      contactNumber: "+971-4-123-4567",
+      emailId: "contact@fakeimmigration.com",
+      scamDescription:
+        "This company promised to process my visa within 2 weeks for $5000. After taking my money, they stopped responding to my calls and emails. Their office address doesn't exist and their website has been taken down. They created fake government stamps and documents. I later found out they are not licensed to provide immigration services. Please avoid this company at all costs.",
+      reportDate: "2024-01-15",
+      status: "pending",
+      reporterInfo: {
+        name: "Anonymous Reporter",
+        email: "reporter1@email.com",
+      },
+      evidenceFiles: {
+        paymentReceipt: "receipt-1.jpg",
+        agreement: "agreement-1.pdf",
+        companyPicture: "company-1.jpg",
+      },
+    },
+    {
+      id: "scam-2",
+      companyName: "Quick Visa Solutions",
+      location: "Abu Dhabi, UAE",
+      contactNumber: "+971-2-987-6543",
+      emailId: "info@quickvisascam.com",
+      scamDescription:
+        "Paid 8000 AED for family visa processing. They provided fake documents and disappeared after 3 months. When I tried to verify the documents with immigration authorities, they were completely fake. The company office was closed and phone numbers disconnected.",
+      reportDate: "2024-01-20",
+      status: "approved",
+      reporterInfo: {
+        name: "John Smith",
+        email: "john@email.com",
+      },
+      evidenceFiles: {
+        paymentReceipt: "receipt-2.jpg",
+        agreement: "agreement-2.pdf",
+      },
+      reviewUrl: "reviews/abu-dhabi/quick-visa-solutions",
+    },
+    {
+      id: "scam-3",
+      companyName: "Express Immigration Hub",
+      location: "Sharjah, UAE",
+      contactNumber: "+971-6-555-1234",
+      emailId: "support@expressimmigration.ae",
+      scamDescription:
+        "They claimed to have connections with government officials and guaranteed visa approval within 1 week. After paying 12000 AED, they provided fake stamps and certificates. The immigration office confirmed all documents were forged.",
+      reportDate: "2024-01-25",
+      status: "investigating",
+      reporterInfo: {
+        name: "Sarah Johnson",
+        email: "sarah@email.com",
+      },
+      evidenceFiles: {
+        paymentReceipt: "receipt-3.jpg",
+        agreement: "agreement-3.pdf",
+        companyPicture: "company-3.jpg",
+      },
+      adminNotes:
+        "Contacted authorities. Multiple reports against this company received.",
+    },
+  ]);
+
+  const [selectedScamReport, setSelectedScamReport] =
+    useState<ScamReport | null>(null);
+  const [showScamDeleteDialog, setShowScamDeleteDialog] = useState(false);
+  const [scamSearchQuery, setScamSearchQuery] = useState("");
+  const [selectedScamTab, setSelectedScamTab] = useState("all");
 
   const filteredBusinesses = businesses.filter((business) => {
     const matchesSearch =
