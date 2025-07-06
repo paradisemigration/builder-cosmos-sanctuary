@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Star,
   TrendingUp,
@@ -25,6 +25,7 @@ import {
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
@@ -99,9 +100,7 @@ export default function Index() {
               <BusinessCard
                 key={business.id}
                 business={business}
-                onClick={() =>
-                  (window.location.href = `/business/${business.id}`)
-                }
+                onClick={() => navigate(`/business/${business.id}`)}
               />
             ))}
           </div>
