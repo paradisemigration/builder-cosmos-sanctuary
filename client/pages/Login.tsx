@@ -188,66 +188,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-purple-50 to-orange-100 relative overflow-hidden">
-      {/* Enhanced Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-xl shadow-2xl border-b border-orange-100/50">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-purple-500/5 to-orange-600/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative">
-          <div className="flex justify-between items-center h-14 sm:h-16 lg:h-18">
-            <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0 group">
-                <div className="relative">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-orange-500 via-purple-500 to-orange-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-sm"></div>
-
-                  <h1 className="relative text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-orange-500 via-purple-600 to-orange-600 bg-clip-text text-transparent hover:from-orange-600 hover:via-purple-700 hover:to-orange-700 transition-all duration-500 transform group-hover:scale-105">
-                    <span className="inline-flex items-center gap-2">
-                      <Globe className="w-6 h-6 lg:w-8 lg:h-8 text-orange-500 animate-spin-slow" />
-                      Trusted<span className="text-gray-800">Immigration</span>
-                      <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500 animate-pulse" />
-                    </span>
-                  </h1>
-                </div>
-              </Link>
-            </div>
-
-            <div className="hidden md:flex md:items-center">
-              <div className="ml-10 flex items-center space-x-2 lg:space-x-4">
-                <Link
-                  to="/"
-                  className="group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 text-gray-700 hover:text-orange-600 hover:bg-orange-50"
-                >
-                  <span className="relative z-10">🏠 Home</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                </Link>
-
-                <Link
-                  to="/browse"
-                  className="group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 text-gray-700 hover:text-orange-600 hover:bg-orange-50"
-                >
-                  <span className="relative z-10">🔍 Browse Services</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                </Link>
-
-                <Link
-                  to="/add-business"
-                  className="group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 text-gray-700 hover:text-orange-600 hover:bg-orange-50"
-                >
-                  <span className="relative z-10">➕ Add Business</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                </Link>
-
-                <Link
-                  to="/report"
-                  className="group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 text-gray-700 hover:text-red-600 hover:bg-red-50"
-                >
-                  <span className="relative z-10">⚠️ Report Scam</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
