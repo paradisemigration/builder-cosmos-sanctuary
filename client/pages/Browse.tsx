@@ -132,43 +132,77 @@ export default function Browse() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      {/* Enhanced Navigation */}
+      <nav className="border-b bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-primary">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">
                   Dubai<span className="text-dubai-gold">Visa</span>Directory
                 </h1>
               </Link>
             </div>
 
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/browse"
-                  className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Browse Services
-                </Link>
-                <Link
-                  to="/add-business"
-                  className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Add Business
-                </Link>
-                <Link to="/login">
-                  <Button size="sm">Sign In</Button>
-                </Link>
-              </div>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-1">
+              <Link
+                to="/"
+                className="text-muted-foreground hover:text-primary px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                to="/browse"
+                className="bg-primary/10 text-primary px-3 py-2 rounded-lg text-sm font-medium"
+              >
+                Browse Services
+              </Link>
+              <Link
+                to="/add-business"
+                className="text-muted-foreground hover:text-primary px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Add Business
+              </Link>
+              <Link to="/login">
+                <Button size="sm" className="ml-2 rounded-lg">
+                  Sign In
+                </Button>
+              </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Link to="/login">
+                <Button size="sm" className="rounded-lg">
+                  Sign In
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        <div className="md:hidden border-t bg-white/95 backdrop-blur-sm">
+          <div className="px-4 py-2 space-y-1">
+            <Link
+              to="/"
+              className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              to="/browse"
+              className="block bg-primary/10 text-primary px-3 py-2 rounded-lg text-sm font-medium"
+            >
+              Browse Services
+            </Link>
+            <Link
+              to="/add-business"
+              className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Add Business
+            </Link>
           </div>
         </div>
       </nav>
