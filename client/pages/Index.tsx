@@ -817,32 +817,156 @@ export default function Index() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary to-dubai-blue text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Ready to Find Your Visa Service Provider?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Browse our directory of verified professionals or add your business
-            to reach more customers.
-          </p>
+      {/* Enhanced CTA Section */}
+      <section
+        className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden"
+        data-section="cta"
+      >
+        {/* Dynamic Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20"></div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/browse">
-              <Button size="lg" variant="secondary" className="min-w-[200px]">
-                Browse Services
-              </Button>
-            </Link>
-            <Link to="/add-business">
-              <Button
-                size="lg"
-                variant="outline"
-                className="min-w-[200px] bg-transparent border-white text-white hover:bg-white hover:text-primary"
-              >
-                Add Your Business
-              </Button>
-            </Link>
+          {/* Animated Shapes */}
+          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/30 rounded-full blur-3xl animate-float-slow"></div>
+          <div className="absolute top-20 right-20 w-32 h-32 bg-purple-500/30 rounded-full blur-2xl animate-float-medium"></div>
+          <div className="absolute bottom-10 left-1/3 w-36 h-36 bg-cyan-500/30 rounded-full blur-3xl animate-float-fast"></div>
+
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <svg
+              className="w-full h-full"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <pattern
+                  id="ctaGrid"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="0.5"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#ctaGrid)" />
+            </svg>
+          </div>
+
+          {/* Floating Particles */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white/40 rounded-full animate-twinkle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <div
+            className={`transition-all duration-1000 ${
+              visibleSections.includes("cta")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Enhanced Header */}
+            <div className="inline-flex items-center justify-center mb-8">
+              <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-white/20 rounded-full px-8 py-4">
+                <span className="text-cyan-300 font-bold text-lg flex items-center gap-3">
+                  <Star className="w-6 h-6 animate-spin-slow" />
+                  🚀 START YOUR JOURNEY
+                  <CheckCircle className="w-5 h-5" />
+                </span>
+              </div>
+            </div>
+
+            <h2 className="text-4xl lg:text-6xl font-black mb-8 leading-tight">
+              <span className="block mb-2">Ready to Find Your</span>
+              <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Visa Service Provider?
+              </span>
+            </h2>
+
+            <p className="text-xl lg:text-2xl text-blue-100 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Join thousands of satisfied customers who found their perfect
+              immigration partner.
+              <span className="block mt-2 text-cyan-300 font-semibold">
+                Browse verified professionals or showcase your expertise to
+                reach more clients.
+              </span>
+            </p>
+
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 lg:gap-8 justify-center mb-12">
+              <Link to="/browse">
+                <Button
+                  size="lg"
+                  className="group relative bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold px-8 lg:px-12 py-4 lg:py-6 text-lg lg:text-xl rounded-2xl shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300 min-w-[250px] overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  <span className="relative flex items-center justify-center gap-3">
+                    🔍 Browse Services
+                    <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
+                </Button>
+              </Link>
+
+              <Link to="/add-business">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="group relative bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 font-bold px-8 lg:px-12 py-4 lg:py-6 text-lg lg:text-xl rounded-2xl shadow-2xl hover:shadow-white/25 transform hover:scale-105 transition-all duration-300 min-w-[250px] overflow-hidden"
+                >
+                  <span className="relative flex items-center justify-center gap-3">
+                    ✨ Add Your Business
+                    <Building className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+                  </span>
+                </Button>
+              </Link>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 max-w-4xl mx-auto">
+              {[
+                { value: "150+", label: "Verified Partners", icon: "🏢" },
+                { value: "5k+", label: "Happy Customers", icon: "😊" },
+                { value: "98%", label: "Success Rate", icon: "🎯" },
+                { value: "<2hrs", label: "Response Time", icon: "⚡" },
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className={`group transition-all duration-700 ${
+                    visibleSections.includes("cta")
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 150 + 500}ms` }}
+                >
+                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 lg:p-6 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                    <div className="text-2xl lg:text-3xl mb-2 transform group-hover:scale-110 transition-transform duration-300">
+                      {stat.icon}
+                    </div>
+                    <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-blue-200">{stat.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
