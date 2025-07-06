@@ -61,38 +61,49 @@ export function Navigation({ className = "" }: NavigationProps) {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Enhanced Desktop Navigation */}
           <div className="hidden md:flex md:items-center">
-            <div className="ml-10 flex items-baseline space-x-4">
+            <div className="ml-10 flex items-center space-x-2 lg:space-x-4">
               <Link
                 to="/"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                 }`}
               >
-                Home
+                <span className="relative z-10">🏠 Home</span>
+                {!isCurrentPage("/") && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                )}
               </Link>
+
               <Link
                 to="/browse"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/browse")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                 }`}
               >
-                Browse Services
+                <span className="relative z-10">🔍 Browse Services</span>
+                {!isCurrentPage("/browse") && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                )}
               </Link>
+
               <Link
                 to="/add-business"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`group relative px-4 py-2 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isCurrentPage("/add-business")
-                    ? "text-foreground bg-primary/10"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                 }`}
               >
-                Add Business
+                <span className="relative z-10">➕ Add Business</span>
+                {!isCurrentPage("/add-business") && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                )}
               </Link>
 
               {/* Authentication Section */}
