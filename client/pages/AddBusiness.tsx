@@ -21,6 +21,7 @@ import {
   Award,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -338,7 +339,7 @@ export default function AddBusiness() {
               on Dubai's #1 Platform
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-              ✨ Join Dubai's most trusted directory of immigration and visa
+              �� Join Dubai's most trusted directory of immigration and visa
               services. Reach thousands of customers and grow your business with
               verified credibility.
             </p>
