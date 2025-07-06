@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { Navigation } from "@/components/Navigation";
 import { EmailPreview } from "@/components/EmailPreview";
 import { Button } from "@/components/ui/button";
