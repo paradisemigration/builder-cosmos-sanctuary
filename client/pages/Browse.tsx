@@ -167,6 +167,7 @@ export default function Browse() {
         break;
     }
 
+    console.log("Filtered businesses count:", filtered.length);
     setFilteredBusinesses(filtered);
   }, [searchQuery, filters]);
 
