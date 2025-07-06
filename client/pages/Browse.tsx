@@ -299,12 +299,12 @@ export default function Browse() {
               </div>
             ) : (
               <>
-                {/* Business Grid */}
-                <div className="grid grid-cols-1 gap-6">
+                {/* Business Grid - Enhanced Mobile Responsive */}
+                <div className="grid grid-cols-1 gap-4 md:gap-6 lg:gap-8">
                   {filteredBusinesses.map((business) => (
                     <div
                       key={business.id}
-                      className="group hover:scale-[1.01] transition-all duration-300"
+                      className="group transition-all duration-500"
                     >
                       <BusinessCard
                         business={business}
