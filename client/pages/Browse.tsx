@@ -69,7 +69,61 @@ export default function Browse() {
   // Initialize businesses on mount
   useEffect(() => {
     setFilteredBusinesses(sampleBusinesses);
-  }, []);
+
+    // Set dynamic page title based on search parameters
+    const generateBrowseTitle = () => {
+      const websiteTitle = "TrustedImmigration";
+      const query = searchParams.get("q");
+      const category = searchParams.get("category");
+      const zone = searchParams.get("zone");
+
+      if (query && category && zone) {
+        return `${query} - ${category} in ${zone} - ${websiteTitle}`;
+      } else if (query && category) {
+        return `${query} - ${category} Services - ${websiteTitle}`;
+      } else if (query && zone) {
+        return `${query} in ${zone} - ${websiteTitle}`;
+      } else if (category && zone) {
+        return `${category} Services in ${zone} - ${websiteTitle}`;
+      } else if (query) {
+        return `Search: ${query} - ${websiteTitle}`;
+      } else if (category) {
+        return `${category} Services - ${websiteTitle}`;
+      } else if (zone) {
+        return `Services in ${zone} - ${websiteTitle}`;
+      } else {
+        return `Browse Immigration Services - ${websiteTitle}`;
+      }
+    };
+
+    const title = generateBrowseTitle();
+    document.title = title;
+
+    // Update meta description
+    const generateBrowseDescription = () => {
+      const query = searchParams.get("q");
+      const category = searchParams.get("category");
+      const zone = searchParams.get("zone");
+
+      if (category && zone) {
+        return `Find verified ${category.toLowerCase()} services in ${zone}. Compare immigration consultants, read reviews, and get expert assistance in Dubai and UAE.`;
+      } else if (category) {
+        return `Browse ${category.toLowerCase()} services across Dubai and UAE. Find verified immigration consultants with ratings, reviews, and contact details.`;
+      } else if (zone) {
+        return `Discover immigration services in ${zone}. Find trusted visa consultants, document clearing, and immigration experts in your area.`;
+      } else {
+        return "Browse Dubai's largest directory of verified immigration services. Find trusted visa consultants, compare ratings, and get expert immigration assistance.";
+      }
+    };
+
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute("content", generateBrowseDescription());
+  }, [searchParams]);
 
   // Scroll animations
   useEffect(() => {
