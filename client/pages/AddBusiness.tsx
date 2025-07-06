@@ -517,13 +517,13 @@ export default function AddBusiness() {
           <Card className="bg-white/80 backdrop-blur-sm shadow-2xl border border-white/50 rounded-3xl overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200 p-8">
               <CardTitle className="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center gap-4">
-                {steps[currentStep - 1].icon}
+                {steps[currentStep].icon}
                 <div>
                   <div>
-                    Step {currentStep}: {steps[currentStep - 1].title}
+                    Step {currentStep + 1}: {steps[currentStep].title}
                   </div>
                   <div className="text-lg text-gray-600 font-normal mt-1">
-                    {steps[currentStep - 1].description}
+                    {steps[currentStep].description}
                   </div>
                 </div>
               </CardTitle>
@@ -1112,7 +1112,7 @@ export default function AddBusiness() {
               disabled={!canProceedToNext()}
               className="w-full sm:w-auto px-8 py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              Next Step ➡️
+              Next Step ���️
             </Button>
           ) : (
             <Button
