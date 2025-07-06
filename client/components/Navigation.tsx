@@ -74,7 +74,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               >
                 <span className="relative z-10">🏠 Home</span>
                 {!isCurrentPage("/") && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 )}
               </Link>
 
@@ -88,7 +88,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               >
                 <span className="relative z-10">🔍 Browse Services</span>
                 {!isCurrentPage("/browse") && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 )}
               </Link>
 
@@ -102,7 +102,7 @@ export function Navigation({ className = "" }: NavigationProps) {
               >
                 <span className="relative z-10">➕ Add Business</span>
                 {!isCurrentPage("/add-business") && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 )}
               </Link>
 
