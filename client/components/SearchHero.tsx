@@ -229,22 +229,27 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
               {/* Form Header */}
               <div className="text-center mb-6 md:mb-8">
                 <div className="inline-flex items-center justify-center mb-3 md:mb-4">
-                  <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-200 rounded-full px-4 md:px-6 py-2">
+                  <div className="bg-gradient-to-r from-orange-500/20 to-purple-500/20 backdrop-blur-sm border border-orange-200 rounded-full px-4 md:px-6 py-2">
                     <div className="flex items-center space-x-2 md:space-x-3">
                       <div className="w-2 h-2 md:w-3 md:h-3 bg-green-400 rounded-full animate-pulse"></div>
-                      <span className="text-xs md:text-sm font-semibold tracking-wide text-blue-700">
-                        🇦🇪 DUBAI'S #1 IMMIGRATION DIRECTORY
+                      <span className="text-xs md:text-sm font-semibold tracking-wide text-orange-700">
+                        {location && location.countryCode !== "AE"
+                          ? `🌍 GLOBAL IMMIGRATION DIRECTORY - SERVING ${location.country?.toUpperCase()}`
+                          : "🇦🇪 DUBAI'S #1 IMMIGRATION DIRECTORY"}
                       </span>
                       <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-green-400" />
                     </div>
                   </div>
                 </div>
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 md:mb-3">
-                  Find Your Immigration Partner Today
+                  {location && location.countryCode !== "AE"
+                    ? `Find Immigration Services in ${location.city}, ${location.country}`
+                    : "Find Your Immigration Partner Today"}
                 </h3>
                 <p className="text-sm md:text-base lg:text-lg text-gray-600">
-                  Search verified professionals who will guide you every step of
-                  the way
+                  {location && location.countryCode !== "AE"
+                    ? `Connect with verified immigration professionals serving ${location.country} residents`
+                    : "Search verified professionals who will guide you every step of the way"}
                 </p>
               </div>
 
