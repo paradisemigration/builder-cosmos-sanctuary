@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Star,
@@ -26,6 +26,33 @@ import {
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const [visibleSections, setVisibleSections] = useState<string[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => [
+              ...prev,
+              entry.target.getAttribute("data-section") || "",
+            ]);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    const sections = document.querySelectorAll("[data-section]");
+    sections.forEach((section) => {
+      observerRef.current?.observe(section);
+    });
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
 
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
