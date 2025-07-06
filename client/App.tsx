@@ -38,6 +38,20 @@ const App = () => (
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
 
+            {/* SEO-friendly category and location routes */}
+            <Route
+              path="/category/:category"
+              element={<CategoryLocationPage />}
+            />
+            <Route
+              path="/location/:location"
+              element={<CategoryLocationPage />}
+            />
+            <Route
+              path="/:location/:category"
+              element={<CategoryLocationPage />}
+            />
+
             {/* Protected Routes - Require Authentication */}
             <Route
               path="/dashboard"
