@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { businessCategories, dubaiZones } from "@/lib/data";
+import { businessCategories, dubaiZones, sampleBusinesses } from "@/lib/data";
 import { useGeolocation } from "@/hooks/useGeolocation";
 
 interface SearchHeroProps {
