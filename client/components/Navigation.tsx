@@ -53,7 +53,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                 <h1 className="relative text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 transition-all duration-500 transform group-hover:scale-105">
                   <span className="inline-flex items-center gap-2">
                     <Globe className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600 animate-spin-slow" />
-                    Trusted<span className="text-yellow-500">Immigration</span>
+                    Trusted<span className="text-gray-800">Immigration</span>
                     <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500 animate-pulse" />
                   </span>
                 </h1>
