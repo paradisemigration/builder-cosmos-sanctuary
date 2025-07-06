@@ -20,30 +20,58 @@ interface BusinessCardProps {
 }
 
 export function BusinessCard({ business, onClick }: BusinessCardProps) {
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (business.whatsapp) {
+      const message = `Hi! I found your business "${business.name}" on Dubai Visa Directory. I'd like to know more about your services.`;
+      const whatsappUrl = `https://wa.me/${business.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+    }
+  };
+
+  const handlePhoneClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(`tel:${business.phone}`, "_self");
+  };
+
   return (
     <Card
-      className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-border/30 hover:border-primary/30 bg-white/50 backdrop-blur-sm overflow-hidden"
+      className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 cursor-pointer border-2 border-border/20 hover:border-gradient-to-r hover:border-primary/40 bg-gradient-to-br from-white via-white to-blue-50/30 backdrop-blur-sm overflow-hidden transform hover:scale-[1.02] hover:-translate-y-1"
       onClick={onClick}
     >
       <div className="relative">
         {business.coverImage && (
-          <div className="h-40 sm:h-48 bg-gradient-to-r from-primary/10 to-accent/10 overflow-hidden">
+          <div className="h-40 sm:h-48 bg-gradient-to-r from-primary/20 via-accent/20 to-cyan-500/20 overflow-hidden relative">
             <img
               src={business.coverImage}
               alt={`${business.name} cover`}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+            {/* Attractive colored border overlay */}
+            <div className="absolute inset-0 border-4 border-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-t-lg pointer-events-none"></div>
+
+            {/* Gradient overlay for better text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-cyan-600/20"></div>
           </div>
         )}
 
         {business.importedFromGoogle && (
           <Badge
             variant="secondary"
-            className="absolute top-3 right-3 text-xs shadow-sm"
+            className="absolute top-3 right-3 text-xs shadow-lg bg-white/90 backdrop-blur-sm border border-white/50"
           >
-            <Globe className="w-3 h-3 mr-1" />
+            <Globe className="w-3 h-3 mr-1 text-blue-600" />
             Google Import
+          </Badge>
+        )}
+
+        {/* Verification Badge */}
+        {business.isVerified && (
+          <Badge className="absolute top-3 left-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg">
+            <CheckCircle className="w-3 h-3 mr-1" />
+            Verified
           </Badge>
         )}
       </div>
