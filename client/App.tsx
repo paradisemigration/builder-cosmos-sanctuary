@@ -11,6 +11,9 @@ import Browse from "./pages/Browse";
 import BusinessProfile from "./pages/BusinessProfile";
 import AddBusiness from "./pages/AddBusiness";
 import Login from "./pages/Login";
+import AdminPanel from "./pages/AdminPanel";
+import EditBusiness from "./pages/EditBusiness";
+import BusinessDashboard from "./pages/BusinessDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,25 +30,12 @@ const App = () => (
           <Route path="/business/:id" element={<BusinessProfile />} />
           <Route path="/add-business" element={<AddBusiness />} />
           <Route path="/login" element={<Login />} />
+          {/* Admin and Business Management Routes */}
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/business/:id/edit" element={<EditBusiness />} />
+          <Route path="/business/:id/edit" element={<EditBusiness />} />
+          <Route path="/dashboard" element={<BusinessDashboard />} />
           {/* Placeholder routes for future development */}
-          <Route
-            path="/dashboard"
-            element={
-              <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold">User Dashboard</h1>
-                <p className="text-muted-foreground">Coming soon...</p>
-              </div>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold">Admin Panel</h1>
-                <p className="text-muted-foreground">Coming soon...</p>
-              </div>
-            }
-          />
           <Route
             path="/contact"
             element={
