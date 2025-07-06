@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Upload,
@@ -10,6 +10,15 @@ import {
   Globe,
   Building,
   Menu,
+  CheckCircle,
+  Star,
+  Sparkles,
+  Rocket,
+  Shield,
+  Users,
+  TrendingUp,
+  Camera,
+  Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +55,10 @@ interface BusinessFormData {
 export default function AddBusiness() {
   const [currentStep, setCurrentStep] = useState(1);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [visibleSections, setVisibleSections] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
     category: "",
@@ -68,6 +81,32 @@ export default function AddBusiness() {
   const [galleryImages, setGalleryImages] = useState<File[]>([]);
   const [newService, setNewService] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+
+  // Scroll animations
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => [
+              ...prev,
+              entry.target.getAttribute("data-section") || "",
+            ]);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    const sections = document.querySelectorAll("[data-section]");
+    sections.forEach((section) => {
+      observerRef.current?.observe(section);
+    });
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
 
   const updateFormData = (field: keyof BusinessFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -104,15 +143,19 @@ export default function AddBusiness() {
     setGalleryImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
-    // In a real app, this would submit to an API
-    console.log("Business submitted:", {
-      ...formData,
-      logo,
-      coverImage,
-      galleryImages,
-    });
-    alert("Business listing submitted for review!");
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      console.log("Business submitted:", {
+        ...formData,
+        logo,
+        coverImage,
+        galleryImages,
+      });
+      setIsSubmitting(false);
+      alert("🎉 Business listing submitted for review!");
+    }, 2000);
   };
 
   const canProceedToNext = () => {
@@ -132,22 +175,42 @@ export default function AddBusiness() {
   };
 
   const steps = [
-    { number: 1, title: "Basic Information" },
-    { number: 2, title: "Services & Photos" },
-    { number: 3, title: "Contact Details" },
-    { number: 4, title: "Review & Submit" },
+    {
+      number: 1,
+      title: "Basic Information",
+      icon: <Building className="w-5 h-5" />,
+      description: "Tell us about your business",
+    },
+    {
+      number: 2,
+      title: "Services & Media",
+      icon: <Star className="w-5 h-5" />,
+      description: "Showcase your services",
+    },
+    {
+      number: 3,
+      title: "Contact Details",
+      icon: <Phone className="w-5 h-5" />,
+      description: "How customers reach you",
+    },
+    {
+      number: 4,
+      title: "Review & Submit",
+      icon: <Rocket className="w-5 h-5" />,
+      description: "Final review and launch",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
+      {/* Enhanced Navigation */}
+      <nav className="border-b bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0">
-                <h1 className="text-xl sm:text-2xl font-bold text-primary">
-                  Dubai<span className="text-dubai-gold">Visa</span>Directory
+                <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  �� Trusted<span className="text-yellow-500">Immigration</span>
                 </h1>
               </Link>
             </div>
@@ -155,26 +218,31 @@ export default function AddBusiness() {
             {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/browse"
-                  className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Browse Services
-                </Link>
-                <Link
-                  to="/add-business"
-                  className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Add Business
-                </Link>
+                {[
+                  { to: "/", text: "🏠 Home" },
+                  { to: "/browse", text: "🔍 Browse Services" },
+                  {
+                    to: "/add-business",
+                    text: "➕ Add Business",
+                    active: true,
+                  },
+                ].map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                      link.active
+                        ? "text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    {link.text}
+                  </Link>
+                ))}
                 <Link to="/login">
-                  <Button size="sm">Sign In</Button>
+                  <Button className="rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg">
+                    🔐 Sign In
+                  </Button>
                 </Link>
               </div>
             </div>
@@ -185,6 +253,7 @@ export default function AddBusiness() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="rounded-xl"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -194,32 +263,33 @@ export default function AddBusiness() {
           {/* Mobile Navigation Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/browse"
-                  className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Browse Services
-                </Link>
-                <Link
-                  to="/add-business"
-                  className="text-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Add Business
-                </Link>
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-sm border-t border-gray-200 rounded-b-2xl shadow-xl">
+                {[
+                  { to: "/", text: "🏠 Home" },
+                  { to: "/browse", text: "🔍 Browse Services" },
+                  {
+                    to: "/add-business",
+                    text: "➕ Add Business",
+                    active: true,
+                  },
+                ].map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`block px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 ${
+                      link.active
+                        ? "text-white bg-gradient-to-r from-blue-600 to-purple-600"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.text}
+                  </Link>
+                ))}
                 <div className="px-3 py-2">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button size="sm" className="w-full">
-                      Sign In
+                    <Button className="w-full rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600">
+                      🔐 Sign In
                     </Button>
                   </Link>
                 </div>
@@ -229,420 +299,665 @@ export default function AddBusiness() {
         </div>
       </nav>
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary/10 to-accent/10 border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Add Your Business
+      {/* Enhanced Hero Header */}
+      <div
+        className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden"
+        data-section="hero"
+      >
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-800/40 to-blue-900/50"></div>
+
+          {/* Floating Shapes */}
+          <div className="absolute top-16 left-8 w-32 h-32 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
+          <div className="absolute top-32 right-12 w-24 h-24 bg-gradient-to-br from-purple-400/25 to-pink-500/25 rounded-full blur-2xl animate-float-medium"></div>
+          <div className="absolute bottom-20 left-1/4 w-28 h-28 bg-gradient-to-br from-green-400/20 to-teal-500/20 rounded-full blur-3xl animate-float-fast"></div>
+
+          {/* Particles */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div
+                key={i}
+                className={`absolute rounded-full animate-twinkle ${
+                  i % 3 === 0
+                    ? "w-1 h-1 bg-white/40"
+                    : i % 3 === 1
+                      ? "w-0.5 h-0.5 bg-cyan-300/50"
+                      : "w-1.5 h-1.5 bg-purple-300/40"
+                }`}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  animationDuration: `${3 + Math.random() * 3}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative">
+          <div
+            className={`text-center transition-all duration-1000 ${
+              visibleSections.includes("hero")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
+              <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
+              <span className="text-white/90 font-medium">
+                Join 50+ Trusted Businesses
+              </span>
+              <Award className="w-5 h-5 text-green-400" />
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-6 leading-tight">
+              🚀 Launch Your{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                Business
+              </span>
+              <br />
+              on Dubai's #1 Platform
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Join Dubai's trusted directory of immigration and visa services.
-              Reach more customers and grow your business.
+            <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
+              ✨ Join Dubai's most trusted directory of immigration and visa
+              services. Reach thousands of customers and grow your business with
+              verified credibility.
             </p>
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto mb-8">
+              <div className="text-center">
+                <div className="text-3xl lg:text-4xl font-bold text-cyan-400 mb-2 flex items-center justify-center gap-2">
+                  <Users className="w-8 h-8" />
+                  1000+
+                </div>
+                <div className="text-blue-200 text-sm lg:text-base">
+                  Monthly Visitors
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl lg:text-4xl font-bold text-purple-400 mb-2 flex items-center justify-center gap-2">
+                  <TrendingUp className="w-8 h-8" />
+                  95%
+                </div>
+                <div className="text-blue-200 text-sm lg:text-base">
+                  Success Rate
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl lg:text-4xl font-bold text-green-400 mb-2 flex items-center justify-center gap-2">
+                  <Shield className="w-8 h-8" />
+                  100%
+                </div>
+                <div className="text-blue-200 text-sm lg:text-base">
+                  Verified Listings
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() =>
+                  document
+                    .getElementById("form-section")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="px-8 py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+              >
+                <Rocket className="w-6 h-6 mr-3 group-hover:animate-pulse" />
+                🚀 Start Your Journey
+              </Button>
+              <Button
+                variant="outline"
+                className="px-8 py-4 text-lg font-semibold rounded-2xl border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+              >
+                📞 Get Help
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Progress Steps */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Mobile Progress */}
-        <div className="block sm:hidden mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
-                {currentStep}
-              </div>
-              <span className="ml-2 text-sm font-medium text-foreground">
-                Step {currentStep} of {steps.length}
-              </span>
-            </div>
-            <span className="text-xs text-muted-foreground">
-              {Math.round((currentStep / steps.length) * 100)}%
-            </span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2">
-            <div
-              className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / steps.length) * 100}%` }}
-            />
-          </div>
-          <p className="text-sm text-muted-foreground mt-2">
-            {steps[currentStep - 1].title}
-          </p>
-        </div>
-
-        {/* Desktop Progress */}
-        <div className="hidden sm:flex items-center justify-between mb-8">
-          {steps.map((step, index) => (
-            <div key={step.number} className="flex items-center flex-1">
-              <div className="flex items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    step.number <= currentStep
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {step.number}
+      {/* Enhanced Form Section */}
+      <div
+        id="form-section"
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+        data-section="form"
+      >
+        {/* Enhanced Progress Section */}
+        <div
+          className={`mb-12 transition-all duration-1000 ${
+            visibleSections.includes("form")
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+          }`}
+        >
+          {/* Mobile Progress */}
+          <div className="block lg:hidden mb-8">
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white flex items-center justify-center text-lg font-bold shadow-lg">
+                    {currentStep}
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-800">
+                      Step {currentStep} of {steps.length}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {steps[currentStep - 1].title}
+                    </div>
+                  </div>
                 </div>
-                <span
-                  className={`ml-3 text-sm font-medium hidden lg:block ${
-                    step.number <= currentStep
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {step.title}
-                </span>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-blue-600">
+                    {Math.round((currentStep / steps.length) * 100)}%
+                  </div>
+                  <div className="text-xs text-gray-500">Complete</div>
+                </div>
               </div>
-              {index < steps.length - 1 && (
+              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
-                  className={`flex-1 h-px mx-4 ${
-                    step.number < currentStep ? "bg-primary" : "bg-muted"
-                  }`}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-3 rounded-full transition-all duration-500 ease-out shadow-inner"
+                  style={{ width: `${(currentStep / steps.length) * 100}%` }}
                 />
-              )}
+              </div>
+              <p className="text-sm text-gray-600 mt-3">
+                {steps[currentStep - 1].description}
+              </p>
             </div>
-          ))}
+          </div>
+
+          {/* Desktop Progress */}
+          <div className="hidden lg:block">
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/50">
+              <div className="flex items-center justify-between">
+                {steps.map((step, index) => (
+                  <div key={step.number} className="flex items-center flex-1">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 mb-3 ${
+                          step.number <= currentStep
+                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-110"
+                            : "bg-gray-200 text-gray-500"
+                        }`}
+                      >
+                        {step.number <= currentStep ? (
+                          step.number < currentStep ? (
+                            <CheckCircle className="w-8 h-8" />
+                          ) : (
+                            step.icon
+                          )
+                        ) : (
+                          step.icon
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <div
+                          className={`font-bold text-lg transition-colors duration-300 ${
+                            step.number <= currentStep
+                              ? "text-gray-800"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          {step.title}
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          {step.description}
+                        </div>
+                      </div>
+                    </div>
+                    {index < steps.length - 1 && (
+                      <div className="flex-1 h-1 mx-6 relative">
+                        <div className="absolute inset-0 bg-gray-200 rounded-full" />
+                        <div
+                          className={`absolute inset-0 rounded-full transition-all duration-500 ${
+                            step.number < currentStep
+                              ? "bg-gradient-to-r from-blue-600 to-purple-600"
+                              : "bg-gray-200"
+                          }`}
+                          style={{
+                            width: step.number < currentStep ? "100%" : "0%",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Form Content */}
-        <Card>
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg sm:text-xl">
-              Step {currentStep}: {steps[currentStep - 1].title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 sm:space-y-6">
-            {currentStep === 1 && (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name">Business Name *</Label>
-                    <Input
-                      id="name"
-                      placeholder="Enter your business name"
-                      value={formData.name}
-                      onChange={(e) => updateFormData("name", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="category">Service Category *</Label>
-                    <Select
-                      value={formData.category}
-                      onValueChange={(value) =>
-                        updateFormData("category", value)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {businessCategories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
+        {/* Enhanced Form Content */}
+        <div
+          className={`transition-all duration-1000 ${
+            visibleSections.includes("form")
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
+          <Card className="bg-white/80 backdrop-blur-sm shadow-2xl border border-white/50 rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200 p-8">
+              <CardTitle className="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center gap-4">
+                {steps[currentStep - 1].icon}
                 <div>
-                  <Label htmlFor="description">Business Description *</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe your business and services..."
-                    value={formData.description}
-                    onChange={(e) =>
-                      updateFormData("description", e.target.value)
-                    }
-                    rows={4}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="license">Trade License Number</Label>
-                  <Input
-                    id="license"
-                    placeholder="DED-XXXXX"
-                    value={formData.licenseNo}
-                    onChange={(e) =>
-                      updateFormData("licenseNo", e.target.value)
-                    }
-                  />
-                </div>
-              </>
-            )}
-
-            {currentStep === 2 && (
-              <>
-                <div>
-                  <Label>Services Offered *</Label>
-                  <div className="flex gap-2 mt-2">
-                    <Input
-                      placeholder="Add a service"
-                      value={newService}
-                      onChange={(e) => setNewService(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && addService()}
-                    />
-                    <Button onClick={addService} size="sm">
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  {formData.services.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {formData.services.map((service) => (
-                        <div
-                          key={service}
-                          className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                        >
-                          {service}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-auto p-0"
-                            onClick={() => removeService(service)}
-                          >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
-                    <Label>Business Logo</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
-                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                        Upload logo (optional)
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          e.target.files?.[0] &&
-                          handleFileUpload(e.target.files[0], "logo")
-                        }
-                        className="hidden"
-                        id="logo-upload"
-                      />
-                      <Label htmlFor="logo-upload" className="cursor-pointer">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="text-xs"
-                        >
-                          <span>Choose File</span>
-                        </Button>
-                      </Label>
-                      {logo && (
-                        <p className="text-xs text-muted-foreground mt-2 truncate">
-                          {logo.name}
-                        </p>
-                      )}
-                    </div>
+                    Step {currentStep}: {steps[currentStep - 1].title}
                   </div>
-
-                  <div>
-                    <Label>Cover Image</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
-                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                        Upload cover (optional)
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          e.target.files?.[0] &&
-                          handleFileUpload(e.target.files[0], "cover")
-                        }
-                        className="hidden"
-                        id="cover-upload"
-                      />
-                      <Label htmlFor="cover-upload" className="cursor-pointer">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="text-xs"
-                        >
-                          <span>Choose File</span>
-                        </Button>
-                      </Label>
-                      {coverImage && (
-                        <p className="text-xs text-muted-foreground mt-2 truncate">
-                          {coverImage.name}
-                        </p>
-                      )}
-                    </div>
+                  <div className="text-lg text-gray-600 font-normal mt-1">
+                    {steps[currentStep - 1].description}
                   </div>
-
-                  <div className="sm:col-span-2 lg:col-span-1">
-                    <Label>Gallery Images</Label>
-                    <div className="mt-2 border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 sm:p-6 text-center">
-                      <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                        Upload photos (max 5)
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) => {
-                          Array.from(e.target.files || []).forEach((file) =>
-                            handleFileUpload(file, "gallery"),
-                          );
-                        }}
-                        className="hidden"
-                        id="gallery-upload"
-                      />
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 space-y-8">
+              {currentStep === 1 && (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-2">
                       <Label
-                        htmlFor="gallery-upload"
-                        className="cursor-pointer"
+                        htmlFor="name"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
                       >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="text-xs"
-                        >
-                          <span>Choose Files</span>
-                        </Button>
+                        <Building className="w-5 h-5" />
+                        Business Name *
                       </Label>
-                      {galleryImages.length > 0 && (
-                        <div className="mt-2 space-y-1">
-                          {galleryImages.map((file, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between text-xs text-muted-foreground bg-muted/30 rounded px-2 py-1"
+                      <Input
+                        id="name"
+                        placeholder="Enter your business name"
+                        value={formData.name}
+                        onChange={(e) => updateFormData("name", e.target.value)}
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="category"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                      >
+                        <Star className="w-5 h-5" />
+                        Service Category *
+                      </Label>
+                      <Select
+                        value={formData.category}
+                        onValueChange={(value) =>
+                          updateFormData("category", value)
+                        }
+                      >
+                        <SelectTrigger className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {businessCategories.map((category) => (
+                            <SelectItem
+                              key={category}
+                              value={category}
+                              className="text-lg"
                             >
-                              <span className="truncate flex-1 mr-2">
-                                {file.name}
-                              </span>
+                              {category}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="description"
+                      className="text-lg font-semibold text-gray-800"
+                    >
+                      Business Description *
+                    </Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Describe your business and services in detail..."
+                      value={formData.description}
+                      onChange={(e) =>
+                        updateFormData("description", e.target.value)
+                      }
+                      rows={5}
+                      className="text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="license"
+                      className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                    >
+                      <Shield className="w-5 h-5" />
+                      Trade License Number
+                    </Label>
+                    <Input
+                      id="license"
+                      placeholder="DED-XXXXX (helps build trust)"
+                      value={formData.licenseNo}
+                      onChange={(e) =>
+                        updateFormData("licenseNo", e.target.value)
+                      }
+                      className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 2 && (
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                      <Star className="w-5 h-5" />
+                      Services Offered *
+                    </Label>
+                    <div className="flex gap-3">
+                      <Input
+                        placeholder="Add a service (e.g., Tourist Visa Processing)"
+                        value={newService}
+                        onChange={(e) => setNewService(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && addService()}
+                        className="h-12 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500"
+                      />
+                      <Button
+                        onClick={addService}
+                        className="h-12 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </Button>
+                    </div>
+
+                    {formData.services.length > 0 && (
+                      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
+                        <div className="flex flex-wrap gap-3">
+                          {formData.services.map((service) => (
+                            <div
+                              key={service}
+                              className="bg-white border-2 border-blue-200 text-blue-800 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm"
+                            >
+                              ✨ {service}
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-auto p-0 flex-shrink-0"
-                                onClick={() => removeGalleryImage(index)}
+                                className="h-auto p-0 text-red-500 hover:text-red-700"
+                                onClick={() => removeService(service)}
                               >
-                                <X className="w-3 h-3" />
+                                <X className="w-4 h-4" />
                               </Button>
                             </div>
                           ))}
                         </div>
-                      )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                      {
+                        type: "logo" as const,
+                        title: "Business Logo",
+                        icon: <Building className="w-8 h-8" />,
+                        current: logo,
+                      },
+                      {
+                        type: "cover" as const,
+                        title: "Cover Image",
+                        icon: <Camera className="w-8 h-8" />,
+                        current: coverImage,
+                      },
+                      {
+                        type: "gallery" as const,
+                        title: "Gallery Images",
+                        icon: <Upload className="w-8 h-8" />,
+                        current: galleryImages.length > 0,
+                      },
+                    ].map((upload) => (
+                      <div key={upload.type} className="space-y-2">
+                        <Label className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                          {upload.icon}
+                          {upload.title}
+                        </Label>
+                        <div className="relative group">
+                          <div className="border-3 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-400 transition-colors bg-gradient-to-br from-gray-50 to-blue-50 group-hover:from-blue-50 group-hover:to-purple-50">
+                            <div className="text-gray-400 group-hover:text-blue-500 transition-colors">
+                              <Upload className="w-12 h-12 mx-auto mb-3" />
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3">
+                              {upload.type === "gallery"
+                                ? "Upload photos (max 5)"
+                                : "Upload image (optional)"}
+                            </p>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple={upload.type === "gallery"}
+                              onChange={(e) => {
+                                if (upload.type === "gallery") {
+                                  Array.from(e.target.files || []).forEach(
+                                    (file) => handleFileUpload(file, "gallery"),
+                                  );
+                                } else {
+                                  e.target.files?.[0] &&
+                                    handleFileUpload(
+                                      e.target.files[0],
+                                      upload.type,
+                                    );
+                                }
+                              }}
+                              className="hidden"
+                              id={`${upload.type}-upload`}
+                            />
+                            <Label
+                              htmlFor={`${upload.type}-upload`}
+                              className="cursor-pointer"
+                            >
+                              <Button
+                                variant="outline"
+                                asChild
+                                className="rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50"
+                              >
+                                <span>
+                                  📁 Choose{" "}
+                                  {upload.type === "gallery" ? "Files" : "File"}
+                                </span>
+                              </Button>
+                            </Label>
+
+                            {upload.type === "logo" && logo && (
+                              <p className="text-xs text-gray-600 mt-2 font-medium">
+                                ✅ {logo.name}
+                              </p>
+                            )}
+                            {upload.type === "cover" && coverImage && (
+                              <p className="text-xs text-gray-600 mt-2 font-medium">
+                                ✅ {coverImage.name}
+                              </p>
+                            )}
+                            {upload.type === "gallery" &&
+                              galleryImages.length > 0 && (
+                                <div className="mt-3 space-y-1">
+                                  {galleryImages.map((file, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center justify-between text-xs text-gray-600 bg-white/80 rounded-lg px-3 py-2"
+                                    >
+                                      <span className="truncate flex-1">
+                                        📸 {file.name}
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-auto p-0 text-red-500 hover:text-red-700"
+                                        onClick={() =>
+                                          removeGalleryImage(index)
+                                        }
+                                      >
+                                        <X className="w-3 h-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 3 && (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="address"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                      >
+                        <MapPin className="w-5 h-5" />
+                        Business Address *
+                      </Label>
+                      <Textarea
+                        id="address"
+                        placeholder="Enter your complete business address"
+                        value={formData.address}
+                        onChange={(e) =>
+                          updateFormData("address", e.target.value)
+                        }
+                        rows={3}
+                        className="text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="zone"
+                        className="text-lg font-semibold text-gray-800"
+                      >
+                        Dubai Zone
+                      </Label>
+                      <Select
+                        value={formData.zone}
+                        onValueChange={(value) => updateFormData("zone", value)}
+                      >
+                        <SelectTrigger className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500">
+                          <SelectValue placeholder="Select zone" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {dubaiZones.map((zone) => (
+                            <SelectItem
+                              key={zone}
+                              value={zone}
+                              className="text-lg"
+                            >
+                              {zone}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="phone"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                      >
+                        <Phone className="w-5 h-5" />
+                        Phone Number *
+                      </Label>
+                      <Input
+                        id="phone"
+                        placeholder="+971-4-XXX-XXXX"
+                        value={formData.phone}
+                        onChange={(e) =>
+                          updateFormData("phone", e.target.value)
+                        }
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="whatsapp"
+                        className="text-lg font-semibold text-gray-800"
+                      >
+                        WhatsApp Number
+                      </Label>
+                      <Input
+                        id="whatsapp"
+                        placeholder="+971-50-XXX-XXXX"
+                        value={formData.whatsapp}
+                        onChange={(e) =>
+                          updateFormData("whatsapp", e.target.value)
+                        }
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="email"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                      >
+                        <Mail className="w-5 h-5" />
+                        Business Email *
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="info@business.com"
+                        value={formData.email}
+                        onChange={(e) =>
+                          updateFormData("email", e.target.value)
+                        }
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="website"
+                        className="text-lg font-semibold text-gray-800 flex items-center gap-2"
+                      >
+                        <Globe className="w-5 h-5" />
+                        Website URL
+                      </Label>
+                      <Input
+                        id="website"
+                        placeholder="https://www.business.com"
+                        value={formData.website}
+                        onChange={(e) =>
+                          updateFormData("website", e.target.value)
+                        }
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                      />
                     </div>
                   </div>
                 </div>
-              </>
-            )}
+              )}
 
-            {currentStep === 3 && (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="address">Business Address *</Label>
-                    <Textarea
-                      id="address"
-                      placeholder="Enter your complete address"
-                      value={formData.address}
-                      onChange={(e) =>
-                        updateFormData("address", e.target.value)
-                      }
-                      rows={3}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="zone">Dubai Zone</Label>
-                    <Select
-                      value={formData.zone}
-                      onValueChange={(value) => updateFormData("zone", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select zone" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {dubaiZones.map((zone) => (
-                          <SelectItem key={zone} value={zone}>
-                            {zone}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="phone">Phone Number *</Label>
-                    <Input
-                      id="phone"
-                      placeholder="+971-4-XXX-XXXX"
-                      value={formData.phone}
-                      onChange={(e) => updateFormData("phone", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="whatsapp">WhatsApp Number</Label>
-                    <Input
-                      id="whatsapp"
-                      placeholder="+971-50-XXX-XXXX"
-                      value={formData.whatsapp}
-                      onChange={(e) =>
-                        updateFormData("whatsapp", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="email">Business Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="info@business.com"
-                      value={formData.email}
-                      onChange={(e) => updateFormData("email", e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="website">Website URL</Label>
-                    <Input
-                      id="website"
-                      placeholder="https://www.business.com"
-                      value={formData.website}
-                      onChange={(e) =>
-                        updateFormData("website", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            {currentStep === 4 && (
-              <>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">
-                      Business Owner Information
+              {currentStep === 4 && (
+                <div className="space-y-8">
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
+                    <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                      <Users className="w-8 h-8 text-blue-600" />
+                      👤 Business Owner Information
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <Label htmlFor="ownerName">Owner Name *</Label>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="ownerName"
+                          className="text-lg font-semibold text-gray-800"
+                        >
+                          Owner Name *
+                        </Label>
                         <Input
                           id="ownerName"
                           placeholder="Enter owner's full name"
@@ -650,11 +965,17 @@ export default function AddBusiness() {
                           onChange={(e) =>
                             updateFormData("ownerName", e.target.value)
                           }
+                          className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500"
                         />
                       </div>
 
-                      <div>
-                        <Label htmlFor="ownerPhone">Owner Phone *</Label>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="ownerPhone"
+                          className="text-lg font-semibold text-gray-800"
+                        >
+                          Owner Phone *
+                        </Label>
                         <Input
                           id="ownerPhone"
                           placeholder="+971-50-XXX-XXXX"
@@ -662,12 +983,18 @@ export default function AddBusiness() {
                           onChange={(e) =>
                             updateFormData("ownerPhone", e.target.value)
                           }
+                          className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500"
                         />
                       </div>
                     </div>
 
-                    <div className="mt-4">
-                      <Label htmlFor="ownerEmail">Owner Email *</Label>
+                    <div className="mt-6 space-y-2">
+                      <Label
+                        htmlFor="ownerEmail"
+                        className="text-lg font-semibold text-gray-800"
+                      >
+                        Owner Email *
+                      </Label>
                       <Input
                         id="ownerEmail"
                         type="email"
@@ -676,44 +1003,54 @@ export default function AddBusiness() {
                         onChange={(e) =>
                           updateFormData("ownerEmail", e.target.value)
                         }
+                        className="h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500"
                       />
                     </div>
                   </div>
 
-                  <div className="border-t pt-6">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Review Your Information
+                  <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
+                    <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                      <CheckCircle className="w-8 h-8 text-green-600" />
+                      📋 Review Your Information
                     </h3>
-                    <div className="bg-muted/30 p-6 rounded-lg space-y-4">
-                      <div>
-                        <h4 className="font-semibold">{formData.name}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {formData.category}
+                    <div className="bg-white rounded-xl p-6 shadow-inner space-y-6">
+                      <div className="border-b pb-4">
+                        <h4 className="text-xl font-bold text-gray-800">
+                          {formData.name || "Business Name"}
+                        </h4>
+                        <p className="text-gray-600 font-medium">
+                          {formData.category || "Category not selected"}
                         </p>
                       </div>
 
                       <div>
-                        <p className="text-sm">{formData.description}</p>
+                        <p className="text-gray-700 leading-relaxed">
+                          {formData.description || "No description provided"}
+                        </p>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                        <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                          <MapPin className="w-5 h-5 mt-0.5 text-gray-500" />
                           <span className="break-words">
-                            {formData.address}
+                            {formData.address || "Address not provided"}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 flex-shrink-0" />
-                          <span className="break-all">{formData.phone}</span>
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                          <Phone className="w-5 h-5 text-gray-500" />
+                          <span className="break-all">
+                            {formData.phone || "Phone not provided"}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 flex-shrink-0" />
-                          <span className="break-all">{formData.email}</span>
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                          <Mail className="w-5 h-5 text-gray-500" />
+                          <span className="break-all">
+                            {formData.email || "Email not provided"}
+                          </span>
                         </div>
                         {formData.website && (
-                          <div className="flex items-center gap-2">
-                            <Globe className="w-4 h-4 flex-shrink-0" />
+                          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                            <Globe className="w-5 h-5 text-gray-500" />
                             <span className="break-all">
                               {formData.website}
                             </span>
@@ -723,78 +1060,104 @@ export default function AddBusiness() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="terms"
-                      checked={agreeToTerms}
-                      onCheckedChange={setAgreeToTerms}
-                    />
-                    <Label htmlFor="terms" className="text-sm">
-                      I agree to the{" "}
-                      <Link
-                        to="/terms"
-                        className="text-primary hover:underline"
+                  <div className="space-y-6">
+                    <div className="flex items-start space-x-3 p-4 bg-white rounded-xl border-2 border-gray-200">
+                      <Checkbox
+                        id="terms"
+                        checked={agreeToTerms}
+                        onCheckedChange={setAgreeToTerms}
+                        className="mt-1"
+                      />
+                      <Label
+                        htmlFor="terms"
+                        className="text-lg leading-relaxed"
                       >
-                        Terms of Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link
-                        to="/privacy"
-                        className="text-primary hover:underline"
-                      >
-                        Privacy Policy
-                      </Link>
-                    </Label>
-                  </div>
+                        I agree to the{" "}
+                        <Link
+                          to="/terms"
+                          className="text-blue-600 hover:text-blue-800 font-semibold underline"
+                        >
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          to="/privacy"
+                          className="text-blue-600 hover:text-blue-800 font-semibold underline"
+                        >
+                          Privacy Policy
+                        </Link>
+                      </Label>
+                    </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <div className="flex items-start gap-3">
-                      <Building className="w-5 h-5 text-blue-600 mt-0.5" />
-                      <div>
-                        <h4 className="font-semibold text-blue-900 mb-1">
-                          Approval Process
-                        </h4>
-                        <p className="text-sm text-blue-700">
-                          Your listing will be reviewed by our team within 24-48
-                          hours. You'll receive an email confirmation once
-                          approved.
-                        </p>
+                    <div className="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-200 rounded-2xl p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-green-600 rounded-full flex items-center justify-center">
+                          <Building className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-blue-900 mb-2 text-lg">
+                            🔍 Approval Process
+                          </h4>
+                          <p className="text-blue-700 leading-relaxed">
+                            Your listing will be carefully reviewed by our
+                            verification team within 24-48 hours. You'll receive
+                            an email confirmation once approved and your
+                            business goes live!
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 mt-6 sm:mt-8">
+        {/* Enhanced Navigation Buttons */}
+        <div
+          className={`flex flex-col sm:flex-row justify-between gap-4 mt-8 transition-all duration-1000 ${
+            visibleSections.includes("form")
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+          }`}
+          style={{ transitionDelay: "400ms" }}
+        >
           <Button
             variant="outline"
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
-            className="w-full sm:w-auto order-2 sm:order-1"
+            className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-2xl border-2 border-gray-300 hover:border-gray-400"
           >
-            Previous
+            ⬅️ Previous Step
           </Button>
 
           {currentStep < 4 ? (
             <Button
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={!canProceedToNext()}
-              className="w-full sm:w-auto order-1 sm:order-2"
+              className="w-full sm:w-auto px-8 py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              Next Step
+              Next Step ➡️
             </Button>
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={!canProceedToNext()}
+              disabled={!canProceedToNext() || isSubmitting}
               size="lg"
-              className="w-full sm:w-auto order-1 sm:order-2"
+              className="w-full sm:w-auto px-12 py-4 text-xl font-bold rounded-2xl bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
             >
-              Submit for Review
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                  ⏳ Submitting...
+                </>
+              ) : (
+                <>
+                  <Rocket className="w-6 h-6 mr-3" />
+                  🚀 Submit for Review
+                </>
+              )}
             </Button>
           )}
         </div>
