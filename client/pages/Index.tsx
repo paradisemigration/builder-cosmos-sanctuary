@@ -31,6 +31,21 @@ export default function Index() {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
+    // Set homepage title and meta description
+    document.title =
+      "TrustedImmigration - Dubai's #1 Immigration Directory | Visa Services UAE";
+
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute(
+      "content",
+      "Dubai's largest directory of verified immigration services. Find trusted visa consultants, document clearing, and immigration experts across UAE. Compare ratings, reviews, and get expert assistance today.",
+    );
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
