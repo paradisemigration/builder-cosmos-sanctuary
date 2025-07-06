@@ -250,7 +250,6 @@ export default function AddBusiness() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="rounded-xl"
               >
                 <Menu className="h-5 w-5" />
@@ -259,7 +258,6 @@ export default function AddBusiness() {
           </div>
 
           {/* Mobile Navigation Menu */}
-          {mobileMenuOpen && (
             <div className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-sm border-t border-gray-200 rounded-b-2xl shadow-xl">
                 {[
