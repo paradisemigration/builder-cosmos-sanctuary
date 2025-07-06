@@ -215,6 +215,54 @@ export default function AdminPanel() {
     setSelectedBusiness(null);
   };
 
+  // Scam Report Handlers
+  const handleScamReportStatusChange = (
+    reportId: string,
+    newStatus: "pending" | "approved" | "rejected" | "investigating",
+  ) => {
+    setScamReports((prev) =>
+      prev.map((report) => {
+        if (report.id === reportId) {
+          const updatedReport = { ...report, status: newStatus };
+
+          // Generate review URL when approved
+          if (newStatus === "approved" && !report.reviewUrl) {
+            const formatForUrl = (str: string) =>
+              str
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]/g, "")
+                .replace(/\s+/g, "-")
+                .replace(/-+/g, "-")
+                .replace(/^-|-$/g, "");
+
+            updatedReport.reviewUrl = `reviews/${formatForUrl(report.location)}/${formatForUrl(report.companyName)}`;
+          }
+
+          return updatedReport;
+        }
+        return report;
+      }),
+    );
+  };
+
+  const handleDeleteScamReport = (reportId: string) => {
+    setScamReports((prev) => prev.filter((report) => report.id !== reportId));
+    setShowScamDeleteDialog(false);
+    setSelectedScamReport(null);
+  };
+
+  const filteredScamReports = scamReports.filter((report) => {
+    const matchesSearch =
+      report.companyName
+        .toLowerCase()
+        .includes(scamSearchQuery.toLowerCase()) ||
+      report.location.toLowerCase().includes(scamSearchQuery.toLowerCase()) ||
+      report.emailId.toLowerCase().includes(scamSearchQuery.toLowerCase());
+    const matchesTab =
+      selectedScamTab === "all" || report.status === selectedScamTab;
+    return matchesSearch && matchesTab;
+  });
+
   const stats = [
     { label: "Total Businesses", value: businesses.length, icon: "📊" },
     {
