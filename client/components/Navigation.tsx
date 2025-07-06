@@ -158,19 +158,25 @@ export function Navigation({ className = "" }: NavigationProps) {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Enhanced Mobile menu button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2"
+              className="p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 group"
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              <div className="relative">
+                <div
+                  className={`transition-all duration-300 ${mobileMenuOpen ? "rotate-90 scale-110" : "rotate-0"}`}
+                >
+                  {mobileMenuOpen ? (
+                    <X className="h-6 w-6 text-red-600" />
+                  ) : (
+                    <Menu className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                </div>
+              </div>
             </Button>
           </div>
         </div>
