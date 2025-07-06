@@ -529,6 +529,186 @@ export default function AddBusiness() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8 space-y-8">
+              {currentStep === 0 && (
+                <div className="space-y-8">
+                  <div className="text-center space-y-4">
+                    <div className="bg-gradient-to-r from-orange-500/20 to-purple-500/20 backdrop-blur-sm border border-orange-200 rounded-full px-6 py-3 inline-block">
+                      <span className="text-sm font-semibold tracking-wide text-orange-700">
+                        🔍 BUSINESS NAME VERIFICATION
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-800">
+                      Let's start by checking your business name
+                    </h3>
+                    <p className="text-gray-600 max-w-2xl mx-auto">
+                      Search for your business name to see if it's already
+                      listed in our directory. If it exists, you can claim the
+                      listing. If not, we'll help you create a new one.
+                    </p>
+                  </div>
+
+                  <div className="max-w-3xl mx-auto">
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                        <Building className="h-6 w-6 text-gray-400 group-hover:text-orange-500 transition-colors duration-300" />
+                      </div>
+                      <Input
+                        placeholder="Search by company name..."
+                        value={businessSearchQuery}
+                        onChange={(e) =>
+                          handleBusinessSearchChange(e.target.value)
+                        }
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && handleBusinessNameVerification()
+                        }
+                        className="pl-16 h-16 bg-gray-50/80 border-2 border-gray-200 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 rounded-2xl text-lg font-medium transition-all duration-300 hover:border-gray-300"
+                      />
+
+                      {/* Autocomplete Suggestions */}
+                      {showBusinessSuggestions &&
+                        businessSuggestions.length > 0 && (
+                          <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white/95 backdrop-blur-xl border border-orange-200 rounded-2xl shadow-2xl max-h-80 overflow-y-auto">
+                            {businessSuggestions.map((business) => (
+                              <div
+                                key={business.id}
+                                onClick={() =>
+                                  handleBusinessSelection(business)
+                                }
+                                className="flex items-center gap-4 p-4 hover:bg-orange-50 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0"
+                              >
+                                {business.logo && (
+                                  <img
+                                    src={business.logo}
+                                    alt={business.name}
+                                    className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                                  />
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-gray-800 text-lg truncate">
+                                    {business.name}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 truncate">
+                                    {business.category} •{" "}
+                                    {business.address.split(",")[0]}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <div className="flex items-center gap-1">
+                                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                      <span className="text-sm text-gray-600">
+                                        {business.rating} (
+                                        {business.reviewCount} reviews)
+                                      </span>
+                                    </div>
+                                    {business.isVerified && (
+                                      <CheckCircle className="w-4 h-4 text-green-500" />
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                    </div>
+
+                    <div className="flex justify-center mt-6">
+                      <Button
+                        onClick={handleBusinessNameVerification}
+                        disabled={businessSearchQuery.length < 2}
+                        className="bg-gradient-to-r from-orange-600 to-purple-600 hover:from-orange-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                      >
+                        Check Business Name
+                      </Button>
+                    </div>
+
+                    {/* Existing Business Found */}
+                    {existingBusiness && (
+                      <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-yellow-100 rounded-full p-2">
+                            <Building className="w-6 h-6 text-yellow-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-lg font-semibold text-yellow-800 mb-2">
+                              Business Already Listed
+                            </h4>
+                            <p className="text-yellow-700 mb-4">
+                              We found a business with this name:{" "}
+                              <strong>{existingBusiness.name}</strong>
+                            </p>
+                            <div className="bg-white/80 rounded-xl p-4 mb-4">
+                              <div className="flex items-center gap-3">
+                                {existingBusiness.logo && (
+                                  <img
+                                    src={existingBusiness.logo}
+                                    alt={existingBusiness.name}
+                                    className="w-12 h-12 rounded-lg object-cover"
+                                  />
+                                )}
+                                <div>
+                                  <h5 className="font-semibold text-gray-800">
+                                    {existingBusiness.name}
+                                  </h5>
+                                  <p className="text-sm text-gray-600">
+                                    {existingBusiness.category}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {existingBusiness.address}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-3">
+                              <Button
+                                variant="outline"
+                                className="border-yellow-300 text-yellow-700 hover:bg-yellow-100"
+                              >
+                                Claim This Listing
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  setBusinessSearchQuery("");
+                                  setExistingBusiness(null);
+                                }}
+                                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+                              >
+                                Search Different Name
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Business Name Verified */}
+                    {businessNameVerified && (
+                      <div className="mt-8 bg-green-50 border border-green-200 rounded-2xl p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-green-100 rounded-full p-2">
+                            <CheckCircle className="w-6 h-6 text-green-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-lg font-semibold text-green-800 mb-2">
+                              Great! Business Name is Available
+                            </h4>
+                            <p className="text-green-700 mb-4">
+                              "<strong>{businessSearchQuery}</strong>" is unique
+                              and can be registered in our directory.
+                            </p>
+                            <Button
+                              onClick={proceedWithNewBusiness}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Proceed with Registration →
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {currentStep === 1 && (
                 <div className="space-y-8">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -1112,7 +1292,7 @@ export default function AddBusiness() {
               disabled={!canProceedToNext()}
               className="w-full sm:w-auto px-8 py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              Next Step ���️
+              Next Step ➡️
             </Button>
           ) : (
             <Button
