@@ -70,19 +70,22 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
 
       setLocationDisplayText(locationText);
 
-      // Auto-set Dubai zones if user is in UAE, otherwise keep it general
+      // Auto-set UAE city if user is in UAE, otherwise keep it general
       if (
         location.country === "United Arab Emirates" ||
         location.countryCode === "AE"
       ) {
-        // If in UAE, try to match with Dubai zones
-        const matchingZone = dubaiZones.find(
-          (zone) =>
-            location.city.toLowerCase().includes(zone.toLowerCase()) ||
-            zone.toLowerCase().includes(location.city.toLowerCase()),
+        // If in UAE, try to match with UAE cities
+        const matchingCity = uaeCities.find(
+          (city) =>
+            location.city.toLowerCase().includes(city.toLowerCase()) ||
+            city.toLowerCase().includes(location.city.toLowerCase()),
         );
-        if (matchingZone) {
-          setSelectedZone(matchingZone);
+        if (matchingCity) {
+          setSelectedZone(matchingCity);
+        } else {
+          // Default to Dubai if no specific city match
+          setSelectedZone("Dubai");
         }
       }
     } else if (locationError) {
