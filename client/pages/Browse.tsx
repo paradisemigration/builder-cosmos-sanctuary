@@ -64,8 +64,13 @@ export default function Browse() {
     sortBy: "rating",
   });
 
-  const [filteredBusinesses, setFilteredBusinesses] =
-    useState<Business[]>(sampleBusinesses);
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+
+  // Initialize businesses on mount
+  useEffect(() => {
+    console.log("Initializing businesses:", sampleBusinesses.length);
+    setFilteredBusinesses(sampleBusinesses);
+  }, []);
 
   // Scroll animations
   useEffect(() => {
@@ -94,6 +99,10 @@ export default function Browse() {
   }, []);
 
   useEffect(() => {
+    console.log(
+      "Filtering businesses. Initial count:",
+      sampleBusinesses.length,
+    );
     let filtered = [...sampleBusinesses];
 
     // Text search
