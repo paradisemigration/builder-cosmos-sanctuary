@@ -996,7 +996,7 @@ export default function AddBusiness() {
                         htmlFor="zone"
                         className="text-lg font-semibold text-gray-800"
                       >
-                        Dubai Zone
+                        City
                       </Label>
                       <Select
                         value={formData.zone}
