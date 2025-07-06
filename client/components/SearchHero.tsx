@@ -131,7 +131,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 key={category}
                 variant="outline"
                 size="sm"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white"
+                className="bg-white/20 border-white/40 text-white hover:bg-white hover:text-primary font-medium"
                 onClick={() => onSearch?.("", category, "")}
               >
                 {category}
