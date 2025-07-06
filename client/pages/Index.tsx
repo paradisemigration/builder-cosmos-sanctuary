@@ -70,13 +70,8 @@ export default function Index() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
-            <div
-              className="flex items-center"
-              style={{
-                display: isMobile ? "none" : "flex",
-              }}
-            >
+            {/* Desktop Navigation - Always visible for now */}
+            <div className="flex items-center">
               <div className="ml-10 flex items-baseline space-x-4">
                 <Link
                   to="/"
@@ -102,13 +97,8 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Mobile menu button */}
-            <div
-              className="flex"
-              style={{
-                display: isMobile ? "flex" : "none",
-              }}
-            >
+            {/* Mobile menu button - Hidden for now */}
+            <div className="hidden">
               <Button
                 variant="ghost"
                 size="sm"
