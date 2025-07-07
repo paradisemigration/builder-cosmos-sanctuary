@@ -74,6 +74,49 @@ export default function Index() {
   const handleSearch = (query: string, category?: string, zone?: string) => {
     setSearchQuery(query);
 
+    // If there's a text query, try to intelligently parse it for location and service type
+    if (query && query.trim().length > 0) {
+      const parsedSearch = parseSearchQuery(query.toLowerCase());
+
+      // If we successfully parsed both location and service, use those
+      if (parsedSearch.location && parsedSearch.serviceType) {
+        const locationSlug = parsedSearch.location
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        const categorySlug = parsedSearch.serviceType
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+
+        // Navigate to SEO-friendly URL: /location/category
+        navigate(`/${locationSlug}/${categorySlug}`);
+        return;
+      }
+      // If we only found service type, navigate to category page
+      else if (parsedSearch.serviceType) {
+        const categorySlug = parsedSearch.serviceType
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        navigate(`/category/${categorySlug}`);
+        return;
+      }
+      // If we only found location, navigate to location page
+      else if (parsedSearch.location) {
+        const locationSlug = parsedSearch.location
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        navigate(`/location/${locationSlug}`);
+        return;
+      }
+    }
+
     // Generate SEO-friendly URLs for category and location searches
     if (category && zone && category !== "all" && zone !== "all") {
       // Format location and category for URL
@@ -115,6 +158,88 @@ export default function Index() {
 
       navigate(`/browse?${params.toString()}`);
     }
+  };
+
+  // Function to parse search queries intelligently
+  const parseSearchQuery = (query: string) => {
+    let serviceType = "";
+    let location = "";
+
+    // Common visa service types
+    const serviceTypes = [
+      "visit visa",
+      "tourist visa",
+      "work visa",
+      "employment visa",
+      "study visa",
+      "student visa",
+      "pr visa",
+      "permanent residence",
+      "citizenship",
+      "immigration",
+      "visa renewal",
+      "visa extension",
+    ];
+
+    // Common locations
+    const locations = [
+      "dubai",
+      "abu dhabi",
+      "sharjah",
+      "ajman",
+      "ras al khaimah",
+      "fujairah",
+      "umm al quwain",
+      "al ain",
+    ];
+
+    // Location keywords
+    const locationKeywords = ["in", "at", "from", "near", "around"];
+
+    // Look for service types
+    for (const service of serviceTypes) {
+      if (query.includes(service)) {
+        serviceType = service;
+        break;
+      }
+    }
+
+    // Look for locations
+    for (const loc of locations) {
+      if (query.includes(loc)) {
+        location = loc;
+        break;
+      }
+    }
+
+    // If we found location keywords but no specific location, try to extract location after keywords
+    if (!location) {
+      for (const keyword of locationKeywords) {
+        const keywordIndex = query.indexOf(keyword + " ");
+        if (keywordIndex !== -1) {
+          const afterKeyword = query.substring(
+            keywordIndex + keyword.length + 1,
+          );
+          const words = afterKeyword.split(" ");
+          if (words[0] && words[0].length > 2) {
+            // Check if the word after keyword matches any location
+            for (const loc of locations) {
+              if (loc.includes(words[0]) || words[0].includes(loc)) {
+                location = loc;
+                break;
+              }
+            }
+            // If no exact match, use the word as location if it looks like a place name
+            if (!location && words[0].length > 3) {
+              location = words[0];
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    return { serviceType, location };
   };
 
   const stats = [
