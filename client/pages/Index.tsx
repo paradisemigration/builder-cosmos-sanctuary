@@ -86,11 +86,13 @@ export default function Index() {
           .replace(/[^a-z0-9]/g, "-")
           .replace(/-+/g, "-")
           .replace(/^-|-$/g, "");
-        const categorySlug = parsedSearch.serviceType
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "-")
-          .replace(/-+/g, "-")
-          .replace(/^-|-$/g, "");
+        const categorySlug = pluralizeCategorySlug(
+          parsedSearch.serviceType
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, ""),
+        );
 
         // Navigate to SEO-friendly URL: /location/category
         navigate(`/${locationSlug}/${categorySlug}`);
