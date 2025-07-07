@@ -101,6 +101,147 @@ export default function AdminPanel() {
     logout();
     window.location.href = "/";
   };
+
+  // Excel Template Download Function
+  const downloadExcelTemplate = () => {
+    const headers = [
+      "Business Name *",
+      "Category *",
+      "Business Description *",
+      "Full Address *",
+      "City *",
+      "Phone Number *",
+      "Email Address *",
+      "WhatsApp Number",
+      "Website URL",
+      "License Number",
+      "Owner/Manager Name",
+      "Owner Email",
+      "Owner Phone",
+      "Services Offered",
+      "Latitude",
+      "Longitude",
+      "Monday Hours",
+      "Tuesday Hours",
+      "Wednesday Hours",
+      "Thursday Hours",
+      "Friday Hours",
+      "Saturday Hours",
+      "Sunday Hours",
+      "Logo Image URL",
+      "Cover Image URL",
+      "Gallery Image URLs",
+      "Pre-Verified",
+      "Additional Notes",
+    ].join("\t");
+
+    const sampleRow = [
+      "Dubai Visa Express",
+      "Visa Services",
+      "Leading visa service provider in Dubai with over 15 years of experience. We specialize in tourist, business, and residence visas for all nationalities.",
+      "Office 1205, Al Manara Tower, Business Bay, Dubai, UAE",
+      "Dubai",
+      "+971-4-123-4567",
+      "info@dubaivisaexpress.com",
+      "+971-50-123-4567",
+      "https://dubaivisaexpress.com",
+      "DED-12345",
+      "Ahmed Al Mansoori",
+      "ahmed@dubaivisaexpress.com",
+      "+971-50-123-4567",
+      "Tourist Visa, Business Visa, Residence Visa, Visa Renewal, Emergency Visa",
+      "25.1887",
+      "55.2673",
+      "9:00 AM - 6:00 PM",
+      "9:00 AM - 6:00 PM",
+      "9:00 AM - 6:00 PM",
+      "9:00 AM - 6:00 PM",
+      "9:00 AM - 6:00 PM",
+      "10:00 AM - 4:00 PM",
+      "Closed",
+      "https://example.com/dubai-visa-express-logo.jpg",
+      "https://example.com/dubai-visa-express-cover.jpg",
+      "https://example.com/office1.jpg, https://example.com/office2.jpg",
+      "TRUE",
+      "Established business with excellent track record",
+    ].join("\t");
+
+    const csvContent = `${headers}\n${sampleRow}`;
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "business_listings_template.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Export Current Business Data
+  const exportBusinesses = () => {
+    const filteredData = businesses
+      .filter((business) => {
+        if (selectedTab === "all") return true;
+        return business.status === selectedTab;
+      })
+      .filter(
+        (business) =>
+          business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          business.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          business.address.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+
+    const headers = [
+      "Business Name",
+      "Category",
+      "Description",
+      "Address",
+      "Phone",
+      "Email",
+      "WhatsApp",
+      "Website",
+      "License Number",
+      "Rating",
+      "Review Count",
+      "Verified",
+      "Status",
+      "Submission Date",
+    ].join("\t");
+
+    const rows = filteredData.map((business) =>
+      [
+        business.name,
+        business.category,
+        business.description,
+        business.address,
+        business.phone,
+        business.email,
+        business.whatsapp || "",
+        business.website || "",
+        business.licenseNo || "",
+        business.rating,
+        business.reviewCount,
+        business.isVerified ? "Yes" : "No",
+        business.status,
+        business.submissionDate,
+      ].join("\t"),
+    );
+
+    const csvContent = `${headers}\n${rows.join("\n")}`;
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `business_listings_export_${new Date().toISOString().split("T")[0]}.csv`,
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const [businesses, setBusinesses] = useState(
     sampleBusinesses.map((business) => ({
       ...business,
