@@ -100,11 +100,13 @@ export default function Index() {
       }
       // If we only found service type, navigate to category page
       else if (parsedSearch.serviceType) {
-        const categorySlug = parsedSearch.serviceType
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "-")
-          .replace(/-+/g, "-")
-          .replace(/^-|-$/g, "");
+        const categorySlug = pluralizeCategorySlug(
+          parsedSearch.serviceType
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, ""),
+        );
         navigate(`/category/${categorySlug}`);
         return;
       }
