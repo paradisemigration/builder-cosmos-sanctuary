@@ -173,7 +173,7 @@ export function Navigation({ className = "" }: NavigationProps) {
           </div>
 
           {/* Enhanced Mobile menu button */}
-          <div className="md:hidden">
+          <div className="hidden">
             <Button
               variant="ghost"
               size="sm"
