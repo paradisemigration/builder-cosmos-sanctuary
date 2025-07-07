@@ -165,23 +165,27 @@ export default function Index() {
     let serviceType = "";
     let location = "";
 
-    // Common visa service types
-    const serviceTypes = [
-      "visit visa",
-      "tourist visa",
-      "work visa",
-      "employment visa",
-      "study visa",
-      "student visa",
-      "pr visa",
-      "permanent residence",
-      "citizenship",
-      "immigration",
-      "visa renewal",
-      "visa extension",
-    ];
+    // Map search terms to our actual visa categories
+    const serviceTypeMap = {
+      "visit visa": "Visit Visa",
+      "tourist visa": "Visit Visa",
+      "tourism visa": "Visit Visa",
+      "work visa": "Work Visa",
+      "employment visa": "Work Visa",
+      "job visa": "Work Visa",
+      "study visa": "Study Visa",
+      "student visa": "Study Visa",
+      "education visa": "Study Visa",
+      "pr visa": "PR Visa",
+      "permanent residence": "PR Visa",
+      "permanent residency": "PR Visa",
+      citizenship: "Citizenship & Immigration",
+      immigration: "Citizenship & Immigration",
+      "visa renewal": "Visit Visa",
+      "visa extension": "Visit Visa",
+    };
 
-    // Common locations
+    // Common locations in UAE
     const locations = [
       "dubai",
       "abu dhabi",
@@ -191,15 +195,39 @@ export default function Index() {
       "fujairah",
       "umm al quwain",
       "al ain",
+      "uae",
+      "emirates",
     ];
 
-    // Location keywords
-    const locationKeywords = ["in", "at", "from", "near", "around"];
+    // Location keywords that indicate location follows
+    const locationKeywords = ["in", "at", "from", "near", "around", "across"];
 
-    // Look for service types
-    for (const service of serviceTypes) {
-      if (query.includes(service)) {
-        serviceType = service;
+    // Company/service keywords to ignore
+    const serviceKeywords = [
+      "company",
+      "consultant",
+      "consultants",
+      "service",
+      "services",
+      "agency",
+      "agencies",
+      "office",
+      "center",
+    ];
+
+    // Clean query by removing service keywords
+    let cleanedQuery = query;
+    serviceKeywords.forEach((keyword) => {
+      cleanedQuery = cleanedQuery.replace(
+        new RegExp(`\\b${keyword}\\b`, "gi"),
+        "",
+      );
+    });
+
+    // Look for service types in the original query
+    for (const [searchTerm, actualCategory] of Object.entries(serviceTypeMap)) {
+      if (query.includes(searchTerm)) {
+        serviceType = actualCategory;
         break;
       }
     }
@@ -207,7 +235,7 @@ export default function Index() {
     // Look for locations
     for (const loc of locations) {
       if (query.includes(loc)) {
-        location = loc;
+        location = loc === "uae" || loc === "emirates" ? "Dubai" : loc;
         break;
       }
     }
@@ -220,23 +248,34 @@ export default function Index() {
           const afterKeyword = query.substring(
             keywordIndex + keyword.length + 1,
           );
-          const words = afterKeyword.split(" ");
+          const words = afterKeyword
+            .split(" ")
+            .filter((word) => word.length > 0);
           if (words[0] && words[0].length > 2) {
             // Check if the word after keyword matches any location
             for (const loc of locations) {
               if (loc.includes(words[0]) || words[0].includes(loc)) {
-                location = loc;
+                location = loc === "uae" || loc === "emirates" ? "Dubai" : loc;
                 break;
               }
             }
-            // If no exact match, use the word as location if it looks like a place name
-            if (!location && words[0].length > 3) {
-              location = words[0];
+            // If no exact match, check if it's a valid city name (capitalize first letter)
+            if (
+              !location &&
+              words[0].length > 3 &&
+              !serviceKeywords.includes(words[0])
+            ) {
+              location = words[0].charAt(0).toUpperCase() + words[0].slice(1);
             }
           }
           break;
         }
       }
+    }
+
+    // Capitalize location name properly
+    if (location) {
+      location = location.charAt(0).toUpperCase() + location.slice(1);
     }
 
     return { serviceType, location };
