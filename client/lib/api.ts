@@ -2,7 +2,7 @@ import { Business } from "./data";
 
 // API Configuration
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+  import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
 // API Response Types
 export interface ApiResponse<T> {
