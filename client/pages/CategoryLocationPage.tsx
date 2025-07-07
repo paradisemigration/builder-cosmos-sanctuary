@@ -18,12 +18,13 @@ import {
   CheckCircle,
 } from "lucide-react";
 import {
-  sampleBusinesses,
   businessCategories,
   dubaiZones,
   uaeCities,
   type Business,
 } from "@/lib/data";
+import { useBusinessData } from "@/hooks/useBusinessData";
+import { BusinessFilters } from "@/lib/api";
 
 export default function CategoryLocationPage() {
   const { location, category } = useParams();
