@@ -73,6 +73,14 @@ const App = () => (
               }
             />
             <Route
+              path="/admin/bulk-upload"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminBulkUpload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/business/:id/edit"
               element={
                 <ProtectedRoute requireRole="admin">
