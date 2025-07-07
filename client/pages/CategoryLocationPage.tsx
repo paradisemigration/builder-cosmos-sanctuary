@@ -53,18 +53,39 @@ export default function CategoryLocationPage() {
               .replace(/-+/g, "-")
               .replace(/^-|-$/g, "") === slug,
         ) ||
-        slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+        // Handle direct city names (e.g., "dubai" -> "Dubai")
+        (slug.length > 2
+          ? slug.charAt(0).toUpperCase() + slug.slice(1)
+          : slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()))
       );
     } else {
+      // Handle category mapping with better matching
+      const categoryMatch = businessCategories.find(
+        (cat) =>
+          cat
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, "") === slug,
+      );
+
+      if (categoryMatch) {
+        return categoryMatch;
+      }
+
+      // Handle common variations manually
+      const categoryMap: { [key: string]: string } = {
+        "visit-visa": "Visit Visa",
+        "work-visa": "Work Visa",
+        "study-visa": "Study Visa",
+        "pr-visa": "PR Visa",
+        "citizenship-immigration": "Citizenship & Immigration",
+        "citizenship-and-immigration": "Citizenship & Immigration",
+      };
+
       return (
-        businessCategories.find(
-          (cat) =>
-            cat
-              .toLowerCase()
-              .replace(/[^a-z0-9]/g, "-")
-              .replace(/-+/g, "-")
-              .replace(/^-|-$/g, "") === slug,
-        ) || slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+        categoryMap[slug] ||
+        slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
       );
     }
   };
