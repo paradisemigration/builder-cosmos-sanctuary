@@ -194,6 +194,17 @@ export function Navigation({ className = "" }: NavigationProps) {
                 ⚠️ Report Scam
               </Link>
 
+              {/* Admin Panel Link for Mobile - Only for Admin Users */}
+              {isAuthenticated && user?.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🛡️ Admin Panel
+                </Link>
+              )}
+
               {isAuthenticated ? (
                 <div className="border-t border-gray-200 pt-4">
                   <div className="px-3 py-2">
