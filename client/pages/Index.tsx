@@ -130,21 +130,25 @@ export default function Index() {
         .replace(/[^a-z0-9]/g, "-")
         .replace(/-+/g, "-")
         .replace(/^-|-$/g, "");
-      const categorySlug = category
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
+      const categorySlug = pluralizeCategorySlug(
+        category
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, ""),
+      );
 
       // Navigate to SEO-friendly URL: /location/category
       navigate(`/${locationSlug}/${categorySlug}`);
     } else if (category && category !== "all") {
       // Category only search
-      const categorySlug = category
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
+      const categorySlug = pluralizeCategorySlug(
+        category
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, ""),
+      );
       navigate(`/category/${categorySlug}`);
     } else if (zone && zone !== "all") {
       // Location only search
