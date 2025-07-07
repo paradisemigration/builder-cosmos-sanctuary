@@ -29,8 +29,6 @@ import { BusinessFilters } from "@/lib/api";
 export default function CategoryLocationPage() {
   const { location, category } = useParams();
   const navigate = useNavigate();
-  const [filteredBusinesses, setFilteredBusinesses] =
-    useState(sampleBusinesses);
   const [sortBy, setSortBy] = useState("rating");
 
   // Convert URL slugs back to display names
