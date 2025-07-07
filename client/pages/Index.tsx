@@ -290,6 +290,26 @@ export default function Index() {
     return { serviceType, location };
   };
 
+  // Function to pluralize category slugs for URLs
+  const pluralizeCategorySlug = (slug: string) => {
+    // Handle special cases for visa categories
+    if (slug.includes("visa")) {
+      return slug.replace("visa", "visas");
+    }
+
+    // Handle citizenship & immigration (already plural)
+    if (slug.includes("citizenship") || slug.includes("immigration")) {
+      return slug;
+    }
+
+    // Default: add 's' if it doesn't already end with 's'
+    if (!slug.endsWith("s")) {
+      return slug + "s";
+    }
+
+    return slug;
+  };
+
   const stats = [
     { label: "Verified Businesses", value: "150+", icon: Building },
     { label: "Customer Reviews", value: "2.5k+", icon: Users },
