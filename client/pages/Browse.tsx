@@ -67,12 +67,32 @@ export default function Browse() {
     sortBy: "rating",
   });
 
-  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+  // API filters based on search parameters and local filters
+  const apiFilters: BusinessFilters = {
+    search: searchQuery || undefined,
+    category: selectedCategory || undefined,
+    location: selectedZone || undefined,
+    verified: filters.verified || undefined,
+    rating: filters.rating ? parseInt(filters.rating) : undefined,
+    page: 1,
+    limit: 20,
+    sortBy: filters.sortBy as "rating" | "name" | "date" | "reviews",
+    sortOrder: "desc",
+  };
 
-  // Initialize businesses on mount
+  // Use business data hook for API integration
+  const {
+    businesses: filteredBusinesses,
+    loading: businessesLoading,
+    error: businessesError,
+    pagination,
+    refetch,
+    loadMore,
+    hasMore,
+  } = useBusinessData(apiFilters);
+
+  // Initialize page title on mount
   useEffect(() => {
-    setFilteredBusinesses(sampleBusinesses);
-
     // Set dynamic page title based on search parameters
     const generateBrowseTitle = () => {
       const websiteTitle = "TrustedImmigration";
