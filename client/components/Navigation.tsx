@@ -62,7 +62,7 @@ export function Navigation({ className = "" }: NavigationProps) {
           </div>
 
           {/* Enhanced Desktop Navigation */}
-          <div className="hidden md:flex md:items-center">
+          <div className="flex items-center">
             <div className="ml-10 flex items-center space-x-2 lg:space-x-4">
               <Link
                 to="/"
