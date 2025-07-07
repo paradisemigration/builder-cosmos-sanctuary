@@ -399,17 +399,44 @@ export default function AdminPanel() {
                       Business Listings
                     </CardTitle>
                     <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="hidden sm:inline-flex"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Export
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="hidden sm:inline-flex"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Export
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={downloadExcelTemplate}>
+                            <Download className="w-4 h-4 mr-2" />
+                            Download Excel Template
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={exportBusinesses}>
+                            <Download className="w-4 h-4 mr-2" />
+                            Export Current Data
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
                       <Button variant="outline" size="sm" className="sm:hidden">
                         <Download className="w-4 h-4" />
                       </Button>
+
+                      <Link to="/admin/bulk-upload">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="hidden sm:inline-flex"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Bulk Upload
+                        </Button>
+                      </Link>
+
                       <Button
                         variant="outline"
                         size="sm"
