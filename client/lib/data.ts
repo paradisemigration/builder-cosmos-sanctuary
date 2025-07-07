@@ -44,18 +44,32 @@ export interface Review {
 }
 
 export type BusinessCategory =
-  | "Visit Visa"
-  | "Work Visa"
-  | "Study Visa"
-  | "PR Visa"
-  | "Citizenship & Immigration";
+  | "Visa Agent"
+  | "Immigration Consultants"
+  | "Visa Services"
+  | "Visa & Passport Services"
+  | "Document Clearing / Typing Centers"
+  | "Travel Agencies (Visa-related)"
+  | "Visit Visa Specialists"
+  | "Work Visa Consultants"
+  | "Study Visa Services"
+  | "PR & Citizenship Services"
+  | "Business Setup & Visa"
+  | "Family Visa Services";
 
 export const businessCategories: BusinessCategory[] = [
-  "Visit Visa",
-  "Work Visa",
-  "Study Visa",
-  "PR Visa",
-  "Citizenship & Immigration",
+  "Visa Agent",
+  "Immigration Consultants",
+  "Visa Services",
+  "Visa & Passport Services",
+  "Document Clearing / Typing Centers",
+  "Travel Agencies (Visa-related)",
+  "Visit Visa Specialists",
+  "Work Visa Consultants",
+  "Study Visa Services",
+  "PR & Citizenship Services",
+  "Business Setup & Visa",
+  "Family Visa Services",
 ];
 
 const originalBusinesses: Business[] = [
