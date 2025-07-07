@@ -493,6 +493,75 @@ export default function AdminPanel() {
           </p>
         </div>
 
+        {/* Quick Actions */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="w-5 h-5" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Button
+                onClick={downloadExcelTemplate}
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-green-50 hover:border-green-300"
+              >
+                <Download className="w-6 h-6 text-green-600" />
+                <div className="text-center">
+                  <div className="font-semibold">Download Template</div>
+                  <div className="text-xs text-muted-foreground">
+                    Excel/CSV Format
+                  </div>
+                </div>
+              </Button>
+
+              <Link to="/admin/bulk-upload" className="block">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center gap-2 hover:bg-blue-50 hover:border-blue-300"
+                >
+                  <Plus className="w-6 h-6 text-blue-600" />
+                  <div className="text-center">
+                    <div className="font-semibold">Bulk Upload</div>
+                    <div className="text-xs text-muted-foreground">
+                      Upload Excel File
+                    </div>
+                  </div>
+                </Button>
+              </Link>
+
+              <Button
+                onClick={exportBusinesses}
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-orange-50 hover:border-orange-300"
+              >
+                <Download className="w-6 h-6 text-orange-600" />
+                <div className="text-center">
+                  <div className="font-semibold">Export Data</div>
+                  <div className="text-xs text-muted-foreground">
+                    Current Listings
+                  </div>
+                </div>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-purple-50 hover:border-purple-300"
+              >
+                <FileText className="w-6 h-6 text-purple-600" />
+                <div className="text-center">
+                  <div className="font-semibold">Generate Report</div>
+                  <div className="text-xs text-muted-foreground">
+                    Analytics Summary
+                  </div>
+                </div>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Navigation Tabs */}
         <Tabs
           value={activeSection}
