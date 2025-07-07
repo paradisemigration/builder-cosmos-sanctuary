@@ -111,6 +111,25 @@ export default function CategoryLocationPage() {
   const locationName = location ? getDisplayName(location, "location") : "";
   const categoryName = category ? getDisplayName(category, "category") : "";
 
+  // API filters for business data
+  const apiFilters: BusinessFilters = {
+    category: categoryName || undefined,
+    location: locationName || undefined,
+    page: 1,
+    limit: 50,
+    sortBy: sortBy as "rating" | "name" | "date" | "reviews",
+    sortOrder: "desc",
+    verified: true, // Show only verified businesses for SEO pages
+  };
+
+  // Use business data hook
+  const {
+    businesses: filteredBusinesses,
+    loading: businessesLoading,
+    error: businessesError,
+    refetch,
+  } = useBusinessData(apiFilters);
+
   // Generate dynamic page title
   const generatePageTitle = () => {
     const websiteTitle = "TrustedImmigration";
