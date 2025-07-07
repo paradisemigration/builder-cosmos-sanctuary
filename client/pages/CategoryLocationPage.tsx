@@ -73,12 +73,31 @@ export default function CategoryLocationPage() {
         return categoryMatch;
       }
 
-      // Handle common variations manually
+      // Convert plural URLs back to singular for category matching
+      const singularSlug = slug.replace(/s$/, ""); // Remove trailing 's'
+      const singularMatch = businessCategories.find(
+        (cat) =>
+          cat
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, "") === singularSlug,
+      );
+
+      if (singularMatch) {
+        return singularMatch;
+      }
+
+      // Handle common variations manually (both plural and singular)
       const categoryMap: { [key: string]: string } = {
         "visit-visa": "Visit Visa",
+        "visit-visas": "Visit Visa",
         "work-visa": "Work Visa",
+        "work-visas": "Work Visa",
         "study-visa": "Study Visa",
+        "study-visas": "Study Visa",
         "pr-visa": "PR Visa",
+        "pr-visas": "PR Visa",
         "citizenship-immigration": "Citizenship & Immigration",
         "citizenship-and-immigration": "Citizenship & Immigration",
       };
