@@ -25,12 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  sampleBusinesses,
   businessCategories,
   dubaiZones,
   uaeCities,
   Business,
 } from "@/lib/data";
+import { useBusinessData } from "@/hooks/useBusinessData";
+import { BusinessFilters } from "@/lib/api";
 
 interface FilterState {
   categories: string[];
@@ -614,7 +615,7 @@ export default function Browse() {
                       className="w-full sm:w-auto rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                     >
                       <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
-                      🚀 Load More Amazing Services
+                      ��� Load More Amazing Services
                     </Button>
                   </div>
                 </div>
