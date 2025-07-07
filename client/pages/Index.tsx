@@ -14,6 +14,7 @@ import {
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { businessCategories } from "@/lib/data";
 import { Navigation } from "@/components/Navigation";
 import { EmailPreview } from "@/components/EmailPreview";
 import { Button } from "@/components/ui/button";
