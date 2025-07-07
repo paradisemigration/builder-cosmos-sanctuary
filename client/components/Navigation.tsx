@@ -100,6 +100,20 @@ export function Navigation({ className = "" }: NavigationProps) {
               ⚠️ Report Scam
             </Link>
 
+            {/* Admin Panel Link - Only for Admin Users */}
+            {isAuthenticated && user?.role === "admin" && (
+              <Link
+                to="/admin"
+                className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  isCurrentPage("/admin")
+                    ? "text-white bg-gradient-to-r from-purple-500 to-blue-500"
+                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+                }`}
+              >
+                🛡️ Admin Panel
+              </Link>
+            )}
+
             {/* Authentication */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
