@@ -27,7 +27,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
-  featuredBusinesses,
   businessCategories,
   sampleBusinesses,
   indianCities,
@@ -36,7 +35,30 @@ import {
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [featuredBusinesses, setFeaturedBusinesses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Fetch real featured businesses from database
+  useEffect(() => {
+    const fetchFeaturedBusinesses = async () => {
+      try {
+        const response = await fetch("/api/scraped-businesses?limit=6");
+        const result = await response.json();
+        if (result.success) {
+          setFeaturedBusinesses(result.businesses || []);
+        }
+      } catch (error) {
+        console.error("Error fetching featured businesses:", error);
+        // Fallback to empty array if fetch fails
+        setFeaturedBusinesses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedBusinesses();
+  }, []);
 
   useEffect(() => {
     document.title =
