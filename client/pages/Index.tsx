@@ -62,7 +62,7 @@ export default function Index() {
 
   const topCities = [
     { name: "Delhi", count: "450+", icon: "🏛️" },
-    { name: "Mumbai", count: "380+", icon: "���" },
+    { name: "Mumbai", count: "380+", icon: "🌆" },
     { name: "Bangalore", count: "320+", icon: "💻" },
     { name: "Chennai", count: "250+", icon: "🌊" },
     { name: "Hyderabad", count: "200+", icon: "💎" },
@@ -260,7 +260,7 @@ export default function Index() {
                   🏢 Business (Legacy)
                 </Link>
                 <Link
-                  to="/business/delhi/delhi-global-visa-consultants"
+                  to="/city/delhi/delhi-global-visa-consultants"
                   className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
                 >
                   🏢 Business (New)
