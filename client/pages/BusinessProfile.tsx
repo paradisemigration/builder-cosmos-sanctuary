@@ -86,20 +86,21 @@ export default function BusinessProfile() {
         );
       }
 
-      // Debug logging in development
-      if (process.env.NODE_ENV === "development") {
-        console.log("Business Profile URL params:", {
-          city,
-          companyName,
-          searchCity,
-          searchName,
-          foundBusiness: foundBusiness?.name,
-          allBusinesses: sampleBusinesses.map((b) => ({
-            name: b.name,
-            city: b.city,
-          })),
-        });
-      }
+      // Debug logging
+      console.log("=== Business Profile URL Debug ===");
+      console.log("URL params:", { city, companyName });
+      console.log("Converted search terms:", { searchCity, searchName });
+      console.log("Found business:", foundBusiness?.name || "NONE");
+      console.log(
+        "All businesses:",
+        sampleBusinesses.map((b) => ({
+          name: b.name,
+          city: b.city,
+          nameMatches: b.name.toLowerCase() === searchName.toLowerCase(),
+          cityMatches: b.city.toLowerCase() === searchCity.toLowerCase(),
+        })),
+      );
+      console.log("================================");
     }
 
     // Fallback to first business for demo if not found
