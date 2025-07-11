@@ -1,8 +1,15 @@
 import fetch from "node-fetch";
 import { uploadToS3 } from "./storage-s3.js";
-import { getDatabase } from "./database.sqlite.js";
+import Database from "better-sqlite3";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const database = getDatabase();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Initialize database connection
+const dbPath = path.join(__dirname, "visaconsult.db");
+const database = new Database(dbPath);
 
 // Curated business-appropriate images from Unsplash
 const businessLogos = [
@@ -86,8 +93,8 @@ export async function assignBulkBusinessImages(options = {}) {
   try {
     // Get businesses that need images
     let query = `
-      SELECT id, name, category, logo, coverImage 
-      FROM businesses 
+      SELECT id, name, category, logo, coverImage
+      FROM businesses
     `;
 
     if (!updateExisting) {
@@ -150,7 +157,7 @@ export async function assignBulkBusinessImages(options = {}) {
 
         // Update business in database
         const updateQuery = `
-          UPDATE businesses 
+          UPDATE businesses
           SET logo = ?, coverImage = ?, updatedAt = ?
           WHERE id = ?
         `;
