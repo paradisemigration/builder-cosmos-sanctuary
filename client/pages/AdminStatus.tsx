@@ -431,9 +431,15 @@ export default function AdminStatus() {
   const loadImageStats = async () => {
     try {
       console.log("📊 Loading image statistics...");
-      const response = await fetch("/api/admin/business-images-status");
-      const result = await response.json();
+      const response = await fetch("/api/admin/business-images-status", {
+        cache: "no-store",
+      });
 
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
       console.log("📊 Image stats response:", result);
 
       if (result.success) {
@@ -441,9 +447,11 @@ export default function AdminStatus() {
         console.log("✅ Image stats loaded:", result.stats);
       } else {
         console.error("❌ Failed to load image stats:", result.error);
+        setImageStats({ error: result.error });
       }
     } catch (error) {
       console.error("❌ Failed to load image stats:", error);
+      setImageStats({ error: error.message });
     }
   };
 
@@ -811,7 +819,21 @@ export default function AdminStatus() {
                 <CardTitle>Business Images Status</CardTitle>
               </CardHeader>
               <CardContent>
-                {imageStats ? (
+                {imageStats?.error ? (
+                  <div className="text-center py-4">
+                    <p className="text-red-600">
+                      Error loading image statistics: {imageStats.error}
+                    </p>
+                    <Button
+                      onClick={loadImageStats}
+                      variant="outline"
+                      size="sm"
+                      className="mt-2"
+                    >
+                      Retry
+                    </Button>
+                  </div>
+                ) : imageStats ? (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="text-center">
