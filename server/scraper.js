@@ -7,6 +7,7 @@ class BusinessScraper {
     this.placesAPI = new GooglePlacesAPI(googleApiKey);
     this.isRunning = false;
     this.currentJob = null;
+    this.shouldStop = false;
   }
 
   // Main scraping method
@@ -255,7 +256,7 @@ class BusinessScraper {
       const saveResult = await database.saveBusiness(businessData);
 
       if (saveResult.success) {
-        console.log(`�� Successfully scraped and saved: ${businessData.name}`);
+        console.log(`✅ Successfully scraped and saved: ${businessData.name}`);
         return saveResult;
       } else {
         throw new Error(saveResult.error);
