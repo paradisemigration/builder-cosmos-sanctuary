@@ -1102,6 +1102,114 @@ app.get("/api/scraping/export", (req, res) => {
   }
 });
 
+// Bulk image assignment endpoints
+import {
+  assignBulkBusinessImages,
+  assignAllBusinessImages,
+} from "./bulk-image-assignment.js";
+
+// Assign images to all businesses (batch processing)
+app.post("/api/admin/assign-all-business-images", async (req, res) => {
+  try {
+    console.log("🚀 Starting bulk image assignment for all businesses");
+
+    // Run in background to avoid timeout
+    assignAllBusinessImages()
+      .then((result) => {
+        console.log("✅ Bulk image assignment completed:", result);
+      })
+      .catch((error) => {
+        console.error("❌ Bulk image assignment failed:", error);
+      });
+
+    res.json({
+      success: true,
+      message:
+        "Bulk image assignment started in background. Check server logs for progress.",
+    });
+  } catch (error) {
+    console.error("Bulk image assignment error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Assign images to specific batch of businesses
+app.post("/api/admin/assign-business-images-batch", async (req, res) => {
+  try {
+    const { limit = 50, offset = 0, updateExisting = false } = req.body;
+
+    const result = await assignBulkBusinessImages({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      updateExisting: Boolean(updateExisting),
+    });
+
+    res.json({
+      success: true,
+      result,
+    });
+  } catch (error) {
+    console.error("Batch image assignment error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get bulk assignment status
+app.get("/api/admin/business-images-status", async (req, res) => {
+  try {
+    const database = getDatabase();
+    const totalBusinesses = database
+      .prepare("SELECT COUNT(*) as count FROM businesses")
+      .get();
+    const withImages = database
+      .prepare(
+        `
+      SELECT COUNT(*) as count FROM businesses
+      WHERE logo IS NOT NULL
+      AND logo NOT LIKE '%placeholder%'
+      AND coverImage IS NOT NULL
+      AND coverImage NOT LIKE '%placeholder%'
+    `,
+      )
+      .get();
+    const withPlaceholders = database
+      .prepare(
+        `
+      SELECT COUNT(*) as count FROM businesses
+      WHERE logo LIKE '%placeholder%'
+      OR coverImage LIKE '%placeholder%'
+      OR logo IS NULL
+      OR coverImage IS NULL
+    `,
+      )
+      .get();
+
+    res.json({
+      success: true,
+      stats: {
+        totalBusinesses: totalBusinesses.count,
+        withRealImages: withImages.count,
+        withPlaceholders: withPlaceholders.count,
+        completionRate: Math.round(
+          (withImages.count / totalBusinesses.count) * 100,
+        ),
+      },
+    });
+  } catch (error) {
+    console.error("Image status error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
