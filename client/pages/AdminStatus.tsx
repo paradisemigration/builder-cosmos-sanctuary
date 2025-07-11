@@ -205,6 +205,20 @@ export default function AdminStatus() {
         errorMessage = error.message;
       }
 
+      // Retry logic for main function
+      if (
+        retryCount < maxRetries &&
+        (errorType === "network" || errorType === "timeout")
+      ) {
+        console.log(
+          `🔄 Retrying loadStatus (${retryCount + 1}/${maxRetries}) in 5 seconds...`,
+        );
+        setTimeout(() => {
+          loadStatus(retryCount + 1);
+        }, 5000);
+        return;
+      }
+
       // Set default empty state to prevent UI errors
       setStats({
         totalBusinesses: 0,
@@ -214,10 +228,15 @@ export default function AdminStatus() {
         scraping: { isRunning: false },
         error: errorMessage,
         errorType,
+        retryCount,
       });
       setDiagnostic({
         actualBusinessCount: 0,
         totalFromQuery: 0,
+        error: errorMessage,
+        errorType,
+      });
+      setImageStatus({
         error: errorMessage,
         errorType,
       });
