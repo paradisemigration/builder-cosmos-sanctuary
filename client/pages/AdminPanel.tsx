@@ -38,7 +38,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
-import { ImageUpload } from "@/components/ImageUpload";
+// import { ImageUpload } from "@/components/ImageUpload";
 import { indianCities, categoryMapping } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1228,12 +1228,9 @@ export default function AdminPanel() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ImageUpload
-                      onUpload={(urls) => console.log("Logos uploaded:", urls)}
-                      multiple={true}
-                      maxFiles={5}
-                      folder="logos"
-                    />
+                    <div className="text-center py-8 text-gray-500">
+                      ImageUpload component temporarily disabled for debugging
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -1245,12 +1242,9 @@ export default function AdminPanel() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ImageUpload
-                      onUpload={(urls) => console.log("Covers uploaded:", urls)}
-                      multiple={true}
-                      maxFiles={5}
-                      folder="covers"
-                    />
+                    <div className="text-center py-8 text-gray-500">
+                      ImageUpload component temporarily disabled for debugging
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -1264,12 +1258,9 @@ export default function AdminPanel() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ImageUpload
-                    onUpload={(urls) => console.log("Gallery uploaded:", urls)}
-                    multiple={true}
-                    maxFiles={50}
-                    folder="gallery"
-                  />
+                  <div className="text-center py-8 text-gray-500">
+                    ImageUpload component temporarily disabled for debugging
+                  </div>
                 </CardContent>
               </Card>
 
