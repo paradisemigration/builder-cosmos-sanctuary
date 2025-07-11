@@ -297,23 +297,29 @@ export default function AdminStatus() {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     // Initial load with small delay to prevent race conditions
     const timeoutId = setTimeout(() => {
-      loadStatus();
+      if (isMounted && !loadingRef && !loading) {
+        console.log("🚀 Initial status load");
+        loadStatus();
+      }
     }, 100);
 
     // Auto-refresh every 30 seconds to reduce server load
     const interval = setInterval(() => {
-      // Only auto-refresh if not currently loading
-      if (!loadingRef && !loading) {
+      // Only auto-refresh if component is mounted and not currently loading
+      if (isMounted && !loadingRef && !loading) {
         console.log("🔄 Auto-refreshing status...");
         loadStatus();
       } else {
-        console.log("⏸️ Skipping auto-refresh (already loading)");
+        console.log("⏸️ Skipping auto-refresh (already loading or unmounted)");
       }
     }, 30000);
 
     return () => {
+      isMounted = false;
       clearTimeout(timeoutId);
       clearInterval(interval);
     };
