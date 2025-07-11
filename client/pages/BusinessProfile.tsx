@@ -464,7 +464,7 @@ export default function BusinessProfile() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-3">
-                    {business.services.map((service, index) => (
+                    {(business.services || []).map((service, index) => (
                       <div
                         key={index}
                         className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
@@ -837,7 +837,7 @@ export default function BusinessProfile() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   >
                     <option value="">Select a service</option>
-                    {business.services.slice(0, 5).map((service) => (
+                    {(business.services || []).slice(0, 5).map((service) => (
                       <option key={service} value={service}>
                         {service}
                       </option>
