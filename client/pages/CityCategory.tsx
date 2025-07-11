@@ -42,18 +42,6 @@ export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
   const navigate = useNavigate();
 
-  // Check if this is a category page or business profile
-  const isCategory = category && categorySlugs.includes(category);
-
-  // If it's not a category, redirect to business profile
-  useEffect(() => {
-    if (category && !isCategory) {
-      // This is likely a business profile, redirect to BusinessProfile component
-      navigate(`/business/${city}/${category}`, { replace: true });
-      return;
-    }
-  }, [category, isCategory, city, navigate]);
-
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
