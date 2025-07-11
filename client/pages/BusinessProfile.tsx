@@ -203,9 +203,10 @@ export default function BusinessProfile() {
     );
   }
 
-  const images = business.gallery || [
-    business.coverImage || "/api/placeholder/800/400",
-  ];
+  const images =
+    (business.gallery || []).length > 0
+      ? business.gallery
+      : [business.coverImage || "/api/placeholder/800/400"];
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
