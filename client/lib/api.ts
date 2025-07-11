@@ -222,6 +222,7 @@ class APIClient {
 
 // Export singleton instance
 export const apiClient = new APIClient();
+export { apiClient as BusinessAPI }; // Backward compatibility alias
 
 // Export types
 export interface UploadResponse {
