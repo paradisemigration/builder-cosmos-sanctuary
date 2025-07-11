@@ -611,7 +611,7 @@ export default function Index() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
-                    to="/browse?category=Student Visa Consultants"
+                    to="/business?category=Student Visa Consultants"
                     className="hover:text-white"
                   >
                     Student Visa
@@ -619,7 +619,7 @@ export default function Index() {
                 </li>
                 <li>
                   <Link
-                    to="/browse?category=Work Visa Consultants"
+                    to="/business?category=Work Visa Consultants"
                     className="hover:text-white"
                   >
                     Work Visa
@@ -627,7 +627,7 @@ export default function Index() {
                 </li>
                 <li>
                   <Link
-                    to="/browse?category=Tourist Visa Services"
+                    to="/business?category=Tourist Visa Services"
                     className="hover:text-white"
                   >
                     Tourist Visa
@@ -635,7 +635,7 @@ export default function Index() {
                 </li>
                 <li>
                   <Link
-                    to="/browse?category=Business Visa Services"
+                    to="/business?category=Business Visa Services"
                     className="hover:text-white"
                   >
                     Business Visa
