@@ -39,18 +39,26 @@ export function ImageUpload({
     setUploading(true);
 
     try {
-      const formData = new FormData();
+      const API_BASE_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:3001";
 
       if (multiple) {
+        // Create new FormData for each request to avoid "body stream already read" error
+        const formData = new FormData();
         Array.from(files).forEach((file) => {
           formData.append("images", file);
         });
         formData.append("folder", folder);
 
-        const response = await fetch("/api/upload/multiple", {
+        const response = await fetch(`${API_BASE_URL}/api/upload/multiple`, {
           method: "POST",
           body: formData,
         });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
 
         const result = await response.json();
 
@@ -64,13 +72,20 @@ export function ImageUpload({
           toast.error(result.error || "Upload failed");
         }
       } else {
+        // Create new FormData for single upload
+        const formData = new FormData();
         formData.append("image", files[0]);
         formData.append("folder", folder);
 
-        const response = await fetch("/api/upload/single", {
+        const response = await fetch(`${API_BASE_URL}/api/upload/single`, {
           method: "POST",
           body: formData,
         });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
 
         const result = await response.json();
 
@@ -86,7 +101,11 @@ export function ImageUpload({
       }
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Upload failed. Please try again.");
+      if (error instanceof Error) {
+        toast.error(`Upload failed: ${error.message}`);
+      } else {
+        toast.error("Upload failed. Please try again.");
+      }
     } finally {
       setUploading(false);
     }
