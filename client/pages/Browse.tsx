@@ -139,12 +139,23 @@ export default function Browse() {
           mappedBusinesses.length,
           "businesses",
         );
+        console.log(
+          `Total available:`,
+          result.total,
+          "| Current loaded:",
+          append
+            ? scrapedBusinesses.length + mappedBusinesses.length
+            : mappedBusinesses.length,
+        );
 
         if (append) {
           setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
         } else {
           setScrapedBusinesses(mappedBusinesses);
         }
+
+        // Track total count from API response
+        setTotalCount(result.total || 0);
 
         // Check if there are more pages
         setHasMore(mappedBusinesses.length === pageSize);
