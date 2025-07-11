@@ -84,6 +84,7 @@ export default function Browse() {
   const [scrapedBusinesses, setScrapedBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -492,7 +493,8 @@ export default function Browse() {
                             )}
                           </Button>
                           <p className="text-xs text-gray-500 mt-2">
-                            Loading {pageSize} more businesses
+                            {totalCount - filteredBusinesses.length} more
+                            consultants available
                           </p>
                         </div>
                       )}
@@ -500,11 +502,21 @@ export default function Browse() {
                     {/* Results Summary */}
                     <div className="text-center mt-8">
                       <p className="text-sm text-gray-600">
-                        Showing {filteredBusinesses.length} consultants
+                        Showing {filteredBusinesses.length} of {totalCount}{" "}
+                        consultants
                         {!searchQuery && !selectedCategory && !selectedZone && (
-                          <span> • Page {currentPage} of results</span>
+                          <span> • Page {currentPage}</span>
                         )}
                       </p>
+                      {hasMore &&
+                        !searchQuery &&
+                        !selectedCategory &&
+                        !selectedZone && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            {totalCount - filteredBusinesses.length} more
+                            available
+                          </p>
+                        )}
                     </div>
 
                     {/* Results Summary */}
