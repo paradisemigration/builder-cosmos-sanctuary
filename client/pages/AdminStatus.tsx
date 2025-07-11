@@ -302,13 +302,16 @@ export default function AdminStatus() {
       loadStatus();
     }, 100);
 
-    // Auto-refresh every 15 seconds (increased from 10 to reduce load)
+    // Auto-refresh every 30 seconds to reduce server load
     const interval = setInterval(() => {
       // Only auto-refresh if not currently loading
       if (!loadingRef && !loading) {
+        console.log("🔄 Auto-refreshing status...");
         loadStatus();
+      } else {
+        console.log("⏸️ Skipping auto-refresh (already loading)");
       }
-    }, 15000);
+    }, 30000);
 
     return () => {
       clearTimeout(timeoutId);
