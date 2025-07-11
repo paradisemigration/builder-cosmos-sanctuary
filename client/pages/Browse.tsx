@@ -515,14 +515,16 @@ export default function Browse() {
                       <p className="text-sm text-gray-600">
                         Showing {filteredBusinesses.length} of {totalCount}{" "}
                         consultants
-                        {!searchQuery && !selectedCategory && !selectedZone && (
-                          <span> • Page {currentPage}</span>
-                        )}
+                        {!searchQuery &&
+                          (!selectedCategory || selectedCategory === "all") &&
+                          (!selectedZone || selectedZone === "all") && (
+                            <span> • Page {currentPage}</span>
+                          )}
                       </p>
                       {hasMore &&
                         !searchQuery &&
-                        !selectedCategory &&
-                        !selectedZone && (
+                        (!selectedCategory || selectedCategory === "all") &&
+                        (!selectedZone || selectedZone === "all") && (
                           <p className="text-xs text-gray-500 mt-1">
                             {totalCount - filteredBusinesses.length} more
                             available
