@@ -109,9 +109,15 @@ export default function AdminStatus() {
       }
 
       if (!statsResult) {
-        throw new Error(
-          `Failed to load stats after 3 attempts: ${statsError?.message}`,
-        );
+        console.error("❌ All stats attempts failed");
+        console.error("Final stats error:", statsError);
+        setStats({
+          error: `API Connection Failed: ${statsError?.message || "Unknown error"}. Please check if the backend server is running.`,
+        });
+        setImageStats({
+          error: "Cannot load image statistics - API connection failed",
+        });
+        return;
       }
 
       // Load diagnostic info with timeout (optional, fallback if 404)
