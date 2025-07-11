@@ -80,42 +80,59 @@ export default function Browse() {
     sortOrder: "desc",
   };
 
-  // Use business data hook for API integration (disabled auto-fetch for demo)
-  const {
-    businesses: apiBusiness,
-    loading: businessesLoading,
-    error: businessesError,
-    pagination,
-    refetch,
-    loadMore,
-    hasMore,
-  } = useBusinessData(apiFilters, false);
+  // State for real scraped businesses
+  const [scrapedBusinesses, setScrapedBusinesses] = useState<Business[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Use sample data as fallback when API fails
-  const [filteredBusinesses, setFilteredBusinesses] =
-    useState<Business[]>(sampleBusinesses);
+  // Load real scraped businesses from database
+  const loadScrapedBusinesses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  // Filter logic for fallback data
-  useEffect(() => {
-    if (apiBusiness.length > 0) {
-      setFilteredBusinesses(apiBusiness);
-    } else {
-      // Use sample data with client-side filtering
-      let filtered = [...sampleBusinesses];
+      const response = await fetch('/api/scraped-businesses');
+      const result = await response.json();
 
-      // Text search
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        filtered = filtered.filter(
-          (business) =>
-            business.name.toLowerCase().includes(query) ||
-            business.description.toLowerCase().includes(query) ||
-            business.category.toLowerCase().includes(query) ||
-            business.services.some((service) =>
-              service.toLowerCase().includes(query),
-            ),
-        );
+      if (result.success) {
+        setScrapedBusinesses(result.businesses || []);
+      } else {
+        setError('Failed to load businesses');
       }
+    } catch (error) {
+      console.error('Failed to load scraped businesses:', error);
+      setError('Failed to load businesses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadScrapedBusinesses();
+  }, []);
+
+  // Use real scraped businesses for filtering
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+
+  // Filter logic for real scraped data
+  useEffect(() => {
+    let filtered = [...scrapedBusinesses];
+
+    // Text search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (business) =>
+          business.name?.toLowerCase().includes(query) ||
+          business.description?.toLowerCase().includes(query) ||
+          business.category?.toLowerCase().includes(query) ||
+          business.scrapedCategory?.toLowerCase().includes(query) ||
+          business.services?.some((service) =>
+            service?.toLowerCase().includes(query),
+          ),
+      );
+    }
 
       // Category filter
       if (selectedCategory && selectedCategory !== "all") {
