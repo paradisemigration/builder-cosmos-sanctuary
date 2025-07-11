@@ -80,7 +80,7 @@ export default function AdminStatus() {
 
       for (let i = 0; i <= 2; i++) {
         try {
-          console.log(`���� Loading stats attempt ${i + 1}/3...`);
+          console.log(`📊 Loading stats attempt ${i + 1}/3...`);
           const statsController = new AbortController();
           const statsTimeout = setTimeout(() => statsController.abort(), 12000);
 
@@ -525,18 +525,20 @@ export default function AdminStatus() {
                 }
                 variant="outline"
                 title={
-                  stats?.error ? "Cannot fetch reviews: Server offline" : ""
+                  stats?.error
+                    ? "Cannot fetch reviews: Server offline"
+                    : "Fetch ALL available reviews (unlimited) for each business"
                 }
               >
                 {reviewsLoading ? (
                   <>
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Fetching Reviews...
+                    Fetching ALL Reviews...
                   </>
                 ) : (
                   <>
                     <Star className="h-4 w-4 mr-2" />
-                    Fetch All Reviews
+                    Fetch ALL Reviews
                   </>
                 )}
               </Button>
