@@ -306,33 +306,6 @@ export default function AdminPanel() {
     }
   };
 
-  const handleSEOEdit = (pageKey: string) => {
-    setSelectedPage(pageKey);
-    setSeoData(
-      pageSEOData[pageKey as keyof typeof pageSEOData] || {
-        title: "",
-        description: "",
-        keywords: "",
-        ogTitle: "",
-        ogDescription: "",
-        ogImage: "",
-      },
-    );
-    setShowSEOManager(true);
-  };
-
-  const handleSEOSave = () => {
-    if (selectedPage) {
-      setPageSEOData((prev) => ({
-        ...prev,
-        [selectedPage]: seoData,
-      }));
-      setShowSEOManager(false);
-      setSelectedPage("");
-      // In a real app, this would save to backend
-    }
-  };
-
   // Dashboard Statistics
   const dashboardStats = {
     totalListings: 8500,
