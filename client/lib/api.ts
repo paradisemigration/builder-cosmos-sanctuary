@@ -130,7 +130,7 @@ class APIClient {
       }
     });
 
-    const endpoint = `/api/businesses${queryParams.toString() ? `?${queryParams}` : ""}`;
+    const endpoint = `/api/scraped-businesses${queryParams.toString() ? `?${queryParams}` : ""}`;
     return this.request<{
       success: boolean;
       data: any[];
