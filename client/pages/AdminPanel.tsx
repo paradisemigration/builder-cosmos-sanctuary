@@ -24,6 +24,11 @@ export default function AdminPanel() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
 
+  // Detect if we're in a local development environment
+  const isLocalDevelopment =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
   }, []);
