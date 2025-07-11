@@ -62,63 +62,91 @@ export default function BusinessProfile() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showAllReviews, setShowAllReviews] = useState(false);
 
-  useEffect(() => {
-    let foundBusiness: Business | null = null;
+  // Load business from database
+  const loadBusiness = async () => {
+    try {
+      setLoading(true);
 
-    // Handle legacy URL structure (/business/:id)
-    if (id) {
-      foundBusiness = sampleBusinesses.find((b) => b.id === id) || null;
-    }
-    // Handle new URL structure (/:city/:companyName)
-    else if (city && companyName) {
-      const searchName = companyName.replace(/-/g, " ");
-      const searchCity = city.replace(/-/g, " ");
+      // Load all businesses from database
+      const response = await fetch("/api/scraped-businesses?limit=9999");
+      const result = await response.json();
 
-      // First try exact match
-      foundBusiness = sampleBusinesses.find(
-        (b) =>
-          b.name.toLowerCase() === searchName.toLowerCase() &&
-          b.city.toLowerCase() === searchCity.toLowerCase(),
-      );
+      if (result.success) {
+        const businesses = (result.businesses || []).map((business: any) => ({
+          ...business,
+          id:
+            business.googlePlaceId || business.id || Date.now() + Math.random(),
+          city: business.scrapedCity || business.city || "Unknown",
+          reviewCount: business.reviews?.length || business.reviewCount || 0,
+          rating: business.rating || 0,
+          services: business.services || [],
+          specializations: business.specializations || [],
+          countriesServed: business.countriesServed || [],
+          languages: business.languages || [],
+          isVerified: business.isVerified || true,
+        }));
 
-      // If no exact match, try partial match
-      if (!foundBusiness) {
-        foundBusiness = sampleBusinesses.find(
-          (b) =>
-            b.name.toLowerCase().includes(searchName.toLowerCase()) &&
-            b.city.toLowerCase().includes(searchCity.toLowerCase()),
-        );
+        let foundBusiness: Business | null = null;
+
+        // Handle legacy URL structure (/business/:id)
+        if (id) {
+          foundBusiness =
+            businesses.find(
+              (b: any) => b.id === id || b.googlePlaceId === id,
+            ) || null;
+        }
+        // Handle new URL structure (/:city/:companyName)
+        else if (city && companyName) {
+          const searchName = companyName.replace(/-/g, " ");
+          const searchCity = city.replace(/-/g, " ");
+
+          // First try exact match
+          foundBusiness = businesses.find(
+            (b: any) =>
+              b.name.toLowerCase() === searchName.toLowerCase() &&
+              (b.city.toLowerCase() === searchCity.toLowerCase() ||
+                b.scrapedCity?.toLowerCase() === searchCity.toLowerCase()),
+          );
+
+          // If no exact match, try partial match
+          if (!foundBusiness) {
+            foundBusiness = businesses.find(
+              (b: any) =>
+                b.name.toLowerCase().includes(searchName.toLowerCase()) &&
+                (b.city.toLowerCase().includes(searchCity.toLowerCase()) ||
+                  b.scrapedCity
+                    ?.toLowerCase()
+                    .includes(searchCity.toLowerCase())),
+            );
+          }
+
+          // Debug logging
+          console.log("=== Business Profile URL Debug ===");
+          console.log("URL params:", { city, companyName });
+          console.log("Converted search terms:", { searchCity, searchName });
+          console.log("Found business:", foundBusiness?.name || "NONE");
+          console.log("Total businesses loaded:", businesses.length);
+        }
+
+        setBusiness(foundBusiness);
+
+        if (foundBusiness) {
+          document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.city} | VisaConsult India`;
+        }
+      } else {
+        console.error("Failed to load businesses:", result.error);
+        setBusiness(null);
       }
-
-      // Debug logging
-      console.log("=== Business Profile URL Debug ===");
-      console.log("URL params:", { city, companyName });
-      console.log("Converted search terms:", { searchCity, searchName });
-      console.log("Found business:", foundBusiness?.name || "NONE");
-      console.log(
-        "All businesses:",
-        sampleBusinesses.map((b) => ({
-          name: b.name,
-          city: b.city,
-          nameMatches: b.name.toLowerCase() === searchName.toLowerCase(),
-          cityMatches: b.city.toLowerCase() === searchCity.toLowerCase(),
-        })),
-      );
-      console.log("================================");
+    } catch (error) {
+      console.error("Error loading business:", error);
+      setBusiness(null);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Fallback to first business for demo if not found
-    if (!foundBusiness) {
-      foundBusiness = sampleBusinesses[0];
-    }
-
-    setBusiness(foundBusiness);
-    setLoading(false);
-
-    if (foundBusiness) {
-      document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.city} | VisaConsult India`;
-      document.description = `${foundBusiness.description.substring(0, 150)}...`;
-    }
+  useEffect(() => {
+    loadBusiness();
   }, [city, companyName, id]);
 
   if (loading) {
