@@ -72,6 +72,98 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
+  const [showSEOManager, setShowSEOManager] = useState(false);
+  const [selectedPage, setSelectedPage] = useState("");
+  const [seoData, setSeoData] = useState({
+    title: "",
+    description: "",
+    keywords: "",
+    ogTitle: "",
+    ogDescription: "",
+    ogImage: "",
+  });
+
+  // SEO data for different pages
+  const [pageSEOData, setPageSEOData] = useState({
+    home: {
+      title: "VisaConsult India - Best Visa Consultants Directory",
+      description:
+        "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
+      keywords:
+        "visa consultants, immigration services, student visa, work visa, India",
+      ogTitle: "VisaConsult India - Best Visa Consultants Directory",
+      ogDescription:
+        "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
+      ogImage: "/og-image.jpg",
+    },
+    about: {
+      title: "About VisaConsult India - Our Mission & Values",
+      description:
+        "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
+      keywords: "about us, visa consultants directory, company mission",
+      ogTitle: "About VisaConsult India - Our Mission & Values",
+      ogDescription:
+        "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
+      ogImage: "/og-image.jpg",
+    },
+    browse: {
+      title: "Browse Visa Consultants - VisaConsult India",
+      description:
+        "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
+      keywords: "browse consultants, find visa agents, search consultants",
+      ogTitle: "Browse Visa Consultants - VisaConsult India",
+      ogDescription:
+        "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
+      ogImage: "/og-image.jpg",
+    },
+    contact: {
+      title: "Contact Us - VisaConsult India",
+      description:
+        "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
+      keywords: "contact us, customer support, help",
+      ogTitle: "Contact Us - VisaConsult India",
+      ogDescription:
+        "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
+      ogImage: "/og-image.jpg",
+    },
+    "list-business": {
+      title: "List Your Visa Consultancy - VisaConsult India",
+      description:
+        "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
+      keywords: "list business, visa consultancy listing, grow business",
+      ogTitle: "List Your Visa Consultancy - VisaConsult India",
+      ogDescription:
+        "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
+      ogImage: "/og-image.jpg",
+    },
+  });
+
+  const handleSEOEdit = (pageKey: string) => {
+    setSelectedPage(pageKey);
+    setSeoData(
+      pageSEOData[pageKey as keyof typeof pageSEOData] || {
+        title: "",
+        description: "",
+        keywords: "",
+        ogTitle: "",
+        ogDescription: "",
+        ogImage: "",
+      },
+    );
+    setShowSEOManager(true);
+  };
+
+  const handleSEOSave = () => {
+    if (selectedPage) {
+      setPageSEOData((prev) => ({
+        ...prev,
+        [selectedPage]: seoData,
+      }));
+      setShowSEOManager(false);
+      setSelectedPage("");
+      // In a real app, this would save to backend
+    }
+  };
 
   // Dashboard Statistics
   const dashboardStats = {
@@ -818,16 +910,20 @@ export default function AdminPanel() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <Globe className="h-8 w-8 text-orange-600" />
-                      <Button variant="outline" size="sm">
-                        Edit
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowSEOManager(true)}
+                      >
+                        Manage
                       </Button>
                     </div>
                     <h3 className="font-semibold text-lg mb-2">SEO Settings</h3>
                     <p className="text-sm text-gray-600">
-                      Manage meta tags, titles, and descriptions
+                      Manage meta tags, titles, and descriptions for all pages
                     </p>
                     <p className="text-xs text-gray-500 mt-2">
-                      Last updated: 5 days ago
+                      {Object.keys(pageSEOData).length} pages configured
                     </p>
                   </CardContent>
                 </Card>
@@ -870,6 +966,233 @@ export default function AdminPanel() {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* SEO Manager Modal */}
+              {showSEOManager && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        SEO Management
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setShowSEOManager(false);
+                          setSelectedPage("");
+                        }}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+
+                    {!selectedPage ? (
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">
+                          Select a page to manage SEO settings:
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {Object.entries(pageSEOData).map(
+                            ([pageKey, data]) => (
+                              <Card
+                                key={pageKey}
+                                className="cursor-pointer hover:shadow-lg transition-shadow"
+                                onClick={() => handleSEOEdit(pageKey)}
+                              >
+                                <CardContent className="p-4">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <h5 className="font-semibold capitalize">
+                                      {pageKey.replace("-", " ")} Page
+                                    </h5>
+                                    <Button size="sm" variant="outline">
+                                      Edit
+                                    </Button>
+                                  </div>
+                                  <p className="text-sm text-gray-600 truncate">
+                                    {data.title}
+                                  </p>
+                                  <p className="text-xs text-gray-500 mt-1 truncate">
+                                    {data.description}
+                                  </p>
+                                </CardContent>
+                              </Card>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-4 mb-6">
+                          <Button
+                            variant="outline"
+                            onClick={() => setSelectedPage("")}
+                          >
+                            ← Back to Pages
+                          </Button>
+                          <h4 className="text-lg font-semibold capitalize">
+                            {selectedPage.replace("-", " ")} Page SEO Settings
+                          </h4>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Page Title
+                              </label>
+                              <Input
+                                value={seoData.title}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    title: e.target.value,
+                                  }))
+                                }
+                                placeholder="Enter page title (recommended: 50-60 characters)"
+                                maxLength={60}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">
+                                {seoData.title.length}/60 characters
+                              </p>
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Meta Description
+                              </label>
+                              <textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                                rows={3}
+                                value={seoData.description}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    description: e.target.value,
+                                  }))
+                                }
+                                placeholder="Enter meta description (recommended: 150-160 characters)"
+                                maxLength={160}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">
+                                {seoData.description.length}/160 characters
+                              </p>
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Keywords (comma-separated)
+                              </label>
+                              <textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                                rows={2}
+                                value={seoData.keywords}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    keywords: e.target.value,
+                                  }))
+                                }
+                                placeholder="keyword1, keyword2, keyword3"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <h5 className="font-semibold text-gray-900">
+                              Open Graph Settings
+                            </h5>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                OG Title
+                              </label>
+                              <Input
+                                value={seoData.ogTitle}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    ogTitle: e.target.value,
+                                  }))
+                                }
+                                placeholder="Title for social media sharing"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                OG Description
+                              </label>
+                              <textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                                rows={3}
+                                value={seoData.ogDescription}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    ogDescription: e.target.value,
+                                  }))
+                                }
+                                placeholder="Description for social media sharing"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                OG Image URL
+                              </label>
+                              <Input
+                                value={seoData.ogImage}
+                                onChange={(e) =>
+                                  setSeoData((prev) => ({
+                                    ...prev,
+                                    ogImage: e.target.value,
+                                  }))
+                                }
+                                placeholder="/path/to/image.jpg"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Preview */}
+                        <div className="border-t pt-6">
+                          <h5 className="font-semibold text-gray-900 mb-4">
+                            Search Preview
+                          </h5>
+                          <div className="border rounded-lg p-4 bg-gray-50">
+                            <div className="text-blue-600 text-lg hover:underline cursor-pointer">
+                              {seoData.title || "Page Title"}
+                            </div>
+                            <div className="text-green-700 text-sm">
+                              visaconsultindia.com/
+                              {selectedPage === "home" ? "" : selectedPage}
+                            </div>
+                            <div className="text-gray-600 text-sm mt-1">
+                              {seoData.description ||
+                                "Meta description will appear here..."}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-4 pt-4">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setShowSEOManager(false);
+                              setSelectedPage("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button onClick={handleSEOSave}>
+                            Save SEO Settings
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
