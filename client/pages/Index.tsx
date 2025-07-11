@@ -204,7 +204,7 @@ export default function Index() {
               <h3 className="font-bold text-yellow-800 mb-3">
                 🔧 Navigation Test Links:
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
                 <Link
                   to="/about"
                   className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
@@ -240,6 +240,18 @@ export default function Index() {
                   className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
                 >
                   🔐 Login
+                </Link>
+                <Link
+                  to="/business/delhi"
+                  className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
+                >
+                  🏛️ Delhi City
+                </Link>
+                <Link
+                  to="/business/mumbai"
+                  className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
+                >
+                  🌆 Mumbai City
                 </Link>
                 <Link
                   to="/business/1"
@@ -460,7 +472,7 @@ export default function Index() {
                   <div className="text-2xl mb-2">
                     {
                       [
-                        "🏛️",
+                        "🏛��",
                         "🌆",
                         "🏢",
                         "🏙️",
