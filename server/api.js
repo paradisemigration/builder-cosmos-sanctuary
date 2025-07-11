@@ -1223,6 +1223,7 @@ app.get("/api/admin/business-images-status", async (req, res) => {
         totalBusinesses: totalBusinesses.count,
         withRealImages: withImages.count,
         withPlaceholders: withPlaceholders.count,
+        withGalleryPhotos: totalGalleryImages.count,
         completionRate: Math.round(
           (withImages.count / totalBusinesses.count) * 100,
         ),
