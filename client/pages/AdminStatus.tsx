@@ -217,6 +217,22 @@ export default function AdminStatus() {
     }
   };
 
+  // Force refresh function that bypasses loading checks
+  const forceRefresh = async () => {
+    console.log("Force refresh triggered");
+
+    // Reset all loading states
+    setLoading(false);
+    setLoadingRef(false);
+
+    // Clear existing data
+    setStats(null);
+    setDiagnostic(null);
+
+    // Force reload
+    await loadStatus();
+  };
+
   useEffect(() => {
     // Initial load with small delay to prevent race conditions
     const timeoutId = setTimeout(() => {
