@@ -96,17 +96,22 @@ export default function Browse() {
 
       if (result.success) {
         // Map the businesses to ensure proper ID field and data structure
-        const mappedBusinesses = (result.businesses || []).map((business: any) => ({
-          ...business,
-          id: business.googlePlaceId || business.id || Date.now() + Math.random(),
-          city: business.scrapedCity || business.city || 'Unknown',
-          reviewCount: business.reviews?.length || business.reviewCount || 0,
-          rating: business.rating || 0,
-          services: business.services || [],
-          isVerified: business.isVerified || true, // Most scraped businesses are verified by default
-        }));
+        const mappedBusinesses = (result.businesses || []).map(
+          (business: any) => ({
+            ...business,
+            id:
+              business.googlePlaceId ||
+              business.id ||
+              Date.now() + Math.random(),
+            city: business.scrapedCity || business.city || "Unknown",
+            reviewCount: business.reviews?.length || business.reviewCount || 0,
+            rating: business.rating || 0,
+            services: business.services || [],
+            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
+          }),
+        );
 
-        console.log('Mapped businesses:', mappedBusinesses.length);
+        console.log("Mapped businesses:", mappedBusinesses.length);
         setScrapedBusinesses(mappedBusinesses);
       } else {
         setError("Failed to load businesses");
@@ -357,12 +362,14 @@ export default function Browse() {
             <div className="lg:col-span-3">
               {/* Debug Info (remove in production) */}
               <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-                <h4 className="font-semibold text-yellow-800 mb-2">🔧 Debug Info:</h4>
+                <h4 className="font-semibold text-yellow-800 mb-2">
+                  🔧 Debug Info:
+                </h4>
                 <div className="grid grid-cols-2 gap-2 text-yellow-700">
                   <div>Total Scraped: {scrapedBusinesses.length}</div>
                   <div>Filtered: {filteredBusinesses.length}</div>
-                  <div>Loading: {loading ? 'Yes' : 'No'}</div>
-                  <div>Error: {error || 'None'}</div>
+                  <div>Loading: {loading ? "Yes" : "No"}</div>
+                  <div>Error: {error || "None"}</div>
                 </div>
               </div>
 
@@ -371,7 +378,9 @@ export default function Browse() {
                 <div className="min-h-[400px] flex items-center justify-center">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading real business data from database...</p>
+                    <p className="text-gray-600">
+                      Loading real business data from database...
+                    </p>
                   </div>
                 </div>
               )}
@@ -381,7 +390,9 @@ export default function Browse() {
                 <div className="min-h-[400px] flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-red-500 text-4xl mb-4">⚠️</div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Data</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Error Loading Data
+                    </h3>
                     <p className="text-gray-600 mb-4">{error}</p>
                     <button
                       onClick={loadScrapedBusinesses}
@@ -406,85 +417,85 @@ export default function Browse() {
                     </p>
                   </div>
 
-                {/* Sort Options */}
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Sort by:</span>
-                  <Select
-                    value={filters.sortBy}
-                    onValueChange={(value) =>
-                      setFilters({ ...filters, sortBy: value })
-                    }
-                  >
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                      <SelectItem value="reviews">Most Reviews</SelectItem>
-                      <SelectItem value="name">Name A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  {/* Sort Options */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">Sort by:</span>
+                    <Select
+                      value={filters.sortBy}
+                      onValueChange={(value) =>
+                        setFilters({ ...filters, sortBy: value })
+                      }
+                    >
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="rating">Highest Rated</SelectItem>
+                        <SelectItem value="reviews">Most Reviews</SelectItem>
+                        <SelectItem value="name">Name A-Z</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              </div>
-
               )}
 
               {/* Results Grid */}
-              {!loading && !error && (
-                filteredBusinesses.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                    <Search className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    No consultants found
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Try adjusting your search criteria or filters
-                  </p>
-                  <Button onClick={clearFilters} variant="outline">
-                    Clear Filters
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {/* Business Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredBusinesses.map((business) => (
-                      <BusinessCard key={business.id} business={business} />
-                    ))}
-                  </div>
-
-                  {/* Results Summary */}
-                  {filteredBusinesses.length > 0 && (
-                    <div className="text-center mt-8">
-                      <p className="text-sm text-gray-600">
-                        Showing {filteredBusinesses.length} of{" "}
-                        {scrapedBusinesses.length} total consultants
-                      </p>
+              {!loading &&
+                !error &&
+                (filteredBusinesses.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <Search className="h-8 w-8 text-gray-400" />
                     </div>
-                  )}
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No consultants found
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Try adjusting your search criteria or filters
+                    </p>
+                    <Button onClick={clearFilters} variant="outline">
+                      Clear Filters
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Business Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {filteredBusinesses.map((business) => (
+                        <BusinessCard key={business.id} business={business} />
+                      ))}
+                    </div>
 
-                  {/* Results Summary */}
-                  <div className="mt-8 pt-6 border-t border-gray-200">
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <Users className="h-4 w-4" />
-                          <span>
-                            Showing {filteredBusinesses.length} of{" "}
-                            {sampleBusinesses.length} consultants
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-yellow-500" />
-                          <span>All verified & rated</span>
+                    {/* Results Summary */}
+                    {filteredBusinesses.length > 0 && (
+                      <div className="text-center mt-8">
+                        <p className="text-sm text-gray-600">
+                          Showing {filteredBusinesses.length} of{" "}
+                          {scrapedBusinesses.length} total consultants
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Results Summary */}
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <Users className="h-4 w-4" />
+                            <span>
+                              Showing {filteredBusinesses.length} of{" "}
+                              {sampleBusinesses.length} consultants
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 text-yellow-500" />
+                            <span>All verified & rated</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                ))}
             </div>
           </div>
         </div>
