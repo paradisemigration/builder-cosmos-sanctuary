@@ -34,8 +34,16 @@ export default function CategoryLocationPage() {
   // Convert URL slugs back to display names
   const getDisplayName = (slug: string, type: "location" | "category") => {
     if (type === "location") {
-      // Check UAE cities first, then Dubai zones for backward compatibility
+      // Check Indian cities first, then UAE cities and Dubai zones for backward compatibility
       return (
+        indianCities.find(
+          (city) =>
+            city
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "-")
+              .replace(/-+/g, "-")
+              .replace(/^-|-$/g, "") === slug,
+        ) ||
         uaeCities.find(
           (city) =>
             city
