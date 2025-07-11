@@ -45,7 +45,7 @@ app.post(
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      const result = await uploadToGCS(
+      const result = await uploadToS3(
         req.file,
         req.body.folder || "businesses",
       );
@@ -75,7 +75,7 @@ app.post(
         return res.status(400).json({ error: "No files uploaded" });
       }
 
-      const results = await uploadMultipleToGCS(
+      const results = await uploadMultipleToS3(
         req.files,
         req.body.folder || "businesses",
       );
@@ -863,7 +863,10 @@ app.post("/api/refresh-review-counts-from-google", async (req, res) => {
           // Small delay to respect API rate limits
           await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
-          console.error(`❌ Error processing ${business.name}:`, error.message);
+          console.error(
+            `��� Error processing ${business.name}:`,
+            error.message,
+          );
           errors.push({ business: business.name, error: error.message });
         }
       }
@@ -998,7 +1001,7 @@ app.get("/api/scraping/stats", async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error("❌ Get scraping stats error:", error.message);
-    console.error("❌ Full error:", error);
+    console.error("�� Full error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
