@@ -106,6 +106,7 @@ export type VisaType = (typeof visaTypes)[number];
 
 // Major Indian Cities
 export const indianCities = [
+  // Tier 1 Cities
   "Delhi",
   "Mumbai",
   "Bangalore",
@@ -114,12 +115,21 @@ export const indianCities = [
   "Kolkata",
   "Pune",
   "Ahmedabad",
+
+  // Popular Metro Cities
   "Jaipur",
-  "Surat",
   "Lucknow",
+  "Indore",
+  "Chandigarh",
+  "Gurgaon",
+  "Noida",
+  "Dehradun",
+  "Kochi", // Kerala major city
+
+  // Other Major Cities
+  "Surat",
   "Kanpur",
   "Nagpur",
-  "Indore",
   "Thane",
   "Bhopal",
   "Visakhapatnam",
@@ -152,9 +162,7 @@ export const indianCities = [
   "Madurai",
   "Raipur",
   "Kota",
-  "Chandigarh",
   "Guwahati",
-  "Dehradun",
 ];
 
 // Dubai zones for backward compatibility (can be removed later)
