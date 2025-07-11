@@ -39,8 +39,12 @@ export function ImageUpload({
     setUploading(true);
 
     try {
+      // In hosted environments, use relative URLs or environment variables
       const API_BASE_URL =
-        import.meta.env.VITE_API_URL || "http://localhost:3001";
+        import.meta.env.VITE_API_URL ||
+        (import.meta.env.MODE === "development"
+          ? "http://localhost:3001"
+          : "/api");
 
       if (multiple) {
         // Create new FormData for each request to avoid "body stream already read" error
@@ -102,7 +106,13 @@ export function ImageUpload({
     } catch (error) {
       console.error("Upload error:", error);
       if (error instanceof Error) {
-        toast.error(`Upload failed: ${error.message}`);
+        if (error.message.includes("Failed to fetch")) {
+          toast.error(
+            "Upload service unavailable. This feature requires a backend server.",
+          );
+        } else {
+          toast.error(`Upload failed: ${error.message}`);
+        }
       } else {
         toast.error("Upload failed. Please try again.");
       }
