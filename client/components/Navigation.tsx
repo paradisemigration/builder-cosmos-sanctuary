@@ -76,7 +76,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
               }`}
             >
-              🔍 Find Consultants
+              ��� Find Consultants
             </Link>
 
             <Link
@@ -88,6 +88,17 @@ export function Navigation({ className = "" }: NavigationProps) {
               }`}
             >
               ➕ List Your Business
+            </Link>
+
+            <Link
+              to="/plans"
+              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                isCurrentPage("/plans")
+                  ? "text-white bg-gradient-to-r from-orange-500 to-purple-500"
+                  : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
+              }`}
+            >
+              💎 Pricing
             </Link>
 
             <Link
