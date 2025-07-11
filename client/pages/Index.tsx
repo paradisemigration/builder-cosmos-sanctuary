@@ -391,7 +391,7 @@ export default function Index() {
 
           <div className="text-center mt-8">
             <Button
-              onClick={() => navigate("/browse")}
+              onClick={() => navigate("/business")}
               size="lg"
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
