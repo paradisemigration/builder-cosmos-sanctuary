@@ -519,6 +519,74 @@ export default function AdminStatus() {
               </CardContent>
             </Card>
 
+            {/* Scraping Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Default Scraping Configuration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="font-semibold text-sm text-gray-700 mb-2">
+                      Cities ({defaultScrapingConfig.cities.length}):
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {defaultScrapingConfig.cities.map((city, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
+                          {city}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="font-semibold text-sm text-gray-700 mb-2">
+                      Categories ({defaultScrapingConfig.categories.length}):
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {defaultScrapingConfig.categories.map(
+                        (category, index) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {category}
+                          </Badge>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        Max Results:
+                      </span>{" "}
+                      {defaultScrapingConfig.maxResultsPerSearch}
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700">
+                        Delay:
+                      </span>{" "}
+                      {defaultScrapingConfig.delay}ms
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
+                    Total searches: {defaultScrapingConfig.cities.length} ×{" "}
+                    {defaultScrapingConfig.categories.length} ={" "}
+                    {defaultScrapingConfig.cities.length *
+                      defaultScrapingConfig.categories.length}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Diagnostic Info */}
             <Card className="md:col-span-2">
               <CardHeader>
