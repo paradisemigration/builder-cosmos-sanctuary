@@ -45,17 +45,10 @@ export default function AdminStatus() {
       for (let i = 0; i <= 2; i++) {
         try {
           console.log(`🔍 Health check attempt ${i + 1}/3...`);
-          const healthController = new AbortController();
-          const healthTimeout = setTimeout(
-            () => healthController.abort(),
-            8000,
-          );
 
           const healthResponse = await fetch("/api/health", {
-            signal: healthController.signal,
             cache: "no-store",
           });
-          clearTimeout(healthTimeout);
 
           if (healthResponse.ok) {
             serverAvailable = true;
@@ -92,14 +85,10 @@ export default function AdminStatus() {
       for (let i = 0; i <= 2; i++) {
         try {
           console.log(`📊 Loading stats attempt ${i + 1}/3...`);
-          const statsController = new AbortController();
-          const statsTimeout = setTimeout(() => statsController.abort(), 12000);
 
           const statsResponse = await fetch("/api/scraping/stats", {
-            signal: statsController.signal,
             cache: "no-store",
           });
-          clearTimeout(statsTimeout);
 
           if (!statsResponse.ok) {
             throw new Error(`Stats API error: ${statsResponse.status}`);
@@ -126,16 +115,9 @@ export default function AdminStatus() {
 
       // Load diagnostic info with timeout (optional, fallback if 404)
       try {
-        const diagnosticController = new AbortController();
-        const diagnosticTimeout = setTimeout(
-          () => diagnosticController.abort(),
-          10000,
-        );
-
         const diagnosticResponse = await fetch("/api/database/diagnostic", {
-          signal: diagnosticController.signal,
+          cache: "no-store",
         });
-        clearTimeout(diagnosticTimeout);
 
         if (diagnosticResponse.ok) {
           const diagnosticResult = await diagnosticResponse.json();
@@ -169,16 +151,9 @@ export default function AdminStatus() {
 
       // Load image storage status
       try {
-        const imageStatusController = new AbortController();
-        const imageStatusTimeout = setTimeout(
-          () => imageStatusController.abort(),
-          10000,
-        );
-
         const imageStatusResponse = await fetch("/api/images/status", {
-          signal: imageStatusController.signal,
+          cache: "no-store",
         });
-        clearTimeout(imageStatusTimeout);
 
         if (imageStatusResponse.ok) {
           const imageStatusResult = await imageStatusResponse.json();
