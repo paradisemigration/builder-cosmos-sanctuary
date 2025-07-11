@@ -51,6 +51,9 @@ const App = () => (
             {/* Legacy business profile route for backward compatibility */}
             <Route path="/business/:id" element={<BusinessProfile />} />
 
+            {/* City-specific business listing routes */}
+            <Route path="/business/:city" element={<CityBusinessListing />} />
+
             {/* SEO-friendly category and location routes */}
             <Route
               path="/category/:category"
