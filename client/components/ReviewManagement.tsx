@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { sampleBusinesses, Review } from "@/lib/data";
+import { sampleBusinesses, type Review } from "@/lib/data";
 
 interface AdminReview extends Review {
   businessName: string;
