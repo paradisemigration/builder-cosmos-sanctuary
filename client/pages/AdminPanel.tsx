@@ -1207,8 +1207,167 @@ export default function AdminPanel() {
                   </CardContent>
                 </Card>
               </div>
+            </div>
+          )}
 
-              {/* SEO Manager Modal */}
+          {/* Media Management */}
+          {activeTab === "media" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Media Management & Cloud Storage
+                </h2>
+                <div className="flex gap-2">
+                  <Button variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export All
+                  </Button>
+                  <Button>
+                    <Upload className="h-4 w-4 mr-2" />
+                    Bulk Upload
+                  </Button>
+                </div>
+              </div>
+
+              {/* Media Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Globe className="h-8 w-8 text-blue-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">
+                          Google Cloud Storage
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">Ready</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Building className="h-8 w-8 text-green-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">
+                          Business Images
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">0</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <FileText className="h-8 w-8 text-purple-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">
+                          Storage Used
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">0 MB</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <TrendingUp className="h-8 w-8 text-orange-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">
+                          This Month
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">0</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Upload Sections */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building className="h-5 w-5" />
+                      Business Logos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ImageUpload
+                      onUpload={(urls) => console.log("Logos uploaded:", urls)}
+                      multiple={true}
+                      maxFiles={5}
+                      folder="logos"
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Cover Images
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ImageUpload
+                      onUpload={(urls) => console.log("Covers uploaded:", urls)}
+                      multiple={true}
+                      maxFiles={5}
+                      folder="covers"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Gallery Upload */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Gallery Images (Bulk Upload)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ImageUpload
+                    onUpload={(urls) => console.log("Gallery uploaded:", urls)}
+                    multiple={true}
+                    maxFiles={50}
+                    folder="gallery"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Setup Instructions */}
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardHeader>
+                  <CardTitle className="text-yellow-800">
+                    🚀 Google Cloud Storage Setup Required
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-yellow-700">
+                  <p className="mb-4">
+                    To enable image uploads, complete these steps:
+                  </p>
+                  <ol className="list-decimal list-inside space-y-2 text-sm">
+                    <li>Create a Google Cloud Storage bucket</li>
+                    <li>Generate service account key JSON file</li>
+                    <li>Update .env file with your credentials</li>
+                    <li>Start the API server: npm run dev:api</li>
+                  </ol>
+                  <div className="mt-4 p-3 bg-gray-100 rounded text-xs font-mono">
+                    <p>GOOGLE_CLOUD_PROJECT_ID=your-project-id</p>
+                    <p>GOOGLE_CLOUD_KEY_FILE=path/to/key.json</p>
+                    <p>GOOGLE_CLOUD_BUCKET_NAME=your-bucket-name</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* SEO Manager Modal */}
               {showSEOManager && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                   <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
