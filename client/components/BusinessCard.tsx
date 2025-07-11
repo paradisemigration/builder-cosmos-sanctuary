@@ -1,269 +1,265 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Star,
   MapPin,
   Phone,
   Globe,
   CheckCircle,
-  AlertTriangle,
-  MessageCircle,
+  Award,
+  Users,
+  Clock,
+  Heart,
+  Share2,
   ExternalLink,
-  Eye,
 } from "lucide-react";
-import { Business } from "@/lib/data";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Business } from "@/lib/data";
 
 interface BusinessCardProps {
   business: Business;
-  onClick?: () => void;
+  className?: string;
 }
 
-export function BusinessCard({ business, onClick }: BusinessCardProps) {
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
+export function BusinessCard({ business, className = "" }: BusinessCardProps) {
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (business.whatsapp) {
-      const message = `Hi! I found your business "${business.name}" on Dubai Visa Directory. I'd like to know more about your services.`;
-      const whatsappUrl = `https://wa.me/${business.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
+
+    if (navigator.share) {
+      navigator.share({
+        title: business.name,
+        text: `Check out ${business.name} - ${business.category}`,
+        url: `/business/${business.id}`,
+      });
+    } else {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/business/${business.id}`,
+      );
+      alert("Link copied to clipboard!");
     }
   };
 
-  const handlePhoneClick = (e: React.MouseEvent) => {
+  const handleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    window.open(`tel:${business.phone}`, "_self");
+    setIsFavorited(!isFavorited);
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
   };
 
   return (
     <Card
-      className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 cursor-pointer border-2 border-border/20 hover:border-gradient-to-r hover:border-primary/40 bg-gradient-to-br from-white via-white to-blue-50/30 backdrop-blur-sm overflow-hidden transform hover:scale-[1.02] hover:-translate-y-1"
-      onClick={onClick}
+      className={`group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}
     >
-      <div className="relative">
-        {business.coverImage && (
-          <div className="h-40 sm:h-48 bg-gradient-to-r from-primary/20 via-accent/20 to-cyan-500/20 overflow-hidden relative">
+      <Link to={`/business/${business.id}`} className="block">
+        {/* Header with Cover Image */}
+        <div className="relative h-32 bg-gradient-to-r from-blue-500 to-purple-600">
+          {business.coverImage && !imageError ? (
             <img
               src={business.coverImage}
               alt={`${business.name} cover`}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600" />
+          )}
 
-            {/* Attractive colored border overlay */}
-            <div className="absolute inset-0 border-4 border-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-t-lg pointer-events-none"></div>
-
-            {/* Gradient overlay for better text contrast */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-cyan-600/20"></div>
-          </div>
-        )}
-
-        {business.importedFromGoogle && (
-          <Badge
-            variant="secondary"
-            className="absolute top-3 right-3 text-xs shadow-lg bg-white/90 backdrop-blur-sm border border-white/50"
-          >
-            <Globe className="w-3 h-3 mr-1 text-blue-600" />
-            Google Import
-          </Badge>
-        )}
-
-        {/* Verification Badge */}
-        {business.isVerified && (
-          <Badge className="absolute top-3 left-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg">
-            <CheckCircle className="w-3 h-3 mr-1" />
-            Verified
-          </Badge>
-        )}
-      </div>
-
-      <CardContent className="p-4 sm:p-6 lg:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-4 lg:gap-6">
-          {/* Mobile: Logo and Title Row */}
-          <div className="flex items-start gap-4 sm:w-auto w-full">
-            {business.logo && (
-              <div className="relative group/logo">
-                {/* Attractive round border with animated gradient */}
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-75 transition-opacity duration-500 blur-md animate-pulse"></div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-white via-blue-50 to-purple-50 border-4 border-white shadow-xl group-hover:shadow-2xl group-hover:shadow-blue-500/20 transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3">
-                  <img
-                    src={business.logo}
-                    alt={`${business.name} logo`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-
-                  {/* Inner animated border */}
-                  <div className="absolute inset-0 rounded-full border-2 border-gradient-to-r from-blue-400/50 to-purple-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                  {/* Sparkle effect */}
-                  <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
-                </div>
-              </div>
-            )}
-
-            <div className="flex-1 min-w-0 sm:hidden">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                  {business.name}
-                </h3>
-                {business.isScamReported && (
-                  <Badge
-                    variant="outline"
-                    className="bg-red-50 text-red-600 border-red-200 flex-shrink-0"
-                  >
-                    <AlertTriangle className="w-3 h-3 mr-1" />
-                    <span className="hidden xs:inline">Reported</span>
-                  </Badge>
-                )}
-              </div>
+          {/* Plan Badge */}
+          {business.plan !== "free" && (
+            <div className="absolute top-3 left-3">
               <Badge
-                variant="outline"
-                className="text-xs mb-2 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 border-blue-200"
+                className={`${
+                  business.plan === "business"
+                    ? "bg-purple-600 text-white"
+                    : "bg-orange-600 text-white"
+                }`}
               >
-                {business.category}
+                {business.plan === "business" ? "Featured" : "Premium"}
               </Badge>
-              <div className="flex items-center gap-1">
-                <div className="flex items-center gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3.5 h-3.5 ${i < Math.floor(business.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-medium text-foreground ml-1">
-                  {business.rating}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  ({business.reviewCount})
-                </span>
-              </div>
             </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="absolute top-3 right-3 flex gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+              onClick={handleFavorite}
+            >
+              <Heart
+                className={`h-4 w-4 ${
+                  isFavorited ? "fill-red-500 text-red-500" : "text-gray-600"
+                }`}
+              />
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+              onClick={handleShare}
+            >
+              <Share2 className="h-4 w-4 text-gray-600" />
+            </Button>
           </div>
 
-          {/* Desktop and Mobile Content */}
-          <div className="flex-1 min-w-0">
-            {/* Desktop Title Row - Hidden on Mobile */}
-            <div className="hidden sm:block">
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h3 className="font-bold text-xl lg:text-2xl text-foreground group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-500 line-clamp-2">
-                  {business.name}
-                </h3>
-
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  {business.isScamReported && (
-                    <Badge
-                      variant="outline"
-                      className="bg-red-50 text-red-600 border-red-200 animate-pulse"
-                    >
-                      <AlertTriangle className="w-3 h-3 mr-1" />
-                      Reported
-                    </Badge>
-                  )}
+          {/* Logo */}
+          <div className="absolute -bottom-6 left-4">
+            <div className="w-12 h-12 rounded-lg bg-white shadow-lg flex items-center justify-center overflow-hidden">
+              {business.logo ? (
+                <img
+                  src={business.logo}
+                  alt={`${business.name} logo`}
+                  className="w-10 h-10 object-cover rounded"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    target.parentElement!.innerHTML = `<div class="w-10 h-10 bg-blue-100 rounded flex items-center justify-center text-xs font-bold text-blue-600">${getInitials(business.name)}</div>`;
+                  }}
+                />
+              ) : (
+                <div className="w-10 h-10 bg-blue-100 rounded flex items-center justify-center text-xs font-bold text-blue-600">
+                  {getInitials(business.name)}
                 </div>
-              </div>
-
-              <Badge
-                variant="outline"
-                className="mb-3 text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 border-blue-200 hover:from-blue-100 hover:to-purple-100 transition-colors duration-300"
-              >
-                {business.category}
-              </Badge>
-
-              <div className="flex items-center gap-1 mb-4">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 transition-all duration-300 ${i < Math.floor(business.rating) ? "text-yellow-400 fill-yellow-400 drop-shadow-sm" : "text-gray-300"}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-bold text-foreground ml-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {business.rating}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  ({business.reviewCount} reviews)
-                </span>
-              </div>
-            </div>
-
-            <p className="text-sm lg:text-base text-muted-foreground mb-4 line-clamp-2 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-              {business.description}
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-3 mb-4 text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground group-hover:text-blue-600 transition-colors duration-300">
-                <MapPin className="w-4 h-4 flex-shrink-0" />
-                <span className="line-clamp-1">{business.address}</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-muted-foreground group-hover:text-green-600 transition-colors duration-300">
-                <Phone className="w-4 h-4 flex-shrink-0" />
-                <span>{business.phone}</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-1.5 mb-6">
-              {business.services.slice(0, 4).map((service, index) => (
-                <Badge
-                  key={index}
-                  variant="secondary"
-                  className="text-xs px-3 py-1 bg-gradient-to-r from-gray-50 to-blue-50 text-gray-700 border-gray-200 hover:from-blue-50 hover:to-purple-50 hover:text-blue-700 transition-all duration-300"
-                >
-                  {service}
-                </Badge>
-              ))}
-              {business.services.length > 4 && (
-                <Badge
-                  variant="secondary"
-                  className="text-xs px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200"
-                >
-                  +{business.services.length - 4} more
-                </Badge>
               )}
-            </div>
-
-            {/* Enhanced Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
-              <Button
-                size="sm"
-                className="flex-1 sm:flex-none sm:min-w-[140px] lg:min-w-[160px] rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group/btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClick?.();
-                }}
-              >
-                <Eye className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform duration-300" />
-                View Details
-                <ExternalLink className="w-3 h-3 ml-2 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-              </Button>
-
-              {business.whatsapp && (
-                <Button
-                  size="sm"
-                  className="flex-1 sm:flex-none rounded-xl font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/whatsapp"
-                  onClick={handleWhatsAppClick}
-                >
-                  <MessageCircle className="w-4 h-4 mr-2 group-hover/whatsapp:scale-110 transition-transform duration-300" />
-                  💬 WhatsApp
-                </Button>
-              )}
-
-              <Button
-                size="sm"
-                variant="outline"
-                className="flex-1 sm:flex-none rounded-xl font-semibold border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:border-blue-300 hover:text-blue-800 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group/phone"
-                onClick={handlePhoneClick}
-              >
-                <Phone className="w-4 h-4 mr-2 group-hover/phone:scale-110 group-hover/phone:rotate-12 transition-transform duration-300" />
-                📞 Call Now
-              </Button>
             </div>
           </div>
         </div>
-      </CardContent>
+
+        <CardHeader className="pt-8 pb-4">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-semibold text-lg text-gray-900 line-clamp-1">
+                  {business.name}
+                </h3>
+                {business.isVerified && (
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                )}
+              </div>
+              <p className="text-sm text-blue-600 font-medium mb-2">
+                {business.category}
+              </p>
+              <div className="flex items-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-1">
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-medium">{business.rating}</span>
+                  <span>({business.reviewCount})</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  <span>{business.city}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-0">
+          {/* Description */}
+          <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+            {business.description}
+          </p>
+
+          {/* Services/Specializations */}
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-1">
+              {business.specializations.slice(0, 3).map((spec, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {spec}
+                </Badge>
+              ))}
+              {business.specializations.length > 3 && (
+                <Badge variant="secondary" className="text-xs">
+                  +{business.specializations.length - 3} more
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+            <div>
+              <div className="text-lg font-bold text-blue-600">
+                {business.successRate}%
+              </div>
+              <div className="text-xs text-gray-500">Success Rate</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-green-600">
+                {business.establishedYear
+                  ? 2024 - business.establishedYear
+                  : 10}
+                +
+              </div>
+              <div className="text-xs text-gray-500">Years Exp.</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-purple-600">
+                {business.countriesServed.length}+
+              </div>
+              <div className="text-xs text-gray-500">Countries</div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(`tel:${business.phone}`, "_self");
+              }}
+            >
+              <Phone className="h-4 w-4 mr-1" />
+              Call
+            </Button>
+            {business.website && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(business.website, "_blank");
+                }}
+              >
+                <Globe className="h-4 w-4 mr-1" />
+                Website
+              </Button>
+            )}
+          </div>
+
+          {/* Business Hours Indicator */}
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-1 text-green-600">
+                <Clock className="h-3 w-3" />
+                <span>Open Now</span>
+              </div>
+              <div className="text-gray-500">
+                {business.languages.slice(0, 2).join(", ")}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Link>
     </Card>
   );
 }
