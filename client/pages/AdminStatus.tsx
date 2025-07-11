@@ -625,8 +625,80 @@ export default function AdminStatus() {
               </CardContent>
             </Card>
 
+            {/* Google Cloud Storage Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Google Cloud Storage Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {imageStatus ? (
+                  <div className="space-y-4">
+                    {imageStatus.error && (
+                      <div className="bg-red-50 border border-red-200 rounded p-3">
+                        <div className="text-red-800 text-sm">
+                          ❌ {imageStatus.error}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center p-4 bg-blue-50 rounded">
+                        <div className="text-2xl font-bold text-blue-600">
+                          {imageStatus.imagesWithGCS || 0}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Images in GCS
+                        </div>
+                      </div>
+
+                      <div className="text-center p-4 bg-orange-50 rounded">
+                        <div className="text-2xl font-bold text-orange-600">
+                          {imageStatus.gcsPercentage || 0}%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          GCS Coverage
+                        </div>
+                      </div>
+                    </div>
+
+                    {imageStatus.configuration && (
+                      <div className="space-y-2">
+                        <div className="font-semibold text-sm">
+                          Configuration:
+                        </div>
+                        <div className="text-sm space-y-1">
+                          <div>
+                            Project ID: {imageStatus.configuration.projectId}
+                          </div>
+                          <div>
+                            Key File: {imageStatus.configuration.keyFile}
+                          </div>
+                          <div>
+                            Bucket: {imageStatus.configuration.bucketName}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {imageStatus.sampleBusiness && (
+                      <div className="text-sm">
+                        <div className="font-semibold">Sample Business:</div>
+                        <div>{imageStatus.sampleBusiness.name}</div>
+                        <div>
+                          Images: {imageStatus.sampleBusiness.imagesWithGCS}/
+                          {imageStatus.sampleBusiness.imageCount} in GCS
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">Loading GCS status...</div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Diagnostic Info */}
-            <Card className="md:col-span-2">
+            <Card>
               <CardHeader>
                 <CardTitle>Database Diagnostic</CardTitle>
               </CardHeader>
