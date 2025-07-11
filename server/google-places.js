@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { uploadToGCS } from "./storage.js";
+import { uploadToS3 } from "./storage-s3.js";
 
 class GooglePlacesAPI {
   constructor(apiKey) {
