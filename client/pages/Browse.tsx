@@ -59,6 +59,7 @@ export default function Browse() {
   );
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const [filters, setFilters] = useState<FilterState>({
