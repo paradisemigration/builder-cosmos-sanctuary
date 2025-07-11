@@ -396,6 +396,56 @@ export default function AdminStatus() {
     }
   };
 
+  const assignAllBusinessImages = async () => {
+    try {
+      setImageAssignmentLoading(true);
+
+      const response = await fetch("/api/admin/assign-all-business-images", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      console.log("🎨 Bulk image assignment result:", result);
+
+      if (result.success) {
+        console.log("✅ Bulk image assignment started");
+        alert("Bulk image assignment started! Check server logs for progress.");
+        // Reload image stats after a delay
+        setTimeout(loadImageStats, 2000);
+      } else {
+        console.warn("⚠️ Bulk image assignment failed:", result.message);
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error("❌ Failed to start bulk image assignment:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setImageAssignmentLoading(false);
+    }
+  };
+
+  const loadImageStats = async () => {
+    try {
+      console.log("📊 Loading image statistics...");
+      const response = await fetch("/api/admin/business-images-status");
+      const result = await response.json();
+
+      console.log("📊 Image stats response:", result);
+
+      if (result.success) {
+        setImageStats(result.stats);
+        console.log("✅ Image stats loaded:", result.stats);
+      } else {
+        console.error("❌ Failed to load image stats:", result.error);
+      }
+    } catch (error) {
+      console.error("❌ Failed to load image stats:", error);
+    }
+  };
+
   // Force refresh function that bypasses loading checks
   const forceRefresh = async () => {
     console.log("Force refresh triggered");
