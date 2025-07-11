@@ -91,7 +91,7 @@ export default function Browse() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/scraped-businesses?limit=1000");
+      const response = await fetch("/api/scraped-businesses?limit=9999");
       const result = await response.json();
 
       if (result.success) {
