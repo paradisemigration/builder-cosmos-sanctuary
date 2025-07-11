@@ -47,10 +47,10 @@ export default function Browse() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || "",
+    searchParams.get("category") || "all",
   );
   const [selectedZone, setSelectedZone] = useState(
-    searchParams.get("zone") || "",
+    searchParams.get("zone") || "all",
   );
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
