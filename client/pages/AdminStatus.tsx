@@ -45,6 +45,10 @@ export default function AdminStatus() {
       for (let i = 0; i <= 2; i++) {
         try {
           console.log(`🔍 Health check attempt ${i + 1}/3...`);
+          console.log(
+            "Trying to connect to:",
+            window.location.origin + "/api/health",
+          );
 
           const healthResponse = await fetch("/api/health", {
             cache: "no-store",
