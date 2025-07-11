@@ -8,17 +8,18 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Validate required environment variables
+// Validate required environment variables for AWS S3
 const requiredEnvVars = [
-  "GOOGLE_CLOUD_PROJECT_ID",
-  "GOOGLE_CLOUD_KEY_FILE",
-  "GOOGLE_CLOUD_BUCKET_NAME",
+  "AWS_ACCESS_KEY_ID",
+  "AWS_SECRET_ACCESS_KEY",
+  "AWS_REGION",
+  "AWS_S3_BUCKET_NAME",
 ];
 
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  console.warn("⚠️  Missing environment variables:");
+  console.warn("⚠️  Missing AWS S3 environment variables:");
   missingEnvVars.forEach((envVar) => {
     console.warn(`   - ${envVar}`);
   });
