@@ -193,6 +193,10 @@ export default function AdminStatus() {
 
   const stopScraping = async () => {
     try {
+      console.log(
+        "🛑 Stop button clicked, current scraping state:",
+        stats?.scraping,
+      );
       setScrapingLoading(true);
 
       const response = await fetch("/api/scraping/stop", {
@@ -203,12 +207,18 @@ export default function AdminStatus() {
       });
 
       const result = await response.json();
-      console.log("Scraping stopped:", result);
+      console.log("🛑 Stop scraping API response:", result);
+
+      if (result.success) {
+        console.log("✅ Scraping stopped successfully");
+      } else {
+        console.warn("⚠️ Stop scraping failed:", result.message);
+      }
 
       // Reload status after stopping
       setTimeout(loadStatus, 1000);
     } catch (error) {
-      console.error("Failed to stop scraping:", error);
+      console.error("❌ Failed to stop scraping:", error);
     } finally {
       setScrapingLoading(false);
     }
