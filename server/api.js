@@ -8,6 +8,7 @@ import {
 } from "./storage.js";
 import BusinessScraper from "./scraper.js";
 import database from "./database.js";
+import sqliteDatabase from "./database.sqlite.js";
 
 const app = express();
 
@@ -575,10 +576,10 @@ app.get("/api/scraping/stats", (req, res) => {
   }
 });
 
-// Get scraped businesses with filters
+// Get scraped businesses with filters from SQLite database
 app.get("/api/scraped-businesses", async (req, res) => {
   try {
-    const result = await database.getBusinesses(req.query);
+    const result = await sqliteDatabase.getBusinesses(req.query);
 
     res.json({
       success: true,
