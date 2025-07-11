@@ -255,17 +255,20 @@ class GooglePlacesAPI {
     }
   }
 
-  // Extract ALL reviews for a business (no 5 review limit)
+  // Extract ALL available reviews for a business
+  // Note: Google Places API limits to ~5 reviews max per place by design
   async extractAllReviews(placeId) {
     try {
-      console.log(`🔍 Fetching ALL reviews for place ID: ${placeId}`);
+      console.log(`🔍 Fetching ALL available reviews for place ID: ${placeId}`);
 
       const placeDetails = await this.getPlaceDetails(placeId);
-      const { reviews = [] } = placeDetails;
+      const { reviews = [], user_ratings_total = 0 } = placeDetails;
 
-      console.log(`📝 Found ${reviews.length} reviews for place ${placeId}`);
+      console.log(
+        `📝 Found ${reviews.length} reviews for place ${placeId} (Google API limit: max ~5 reviews, business has ${user_ratings_total} total reviews)`,
+      );
 
-      // Process ALL reviews (no slice limit)
+      // Process ALL available reviews (Google API provides max ~5)
       const processedReviews = reviews.map((review, index) => ({
         id: `google_${placeId}_${index}`,
         authorName: review.author_name || "Anonymous",
@@ -276,13 +279,15 @@ class GooglePlacesAPI {
         relativeTimeDescription: review.relative_time_description || "",
         text: review.text || "",
         time: review.time || Date.now() / 1000,
-        source: "google_places_full",
+        source: "google_places_api",
       }));
 
       return {
         placeId,
         totalReviews: processedReviews.length,
+        businessTotalReviews: user_ratings_total,
         reviews: processedReviews,
+        note: `Retrieved ${processedReviews.length} reviews (Google API maximum) out of ${user_ratings_total} total reviews for this business`,
       };
     } catch (error) {
       console.error(`Error extracting all reviews for ${placeId}:`, error);
