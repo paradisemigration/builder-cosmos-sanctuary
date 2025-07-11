@@ -100,6 +100,8 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   return (
     <Card
       className={`group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}
+      data-business-card={business.name}
+      data-business-url={businessUrl}
     >
       <Link to={businessUrl} className="block" onClick={handleCardClick}>
         {/* Header with Cover Image */}
