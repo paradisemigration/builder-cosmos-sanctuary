@@ -449,7 +449,7 @@ export default function Browse() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Cities</SelectItem>
-                        {uaeCities.map((city) => (
+                        {indianCities.map((city) => (
                           <SelectItem key={city} value={city}>
                             {city}
                           </SelectItem>
