@@ -527,18 +527,18 @@ export default function AdminStatus() {
                 title={
                   stats?.error
                     ? "Cannot fetch reviews: Server offline"
-                    : "Fetch ALL available reviews (unlimited) for each business"
+                    : "Fetch all available reviews for each business (Google API limit: ~5 reviews per business)"
                 }
               >
                 {reviewsLoading ? (
                   <>
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Fetching ALL Reviews...
+                    Fetching Reviews...
                   </>
                 ) : (
                   <>
                     <Star className="h-4 w-4 mr-2" />
-                    Fetch ALL Reviews
+                    Fetch All Reviews
                   </>
                 )}
               </Button>
