@@ -233,6 +233,47 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
             </div>
           </div>
 
+          {/* Recent Reviews */}
+          {business.reviews && business.reviews.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                <Star className="h-4 w-4 text-yellow-400" />
+                Recent Reviews
+              </h4>
+              <div className="space-y-2">
+                {business.reviews.slice(0, 2).map((review, index) => (
+                  <div key={index} className="bg-gray-50 p-2 rounded text-xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-3 w-3 ${
+                              i < review.rating
+                                ? "text-yellow-400 fill-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-medium text-gray-600">
+                        {review.authorName || "Anonymous"}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 line-clamp-2">
+                      {review.text || review.comment || "Great service!"}
+                    </p>
+                  </div>
+                ))}
+                {business.reviews.length > 2 && (
+                  <div className="text-xs text-blue-600 font-medium">
+                    +{business.reviews.length - 2} more reviews
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-4 mb-4 text-center">
             <div>
