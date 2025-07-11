@@ -25,6 +25,8 @@ class BusinessScraper {
     }
 
     this.isRunning = true;
+    this.shouldStop = false;
+    this.currentJob = jobId;
     const totalSearches = cities.length * categories.length;
     let currentSearch = 0;
     let totalBusinesses = 0;
