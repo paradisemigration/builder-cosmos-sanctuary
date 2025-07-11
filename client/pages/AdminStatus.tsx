@@ -320,10 +320,7 @@ export default function AdminStatus() {
 
             <div className="flex gap-4">
               <Button
-                onClick={() => {
-                  console.log("Refresh button clicked");
-                  loadStatus();
-                }}
+                onClick={forceRefresh}
                 disabled={loading || loadingRef}
                 variant="outline"
               >
