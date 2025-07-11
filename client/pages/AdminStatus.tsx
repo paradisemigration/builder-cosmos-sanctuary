@@ -8,6 +8,7 @@ import { RefreshCw, Database, Play, Square, Star } from "lucide-react";
 export default function AdminStatus() {
   const [stats, setStats] = useState<any>(null);
   const [diagnostic, setDiagnostic] = useState<any>(null);
+  const [imageStatus, setImageStatus] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [scrapingLoading, setScrapingLoading] = useState(false);
   const [reviewsLoading, setReviewsLoading] = useState(false);
