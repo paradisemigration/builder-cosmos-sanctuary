@@ -38,6 +38,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { ImageUpload } from "@/components/ImageUpload";
 import { indianCities, categoryMapping } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
