@@ -120,18 +120,25 @@ export default function Browse() {
       if (result.success) {
         // Map the businesses to ensure proper ID field and data structure
         const mappedBusinesses = (result.businesses || []).map(
-          (business: any) => ({
-            ...business,
-            id:
-              business.googlePlaceId ||
-              business.id ||
-              Date.now() + Math.random(),
-            city: business.scrapedCity || business.city || "Unknown",
-            reviewCount: business.reviews?.length || business.reviewCount || 0,
-            rating: business.rating || 0,
-            services: business.services || [],
-            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
-          }),
+          (business: any) => {
+            const finalReviewCount =
+              business.reviews?.length || business.reviewCount || 0;
+            console.log(
+              `DEBUG: ${business.name} - reviewCount: ${business.reviewCount}, reviews.length: ${business.reviews?.length}, final: ${finalReviewCount}`,
+            );
+            return {
+              ...business,
+              id:
+                business.googlePlaceId ||
+                business.id ||
+                Date.now() + Math.random(),
+              city: business.scrapedCity || business.city || "Unknown",
+              reviewCount: finalReviewCount,
+              rating: business.rating || 0,
+              services: business.services || [],
+              isVerified: business.isVerified || true, // Most scraped businesses are verified by default
+            };
+          },
         );
 
         console.log(
