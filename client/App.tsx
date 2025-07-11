@@ -42,7 +42,7 @@ const App = () => (
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
-            <Route path="/browse" element={<Browse />} />
+            <Route path="/business" element={<Browse />} />
             <Route path="/list-business" element={<ListBusiness />} />
             <Route path="/plans" element={<ListingPlans />} />
             <Route path="/add-business" element={<AddBusiness />} />
