@@ -12,6 +12,7 @@ export default function AdminStatus() {
   const [loading, setLoading] = useState(false);
   const [scrapingLoading, setScrapingLoading] = useState(false);
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewCountsLoading, setReviewCountsLoading] = useState(false);
   const [loadingRef, setLoadingRef] = useState(false);
 
   const loadStatus = async (retryCount = 0) => {
