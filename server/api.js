@@ -793,43 +793,42 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
 // Fix reviewCount for all businesses to match actual review count
 app.post("/api/fix-review-counts", async (req, res) => {
   try {
-    console.log("🚀 Fixing reviewCount for all businesses...");
+    console.log("🚀 Fixing reviewCount for all businesses using SQL...");
 
-    // Get all businesses
-    const result = await sqliteDatabase.getBusinesses({ limit: 9999 });
-    const businesses = result.businesses;
+    // Use SQL to directly update reviewCount based on actual review count
+    const updateSql = `
+      UPDATE businesses
+      SET reviewCount = (
+        SELECT COUNT(*)
+        FROM reviews
+        WHERE reviews.businessId = businesses.id
+      )
+    `;
 
-    let updatedCount = 0;
+    await new Promise((resolve, reject) => {
+      sqliteDatabase.db.run(updateSql, function (err) {
+        if (err) {
+          console.error("Error updating review counts:", err);
+          reject(err);
+        } else {
+          console.log(`✅ Updated reviewCount for ${this.changes} businesses`);
+          resolve(this.changes);
+        }
+      });
+    });
 
-    for (const business of businesses) {
-      const actualReviewCount = business.reviews?.length || 0;
-      if (business.reviewCount !== actualReviewCount) {
-        await new Promise((resolve, reject) => {
-          sqliteDatabase.db.run(
-            "UPDATE businesses SET reviewCount = ? WHERE id = ?",
-            [actualReviewCount, business.id],
-            function (err) {
-              if (err) {
-                console.error(`Error updating business ${business.id}:`, err);
-                reject(err);
-              } else {
-                console.log(
-                  `✅ Updated business ${business.name}: ${business.reviewCount} → ${actualReviewCount} reviews`,
-                );
-                updatedCount++;
-                resolve();
-              }
-            },
-          );
-        });
-      }
-    }
+    // Get updated stats
+    const result = await sqliteDatabase.getBusinesses({ limit: 5 });
+    const sampleBusinesses = result.businesses.slice(0, 3).map((b) => ({
+      name: b.name,
+      oldReviewCount: b.reviewCount,
+      actualReviews: b.reviews?.length || 0,
+    }));
 
     res.json({
       success: true,
-      message: `Review counts fixed for ${updatedCount} businesses`,
-      totalBusinesses: businesses.length,
-      updatedCount,
+      message: "Review counts synced with actual review data",
+      sampleBusinesses,
     });
   } catch (error) {
     console.error("Fix review counts error:", error);
