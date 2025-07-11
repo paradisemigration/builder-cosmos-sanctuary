@@ -202,22 +202,31 @@ class BusinessScraper {
             );
           }
         }
+        // Exit outer loop if stopped
+        if (this.shouldStop || !this.isRunning) {
+          break;
+        }
       }
 
       // Complete the job
       if (jobId) {
+        const finalStatus = this.shouldStop ? "cancelled" : "completed";
         await database.updateScrapingJob(jobId, {
-          status: "completed",
+          status: finalStatus,
           completedAt: new Date().toISOString(),
-          progress: 100,
+          progress: this.shouldStop
+            ? Math.round((currentSearch / totalSearches) * 100)
+            : 100,
           totalBusinesses,
           errors,
         });
       }
 
-      console.log(
-        `🎉 Scraping completed! Added ${totalBusinesses} new businesses, skipped ${duplicatesSkipped} duplicates`,
-      );
+      const statusMessage = this.shouldStop
+        ? `🛑 Scraping stopped! Added ${totalBusinesses} businesses before stopping`
+        : `🎉 Scraping completed! Added ${totalBusinesses} new businesses, skipped ${duplicatesSkipped} duplicates`;
+
+      console.log(statusMessage);
 
       return {
         success: true,
@@ -225,6 +234,7 @@ class BusinessScraper {
         duplicatesSkipped,
         totalSearches: currentSearch,
         errors,
+        stopped: this.shouldStop,
       };
     } catch (error) {
       console.error("❌ Scraping failed:", error);
