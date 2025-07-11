@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:api\"",
     "dev:client": "vite",
-    "dev:api": "node server/api.js",
+    "dev:api": "node server/index.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
@@ -67,7 +67,7 @@
     "@tanstack/react-query": "^5.56.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "@types/multer": "^1.4.13",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
