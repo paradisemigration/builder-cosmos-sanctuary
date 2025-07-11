@@ -147,10 +147,12 @@ class SQLiteDatabase {
         const addColumnIfNotExists = (tableName, columnName, columnType) => {
           try {
             // First check if column exists by querying table info
-            const columns = this.db
+            const columnsResult = this.db
               .prepare(`PRAGMA table_info(${tableName})`)
               .all();
-            const columnExists = columns.some((col) => col.name === columnName);
+            const columnExists =
+              Array.isArray(columnsResult) &&
+              columnsResult.some((col) => col.name === columnName);
 
             if (!columnExists) {
               this.db.exec(
