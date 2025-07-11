@@ -45,6 +45,43 @@ const businessCoverImages = [
   "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=1200&h=600&fit=crop&crop=center", // Office meeting
 ];
 
+// Business gallery photos for creating comprehensive business profiles
+const businessGalleryImages = [
+  // Office interiors and workspaces
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=800&h=600&fit=crop&crop=center",
+
+  // Business meetings and consultations
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop&crop=center",
+
+  // Professional services and consultation
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=800&h=600&fit=crop&crop=center",
+
+  // Reception and waiting areas
+  "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1560472355-536de3962603?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1601582589907-f92af5ed9db8?w=800&h=600&fit=crop&crop=center",
+
+  // Business exteriors and buildings
+  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&h=600&fit=crop&crop=center",
+];
+
 async function downloadImageAsBuffer(url) {
   try {
     const response = await fetch(url);
@@ -152,16 +189,78 @@ export async function assignBulkBusinessImages(options = {}) {
           console.log(`✅ Cover image uploaded to: ${coverImageUrl}`);
         }
 
+        // Assign gallery images (3-5 photos per business)
+        let galleryUrls = [];
+        try {
+          if (business.gallery) {
+            galleryUrls = JSON.parse(business.gallery);
+          }
+        } catch (e) {
+          galleryUrls = [];
+        }
+
+        if (galleryUrls.length === 0 || updateExisting) {
+          console.log(
+            `📸 Adding gallery photos for business: ${business.name}`,
+          );
+          const numberOfGalleryImages = Math.floor(Math.random() * 3) + 3; // 3-5 images
+          galleryUrls = [];
+
+          for (let g = 0; g < numberOfGalleryImages; g++) {
+            try {
+              const galleryImageUrl =
+                businessGalleryImages[
+                  (i * numberOfGalleryImages + g) % businessGalleryImages.length
+                ];
+              console.log(
+                `📥 Downloading gallery image ${g + 1}/${numberOfGalleryImages} from: ${galleryImageUrl}`,
+              );
+
+              const galleryBuffer =
+                await downloadImageAsBuffer(galleryImageUrl);
+              const galleryS3Url = await uploadImageToS3(
+                galleryBuffer,
+                `gallery_${business.id}_${g + 1}.jpg`,
+                "gallery",
+              );
+
+              galleryUrls.push(galleryS3Url);
+              console.log(
+                `✅ Gallery image ${g + 1} uploaded to: ${galleryS3Url}`,
+              );
+
+              // Small delay between gallery uploads
+              await new Promise((resolve) => setTimeout(resolve, 200));
+            } catch (galleryError) {
+              console.error(
+                `❌ Failed to upload gallery image ${g + 1}:`,
+                galleryError,
+              );
+              // Continue with other gallery images
+            }
+          }
+
+          console.log(
+            `📸 Completed gallery upload: ${galleryUrls.length} images for ${business.name}`,
+          );
+        }
+
         // Update business in database
         const updateQuery = `
           UPDATE businesses
-          SET logo = ?, coverImage = ?, updatedAt = ?
+          SET logo = ?, coverImage = ?, gallery = ?, updatedAt = ?
           WHERE id = ?
         `;
 
         database
           .prepare(updateQuery)
-          .run(logoUrl, coverImageUrl, new Date().toISOString(), business.id);
+          .run(
+            logoUrl,
+            coverImageUrl,
+            JSON.stringify(galleryUrls),
+            new Date().toISOString(),
+            business.id,
+          );
 
         successCount++;
         console.log(`✅ Updated business: ${business.name}`);
