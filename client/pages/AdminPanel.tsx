@@ -54,6 +54,14 @@ export default function AdminPanel() {
 
       if (businessesResult.success) {
         setBusinesses(businessesResult.businesses || []);
+
+        // Update stats with accurate total from the businesses query
+        if (businessesResult.total) {
+          setStats((prev) => ({
+            ...prev,
+            totalBusinesses: businessesResult.total,
+          }));
+        }
       }
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
