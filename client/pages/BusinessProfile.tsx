@@ -44,9 +44,10 @@ import { sampleBusinesses, type Business } from "@/lib/data";
 import { toast } from "sonner";
 
 export default function BusinessProfile() {
-  const { city, companyName } = useParams<{
-    city: string;
-    companyName: string;
+  const { city, companyName, id } = useParams<{
+    city?: string;
+    companyName?: string;
+    id?: string;
   }>();
   const navigate = useNavigate();
   const [business, setBusiness] = useState<Business | null>(null);
@@ -58,17 +59,28 @@ export default function BusinessProfile() {
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
-    // Convert URL params back to find business
-    // In real app, would search by city and company name slug
-    const searchName = companyName?.replace(/-/g, " ");
-    const searchCity = city?.replace(/-/g, " ");
+    let foundBusiness: Business | null = null;
 
-    const foundBusiness =
-      sampleBusinesses.find(
+    // Handle legacy URL structure (/business/:id)
+    if (id) {
+      foundBusiness = sampleBusinesses.find((b) => b.id === id) || null;
+    }
+    // Handle new URL structure (/:city/:companyName)
+    else if (city && companyName) {
+      const searchName = companyName.replace(/-/g, " ");
+      const searchCity = city.replace(/-/g, " ");
+
+      foundBusiness = sampleBusinesses.find(
         (b) =>
-          b.name.toLowerCase().includes(searchName?.toLowerCase() || "") &&
-          b.city.toLowerCase().includes(searchCity?.toLowerCase() || ""),
-      ) || sampleBusinesses[0]; // Fallback to first business for demo
+          b.name.toLowerCase().includes(searchName.toLowerCase()) &&
+          b.city.toLowerCase().includes(searchCity.toLowerCase()),
+      );
+    }
+
+    // Fallback to first business for demo if not found
+    if (!foundBusiness) {
+      foundBusiness = sampleBusinesses[0];
+    }
 
     setBusiness(foundBusiness);
     setLoading(false);
@@ -77,7 +89,7 @@ export default function BusinessProfile() {
       document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.city} | VisaConsult India`;
       document.description = `${foundBusiness.description.substring(0, 150)}...`;
     }
-  }, [city, companyName]);
+  }, [city, companyName, id]);
 
   if (loading) {
     return (
