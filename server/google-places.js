@@ -255,6 +255,46 @@ class GooglePlacesAPI {
     }
   }
 
+  // Extract ALL reviews for a business (no 5 review limit)
+  async extractAllReviews(placeId) {
+    try {
+      console.log(`🔍 Fetching ALL reviews for place ID: ${placeId}`);
+
+      const placeDetails = await this.getPlaceDetails(placeId);
+      const { reviews = [] } = placeDetails;
+
+      console.log(`📝 Found ${reviews.length} reviews for place ${placeId}`);
+
+      // Process ALL reviews (no slice limit)
+      const processedReviews = reviews.map((review, index) => ({
+        id: `google_${placeId}_${index}`,
+        authorName: review.author_name || "Anonymous",
+        authorUrl: review.author_url || null,
+        language: review.language || "en",
+        profilePhotoUrl: review.profile_photo_url || null,
+        rating: review.rating || 0,
+        relativeTimeDescription: review.relative_time_description || "",
+        text: review.text || "",
+        time: review.time || Date.now() / 1000,
+        source: "google_places_full",
+      }));
+
+      return {
+        placeId,
+        totalReviews: processedReviews.length,
+        reviews: processedReviews,
+      };
+    } catch (error) {
+      console.error(`Error extracting all reviews for ${placeId}:`, error);
+      return {
+        placeId,
+        totalReviews: 0,
+        reviews: [],
+        error: error.message,
+      };
+    }
+  }
+
   // Helper methods
   extractCityFromAddress(addressParts) {
     // Look for common Indian city patterns
