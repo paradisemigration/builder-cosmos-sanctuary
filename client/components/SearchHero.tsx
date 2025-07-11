@@ -58,7 +58,11 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
     setSearchQuery(business.name);
     setShowSuggestions(false);
     if (onSearch) {
-      onSearch(business.name, selectedCategory, selectedLocation);
+      onSearch(
+        business.name,
+        selectedCategory === "all" ? "" : selectedCategory,
+        selectedLocation === "all" ? "" : selectedLocation,
+      );
     }
   };
 
@@ -66,7 +70,11 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   const handleSearch = () => {
     setShowSuggestions(false);
     if (onSearch) {
-      onSearch(searchQuery, selectedCategory, selectedLocation);
+      onSearch(
+        searchQuery,
+        selectedCategory === "all" ? "" : selectedCategory,
+        selectedLocation === "all" ? "" : selectedLocation,
+      );
     }
   };
 
