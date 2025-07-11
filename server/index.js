@@ -8,9 +8,6 @@ const __dirname = path.dirname(__filename);
 // Load environment variables from the server directory
 dotenv.config({ path: path.join(__dirname, ".env") });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Validate required environment variables for AWS S3
 const requiredEnvVars = [
   "AWS_ACCESS_KEY_ID",
