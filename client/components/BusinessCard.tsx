@@ -41,7 +41,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   // Ensure we have valid city and name for URL generation
   const citySlug = generateSlug(business.city || "unknown");
   const nameSlug = generateSlug(business.name || "business");
-  const businessUrl = `/${citySlug}/${nameSlug}`;
+  const businessUrl = `/business/${citySlug}/${nameSlug}`;
 
   // Debug: log the generated URL in development
   if (process.env.NODE_ENV === "development") {
