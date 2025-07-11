@@ -10,6 +10,7 @@ import {
   Square,
   Star,
   TrendingUp,
+  Camera,
 } from "lucide-react";
 
 export default function AdminStatus() {
