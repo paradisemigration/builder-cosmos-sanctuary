@@ -790,6 +790,100 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
   }
 });
 
+// Refresh review counts from Google Places API for all businesses
+app.post("/api/refresh-review-counts-from-google", async (req, res) => {
+  try {
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    console.log("🚀 Refreshing review counts from Google Places API...");
+
+    // Get all businesses from database
+    const result = await sqliteDatabase.getBusinesses({ limit: 9999 });
+    const businesses = result.businesses;
+
+    let updatedCount = 0;
+    let totalProcessed = 0;
+    const errors = [];
+
+    // Process businesses in batches to avoid API rate limits
+    const batchSize = 10;
+    for (let i = 0; i < businesses.length; i += batchSize) {
+      const batch = businesses.slice(i, i + batchSize);
+
+      for (const business of batch) {
+        try {
+          if (!business.googlePlaceId) {
+            console.log(`⏭️ Skipping ${business.name} - no Google Place ID`);
+            continue;
+          }
+
+          console.log(`🔍 Fetching review count for: ${business.name}`);
+
+          // Get place details from Google Places API
+          const placeDetails = await googlePlaces.getPlaceDetails(
+            business.googlePlaceId,
+          );
+          const { user_ratings_total = 0 } = placeDetails;
+
+          // Update review count in database if different
+          if (business.reviewCount !== user_ratings_total) {
+            await new Promise((resolve, reject) => {
+              sqliteDatabase.db.run(
+                "UPDATE businesses SET reviewCount = ? WHERE id = ?",
+                [user_ratings_total, business.id],
+                function (err) {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    console.log(
+                      `✅ Updated ${business.name}: ${business.reviewCount} → ${user_ratings_total} reviews`,
+                    );
+                    updatedCount++;
+                    resolve();
+                  }
+                },
+              );
+            });
+          } else {
+            console.log(
+              `✓ ${business.name}: ${user_ratings_total} reviews (no change)`,
+            );
+          }
+
+          totalProcessed++;
+
+          // Small delay to respect API rate limits
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        } catch (error) {
+          console.error(`❌ Error processing ${business.name}:`, error.message);
+          errors.push({ business: business.name, error: error.message });
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Review counts refreshed from Google Places API`,
+      totalBusinesses: businesses.length,
+      processed: totalProcessed,
+      updated: updatedCount,
+      errors: errors.length,
+      sampleErrors: errors.slice(0, 3),
+    });
+  } catch (error) {
+    console.error("Refresh review counts error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Fix reviewCount for all businesses to match actual review count
 app.post("/api/fix-review-counts", async (req, res) => {
   try {
