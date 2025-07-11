@@ -97,6 +97,13 @@ export default function AddBusiness() {
   const [businessNameVerified, setBusinessNameVerified] = useState(false);
   const [existingBusiness, setExistingBusiness] = useState<any>(null);
 
+  // Set page title based on selected plan
+  useEffect(() => {
+    const planName =
+      selectedPlan === "business" ? "Business Pro" : selectedPlan;
+    document.title = `Register Your Business - ${planName} Plan | VisaConsult India`;
+  }, [selectedPlan]);
+
   // Scroll animations
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
