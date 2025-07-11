@@ -11,20 +11,45 @@ export default function AdminStatus() {
   const [loading, setLoading] = useState(false);
   const [scrapingLoading, setScrapingLoading] = useState(false);
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [loadingRef, setLoadingRef] = useState(false);
 
   const loadStatus = async () => {
+    // Prevent concurrent requests
+    if (loadingRef || loading) {
+      console.log("Status loading already in progress, skipping...");
+      return;
+    }
+
     try {
       setLoading(true);
+      setLoadingRef(true);
 
-      // Load scraping stats
-      const statsResponse = await fetch("/api/scraping/stats");
+      // Load scraping stats with timeout
+      const statsController = new AbortController();
+      const statsTimeout = setTimeout(() => statsController.abort(), 10000);
+
+      const statsResponse = await fetch("/api/scraping/stats", {
+        signal: statsController.signal,
+      });
+      clearTimeout(statsTimeout);
+
       if (!statsResponse.ok) {
         throw new Error(`Stats API error: ${statsResponse.status}`);
       }
       const statsResult = await statsResponse.json();
 
-      // Load diagnostic info
-      const diagnosticResponse = await fetch("/api/database/diagnostic");
+      // Load diagnostic info with timeout
+      const diagnosticController = new AbortController();
+      const diagnosticTimeout = setTimeout(
+        () => diagnosticController.abort(),
+        10000,
+      );
+
+      const diagnosticResponse = await fetch("/api/database/diagnostic", {
+        signal: diagnosticController.signal,
+      });
+      clearTimeout(diagnosticTimeout);
+
       if (!diagnosticResponse.ok) {
         throw new Error(`Diagnostic API error: ${diagnosticResponse.status}`);
       }
@@ -53,6 +78,7 @@ export default function AdminStatus() {
       });
     } finally {
       setLoading(false);
+      setLoadingRef(false);
     }
   };
 
@@ -126,12 +152,23 @@ export default function AdminStatus() {
   };
 
   useEffect(() => {
-    loadStatus();
+    // Initial load with small delay to prevent race conditions
+    const timeoutId = setTimeout(() => {
+      loadStatus();
+    }, 100);
 
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(loadStatus, 10000);
-    return () => clearInterval(interval);
-  }, []);
+    // Auto-refresh every 15 seconds (increased from 10 to reduce load)
+    const interval = setInterval(() => {
+      if (!loadingRef && !loading) {
+        loadStatus();
+      }
+    }, 15000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(interval);
+    };
+  }, [loadingRef, loading]);
 
   return (
     <div className="min-h-screen bg-gray-50">
