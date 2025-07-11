@@ -42,7 +42,19 @@ class BusinessScraper {
       }
 
       for (const city of cities) {
+        // Check if scraping should stop
+        if (this.shouldStop || !this.isRunning) {
+          console.log("🛑 Scraping stopped by user request");
+          break;
+        }
+
         for (const category of categories) {
+          // Check if scraping should stop
+          if (this.shouldStop || !this.isRunning) {
+            console.log("🛑 Scraping stopped by user request");
+            break;
+          }
+
           try {
             console.log(`🔍 Searching for ${category} in ${city}...`);
 
