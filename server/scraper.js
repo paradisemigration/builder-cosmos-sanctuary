@@ -27,6 +27,7 @@ class BusinessScraper {
     const totalSearches = cities.length * categories.length;
     let currentSearch = 0;
     let totalBusinesses = 0;
+    let duplicatesSkipped = 0;
     let errors = [];
 
     try {
