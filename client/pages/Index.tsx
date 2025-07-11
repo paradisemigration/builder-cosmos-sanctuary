@@ -62,7 +62,7 @@ export default function Index() {
 
   const topCities = [
     { name: "Delhi", count: "450+", icon: "🏛️" },
-    { name: "Mumbai", count: "380+", icon: "🌆" },
+    { name: "Mumbai", count: "380+", icon: "���" },
     { name: "Bangalore", count: "320+", icon: "💻" },
     { name: "Chennai", count: "250+", icon: "🌊" },
     { name: "Hyderabad", count: "200+", icon: "💎" },
@@ -242,13 +242,13 @@ export default function Index() {
                   🔐 Login
                 </Link>
                 <Link
-                  to="/business/delhi"
+                  to="/city/delhi"
                   className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
                 >
                   🏛️ Delhi City
                 </Link>
                 <Link
-                  to="/business/mumbai"
+                  to="/city/mumbai"
                   className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
                 >
                   🌆 Mumbai City
@@ -465,14 +465,14 @@ export default function Index() {
             ].map((city, index) => (
               <Link
                 key={city}
-                to={`/business/${city.toLowerCase()}`}
+                to={`/city/${city.toLowerCase()}`}
                 className="group relative"
               >
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105 border border-gray-100">
                   <div className="text-2xl mb-2">
                     {
                       [
-                        "🏛��",
+                        "🏛️",
                         "🌆",
                         "🏢",
                         "🏙️",
