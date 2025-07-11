@@ -159,7 +159,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
           {/* Logo */}
           <div className="absolute -bottom-6 left-4">
             <div className="w-12 h-12 rounded-lg bg-white shadow-lg flex items-center justify-center overflow-hidden">
-              {business.logo ? (
+              {business.logo && business.logo !== "/api/placeholder/80/80" ? (
                 <img
                   src={business.logo}
                   alt={`${business.name} logo`}
