@@ -216,14 +216,121 @@ export default function AdminPanel() {
 
           <TabsContent value="listings">
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Listing Management
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Listing Management
+                </h2>
+                <div className="flex items-center gap-4">
+                  <Badge variant="outline" className="text-lg px-4 py-2">
+                    {loading
+                      ? "Loading..."
+                      : `${businesses.length} Total Listings`}
+                  </Badge>
+                  <Button
+                    onClick={loadDashboardData}
+                    disabled={loading}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <RefreshCw
+                      className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                    />
+                    Refresh
+                  </Button>
+                </div>
+              </div>
+
               <Card>
-                <CardContent className="p-6">
-                  <p className="text-gray-600">
-                    Listing management features will be available here.
-                  </p>
+                <CardHeader>
+                  <CardTitle>All Business Listings</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600">Loading businesses...</p>
+                    </div>
+                  ) : businesses.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 mb-4">
+                        No businesses found in database.
+                      </p>
+                      <Button
+                        onClick={() => setActiveTab("scraper")}
+                        variant="outline"
+                      >
+                        Start Scraping Data
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* Listings Header */}
+                      <div className="grid grid-cols-6 gap-4 p-4 bg-gray-50 rounded-lg font-semibold text-sm text-gray-700">
+                        <div>Business Name</div>
+                        <div>City</div>
+                        <div>Category</div>
+                        <div>Rating</div>
+                        <div>Reviews</div>
+                        <div>Actions</div>
+                      </div>
+
+                      {/* Listings Rows */}
+                      <div className="max-h-96 overflow-y-auto space-y-2">
+                        {businesses.map((business, index) => (
+                          <div
+                            key={business.id || index}
+                            className="grid grid-cols-6 gap-4 p-4 border rounded-lg hover:bg-gray-50"
+                          >
+                            <div className="font-medium text-gray-900 truncate">
+                              {business.name || "Unknown Business"}
+                            </div>
+                            <div className="text-gray-600">
+                              {business.scrapedCity ||
+                                business.city ||
+                                "Unknown"}
+                            </div>
+                            <div className="text-gray-600 truncate">
+                              {business.scrapedCategory ||
+                                business.category ||
+                                "Visa Consultant"}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 text-yellow-500" />
+                              <span className="text-sm">
+                                {business.rating || "0.0"}
+                              </span>
+                            </div>
+                            <div className="text-gray-600">
+                              {business.reviewCount ||
+                                business.reviews?.length ||
+                                0}
+                            </div>
+                            <div className="flex gap-2">
+                              <Button size="sm" variant="outline">
+                                View
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                Edit
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* View All Button */}
+                      {businesses.length >= 100 && (
+                        <div className="text-center pt-4 border-t">
+                          <Button
+                            onClick={() => window.open("/business", "_blank")}
+                            variant="outline"
+                          >
+                            View All Listings (
+                            {stats?.totalBusinesses || businesses.length})
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
