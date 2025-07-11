@@ -106,13 +106,8 @@ class BusinessScraper {
                   businessData.scrapedCategory = category;
                   businessData.scrapedAt = new Date().toISOString();
 
-                  // Ensure we store at least 5 reviews if available
-                  if (businessData.reviews && businessData.reviews.length > 5) {
-                    businessData.reviews = businessData.reviews.slice(0, 5);
-                  }
-
-                  // Add minimum required reviews note
-                  businessData.reviewsNote = `Stored ${businessData.reviews?.length || 0} reviews (max 5 per business)`;
+                  // Store ALL reviews (no limit)
+                  businessData.reviewsNote = `Stored ${businessData.reviews?.length || 0} reviews (all available)`;
                 }
 
                 // Check if business already exists in SQLite database
@@ -122,7 +117,7 @@ class BusinessScraper {
                 if (existingBusiness) {
                   duplicatesSkipped++;
                   console.log(
-                    `���️  Duplicate found: ${businessData.name} (${place.place_id}) - Skipping...`,
+                    `⏭️  Duplicate found: ${businessData.name} (${place.place_id}) - Skipping...`,
                   );
                   // Just count it but don't add to processed (to avoid duplicates in results)
                   continue;
