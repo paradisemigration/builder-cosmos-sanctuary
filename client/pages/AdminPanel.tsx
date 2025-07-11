@@ -224,7 +224,7 @@ export default function AdminPanel() {
                   <Badge variant="outline" className="text-lg px-4 py-2">
                     {loading
                       ? "Loading..."
-                      : `${businesses.length} Total Listings`}
+                      : `${stats?.totalBusinesses || businesses.length} Total Listings`}
                   </Badge>
                   <Button
                     onClick={loadDashboardData}
