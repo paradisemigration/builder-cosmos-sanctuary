@@ -253,6 +253,18 @@ export default function Index() {
                 >
                   🏢 Business (New)
                 </Link>
+                <Link
+                  to="/privacy"
+                  className="px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-center"
+                >
+                  🔒 Privacy
+                </Link>
+                <Link
+                  to="/terms"
+                  className="px-3 py-2 bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-colors text-center"
+                >
+                  📋 Terms
+                </Link>
               </div>
               <div className="mt-3 text-xs text-yellow-700 text-center">
                 Click any button above to test navigation. Check browser console
