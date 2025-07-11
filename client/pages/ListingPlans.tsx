@@ -150,6 +150,7 @@ const successStories = [
 ];
 
 export default function ListingPlans() {
+  const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
     "monthly",
@@ -164,10 +165,8 @@ export default function ListingPlans() {
 
   const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId);
-    // In a real app, this would redirect to payment/signup
-    alert(
-      `Selected ${plans.find((p) => p.id === planId)?.name} plan. Redirecting to registration...`,
-    );
+    // Redirect to add-business page with selected plan
+    navigate(`/add-business?plan=${planId}&billing=${billingCycle}`);
   };
 
   return (
