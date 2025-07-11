@@ -203,8 +203,15 @@ export function GooglePlacesScraper() {
         loadScrapingJobs();
         loadStats();
       } else {
-        // Show more specific error message
-        toast.error(result.message || "No active scraping job to stop");
+        // Handle case where no active scraping job exists
+        if (result.message === "No active scraping job") {
+          toast.info("No active scraping job to stop");
+          setActiveJob(null);
+          loadScrapingJobs();
+          loadStats();
+        } else {
+          toast.error(result.message || "Failed to stop scraping");
+        }
       }
     } catch (error) {
       console.error("Stop scraping error:", error);
