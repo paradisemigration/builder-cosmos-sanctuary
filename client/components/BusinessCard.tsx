@@ -217,14 +217,16 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
           {/* Services/Specializations */}
           <div className="mb-4">
             <div className="flex flex-wrap gap-1">
-              {business.specializations.slice(0, 3).map((spec, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {spec}
-                </Badge>
-              ))}
-              {business.specializations.length > 3 && (
+              {(business.specializations || [])
+                .slice(0, 3)
+                .map((spec, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {spec}
+                  </Badge>
+                ))}
+              {(business.specializations || []).length > 3 && (
                 <Badge variant="secondary" className="text-xs">
-                  +{business.specializations.length - 3} more
+                  +{(business.specializations || []).length - 3} more
                 </Badge>
               )}
             </div>
@@ -249,7 +251,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
             </div>
             <div>
               <div className="text-lg font-bold text-purple-600">
-                {business.countriesServed.length}+
+                {(business.countriesServed || []).length}+
               </div>
               <div className="text-xs text-gray-500">Countries</div>
             </div>
@@ -293,7 +295,8 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                 <span>Open Now</span>
               </div>
               <div className="text-gray-500">
-                {business.languages?.slice(0, 2).join(", ") || "Hindi, English"}
+                {(business.languages || []).slice(0, 2).join(", ") ||
+                  "Hindi, English"}
               </div>
             </div>
           </div>
