@@ -248,6 +248,100 @@ class BusinessScraper {
     }
   }
 
+  // Fetch ALL reviews for existing businesses
+  async fetchAllReviewsForExistingBusinesses() {
+    try {
+      console.log(
+        "🔍 Starting to fetch ALL reviews for existing businesses...",
+      );
+
+      // Get all businesses from SQLite database
+      const allBusinessesResult = await sqliteDatabase.getBusinesses({
+        limit: 9999,
+      });
+      const businesses = allBusinessesResult.businesses || [];
+
+      console.log(
+        `📊 Found ${businesses.length} businesses to fetch reviews for`,
+      );
+
+      if (businesses.length === 0) {
+        return {
+          success: true,
+          message: "No businesses found in database",
+          totalBusinesses: 0,
+          totalReviews: 0,
+        };
+      }
+
+      let totalReviewsFetched = 0;
+      let businessesUpdated = 0;
+      const errors = [];
+
+      for (let i = 0; i < businesses.length; i++) {
+        const business = businesses[i];
+
+        try {
+          if (!business.googlePlaceId) {
+            console.log(`⏭️ Skipping ${business.name} - No Google Place ID`);
+            continue;
+          }
+
+          console.log(
+            `🔄 [${i + 1}/${businesses.length}] Fetching reviews for: ${business.name}`,
+          );
+
+          // Extract ALL reviews for this business
+          const reviewsData = await this.placesAPI.extractAllReviews(
+            business.googlePlaceId,
+          );
+
+          if (reviewsData.reviews.length > 0) {
+            // Save reviews to database (will replace existing reviews)
+            await sqliteDatabase.saveReviews(business.id, reviewsData.reviews);
+
+            totalReviewsFetched += reviewsData.reviews.length;
+            businessesUpdated++;
+
+            console.log(
+              `✅ Updated ${business.name} with ${reviewsData.reviews.length} reviews`,
+            );
+          } else {
+            console.log(`📝 No reviews found for ${business.name}`);
+          }
+
+          // Add delay to respect API rate limits
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        } catch (error) {
+          console.error(
+            `❌ Error fetching reviews for ${business.name}:`,
+            error.message,
+          );
+          errors.push(`${business.name}: ${error.message}`);
+        }
+      }
+
+      // Update statistics
+      await sqliteDatabase.updateStatistics();
+
+      console.log(
+        `🎉 Review fetching completed! Updated ${businessesUpdated} businesses with ${totalReviewsFetched} total reviews`,
+      );
+
+      return {
+        success: true,
+        totalBusinesses: businesses.length,
+        businessesUpdated,
+        totalReviewsFetched,
+        errors,
+        message: `Successfully fetched ${totalReviewsFetched} reviews for ${businessesUpdated} businesses`,
+      };
+    } catch (error) {
+      console.error("❌ Error fetching all reviews:", error);
+      throw error;
+    }
+  }
+
   // Get scraping status
   getStatus() {
     return {
