@@ -98,8 +98,9 @@ class BusinessScraper {
                   place.place_id,
                 );
                 if (existingBusiness) {
+                  duplicatesSkipped++;
                   console.log(
-                    `⏭️  Business ${businessData.name} already exists in database, skipping duplicate...`,
+                    `⏭️  Duplicate found: ${businessData.name} (${place.place_id}) - Skipping...`,
                   );
                   // Just count it but don't add to processed (to avoid duplicates in results)
                   continue;
@@ -167,7 +168,7 @@ class BusinessScraper {
             }
 
             console.log(
-              `📊 Progress: ${progress}% (${currentSearch}/${totalSearches}) | ${city} ${category}: ${processedBusinesses.length} businesses | Total: ${totalBusinesses}`,
+              `📊 Progress: ${progress}% (${currentSearch}/${totalSearches}) | ${city} ${category}: ${processedBusinesses.length} new businesses | Total: ${totalBusinesses} | Duplicates skipped: ${duplicatesSkipped}`,
             );
           } catch (error) {
             console.error(
@@ -193,12 +194,13 @@ class BusinessScraper {
       }
 
       console.log(
-        `🎉 Scraping completed! Processed ${totalBusinesses} businesses`,
+        `🎉 Scraping completed! Added ${totalBusinesses} new businesses, skipped ${duplicatesSkipped} duplicates`,
       );
 
       return {
         success: true,
         totalBusinesses,
+        duplicatesSkipped,
         totalSearches: currentSearch,
         errors,
       };
