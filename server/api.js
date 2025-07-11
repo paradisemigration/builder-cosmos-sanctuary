@@ -109,22 +109,19 @@ app.post(
 
       // Upload logo if provided
       if (req.files?.logo?.[0]) {
-        const logoResult = await uploadToGCS(req.files.logo[0], "logos");
+        const logoResult = await uploadToS3(req.files.logo[0], "logos");
         businessData.logo = logoResult.publicUrl;
       }
 
       // Upload cover image if provided
       if (req.files?.coverImage?.[0]) {
-        const coverResult = await uploadToGCS(
-          req.files.coverImage[0],
-          "covers",
-        );
+        const coverResult = await uploadToS3(req.files.coverImage[0], "covers");
         businessData.coverImage = coverResult.publicUrl;
       }
 
       // Upload gallery images if provided
       if (req.files?.gallery?.length > 0) {
-        const galleryResults = await uploadMultipleToGCS(
+        const galleryResults = await uploadMultipleToS3(
           req.files.gallery,
           "gallery",
         );
