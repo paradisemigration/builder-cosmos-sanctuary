@@ -3,7 +3,7 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCw, Database, Play, Square } from "lucide-react";
+import { RefreshCw, Database, Play, Square, Star } from "lucide-react";
 
 export default function AdminStatus() {
   const [stats, setStats] = useState<any>(null);
