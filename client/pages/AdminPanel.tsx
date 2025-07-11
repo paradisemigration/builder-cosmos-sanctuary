@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { Navigation } from "@/components/Navigation";
 import { ImageUpload } from "@/components/ImageUpload";
 import { DemoUpload } from "@/components/DemoUpload";
+import { GooglePlacesScraper } from "@/components/GooglePlacesScraper";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,11 +89,12 @@ export default function AdminPanel() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="listings">Listings</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
+            <TabsTrigger value="scraper">Data Scraper</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
@@ -485,6 +487,10 @@ export default function AdminPanel() {
                 </Card>
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="scraper">
+            <GooglePlacesScraper />
           </TabsContent>
         </Tabs>
       </div>

@@ -6,8 +6,13 @@ import {
   uploadMultipleToGCS,
   deleteFromGCS,
 } from "./storage.js";
+import BusinessScraper from "./scraper.js";
+import database from "./database.js";
 
 const app = express();
+
+// Initialize business scraper
+const scraper = new BusinessScraper(process.env.GOOGLE_PLACES_API_KEY);
 
 // Middleware
 app.use(
@@ -350,6 +355,248 @@ app.get("/api/test-upload", (req, res) => {
       googleCloudConfigured: !!process.env.GOOGLE_CLOUD_PROJECT_ID,
     },
   });
+});
+
+// ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
+
+// Start a new scraping job
+app.post("/api/scraping/start", async (req, res) => {
+  try {
+    const {
+      cities = [],
+      categories = [],
+      maxResultsPerSearch = 15,
+      delay = 1500,
+    } = req.body;
+
+    if (!cities.length || !categories.length) {
+      return res.status(400).json({
+        success: false,
+        error: "Cities and categories are required",
+      });
+    }
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    // Create scraping job
+    const jobResult = await database.createScrapingJob({
+      cities,
+      categories,
+      maxResultsPerSearch,
+      delay,
+      totalSearches: cities.length * categories.length,
+    });
+
+    if (!jobResult.success) {
+      return res.status(500).json(jobResult);
+    }
+
+    const jobId = jobResult.job.id;
+
+    // Start scraping in background
+    scraper
+      .scrapeBusinesses({
+        cities,
+        categories,
+        maxResultsPerSearch,
+        delay,
+        jobId,
+      })
+      .catch((error) => {
+        console.error("Background scraping error:", error);
+      });
+
+    res.json({
+      success: true,
+      jobId,
+      message: "Scraping job started successfully",
+      estimatedTime: `${Math.ceil((cities.length * categories.length * delay) / 60000)} minutes`,
+    });
+  } catch (error) {
+    console.error("Start scraping error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get scraping job status
+app.get("/api/scraping/job/:jobId", async (req, res) => {
+  try {
+    const job = await database.getScrapingJob(req.params.jobId);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        error: "Job not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      job,
+    });
+  } catch (error) {
+    console.error("Get job status error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get all scraping jobs
+app.get("/api/scraping/jobs", async (req, res) => {
+  try {
+    const jobs = await database.getScrapingJobs();
+
+    res.json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    console.error("Get jobs error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Stop current scraping job
+app.post("/api/scraping/stop", async (req, res) => {
+  try {
+    const result = await scraper.stopScraping();
+    res.json(result);
+  } catch (error) {
+    console.error("Stop scraping error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get scraping recommendations
+app.get("/api/scraping/recommendations", (req, res) => {
+  try {
+    const configs = scraper.getRecommendedConfigs();
+    res.json({
+      success: true,
+      configs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Validate Google Places API key
+app.get("/api/scraping/validate-api", async (req, res) => {
+  try {
+    const validation = await scraper.validateApiKey();
+    res.json({
+      success: true,
+      validation,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get scraping statistics
+app.get("/api/scraping/stats", (req, res) => {
+  try {
+    const stats = database.getStatistics();
+    const scrapingStatus = scraper.getStatus();
+
+    res.json({
+      success: true,
+      stats: {
+        ...stats,
+        scraping: scrapingStatus,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get scraped businesses with filters
+app.get("/api/scraped-businesses", async (req, res) => {
+  try {
+    const result = await database.getBusinesses(req.query);
+
+    res.json({
+      success: true,
+      ...result,
+    });
+  } catch (error) {
+    console.error("Get scraped businesses error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Delete scraped business
+app.delete("/api/scraped-businesses/:id", async (req, res) => {
+  try {
+    const result = await database.deleteBusiness(req.params.id);
+
+    if (result.success) {
+      res.json({
+        success: true,
+        message: "Business deleted successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: "Business not found",
+      });
+    }
+  } catch (error) {
+    console.error("Delete business error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Export scraped data
+app.get("/api/scraping/export", (req, res) => {
+  try {
+    const format = req.query.format || "json";
+    const data = database.exportData(format);
+
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="scraped-businesses-${Date.now()}.json"`,
+    );
+    res.send(data);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3001;

@@ -1,0 +1,331 @@
+import GooglePlacesAPI from "./google-places.js";
+import database from "./database.js";
+
+class BusinessScraper {
+  constructor(googleApiKey) {
+    this.placesAPI = new GooglePlacesAPI(googleApiKey);
+    this.isRunning = false;
+    this.currentJob = null;
+  }
+
+  // Main scraping method
+  async scrapeBusinesses(config) {
+    const {
+      cities = [],
+      categories = [],
+      maxResultsPerSearch = 20,
+      delay = 1000, // Delay between API calls
+      jobId = null,
+    } = config;
+
+    if (this.isRunning) {
+      throw new Error("Scraper is already running");
+    }
+
+    this.isRunning = true;
+    const totalSearches = cities.length * categories.length;
+    let currentSearch = 0;
+    let totalBusinesses = 0;
+    let errors = [];
+
+    try {
+      // Update job status
+      if (jobId) {
+        await database.updateScrapingJob(jobId, {
+          status: "running",
+          startedAt: new Date().toISOString(),
+          totalSearches,
+          progress: 0,
+        });
+      }
+
+      for (const city of cities) {
+        for (const category of categories) {
+          try {
+            console.log(`🔍 Searching for ${category} in ${city}...`);
+
+            // Search for places
+            const places = await this.placesAPI.searchPlaces(
+              category,
+              city,
+              10000, // 10km radius
+              "establishment",
+            );
+
+            console.log(
+              `📍 Found ${places.length} places for ${category} in ${city}`,
+            );
+
+            // Process each place
+            const processedBusinesses = [];
+            for (
+              let i = 0;
+              i < Math.min(places.length, maxResultsPerSearch);
+              i++
+            ) {
+              const place = places[i];
+
+              try {
+                // Get detailed information
+                const placeDetails = await this.placesAPI.getPlaceDetails(
+                  place.place_id,
+                );
+
+                // Extract and process business data
+                const businessData = await this.placesAPI.extractBusinessData(
+                  placeDetails,
+                  category,
+                );
+
+                // Check if business already exists
+                const existingBusiness = await database.getBusinessById(
+                  place.place_id,
+                );
+                if (existingBusiness) {
+                  console.log(
+                    `⏭️  Business ${businessData.name} already exists, skipping...`,
+                  );
+                  continue;
+                }
+
+                // Save to database
+                const saveResult = await database.saveBusiness(businessData);
+                if (saveResult.success) {
+                  processedBusinesses.push(saveResult.business);
+                  totalBusinesses++;
+                  console.log(`✅ Saved: ${businessData.name}`);
+                } else {
+                  console.error(
+                    `❌ Failed to save: ${businessData.name}`,
+                    saveResult.error,
+                  );
+                  errors.push(
+                    `Failed to save ${businessData.name}: ${saveResult.error}`,
+                  );
+                }
+
+                // Respect API rate limits
+                await this.delay(delay);
+              } catch (error) {
+                console.error(
+                  `❌ Error processing place ${place.name}:`,
+                  error.message,
+                );
+                errors.push(`Error processing ${place.name}: ${error.message}`);
+              }
+            }
+
+            currentSearch++;
+            const progress = Math.round((currentSearch / totalSearches) * 100);
+
+            // Update job progress
+            if (jobId) {
+              await database.updateScrapingJob(jobId, {
+                progress,
+                totalBusinesses,
+                currentCity: city,
+                currentCategory: category,
+                errors: errors.slice(-10), // Keep last 10 errors
+              });
+            }
+
+            console.log(
+              `📊 Progress: ${progress}% (${currentSearch}/${totalSearches})`,
+            );
+          } catch (error) {
+            console.error(
+              `❌ Error searching ${category} in ${city}:`,
+              error.message,
+            );
+            errors.push(
+              `Error searching ${category} in ${city}: ${error.message}`,
+            );
+          }
+        }
+      }
+
+      // Complete the job
+      if (jobId) {
+        await database.updateScrapingJob(jobId, {
+          status: "completed",
+          completedAt: new Date().toISOString(),
+          progress: 100,
+          totalBusinesses,
+          errors,
+        });
+      }
+
+      console.log(
+        `🎉 Scraping completed! Processed ${totalBusinesses} businesses`,
+      );
+
+      return {
+        success: true,
+        totalBusinesses,
+        totalSearches: currentSearch,
+        errors,
+      };
+    } catch (error) {
+      console.error("❌ Scraping failed:", error);
+
+      if (jobId) {
+        await database.updateScrapingJob(jobId, {
+          status: "failed",
+          error: error.message,
+          completedAt: new Date().toISOString(),
+        });
+      }
+
+      throw error;
+    } finally {
+      this.isRunning = false;
+      this.currentJob = null;
+    }
+  }
+
+  // Scrape specific business by place ID
+  async scrapeBusinessById(placeId, category = "Immigration Services") {
+    try {
+      console.log(`🔍 Fetching business details for place ID: ${placeId}`);
+
+      const placeDetails = await this.placesAPI.getPlaceDetails(placeId);
+      const businessData = await this.placesAPI.extractBusinessData(
+        placeDetails,
+        category,
+      );
+
+      const saveResult = await database.saveBusiness(businessData);
+
+      if (saveResult.success) {
+        console.log(`✅ Successfully scraped and saved: ${businessData.name}`);
+        return saveResult;
+      } else {
+        throw new Error(saveResult.error);
+      }
+    } catch (error) {
+      console.error("❌ Single business scraping failed:", error);
+      throw error;
+    }
+  }
+
+  // Get scraping status
+  getStatus() {
+    return {
+      isRunning: this.isRunning,
+      currentJob: this.currentJob,
+    };
+  }
+
+  // Stop current scraping job
+  async stopScraping() {
+    if (this.isRunning && this.currentJob) {
+      await database.updateScrapingJob(this.currentJob, {
+        status: "cancelled",
+        completedAt: new Date().toISOString(),
+      });
+
+      this.isRunning = false;
+      this.currentJob = null;
+
+      return { success: true, message: "Scraping stopped" };
+    }
+
+    return { success: false, message: "No active scraping job" };
+  }
+
+  // Utility method for delays
+  delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  // Get recommended search configurations
+  getRecommendedConfigs() {
+    return {
+      visa_consultants: {
+        categories: [
+          "visa consultant",
+          "immigration lawyer",
+          "travel agency",
+          "immigration services",
+          "study abroad consultant",
+        ],
+        cities: [
+          "Delhi",
+          "Mumbai",
+          "Bangalore",
+          "Chennai",
+          "Hyderabad",
+          "Kolkata",
+          "Pune",
+          "Ahmedabad",
+          "Jaipur",
+          "Lucknow",
+        ],
+        maxResultsPerSearch: 15,
+        delay: 1500,
+      },
+      student_visa: {
+        categories: [
+          "study abroad consultant",
+          "education consultant",
+          "student visa services",
+          "overseas education",
+        ],
+        cities: [
+          "Delhi",
+          "Mumbai",
+          "Bangalore",
+          "Chennai",
+          "Pune",
+          "Hyderabad",
+          "Chandigarh",
+          "Jaipur",
+          "Kochi",
+        ],
+        maxResultsPerSearch: 10,
+        delay: 1000,
+      },
+      immigration_lawyers: {
+        categories: [
+          "immigration lawyer",
+          "immigration attorney",
+          "legal services immigration",
+          "visa lawyer",
+        ],
+        cities: [
+          "Delhi",
+          "Mumbai",
+          "Bangalore",
+          "Chennai",
+          "Gurgaon",
+          "Noida",
+          "Pune",
+          "Hyderabad",
+        ],
+        maxResultsPerSearch: 8,
+        delay: 2000,
+      },
+    };
+  }
+
+  // Validate Google Places API key
+  async validateApiKey() {
+    try {
+      const testResult = await this.placesAPI.searchPlaces(
+        "visa consultant",
+        "Delhi",
+        1000,
+      );
+      return { valid: true, message: "API key is valid" };
+    } catch (error) {
+      return {
+        valid: false,
+        message: error.message.includes("API")
+          ? "Invalid API key"
+          : "API connection failed",
+      };
+    }
+  }
+}
+
+export default BusinessScraper;
