@@ -542,6 +542,33 @@ export default function AdminStatus() {
                   </>
                 )}
               </Button>
+
+              <Button
+                onClick={refreshReviewCounts}
+                disabled={
+                  reviewCountsLoading ||
+                  stats?.scraping?.isRunning ||
+                  stats?.error
+                }
+                variant="outline"
+                title={
+                  stats?.error
+                    ? "Cannot refresh: Server offline"
+                    : "Refresh review counts from Google Places API (gets total review count, not just ~5 reviews)"
+                }
+              >
+                {reviewCountsLoading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Updating Counts...
+                  </>
+                ) : (
+                  <>
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Refresh Review Counts
+                  </>
+                )}
+              </Button>
             </div>
           </div>
 
