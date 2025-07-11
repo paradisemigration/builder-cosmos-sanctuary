@@ -48,11 +48,17 @@ const App = () => (
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Legacy business profile route for backward compatibility */}
-            <Route path="/business/:id" element={<BusinessProfile />} />
-
-            {/* City-specific business listing routes */}
+            {/* City-specific business listing routes - more specific routes first */}
             <Route path="/business/:city" element={<CityBusinessListing />} />
+
+            {/* New SEO-friendly business profile route: /business/city/company-name */}
+            <Route
+              path="/business/:city/:companyName"
+              element={<BusinessProfile />}
+            />
+
+            {/* Legacy business profile route for backward compatibility - numeric IDs only */}
+            <Route path="/business/:id" element={<BusinessProfile />} />
 
             {/* SEO-friendly category and location routes */}
             <Route
@@ -62,12 +68,6 @@ const App = () => (
             <Route
               path="/location/:location"
               element={<CategoryLocationPage />}
-            />
-
-            {/* New SEO-friendly business profile route: /business/city/company-name */}
-            <Route
-              path="/business/:city/:companyName"
-              element={<BusinessProfile />}
             />
 
             {/* Protected Routes - Require Authentication */}
