@@ -231,7 +231,7 @@ export default function AdminPanel() {
                   }
                 >
                   <div className="space-y-2">
-                    {import.meta.env.MODE === "development" ? (
+                    {isLocalDevelopment ? (
                       <>
                         <p>• Google Cloud Storage: Configured ✅</p>
                         <p>• API Server: Running on port 3001 ✅</p>
@@ -346,7 +346,7 @@ export default function AdminPanel() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {import.meta.env.MODE === "development" ? (
+                    {isLocalDevelopment ? (
                       <ImageUpload
                         onUpload={(urls) =>
                           console.log("Logos uploaded:", urls)
