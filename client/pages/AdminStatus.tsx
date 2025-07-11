@@ -10,6 +10,7 @@ export default function AdminStatus() {
   const [diagnostic, setDiagnostic] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [scrapingLoading, setScrapingLoading] = useState(false);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
   const loadStatus = async () => {
     try {
@@ -73,6 +74,34 @@ export default function AdminStatus() {
     }
   };
 
+  const fetchAllReviews = async () => {
+    try {
+      setReviewsLoading(true);
+
+      const response = await fetch("/api/scraping/fetch-all-reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      console.log("Review fetching started:", result);
+
+      alert(
+        result.message + "\n\nCheck the console logs for progress updates.",
+      );
+
+      // Reload status after starting
+      setTimeout(loadStatus, 2000);
+    } catch (error) {
+      console.error("Failed to start review fetching:", error);
+      alert("Failed to start review fetching: " + error.message);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadStatus();
 
@@ -113,6 +142,24 @@ export default function AdminStatus() {
                   <>
                     <Play className="h-4 w-4 mr-2" />
                     Start Scraping
+                  </>
+                )}
+              </Button>
+
+              <Button
+                onClick={fetchAllReviews}
+                disabled={reviewsLoading || stats?.scraping?.isRunning}
+                variant="outline"
+              >
+                {reviewsLoading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Fetching Reviews...
+                  </>
+                ) : (
+                  <>
+                    <Star className="h-4 w-4 mr-2" />
+                    Fetch All Reviews
                   </>
                 )}
               </Button>
