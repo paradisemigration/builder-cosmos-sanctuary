@@ -26,7 +26,9 @@ import {
 import {
   businessCategories,
   dubaiZones,
+  indianCities,
   uaeCities,
+  visaTypes,
   sampleBusinesses,
 } from "@/lib/data";
 import { useGeolocation } from "@/hooks/useGeolocation";
