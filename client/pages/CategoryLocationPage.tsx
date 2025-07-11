@@ -133,13 +133,13 @@ export default function CategoryLocationPage() {
     verified: true, // Show only verified businesses for SEO pages
   };
 
-  // Use business data hook
+  // Use business data hook (disabled auto-fetch for demo)
   const {
     businesses: apiBusinesses,
     loading: businessesLoading,
     error: businessesError,
     refetch,
-  } = useBusinessData(apiFilters);
+  } = useBusinessData(apiFilters, false);
 
   // Use sample data as fallback when API fails
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
