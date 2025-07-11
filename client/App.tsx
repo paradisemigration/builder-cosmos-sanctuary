@@ -20,6 +20,8 @@ import EditBusiness from "./pages/EditBusiness";
 import BusinessDashboard from "./pages/BusinessDashboard";
 import ListingPlans from "./pages/ListingPlans";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
+import CantFindBusiness from "./pages/CantFindBusiness";
 import CategoryLocationPage from "./pages/CategoryLocationPage";
 import AdminBulkUpload from "./pages/AdminBulkUpload";
 import NotFound from "./pages/NotFound";
