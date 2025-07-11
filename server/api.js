@@ -1186,6 +1186,8 @@ app.get("/api/admin/business-images-status", async (req, res) => {
       AND logo NOT LIKE '%placeholder%'
       AND coverImage IS NOT NULL
       AND coverImage NOT LIKE '%placeholder%'
+      AND gallery IS NOT NULL
+      AND gallery != '[]'
     `,
       )
       .get();
@@ -1197,6 +1199,20 @@ app.get("/api/admin/business-images-status", async (req, res) => {
       OR coverImage LIKE '%placeholder%'
       OR logo IS NULL
       OR coverImage IS NULL
+      OR gallery IS NULL
+      OR gallery = '[]'
+    `,
+      )
+      .get();
+
+    // Count total gallery images across all businesses
+    const totalGalleryImages = bulkDatabase
+      .prepare(
+        `
+      SELECT COUNT(*) as count FROM businesses
+      WHERE gallery IS NOT NULL
+      AND gallery != '[]'
+      AND gallery != 'null'
     `,
       )
       .get();
