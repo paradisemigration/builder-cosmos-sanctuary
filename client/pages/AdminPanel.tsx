@@ -326,17 +326,21 @@ export default function AdminPanel() {
                       </div>
 
                       {/* View All Button */}
-                      {businesses.length >= 100 && (
-                        <div className="text-center pt-4 border-t">
+                      <div className="text-center pt-4 border-t">
+                        <div className="flex items-center justify-center gap-4">
+                          <p className="text-sm text-gray-600">
+                            Showing {businesses.length} of{" "}
+                            {stats?.totalBusinesses || businesses.length}{" "}
+                            businesses
+                          </p>
                           <Button
                             onClick={() => window.open("/business", "_blank")}
                             variant="outline"
                           >
-                            View All Listings (
-                            {stats?.totalBusinesses || businesses.length})
+                            View All Listings
                           </Button>
                         </div>
-                      )}
+                      </div>
                     </div>
                   )}
                 </CardContent>
