@@ -100,6 +100,7 @@ export default function AdminStatus() {
         } catch (error) {
           statsError = error;
           console.warn(`❌ Stats attempt ${i + 1} failed:`, error.message);
+          console.warn("Error details:", error);
           if (i < 2) {
             console.log("⏳ Waiting 3s before retry...");
             await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -406,26 +407,50 @@ export default function AdminStatus() {
   const loadImageStats = async () => {
     try {
       console.log("📊 Loading image statistics...");
-      const response = await fetch("/api/admin/business-images-status", {
-        cache: "no-store",
+
+      // Try with retries like loadStatus
+      let imageStatsError = null;
+      for (let i = 0; i < 3; i++) {
+        try {
+          const response = await fetch("/api/admin/business-images-status", {
+            cache: "no-store",
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          console.log("📊 Image stats response:", result);
+
+          if (result.success) {
+            setImageStats(result.stats);
+            console.log("✅ Image stats loaded:", result.stats);
+            return; // Success, exit function
+          } else {
+            console.error("❌ Failed to load image stats:", result.error);
+            setImageStats({ error: result.error });
+            return;
+          }
+        } catch (error) {
+          imageStatsError = error;
+          console.warn(
+            `❌ Image stats attempt ${i + 1} failed:`,
+            error.message,
+          );
+          if (i < 2) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+      }
+
+      // If all retries failed
+      console.error("❌ All image stats attempts failed:", imageStatsError);
+      setImageStats({
+        error: `Connection failed: ${imageStatsError?.message || "Unknown error"}`,
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log("📊 Image stats response:", result);
-
-      if (result.success) {
-        setImageStats(result.stats);
-        console.log("✅ Image stats loaded:", result.stats);
-      } else {
-        console.error("❌ Failed to load image stats:", result.error);
-        setImageStats({ error: result.error });
-      }
     } catch (error) {
-      console.error("❌ Failed to load image stats:", error);
+      console.error("❌ Critical error in loadImageStats:", error);
       setImageStats({ error: error.message });
     }
   };
