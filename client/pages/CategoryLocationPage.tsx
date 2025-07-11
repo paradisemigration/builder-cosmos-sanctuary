@@ -17,7 +17,11 @@ import {
   Search,
   CheckCircle,
 } from "lucide-react";
-import { businessCategories, indianCities, type Business } from "@/lib/data";
+import {
+  businessCategories,
+  indianCities,
+  type Business,
+} from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
@@ -29,7 +33,7 @@ export default function CategoryLocationPage() {
   // Convert URL slugs back to display names
   const getDisplayName = (slug: string, type: "location" | "category") => {
     if (type === "location") {
-      // Check Indian cities first, then UAE cities and Dubai zones for backward compatibility
+      // Check Indian cities
       return (
         indianCities.find(
           (city) =>
@@ -38,18 +42,7 @@ export default function CategoryLocationPage() {
               .replace(/[^a-z0-9]/g, "-")
               .replace(/-+/g, "-")
               .replace(/^-|-$/g, "") === slug,
-        ) ||
-        uaeCities.find(
-          (city) =>
-            city
-              .toLowerCase()
-              .replace(/[^a-z0-9]/g, "-")
-              .replace(/-+/g, "-")
-              .replace(/^-|-$/g, "") === slug,
-        ) ||
-        dubaiZones.find(
-          (zone) =>
-            zone
+        ) || slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ")
               .toLowerCase()
               .replace(/[^a-z0-9]/g, "-")
               .replace(/-+/g, "-")
