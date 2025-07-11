@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import {
   uploadMiddleware,
-  uploadToGCS,
-  uploadMultipleToGCS,
-  deleteFromGCS,
-} from "./storage.js";
+  uploadToS3,
+  uploadMultipleToS3,
+  deleteFromS3,
+  checkS3Configuration,
+} from "./storage-s3.js";
 import BusinessScraper from "./scraper.js";
 import GooglePlaces from "./google-places.js";
 import database from "./database.js";
