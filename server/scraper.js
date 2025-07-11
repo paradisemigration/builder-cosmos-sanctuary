@@ -1,5 +1,6 @@
 import GooglePlacesAPI from "./google-places.js";
 import database from "./database.js";
+import sqliteDatabase from "./database.sqlite.js";
 
 class BusinessScraper {
   constructor(googleApiKey) {
@@ -112,17 +113,20 @@ class BusinessScraper {
                   continue;
                 }
 
-                // Save new business to database
-                const saveResult = await database.saveBusiness(businessData);
+                // Save new business to both databases (SQLite primary, memory for jobs)
+                const saveResult =
+                  await sqliteDatabase.saveBusiness(businessData);
+                const memoryResult = await database.saveBusiness(businessData);
+
                 if (saveResult.success) {
                   processedBusinesses.push(saveResult.business);
                   totalBusinesses++;
                   console.log(
-                    `✅ Saved: ${businessData.name} | Reviews: ${businessData.reviews?.length || 0} | City: ${city}`,
+                    `✅ Saved to SQLite: ${businessData.name} | Reviews: ${businessData.reviews?.length || 0} | City: ${city}`,
                   );
                 } else {
                   console.error(
-                    `❌ Failed to save: ${businessData.name}`,
+                    `❌ Failed to save to SQLite: ${businessData.name}`,
                     saveResult.error,
                   );
                   errors.push(
