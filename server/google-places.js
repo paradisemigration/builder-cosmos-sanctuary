@@ -122,6 +122,52 @@ class GooglePlacesAPI {
     }
   }
 
+  // Download and store a photo in AWS S3 for scraped businesses
+  async downloadAndStorePhotoToS3(photoReference, placeId, imageIndex) {
+    try {
+      console.log(
+        `📸 Downloading image ${imageIndex + 1} for place: ${placeId}`,
+      );
+
+      // Get the full-size photo URL from Google Places
+      const photoUrl = `${this.baseUrl}/photo?maxwidth=800&photoreference=${photoReference}&key=${this.apiKey}`;
+
+      // Download the image
+      const response = await fetch(photoUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to download image: ${response.statusText}`);
+      }
+
+      const imageBuffer = await response.buffer();
+
+      // Create file object for S3 upload
+      const file = {
+        buffer: imageBuffer,
+        originalname: `scraped_${placeId}_${imageIndex + 1}.jpg`,
+        mimetype: "image/jpeg",
+        size: imageBuffer.length,
+      };
+
+      // Determine folder based on image index
+      const folder =
+        imageIndex === 0 ? "logos" : imageIndex === 1 ? "covers" : "gallery";
+
+      // Upload to S3
+      const s3Result = await uploadToS3(file, folder);
+
+      console.log(
+        `✅ Image ${imageIndex + 1} uploaded to S3: ${s3Result.publicUrl}`,
+      );
+      return s3Result.publicUrl;
+    } catch (error) {
+      console.error(
+        `❌ Error downloading/storing photo ${imageIndex + 1}:`,
+        error,
+      );
+      return null;
+    }
+  }
+
   // Process and extract business data
   async extractBusinessData(placeData, category = "Immigration Services") {
     try {
