@@ -19,6 +19,7 @@ import AdminPanel from "./pages/AdminPanel";
 import EditBusiness from "./pages/EditBusiness";
 import BusinessDashboard from "./pages/BusinessDashboard";
 import ListingPlans from "./pages/ListingPlans";
+import ListBusiness from "./pages/ListBusiness";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import CantFindBusiness from "./pages/CantFindBusiness";
