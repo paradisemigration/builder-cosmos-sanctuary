@@ -2,30 +2,7 @@ import React from "react";
 import "./global.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Pages
-import Index from "./pages/Index";
-import Browse from "./pages/Browse";
-import BusinessProfile from "./pages/BusinessProfile";
-import AddBusiness from "./pages/AddBusiness";
-import Login from "./pages/Login";
-import AdminPanel from "./pages/AdminPanel";
-import EditBusiness from "./pages/EditBusiness";
-import BusinessDashboard from "./pages/BusinessDashboard";
-import ListingPlans from "./pages/ListingPlans";
-import ListBusiness from "./pages/ListBusiness";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import CantFindBusiness from "./pages/CantFindBusiness";
-import CategoryLocationPage from "./pages/CategoryLocationPage";
-import CityBusinessListing from "./pages/CityBusinessListing";
-import CityCategory from "./pages/CityCategory";
-import CityRouteHandler from "./components/CityRouteHandler";
-import AdminBulkUpload from "./pages/AdminBulkUpload";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import NotFound from "./pages/NotFound";
-
-const queryClient = new QueryClient();
+// Temporary simplified version to avoid React version conflicts
 
 // Simple working homepage component
 function SimpleHomepage() {
