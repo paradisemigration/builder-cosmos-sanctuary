@@ -44,9 +44,6 @@ const App = () => (
             <Route path="/plans" element={<ListingPlans />} />
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cant-find-business" element={<CantFindBusiness />} />
 
             {/* Legacy business profile route for backward compatibility */}
             <Route path="/business/:id" element={<BusinessProfile />} />
