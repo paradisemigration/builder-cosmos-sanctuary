@@ -250,9 +250,9 @@ export function CategoryFilter({
 
             {/* Cities */}
             <div>
-              <h4 className="font-semibold mb-3">UAE Cities</h4>
+              <h4 className="font-semibold mb-3">Indian Cities</h4>
               <div className="space-y-2 max-h-48 overflow-y-auto">
-                {uaeCities.map((city) => (
+                {indianCities.map((city) => (
                   <div key={city} className="flex items-center space-x-2">
                     <Checkbox
                       id={city}
