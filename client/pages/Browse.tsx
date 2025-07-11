@@ -92,7 +92,11 @@ export default function Browse() {
   const pageSize = 25;
 
   // Load real scraped businesses from database
-  const loadScrapedBusinesses = async (page = 1, append = false) => {
+  const loadScrapedBusinesses = async (
+    page = 1,
+    append = false,
+    filters = {},
+  ) => {
     try {
       if (page === 1) {
         setLoading(true);
@@ -102,9 +106,14 @@ export default function Browse() {
       }
       setError(null);
 
-      const response = await fetch(
-        `/api/scraped-businesses?page=${page}&limit=${pageSize}`,
-      );
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: pageSize.toString(),
+        ...filters,
+      });
+
+      const response = await fetch(`/api/scraped-businesses?${params}`);
       const result = await response.json();
 
       if (result.success) {
@@ -154,7 +163,13 @@ export default function Browse() {
   // Load more businesses
   const loadMore = () => {
     if (!loadingMore && hasMore) {
-      loadScrapedBusinesses(currentPage + 1, true);
+      const filters = {};
+      if (searchQuery) filters.q = searchQuery;
+      if (selectedCategory && selectedCategory !== "all")
+        filters.category = selectedCategory;
+      if (selectedZone && selectedZone !== "all") filters.city = selectedZone;
+
+      loadScrapedBusinesses(currentPage + 1, true, filters);
     }
   };
 
@@ -163,93 +178,22 @@ export default function Browse() {
     loadScrapedBusinesses();
   }, []);
 
-  // Use real scraped businesses for filtering
-  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
-
-  // Filter logic for real scraped data (client-side filtering for loaded data)
+  // Apply server-side filtering by reloading data when filters change
   useEffect(() => {
-    let filtered = [...scrapedBusinesses];
+    const filters = {};
+    if (searchQuery) filters.q = searchQuery;
+    if (selectedCategory && selectedCategory !== "all")
+      filters.category = selectedCategory;
+    if (selectedZone && selectedZone !== "all") filters.city = selectedZone;
 
-    // Text search (only for loaded businesses)
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (business) =>
-          business.name?.toLowerCase().includes(query) ||
-          business.description?.toLowerCase().includes(query) ||
-          business.category?.toLowerCase().includes(query) ||
-          business.scrapedCategory?.toLowerCase().includes(query) ||
-          business.services?.some((service) =>
-            service?.toLowerCase().includes(query),
-          ),
-      );
-    }
-
-    // Category filter (only for loaded businesses)
-    if (selectedCategory && selectedCategory !== "all") {
-      filtered = filtered.filter(
-        (business) =>
-          business.category
-            ?.toLowerCase()
-            .includes(selectedCategory.toLowerCase()) ||
-          business.scrapedCategory
-            ?.toLowerCase()
-            .includes(selectedCategory.toLowerCase()),
-      );
-    }
-
-    // Location filter (only for loaded businesses)
-    if (selectedZone && selectedZone !== "all") {
-      filtered = filtered.filter(
-        (business) =>
-          business.city?.toLowerCase().includes(selectedZone.toLowerCase()) ||
-          business.scrapedCity
-            ?.toLowerCase()
-            .includes(selectedZone.toLowerCase()) ||
-          business.address?.toLowerCase().includes(selectedZone.toLowerCase()),
-      );
-    }
-
-    // Sort
-    switch (filters.sortBy) {
-      case "rating":
-        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-        break;
-      case "reviews":
-        filtered.sort(
-          (a, b) =>
-            (b.reviewCount || b.reviews?.length || 0) -
-            (a.reviewCount || a.reviews?.length || 0),
-        );
-        break;
-      case "name":
-        filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-        break;
-    }
-
-    setFilteredBusinesses(filtered);
-  }, [
-    scrapedBusinesses,
-    searchQuery,
-    selectedCategory,
-    selectedZone,
-    filters.sortBy,
-  ]);
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    if (searchQuery || selectedCategory !== "all" || selectedZone !== "all") {
-      // When filtering, load all data and reset pagination
-      setCurrentPage(1);
-      setHasMore(false);
-      loadScrapedBusinesses(1, false);
-    } else {
-      // Reset to first page when clearing filters
-      setCurrentPage(1);
-      setHasMore(true);
-      loadScrapedBusinesses(1, false);
-    }
+    // Reset to first page and reload with new filters
+    setCurrentPage(1);
+    setHasMore(true);
+    loadScrapedBusinesses(1, false, filters);
   }, [searchQuery, selectedCategory, selectedZone]);
+
+  // Use scraped businesses directly since filtering is done server-side
+  const filteredBusinesses = scrapedBusinesses;
 
   // Initialize page title on mount
   useEffect(() => {
