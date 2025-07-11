@@ -266,34 +266,65 @@ export default function AdminPanel() {
                 </CardContent>
               </Card>
 
-              {/* Google Cloud Storage Status */}
-              <Card className="border-yellow-200 bg-yellow-50">
+              {/* Deployment Information */}
+              <Card className="border-purple-200 bg-purple-50">
                 <CardHeader>
-                  <CardTitle className="text-yellow-800">
-                    🚀 Google Cloud Storage Integration
+                  <CardTitle className="text-purple-800">
+                    🚀 Deployment Status & Next Steps
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-yellow-700">
-                  <p className="mb-4">
-                    Ready to handle thousands of images! To enable uploads:
-                  </p>
-                  <ol className="list-decimal list-inside space-y-2 text-sm">
-                    <li>Configure your Google Cloud Storage credentials</li>
-                    <li>Update .env file with project details</li>
-                    <li>Start the API server</li>
-                    <li>Begin uploading images</li>
-                  </ol>
-                  <div className="mt-4 p-3 bg-gray-100 rounded text-xs font-mono">
-                    <p>GOOGLE_CLOUD_PROJECT_ID=your-project-id</p>
-                    <p>GOOGLE_CLOUD_BUCKET_NAME=your-bucket-name</p>
-                  </div>
+                <CardContent className="text-purple-700">
+                  {import.meta.env.MODE === "development" ? (
+                    <>
+                      <p className="mb-4">
+                        ✅ <strong>Development Environment Active</strong>
+                      </p>
+                      <p className="mb-4">
+                        Your Google Cloud Storage is configured and ready for
+                        uploads:
+                      </p>
+                      <div className="mt-4 p-3 bg-gray-100 rounded text-xs font-mono">
+                        <p>Project: extreme-water-465615-i5</p>
+                        <p>Bucket: dreamvisa-storage</p>
+                        <p>API: http://localhost:3001</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mb-4">
+                        🌐 <strong>Frontend Successfully Deployed</strong>
+                      </p>
+                      <p className="mb-4">
+                        To enable full functionality with image uploads:
+                      </p>
+                      <ol className="list-decimal list-inside space-y-2 text-sm">
+                        <li>
+                          Deploy the Node.js API server to your hosting platform
+                        </li>
+                        <li>Update VITE_API_URL environment variable</li>
+                        <li>
+                          Configure Google Cloud Storage bucket permissions
+                        </li>
+                        <li>Test upload functionality</li>
+                      </ol>
+                      <div className="mt-4 p-3 bg-gray-100 rounded text-xs font-mono">
+                        <p>Frontend: ✅ Deployed</p>
+                        <p>Backend: 📋 Pending deployment</p>
+                        <p>Storage: ✅ Configured</p>
+                      </div>
+                    </>
+                  )}
                   <div className="mt-4">
                     <Button
                       onClick={() =>
-                        window.open("/GOOGLE_CLOUD_SETUP.md", "_blank")
+                        window.open(
+                          "https://github.com/vercel/vercel",
+                          "_blank",
+                        )
                       }
+                      variant="outline"
                     >
-                      📖 View Setup Guide
+                      📖 Deploy Backend Guide
                     </Button>
                   </div>
                 </CardContent>
