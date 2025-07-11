@@ -71,11 +71,26 @@ class BusinessScraper {
                   place.place_id,
                 );
 
-                // Extract and process business data
+                // Extract and process business data with city information
                 const businessData = await this.placesAPI.extractBusinessData(
                   placeDetails,
                   category,
                 );
+
+                // Enhanced business data with scraping metadata
+                if (businessData && businessData.name) {
+                  businessData.scrapedCity = city;
+                  businessData.scrapedCategory = category;
+                  businessData.scrapedAt = new Date().toISOString();
+
+                  // Ensure we store at least 5 reviews if available
+                  if (businessData.reviews && businessData.reviews.length > 5) {
+                    businessData.reviews = businessData.reviews.slice(0, 5);
+                  }
+
+                  // Add minimum required reviews note
+                  businessData.reviewsNote = `Stored ${businessData.reviews?.length || 0} reviews (max 5 per business)`;
+                }
 
                 // Check if business already exists
                 const existingBusiness = await database.getBusinessById(
@@ -83,17 +98,28 @@ class BusinessScraper {
                 );
                 if (existingBusiness) {
                   console.log(
-                    `⏭️  Business ${businessData.name} already exists, skipping...`,
+                    `⏭️  Business ${businessData.name} already exists, updating with latest data...`,
                   );
+                  // Update existing business with new scraping metadata
+                  const updateResult = await database.saveBusiness({
+                    ...existingBusiness,
+                    ...businessData,
+                    updatedAt: new Date().toISOString(),
+                  });
+                  if (updateResult.success) {
+                    processedBusinesses.push(updateResult.business);
+                  }
                   continue;
                 }
 
-                // Save to database
+                // Save new business to database
                 const saveResult = await database.saveBusiness(businessData);
                 if (saveResult.success) {
                   processedBusinesses.push(saveResult.business);
                   totalBusinesses++;
-                  console.log(`✅ Saved: ${businessData.name}`);
+                  console.log(
+                    `✅ Saved: ${businessData.name} | Reviews: ${businessData.reviews?.length || 0} | City: ${city}`,
+                  );
                 } else {
                   console.error(
                     `❌ Failed to save: ${businessData.name}`,
