@@ -91,17 +91,17 @@ export default function Browse() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/api/scraped-businesses');
+      const response = await fetch("/api/scraped-businesses");
       const result = await response.json();
 
       if (result.success) {
         setScrapedBusinesses(result.businesses || []);
       } else {
-        setError('Failed to load businesses');
+        setError("Failed to load businesses");
       }
     } catch (error) {
-      console.error('Failed to load scraped businesses:', error);
-      setError('Failed to load businesses');
+      console.error("Failed to load scraped businesses:", error);
+      setError("Failed to load businesses");
     } finally {
       setLoading(false);
     }
@@ -134,41 +134,51 @@ export default function Browse() {
       );
     }
 
-      // Category filter
-      if (selectedCategory && selectedCategory !== "all") {
-        filtered = filtered.filter((business) =>
+    // Category filter
+    if (selectedCategory && selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (business) =>
           business.category
-            .toLowerCase()
+            ?.toLowerCase()
+            .includes(selectedCategory.toLowerCase()) ||
+          business.scrapedCategory
+            ?.toLowerCase()
             .includes(selectedCategory.toLowerCase()),
-        );
-      }
-
-      // Location filter
-      if (selectedZone && selectedZone !== "all") {
-        filtered = filtered.filter(
-          (business) =>
-            business.city.toLowerCase().includes(selectedZone.toLowerCase()) ||
-            business.address.toLowerCase().includes(selectedZone.toLowerCase()),
-        );
-      }
-
-      // Sort
-      switch (filters.sortBy) {
-        case "rating":
-          filtered.sort((a, b) => b.rating - a.rating);
-          break;
-        case "reviews":
-          filtered.sort((a, b) => b.reviewCount - a.reviewCount);
-          break;
-        case "name":
-          filtered.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-      }
-
-      setFilteredBusinesses(filtered);
+      );
     }
+
+    // Location filter
+    if (selectedZone && selectedZone !== "all") {
+      filtered = filtered.filter(
+        (business) =>
+          business.city?.toLowerCase().includes(selectedZone.toLowerCase()) ||
+          business.scrapedCity
+            ?.toLowerCase()
+            .includes(selectedZone.toLowerCase()) ||
+          business.address?.toLowerCase().includes(selectedZone.toLowerCase()),
+      );
+    }
+
+    // Sort
+    switch (filters.sortBy) {
+      case "rating":
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case "reviews":
+        filtered.sort(
+          (a, b) =>
+            (b.reviewCount || b.reviews?.length || 0) -
+            (a.reviewCount || a.reviews?.length || 0),
+        );
+        break;
+      case "name":
+        filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+        break;
+    }
+
+    setFilteredBusinesses(filtered);
   }, [
-    apiBusiness,
+    scrapedBusinesses,
     searchQuery,
     selectedCategory,
     selectedZone,
