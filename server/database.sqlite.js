@@ -133,9 +133,44 @@ class SQLiteDatabase {
           reject(err);
         } else {
           console.log("✅ Database tables created successfully");
-          resolve();
+          // Add missing columns if they don't exist
+          this.addMissingColumns().then(resolve).catch(reject);
         }
       });
+    });
+  }
+
+  async addMissingColumns() {
+    return new Promise((resolve, reject) => {
+      try {
+        // Check if columns exist and add them if missing
+        const addColumnIfNotExists = (tableName, columnName, columnType) => {
+          try {
+            this.db.exec(
+              `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType}`,
+            );
+            console.log(`✅ Added column ${columnName} to ${tableName}`);
+          } catch (error) {
+            if (error.message.includes("duplicate column name")) {
+              console.log(
+                `ℹ️ Column ${columnName} already exists in ${tableName}`,
+              );
+            } else {
+              throw error;
+            }
+          }
+        };
+
+        addColumnIfNotExists("businesses", "logo", "TEXT");
+        addColumnIfNotExists("businesses", "coverImage", "TEXT");
+        addColumnIfNotExists("businesses", "gallery", "TEXT");
+
+        console.log("✅ Column migration completed");
+        resolve();
+      } catch (error) {
+        console.error("❌ Column migration failed:", error);
+        reject(error);
+      }
     });
   }
 
