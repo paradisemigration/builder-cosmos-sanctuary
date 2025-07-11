@@ -250,6 +250,89 @@ export default function AdminPanel() {
     }
   };
 
+  // Handler functions for admin actions
+  const handleViewBusiness = (business: Business) => {
+    setSelectedBusiness(business);
+    setShowBusinessDetails(true);
+  };
+
+  const handleEditBusiness = (business: Business) => {
+    setSelectedBusiness(business);
+    setShowEditBusiness(true);
+  };
+
+  const handleApproveBusiness = (businessId: string) => {
+    // In real app, would call API
+    alert(`Business ${businessId} approved successfully!`);
+  };
+
+  const handleDeleteBusiness = (businessId: string) => {
+    if (
+      confirm(
+        "Are you sure you want to delete this business? This action cannot be undone.",
+      )
+    ) {
+      // In real app, would call API
+      alert(`Business ${businessId} deleted successfully!`);
+    }
+  };
+
+  const handleViewReview = (review: any) => {
+    setSelectedReview(review);
+    setShowReviewDetails(true);
+  };
+
+  const handleFlagReview = (reviewId: number) => {
+    // In real app, would call API
+    alert(`Review ${reviewId} flagged for moderation!`);
+  };
+
+  const handleDeleteReview = (reviewId: number) => {
+    if (confirm("Are you sure you want to delete this review?")) {
+      // In real app, would call API
+      alert(`Review ${reviewId} deleted successfully!`);
+    }
+  };
+
+  const handleViewUser = (user: any) => {
+    setSelectedUser(user);
+    setShowUserDetails(true);
+  };
+
+  const handleSuspendUser = (userId: number) => {
+    if (confirm("Are you sure you want to suspend this user?")) {
+      // In real app, would call API
+      alert(`User ${userId} suspended successfully!`);
+    }
+  };
+
+  const handleSEOEdit = (pageKey: string) => {
+    setSelectedPage(pageKey);
+    setSeoData(
+      pageSEOData[pageKey as keyof typeof pageSEOData] || {
+        title: "",
+        description: "",
+        keywords: "",
+        ogTitle: "",
+        ogDescription: "",
+        ogImage: "",
+      },
+    );
+    setShowSEOManager(true);
+  };
+
+  const handleSEOSave = () => {
+    if (selectedPage) {
+      setPageSEOData((prev) => ({
+        ...prev,
+        [selectedPage]: seoData,
+      }));
+      setShowSEOManager(false);
+      setSelectedPage("");
+      // In a real app, this would save to backend
+    }
+  };
+
   // Dashboard Statistics
   const dashboardStats = {
     totalListings: 8500,
