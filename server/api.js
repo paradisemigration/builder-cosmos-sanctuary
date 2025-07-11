@@ -483,6 +483,45 @@ app.post("/api/scraping/stop", async (req, res) => {
   }
 });
 
+// Stop specific scraping job by ID
+app.post("/api/scraping/job/:jobId/stop", async (req, res) => {
+  try {
+    const { jobId } = req.params;
+
+    // Update job status to stopped
+    const result = await database.updateScrapingJob(jobId, {
+      status: "stopped",
+      stoppedAt: new Date().toISOString(),
+    });
+
+    if (result.success) {
+      // Also try to stop the scraper if it's running
+      try {
+        await scraper.stopScraping();
+      } catch (e) {
+        console.log("Scraper was not running");
+      }
+
+      res.json({
+        success: true,
+        message: "Scraping job stopped successfully",
+        jobId,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+  } catch (error) {
+    console.error("Stop job error:", error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 // Get scraping recommendations
 app.get("/api/scraping/recommendations", (req, res) => {
   try {
