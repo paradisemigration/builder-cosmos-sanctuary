@@ -216,13 +216,17 @@ export default function AdminPanel() {
                   <Button
                     onClick={async () => {
                       try {
-                        const response = await fetch(
-                          "http://localhost:3001/api/test-upload",
-                        );
+                        // Use relative URL or environment variable for hosted environments
+                        const apiUrl = import.meta.env.VITE_API_URL || "/api";
+                        const response = await fetch(`${apiUrl}/test-upload`);
                         const result = await response.json();
-                        alert(`API Test: ${result.message}`);
+                        alert(
+                          `API Test: ${result.message}\nEnvironment: ${import.meta.env.MODE}`,
+                        );
                       } catch (error) {
-                        alert(`API Test Failed: ${error}`);
+                        alert(
+                          `API Test Failed: ${error}\n\nNote: API server may not be available in hosted environment. This is normal for frontend-only deployments.`,
+                        );
                       }
                     }}
                     className="mt-4"
