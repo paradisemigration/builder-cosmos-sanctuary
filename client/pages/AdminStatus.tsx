@@ -351,6 +351,38 @@ export default function AdminStatus() {
     }
   };
 
+  const refreshReviewCounts = async () => {
+    try {
+      setReviewCountsLoading(true);
+
+      const response = await fetch("/api/refresh-review-counts-from-google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log("✅ Review counts refreshed:", result);
+        alert(
+          `Review counts updated!\nProcessed: ${result.processed} businesses\nUpdated: ${result.updated} businesses\nErrors: ${result.errors}`,
+        );
+        // Refresh stats after the process
+        setTimeout(loadStatus, 2000);
+      } else {
+        console.error("❌ Review count refresh failed:", result.error);
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error refreshing review counts:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setReviewCountsLoading(false);
+    }
+  };
+
   // Force refresh function that bypasses loading checks
   const forceRefresh = async () => {
     console.log("Force refresh triggered");
