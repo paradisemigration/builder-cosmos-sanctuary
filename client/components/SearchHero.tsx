@@ -72,13 +72,10 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
 
       setLocationDisplayText(locationText);
 
-      // Auto-set UAE city if user is in UAE, otherwise keep it general
-      if (
-        location.country === "United Arab Emirates" ||
-        location.countryCode === "AE"
-      ) {
-        // If in UAE, try to match with UAE cities
-        const matchingCity = uaeCities.find(
+      // Auto-set Indian city if user is in India, otherwise keep it general
+      if (location.country === "India" || location.countryCode === "IN") {
+        // If in India, try to match with Indian cities
+        const matchingCity = indianCities.find(
           (city) =>
             location.city.toLowerCase().includes(city.toLowerCase()) ||
             city.toLowerCase().includes(location.city.toLowerCase()),
@@ -86,8 +83,8 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
         if (matchingCity) {
           setSelectedZone(matchingCity);
         } else {
-          // Default to Dubai if no specific city match
-          setSelectedZone("Dubai");
+          // Default to Delhi if no specific city match
+          setSelectedZone("Delhi");
         }
       }
     } else if (locationError) {
