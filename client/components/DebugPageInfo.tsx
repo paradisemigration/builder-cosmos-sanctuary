@@ -37,9 +37,26 @@ export function DebugPageInfo() {
           return `City Business Listing - ${segment}`;
         }
       } else if (pathParts.length === 4) {
-        // Business profile: /business/city/company-name
-        const [, , city, companyName] = pathParts;
-        return `Business Profile - ${city}/${companyName}`;
+        // Could be category or business profile: /business/city/category-or-company
+        const [, , city, categoryOrCompany] = pathParts;
+
+        // Import category slugs to check
+        const categorySlugs = [
+          "study-abroad",
+          "immigration-consultants",
+          "visa-consultants",
+          "work-permit",
+          "visa-services",
+          "immigration-services",
+          "overseas-services",
+          "education-services",
+        ];
+
+        if (categorySlugs.includes(categoryOrCompany)) {
+          return `City Category Page - ${city}/${categoryOrCompany}`;
+        } else {
+          return `Business Profile - ${city}/${categoryOrCompany}`;
+        }
       }
     } else if (path === "/add-business") {
       return "Add Business";
