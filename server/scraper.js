@@ -77,6 +77,12 @@ class BusinessScraper {
               i < Math.min(places.length, maxResultsPerSearch);
               i++
             ) {
+              // Check if scraping should stop
+              if (this.shouldStop || !this.isRunning) {
+                console.log("🛑 Scraping stopped by user request");
+                break;
+              }
+
               const place = places[i];
 
               try {
@@ -249,7 +255,7 @@ class BusinessScraper {
       const saveResult = await database.saveBusiness(businessData);
 
       if (saveResult.success) {
-        console.log(`✅ Successfully scraped and saved: ${businessData.name}`);
+        console.log(`�� Successfully scraped and saved: ${businessData.name}`);
         return saveResult;
       } else {
         throw new Error(saveResult.error);
