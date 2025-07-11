@@ -184,7 +184,7 @@ export default function Index() {
             </p>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {statsData.map((stat, index) => (
                 <div
                   key={index}
@@ -197,6 +197,38 @@ export default function Index() {
                   <p className="text-sm text-gray-600">{stat.label}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Debug Test Links - Remove in production */}
+            <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <h3 className="font-bold text-yellow-800 mb-2">
+                🔧 Debug Test Links:
+              </h3>
+              <div className="flex flex-wrap gap-4 justify-center text-sm">
+                <Link
+                  to="/business/delhi/delhi-global-visa-consultants"
+                  className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                >
+                  Test New URL: /business/delhi/delhi-global-visa-consultants
+                </Link>
+                <Link
+                  to="/business/1"
+                  className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                >
+                  Test Legacy URL: /business/1
+                </Link>
+                <button
+                  onClick={() =>
+                    console.log(
+                      "Business cards:",
+                      document.querySelectorAll("[data-business-card]"),
+                    )
+                  }
+                  className="px-3 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
+                >
+                  Debug Business Cards
+                </button>
+              </div>
             </div>
           </div>
 
