@@ -135,11 +135,39 @@ export default function CategoryLocationPage() {
 
   // Use business data hook
   const {
-    businesses: filteredBusinesses,
+    businesses: apiBusinesses,
     loading: businessesLoading,
     error: businessesError,
     refetch,
   } = useBusinessData(apiFilters);
+
+  // Use sample data as fallback when API fails
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+
+  useEffect(() => {
+    if (apiBusinesses.length > 0) {
+      setFilteredBusinesses(apiBusinesses);
+    } else {
+      // Use sample data with client-side filtering
+      let filtered = sampleBusinesses;
+
+      if (categoryName && categoryName !== "all") {
+        filtered = filtered.filter((business) =>
+          business.category.toLowerCase().includes(categoryName.toLowerCase()),
+        );
+      }
+
+      if (locationName && locationName !== "all") {
+        filtered = filtered.filter(
+          (business) =>
+            business.city.toLowerCase().includes(locationName.toLowerCase()) ||
+            business.address.toLowerCase().includes(locationName.toLowerCase()),
+        );
+      }
+
+      setFilteredBusinesses(filtered);
+    }
+  }, [apiBusinesses, categoryName, locationName]);
 
   // Generate dynamic page title
   const generatePageTitle = () => {
