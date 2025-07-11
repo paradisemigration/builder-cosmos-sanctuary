@@ -452,7 +452,7 @@ class SQLiteDatabase {
   async getBusinessReviews(businessId) {
     return new Promise((resolve, reject) => {
       const sql =
-        "SELECT * FROM reviews WHERE businessId = ? ORDER BY rating DESC LIMIT 5";
+        "SELECT * FROM reviews WHERE businessId = ? ORDER BY rating DESC";
       this.db.all(sql, [businessId], (err, rows) => {
         if (err) {
           console.error("Error getting reviews:", err);
