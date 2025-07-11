@@ -83,7 +83,7 @@ export default function AdminBulkUpload() {
             reviews: [],
           };
 
-          await BusinessAPI.addBusiness(businessData);
+          await apiClient.createBusiness(businessData);
           successCount++;
         } catch (error) {
           failedCount++;
