@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { ArrowLeft, Upload, Save, Eye } from "lucide-react";
 import { type ExcelBusinessRow } from "@/lib/excel-template";
-import { BusinessAPI } from "@/lib/api";
+import { apiClient } from "@/lib/api";
 
 export default function AdminBulkUpload() {
   const navigate = useNavigate();
