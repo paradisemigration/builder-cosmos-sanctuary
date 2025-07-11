@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import {
   Search,
@@ -20,7 +20,25 @@ import {
   Phone,
   Mail,
   ExternalLink,
+  Users,
+  Building,
+  Star,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  Settings,
+  Upload,
+  Globe,
+  CreditCard,
+  UserCheck,
+  MessageSquare,
+  Flag,
+  PenTool,
+  Database,
+  Bell,
+  RefreshCw,
 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -48,1888 +66,853 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import { sampleBusinesses, type Business } from "@/lib/data";
-import { ReviewManagement } from "@/components/ReviewManagement";
-import { Navigation } from "@/components/Navigation";
-
-const businessStatuses = {
-  pending: { label: "Pending Review", color: "bg-yellow-100 text-yellow-800" },
-  approved: { label: "Approved", color: "bg-green-100 text-green-800" },
-  rejected: { label: "Rejected", color: "bg-red-100 text-red-800" },
-  suspended: { label: "Suspended", color: "bg-gray-100 text-gray-800" },
-};
-
-const scamReportStatuses = {
-  pending: { label: "Pending Review", color: "bg-yellow-100 text-yellow-800" },
-  approved: { label: "Published", color: "bg-green-100 text-green-800" },
-  rejected: { label: "Rejected", color: "bg-red-100 text-red-800" },
-  investigating: {
-    label: "Under Investigation",
-    color: "bg-blue-100 text-blue-800",
-  },
-};
-
-interface ScamReport {
-  id: string;
-  companyName: string;
-  location: string;
-  contactNumber: string;
-  emailId: string;
-  scamDescription: string;
-  reportDate: string;
-  status: "pending" | "approved" | "rejected" | "investigating";
-  reporterInfo: {
-    name: string;
-    email: string;
-  };
-  evidenceFiles: {
-    paymentReceipt?: string;
-    agreement?: string;
-    companyPicture?: string;
-  };
-  reviewUrl?: string;
-  adminNotes?: string;
-}
 
 export default function AdminPanel() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
-  const [activeSection, setActiveSection] = useState("businesses");
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = "/";
+  // Dashboard Statistics
+  const dashboardStats = {
+    totalListings: 8500,
+    pendingListings: 42,
+    totalUsers: 125000,
+    monthlyRevenue: 2850000,
+    activeUsers: 89500,
+    verifiedListings: 8100,
+    reviewsThisMonth: 3420,
+    conversionRate: 12.5,
   };
 
-  // Excel Template Download Function
-  const downloadExcelTemplate = () => {
-    const headers = [
-      "Business Name *",
-      "Category *",
-      "Business Description *",
-      "Full Address *",
-      "City *",
-      "Phone Number *",
-      "Email Address *",
-      "WhatsApp Number",
-      "Website URL",
-      "License Number",
-      "Owner/Manager Name",
-      "Owner Email",
-      "Owner Phone",
-      "Services Offered",
-      "Latitude",
-      "Longitude",
-      "Monday Hours",
-      "Tuesday Hours",
-      "Wednesday Hours",
-      "Thursday Hours",
-      "Friday Hours",
-      "Saturday Hours",
-      "Sunday Hours",
-      "Logo Image URL",
-      "Cover Image URL",
-      "Gallery Image URLs",
-      "Pre-Verified",
-      "Additional Notes",
-    ].join("\t");
-
-    const sampleRow = [
-      "Dubai Visa Express",
-      "Visa Services",
-      "Leading visa service provider in Dubai with over 15 years of experience. We specialize in tourist, business, and residence visas for all nationalities.",
-      "Office 1205, Al Manara Tower, Business Bay, Dubai, UAE",
-      "Dubai",
-      "+971-4-123-4567",
-      "info@dubaivisaexpress.com",
-      "+971-50-123-4567",
-      "https://dubaivisaexpress.com",
-      "DED-12345",
-      "Ahmed Al Mansoori",
-      "ahmed@dubaivisaexpress.com",
-      "+971-50-123-4567",
-      "Tourist Visa, Business Visa, Residence Visa, Visa Renewal, Emergency Visa",
-      "25.1887",
-      "55.2673",
-      "9:00 AM - 6:00 PM",
-      "9:00 AM - 6:00 PM",
-      "9:00 AM - 6:00 PM",
-      "9:00 AM - 6:00 PM",
-      "9:00 AM - 6:00 PM",
-      "10:00 AM - 4:00 PM",
-      "Closed",
-      "https://example.com/dubai-visa-express-logo.jpg",
-      "https://example.com/dubai-visa-express-cover.jpg",
-      "https://example.com/office1.jpg, https://example.com/office2.jpg",
-      "TRUE",
-      "Established business with excellent track record",
-    ].join("\t");
-
-    const csvContent = `${headers}\n${sampleRow}`;
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "business_listings_template.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Export Current Business Data
-  const exportBusinesses = () => {
-    const filteredData = businesses
-      .filter((business) => {
-        if (selectedTab === "all") return true;
-        return business.status === selectedTab;
-      })
-      .filter(
-        (business) =>
-          business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          business.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          business.address.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-
-    const headers = [
-      "Business Name",
-      "Category",
-      "Description",
-      "Address",
-      "Phone",
-      "Email",
-      "WhatsApp",
-      "Website",
-      "License Number",
-      "Rating",
-      "Review Count",
-      "Verified",
-      "Status",
-      "Submission Date",
-    ].join("\t");
-
-    const rows = filteredData.map((business) =>
-      [
-        business.name,
-        business.category,
-        business.description,
-        business.address,
-        business.phone,
-        business.email,
-        business.whatsapp || "",
-        business.website || "",
-        business.licenseNo || "",
-        business.rating,
-        business.reviewCount,
-        business.isVerified ? "Yes" : "No",
-        business.status,
-        business.submissionDate,
-      ].join("\t"),
-    );
-
-    const csvContent = `${headers}\n${rows.join("\n")}`;
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `business_listings_export_${new Date().toISOString().split("T")[0]}.csv`,
-    );
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-  const [businesses, setBusinesses] = useState(
-    sampleBusinesses.map((business) => ({
-      ...business,
-      status: business.isVerified ? "approved" : "pending",
-      submissionDate: "2024-01-15",
-    })),
-  );
-
-  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
-    null,
-  );
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  // Scam Reports State
-  const [scamReports, setScamReports] = useState<ScamReport[]>([
+  const recentActivity = [
     {
-      id: "scam-1",
-      companyName: "Fake Immigration Services",
-      location: "Dubai, UAE",
-      contactNumber: "+971-4-123-4567",
-      emailId: "contact@fakeimmigration.com",
-      scamDescription:
-        "This company promised to process my visa within 2 weeks for $5000. After taking my money, they stopped responding to my calls and emails. Their office address doesn't exist and their website has been taken down. They created fake government stamps and documents. I later found out they are not licensed to provide immigration services. Please avoid this company at all costs.",
-      reportDate: "2024-01-15",
+      id: 1,
+      type: "listing",
+      action: "New business registered",
+      business: "Mumbai Visa Services",
+      timestamp: "2 minutes ago",
       status: "pending",
-      reporterInfo: {
-        name: "Anonymous Reporter",
-        email: "reporter1@email.com",
-      },
-      evidenceFiles: {
-        paymentReceipt: "receipt-1.jpg",
-        agreement: "agreement-1.pdf",
-        companyPicture: "company-1.jpg",
-      },
     },
     {
-      id: "scam-2",
-      companyName: "Quick Visa Solutions",
-      location: "Abu Dhabi, UAE",
-      contactNumber: "+971-2-987-6543",
-      emailId: "info@quickvisascam.com",
-      scamDescription:
-        "Paid 8000 AED for family visa processing. They provided fake documents and disappeared after 3 months. When I tried to verify the documents with immigration authorities, they were completely fake. The company office was closed and phone numbers disconnected.",
-      reportDate: "2024-01-20",
-      status: "approved",
-      reporterInfo: {
-        name: "John Smith",
-        email: "john@email.com",
-      },
-      evidenceFiles: {
-        paymentReceipt: "receipt-2.jpg",
-        agreement: "agreement-2.pdf",
-      },
-      reviewUrl: "reviews/abu-dhabi/quick-visa-solutions",
+      id: 2,
+      type: "review",
+      action: "Review flagged as spam",
+      business: "Delhi Immigration Hub",
+      timestamp: "5 minutes ago",
+      status: "flagged",
     },
     {
-      id: "scam-3",
-      companyName: "Express Immigration Hub",
-      location: "Sharjah, UAE",
-      contactNumber: "+971-6-555-1234",
-      emailId: "support@expressimmigration.ae",
-      scamDescription:
-        "They claimed to have connections with government officials and guaranteed visa approval within 1 week. After paying 12000 AED, they provided fake stamps and certificates. The immigration office confirmed all documents were forged.",
-      reportDate: "2024-01-25",
-      status: "investigating",
-      reporterInfo: {
-        name: "Sarah Johnson",
-        email: "sarah@email.com",
-      },
-      evidenceFiles: {
-        paymentReceipt: "receipt-3.jpg",
-        agreement: "agreement-3.pdf",
-        companyPicture: "company-3.jpg",
-      },
-      adminNotes:
-        "Contacted authorities. Multiple reports against this company received.",
+      id: 3,
+      type: "payment",
+      action: "Premium subscription payment",
+      business: "Bangalore Study Abroad",
+      timestamp: "10 minutes ago",
+      status: "completed",
     },
-  ]);
+    {
+      id: 4,
+      type: "user",
+      action: "New user registration",
+      business: "Individual User",
+      timestamp: "15 minutes ago",
+      status: "active",
+    },
+  ];
 
-  const [selectedScamReport, setSelectedScamReport] =
-    useState<ScamReport | null>(null);
-  const [showScamDeleteDialog, setShowScamDeleteDialog] = useState(false);
-  const [scamSearchQuery, setScamSearchQuery] = useState("");
-  const [selectedScamTab, setSelectedScamTab] = useState("all");
+  const monthlyRevenue = [
+    { month: "Jan", revenue: 2100000 },
+    { month: "Feb", revenue: 2300000 },
+    { month: "Mar", revenue: 2450000 },
+    { month: "Apr", revenue: 2600000 },
+    { month: "May", revenue: 2750000 },
+    { month: "Jun", revenue: 2850000 },
+  ];
 
-  const filteredBusinesses = businesses.filter((business) => {
-    const matchesSearch =
-      business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      business.category.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTab = selectedTab === "all" || business.status === selectedTab;
-    return matchesSearch && matchesTab;
-  });
+  useEffect(() => {
+    document.title = "Admin Panel - VisaConsult India";
+  }, []);
 
-  const handleStatusChange = (businessId: string, newStatus: string) => {
-    setBusinesses((prev) =>
-      prev.map((business) =>
-        business.id === businessId
-          ? {
-              ...business,
-              status: newStatus,
-              isVerified: newStatus === "approved",
-            }
-          : business,
-      ),
+  if (!user || user.role !== "admin") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">You don't have permission to access this page.</p>
+          <Button onClick={() => navigate("/")} variant="outline">
+            Go to Homepage
+          </Button>
+        </div>
+      </div>
     );
-  };
-
-  const handleDeleteBusiness = (businessId: string) => {
-    setBusinesses((prev) =>
-      prev.filter((business) => business.id !== businessId),
-    );
-    setShowDeleteDialog(false);
-    setSelectedBusiness(null);
-  };
-
-  // Scam Report Handlers
-  const handleScamReportStatusChange = (
-    reportId: string,
-    newStatus: "pending" | "approved" | "rejected" | "investigating",
-  ) => {
-    setScamReports((prev) =>
-      prev.map((report) => {
-        if (report.id === reportId) {
-          const updatedReport = { ...report, status: newStatus };
-
-          // Generate review URL when approved
-          if (newStatus === "approved" && !report.reviewUrl) {
-            const formatForUrl = (str: string) =>
-              str
-                .toLowerCase()
-                .replace(/[^a-z0-9\s]/g, "")
-                .replace(/\s+/g, "-")
-                .replace(/-+/g, "-")
-                .replace(/^-|-$/g, "");
-
-            updatedReport.reviewUrl = `reviews/${formatForUrl(report.location)}/${formatForUrl(report.companyName)}`;
-          }
-
-          return updatedReport;
-        }
-        return report;
-      }),
-    );
-  };
-
-  const handleDeleteScamReport = (reportId: string) => {
-    setScamReports((prev) => prev.filter((report) => report.id !== reportId));
-    setShowScamDeleteDialog(false);
-    setSelectedScamReport(null);
-  };
-
-  const filteredScamReports = scamReports.filter((report) => {
-    const matchesSearch =
-      report.companyName
-        .toLowerCase()
-        .includes(scamSearchQuery.toLowerCase()) ||
-      report.location.toLowerCase().includes(scamSearchQuery.toLowerCase()) ||
-      report.emailId.toLowerCase().includes(scamSearchQuery.toLowerCase());
-    const matchesTab =
-      selectedScamTab === "all" || report.status === selectedScamTab;
-    return matchesSearch && matchesTab;
-  });
-
-  const stats =
-    activeSection === "businesses"
-      ? [
-          { label: "Total Businesses", value: businesses.length, icon: "📊" },
-          {
-            label: "Pending Review",
-            value: businesses.filter((b) => b.status === "pending").length,
-            icon: "⏳",
-          },
-          {
-            label: "Approved",
-            value: businesses.filter((b) => b.status === "approved").length,
-            icon: "✅",
-          },
-          {
-            label: "Rejected",
-            value: businesses.filter((b) => b.status === "rejected").length,
-            icon: "❌",
-          },
-        ]
-      : activeSection === "scam-reports"
-        ? [
-            { label: "Total Reports", value: scamReports.length, icon: "🚨" },
-            {
-              label: "Pending Review",
-              value: scamReports.filter((r) => r.status === "pending").length,
-              icon: "⏳",
-            },
-            {
-              label: "Published",
-              value: scamReports.filter((r) => r.status === "approved").length,
-              icon: "✅",
-            },
-            {
-              label: "Under Investigation",
-              value: scamReports.filter((r) => r.status === "investigating")
-                .length,
-              icon: "🔍",
-            },
-          ]
-        : [];
+  }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
-
-      {/* Admin Header */}
-      <div className="bg-gradient-to-r from-orange-50 to-purple-50 border-b border-orange-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg sm:text-xl font-bold text-gray-800">
-                  Admin Panel
-                </h1>
-                <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
-              </div>
+      
+      {/* Header */}
+      <div className="pt-20 pb-6 px-4 bg-white border-b">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-gray-600">Manage your visa consultant directory</p>
             </div>
-
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Button
-                size="sm"
-                onClick={handleLogout}
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
-              >
-                <span className="hidden sm:inline">Logout</span>
-                <span className="sm:hidden">Exit</span>
+            <div className="flex items-center gap-4">
+              <Button variant="outline" size="sm">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh Data
+              </Button>
+              <Button size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export Report
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">
-            Admin Panel
-          </h2>
-          <p className="text-muted-foreground">
-            Manage business listings, reviews, and directory content
-          </p>
-        </div>
+      <div className="container mx-auto max-w-7xl px-4 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="listings">Listings</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="reviews">Reviews</TabsTrigger>
+            <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="payments">Payments</TabsTrigger>
+          </Tabs>
 
-        {/* Quick Actions */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5" />
-              Quick Actions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Button
-                onClick={downloadExcelTemplate}
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-green-50 hover:border-green-300"
-              >
-                <Download className="w-6 h-6 text-green-600" />
-                <div className="text-center">
-                  <div className="font-semibold">Download Template</div>
-                  <div className="text-xs text-muted-foreground">
-                    Excel/CSV Format
-                  </div>
-                </div>
-              </Button>
-
-              <Link to="/admin/bulk-upload" className="block">
-                <Button
-                  variant="outline"
-                  className="w-full h-auto p-4 flex flex-col items-center gap-2 hover:bg-blue-50 hover:border-blue-300"
-                >
-                  <Plus className="w-6 h-6 text-blue-600" />
-                  <div className="text-center">
-                    <div className="font-semibold">Bulk Upload</div>
-                    <div className="text-xs text-muted-foreground">
-                      Upload Excel File
+          {/* Dashboard Overview */}
+          <TabsContent value="dashboard" className="space-y-6">
+            {/* Key Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Listings</p>
+                      <p className="text-3xl font-bold text-gray-900">{dashboardStats.totalListings.toLocaleString()}</p>
+                      <p className="text-sm text-green-600">+12% from last month</p>
                     </div>
+                    <Building className="h-8 w-8 text-blue-600" />
                   </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Pending Approvals</p>
+                      <p className="text-3xl font-bold text-gray-900">{dashboardStats.pendingListings}</p>
+                      <p className="text-sm text-orange-600">Requires attention</p>
+                    </div>
+                    <AlertTriangle className="h-8 w-8 text-orange-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Users</p>
+                      <p className="text-3xl font-bold text-gray-900">{dashboardStats.totalUsers.toLocaleString()}</p>
+                      <p className="text-sm text-green-600">+8% from last month</p>
+                    </div>
+                    <Users className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                      <p className="text-3xl font-bold text-gray-900">₹{(dashboardStats.monthlyRevenue / 100000).toFixed(1)}L</p>
+                      <p className="text-sm text-green-600">+15% from last month</p>
+                    </div>
+                    <DollarSign className="h-8 w-8 text-purple-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Charts and Activity */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Revenue Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Monthly Revenue Trend</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {monthlyRevenue.map((data, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <span className="text-sm font-medium">{data.month}</span>
+                        <div className="flex items-center gap-3 flex-1 mx-4">
+                          <Progress 
+                            value={(data.revenue / 3000000) * 100} 
+                            className="flex-1"
+                          />
+                          <span className="text-sm text-gray-600">
+                            ₹{(data.revenue / 100000).toFixed(1)}L
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Recent Activity */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {recentActivity.map((activity) => (
+                      <div key={activity.id} className="flex items-start gap-3">
+                        <div className={`w-2 h-2 rounded-full mt-2 ${
+                          activity.status === 'pending' ? 'bg-orange-500' :
+                          activity.status === 'flagged' ? 'bg-red-500' :
+                          activity.status === 'completed' ? 'bg-green-500' :
+                          'bg-blue-500'
+                        }`} />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                          <p className="text-sm text-gray-600">{activity.business}</p>
+                          <p className="text-xs text-gray-500">{activity.timestamp}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Button className="h-20 flex-col" variant="outline">
+                    <CheckCircle className="h-6 w-6 mb-2" />
+                    Approve Listings
+                  </Button>
+                  <Button className="h-20 flex-col" variant="outline">
+                    <Flag className="h-6 w-6 mb-2" />
+                    Review Flags
+                  </Button>
+                  <Button className="h-20 flex-col" variant="outline">
+                    <Upload className="h-6 w-6 mb-2" />
+                    Bulk Upload
+                  </Button>
+                  <Button className="h-20 flex-col" variant="outline">
+                    <BarChart3 className="h-6 w-6 mb-2" />
+                    Analytics
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Listing Management */}
+          <TabsContent value="listings" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Listing Management</h2>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Search className="h-4 w-4 text-gray-400" />
+                  <Input 
+                    placeholder="Search listings..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-64"
+                  />
+                </div>
+                <Select value={selectedTab} onValueChange={setSelectedTab}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Listings</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="approved">Approved</SelectItem>
+                    <SelectItem value="rejected">Rejected</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Listing
                 </Button>
-              </Link>
-
-              <Button
-                onClick={exportBusinesses}
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-orange-50 hover:border-orange-300"
-              >
-                <Download className="w-6 h-6 text-orange-600" />
-                <div className="text-center">
-                  <div className="font-semibold">Export Data</div>
-                  <div className="text-xs text-muted-foreground">
-                    Current Listings
-                  </div>
-                </div>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-purple-50 hover:border-purple-300"
-              >
-                <FileText className="w-6 h-6 text-purple-600" />
-                <div className="text-center">
-                  <div className="font-semibold">Generate Report</div>
-                  <div className="text-xs text-muted-foreground">
-                    Analytics Summary
-                  </div>
-                </div>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Main Navigation Tabs */}
-        <Tabs
-          value={activeSection}
-          onValueChange={setActiveSection}
-          className="mb-8"
-        >
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="businesses">Business Management</TabsTrigger>
-            <TabsTrigger value="reviews">Review Management</TabsTrigger>
-            <TabsTrigger value="scam-reports">Scam Reports</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="businesses">
-            {/* Business Management Content */}
-
-            {/* Responsive Stats Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
-              {stats.map((stat, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4 sm:p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                          {stat.label}
-                        </p>
-                        <p className="text-lg sm:text-2xl font-bold text-foreground">
-                          {stat.value}
-                        </p>
-                      </div>
-                      <div className="text-lg sm:text-2xl opacity-70">
-                        {stat.icon}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              </div>
             </div>
 
-            {/* Responsive Search and Filters */}
-            <Card className="mb-6">
-              <CardHeader className="pb-4">
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg sm:text-xl">
-                      Business Listings
-                    </CardTitle>
-                    <div className="flex gap-2">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="hidden sm:inline-flex"
-                          >
-                            <Download className="w-4 h-4 mr-2" />
-                            Export
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={downloadExcelTemplate}>
-                            <Download className="w-4 h-4 mr-2" />
-                            Download Excel Template
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={exportBusinesses}>
-                            <Download className="w-4 h-4 mr-2" />
-                            Export Current Data
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-
-                      <Button variant="outline" size="sm" className="sm:hidden">
-                        <Download className="w-4 h-4" />
-                      </Button>
-
-                      <Link to="/admin/bulk-upload">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="hidden sm:inline-flex"
-                        >
-                          <Plus className="w-4 h-4 mr-2" />
-                          Bulk Upload
-                        </Button>
-                      </Link>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="hidden sm:inline-flex"
-                      >
-                        <Filter className="w-4 h-4 mr-2" />
-                        Filters
-                      </Button>
-                      <Button variant="outline" size="sm" className="sm:hidden">
-                        <Filter className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                    <Input
-                      placeholder="Search businesses..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-                  {/* Mobile: Scrollable tabs */}
-                  <div className="w-full overflow-x-auto pb-2">
-                    <TabsList className="grid grid-cols-5 min-w-[600px] sm:min-w-0 sm:w-full">
-                      <TabsTrigger value="all" className="text-xs sm:text-sm">
-                        <span className="hidden sm:inline">
-                          All ({businesses.length})
-                        </span>
-                        <span className="sm:hidden">All</span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="pending"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Pending (
-                          {
-                            businesses.filter((b) => b.status === "pending")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Pending (
-                          {
-                            businesses.filter((b) => b.status === "pending")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="approved"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Approved (
-                          {
-                            businesses.filter((b) => b.status === "approved")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          OK (
-                          {
-                            businesses.filter((b) => b.status === "approved")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="rejected"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Rejected (
-                          {
-                            businesses.filter((b) => b.status === "rejected")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          No (
-                          {
-                            businesses.filter((b) => b.status === "rejected")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="suspended"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Suspended (
-                          {
-                            businesses.filter((b) => b.status === "suspended")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Sus (
-                          {
-                            businesses.filter((b) => b.status === "suspended")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                    </TabsList>
-                  </div>
-
-                  <TabsContent value={selectedTab} className="mt-6">
-                    {/* Mobile: Card Layout */}
-                    <div className="space-y-4 sm:hidden">
-                      {filteredBusinesses.map((business) => (
-                        <Card key={business.id} className="p-4">
-                          <div className="flex items-start gap-3">
-                            {business.logo && (
-                              <img
-                                src={business.logo}
-                                alt={business.name}
-                                className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                              />
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-start justify-between gap-2 mb-2">
-                                <h3 className="font-medium truncate">
-                                  {business.name}
-                                </h3>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-8 w-8 p-0"
-                                    >
-                                      <MoreHorizontal className="w-4 h-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        window.open(
-                                          `/business/${business.id}`,
-                                          "_blank",
-                                        )
-                                      }
-                                    >
-                                      <Eye className="w-4 h-4 mr-2" />
-                                      View
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        window.open(
-                                          `/admin/business/${business.id}/edit`,
-                                          "_blank",
-                                        )
-                                      }
-                                    >
-                                      <Edit className="w-4 h-4 mr-2" />
-                                      Edit
-                                    </DropdownMenuItem>
-                                    {business.status === "pending" && (
-                                      <>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleStatusChange(
-                                              business.id,
-                                              "approved",
-                                            )
-                                          }
-                                        >
-                                          <CheckCircle className="w-4 h-4 mr-2" />
-                                          Approve
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleStatusChange(
-                                              business.id,
-                                              "rejected",
-                                            )
-                                          }
-                                        >
-                                          <XCircle className="w-4 h-4 mr-2" />
-                                          Reject
-                                        </DropdownMenuItem>
-                                      </>
-                                    )}
-                                    {business.status === "approved" && (
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleStatusChange(
-                                            business.id,
-                                            "suspended",
-                                          )
-                                        }
-                                      >
-                                        <AlertTriangle className="w-4 h-4 mr-2" />
-                                        Suspend
-                                      </DropdownMenuItem>
-                                    )}
-                                    <DropdownMenuItem
-                                      onClick={() => {
-                                        setSelectedBusiness(business);
-                                        setShowDeleteDialog(true);
-                                      }}
-                                      className="text-red-600"
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-2" />
-                                      Delete
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </div>
-
-                              <div className="space-y-2">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <Badge variant="outline" className="text-xs">
-                                    {business.category}
-                                  </Badge>
-                                  <Badge
-                                    className={`text-xs ${
-                                      businessStatuses[
-                                        business.status as keyof typeof businessStatuses
-                                      ]?.color
-                                    }`}
-                                  >
-                                    {
-                                      businessStatuses[
-                                        business.status as keyof typeof businessStatuses
-                                      ]?.label
-                                    }
-                                  </Badge>
-                                </div>
-
-                                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                                  <span>
-                                    {business.rating} ⭐ ({business.reviewCount}
-                                    )
-                                  </span>
-                                  <span>{business.submissionDate}</span>
-                                </div>
-
-                                <p className="text-sm text-muted-foreground line-clamp-1">
-                                  {business.address}
-                                </p>
-                              </div>
-                            </div>
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Business Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sampleBusinesses.slice(0, 10).map((business) => (
+                    <TableRow key={business.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={business.logo} 
+                            alt={business.name}
+                            className="w-10 h-10 rounded-lg object-cover"
+                          />
+                          <div>
+                            <p className="font-medium">{business.name}</p>
+                            <p className="text-sm text-gray-600">{business.email}</p>
                           </div>
-                        </Card>
-                      ))}
-                    </div>
-
-                    {/* Desktop: Table Layout */}
-                    <div className="hidden sm:block rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Business</TableHead>
-                            <TableHead>Category</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Rating</TableHead>
-                            <TableHead>Submitted</TableHead>
-                            <TableHead>Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filteredBusinesses.map((business) => (
-                            <TableRow key={business.id}>
-                              <TableCell>
-                                <div className="flex items-center gap-3">
-                                  {business.logo && (
-                                    <img
-                                      src={business.logo}
-                                      alt={business.name}
-                                      className="w-10 h-10 rounded-lg object-cover"
-                                    />
-                                  )}
-                                  <div>
-                                    <div className="font-medium">
-                                      {business.name}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground line-clamp-1">
-                                      {business.address}
-                                    </div>
-                                  </div>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="outline">
-                                  {business.category}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>
-                                <Badge
-                                  className={
-                                    businessStatuses[
-                                      business.status as keyof typeof businessStatuses
-                                    ]?.color
-                                  }
-                                >
-                                  {
-                                    businessStatuses[
-                                      business.status as keyof typeof businessStatuses
-                                    ]?.label
-                                  }
-                                </Badge>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center gap-1">
-                                  <span>{business.rating}</span>
-                                  <span className="text-sm text-muted-foreground">
-                                    ({business.reviewCount})
-                                  </span>
-                                </div>
-                              </TableCell>
-                              <TableCell>{business.submissionDate}</TableCell>
-                              <TableCell>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm">
-                                      <MoreHorizontal className="w-4 h-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        window.open(
-                                          `/business/${business.id}`,
-                                          "_blank",
-                                        )
-                                      }
-                                    >
-                                      <Eye className="w-4 h-4 mr-2" />
-                                      View
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        window.open(
-                                          `/admin/business/${business.id}/edit`,
-                                          "_blank",
-                                        )
-                                      }
-                                    >
-                                      <Edit className="w-4 h-4 mr-2" />
-                                      Edit
-                                    </DropdownMenuItem>
-                                    {business.status === "pending" && (
-                                      <>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleStatusChange(
-                                              business.id,
-                                              "approved",
-                                            )
-                                          }
-                                        >
-                                          <CheckCircle className="w-4 h-4 mr-2" />
-                                          Approve
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleStatusChange(
-                                              business.id,
-                                              "rejected",
-                                            )
-                                          }
-                                        >
-                                          <XCircle className="w-4 h-4 mr-2" />
-                                          Reject
-                                        </DropdownMenuItem>
-                                      </>
-                                    )}
-                                    {business.status === "approved" && (
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleStatusChange(
-                                            business.id,
-                                            "suspended",
-                                          )
-                                        }
-                                      >
-                                        <AlertTriangle className="w-4 h-4 mr-2" />
-                                        Suspend
-                                      </DropdownMenuItem>
-                                    )}
-                                    <DropdownMenuItem
-                                      onClick={() => {
-                                        setSelectedBusiness(business);
-                                        setShowDeleteDialog(true);
-                                      }}
-                                      className="text-red-600"
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-2" />
-                                      Delete
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
+                        </div>
+                      </TableCell>
+                      <TableCell>{business.category}</TableCell>
+                      <TableCell>{business.city}</TableCell>
+                      <TableCell>
+                        <Badge className={business.isVerified ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800"}>
+                          {business.isVerified ? "Verified" : "Pending"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{business.plan || "Premium"}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          <span>{business.rating}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </Card>
           </TabsContent>
 
-          <TabsContent value="reviews">
-            <ReviewManagement />
-          </TabsContent>
-
-          <TabsContent value="scam-reports">
-            {/* Scam Reports Management Content */}
-
-            {/* Scam Reports Stats Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8">
-              {stats.map((stat, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4 sm:p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                          {stat.label}
-                        </p>
-                        <p className="text-lg sm:text-2xl font-bold text-foreground">
-                          {stat.value}
-                        </p>
-                      </div>
-                      <div className="text-lg sm:text-2xl opacity-70">
-                        {stat.icon}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+          {/* User Management */}
+          <TabsContent value="users" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
+              <div className="flex items-center gap-4">
+                <Input placeholder="Search users..." className="w-64" />
+                <Select>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="User Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Users</SelectItem>
+                    <SelectItem value="individual">Individual</SelectItem>
+                    <SelectItem value="business">Business</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            {/* Scam Reports Search and Filters */}
-            <Card className="mb-6">
-              <CardHeader className="pb-4">
-                <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-                      <AlertTriangle className="w-5 h-5 text-red-600" />
-                      Scam Reports
-                    </CardTitle>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="hidden sm:inline-flex"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Export
-                      </Button>
-                      <Button variant="outline" size="sm" className="sm:hidden">
-                        <Download className="w-4 h-4" />
-                      </Button>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Users</p>
+                      <p className="text-2xl font-bold">125,000</p>
                     </div>
+                    <Users className="h-8 w-8 text-blue-600" />
                   </div>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                    <Input
-                      placeholder="Search scam reports..."
-                      value={scamSearchQuery}
-                      onChange={(e) => setScamSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Business Owners</p>
+                      <p className="text-2xl font-bold">8,500</p>
+                    </div>
+                    <Building className="h-8 w-8 text-green-600" />
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Tabs
-                  value={selectedScamTab}
-                  onValueChange={setSelectedScamTab}
-                >
-                  {/* Mobile: Scrollable tabs */}
-                  <div className="w-full overflow-x-auto pb-2">
-                    <TabsList className="grid grid-cols-5 min-w-[600px] sm:min-w-0 sm:w-full">
-                      <TabsTrigger value="all" className="text-xs sm:text-sm">
-                        All ({scamReports.length})
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="pending"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Pending (
-                          {
-                            scamReports.filter((r) => r.status === "pending")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Pending (
-                          {
-                            scamReports.filter((r) => r.status === "pending")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="approved"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Published (
-                          {
-                            scamReports.filter((r) => r.status === "approved")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Live (
-                          {
-                            scamReports.filter((r) => r.status === "approved")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="investigating"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Investigating (
-                          {
-                            scamReports.filter(
-                              (r) => r.status === "investigating",
-                            ).length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Investigating (
-                          {
-                            scamReports.filter(
-                              (r) => r.status === "investigating",
-                            ).length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="rejected"
-                        className="text-xs sm:text-sm"
-                      >
-                        <span className="hidden sm:inline">
-                          Rejected (
-                          {
-                            scamReports.filter((r) => r.status === "rejected")
-                              .length
-                          }
-                          )
-                        </span>
-                        <span className="sm:hidden">
-                          Rejected (
-                          {
-                            scamReports.filter((r) => r.status === "rejected")
-                              .length
-                          }
-                          )
-                        </span>
-                      </TabsTrigger>
-                    </TabsList>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Active Today</p>
+                      <p className="text-2xl font-bold">12,450</p>
+                    </div>
+                    <UserCheck className="h-8 w-8 text-purple-600" />
                   </div>
+                </CardContent>
+              </Card>
+            </div>
 
-                  <TabsContent value={selectedScamTab} className="mt-6">
-                    {/* Mobile: Card Layout */}
-                    <div className="space-y-4 sm:hidden">
-                      {filteredScamReports.map((report) => (
-                        <Card
-                          key={report.id}
-                          className="p-4 border-l-4 border-l-red-500"
-                        >
-                          <div className="space-y-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-red-800 truncate flex items-center gap-2">
-                                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-                                  {report.companyName}
-                                </h3>
-                                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                                  <MapPin className="w-3 h-3" />
-                                  {report.location}
-                                </p>
-                              </div>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-8 w-8 p-0"
-                                  >
-                                    <MoreHorizontal className="w-4 h-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <Dialog>
-                                    <DialogTrigger asChild>
-                                      <DropdownMenuItem
-                                        onSelect={(e) => e.preventDefault()}
-                                      >
-                                        <Eye className="w-4 h-4 mr-2" />
-                                        View Details
-                                      </DropdownMenuItem>
-                                    </DialogTrigger>
-                                    <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                                      <DialogHeader>
-                                        <DialogTitle className="flex items-center gap-2 text-red-800">
-                                          <AlertTriangle className="w-5 h-5" />
-                                          Scam Report Details
-                                        </DialogTitle>
-                                      </DialogHeader>
-                                      <div className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Company Name
-                                            </label>
-                                            <p className="text-red-800 font-medium">
-                                              {report.companyName}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Location
-                                            </label>
-                                            <p className="flex items-center gap-1">
-                                              <MapPin className="w-4 h-4" />
-                                              {report.location}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Contact Number
-                                            </label>
-                                            <p className="flex items-center gap-1">
-                                              <Phone className="w-4 h-4" />
-                                              {report.contactNumber}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Email
-                                            </label>
-                                            <p className="flex items-center gap-1">
-                                              <Mail className="w-4 h-4" />
-                                              {report.emailId}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Report Date
-                                            </label>
-                                            <p className="flex items-center gap-1">
-                                              <Calendar className="w-4 h-4" />
-                                              {report.reportDate}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Status
-                                            </label>
-                                            <Badge
-                                              className={
-                                                scamReportStatuses[
-                                                  report.status
-                                                ]?.color
-                                              }
-                                            >
-                                              {
-                                                scamReportStatuses[
-                                                  report.status
-                                                ]?.label
-                                              }
-                                            </Badge>
-                                          </div>
-                                        </div>
-
-                                        <div>
-                                          <label className="text-sm font-medium text-gray-600">
-                                            Scam Description
-                                          </label>
-                                          <div className="mt-2 p-4 bg-red-50 border border-red-200 rounded-lg">
-                                            <p className="text-gray-800 leading-relaxed">
-                                              {report.scamDescription}
-                                            </p>
-                                          </div>
-                                        </div>
-
-                                        <div>
-                                          <label className="text-sm font-medium text-gray-600">
-                                            Evidence Files
-                                          </label>
-                                          <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                            {report.evidenceFiles
-                                              .paymentReceipt && (
-                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                <FileText className="w-4 h-4" />
-                                                <span className="text-sm">
-                                                  Payment Receipt
-                                                </span>
-                                              </div>
-                                            )}
-                                            {report.evidenceFiles.agreement && (
-                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                <FileText className="w-4 h-4" />
-                                                <span className="text-sm">
-                                                  Agreement
-                                                </span>
-                                              </div>
-                                            )}
-                                            {report.evidenceFiles
-                                              .companyPicture && (
-                                              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                <FileText className="w-4 h-4" />
-                                                <span className="text-sm">
-                                                  Company Picture
-                                                </span>
-                                              </div>
-                                            )}
-                                          </div>
-                                        </div>
-
-                                        {report.reviewUrl && (
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Published URL
-                                            </label>
-                                            <div className="mt-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                              <ExternalLink className="w-4 h-4 text-green-600" />
-                                              <span className="text-green-700 font-mono text-sm">
-                                                /{report.reviewUrl}
-                                              </span>
-                                            </div>
-                                          </div>
-                                        )}
-
-                                        {report.adminNotes && (
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Admin Notes
-                                            </label>
-                                            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                              <p className="text-blue-800">
-                                                {report.adminNotes}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </DialogContent>
-                                  </Dialog>
-
-                                  {report.status === "pending" && (
-                                    <>
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleScamReportStatusChange(
-                                            report.id,
-                                            "approved",
-                                          )
-                                        }
-                                        className="text-green-600"
-                                      >
-                                        <CheckCircle className="w-4 h-4 mr-2" />
-                                        Approve & Publish
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleScamReportStatusChange(
-                                            report.id,
-                                            "investigating",
-                                          )
-                                        }
-                                        className="text-blue-600"
-                                      >
-                                        <Shield className="w-4 h-4 mr-2" />
-                                        Mark as Investigating
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleScamReportStatusChange(
-                                            report.id,
-                                            "rejected",
-                                          )
-                                        }
-                                        className="text-red-600"
-                                      >
-                                        <XCircle className="w-4 h-4 mr-2" />
-                                        Reject
-                                      </DropdownMenuItem>
-                                    </>
-                                  )}
-
-                                  {report.status === "approved" && (
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        window.open(
-                                          `/${report.reviewUrl}`,
-                                          "_blank",
-                                        )
-                                      }
-                                      className="text-blue-600"
-                                    >
-                                      <ExternalLink className="w-4 h-4 mr-2" />
-                                      View Live Page
-                                    </DropdownMenuItem>
-                                  )}
-
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      setSelectedScamReport(report);
-                                      setShowScamDeleteDialog(true);
-                                    }}
-                                    className="text-red-600"
-                                  >
-                                    <Trash2 className="w-4 h-4 mr-2" />
-                                    Delete Report
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <Badge
-                                  className={`text-xs ${scamReportStatuses[report.status]?.color}`}
-                                >
-                                  {scamReportStatuses[report.status]?.label}
-                                </Badge>
-                                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  {report.reportDate}
-                                </span>
-                              </div>
-
-                              <p className="text-sm text-muted-foreground line-clamp-2">
-                                {report.scamDescription}
-                              </p>
-
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <span className="flex items-center gap-1">
-                                  <Phone className="w-3 h-3" />
-                                  {report.contactNumber}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Mail className="w-3 h-3" />
-                                  {report.emailId}
-                                </span>
-                              </div>
-                            </div>
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>User</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Joined</TableHead>
+                    <TableHead>Last Active</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-gray-600" />
                           </div>
-                        </Card>
-                      ))}
-                    </div>
-
-                    {/* Desktop: Table Layout */}
-                    <div className="hidden sm:block rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Company</TableHead>
-                            <TableHead>Contact Info</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Report Date</TableHead>
-                            <TableHead>Evidence</TableHead>
-                            <TableHead>Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filteredScamReports.map((report) => (
-                            <TableRow
-                              key={report.id}
-                              className="border-l-4 border-l-red-500"
-                            >
-                              <TableCell>
-                                <div>
-                                  <div className="font-medium text-red-800 flex items-center gap-2">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    {report.companyName}
-                                  </div>
-                                  <div className="text-sm text-muted-foreground flex items-center gap-1">
-                                    <MapPin className="w-3 h-3" />
-                                    {report.location}
-                                  </div>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="space-y-1">
-                                  <div className="text-sm flex items-center gap-1">
-                                    <Phone className="w-3 h-3" />
-                                    {report.contactNumber}
-                                  </div>
-                                  <div className="text-sm flex items-center gap-1">
-                                    <Mail className="w-3 h-3" />
-                                    {report.emailId}
-                                  </div>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge
-                                  className={
-                                    scamReportStatuses[report.status]?.color
-                                  }
-                                >
-                                  {scamReportStatuses[report.status]?.label}
-                                </Badge>
-                                {report.reviewUrl && (
-                                  <div className="mt-1">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className="h-6 px-2 text-xs"
-                                      onClick={() =>
-                                        window.open(
-                                          `/${report.reviewUrl}`,
-                                          "_blank",
-                                        )
-                                      }
-                                    >
-                                      <ExternalLink className="w-3 h-3 mr-1" />
-                                      Live
-                                    </Button>
-                                  </div>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center gap-1">
-                                  <Calendar className="w-4 h-4" />
-                                  {report.reportDate}
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center gap-1">
-                                  <FileText className="w-4 h-4" />
-                                  <span className="text-sm">
-                                    {
-                                      Object.values(
-                                        report.evidenceFiles,
-                                      ).filter(Boolean).length
-                                    }{" "}
-                                    files
-                                  </span>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm">
-                                      <MoreHorizontal className="w-4 h-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <Dialog>
-                                      <DialogTrigger asChild>
-                                        <DropdownMenuItem
-                                          onSelect={(e) => e.preventDefault()}
-                                        >
-                                          <Eye className="w-4 h-4 mr-2" />
-                                          View Details
-                                        </DropdownMenuItem>
-                                      </DialogTrigger>
-                                      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                                        <DialogHeader>
-                                          <DialogTitle className="flex items-center gap-2 text-red-800">
-                                            <AlertTriangle className="w-5 h-5" />
-                                            Scam Report Details
-                                          </DialogTitle>
-                                        </DialogHeader>
-                                        <div className="space-y-6">
-                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Company Name
-                                              </label>
-                                              <p className="text-red-800 font-medium">
-                                                {report.companyName}
-                                              </p>
-                                            </div>
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Location
-                                              </label>
-                                              <p className="flex items-center gap-1">
-                                                <MapPin className="w-4 h-4" />
-                                                {report.location}
-                                              </p>
-                                            </div>
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Contact Number
-                                              </label>
-                                              <p className="flex items-center gap-1">
-                                                <Phone className="w-4 h-4" />
-                                                {report.contactNumber}
-                                              </p>
-                                            </div>
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Email
-                                              </label>
-                                              <p className="flex items-center gap-1">
-                                                <Mail className="w-4 h-4" />
-                                                {report.emailId}
-                                              </p>
-                                            </div>
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Report Date
-                                              </label>
-                                              <p className="flex items-center gap-1">
-                                                <Calendar className="w-4 h-4" />
-                                                {report.reportDate}
-                                              </p>
-                                            </div>
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Status
-                                              </label>
-                                              <Badge
-                                                className={
-                                                  scamReportStatuses[
-                                                    report.status
-                                                  ]?.color
-                                                }
-                                              >
-                                                {
-                                                  scamReportStatuses[
-                                                    report.status
-                                                  ]?.label
-                                                }
-                                              </Badge>
-                                            </div>
-                                          </div>
-
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Scam Description
-                                            </label>
-                                            <div className="mt-2 p-4 bg-red-50 border border-red-200 rounded-lg">
-                                              <p className="text-gray-800 leading-relaxed">
-                                                {report.scamDescription}
-                                              </p>
-                                            </div>
-                                          </div>
-
-                                          <div>
-                                            <label className="text-sm font-medium text-gray-600">
-                                              Evidence Files
-                                            </label>
-                                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                              {report.evidenceFiles
-                                                .paymentReceipt && (
-                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                  <FileText className="w-4 h-4" />
-                                                  <span className="text-sm">
-                                                    Payment Receipt
-                                                  </span>
-                                                </div>
-                                              )}
-                                              {report.evidenceFiles
-                                                .agreement && (
-                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                  <FileText className="w-4 h-4" />
-                                                  <span className="text-sm">
-                                                    Agreement
-                                                  </span>
-                                                </div>
-                                              )}
-                                              {report.evidenceFiles
-                                                .companyPicture && (
-                                                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                                  <FileText className="w-4 h-4" />
-                                                  <span className="text-sm">
-                                                    Company Picture
-                                                  </span>
-                                                </div>
-                                              )}
-                                            </div>
-                                          </div>
-
-                                          {report.reviewUrl && (
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Published URL
-                                              </label>
-                                              <div className="mt-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                                <ExternalLink className="w-4 h-4 text-green-600" />
-                                                <span className="text-green-700 font-mono text-sm">
-                                                  /{report.reviewUrl}
-                                                </span>
-                                              </div>
-                                            </div>
-                                          )}
-
-                                          {report.adminNotes && (
-                                            <div>
-                                              <label className="text-sm font-medium text-gray-600">
-                                                Admin Notes
-                                              </label>
-                                              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                                <p className="text-blue-800">
-                                                  {report.adminNotes}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          )}
-                                        </div>
-                                      </DialogContent>
-                                    </Dialog>
-
-                                    {report.status === "pending" && (
-                                      <>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleScamReportStatusChange(
-                                              report.id,
-                                              "approved",
-                                            )
-                                          }
-                                          className="text-green-600"
-                                        >
-                                          <CheckCircle className="w-4 h-4 mr-2" />
-                                          Approve & Publish
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleScamReportStatusChange(
-                                              report.id,
-                                              "investigating",
-                                            )
-                                          }
-                                          className="text-blue-600"
-                                        >
-                                          <Shield className="w-4 h-4 mr-2" />
-                                          Mark as Investigating
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                          onClick={() =>
-                                            handleScamReportStatusChange(
-                                              report.id,
-                                              "rejected",
-                                            )
-                                          }
-                                          className="text-red-600"
-                                        >
-                                          <XCircle className="w-4 h-4 mr-2" />
-                                          Reject
-                                        </DropdownMenuItem>
-                                      </>
-                                    )}
-
-                                    {report.status === "approved" && (
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          window.open(
-                                            `/${report.reviewUrl}`,
-                                            "_blank",
-                                          )
-                                        }
-                                        className="text-blue-600"
-                                      >
-                                        <ExternalLink className="w-4 h-4 mr-2" />
-                                        View Live Page
-                                      </DropdownMenuItem>
-                                    )}
-
-                                    <DropdownMenuItem
-                                      onClick={() => {
-                                        setSelectedScamReport(report);
-                                        setShowScamDeleteDialog(true);
-                                      }}
-                                      className="text-red-600"
-                                    >
-                                      <Trash2 className="w-4 h-4 mr-2" />
-                                      Delete Report
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
+                          <div>
+                            <p className="font-medium">User {i}</p>
+                            <p className="text-sm text-gray-600">user{i}@example.com</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {i % 2 === 0 ? "Business" : "Individual"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className="bg-green-100 text-green-800">Active</Badge>
+                      </TableCell>
+                      <TableCell>Jan 2024</TableCell>
+                      <TableCell>2 hours ago</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit User
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">
+                              <XCircle className="h-4 w-4 mr-2" />
+                              Suspend
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </Card>
+          </TabsContent>
+
+          {/* Review Management */}
+          <TabsContent value="reviews" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Review Management</h2>
+              <div className="flex items-center gap-4">
+                <Input placeholder="Search reviews..." className="w-64" />
+                <Select>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Reviews</SelectItem>
+                    <SelectItem value="approved">Approved</SelectItem>
+                    <SelectItem value="flagged">Flagged</SelectItem>
+                    <SelectItem value="spam">Spam</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Reviews</p>
+                      <p className="text-2xl font-bold">45,230</p>
+                    </div>
+                    <MessageSquare className="h-8 w-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Flagged</p>
+                      <p className="text-2xl font-bold">28</p>
+                    </div>
+                    <Flag className="h-8 w-8 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">This Month</p>
+                      <p className="text-2xl font-bold">3,420</p>
+                    </div>
+                    <Calendar className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Avg Rating</p>
+                      <p className="text-2xl font-bold">4.2</p>
+                    </div>
+                    <Star className="h-8 w-8 text-yellow-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Review</TableHead>
+                    <TableHead>Business</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">Great service!</p>
+                          <p className="text-sm text-gray-600">They helped me get my visa approved quickly...</p>
+                        </div>
+                      </TableCell>
+                      <TableCell>Business {i}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          {Array.from({ length: 5 }).map((_, index) => (
+                            <Star
+                              key={index}
+                              className={`h-4 w-4 ${
+                                index < 4 ? "text-yellow-400 fill-current" : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                      </TableCell>
+                      <TableCell>Jan 15, 2024</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Full Review
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Flag className="h-4 w-4 mr-2" />
+                              Flag as Spam
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+          </TabsContent>
+
+          {/* Content Management */}
+          <TabsContent value="content" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Content Management</h2>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Content
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <FileText className="h-8 w-8 text-blue-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">About Us Page</h3>
+                  <p className="text-sm text-gray-600">Manage company information and team details</p>
+                  <p className="text-xs text-gray-500 mt-2">Last updated: 2 days ago</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Shield className="h-8 w-8 text-green-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Privacy Policy</h3>
+                  <p className="text-sm text-gray-600">Update privacy and data protection policies</p>
+                  <p className="text-xs text-gray-500 mt-2">Last updated: 1 week ago</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <FileText className="h-8 w-8 text-purple-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Terms of Service</h3>
+                  <p className="text-sm text-gray-600">Manage terms and conditions</p>
+                  <p className="text-xs text-gray-500 mt-2">Last updated: 3 days ago</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Globe className="h-8 w-8 text-orange-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">SEO Settings</h3>
+                  <p className="text-sm text-gray-600">Manage meta tags, titles, and descriptions</p>
+                  <p className="text-xs text-gray-500 mt-2">Last updated: 5 days ago</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <PenTool className="h-8 w-8 text-red-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Blog Posts</h3>
+                  <p className="text-sm text-gray-600">Create and manage blog content</p>
+                  <p className="text-xs text-gray-500 mt-2">12 published posts</p>
+                </CardContent>
+              </Card>
+
+              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Bell className="h-8 w-8 text-indigo-600" />
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Notifications</h3>
+                  <p className="text-sm text-gray-600">Manage email templates and notifications</p>
+                  <p className="text-xs text-gray-500 mt-2">8 active templates</p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Payments & Monetization */}
+          <TabsContent value="payments" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Payments & Revenue</h2>
+              <div className="flex items-center gap-4">
+                <Button variant="outline">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Payment Settings
+                </Button>
+                <Button>
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Report
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                      <p className="text-2xl font-bold">₹28.5L</p>
+                    </div>
+                    <DollarSign className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">This Month</p>
+                      <p className="text-2xl font-bold">₹4.2L</p>
+                    </div>
+                    <TrendingUp className="h-8 w-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Active Subscriptions</p>
+                      <p className="text-2xl font-bold">1,250</p>
+                    </div>
+                    <CreditCard className="h-8 w-8 text-purple-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                      <p className="text-2xl font-bold">12.5%</p>
+                    </div>
+                    <BarChart3 className="h-8 w-8 text-orange-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Recent Transactions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Transactions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Premium Plan - Business {i}</p>
+                            <p className="text-sm text-gray-600">Jan 15, 2024</p>
+                          </div>
+                        </div>
+                        <span className="font-medium text-green-600">₹2,999</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Plan Statistics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Plan Distribution</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Free Plan</span>
+                      <div className="flex items-center gap-3 flex-1 mx-4">
+                        <Progress value={60} className="flex-1" />
+                        <span className="text-sm text-gray-600">6,800</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Premium Plan</span>
+                      <div className="flex items-center gap-3 flex-1 mx-4">
+                        <Progress value={30} className="flex-1" />
+                        <span className="text-sm text-gray-600">1,450</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Business Pro</span>
+                      <div className="flex items-center gap-3 flex-1 mx-4">
+                        <Progress value={10} className="flex-1" />
+                        <span className="text-sm text-gray-600">250</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Business Listing</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm text-muted-foreground">
-              Are you sure you want to delete "{selectedBusiness?.name}"? This
-              action cannot be undone.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowDeleteDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() =>
-                selectedBusiness && handleDeleteBusiness(selectedBusiness.id)
-              }
-            >
-              Delete Business
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Scam Report Delete Confirmation Dialog */}
-      <Dialog
-        open={showScamDeleteDialog}
-        onOpenChange={setShowScamDeleteDialog}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-800">
-              <AlertTriangle className="w-5 h-5" />
-              Delete Scam Report
-            </DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm text-muted-foreground">
-              Are you sure you want to delete the scam report for "
-              {selectedScamReport?.companyName}"? This action cannot be undone
-              and will remove the report from both the admin panel and any live
-              pages.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowScamDeleteDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() =>
-                selectedScamReport &&
-                handleDeleteScamReport(selectedScamReport.id)
-              }
-            >
-              Delete Report
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
