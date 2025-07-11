@@ -11,6 +11,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Pages
 import Index from "./pages/Index";
+import TestIndex from "./pages/TestIndex";
 import Browse from "./pages/Browse";
 import BusinessProfile from "./pages/BusinessProfile";
 import AddBusiness from "./pages/AddBusiness";
@@ -43,7 +44,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<TestIndex />} />
             <Route path="/business" element={<Browse />} />
             <Route path="/list-business" element={<ListBusiness />} />
             <Route path="/plans" element={<ListingPlans />} />
