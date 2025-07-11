@@ -420,6 +420,84 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Popular Cities Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Find Consultants by City
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore trusted visa consultants in major Indian cities
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            {[
+              "Delhi",
+              "Mumbai",
+              "Bangalore",
+              "Chennai",
+              "Hyderabad",
+              "Pune",
+              "Jaipur",
+              "Lucknow",
+              "Indore",
+              "Chandigarh",
+              "Gurgaon",
+              "Noida",
+              "Dehradun",
+              "Kochi",
+              "Kolkata",
+              "Ahmedabad",
+            ].map((city, index) => (
+              <Link
+                key={city}
+                to={`/business/${city.toLowerCase()}`}
+                className="group relative"
+              >
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105 border border-gray-100">
+                  <div className="text-2xl mb-2">
+                    {
+                      [
+                        "🏛️",
+                        "🌆",
+                        "🏢",
+                        "🏙️",
+                        "💎",
+                        "🎯",
+                        "🏰",
+                        "🕌",
+                        "🌟",
+                        "🌸",
+                        "🏗️",
+                        "🚇",
+                        "🏔️",
+                        "🌴",
+                        "🎭",
+                        "💼",
+                      ][index]
+                    }
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors">
+                    {city}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {Math.floor(Math.random() * 50) + 10}+ Consultants
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/browse">View All Cities</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
       <section className="py-16 px-4 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
         <div className="container mx-auto max-w-6xl">
