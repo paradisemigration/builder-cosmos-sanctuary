@@ -38,6 +38,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   businessCategories,
   dubaiZones,
+  indianCities,
   uaeCities,
   sampleBusinesses,
 } from "@/lib/data";
