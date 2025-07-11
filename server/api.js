@@ -459,6 +459,17 @@ app.get("/api/database/duplicates", async (req, res) => {
   }
 });
 
+// Simple server health check
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    env: process.env.NODE_ENV || "development",
+  });
+});
+
 // ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
 
 // Start a new scraping job
