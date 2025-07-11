@@ -31,11 +31,28 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   const generateSlug = (text: string) => {
     return text
       .toLowerCase()
+      .trim()
       .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
   };
 
-  const businessUrl = `/${generateSlug(business.city)}/${generateSlug(business.name)}`;
+  // Ensure we have valid city and name for URL generation
+  const citySlug = generateSlug(business.city || "unknown");
+  const nameSlug = generateSlug(business.name || "business");
+  const businessUrl = `/${citySlug}/${nameSlug}`;
+
+  // Debug: log the generated URL in development
+  if (process.env.NODE_ENV === "development") {
+    console.log("Business URL generated:", {
+      city: business.city,
+      name: business.name,
+      citySlug,
+      nameSlug,
+      finalUrl: businessUrl,
+    });
+  }
 
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
