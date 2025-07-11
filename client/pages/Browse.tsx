@@ -4,17 +4,15 @@ import {
   Search,
   MapPin,
   Filter,
-  Sparkles,
   TrendingUp,
   Users,
   Star,
   ChevronDown,
-  Eye,
+  SlidersHorizontal,
 } from "lucide-react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Navigation } from "@/components/Navigation";
-import { DebugPageInfo } from "@/components/DebugPageInfo";
 import {
   LoadingState,
   ErrorState,
@@ -29,6 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   businessCategories,
   indianCities,
@@ -57,9 +57,7 @@ export default function Browse() {
   const [selectedZone, setSelectedZone] = useState(
     searchParams.get("zone") || "all",
   );
-  const [visibleSections, setVisibleSections] = useState<string[]>([]);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState<FilterState>({
     categories: searchParams.get("category")
@@ -72,15 +70,12 @@ export default function Browse() {
     sortBy: "rating",
   });
 
-  // API filters based on search parameters and local filters
+  // API filters for hook
   const apiFilters: BusinessFilters = {
     search: searchQuery || undefined,
-    category: selectedCategory || undefined,
-    location: selectedZone || undefined,
+    category: selectedCategory !== "all" ? selectedCategory : undefined,
+    location: selectedZone !== "all" ? selectedZone : undefined,
     verified: filters.verified || undefined,
-    rating: filters.rating ? parseInt(filters.rating) : undefined,
-    page: 1,
-    limit: 20,
     sortBy: filters.sortBy as "rating" | "name" | "date" | "reviews",
     sortOrder: "desc",
   };
@@ -165,85 +160,7 @@ export default function Browse() {
 
   // Initialize page title on mount
   useEffect(() => {
-    // Set dynamic page title based on search parameters
-    const generateBrowseTitle = () => {
-      const websiteTitle = "TrustedImmigration";
-      const query = searchParams.get("q");
-      const category = searchParams.get("category");
-      const zone = searchParams.get("zone");
-
-      if (query && category && zone) {
-        return `${query} - ${category} in ${zone} - ${websiteTitle}`;
-      } else if (query && category) {
-        return `${query} - ${category} Services - ${websiteTitle}`;
-      } else if (query && zone) {
-        return `${query} in ${zone} - ${websiteTitle}`;
-      } else if (category && zone) {
-        return `${category} Services in ${zone} - ${websiteTitle}`;
-      } else if (query) {
-        return `Search: ${query} - ${websiteTitle}`;
-      } else if (category) {
-        return `${category} Services - ${websiteTitle}`;
-      } else if (zone) {
-        return `Services in ${zone} - ${websiteTitle}`;
-      } else {
-        return `Browse Immigration Services - ${websiteTitle}`;
-      }
-    };
-
-    const title = generateBrowseTitle();
-    document.title = title;
-
-    // Update meta description
-    const generateBrowseDescription = () => {
-      const query = searchParams.get("q");
-      const category = searchParams.get("category");
-      const zone = searchParams.get("zone");
-
-      if (category && zone) {
-        return `Find verified ${category.toLowerCase()} services in ${zone}. Compare immigration consultants, read reviews, and get expert assistance in Dubai and UAE.`;
-      } else if (category) {
-        return `Browse ${category.toLowerCase()} services across Dubai and UAE. Find verified immigration consultants with ratings, reviews, and contact details.`;
-      } else if (zone) {
-        return `Discover immigration services in ${zone}. Find trusted visa consultants, document clearing, and immigration experts in your area.`;
-      } else {
-        return "Browse Dubai's largest directory of verified immigration services. Find trusted visa consultants, compare ratings, and get expert immigration assistance.";
-      }
-    };
-
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement("meta");
-      metaDescription.setAttribute("name", "description");
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute("content", generateBrowseDescription());
-  }, [searchParams]);
-
-  // Scroll animations
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => [
-              ...prev,
-              entry.target.getAttribute("data-section") || "",
-            ]);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-
-    const sections = document.querySelectorAll("[data-section]");
-    sections.forEach((section) => {
-      observerRef.current?.observe(section);
-    });
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
+    document.title = "Browse Visa Consultants - VisaConsult India";
   }, []);
 
   const handleSearch = () => {
@@ -256,488 +173,269 @@ export default function Browse() {
     setSearchParams(params);
   };
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setSelectedZone("all");
+    setFilters({
+      categories: [],
+      zones: [],
+      rating: "",
+      verified: false,
+      hasReviews: false,
+      sortBy: "rating",
+    });
+    setSearchParams(new URLSearchParams());
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
-      {/* Navigation */}
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
 
-      {/* Enhanced Animated Hero Section */}
-      <div className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-800/40 to-blue-900/50"></div>
-
-          {/* Floating Geometric Shapes */}
-          <div className="absolute top-16 left-8 w-48 h-48 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute top-32 right-12 w-36 h-36 bg-gradient-to-br from-purple-400/25 to-pink-500/25 rounded-full blur-2xl animate-float-medium"></div>
-          <div className="absolute bottom-20 left-1/4 w-44 h-44 bg-gradient-to-br from-green-400/20 to-teal-500/20 rounded-full blur-3xl animate-float-fast"></div>
-
-          {/* Enhanced Particle System */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div
-                key={i}
-                className={`absolute rounded-full animate-twinkle ${
-                  i % 3 === 0
-                    ? "w-2 h-2 bg-white/40"
-                    : i % 3 === 1
-                      ? "w-1 h-1 bg-cyan-300/50"
-                      : "w-1.5 h-1.5 bg-purple-300/40"
-                }`}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 4}s`,
-                  animationDuration: `${3 + Math.random() * 3}s`,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative"
-          data-section="hero"
-        >
-          <div
-            className={`text-center mb-12 transition-all duration-1000 ${
-              visibleSections.includes("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-6 leading-tight">
-              Discover{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                Trusted
-              </span>
-              <br />
-              Immigration Services
+      {/* Header Section */}
+      <section className="pt-24 pb-8 px-4 bg-white border-b">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Find Trusted Visa Consultants
             </h1>
-            <p className="text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto mb-8 leading-relaxed">
-              ✈️ Find verified professionals and legitimate service providers in
-              Dubai. Your journey to success starts here.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Browse through India's largest directory of verified immigration
+              experts
             </p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto mb-12">
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-cyan-400 mb-2">
-                  50+
-                </div>
-                <div className="text-blue-200 text-sm lg:text-base">
-                  Verified Businesses
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-purple-400 mb-2">
-                  1000+
-                </div>
-                <div className="text-blue-200 text-sm lg:text-base">
-                  Happy Customers
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-green-400 mb-2">
-                  4.8★
-                </div>
-                <div className="text-blue-200 text-sm lg:text-base">
-                  Average Rating
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Enhanced Search Card */}
-          <div
-            className={`transition-all duration-1000 ${
-              visibleSections.includes("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "300ms" }}
-          >
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 lg:p-8 shadow-2xl border border-white/20">
-              <div className="space-y-6">
-                {/* Main Search Input with Enhanced Focus Effects */}
-                <div className="relative group">
-                  <Search
-                    className={`absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 transition-all duration-300 ${
-                      isSearchFocused
-                        ? "text-blue-500 scale-110"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  <Input
-                    placeholder="🔍 Search for visa services, agents, consultants..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
-                    className={`pl-16 pr-6 h-16 text-lg rounded-2xl border-2 transition-all duration-300 bg-white/80 backdrop-blur-sm ${
-                      isSearchFocused
-                        ? "border-blue-500 shadow-lg shadow-blue-500/25 bg-white"
-                        : "border-white/30 hover:border-white/50"
-                    }`}
-                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  />
-                  {/* Search suggestions */}
-                  {isSearchFocused && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50">
-                      <div className="space-y-2">
-                        <div className="text-sm text-gray-500 font-medium">
-                          Popular searches:
-                        </div>
-                        {[
-                          "Tourist Visa",
-                          "Employment Visa",
-                          "Golden Visa",
-                          "Business Setup",
-                        ].map((term) => (
-                          <button
-                            key={term}
-                            className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                            onClick={() => {
-                              setSearchQuery(term);
-                              setIsSearchFocused(false);
-                            }}
-                          >
-                            🔍 {term}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+          {/* Search Bar */}
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-lg border shadow-sm p-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Search Input */}
+                <div className="md:col-span-2">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Search consultants, services..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 h-12 border-gray-200"
+                    />
+                  </div>
                 </div>
 
-                {/* Enhanced Filter Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="relative group">
-                    <Select
-                      value={selectedCategory}
-                      onValueChange={setSelectedCategory}
-                    >
-                      <SelectTrigger className="h-14 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-white/30 hover:border-white/50 transition-all duration-300 group-hover:shadow-lg">
-                        <div className="flex items-center">
-                          <Sparkles className="w-5 h-5 mr-3 text-purple-500" />
-                          <SelectValue placeholder="Service Category" />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {businessCategories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="relative group">
-                    <Select
-                      value={selectedZone}
-                      onValueChange={setSelectedZone}
-                    >
-                      <SelectTrigger className="h-14 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-white/30 hover:border-white/50 transition-all duration-300 group-hover:shadow-lg">
-                        <div className="flex items-center">
-                          <MapPin className="w-5 h-5 mr-3 text-green-500" />
-                          <SelectValue placeholder="Select City" />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Cities</SelectItem>
-                        {indianCities.map((city) => (
-                          <SelectItem key={city} value={city}>
-                            {city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button
-                    onClick={handleSearch}
-                    className="h-14 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg font-bold px-8 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                {/* Category Filter */}
+                <div>
+                  <Select
+                    value={selectedCategory}
+                    onValueChange={setSelectedCategory}
                   >
-                    <Search className="w-6 h-6 mr-3 group-hover:animate-pulse" />
-                    🚀 Find Services
-                  </Button>
+                    <SelectTrigger className="h-12 border-gray-200">
+                      <div className="flex items-center">
+                        <Filter className="w-4 h-4 mr-2 text-gray-400" />
+                        <SelectValue placeholder="Category" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {businessCategories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                {/* Quick Filter Tags */}
-                <div className="flex flex-wrap gap-3 pt-4">
-                  <span className="text-white/80 text-sm font-medium">
-                    Quick filters:
-                  </span>
-                  {[
-                    "⭐ Verified Only",
-                    "��� Top Rated",
-                    "💬 Most Reviews",
-                    "🆕 Recently Added",
-                  ].map((tag) => (
-                    <button
-                      key={tag}
-                      className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm text-white backdrop-blur-sm border border-white/30 hover:border-white/50 transition-all duration-300 hover:scale-105"
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                {/* Location Filter */}
+                <div>
+                  <Select value={selectedZone} onValueChange={setSelectedZone}>
+                    <SelectTrigger className="h-12 border-gray-200">
+                      <div className="flex items-center">
+                        <MapPin className="w-4 h-4 mr-2 text-gray-400" />
+                        <SelectValue placeholder="City" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Cities</SelectItem>
+                      {indianCities.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <Button onClick={handleSearch} className="flex-1 sm:flex-none">
+                  <Search className="w-4 h-4 mr-2" />
+                  Search
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex-1 sm:flex-none"
+                >
+                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                  Filters
+                  <ChevronDown
+                    className={`w-4 h-4 ml-2 transition-transform ${
+                      showFilters ? "rotate-180" : ""
+                    }`}
+                  />
+                </Button>
+                {(searchQuery ||
+                  selectedCategory !== "all" ||
+                  selectedZone !== "all") && (
+                  <Button variant="ghost" onClick={clearFilters}>
+                    Clear All
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Enhanced Main Content */}
-      <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
-        data-section="content"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Enhanced Filters Sidebar */}
-          <div className="lg:col-span-1 order-2 lg:order-1">
-            <div className="sticky top-24">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 p-6">
+      {/* Main Content */}
+      <section className="py-8 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar Filters */}
+            <div className={`lg:block ${showFilters ? "block" : "hidden"}`}>
+              <Card className="sticky top-24">
                 <CategoryFilter
                   filters={filters}
                   onFiltersChange={setFilters}
                   resultCount={filteredBusinesses.length}
                 />
-              </div>
+              </Card>
             </div>
-          </div>
 
-          {/* Enhanced Business Listings */}
-          <div className="lg:col-span-3 order-1 lg:order-2">
-            {/* Enhanced Results Header */}
-            <div className="bg-gradient-to-r from-white/90 to-blue-50/90 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg border border-white/50">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Results Section */}
+            <div className="lg:col-span-3">
+              {/* Results Header */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    🎯 {filteredBusinesses.length} Business
-                    {filteredBusinesses.length !== 1 ? "es" : ""} Found
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {filteredBusinesses.length} Consultant
+                    {filteredBusinesses.length !== 1 ? "s" : ""} Found
                   </h2>
-                  <p className="text-gray-600 flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    Showing verified immigration services in Dubai
+                  <p className="text-sm text-gray-600">
+                    Showing verified immigration experts
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-600 hidden sm:inline flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4" />
-                    Sort by:
-                  </span>
+
+                {/* Sort Options */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Sort by:</span>
                   <Select
                     value={filters.sortBy}
                     onValueChange={(value) =>
-                      setFilters((prev) => ({ ...prev, sortBy: value }))
+                      setFilters({ ...filters, sortBy: value })
                     }
                   >
-                    <SelectTrigger className="w-48 h-12 rounded-xl bg-white border-2 border-gray-200 hover:border-blue-300 transition-colors">
+                    <SelectTrigger className="w-40">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rating">⭐ Highest Rated</SelectItem>
-                      <SelectItem value="reviews">💬 Most Reviews</SelectItem>
-                      <SelectItem value="name">📝 Name A-Z</SelectItem>
-                      <SelectItem value="verified">
-                        ✅ Verified First
-                      </SelectItem>
+                      <SelectItem value="rating">Highest Rated</SelectItem>
+                      <SelectItem value="reviews">Most Reviews</SelectItem>
+                      <SelectItem value="name">Name A-Z</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-            </div>
 
-            {filteredBusinesses.length === 0 ? (
-              <div className="text-center py-12 sm:py-16 lg:py-24">
-                <div className="relative mx-auto w-fit">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-6 sm:mb-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg">
-                    <Search className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" />
+              {/* Results Grid */}
+              {filteredBusinesses.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <Search className="h-8 w-8 text-gray-400" />
                   </div>
-                  <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-yellow-400 rounded-full animate-bounce"></div>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3 sm:mb-4 px-4">
-                  🔍 No businesses found
-                </h3>
-                <p className="text-gray-600 mb-6 sm:mb-8 max-w-md mx-auto text-base sm:text-lg leading-relaxed px-4">
-                  Don't worry! Try adjusting your search criteria or filters. We
-                  have {sampleBusinesses.length}+ verified businesses waiting to
-                  help you.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("");
-                      setSelectedZone("");
-                      setFilters({
-                        categories: [],
-                        zones: [],
-                        rating: "",
-                        verified: false,
-                        hasReviews: false,
-                        sortBy: "rating",
-                      });
-                    }}
-                    className="rounded-xl border-2 border-blue-200 hover:border-blue-400 px-6 sm:px-8 py-3 font-semibold"
-                  >
-                    🔄 Clear All Filters
-                  </Button>
-                  <Button
-                    onClick={() => window.location.reload()}
-                    className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 sm:px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                  >
-                    👀 View All Businesses
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    No consultants found
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Try adjusting your search criteria or filters
+                  </p>
+                  <Button onClick={clearFilters} variant="outline">
+                    Clear Filters
                   </Button>
                 </div>
-              </div>
-            ) : (
-              <>
-                {/* Enhanced Business Grid - Mobile Responsive */}
-                <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                  {(filteredBusinesses.length > 0
-                    ? filteredBusinesses
-                    : sampleBusinesses.slice(0, 10)
-                  ).map((business, index) => (
-                    <div
-                      key={business.id}
-                      className="group opacity-100 translate-y-0"
-                    >
-                      <div className="hover:shadow-xl transition-shadow duration-300">
-                        <BusinessCard
-                          business={business}
-                          onClick={() => navigate(`/business/${business.id}`)}
-                        />
+              ) : (
+                <>
+                  {/* Business Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredBusinesses.map((business) => (
+                      <BusinessCard key={business.id} business={business} />
+                    ))}
+                  </div>
+
+                  {/* Load More / Pagination */}
+                  {hasMore && (
+                    <div className="text-center mt-8">
+                      <Button
+                        onClick={() => loadMore()}
+                        disabled={businessesLoading}
+                        size="lg"
+                        variant="outline"
+                      >
+                        {businessesLoading ? "Loading..." : "Load More"}
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Results Summary */}
+                  <div className="mt-8 pt-6 border-t border-gray-200">
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>
+                            Showing {filteredBusinesses.length} of{" "}
+                            {sampleBusinesses.length} consultants
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-500" />
+                          <span>All verified & rated</span>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Enhanced Load More Section - Mobile Responsive */}
-                <div className="text-center mt-12 sm:mt-16 pt-8 sm:pt-12 border-t-2 border-gray-200">
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-                      <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 flex-shrink-0" />
-                      <div className="text-center">
-                        <p className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">
-                          📊 Showing {filteredBusinesses.length} of{" "}
-                          {sampleBusinesses.length} businesses
-                        </p>
-                        <p className="text-sm sm:text-base text-gray-600 px-2">
-                          🎯 Found exactly what you're looking for? Great! Want
-                          to see more options?
-                        </p>
-                      </div>
-                      <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 flex-shrink-0" />
-                    </div>
-                    <Button
-                      size="lg"
-                      className="w-full sm:w-auto rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                    >
-                      <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
-                      ��� Load More Amazing Services
-                    </Button>
                   </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Footer */}
-      <footer className="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white py-20 mt-20 relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl animate-float-slow"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl animate-float-medium"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
-            <div className="md:col-span-2">
-              <h3 className="text-3xl font-black text-white mb-6">
-                🏢 Trusted<span className="text-yellow-400">Immigration</span>
-              </h3>
-              <p className="text-blue-100 mb-6 text-lg leading-relaxed">
-                ✈️ Your trusted partner for finding legitimate visa and
-                immigration services in Dubai. We verify every business to
-                protect you from scams.
-              </p>
-              <div className="flex gap-4">
-                {[
-                  { icon: "📱", label: "Mobile App Coming Soon" },
-                  { icon: "🔒", label: "100% Verified" },
-                  { icon: "⭐", label: "Trusted by 1000+" },
-                ].map((item) => (
-                  <div key={item.label} className="text-center">
-                    <div className="text-2xl mb-2">{item.icon}</div>
-                    <div className="text-xs text-blue-200">{item.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-6 text-lg">🔗 Quick Links</h4>
-              <ul className="space-y-3 text-blue-200">
-                {[
-                  { to: "/browse", text: "🔍 Browse Services" },
-                  { to: "/add-business", text: "➕ Add Business" },
-                  { to: "/contact", text: "📞 Contact Us" },
-                  { to: "/about", text: "ℹ️ About Us" },
-                ].map((link) => (
-                  <li key={link.to}>
-                    <Link
-                      to={link.to}
-                      className="hover:text-white transition-colors duration-300 hover:translate-x-2 transform inline-block"
-                    >
-                      {link.text}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-6 text-lg">🛡️ Support</h4>
-              <ul className="space-y-3 text-blue-200">
-                {[
-                  { to: "/help", text: "❓ Help Center" },
-                  { to: "/report", text: "🚨 Report Scam" },
-                  { to: "/privacy", text: "🔐 Privacy Policy" },
-                  { to: "/terms", text: "📋 Terms of Service" },
-                ].map((link) => (
-                  <li key={link.to}>
-                    <Link
-                      to={link.to}
-                      className="hover:text-white transition-colors duration-300 hover:translate-x-2 transform inline-block"
-                    >
-                      {link.text}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                </>
+              )}
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="border-t border-white/20 mt-16 pt-8 text-center">
-            <p className="text-blue-200">
-              &copy; 2024 Trusted Immigration Directory. All rights reserved.
-              <span className="block mt-2 text-sm">
-                🌟 Made with ❤️ in Dubai, UAE
-              </span>
-            </p>
+      {/* CTA Section */}
+      <section className="py-12 px-4 bg-blue-600 text-white">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            Can't Find What You're Looking For?
+          </h2>
+          <p className="text-lg opacity-90 mb-6">
+            Contact our support team for personalized consultant recommendations
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" variant="secondary">
+              Contact Support
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600"
+            >
+              List Your Business
+            </Button>
           </div>
         </div>
-      </footer>
-
-      {/* Debug Info - Remove before production */}
-      <DebugPageInfo />
+      </section>
     </div>
   );
 }
