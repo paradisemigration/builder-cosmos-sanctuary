@@ -326,7 +326,7 @@ class SQLiteDatabase {
   async getBusinesses(filters = {}) {
     return new Promise((resolve, reject) => {
       let sql = `
-        SELECT b.*, 
+        SELECT b.*,
                GROUP_CONCAT(DISTINCT r.id) as reviewIds,
                GROUP_CONCAT(DISTINCT i.id) as imageIds
         FROM businesses b
@@ -336,6 +336,15 @@ class SQLiteDatabase {
 
       const conditions = [];
       const params = [];
+
+      // Text search across multiple fields
+      if (filters.q) {
+        conditions.push(
+          "(LOWER(b.name) LIKE ? OR LOWER(b.description) LIKE ? OR LOWER(b.category) LIKE ? OR LOWER(b.scrapedCategory) LIKE ?)",
+        );
+        const searchTerm = `%${filters.q.toLowerCase()}%`;
+        params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+      }
 
       if (filters.city) {
         conditions.push(
@@ -463,7 +472,7 @@ class SQLiteDatabase {
   async updateStatistics() {
     return new Promise((resolve, reject) => {
       const sql = `
-        UPDATE statistics SET 
+        UPDATE statistics SET
           totalBusinesses = (SELECT COUNT(*) FROM businesses),
           totalImages = (SELECT COUNT(*) FROM images),
           totalReviews = (SELECT COUNT(*) FROM reviews),
