@@ -89,6 +89,20 @@ export const businessCategories: BusinessCategory[] = [
   "Education Consultants",
 ];
 
+// Category slugs for URL routing
+export const categoryMapping: Record<string, string> = {
+  "study-abroad": "Study Abroad Consultants",
+  "immigration-consultants": "Immigration Lawyers",
+  "visa-consultants": "Student Visa Consultants",
+  "work-permit": "Work Visa Consultants",
+  "visa-services": "Visa Documentation Services",
+  "immigration-services": "PR & Citizenship Services",
+  "overseas-services": "Embassy Services",
+  "education-services": "Education Consultants",
+};
+
+export const categorySlugs = Object.keys(categoryMapping);
+
 export const visaTypes = [
   "Student Visa",
   "Work Visa",
