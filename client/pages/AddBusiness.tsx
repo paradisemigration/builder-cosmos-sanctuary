@@ -1007,7 +1007,7 @@ export default function AddBusiness() {
                           <SelectValue placeholder="Select city" />
                         </SelectTrigger>
                         <SelectContent>
-                          {uaeCities.map((city) => (
+                          {indianCities.map((city) => (
                             <SelectItem
                               key={city}
                               value={city}
