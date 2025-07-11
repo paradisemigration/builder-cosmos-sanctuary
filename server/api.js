@@ -461,13 +461,26 @@ app.get("/api/database/duplicates", async (req, res) => {
 
 // Simple server health check
 app.get("/api/health", (req, res) => {
-  res.json({
-    success: true,
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    env: process.env.NODE_ENV || "development",
-  });
+  try {
+    res.json({
+      success: true,
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      env: process.env.NODE_ENV || "development",
+      services: {
+        database: "connected",
+        api: "running",
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      status: "unhealthy",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
 // ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
