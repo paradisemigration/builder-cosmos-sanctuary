@@ -92,6 +92,7 @@ export default function BusinessProfile() {
           ...business,
           id:
             business.googlePlaceId || business.id || Date.now() + Math.random(),
+          name: business.name || "Unknown Business",
           city: business.scrapedCity || business.city || "Unknown",
           reviewCount: business.reviews?.length || business.reviewCount || 0,
           rating: business.rating || 0,
@@ -99,6 +100,8 @@ export default function BusinessProfile() {
           specializations: business.specializations || [],
           countriesServed: business.countriesServed || [],
           languages: business.languages || [],
+          reviews: business.reviews || [],
+          gallery: business.gallery || [],
           isVerified: business.isVerified || true,
         }));
 
