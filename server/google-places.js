@@ -177,8 +177,8 @@ class GooglePlacesAPI {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      // Process reviews
-      const processedReviews = reviews.slice(0, 5).map((review, index) => ({
+      // Process ALL reviews (no limit)
+      const processedReviews = reviews.map((review, index) => ({
         id: `google_${place_id}_${index}`,
         userId: `google_user_${review.author_name?.replace(/\s+/g, "_").toLowerCase()}`,
         userName: review.author_name || "Anonymous",
