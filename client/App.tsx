@@ -40,17 +40,16 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/browse" element={<Browse />} />
-
-            {/* Legacy business profile route for backward compatibility */}
-            <Route path="/business/:id" element={<BusinessProfile />} />
-
-            {/* New SEO-friendly business profile route: /city/company-name */}
-            <Route path="/:city/:companyName" element={<BusinessProfile />} />
-
             <Route path="/list-business" element={<ListBusiness />} />
             <Route path="/plans" element={<ListingPlans />} />
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/cant-find-business" element={<CantFindBusiness />} />
+
+            {/* Legacy business profile route for backward compatibility */}
+            <Route path="/business/:id" element={<BusinessProfile />} />
 
             {/* SEO-friendly category and location routes */}
             <Route
@@ -61,6 +60,9 @@ const App = () => (
               path="/location/:location"
               element={<CategoryLocationPage />}
             />
+
+            {/* New SEO-friendly business profile route: /city/company-name */}
+            <Route path="/:city/:companyName" element={<BusinessProfile />} />
 
             {/* Protected Routes - Require Authentication */}
             <Route
