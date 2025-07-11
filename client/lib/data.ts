@@ -44,33 +44,49 @@ export interface Review {
 }
 
 export type BusinessCategory =
-  | "Visa Agent"
-  | "Immigration Consultants"
-  | "Visa Services"
-  | "Visa & Passport Services"
-  | "Document Clearing / Typing Centers"
-  | "Travel Agencies (Visa-related)"
-  | "Visit Visa Specialists"
+  | "Student Visa Consultants"
   | "Work Visa Consultants"
-  | "Study Visa Services"
+  | "Tourist Visa Services"
+  | "Business Visa Services"
+  | "Immigration Lawyers"
+  | "Study Abroad Consultants"
   | "PR & Citizenship Services"
-  | "Business Setup & Visa"
-  | "Family Visa Services";
+  | "Visa Documentation Services"
+  | "Embassy Services"
+  | "Visa Interview Preparation"
+  | "Language Training Centers"
+  | "Education Consultants";
 
 export const businessCategories: BusinessCategory[] = [
-  "Visa Agent",
-  "Immigration Consultants",
-  "Visa Services",
-  "Visa & Passport Services",
-  "Document Clearing / Typing Centers",
-  "Travel Agencies (Visa-related)",
-  "Visit Visa Specialists",
+  "Student Visa Consultants",
   "Work Visa Consultants",
-  "Study Visa Services",
+  "Tourist Visa Services",
+  "Business Visa Services",
+  "Immigration Lawyers",
+  "Study Abroad Consultants",
   "PR & Citizenship Services",
-  "Business Setup & Visa",
-  "Family Visa Services",
+  "Visa Documentation Services",
+  "Embassy Services",
+  "Visa Interview Preparation",
+  "Language Training Centers",
+  "Education Consultants",
 ];
+
+// Visa types for filtering
+export const visaTypes = [
+  "Student Visa",
+  "Work Visa",
+  "Tourist Visa",
+  "Business Visa",
+  "Transit Visa",
+  "Medical Visa",
+  "Conference Visa",
+  "Employment Visa",
+  "Dependent Visa",
+  "Permanent Residency",
+] as const;
+
+export type VisaType = (typeof visaTypes)[number];
 
 const originalBusinesses: Business[] = [
   {
