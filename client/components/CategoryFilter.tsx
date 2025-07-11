@@ -15,12 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  businessCategories,
-  dubaiZones,
-  indianCities,
-  uaeCities,
-} from "@/lib/data";
+import { businessCategories, indianCities } from "@/lib/data";
 
 interface FilterState {
   categories: string[];
