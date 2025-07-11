@@ -145,8 +145,9 @@ class GooglePlacesAPI {
       const addressParts = formatted_address?.split(",") || [];
       const city = this.extractCityFromAddress(addressParts);
 
-      // Download and store photos
+      // Download and store photos in Google Cloud Storage
       const imageUrls = [];
+      const imagesForDB = [];
       let logo = null;
 
       // Process up to 5 photos
@@ -161,6 +162,15 @@ class GooglePlacesAPI {
             logo = imageUrl; // First image as logo
           }
           imageUrls.push(imageUrl);
+
+          // Format image data for SQLite database
+          imagesForDB.push({
+            photoReference: photo.photo_reference,
+            height: photo.height,
+            width: photo.width,
+            htmlAttributions: photo.html_attributions || [],
+            cloudStorageUrl: imageUrl, // GCS URL
+          });
         }
 
         // Add delay to respect API rate limits
