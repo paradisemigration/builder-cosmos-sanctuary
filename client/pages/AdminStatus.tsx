@@ -20,6 +20,8 @@ export default function AdminStatus() {
   const [scrapingLoading, setScrapingLoading] = useState(false);
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [reviewCountsLoading, setReviewCountsLoading] = useState(false);
+  const [imageAssignmentLoading, setImageAssignmentLoading] = useState(false);
+  const [imageStats, setImageStats] = useState<any>(null);
   const [loadingRef, setLoadingRef] = useState(false);
 
   const loadStatus = async (retryCount = 0) => {
@@ -721,6 +723,67 @@ export default function AdminStatus() {
                   </div>
                 ) : (
                   <div>No scraping data</div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Image Assignment Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Business Images Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {imageStats ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">
+                          {imageStats.totalBusinesses}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Total Businesses
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">
+                          {imageStats.withRealImages}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          With Real Images
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-orange-600">
+                          {imageStats.withPlaceholders}
+                        </div>
+                        <div className="text-sm text-gray-600">Need Images</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-purple-600">
+                          {imageStats.completionRate}%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Completion Rate
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-full bg-gray-200 rounded-full h-3">
+                      <div
+                        className="bg-green-600 h-3 rounded-full transition-all duration-300"
+                        style={{ width: `${imageStats.completionRate}%` }}
+                      ></div>
+                    </div>
+
+                    <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded">
+                      <strong>Note:</strong> Business images (logos & cover
+                      photos) are stored permanently in AWS S3. The system will
+                      assign professional business images from Unsplash to
+                      businesses that currently use placeholder images.
+                    </div>
+                  </div>
+                ) : (
+                  <div>Loading image statistics...</div>
                 )}
               </CardContent>
             </Card>
