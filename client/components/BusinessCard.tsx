@@ -293,7 +293,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                 <span>Open Now</span>
               </div>
               <div className="text-gray-500">
-                {business.languages.slice(0, 2).join(", ")}
+                {business.languages?.slice(0, 2).join(", ") || "Hindi, English"}
               </div>
             </div>
           </div>
