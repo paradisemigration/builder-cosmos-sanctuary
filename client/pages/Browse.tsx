@@ -96,22 +96,17 @@ export default function Browse() {
 
       if (result.success) {
         // Map the businesses to ensure proper ID field and data structure
-        const mappedBusinesses = (result.businesses || []).map(
-          (business: any) => ({
-            ...business,
-            id:
-              business.googlePlaceId ||
-              business.id ||
-              Date.now() + Math.random(),
-            city: business.scrapedCity || business.city || "Unknown",
-            reviewCount: business.reviews?.length || business.reviewCount || 0,
-            rating: business.rating || 0,
-            services: business.services || [],
-            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
-          }),
-        );
+        const mappedBusinesses = (result.businesses || []).map((business: any) => ({
+          ...business,
+          id: business.googlePlaceId || business.id || Date.now() + Math.random(),
+          city: business.scrapedCity || business.city || 'Unknown',
+          reviewCount: business.reviews?.length || business.reviewCount || 0,
+          rating: business.rating || 0,
+          services: business.services || [],
+          isVerified: business.isVerified || true, // Most scraped businesses are verified by default
+        }));
 
-        console.log("Mapped businesses:", mappedBusinesses.length);
+        console.log('Mapped businesses:', mappedBusinesses.length);
         setScrapedBusinesses(mappedBusinesses);
       } else {
         setError("Failed to load businesses");
@@ -360,17 +355,56 @@ export default function Browse() {
 
             {/* Results Section */}
             <div className="lg:col-span-3">
-              {/* Results Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {filteredBusinesses.length} Consultant
-                    {filteredBusinesses.length !== 1 ? "s" : ""} Found
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Showing verified immigration experts
-                  </p>
+              {/* Debug Info (remove in production) */}
+              <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+                <h4 className="font-semibold text-yellow-800 mb-2">🔧 Debug Info:</h4>
+                <div className="grid grid-cols-2 gap-2 text-yellow-700">
+                  <div>Total Scraped: {scrapedBusinesses.length}</div>
+                  <div>Filtered: {filteredBusinesses.length}</div>
+                  <div>Loading: {loading ? 'Yes' : 'No'}</div>
+                  <div>Error: {error || 'None'}</div>
                 </div>
+              </div>
+
+              {/* Loading State */}
+              {loading && (
+                <div className="min-h-[400px] flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading real business data from database...</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error State */}
+              {error && (
+                <div className="min-h-[400px] flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-red-500 text-4xl mb-4">⚠️</div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Data</h3>
+                    <p className="text-gray-600 mb-4">{error}</p>
+                    <button
+                      onClick={loadScrapedBusinesses}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Results Header */}
+              {!loading && !error && (
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      {filteredBusinesses.length} Consultant
+                      {filteredBusinesses.length !== 1 ? "s" : ""} Found
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      Showing verified immigration experts from database
+                    </p>
+                  </div>
 
                 {/* Sort Options */}
                 <div className="flex items-center gap-2">
@@ -393,8 +427,11 @@ export default function Browse() {
                 </div>
               </div>
 
+              )}
+
               {/* Results Grid */}
-              {filteredBusinesses.length === 0 ? (
+              {!loading && !error && (
+                filteredBusinesses.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                     <Search className="h-8 w-8 text-gray-400" />
