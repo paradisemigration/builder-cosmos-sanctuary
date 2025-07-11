@@ -1217,37 +1217,154 @@ export default function AdminPanel() {
                     </div>
 
                     {!selectedPage ? (
-                      <div className="space-y-4">
-                        <h4 className="text-lg font-semibold">
-                          Select a page to manage SEO settings:
-                        </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {Object.entries(pageSEOData).map(
-                            ([pageKey, data]) => (
-                              <Card
-                                key={pageKey}
-                                className="cursor-pointer hover:shadow-lg transition-shadow"
-                                onClick={() => handleSEOEdit(pageKey)}
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-lg font-semibold">
+                            Manage SEO for {Object.keys(pageSEOData).length}{" "}
+                            pages:
+                          </h4>
+                          <div className="text-sm text-gray-600">
+                            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2">
+                              Main: 7
+                            </span>
+                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">
+                              Cities: 16
+                            </span>
+                            <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                              Categories: 128
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Main Pages */}
+                        <div>
+                          <h5 className="text-md font-medium text-gray-800 mb-3">
+                            📄 Main Pages
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            {Object.entries(pageSEOData)
+                              .filter(
+                                ([key]) =>
+                                  !key.includes("-") || key === "list-business",
+                              )
+                              .map(([pageKey, data]) => (
+                                <Card
+                                  key={pageKey}
+                                  className="cursor-pointer hover:shadow-lg transition-shadow border-blue-200"
+                                  onClick={() => handleSEOEdit(pageKey)}
+                                >
+                                  <CardContent className="p-3">
+                                    <div className="flex items-center justify-between mb-1">
+                                      <h6 className="font-medium text-sm capitalize">
+                                        {pageKey.replace("-", " ")}
+                                      </h6>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-6 text-xs"
+                                      >
+                                        Edit
+                                      </Button>
+                                    </div>
+                                    <p className="text-xs text-gray-600 truncate">
+                                      {data.title}
+                                    </p>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+
+                        {/* City Pages */}
+                        <div>
+                          <h5 className="text-md font-medium text-gray-800 mb-3">
+                            🏙️ City Directory Pages (16)
+                          </h5>
+                          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+                            {Object.entries(pageSEOData)
+                              .filter(([key]) => key.startsWith("city-"))
+                              .map(([pageKey, data]) => (
+                                <Card
+                                  key={pageKey}
+                                  className="cursor-pointer hover:shadow-lg transition-shadow border-green-200"
+                                  onClick={() => handleSEOEdit(pageKey)}
+                                >
+                                  <CardContent className="p-2">
+                                    <div className="text-center">
+                                      <h6 className="font-medium text-xs capitalize">
+                                        {pageKey
+                                          .replace("city-", "")
+                                          .replace("-", " ")}
+                                      </h6>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-5 text-xs mt-1"
+                                      >
+                                        Edit
+                                      </Button>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                          </div>
+                        </div>
+
+                        {/* Category Pages */}
+                        <div>
+                          <h5 className="text-md font-medium text-gray-800 mb-3">
+                            🏢 City Category Pages (128)
+                          </h5>
+                          <div className="space-y-3">
+                            {indianCities.slice(0, 4).map((city) => (
+                              <div
+                                key={city}
+                                className="border rounded-lg p-3 bg-gray-50"
                               >
-                                <CardContent className="p-4">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <h5 className="font-semibold capitalize">
-                                      {pageKey.replace("-", " ")} Page
-                                    </h5>
-                                    <Button size="sm" variant="outline">
-                                      Edit
-                                    </Button>
-                                  </div>
-                                  <p className="text-sm text-gray-600 truncate">
-                                    {data.title}
-                                  </p>
-                                  <p className="text-xs text-gray-500 mt-1 truncate">
-                                    {data.description}
-                                  </p>
-                                </CardContent>
-                              </Card>
-                            ),
-                          )}
+                                <h6 className="font-medium text-sm mb-2">
+                                  {city} Categories:
+                                </h6>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                  {Object.keys(categoryMapping).map((slug) => {
+                                    const pageKey = `${city.toLowerCase()}-${slug}`;
+                                    return (
+                                      <Card
+                                        key={pageKey}
+                                        className="cursor-pointer hover:shadow-lg transition-shadow border-purple-200"
+                                        onClick={() => handleSEOEdit(pageKey)}
+                                      >
+                                        <CardContent className="p-2">
+                                          <div className="text-center">
+                                            <h6 className="font-medium text-xs">
+                                              {slug.replace("-", " ")}
+                                            </h6>
+                                            <Button
+                                              size="sm"
+                                              variant="outline"
+                                              className="h-5 text-xs mt-1"
+                                            >
+                                              Edit
+                                            </Button>
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                            <div className="text-center mt-4">
+                              <p className="text-sm text-gray-500 mb-2">
+                                +{" "}
+                                {(indianCities.length - 4) *
+                                  Object.keys(categoryMapping).length}{" "}
+                                more category pages...
+                              </p>
+                              <Button variant="outline" size="sm">
+                                View All Category Pages
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ) : (
