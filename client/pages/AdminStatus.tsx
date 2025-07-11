@@ -355,28 +355,51 @@ export default function AdminStatus() {
                 {loading || loadingRef ? "Refreshing..." : "Refresh Status"}
               </Button>
 
-              <Button
-                onClick={startScraping}
-                disabled={
-                  scrapingLoading || stats?.scraping?.isRunning || stats?.error
-                }
-                variant={stats?.scraping?.isRunning ? "destructive" : "default"}
-                title={
-                  stats?.error ? "Cannot start scraping: Server offline" : ""
-                }
-              >
-                {stats?.scraping?.isRunning ? (
-                  <>
-                    <Square className="h-4 w-4 mr-2" />
-                    Scraping Running...
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-4 w-4 mr-2" />
-                    Start Scraping
-                  </>
-                )}
-              </Button>
+              {stats?.scraping?.isRunning ? (
+                <Button
+                  onClick={stopScraping}
+                  disabled={scrapingLoading || stats?.error}
+                  variant="destructive"
+                  title={
+                    stats?.error ? "Cannot stop scraping: Server offline" : ""
+                  }
+                >
+                  {scrapingLoading ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Stopping...
+                    </>
+                  ) : (
+                    <>
+                      <Square className="h-4 w-4 mr-2" />
+                      Stop Scraping
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  onClick={startScraping}
+                  disabled={scrapingLoading || stats?.error}
+                  variant="default"
+                  title={
+                    stats?.error
+                      ? "Cannot start scraping: Server offline"
+                      : `Will scrape: ${defaultScrapingConfig.cities.length} cities, ${defaultScrapingConfig.categories.length} categories`
+                  }
+                >
+                  {scrapingLoading ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Starting...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Scraping
+                    </>
+                  )}
+                </Button>
+              )}
 
               <Button
                 onClick={fetchAllReviews}
