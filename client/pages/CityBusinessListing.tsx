@@ -31,6 +31,7 @@ import {
   sampleBusinesses,
   businessCategories,
   indianCities,
+  categoryMapping,
   type Business,
 } from "@/lib/data";
 
