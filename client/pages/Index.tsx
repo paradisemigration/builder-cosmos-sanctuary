@@ -585,7 +585,7 @@ export default function Index() {
               <h4 className="text-white font-medium mb-3">Quick Links</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/browse" className="hover:text-white">
+                  <Link to="/business" className="hover:text-white">
                     Browse Consultants
                   </Link>
                 </li>
