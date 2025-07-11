@@ -8,6 +8,14 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// Add required UI providers
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
 // Import all original pages
 import Index from "./pages/Index";
 import Browse from "./pages/Browse";
@@ -142,110 +150,123 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => (
-  <AuthProvider>
-    <BrowserRouter>
-      <SimpleNavigation />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Index />} />
-        <Route path="/business" element={<Browse />} />
-        <Route path="/list-business" element={<ListBusiness />} />
-        <Route path="/plans" element={<ListingPlans />} />
-        <Route path="/add-business" element={<AddBusiness />} />
-        <Route path="/login" element={<Login />} />
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <SimpleNavigation />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/business" element={<Browse />} />
+            <Route path="/list-business" element={<ListBusiness />} />
+            <Route path="/plans" element={<ListingPlans />} />
+            <Route path="/add-business" element={<AddBusiness />} />
+            <Route path="/login" element={<Login />} />
 
-        {/* City-specific business listing routes */}
-        <Route path="/business/:city" element={<CityBusinessListing />} />
+            {/* City-specific business listing routes */}
+            <Route path="/business/:city" element={<CityBusinessListing />} />
 
-        {/* Legacy business profile route for backward compatibility */}
-        <Route path="/business/:id" element={<BusinessProfile />} />
+            {/* Legacy business profile route for backward compatibility */}
+            <Route path="/business/:id" element={<BusinessProfile />} />
 
-        {/* Smart route handler for categories vs business profiles */}
-        <Route
-          path="/business/:city/:category"
-          element={<CityRouteHandler />}
-        />
+            {/* Smart route handler for categories vs business profiles */}
+            <Route
+              path="/business/:city/:category"
+              element={<CityRouteHandler />}
+            />
 
-        {/* SEO-friendly category and location routes */}
-        <Route path="/category/:category" element={<CategoryLocationPage />} />
-        <Route path="/location/:location" element={<CategoryLocationPage />} />
+            {/* SEO-friendly category and location routes */}
+            <Route
+              path="/category/:category"
+              element={<CategoryLocationPage />}
+            />
+            <Route
+              path="/location/:location"
+              element={<CategoryLocationPage />}
+            />
 
-        {/* Protected Routes - Require Authentication */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute requireRole="business_owner">
-              <BusinessDashboard />
-            </ProtectedRoute>
-          }
-        />
+            {/* Protected Routes - Require Authentication */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute requireRole="business_owner">
+                  <BusinessDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* Admin Only Routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute requireRole="admin">
-              <AdminPanel />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/bulk-upload"
-          element={
-            <ProtectedRoute requireRole="admin">
-              <AdminBulkUpload />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/business/:id/edit"
-          element={
-            <ProtectedRoute requireRole="admin">
-              <EditBusiness />
-            </ProtectedRoute>
-          }
-        />
+            {/* Admin Only Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/bulk-upload"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminBulkUpload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/business/:id/edit"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <EditBusiness />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* Business Owner Edit Route */}
-        <Route
-          path="/business/:id/edit"
-          element={
-            <ProtectedRoute requireRole="business_owner">
-              <EditBusiness />
-            </ProtectedRoute>
-          }
-        />
+            {/* Business Owner Edit Route */}
+            <Route
+              path="/business/:id/edit"
+              element={
+                <ProtectedRoute requireRole="business_owner">
+                  <EditBusiness />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* Static Pages */}
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/cant-find-business" element={<CantFindBusiness />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route
-          path="/help"
-          element={
-            <div className="min-h-screen bg-gray-50 pt-24 px-4">
-              <div className="container mx-auto max-w-4xl">
-                <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                  Help Center
-                </h1>
-                <div className="bg-white rounded-lg p-8 shadow-sm">
-                  <p className="text-lg text-gray-700 mb-4">
-                    Find answers to frequently asked questions and get support.
-                  </p>
-                  <p className="text-gray-600">Coming soon...</p>
+            {/* Static Pages */}
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/cant-find-business" element={<CantFindBusiness />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route
+              path="/help"
+              element={
+                <div className="min-h-screen bg-gray-50 pt-24 px-4">
+                  <div className="container mx-auto max-w-4xl">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-6">
+                      Help Center
+                    </h1>
+                    <div className="bg-white rounded-lg p-8 shadow-sm">
+                      <p className="text-lg text-gray-700 mb-4">
+                        Find answers to frequently asked questions and get
+                        support.
+                      </p>
+                      <p className="text-gray-600">Coming soon...</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          }
-        />
+              }
+            />
 
-        {/* Catch-all route - must be last */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  </AuthProvider>
+            {/* Catch-all route - must be last */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
 
 export default App;
