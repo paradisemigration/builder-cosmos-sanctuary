@@ -351,13 +351,7 @@ export default function AdminPanel() {
                         folder="logos"
                       />
                     ) : (
-                      <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-                        <Building className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                        <p className="mb-2">Upload functionality ready</p>
-                        <p className="text-sm">
-                          Requires backend server deployment
-                        </p>
-                      </div>
+                      <DemoUpload title="logos" multiple={true} maxFiles={5} />
                     )}
                   </CardContent>
                 </Card>
@@ -385,13 +379,11 @@ export default function AdminPanel() {
                         folder="gallery"
                       />
                     ) : (
-                      <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-                        <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                        <p className="mb-2">Gallery upload ready</p>
-                        <p className="text-sm">
-                          Requires backend server deployment
-                        </p>
-                      </div>
+                      <DemoUpload
+                        title="gallery"
+                        multiple={true}
+                        maxFiles={20}
+                      />
                     )}
                   </CardContent>
                 </Card>
