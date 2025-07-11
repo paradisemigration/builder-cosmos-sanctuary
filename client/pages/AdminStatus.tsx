@@ -148,6 +148,25 @@ export default function AdminStatus() {
     }
   };
 
+  const defaultScrapingConfig = {
+    cities: [
+      "Delhi",
+      "Mumbai",
+      "Bangalore",
+      "Chennai",
+      "Hyderabad",
+      "Pune",
+      "Kolkata",
+    ],
+    categories: [
+      "visa consultant",
+      "immigration lawyer",
+      "immigration consultant",
+    ],
+    maxResultsPerSearch: 20,
+    delay: 1000,
+  };
+
   const startScraping = async () => {
     try {
       setScrapingLoading(true);
@@ -157,24 +176,7 @@ export default function AdminStatus() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          cities: [
-            "Delhi",
-            "Mumbai",
-            "Bangalore",
-            "Chennai",
-            "Hyderabad",
-            "Pune",
-            "Kolkata",
-          ],
-          categories: [
-            "visa consultant",
-            "immigration lawyer",
-            "immigration consultant",
-          ],
-          maxResultsPerSearch: 20,
-          delay: 1000,
-        }),
+        body: JSON.stringify(defaultScrapingConfig),
       });
 
       const result = await response.json();
@@ -184,6 +186,29 @@ export default function AdminStatus() {
       setTimeout(loadStatus, 2000);
     } catch (error) {
       console.error("Failed to start scraping:", error);
+    } finally {
+      setScrapingLoading(false);
+    }
+  };
+
+  const stopScraping = async () => {
+    try {
+      setScrapingLoading(true);
+
+      const response = await fetch("/api/scraping/stop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      console.log("Scraping stopped:", result);
+
+      // Reload status after stopping
+      setTimeout(loadStatus, 1000);
+    } catch (error) {
+      console.error("Failed to stop scraping:", error);
     } finally {
       setScrapingLoading(false);
     }
