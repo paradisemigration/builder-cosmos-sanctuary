@@ -435,6 +435,20 @@ class SQLiteDatabase {
     });
   }
 
+  async getBusinessById(googlePlaceId) {
+    return new Promise((resolve, reject) => {
+      const sql = "SELECT * FROM businesses WHERE googlePlaceId = ? OR id = ?";
+      this.db.get(sql, [googlePlaceId, googlePlaceId], (err, row) => {
+        if (err) {
+          console.error("Error getting business by ID:", err);
+          resolve(null);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
+
   async getBusinessReviews(businessId) {
     return new Promise((resolve, reject) => {
       const sql =

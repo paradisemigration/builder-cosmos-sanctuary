@@ -93,23 +93,15 @@ class BusinessScraper {
                   businessData.reviewsNote = `Stored ${businessData.reviews?.length || 0} reviews (max 5 per business)`;
                 }
 
-                // Check if business already exists
-                const existingBusiness = await database.getBusinessById(
+                // Check if business already exists in SQLite database
+                const existingBusiness = await sqliteDatabase.getBusinessById(
                   place.place_id,
                 );
                 if (existingBusiness) {
                   console.log(
-                    `⏭️  Business ${businessData.name} already exists, updating with latest data...`,
+                    `⏭️  Business ${businessData.name} already exists in database, skipping duplicate...`,
                   );
-                  // Update existing business with new scraping metadata
-                  const updateResult = await database.saveBusiness({
-                    ...existingBusiness,
-                    ...businessData,
-                    updatedAt: new Date().toISOString(),
-                  });
-                  if (updateResult.success) {
-                    processedBusinesses.push(updateResult.business);
-                  }
+                  // Just count it but don't add to processed (to avoid duplicates in results)
                   continue;
                 }
 
