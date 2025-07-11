@@ -65,9 +65,9 @@ export default function ScamReview() {
                 The scam report you're looking for doesn't exist or hasn't been
                 published yet.
               </p>
-              <Link to="/browse">
+              <Link to="/business">
                 <Button className="bg-gradient-to-r from-orange-600 to-purple-600 hover:from-orange-700 hover:to-purple-700 text-white">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-4 w-4 mr-2" />
                   Back to Browse
                 </Button>
               </Link>
