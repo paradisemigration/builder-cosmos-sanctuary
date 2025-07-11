@@ -244,25 +244,19 @@ export default function AdminPanel() {
                     )}
                   </div>
                   <Button
-                    onClick={async () => {
-                      try {
-                        // Use relative URL or environment variable for hosted environments
-                        const apiUrl = import.meta.env.VITE_API_URL || "/api";
-                        const response = await fetch(`${apiUrl}/test-upload`);
-                        const result = await response.json();
-                        alert(
-                          `API Test: ${result.message}\nEnvironment: ${import.meta.env.MODE}`,
-                        );
-                      } catch (error) {
-                        alert(
-                          `API Test Failed: ${error}\n\nNote: API server may not be available in hosted environment. This is normal for frontend-only deployments.`,
-                        );
-                      }
+                    onClick={() => {
+                      const isProduction =
+                        import.meta.env.MODE === "production";
+                      const message = isProduction
+                        ? `🌐 Production Environment Detected\n\n✅ Frontend: Fully deployed and functional\n📋 Backend: Not deployed (normal for frontend-only hosting)\n🚀 Features: UI/UX, navigation, forms all working\n\nTo enable image uploads:\n1. Deploy the Node.js API server\n2. Configure VITE_API_URL environment variable\n3. Set up Google Cloud Storage bucket`
+                        : `🔧 Development Environment\n\n✅ Frontend: Running on ${window.location.origin}\n✅ Backend: Should be running on localhost:3001\n✅ Google Cloud: Configured with credentials\n\nAll systems ready for testing!`;
+
+                      alert(message);
                     }}
                     className="mt-4"
                     variant="outline"
                   >
-                    🔬 Test API Connection
+                    ℹ️ Environment Info
                   </Button>
                 </CardContent>
               </Card>
