@@ -26,6 +26,7 @@ import CantFindBusiness from "./pages/CantFindBusiness";
 import CategoryLocationPage from "./pages/CategoryLocationPage";
 import CityBusinessListing from "./pages/CityBusinessListing";
 import CityCategory from "./pages/CityCategory";
+import CityRouteHandler from "./components/CityRouteHandler";
 import AdminBulkUpload from "./pages/AdminBulkUpload";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -52,17 +53,14 @@ const App = () => (
             {/* City-specific business listing routes */}
             <Route path="/business/:city" element={<CityBusinessListing />} />
 
-            {/* City-category specific routes - must come before business profiles */}
-            <Route
-              path="/business/:city/:category"
-              element={<CityCategory />}
-            />
-
             {/* Legacy business profile route for backward compatibility */}
             <Route path="/business/:id" element={<BusinessProfile />} />
 
-            {/* New SEO-friendly business profile route: /business/city/company-name */}
-            {/* This is now handled by CityCategory component with routing logic */}
+            {/* Smart route handler for categories vs business profiles */}
+            <Route
+              path="/business/:city/:category"
+              element={<CityRouteHandler />}
+            />
 
             {/* SEO-friendly category and location routes */}
             <Route
