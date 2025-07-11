@@ -360,17 +360,28 @@ export default function Browse() {
 
             {/* Results Section */}
             <div className="lg:col-span-3">
-              {/* Debug Info (remove in production) */}
-              <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-                <h4 className="font-semibold text-yellow-800 mb-2">
-                  🔧 Debug Info:
+              {/* Real Data Status */}
+              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-sm">
+                <h4 className="font-semibold text-green-800 mb-2">
+                  ✅ Live Database Content:
                 </h4>
-                <div className="grid grid-cols-2 gap-2 text-yellow-700">
-                  <div>Total Scraped: {scrapedBusinesses.length}</div>
-                  <div>Filtered: {filteredBusinesses.length}</div>
-                  <div>Loading: {loading ? "Yes" : "No"}</div>
-                  <div>Error: {error || "None"}</div>
+                <div className="grid grid-cols-3 gap-2 text-green-700">
+                  <div>📊 Total Businesses: {scrapedBusinesses.length}</div>
+                  <div>🔍 Filtered Results: {filteredBusinesses.length}</div>
+                  <div>⚡ Status: {loading ? "Loading..." : "Ready"}</div>
                 </div>
+                {scrapedBusinesses.length >= 300 && (
+                  <div className="mt-2 text-green-600 font-medium">
+                    🎉 All {scrapedBusinesses.length} real consultants loaded
+                    successfully!
+                  </div>
+                )}
+                {scrapedBusinesses.length < 50 && !loading && (
+                  <div className="mt-2 text-orange-600 font-medium">
+                    ⚠️ Limited data - Visit Admin Panel → Data Scraper to
+                    collect more businesses
+                  </div>
+                )}
               </div>
 
               {/* Loading State */}
