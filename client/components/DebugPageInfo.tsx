@@ -13,7 +13,7 @@ export function DebugPageInfo() {
     // Extract page info based on current path
     if (path === "/") {
       return "Homepage";
-    } else if (path === "/browse") {
+    } else if (path === "/business") {
       const category = searchParams.get("category");
       const zone = searchParams.get("zone");
       const query = searchParams.get("q");

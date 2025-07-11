@@ -57,7 +57,7 @@ export default function CityBusinessListing() {
       !city ||
       !indianCities.some((c) => c.toLowerCase() === city.toLowerCase())
     ) {
-      navigate("/browse");
+      navigate("/business");
       return;
     }
 
@@ -156,7 +156,7 @@ export default function CityBusinessListing() {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => navigate("/browse")}
+              onClick={() => navigate("/business")}
               className="mr-4"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -350,7 +350,7 @@ export default function CityBusinessListing() {
                       </Button>
                     )}
                     <Button asChild>
-                      <Link to="/browse">Browse All Cities</Link>
+                      <Link to="/business">Browse All Cities</Link>
                     </Button>
                   </div>
                 </div>
