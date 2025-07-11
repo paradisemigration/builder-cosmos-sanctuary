@@ -606,19 +606,35 @@ app.post("/api/migrate-to-sqlite", async (req, res) => {
 });
 
 // Get scraping statistics
-app.get("/api/scraping/stats", (req, res) => {
+app.get("/api/scraping/stats", async (req, res) => {
   try {
-    const stats = database.getStatistics();
+    const sqliteStats = await sqliteDatabase.getStatistics();
+    const memoryStats = database.getStatistics();
     const scrapingStatus = scraper.getStatus();
 
     res.json({
       success: true,
       stats: {
-        ...stats,
+        // Use SQLite stats as primary, fallback to memory
+        totalBusinesses:
+          sqliteStats.totalBusinesses || memoryStats.totalBusinesses || 0,
+        totalImages: sqliteStats.totalImages || memoryStats.totalImages || 0,
+        totalReviews: sqliteStats.totalReviews || memoryStats.totalReviews || 0,
+        averageRating:
+          sqliteStats.averageRating || memoryStats.averageRating || 0,
+        citiesCount: sqliteStats.citiesCount || memoryStats.citiesCount || 0,
+        lastUpdated: sqliteStats.lastUpdated || memoryStats.lastUpdated,
+        // Scraping info from memory
         scraping: scrapingStatus,
+        // Database info
+        database: {
+          sqlite: sqliteStats,
+          memory: memoryStats,
+        },
       },
     });
   } catch (error) {
+    console.error("Get scraping stats error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
