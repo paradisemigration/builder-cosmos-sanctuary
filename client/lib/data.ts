@@ -157,6 +157,21 @@ export const indianCities = [
   "Dehradun",
 ];
 
+// Dubai zones for backward compatibility (can be removed later)
+export const dubaiZones = [
+  "Business Bay",
+  "Downtown Dubai",
+  "Dubai Marina",
+  "JLT",
+  "DIFC",
+  "Deira",
+  "Bur Dubai",
+  "Jumeirah",
+];
+
+// Keep UAE cities for backward compatibility
+export const uaeCities = indianCities;
+
 // Sample Businesses
 export const sampleBusinesses: Business[] = [
   {
