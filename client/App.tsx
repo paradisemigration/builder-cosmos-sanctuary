@@ -25,6 +25,8 @@ import Contact from "./pages/Contact";
 import CantFindBusiness from "./pages/CantFindBusiness";
 import CategoryLocationPage from "./pages/CategoryLocationPage";
 import AdminBulkUpload from "./pages/AdminBulkUpload";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -114,6 +116,8 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cant-find-business" element={<CantFindBusiness />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route
               path="/help"
               element={
