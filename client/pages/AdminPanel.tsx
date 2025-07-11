@@ -38,6 +38,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { indianCities, categoryMapping } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -168,60 +169,117 @@ export default function AdminPanel() {
     },
   ];
 
+  // Generate comprehensive SEO data for all pages
+  const generateSEOData = () => {
+    const baseSEOData = {
+      home: {
+        title: "VisaConsult India - Best Visa Consultants Directory",
+        description:
+          "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
+        keywords:
+          "visa consultants, immigration services, student visa, work visa, India",
+        ogTitle: "VisaConsult India - Best Visa Consultants Directory",
+        ogDescription:
+          "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
+        ogImage: "/og-image.jpg",
+      },
+      about: {
+        title: "About VisaConsult India - Our Mission & Values",
+        description:
+          "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
+        keywords: "about us, visa consultants directory, company mission",
+        ogTitle: "About VisaConsult India - Our Mission & Values",
+        ogDescription:
+          "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
+        ogImage: "/og-image.jpg",
+      },
+      business: {
+        title: "Browse Visa Consultants - VisaConsult India",
+        description:
+          "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
+        keywords: "browse consultants, find visa agents, search consultants",
+        ogTitle: "Browse Visa Consultants - VisaConsult India",
+        ogDescription:
+          "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
+        ogImage: "/og-image.jpg",
+      },
+      contact: {
+        title: "Contact Us - VisaConsult India",
+        description:
+          "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
+        keywords: "contact us, customer support, help",
+        ogTitle: "Contact Us - VisaConsult India",
+        ogDescription:
+          "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
+        ogImage: "/og-image.jpg",
+      },
+      "list-business": {
+        title: "List Your Visa Consultancy - VisaConsult India",
+        description:
+          "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
+        keywords: "list business, visa consultancy listing, grow business",
+        ogTitle: "List Your Visa Consultancy - VisaConsult India",
+        ogDescription:
+          "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
+        ogImage: "/og-image.jpg",
+      },
+      privacy: {
+        title: "Privacy Policy - VisaConsult India",
+        description:
+          "Read our privacy policy and learn how we protect your personal information on VisaConsult India.",
+        keywords: "privacy policy, data protection, personal information",
+        ogTitle: "Privacy Policy - VisaConsult India",
+        ogDescription:
+          "Read our privacy policy and learn how we protect your personal information on VisaConsult India.",
+        ogImage: "/og-image.jpg",
+      },
+      terms: {
+        title: "Terms of Service - VisaConsult India",
+        description:
+          "Read our terms of service and understand the rules for using VisaConsult India platform.",
+        keywords: "terms of service, terms and conditions, legal",
+        ogTitle: "Terms of Service - VisaConsult India",
+        ogDescription:
+          "Read our terms of service and understand the rules for using VisaConsult India platform.",
+        ogImage: "/og-image.jpg",
+      },
+    };
+
+    // Add city pages
+    const cityPages = {};
+    indianCities.slice(0, 16).forEach((city) => {
+      const cityLower = city.toLowerCase();
+      cityPages[`city-${cityLower}`] = {
+        title: `Visa Consultants in ${city} - VisaConsult India`,
+        description: `Find trusted visa consultants and immigration services in ${city}. Compare top-rated agencies for student visas, work permits, and more.`,
+        keywords: `visa consultants ${city}, immigration services ${city}, ${city} visa agents, student visa ${city}`,
+        ogTitle: `Best Visa Consultants in ${city} - VisaConsult India`,
+        ogDescription: `Find trusted visa consultants and immigration services in ${city}. Compare top-rated agencies for student visas, work permits, and more.`,
+        ogImage: "/og-image.jpg",
+      };
+    });
+
+    // Add city-category pages
+    const categoryPages = {};
+    indianCities.slice(0, 16).forEach((city) => {
+      Object.entries(categoryMapping).forEach(([slug, categoryName]) => {
+        const cityLower = city.toLowerCase();
+        categoryPages[`${cityLower}-${slug}`] = {
+          title: `${categoryName} in ${city} - VisaConsult India`,
+          description: `Find expert ${categoryName.toLowerCase()} in ${city}. Compare services, read reviews, and get professional visa assistance.`,
+          keywords: `${categoryName} ${city}, ${slug.replace("-", " ")} ${city}, visa services ${city}`,
+          ogTitle: `Best ${categoryName} in ${city} - VisaConsult India`,
+          ogDescription: `Find expert ${categoryName.toLowerCase()} in ${city}. Compare services, read reviews, and get professional visa assistance.`,
+          ogImage: "/og-image.jpg",
+        };
+      });
+    });
+
+    return { ...baseSEOData, ...cityPages, ...categoryPages };
+  };
+
   // SEO data for different pages
-  const [pageSEOData, setPageSEOData] = useState({
-    home: {
-      title: "VisaConsult India - Best Visa Consultants Directory",
-      description:
-        "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
-      keywords:
-        "visa consultants, immigration services, student visa, work visa, India",
-      ogTitle: "VisaConsult India - Best Visa Consultants Directory",
-      ogDescription:
-        "Find trusted visa consultants and agencies across India. Get expert help for student visas, work visas, tourist visas and more.",
-      ogImage: "/og-image.jpg",
-    },
-    about: {
-      title: "About VisaConsult India - Our Mission & Values",
-      description:
-        "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
-      keywords: "about us, visa consultants directory, company mission",
-      ogTitle: "About VisaConsult India - Our Mission & Values",
-      ogDescription:
-        "Learn about VisaConsult India's mission to connect people with trusted visa consultants across the country.",
-      ogImage: "/og-image.jpg",
-    },
-    browse: {
-      title: "Browse Visa Consultants - VisaConsult India",
-      description:
-        "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
-      keywords: "browse consultants, find visa agents, search consultants",
-      ogTitle: "Browse Visa Consultants - VisaConsult India",
-      ogDescription:
-        "Browse and find visa consultants by location and specialization. Compare services and read reviews.",
-      ogImage: "/og-image.jpg",
-    },
-    contact: {
-      title: "Contact Us - VisaConsult India",
-      description:
-        "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
-      keywords: "contact us, customer support, help",
-      ogTitle: "Contact Us - VisaConsult India",
-      ogDescription:
-        "Get in touch with VisaConsult India team. We're here to help you find the right visa consultant.",
-      ogImage: "/og-image.jpg",
-    },
-    "list-business": {
-      title: "List Your Visa Consultancy - VisaConsult India",
-      description:
-        "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
-      keywords: "list business, visa consultancy listing, grow business",
-      ogTitle: "List Your Visa Consultancy - VisaConsult India",
-      ogDescription:
-        "List your visa consultancy on India's leading directory. Grow your business and reach more clients.",
-      ogImage: "/og-image.jpg",
-    },
-  });
+  const [pageSEOData, setPageSEOData] = useState(generateSEOData());
 
   const handleSEOEdit = (pageKey: string) => {
     setSelectedPage(pageKey);
