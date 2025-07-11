@@ -1,180 +1,251 @@
-import { Business } from "./data";
+// API client for backend communication
 
-// API Configuration
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
-// API Response Types
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-  pagination?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
+class APIClient {
+  private baseURL: string;
 
-export interface BusinessFilters {
-  category?: string;
-  location?: string;
-  zone?: string;
-  verified?: boolean;
-  rating?: number;
-  search?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: "rating" | "name" | "date" | "reviews";
-  sortOrder?: "asc" | "desc";
-}
-
-// Business API Class
-export class BusinessAPI {
-  private static async request<T>(
-    endpoint: string,
-    options: RequestInit = {},
-  ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
-        ...options,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("API Request failed:", error);
-      throw error;
-    }
+  constructor(baseURL: string = API_BASE_URL) {
+    this.baseURL = baseURL;
   }
 
-  // Get all businesses with filters
-  static async getBusinesses(
-    filters: BusinessFilters = {},
-  ): Promise<ApiResponse<Business[]>> {
-    const queryParams = new URLSearchParams();
+  // Generic request method
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {},
+  ): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
 
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: "Request failed",
+      }));
+      throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  // Upload single image
+  async uploadImage(file: File, folder?: string) {
+    const formData = new FormData();
+    formData.append("image", file);
+    if (folder) formData.append("folder", folder);
+
+    const response = await fetch(`${this.baseURL}/api/upload/single`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: "Upload failed",
+      }));
+      throw new Error(error.message || "Upload failed");
+    }
+
+    return response.json();
+  }
+
+  // Upload multiple images
+  async uploadImages(files: File[], folder?: string) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("images", file));
+    if (folder) formData.append("folder", folder);
+
+    const response = await fetch(`${this.baseURL}/api/upload/multiple`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: "Upload failed",
+      }));
+      throw new Error(error.message || "Upload failed");
+    }
+
+    return response.json();
+  }
+
+  // Create business with images
+  async createBusiness(
+    businessData: any,
+    files?: {
+      logo?: File;
+      coverImage?: File;
+      gallery?: File[];
+    },
+  ) {
+    const formData = new FormData();
+    formData.append("businessData", JSON.stringify(businessData));
+
+    if (files?.logo) {
+      formData.append("logo", files.logo);
+    }
+    if (files?.coverImage) {
+      formData.append("coverImage", files.coverImage);
+    }
+    if (files?.gallery) {
+      files.gallery.forEach((file) => formData.append("gallery", file));
+    }
+
+    const response = await fetch(`${this.baseURL}/api/businesses`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: "Failed to create business",
+      }));
+      throw new Error(error.message || "Failed to create business");
+    }
+
+    return response.json();
+  }
+
+  // Get businesses with pagination and filters
+  async getBusinesses(
+    params: {
+      page?: number;
+      limit?: number;
+      city?: string;
+      category?: string;
+      search?: string;
+    } = {},
+  ) {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
         queryParams.append(key, value.toString());
       }
     });
 
-    const queryString = queryParams.toString();
-    const endpoint = `/businesses${queryString ? `?${queryString}` : ""}`;
-
-    return this.request<Business[]>(endpoint);
+    const endpoint = `/api/businesses${queryParams.toString() ? `?${queryParams}` : ""}`;
+    return this.request<{
+      success: boolean;
+      data: any[];
+      pagination: {
+        current: number;
+        total: number;
+        totalRecords: number;
+        hasNext: boolean;
+        hasPrev: boolean;
+      };
+    }>(endpoint);
   }
 
-  // Get featured businesses (verified + high rating)
-  static async getFeaturedBusinesses(): Promise<ApiResponse<Business[]>> {
-    return this.request<Business[]>("/businesses/featured");
-  }
-
-  // Get business by ID
-  static async getBusinessById(id: string): Promise<ApiResponse<Business>> {
-    return this.request<Business>(`/businesses/${id}`);
-  }
-
-  // Search businesses by text query
-  static async searchBusinesses(
-    query: string,
-    filters: Omit<BusinessFilters, "search"> = {},
-  ): Promise<ApiResponse<Business[]>> {
-    return this.getBusinesses({ ...filters, search: query });
-  }
-
-  // Get businesses by category
-  static async getBusinessesByCategory(
-    category: string,
-    filters: Omit<BusinessFilters, "category"> = {},
-  ): Promise<ApiResponse<Business[]>> {
-    return this.getBusinesses({ ...filters, category });
-  }
-
-  // Get businesses by location
-  static async getBusinessesByLocation(
-    location: string,
-    filters: Omit<BusinessFilters, "location"> = {},
-  ): Promise<ApiResponse<Business[]>> {
-    return this.getBusinesses({ ...filters, location });
-  }
-
-  // Get businesses by category and location
-  static async getBusinessesByCategoryAndLocation(
-    category: string,
-    location: string,
-    filters: Omit<BusinessFilters, "category" | "location"> = {},
-  ): Promise<ApiResponse<Business[]>> {
-    return this.getBusinesses({ ...filters, category, location });
-  }
-
-  // Add new business
-  static async addBusiness(
-    businessData: Omit<Business, "id" | "rating" | "reviewCount" | "reviews">,
-  ): Promise<ApiResponse<Business>> {
-    return this.request<Business>("/businesses", {
-      method: "POST",
-      body: JSON.stringify(businessData),
-    });
+  // Get single business
+  async getBusiness(id: string) {
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>(`/api/businesses/${id}`);
   }
 
   // Update business
-  static async updateBusiness(
+  async updateBusiness(
     id: string,
-    businessData: Partial<Business>,
-  ): Promise<ApiResponse<Business>> {
-    return this.request<Business>(`/businesses/${id}`, {
+    businessData: any,
+    files?: {
+      logo?: File;
+      coverImage?: File;
+      gallery?: File[];
+    },
+  ) {
+    const formData = new FormData();
+    formData.append("businessData", JSON.stringify(businessData));
+
+    if (files?.logo) {
+      formData.append("logo", files.logo);
+    }
+    if (files?.coverImage) {
+      formData.append("coverImage", files.coverImage);
+    }
+    if (files?.gallery) {
+      files.gallery.forEach((file) => formData.append("gallery", file));
+    }
+
+    const response = await fetch(`${this.baseURL}/api/businesses/${id}`, {
       method: "PUT",
-      body: JSON.stringify(businessData),
+      body: formData,
     });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: "Failed to update business",
+      }));
+      throw new Error(error.message || "Failed to update business");
+    }
+
+    return response.json();
   }
 
   // Delete business
-  static async deleteBusiness(id: string): Promise<ApiResponse<void>> {
-    return this.request<void>(`/businesses/${id}`, {
+  async deleteBusiness(id: string) {
+    return this.request<{
+      success: boolean;
+      message: string;
+    }>(`/api/businesses/${id}`, {
       method: "DELETE",
     });
   }
 
-  // Get business statistics
-  static async getBusinessStats(): Promise<
-    ApiResponse<{
-      totalBusinesses: number;
-      verifiedBusinesses: number;
-      averageRating: number;
-      totalReviews: number;
-      businessesByCategory: { [category: string]: number };
-      businessesByLocation: { [location: string]: number };
-    }>
-  > {
-    return this.request("/businesses/stats");
+  // Delete image
+  async deleteImage(fileName: string) {
+    return this.request<{
+      success: boolean;
+      message: string;
+    }>(`/api/images/${fileName}`, {
+      method: "DELETE",
+    });
+  }
+
+  // Health check
+  async healthCheck() {
+    return this.request<{
+      success: boolean;
+      message: string;
+      timestamp: string;
+    }>("/api/health");
   }
 }
 
-// Helper hook for API calls with loading and error states
-export function useBusinessAPI() {
-  return {
-    getBusinesses: BusinessAPI.getBusinesses,
-    getFeaturedBusinesses: BusinessAPI.getFeaturedBusinesses,
-    getBusinessById: BusinessAPI.getBusinessById,
-    searchBusinesses: BusinessAPI.searchBusinesses,
-    getBusinessesByCategory: BusinessAPI.getBusinessesByCategory,
-    getBusinessesByLocation: BusinessAPI.getBusinessesByLocation,
-    getBusinessesByCategoryAndLocation:
-      BusinessAPI.getBusinessesByCategoryAndLocation,
-    addBusiness: BusinessAPI.addBusiness,
-    updateBusiness: BusinessAPI.updateBusiness,
-    deleteBusiness: BusinessAPI.deleteBusiness,
-    getBusinessStats: BusinessAPI.getBusinessStats,
-  };
+// Export singleton instance
+export const apiClient = new APIClient();
+
+// Export types
+export interface UploadResponse {
+  success: boolean;
+  data:
+    | {
+        fileName: string;
+        publicUrl: string;
+        size: number;
+        mimetype: string;
+      }
+    | {
+        fileName: string;
+        publicUrl: string;
+        size: number;
+        mimetype: string;
+      }[];
+  message: string;
 }
+
+export interface BusinessResponse {
+  success: boolean;
+  data: any;
+  message: string;
+}
+
+export default apiClient;
