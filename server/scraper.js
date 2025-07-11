@@ -144,19 +144,34 @@ class BusinessScraper {
             currentSearch++;
             const progress = Math.round((currentSearch / totalSearches) * 100);
 
-            // Update job progress
+            // Update job progress with detailed city-wise breakdown
             if (jobId) {
+              const currentJob = database.getScrapingJob(jobId);
+              const allResults = [
+                ...(currentJob?.results || []),
+                ...processedBusinesses,
+              ];
+
               await database.updateScrapingJob(jobId, {
                 progress,
                 totalBusinesses,
                 currentCity: city,
                 currentCategory: category,
                 errors: errors.slice(-10), // Keep last 10 errors
+                results: allResults,
+                currentCityBusinesses: processedBusinesses.length,
+                totalBusinessesSaved: allResults.length,
+                cityProgress: {
+                  city,
+                  category,
+                  businessesFound: processedBusinesses.length,
+                  timestamp: new Date().toISOString(),
+                },
               });
             }
 
             console.log(
-              `📊 Progress: ${progress}% (${currentSearch}/${totalSearches})`,
+              `📊 Progress: ${progress}% (${currentSearch}/${totalSearches}) | ${city} ${category}: ${processedBusinesses.length} businesses | Total: ${totalBusinesses}`,
             );
           } catch (error) {
             console.error(
