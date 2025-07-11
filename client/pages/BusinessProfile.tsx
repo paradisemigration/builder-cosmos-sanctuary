@@ -44,12 +44,16 @@ import { sampleBusinesses, type Business } from "@/lib/data";
 import { toast } from "sonner";
 
 export default function BusinessProfile() {
+  console.log("🔍 BusinessProfile component mounted!");
+
   const { city, companyName, id } = useParams<{
     city?: string;
     companyName?: string;
     id?: string;
   }>();
   const navigate = useNavigate();
+
+  console.log("📍 URL Params received:", { city, companyName, id });
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
