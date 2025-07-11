@@ -397,57 +397,121 @@ export default function Index() {
               {/* City Category Pages */}
               <div className="mb-4">
                 <h4 className="text-sm font-medium text-yellow-700 mb-2">
-                  City Category Pages (8 Categories):
+                  City Category Pages (8 Categories × 16 Cities = 128 Pages):
                 </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                  <Link
-                    to="/business/delhi/study-abroad"
-                    className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
-                  >
-                    🎓 Study Abroad
-                  </Link>
-                  <Link
-                    to="/business/delhi/immigration-consultants"
-                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                  >
-                    ⚖️ Immigration
-                  </Link>
-                  <Link
-                    to="/business/delhi/visa-consultants"
-                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
-                  >
-                    📋 Visa Consultants
-                  </Link>
-                  <Link
-                    to="/business/delhi/work-permit"
-                    className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
-                  >
-                    💼 Work Permit
-                  </Link>
-                  <Link
-                    to="/business/mumbai/visa-services"
-                    className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
-                  >
-                    🛂 Visa Services
-                  </Link>
-                  <Link
-                    to="/business/bangalore/immigration-services"
-                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
-                  >
-                    🏛️ Immigration Svc
-                  </Link>
-                  <Link
-                    to="/business/chennai/overseas-services"
-                    className="px-3 py-2 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
-                  >
-                    🌍 Overseas Svc
-                  </Link>
-                  <Link
-                    to="/business/pune/education-services"
-                    className="px-3 py-2 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
-                  >
-                    📚 Education Svc
-                  </Link>
+
+                {/* Delhi Categories */}
+                <div className="mb-3">
+                  <h5 className="text-xs text-yellow-600 mb-1">
+                    Delhi Categories:
+                  </h5>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-1 text-xs">
+                    <Link
+                      to="/business/delhi/study-abroad"
+                      className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
+                    >
+                      🎓 Study Abroad
+                    </Link>
+                    <Link
+                      to="/business/delhi/immigration-consultants"
+                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                    >
+                      ⚖️ Immigration
+                    </Link>
+                    <Link
+                      to="/business/delhi/visa-consultants"
+                      className="px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                    >
+                      📋 Visa
+                    </Link>
+                    <Link
+                      to="/business/delhi/work-permit"
+                      className="px-2 py-1 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
+                    >
+                      💼 Work
+                    </Link>
+                    <Link
+                      to="/business/delhi/visa-services"
+                      className="px-2 py-1 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
+                    >
+                      🛂 Visa Svc
+                    </Link>
+                    <Link
+                      to="/business/delhi/immigration-services"
+                      className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                    >
+                      🏛️ Immigration Svc
+                    </Link>
+                    <Link
+                      to="/business/delhi/overseas-services"
+                      className="px-2 py-1 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
+                    >
+                      🌍 Overseas
+                    </Link>
+                    <Link
+                      to="/business/delhi/education-services"
+                      className="px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
+                    >
+                      📚 Education
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Sample Categories from Other Cities */}
+                <div className="mb-3">
+                  <h5 className="text-xs text-yellow-600 mb-1">
+                    Other Cities Sample Categories:
+                  </h5>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-1 text-xs">
+                    <Link
+                      to="/business/mumbai/study-abroad"
+                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                    >
+                      Mumbai Study
+                    </Link>
+                    <Link
+                      to="/business/bangalore/work-permit"
+                      className="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
+                    >
+                      Bangalore Work
+                    </Link>
+                    <Link
+                      to="/business/chennai/visa-consultants"
+                      className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
+                    >
+                      Chennai Visa
+                    </Link>
+                    <Link
+                      to="/business/pune/immigration-services"
+                      className="px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                    >
+                      Pune Immigration
+                    </Link>
+                    <Link
+                      to="/business/hyderabad/overseas-services"
+                      className="px-2 py-1 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
+                    >
+                      Hyderabad Overseas
+                    </Link>
+                    <Link
+                      to="/business/kolkata/education-services"
+                      className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                    >
+                      Kolkata Education
+                    </Link>
+                    <Link
+                      to="/business/jaipur/visa-services"
+                      className="px-2 py-1 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
+                    >
+                      Jaipur Visa Svc
+                    </Link>
+                    <Link
+                      to="/business/gurgaon/study-abroad"
+                      className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
+                    >
+                      Gurgaon Study
+                    </Link>
+                  </div>
                 </div>
               </div>
 
