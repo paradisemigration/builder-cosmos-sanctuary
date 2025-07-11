@@ -527,7 +527,7 @@ export default function AdminStatus() {
                 title={
                   stats?.error
                     ? "Cannot fetch reviews: Server offline"
-                    : "Fetch all available reviews for each business (Google API limit: ~5 reviews per business)"
+                    : "Fetch all available reviews for each business (Google Places API provides ~5 reviews per business)"
                 }
               >
                 {reviewsLoading ? (
