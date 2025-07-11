@@ -99,11 +99,11 @@ export default function BusinessProfile() {
 
         let foundBusiness: Business | null = null;
 
-        // Handle legacy URL structure (/business/:id)
-        if (id) {
+        // Handle ID from URL params or query parameter (most reliable)
+        if (businessId) {
           foundBusiness =
             businesses.find(
-              (b: any) => b.id === id || b.googlePlaceId === id,
+              (b: any) => b.id === businessId || b.googlePlaceId === businessId,
             ) || null;
         }
         // Handle new URL structure (/:city/:companyName)
@@ -158,7 +158,7 @@ export default function BusinessProfile() {
 
   useEffect(() => {
     loadBusiness();
-  }, [city, companyName, id]);
+  }, [city, companyName, businessId]);
 
   if (loading) {
     return (
