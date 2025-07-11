@@ -352,16 +352,29 @@ class BusinessScraper {
 
   // Stop current scraping job
   async stopScraping() {
-    if (this.isRunning && this.currentJob) {
-      await database.updateScrapingJob(this.currentJob, {
-        status: "cancelled",
-        completedAt: new Date().toISOString(),
-      });
+    console.log(
+      `🛑 Stop scraping called. Current state: isRunning=${this.isRunning}, currentJob=${this.currentJob}`,
+    );
 
+    if (this.isRunning || this.currentJob) {
+      // Set flags to stop the scraping process
       this.isRunning = false;
-      this.currentJob = null;
+      this.shouldStop = true;
 
-      return { success: true, message: "Scraping stopped" };
+      if (this.currentJob) {
+        try {
+          await database.updateScrapingJob(this.currentJob, {
+            status: "cancelled",
+            completedAt: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error("Error updating job status:", error);
+        }
+        this.currentJob = null;
+      }
+
+      console.log("✅ Scraping stopped successfully");
+      return { success: true, message: "Scraping stopped successfully" };
     }
 
     return { success: false, message: "No active scraping job" };
