@@ -27,6 +27,16 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imageError, setImageError] = useState(false);
 
+  // Generate SEO-friendly URL slug
+  const generateSlug = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
+  const businessUrl = `/${generateSlug(business.city)}/${generateSlug(business.name)}`;
+
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -34,13 +44,11 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
     if (navigator.share) {
       navigator.share({
         title: business.name,
-        text: `Check out ${business.name} - ${business.category}`,
-        url: `/business/${business.id}`,
+        text: `Check out ${business.name} - ${business.category} in ${business.city}`,
+        url: businessUrl,
       });
     } else {
-      navigator.clipboard.writeText(
-        `${window.location.origin}/business/${business.id}`,
-      );
+      navigator.clipboard.writeText(`${window.location.origin}${businessUrl}`);
       alert("Link copied to clipboard!");
     }
   };
@@ -64,7 +72,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
     <Card
       className={`group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}
     >
-      <Link to={`/business/${business.id}`} className="block">
+      <Link to={businessUrl} className="block">
         {/* Header with Cover Image */}
         <div className="relative h-32 bg-gradient-to-r from-blue-500 to-purple-600">
           {business.coverImage && !imageError ? (
