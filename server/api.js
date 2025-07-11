@@ -388,6 +388,54 @@ app.get("/api/images/status", async (req, res) => {
   }
 });
 
+// Database diagnostic endpoint
+app.get("/api/database/diagnostic", async (req, res) => {
+  try {
+    const sqliteStats = await sqliteDatabase.getStatistics();
+
+    // Get businesses with no limit to check actual count
+    const allBusinessesResult = await sqliteDatabase.getBusinesses({
+      limit: 9999,
+    });
+
+    res.json({
+      success: true,
+      diagnostic: {
+        sqliteStats,
+        actualBusinessCount: allBusinessesResult.businesses.length,
+        totalFromQuery: allBusinessesResult.total,
+        firstBusiness: allBusinessesResult.businesses[0]
+          ? {
+              name: allBusinessesResult.businesses[0].name,
+              city: allBusinessesResult.businesses[0].city,
+              id: allBusinessesResult.businesses[0].id,
+            }
+          : null,
+        lastBusiness:
+          allBusinessesResult.businesses.length > 0
+            ? {
+                name: allBusinessesResult.businesses[
+                  allBusinessesResult.businesses.length - 1
+                ].name,
+                city: allBusinessesResult.businesses[
+                  allBusinessesResult.businesses.length - 1
+                ].city,
+                id: allBusinessesResult.businesses[
+                  allBusinessesResult.businesses.length - 1
+                ].id,
+              }
+            : null,
+      },
+    });
+  } catch (error) {
+    console.error("Database diagnostic error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
 
 // Start a new scraping job
