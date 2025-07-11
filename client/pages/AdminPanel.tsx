@@ -445,83 +445,7 @@ export default function AdminPanel() {
             <TabsTrigger value="payments">Payments</TabsTrigger>
           </TabsList>
 
-          <div className="border-b border-gray-200 hidden">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab("dashboard")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "dashboard"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Dashboard
-              </button>
-              <button
-                onClick={() => setActiveTab("listings")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "listings"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Listings
-              </button>
-              <button
-                onClick={() => setActiveTab("users")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "users"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Users
-              </button>
-              <button
-                onClick={() => setActiveTab("reviews")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "reviews"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Reviews
-              </button>
-              <button
-                onClick={() => setActiveTab("content")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "content"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Content
-              </button>
-              <button
-                onClick={() => setActiveTab("media")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "media"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Media
-              </button>
-              <button
-                onClick={() => setActiveTab("payments")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "payments"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Payments
-              </button>
-            </nav>
-          </div>
-
-          {/* Dashboard Overview */}
-          {activeTab === "dashboard" && (
+          <TabsContent value="dashboard">
             <div className="space-y-6">
               {/* Key Statistics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -632,10 +556,9 @@ export default function AdminPanel() {
                 </CardContent>
               </Card>
             </div>
-          )}
+          </TabsContent>
 
-          {/* Listing Management */}
-          {activeTab === "listings" && (
+          <TabsContent value="listings">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-900">
@@ -2086,7 +2009,7 @@ export default function AdminPanel() {
                         variant="outline"
                         onClick={() => setShowEditBusiness(false)}
                       >
-                        ✕
+                        ��
                       </Button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
