@@ -338,7 +338,7 @@ export default function AdminPanel() {
                     <CardTitle className="flex items-center gap-2">
                       <Building className="h-5 w-5" />
                       Business Logos
-                      {import.meta.env.MODE !== "development" && (
+                      {!isLocalDevelopment && (
                         <Badge variant="secondary" className="ml-2">
                           Demo
                         </Badge>
@@ -366,7 +366,7 @@ export default function AdminPanel() {
                     <CardTitle className="flex items-center gap-2">
                       <BarChart3 className="h-5 w-5" />
                       Gallery Images
-                      {import.meta.env.MODE !== "development" && (
+                      {!isLocalDevelopment && (
                         <Badge variant="secondary" className="ml-2">
                           Demo
                         </Badge>
