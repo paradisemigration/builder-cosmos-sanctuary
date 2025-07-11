@@ -224,6 +224,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin/status"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminStatus />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Business Owner Edit Route */}
             <Route
