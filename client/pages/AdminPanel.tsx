@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Navigation } from "@/components/Navigation";
 import { ImageUpload } from "@/components/ImageUpload";
+import { DemoUpload } from "@/components/DemoUpload";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
