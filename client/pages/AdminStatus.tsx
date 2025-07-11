@@ -38,29 +38,51 @@ export default function AdminStatus() {
       }
       const statsResult = await statsResponse.json();
 
-      // Load diagnostic info with timeout
-      const diagnosticController = new AbortController();
-      const diagnosticTimeout = setTimeout(
-        () => diagnosticController.abort(),
-        10000,
-      );
+      // Load diagnostic info with timeout (optional, fallback if 404)
+      try {
+        const diagnosticController = new AbortController();
+        const diagnosticTimeout = setTimeout(
+          () => diagnosticController.abort(),
+          10000,
+        );
 
-      const diagnosticResponse = await fetch("/api/database/diagnostic", {
-        signal: diagnosticController.signal,
-      });
-      clearTimeout(diagnosticTimeout);
+        const diagnosticResponse = await fetch("/api/database/diagnostic", {
+          signal: diagnosticController.signal,
+        });
+        clearTimeout(diagnosticTimeout);
 
-      if (!diagnosticResponse.ok) {
-        throw new Error(`Diagnostic API error: ${diagnosticResponse.status}`);
+        if (diagnosticResponse.ok) {
+          const diagnosticResult = await diagnosticResponse.json();
+          if (diagnosticResult.success) {
+            setDiagnostic(diagnosticResult.diagnostic);
+          }
+        } else if (diagnosticResponse.status === 404) {
+          console.warn(
+            "Diagnostic endpoint not available (404), using fallback",
+          );
+          setDiagnostic({
+            actualBusinessCount: statsResult.stats?.totalBusinesses || 0,
+            totalFromQuery: statsResult.stats?.totalBusinesses || 0,
+            note: "Diagnostic endpoint not available",
+          });
+        } else {
+          console.error(`Diagnostic API error: ${diagnosticResponse.status}`);
+          setDiagnostic(null);
+        }
+      } catch (diagError) {
+        console.warn(
+          "Diagnostic endpoint failed, continuing without it:",
+          diagError.message,
+        );
+        setDiagnostic({
+          actualBusinessCount: statsResult.stats?.totalBusinesses || 0,
+          totalFromQuery: statsResult.stats?.totalBusinesses || 0,
+          note: "Diagnostic data unavailable",
+        });
       }
-      const diagnosticResult = await diagnosticResponse.json();
 
       if (statsResult.success) {
         setStats(statsResult.stats);
-      }
-
-      if (diagnosticResult.success) {
-        setDiagnostic(diagnosticResult.diagnostic);
       }
     } catch (error) {
       console.error("Failed to load status:", error);
@@ -71,10 +93,12 @@ export default function AdminStatus() {
         totalReviews: 0,
         averageRating: 0,
         scraping: { isRunning: false },
+        error: error.message,
       });
       setDiagnostic({
         actualBusinessCount: 0,
         totalFromQuery: 0,
+        error: error.message,
       });
     } finally {
       setLoading(false);
@@ -320,13 +344,29 @@ export default function AdminStatus() {
             </Card>
 
             {/* Diagnostic Info */}
-            {diagnostic && (
-              <Card className="md:col-span-2">
-                <CardHeader>
-                  <CardTitle>Database Diagnostic</CardTitle>
-                </CardHeader>
-                <CardContent>
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle>Database Diagnostic</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {diagnostic ? (
                   <div className="space-y-4">
+                    {diagnostic.error && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                        <div className="text-yellow-800 text-sm">
+                          ⚠️ {diagnostic.error}
+                        </div>
+                      </div>
+                    )}
+
+                    {diagnostic.note && (
+                      <div className="bg-blue-50 border border-blue-200 rounded p-3">
+                        <div className="text-blue-800 text-sm">
+                          ℹ️ {diagnostic.note}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="grid md:grid-cols-3 gap-4">
                       <div>
                         <div className="font-semibold">SQLite Stats Count:</div>
@@ -354,9 +394,15 @@ export default function AdminStatus() {
                       </div>
                     )}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-gray-500">
+                      Diagnostic data unavailable
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
