@@ -631,6 +631,14 @@ app.get("/api/scraped-businesses", async (req, res) => {
   try {
     const result = await sqliteDatabase.getBusinesses(req.query);
 
+    // Add debug logging
+    console.log(
+      `API Request: page=${req.query.page || 1}, limit=${req.query.limit || 1000}`,
+    );
+    console.log(
+      `Database returned: ${result.businesses.length} businesses, total: ${result.total}`,
+    );
+
     res.json({
       success: true,
       ...result,
