@@ -43,16 +43,17 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   const nameSlug = generateSlug(business.name || "business");
   const businessUrl = `/business/${citySlug}/${nameSlug}`;
 
-  // Debug: log the generated URL in development
-  if (process.env.NODE_ENV === "development") {
-    console.log("Business URL generated:", {
-      city: business.city,
-      name: business.name,
-      citySlug,
-      nameSlug,
-      finalUrl: businessUrl,
-    });
-  }
+  // Debug: log the generated URL always for testing
+  console.log("Business URL generated:", {
+    originalCity: business.city,
+    originalName: business.name,
+    citySlug,
+    nameSlug,
+    finalUrl: businessUrl,
+    expectedForDelhi:
+      business.city === "Delhi" &&
+      business.name === "Delhi Global Visa Consultants",
+  });
 
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
