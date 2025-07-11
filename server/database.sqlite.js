@@ -266,7 +266,21 @@ class SQLiteDatabase {
               console.error("Error saving reviews:", err);
               reject(err);
             } else {
-              resolve();
+              // Update the business reviewCount to match actual review count
+              this.db.run(
+                "UPDATE businesses SET reviewCount = ? WHERE id = ?",
+                [reviews.length, businessId],
+                (updateErr) => {
+                  if (updateErr) {
+                    console.error("Error updating reviewCount:", updateErr);
+                  } else {
+                    console.log(
+                      `✅ Updated reviewCount to ${reviews.length} for business ${businessId}`,
+                    );
+                  }
+                  resolve();
+                },
+              );
             }
           });
         },
