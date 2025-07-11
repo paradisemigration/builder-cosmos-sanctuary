@@ -169,7 +169,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {businessCategories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
