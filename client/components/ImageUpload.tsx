@@ -27,6 +27,18 @@ export function ImageUpload({
   const handleFiles = async (files: FileList) => {
     if (files.length === 0) return;
 
+    // Check if we're in a hosted environment without backend
+    const isHostedEnvironment =
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1";
+
+    if (isHostedEnvironment) {
+      toast.error(
+        "Upload requires backend server. This is a frontend-only deployment.",
+      );
+      return;
+    }
+
     const maxAllowed = multiple ? maxFiles : 1;
     const currentCount = images.length;
     const remainingSlots = maxAllowed - currentCount;
@@ -39,12 +51,8 @@ export function ImageUpload({
     setUploading(true);
 
     try {
-      // In hosted environments, use relative URLs or environment variables
-      const API_BASE_URL =
-        import.meta.env.VITE_API_URL ||
-        (import.meta.env.MODE === "development"
-          ? "http://localhost:3001"
-          : "/api");
+      // Only proceed if we're in a local development environment
+      const API_BASE_URL = "http://localhost:3001";
 
       if (multiple) {
         // Create new FormData for each request to avoid "body stream already read" error
