@@ -303,11 +303,18 @@ export default function AdminStatus() {
             )}
 
             <div className="flex gap-4">
-              <Button onClick={loadStatus} disabled={loading}>
+              <Button
+                onClick={() => {
+                  console.log("Refresh button clicked");
+                  loadStatus();
+                }}
+                disabled={loading || loadingRef}
+                variant="outline"
+              >
                 <RefreshCw
-                  className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                  className={`h-4 w-4 mr-2 ${loading || loadingRef ? "animate-spin" : ""}`}
                 />
-                Refresh Status
+                {loading || loadingRef ? "Refreshing..." : "Refresh Status"}
               </Button>
 
               <Button
