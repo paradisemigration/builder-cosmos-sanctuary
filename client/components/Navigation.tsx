@@ -76,7 +76,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
               }`}
             >
-              🔍 Browse Services
+              🔍 Find Consultants
             </Link>
 
             <Link
@@ -87,7 +87,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   : "text-gray-700 hover:text-orange-600 hover:bg-orange-50"
               }`}
             >
-              ➕ Add Business
+              ➕ List Your Business
             </Link>
 
             <Link
@@ -98,7 +98,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                   : "text-gray-700 hover:text-red-600 hover:bg-red-50"
               }`}
             >
-              ⚠️ Report Scam
+              ⚠️ Report Issue
             </Link>
 
             {/* Admin Panel Link - Only for Admin Users */}
