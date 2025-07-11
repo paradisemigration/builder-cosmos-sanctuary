@@ -55,10 +55,15 @@ interface BusinessFormData {
 }
 
 export default function AddBusiness() {
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(0);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Get selected plan from URL parameters
+  const selectedPlan = searchParams.get("plan") || "free";
+  const selectedBilling = searchParams.get("billing") || "monthly";
 
   const [formData, setFormData] = useState<BusinessFormData>({
     name: "",
