@@ -122,7 +122,7 @@ class BusinessScraper {
                   processedBusinesses.push(saveResult.business);
                   totalBusinesses++;
                   console.log(
-                    `✅ Saved to SQLite: ${businessData.name} | Reviews: ${businessData.reviews?.length || 0} | City: ${city}`,
+                    `✅ Saved to SQLite: ${businessData.name} | Reviews: ${businessData.reviews?.length || 0} | Images: ${businessData.images?.length || 0} (GCS) | City: ${city}`,
                   );
                 } else {
                   console.error(
