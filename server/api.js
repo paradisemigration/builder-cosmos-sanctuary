@@ -359,24 +359,71 @@ app.get("/api/test-upload", (req, res) => {
   });
 });
 
-// Verify image storage status
+// Verify image storage status with detailed GCS info
 app.get("/api/images/status", async (req, res) => {
   try {
     const stats = await sqliteDatabase.getStatistics();
 
-    // Get sample business with images
-    const businessResult = await sqliteDatabase.getBusinesses({ limit: 1 });
-    const sampleBusiness = businessResult.businesses[0];
+    // Get sample businesses with images to check GCS status
+    const businessResult = await sqliteDatabase.getBusinesses({ limit: 10 });
+    const businesses = businessResult.businesses;
+
+    // Count images with and without cloud storage URLs
+    let totalImagesWithGCS = 0;
+    let totalImagesWithoutGCS = 0;
+    let sampleGCSUrl = null;
+    let sampleBusinessWithImages = null;
+
+    for (const business of businesses) {
+      if (business.images && business.images.length > 0) {
+        sampleBusinessWithImages = business;
+        for (const image of business.images) {
+          if (image.cloudStorageUrl && image.cloudStorageUrl !== null) {
+            totalImagesWithGCS++;
+            if (!sampleGCSUrl) {
+              sampleGCSUrl = image.cloudStorageUrl;
+            }
+          } else {
+            totalImagesWithoutGCS++;
+          }
+        }
+      }
+    }
 
     res.json({
       success: true,
       imageStorage: {
         totalImages: stats.totalImages || 0,
         totalBusinesses: stats.totalBusinesses || 0,
+        imagesWithGCS: totalImagesWithGCS,
+        imagesWithoutGCS: totalImagesWithoutGCS,
+        gcsPercentage:
+          stats.totalImages > 0
+            ? Math.round((totalImagesWithGCS / stats.totalImages) * 100)
+            : 0,
         storageType: "Google Cloud Storage",
         bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME,
-        sampleImageUrl: sampleBusiness?.images?.[0]?.cloudStorageUrl || null,
+        sampleGCSUrl: sampleGCSUrl,
+        sampleBusiness: sampleBusinessWithImages
+          ? {
+              name: sampleBusinessWithImages.name,
+              imageCount: sampleBusinessWithImages.images?.length || 0,
+              imagesWithGCS:
+                sampleBusinessWithImages.images?.filter(
+                  (img) => img.cloudStorageUrl,
+                )?.length || 0,
+            }
+          : null,
         isConfigured: !!process.env.GOOGLE_CLOUD_PROJECT_ID,
+        configuration: {
+          projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
+            ? "✅ Set"
+            : "❌ Missing",
+          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE ? "✅ Set" : "❌ Missing",
+          bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME
+            ? "✅ Set"
+            : "❌ Missing",
+        },
       },
     });
   } catch (error) {
