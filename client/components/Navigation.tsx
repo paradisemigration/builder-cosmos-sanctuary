@@ -305,7 +305,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                     Sign In
                   </Link>
                   <Link
-                    to="/plans"
+                    to="/list-business"
                     className="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700"
                     onClick={() => setMobileMenuOpen(false)}
                   >
