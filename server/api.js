@@ -7,6 +7,7 @@ import {
   deleteFromGCS,
 } from "./storage.js";
 import BusinessScraper from "./scraper.js";
+import GooglePlaces from "./google-places.js";
 import database from "./database.js";
 import sqliteDatabase from "./database.sqlite.js";
 import DataMigration from "./migrate-to-sqlite.js";
