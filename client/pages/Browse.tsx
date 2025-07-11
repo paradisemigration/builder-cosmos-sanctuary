@@ -95,7 +95,24 @@ export default function Browse() {
       const result = await response.json();
 
       if (result.success) {
-        setScrapedBusinesses(result.businesses || []);
+        // Map the businesses to ensure proper ID field and data structure
+        const mappedBusinesses = (result.businesses || []).map(
+          (business: any) => ({
+            ...business,
+            id:
+              business.googlePlaceId ||
+              business.id ||
+              Date.now() + Math.random(),
+            city: business.scrapedCity || business.city || "Unknown",
+            reviewCount: business.reviews?.length || business.reviewCount || 0,
+            rating: business.rating || 0,
+            services: business.services || [],
+            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
+          }),
+        );
+
+        console.log("Mapped businesses:", mappedBusinesses.length);
+        setScrapedBusinesses(mappedBusinesses);
       } else {
         setError("Failed to load businesses");
       }
