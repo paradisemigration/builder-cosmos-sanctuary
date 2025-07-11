@@ -14,7 +14,9 @@ export default function AdminStatus() {
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [loadingRef, setLoadingRef] = useState(false);
 
-  const loadStatus = async () => {
+  const loadStatus = async (retryCount = 0) => {
+    const maxRetries = 3;
+
     // Prevent concurrent requests
     if (loadingRef || loading) {
       console.log("Status loading already in progress, skipping...");
@@ -25,26 +27,50 @@ export default function AdminStatus() {
       setLoading(true);
       setLoadingRef(true);
 
-      // Test server connectivity first
+      // Test server connectivity with retries
       let serverAvailable = false;
-      try {
-        const healthController = new AbortController();
-        const healthTimeout = setTimeout(() => healthController.abort(), 5000);
+      let healthError = null;
 
-        const healthResponse = await fetch("/api/health", {
-          signal: healthController.signal,
-        });
-        clearTimeout(healthTimeout);
+      for (let i = 0; i <= 2; i++) {
+        try {
+          console.log(`🔍 Health check attempt ${i + 1}/3...`);
+          const healthController = new AbortController();
+          const healthTimeout = setTimeout(
+            () => healthController.abort(),
+            8000,
+          );
 
-        serverAvailable = healthResponse.ok;
-      } catch (healthError) {
-        console.warn("Server health check failed:", healthError.message);
-        serverAvailable = false;
+          const healthResponse = await fetch("/api/health", {
+            signal: healthController.signal,
+            cache: "no-store",
+          });
+          clearTimeout(healthTimeout);
+
+          if (healthResponse.ok) {
+            serverAvailable = true;
+            console.log("✅ Health check passed");
+            break;
+          } else {
+            console.warn(
+              `⚠️ Health check failed with status: ${healthResponse.status}`,
+            );
+          }
+        } catch (error) {
+          healthError = error;
+          console.warn(
+            `❌ Health check attempt ${i + 1} failed:`,
+            error.message,
+          );
+          if (i < 2) {
+            console.log("⏳ Waiting 2s before retry...");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+          }
+        }
       }
 
       if (!serverAvailable) {
         throw new Error(
-          "API server is not responding. Please check if the backend server is running.",
+          `API server is not responding after 3 attempts. Last error: ${healthError?.message || "Unknown"}`,
         );
       }
 
