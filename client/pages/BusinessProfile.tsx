@@ -315,7 +315,7 @@ export default function BusinessProfile() {
                   <Avatar className="h-24 w-24 border-4 border-white shadow-xl">
                     <AvatarImage src={business.logo} alt={business.name} />
                     <AvatarFallback className="text-2xl font-bold bg-white text-gray-800">
-                      {business.name
+                      {(business.name || "Business")
                         .split(" ")
                         .map((n) => n[0])
                         .join("")
@@ -413,15 +413,17 @@ export default function BusinessProfile() {
                         Specializations
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {business.services.slice(0, 6).map((service, index) => (
-                          <Badge
-                            key={index}
-                            variant="secondary"
-                            className="bg-blue-50 text-blue-700"
-                          >
-                            {service}
-                          </Badge>
-                        ))}
+                        {(business.services || [])
+                          .slice(0, 6)
+                          .map((service, index) => (
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className="bg-blue-50 text-blue-700"
+                            >
+                              {service}
+                            </Badge>
+                          ))}
                       </div>
                     </div>
 
@@ -498,8 +500,11 @@ export default function BusinessProfile() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {business.reviews
-                      .slice(0, showAllReviews ? business.reviews.length : 3)
+                    {(business.reviews || [])
+                      .slice(
+                        0,
+                        showAllReviews ? (business.reviews || []).length : 3,
+                      )
                       .map((review) => (
                         <div
                           key={review.id}
@@ -509,7 +514,7 @@ export default function BusinessProfile() {
                             <Avatar className="h-10 w-10">
                               <AvatarImage src={review.userAvatar} />
                               <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                                {review.userName[0]}
+                                {(review.userName || "U")[0]}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
