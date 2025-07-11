@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Business } from "@/lib/data";
+import { type Business } from "@/lib/data";
 
 interface BusinessCardProps {
   business: Business;
