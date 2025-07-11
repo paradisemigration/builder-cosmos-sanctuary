@@ -146,18 +146,28 @@ class SQLiteDatabase {
         // Check if columns exist and add them if missing
         const addColumnIfNotExists = (tableName, columnName, columnType) => {
           try {
-            this.db.exec(
-              `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType}`,
-            );
-            console.log(`✅ Added column ${columnName} to ${tableName}`);
-          } catch (error) {
-            if (error.message.includes("duplicate column name")) {
+            // First check if column exists by querying table info
+            const columns = this.db
+              .prepare(`PRAGMA table_info(${tableName})`)
+              .all();
+            const columnExists = columns.some((col) => col.name === columnName);
+
+            if (!columnExists) {
+              this.db.exec(
+                `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType}`,
+              );
+              console.log(`✅ Added column ${columnName} to ${tableName}`);
+            } else {
               console.log(
                 `ℹ️ Column ${columnName} already exists in ${tableName}`,
               );
-            } else {
-              throw error;
             }
+          } catch (error) {
+            console.error(
+              `❌ Error checking/adding column ${columnName}:`,
+              error.message,
+            );
+            // Don't throw, just log and continue
           }
         };
 
