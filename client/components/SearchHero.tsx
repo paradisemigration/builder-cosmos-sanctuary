@@ -299,7 +299,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                       <Search className="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-hover:text-orange-500 transition-colors duration-300" />
                     </div>
                     <Input
-                      placeholder="Search by company name..."
+                      placeholder="Search visa consultants, immigration experts..."
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && handleSearch()}
