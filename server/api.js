@@ -9,6 +9,7 @@ import {
 import BusinessScraper from "./scraper.js";
 import database from "./database.js";
 import sqliteDatabase from "./database.sqlite.js";
+import DataMigration from "./migrate-to-sqlite.js";
 
 const app = express();
 
@@ -548,6 +549,26 @@ app.get("/api/scraping/validate-api", async (req, res) => {
       validation,
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Migrate data from memory to SQLite database
+app.post("/api/migrate-to-sqlite", async (req, res) => {
+  try {
+    console.log("🚀 Starting migration API endpoint...");
+    const migration = new DataMigration();
+    await migration.migrate();
+
+    res.json({
+      success: true,
+      message: "Data migration completed successfully",
+    });
+  } catch (error) {
+    console.error("Migration API error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
