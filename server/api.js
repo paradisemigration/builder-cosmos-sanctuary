@@ -777,8 +777,9 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
 
     res.json({
       success: true,
-      message: "ALL reviews fetching started successfully (no 5-review limit)",
-      note: "Process is running in the background. Check console logs for progress. This will fetch ALL available reviews for each business.",
+      message:
+        "Review fetching started successfully (Google API maximum ~5 reviews per business)",
+      note: "Process is running in the background. Note: Google Places API limits reviews to ~5 per business by design. Check console logs for progress.",
     });
   } catch (error) {
     console.error("Fetch all reviews error:", error);
