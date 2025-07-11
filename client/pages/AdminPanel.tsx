@@ -24,14 +24,47 @@ export default function AdminPanel() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [stats, setStats] = useState<any>(null);
+  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   // Detect if we're in a local development environment
   const isLocalDevelopment =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1";
 
+  // Load real data from API
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+
+      // Load scraping statistics
+      const statsResponse = await fetch("/api/scraping/stats");
+      const statsResult = await statsResponse.json();
+
+      // Load businesses
+      const businessesResponse = await fetch(
+        "/api/scraped-businesses?limit=100",
+      );
+      const businessesResult = await businessesResponse.json();
+
+      if (statsResult.success) {
+        setStats(statsResult.stats);
+      }
+
+      if (businessesResult.success) {
+        setBusinesses(businessesResult.businesses || []);
+      }
+    } catch (error) {
+      console.error("Failed to load dashboard data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
+    loadDashboardData();
   }, []);
 
   if (!user || user.role !== "admin") {
@@ -69,8 +102,15 @@ export default function AdminPanel() {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm">
-                <RefreshCw className="h-4 w-4 mr-2" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadDashboardData}
+                disabled={loading}
+              >
+                <RefreshCw
+                  className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                />
                 Refresh Data
               </Button>
               <Button size="sm">
@@ -114,7 +154,7 @@ export default function AdminPanel() {
                           Total Listings
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          8,500
+                          {loading ? "..." : stats?.totalBusinesses || 0}
                         </p>
                       </div>
                     </div>
@@ -124,13 +164,13 @@ export default function AdminPanel() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <Users className="h-8 w-8 text-green-600" />
+                      <Star className="h-8 w-8 text-green-600" />
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">
-                          Total Users
+                          Total Reviews
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          125,000
+                          {loading ? "..." : stats?.totalReviews || 0}
                         </p>
                       </div>
                     </div>
@@ -140,13 +180,13 @@ export default function AdminPanel() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <Star className="h-8 w-8 text-yellow-600" />
+                      <Users className="h-8 w-8 text-yellow-600" />
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">
-                          Reviews This Month
+                          Total Images
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          3,420
+                          {loading ? "..." : stats?.totalImages || 0}
                         </p>
                       </div>
                     </div>
@@ -156,13 +196,15 @@ export default function AdminPanel() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <DollarSign className="h-8 w-8 text-purple-600" />
+                      <BarChart3 className="h-8 w-8 text-purple-600" />
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">
-                          Monthly Revenue
+                          Average Rating
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          ₹28.5L
+                          {loading
+                            ? "..."
+                            : stats?.averageRating?.toFixed(1) || "0.0"}
                         </p>
                       </div>
                     </div>
