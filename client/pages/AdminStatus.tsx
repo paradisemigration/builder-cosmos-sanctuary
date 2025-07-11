@@ -487,7 +487,7 @@ export default function AdminStatus() {
     // Initial load with small delay to prevent race conditions
     const timeoutId = setTimeout(() => {
       if (isMounted && !loadingRef && !loading) {
-        console.log("🚀 Initial status load");
+        console.log("���� Initial status load");
         loadStatus();
       }
     }, 100);
@@ -845,7 +845,7 @@ export default function AdminStatus() {
                   </div>
                 ) : imageStats ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-blue-600">
                           {imageStats.totalBusinesses}
@@ -859,7 +859,15 @@ export default function AdminStatus() {
                           {imageStats.withRealImages}
                         </div>
                         <div className="text-sm text-gray-600">
-                          With Real Images
+                          Complete Profiles
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-purple-600">
+                          {imageStats.withGalleryPhotos || 0}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          With Gallery
                         </div>
                       </div>
                       <div className="text-center">
@@ -869,7 +877,7 @@ export default function AdminStatus() {
                         <div className="text-sm text-gray-600">Need Images</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-600">
+                        <div className="text-2xl font-bold text-indigo-600">
                           {imageStats.completionRate}%
                         </div>
                         <div className="text-sm text-gray-600">
