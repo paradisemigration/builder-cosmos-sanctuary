@@ -53,7 +53,18 @@ export default function BusinessProfile() {
   }>();
   const navigate = useNavigate();
 
-  console.log("📍 URL Params received:", { city, companyName, id });
+  // Also check for ID in query parameters
+  const [searchParams] = useSearchParams();
+  const queryId = searchParams.get("id");
+  const businessId = id || queryId;
+
+  console.log("📍 URL Params received:", {
+    city,
+    companyName,
+    id,
+    queryId,
+    businessId,
+  });
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
