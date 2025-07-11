@@ -717,6 +717,65 @@ export default function AddBusiness() {
 
               {currentStep === 1 && (
                 <div className="space-y-8">
+                  {/* Plan Confirmation Section */}
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        Selected Plan
+                      </h3>
+                      <Link
+                        to="/plans"
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      >
+                        Change Plan
+                      </Link>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        {selectedPlan === "free" ? (
+                          <Shield className="h-6 w-6 text-blue-600" />
+                        ) : selectedPlan === "premium" ? (
+                          <Star className="h-6 w-6 text-orange-600" />
+                        ) : (
+                          <Award className="h-6 w-6 text-purple-600" />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 capitalize">
+                          {selectedPlan === "business"
+                            ? "Business Pro"
+                            : selectedPlan}{" "}
+                          Plan
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {selectedPlan === "free"
+                            ? "Basic listing features"
+                            : selectedPlan === "premium"
+                              ? "Enhanced visibility and professional features"
+                              : "Complete business growth solution"}
+                        </p>
+                      </div>
+                      <div className="ml-auto text-right">
+                        <div className="text-lg font-bold text-gray-900">
+                          {selectedPlan === "free"
+                            ? "Free"
+                            : selectedPlan === "premium"
+                              ? selectedBilling === "yearly"
+                                ? "₹29,990/year"
+                                : "₹2,999/month"
+                              : selectedBilling === "yearly"
+                                ? "₹49,990/year"
+                                : "₹4,999/month"}
+                        </div>
+                        {selectedPlan !== "free" &&
+                          selectedBilling === "yearly" && (
+                            <div className="text-sm text-green-600 font-medium">
+                              Save 17%
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-2">
                       <Label
