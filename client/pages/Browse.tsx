@@ -29,7 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { businessCategories, indianCities, type Business } from "@/lib/data";
+import {
+  businessCategories,
+  indianCities,
+  sampleBusinesses,
+  type Business,
+} from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
@@ -468,7 +473,7 @@ export default function Browse() {
                   </span>
                   {[
                     "⭐ Verified Only",
-                    "🏆 Top Rated",
+                    "��� Top Rated",
                     "💬 Most Reviews",
                     "🆕 Recently Added",
                   ].map((tag) => (
