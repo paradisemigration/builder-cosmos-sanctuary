@@ -70,11 +70,36 @@ export default function BusinessProfile() {
       const searchName = companyName.replace(/-/g, " ");
       const searchCity = city.replace(/-/g, " ");
 
+      // First try exact match
       foundBusiness = sampleBusinesses.find(
         (b) =>
-          b.name.toLowerCase().includes(searchName.toLowerCase()) &&
-          b.city.toLowerCase().includes(searchCity.toLowerCase()),
+          b.name.toLowerCase() === searchName.toLowerCase() &&
+          b.city.toLowerCase() === searchCity.toLowerCase(),
       );
+
+      // If no exact match, try partial match
+      if (!foundBusiness) {
+        foundBusiness = sampleBusinesses.find(
+          (b) =>
+            b.name.toLowerCase().includes(searchName.toLowerCase()) &&
+            b.city.toLowerCase().includes(searchCity.toLowerCase()),
+        );
+      }
+
+      // Debug logging in development
+      if (process.env.NODE_ENV === "development") {
+        console.log("Business Profile URL params:", {
+          city,
+          companyName,
+          searchCity,
+          searchName,
+          foundBusiness: foundBusiness?.name,
+          allBusinesses: sampleBusinesses.map((b) => ({
+            name: b.name,
+            city: b.city,
+          })),
+        });
+      }
     }
 
     // Fallback to first business for demo if not found
