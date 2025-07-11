@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  Search,
   Star,
   TrendingUp,
   Users,
@@ -8,7 +9,6 @@ import {
   ArrowRight,
   Building,
   Shield,
-  Clock,
   Globe,
   MapPin,
   Phone,
@@ -16,13 +16,16 @@ import {
   Briefcase,
   GraduationCap,
   Plane,
+  Clock,
+  ThumbsUp,
 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 import { SearchHero } from "@/components/SearchHero";
 import { BusinessCard } from "@/components/BusinessCard";
-import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   featuredBusinesses,
   businessCategories,
@@ -34,48 +37,18 @@ import {
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [visibleSections, setVisibleSections] = useState<string[]>([]);
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     document.title =
-      "VisaConsult India - Find Trusted Visa Consultants | Study, Work & Tourist Visa Services";
+      "VisaConsult India - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services";
 
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement("meta");
-      metaDescription.setAttribute("name", "description");
-      document.head.appendChild(metaDescription);
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "India's largest directory of verified visa consultants. Find trusted immigration experts for student visa, work visa, tourist visa in Delhi, Mumbai, Bangalore & all major cities. Compare ratings & reviews.",
+      );
     }
-    metaDescription.setAttribute(
-      "content",
-      "India's largest directory of verified visa consultants. Find trusted immigration experts for student visa, work visa, tourist visa in Delhi, Mumbai, Bangalore & all major cities. Compare ratings & reviews.",
-    );
-
-    // Intersection Observer for animations
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => [...prev, entry.target.id]);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-
-    const sections = document.querySelectorAll("[data-animate]");
-    sections.forEach((section) => {
-      if (observerRef.current) {
-        observerRef.current.observe(section);
-      }
-    });
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
   }, []);
 
   const handleSearch = (query: string, location: string, category: string) => {
@@ -88,22 +61,22 @@ export default function Index() {
   };
 
   const topCities = [
-    { name: "Delhi", count: "450+ Consultants", icon: "🏛️" },
-    { name: "Mumbai", count: "380+ Consultants", icon: "🏙️" },
-    { name: "Bangalore", count: "320+ Consultants", icon: "💻" },
-    { name: "Chennai", count: "250+ Consultants", icon: "🌊" },
-    { name: "Hyderabad", count: "200+ Consultants", icon: "💎" },
-    { name: "Kolkata", count: "180+ Consultants", icon: "🎭" },
-    { name: "Pune", count: "150+ Consultants", icon: "🎓" },
-    { name: "Ahmedabad", count: "120+ Consultants", icon: "🏗️" },
+    { name: "Delhi", count: "450+", icon: "🏛️" },
+    { name: "Mumbai", count: "380+", icon: "🌆" },
+    { name: "Bangalore", count: "320+", icon: "💻" },
+    { name: "Chennai", count: "250+", icon: "🌊" },
+    { name: "Hyderabad", count: "200+", icon: "💎" },
+    { name: "Kolkata", count: "180+", icon: "🎭" },
+    { name: "Pune", count: "150+", icon: "🎓" },
+    { name: "Ahmedabad", count: "120+", icon: "🏗️" },
   ];
 
-  const visaTypeCards = [
+  const visaServices = [
     {
       type: "Student Visa",
       description: "Study abroad consultants for universities worldwide",
       icon: <GraduationCap className="h-8 w-8" />,
-      count: "2,500+ Consultants",
+      count: "2,500+",
       color: "bg-blue-50 border-blue-200",
       iconColor: "text-blue-600",
       countries: ["USA", "Canada", "UK", "Australia", "Germany"],
@@ -112,7 +85,7 @@ export default function Index() {
       type: "Work Visa",
       description: "Employment visa experts for global opportunities",
       icon: <Briefcase className="h-8 w-8" />,
-      count: "1,800+ Consultants",
+      count: "1,800+",
       color: "bg-green-50 border-green-200",
       iconColor: "text-green-600",
       countries: ["Canada", "Australia", "Germany", "UAE", "Singapore"],
@@ -121,7 +94,7 @@ export default function Index() {
       type: "Tourist Visa",
       description: "Travel visa services for leisure and business trips",
       icon: <Plane className="h-8 w-8" />,
-      count: "3,200+ Consultants",
+      count: "3,200+",
       color: "bg-purple-50 border-purple-200",
       iconColor: "text-purple-600",
       countries: ["USA", "Schengen", "UK", "Japan", "Thailand"],
@@ -130,7 +103,7 @@ export default function Index() {
       type: "Business Visa",
       description: "Corporate visa solutions for business expansion",
       icon: <Building className="h-8 w-8" />,
-      count: "1,200+ Consultants",
+      count: "1,200+",
       color: "bg-orange-50 border-orange-200",
       iconColor: "text-orange-600",
       countries: ["USA", "UK", "Singapore", "UAE", "Hong Kong"],
@@ -160,8 +133,35 @@ export default function Index() {
     },
   ];
 
+  const whyChooseUs = [
+    {
+      icon: <Shield className="h-8 w-8 text-blue-600" />,
+      title: "Verified Professionals",
+      description:
+        "All consultants are verified with proper licenses and credentials",
+    },
+    {
+      icon: <Star className="h-8 w-8 text-yellow-600" />,
+      title: "Genuine Reviews",
+      description:
+        "Real customer reviews and ratings to help you make informed decisions",
+    },
+    {
+      icon: <Clock className="h-8 w-8 text-green-600" />,
+      title: "24/7 Support",
+      description:
+        "Round-the-clock customer support for all your visa-related queries",
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8 text-purple-600" />,
+      title: "Success Rate",
+      description:
+        "Track record of 95%+ success rate across all visa categories",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Navigation />
 
       {/* Hero Section */}
@@ -170,7 +170,7 @@ export default function Index() {
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Find India's Most
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                 {" "}
                 Trusted{" "}
               </span>
@@ -188,9 +188,9 @@ export default function Index() {
               {statsData.map((stat, index) => (
                 <div
                   key={index}
-                  className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200"
+                  className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 shadow-sm"
                 >
-                  <div className="flex items-center justify-center space-x-2 text-orange-600 mb-2">
+                  <div className="flex items-center justify-center space-x-2 text-blue-600 mb-2">
                     {stat.icon}
                     <span className="text-2xl font-bold">{stat.value}</span>
                   </div>
@@ -207,8 +207,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Visa Types Section */}
-      <section className="py-16 px-4 bg-white" data-animate id="visa-types">
+      {/* Visa Services Section */}
+      <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -221,12 +221,14 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visaTypeCards.map((visa, index) => (
+            {visaServices.map((visa, index) => (
               <Card
                 key={index}
                 className={`${visa.color} hover:shadow-lg transition-all duration-300 cursor-pointer group`}
                 onClick={() =>
-                  navigate(`/browse?category=${encodeURIComponent(visa.type)}`)
+                  navigate(
+                    `/browse?category=${encodeURIComponent(visa.type + " Consultants")}`,
+                  )
                 }
               >
                 <CardHeader className="text-center pb-4">
@@ -244,7 +246,7 @@ export default function Index() {
                     {visa.description}
                   </p>
                   <p className="text-sm font-medium text-gray-800 mb-3">
-                    {visa.count}
+                    {visa.count} Consultants
                   </p>
                   <div className="flex flex-wrap gap-1 justify-center">
                     {visa.countries.map((country, idx) => (
@@ -264,7 +266,7 @@ export default function Index() {
       </section>
 
       {/* Browse by Cities */}
-      <section className="py-16 px-4 bg-gray-50" data-animate id="cities">
+      <section className="py-16 px-4 bg-gray-50">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -287,11 +289,13 @@ export default function Index() {
                   <h3 className="font-semibold text-lg text-gray-900 mb-1">
                     {city.name}
                   </h3>
-                  <p className="text-sm text-gray-600">{city.count}</p>
+                  <p className="text-sm text-gray-600">
+                    {city.count} Consultants
+                  </p>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="mt-2 group-hover:text-orange-600"
+                    className="mt-2 group-hover:text-blue-600"
                   >
                     Explore <ArrowRight className="h-3 w-3 ml-1" />
                   </Button>
@@ -304,7 +308,7 @@ export default function Index() {
             <Button
               onClick={() => navigate("/browse")}
               size="lg"
-              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               View All Cities <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
@@ -313,7 +317,7 @@ export default function Index() {
       </section>
 
       {/* Featured Consultants */}
-      <section className="py-16 px-4 bg-white" data-animate id="featured">
+      <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -344,11 +348,7 @@ export default function Index() {
       </section>
 
       {/* Why Choose Us */}
-      <section
-        className="py-16 px-4 bg-gradient-to-br from-orange-500 to-purple-600 text-white"
-        data-animate
-        id="why-choose"
-      >
+      <section className="py-16 px-4 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -360,41 +360,16 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {whyChooseUs.map((feature, index) => (
+              <div key={index} className="text-center">
+                <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="opacity-90">{feature.description}</p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">
-                Verified Professionals
-              </h3>
-              <p className="opacity-90">
-                All consultants are verified with proper licenses and
-                credentials
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Genuine Reviews</h3>
-              <p className="opacity-90">
-                Real customer reviews and ratings to help you make informed
-                decisions
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Clock className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">24/7 Support</h3>
-              <p className="opacity-90">
-                Round-the-clock customer support for all your visa-related
-                queries
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -414,7 +389,7 @@ export default function Index() {
             <Button
               onClick={() => navigate("/browse")}
               size="lg"
-              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               Find Consultants <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
@@ -452,8 +427,8 @@ export default function Index() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/add-business" className="hover:text-white">
-                    Add Your Listing
+                  <Link to="/plans" className="hover:text-white">
+                    Pricing Plans
                   </Link>
                 </li>
                 <li>
