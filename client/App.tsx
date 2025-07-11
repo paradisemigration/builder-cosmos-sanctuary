@@ -106,24 +106,8 @@ const App = () => (
 
             {/* Static Pages */}
             <Route path="/about" element={<About />} />
-            <Route
-              path="/contact"
-              element={
-                <div className="min-h-screen bg-gray-50 pt-24 px-4">
-                  <div className="container mx-auto max-w-4xl">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                      Contact Us
-                    </h1>
-                    <div className="bg-white rounded-lg p-8 shadow-sm">
-                      <p className="text-lg text-gray-700 mb-4">
-                        Get in touch with our team for any questions or support.
-                      </p>
-                      <p className="text-gray-600">Coming soon...</p>
-                    </div>
-                  </div>
-                </div>
-              }
-            />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/cant-find-business" element={<CantFindBusiness />} />
             <Route
               path="/help"
               element={
