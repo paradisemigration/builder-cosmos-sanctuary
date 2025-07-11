@@ -38,6 +38,7 @@ const App = () => (
             <Route path="/browse" element={<Browse />} />
             <Route path="/business/:id" element={<BusinessProfile />} />
             <Route path="/add-business" element={<AddBusiness />} />
+            <Route path="/plans" element={<ListingPlans />} />
             <Route path="/login" element={<Login />} />
 
             {/* SEO-friendly category and location routes */}
