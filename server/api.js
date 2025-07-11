@@ -539,12 +539,39 @@ app.get("/api/health", (req, res) => {
       services: {
         database: "connected",
         api: "running",
+        storage: "AWS S3",
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       status: "unhealthy",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
+// S3 Storage health check endpoint
+app.get("/api/storage-health", async (req, res) => {
+  try {
+    const isConfigured = await checkS3Configuration();
+
+    res.json({
+      success: true,
+      status: isConfigured ? "healthy" : "misconfigured",
+      storage: "AWS S3",
+      configured: isConfigured,
+      bucket: process.env.AWS_S3_BUCKET_NAME,
+      region: process.env.AWS_REGION,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      status: "error",
+      storage: "AWS S3",
+      configured: false,
       error: error.message,
       timestamp: new Date().toISOString(),
     });
