@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { businessCategories, indianCities, Business } from "@/lib/data";
+import { businessCategories, indianCities, type Business } from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
