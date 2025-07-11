@@ -74,19 +74,44 @@ export default function AdminStatus() {
         );
       }
 
-      // Load scraping stats with timeout
-      const statsController = new AbortController();
-      const statsTimeout = setTimeout(() => statsController.abort(), 10000);
+      // Load scraping stats with retry logic
+      let statsResult = null;
+      let statsError = null;
 
-      const statsResponse = await fetch("/api/scraping/stats", {
-        signal: statsController.signal,
-      });
-      clearTimeout(statsTimeout);
+      for (let i = 0; i <= 2; i++) {
+        try {
+          console.log(`📊 Loading stats attempt ${i + 1}/3...`);
+          const statsController = new AbortController();
+          const statsTimeout = setTimeout(() => statsController.abort(), 12000);
 
-      if (!statsResponse.ok) {
-        throw new Error(`Stats API error: ${statsResponse.status}`);
+          const statsResponse = await fetch("/api/scraping/stats", {
+            signal: statsController.signal,
+            cache: "no-store",
+          });
+          clearTimeout(statsTimeout);
+
+          if (!statsResponse.ok) {
+            throw new Error(`Stats API error: ${statsResponse.status}`);
+          }
+
+          statsResult = await statsResponse.json();
+          console.log("✅ Stats loaded successfully");
+          break;
+        } catch (error) {
+          statsError = error;
+          console.warn(`❌ Stats attempt ${i + 1} failed:`, error.message);
+          if (i < 2) {
+            console.log("⏳ Waiting 3s before retry...");
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+          }
+        }
       }
-      const statsResult = await statsResponse.json();
+
+      if (!statsResult) {
+        throw new Error(
+          `Failed to load stats after 3 attempts: ${statsError?.message}`,
+        );
+      }
 
       // Load diagnostic info with timeout (optional, fallback if 404)
       try {
