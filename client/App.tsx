@@ -103,26 +103,7 @@ const App = () => (
             />
 
             {/* Static Pages */}
-            <Route
-              path="/about"
-              element={
-                <div className="min-h-screen bg-gray-50 pt-24 px-4">
-                  <div className="container mx-auto max-w-4xl">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                      About VisaConsult India
-                    </h1>
-                    <div className="bg-white rounded-lg p-8 shadow-sm">
-                      <p className="text-lg text-gray-700 mb-4">
-                        VisaConsult India is the country's most comprehensive
-                        directory of verified visa consultants and immigration
-                        experts.
-                      </p>
-                      <p className="text-gray-600">Coming soon...</p>
-                    </div>
-                  </div>
-                </div>
-              }
-            />
+            <Route path="/about" element={<About />} />
             <Route
               path="/contact"
               element={
