@@ -176,6 +176,24 @@ export function GooglePlacesScraper() {
 
   const stopScraping = async () => {
     try {
+      // First check if there's an active job to stop
+      if (activeJob && activeJob.id) {
+        // Try to stop the specific job
+        const response = await fetch(`/api/scraping/job/${activeJob.id}/stop`, {
+          method: "POST",
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success("Scraping stopped successfully");
+          setActiveJob(null);
+          loadScrapingJobs();
+          loadStats();
+          return;
+        }
+      }
+
+      // Fallback to general stop API
       const response = await fetch("/api/scraping/stop", { method: "POST" });
       const result = await response.json();
 
@@ -183,10 +201,13 @@ export function GooglePlacesScraper() {
         toast.success("Scraping stopped");
         setActiveJob(null);
         loadScrapingJobs();
+        loadStats();
       } else {
-        toast.error(result.message || "Failed to stop scraping");
+        // Show more specific error message
+        toast.error(result.message || "No active scraping job to stop");
       }
     } catch (error) {
+      console.error("Stop scraping error:", error);
       toast.error("Failed to stop scraping");
     }
   };
