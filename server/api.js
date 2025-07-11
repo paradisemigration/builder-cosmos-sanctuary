@@ -751,7 +751,7 @@ app.get("/api/scraping/validate-api", async (req, res) => {
   }
 });
 
-// Fetch all reviews for existing businesses
+// Fetch ALL reviews (unlimited) for existing businesses
 app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
   try {
     if (!process.env.GOOGLE_PLACES_API_KEY) {
@@ -761,13 +761,15 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
       });
     }
 
-    console.log("🚀 Starting to fetch all reviews for existing businesses...");
+    console.log(
+      "🚀 Starting to fetch ALL reviews (unlimited) for existing businesses...",
+    );
 
     // Start the review fetching process in the background
     scraper
       .fetchAllReviewsForExistingBusinesses()
       .then((result) => {
-        console.log("✅ Review fetching completed:", result);
+        console.log("✅ ALL reviews fetching completed:", result);
       })
       .catch((error) => {
         console.error("❌ Review fetching failed:", error);
@@ -775,8 +777,8 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Review fetching started successfully",
-      note: "Process is running in the background. Check console logs for progress.",
+      message: "ALL reviews fetching started successfully (no 5-review limit)",
+      note: "Process is running in the background. Check console logs for progress. This will fetch ALL available reviews for each business.",
     });
   } catch (error) {
     console.error("Fetch all reviews error:", error);
