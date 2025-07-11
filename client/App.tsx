@@ -58,7 +58,8 @@ const App = () => (
               element={<CategoryLocationPage />}
             />
 
-            {/* New SEO-friendly business profile route: /city/company-name */}
+            {/* New SEO-friendly business profile route: /city/company-name
+                This must come after more specific routes */}
             <Route path="/:city/:companyName" element={<BusinessProfile />} />
 
             {/* Protected Routes - Require Authentication */}
