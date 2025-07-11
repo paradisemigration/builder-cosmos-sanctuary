@@ -380,13 +380,13 @@ export default function Index() {
                     🏢 Business (Legacy)
                   </Link>
                   <Link
-                    to="/city/delhi/delhi-global-visa-consultants"
+                    to="/business/delhi/delhi-global-visa-consultants"
                     className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
                   >
                     🏢 Business (New URL)
                   </Link>
                   <Link
-                    to="/city/mumbai/mumbai-immigration-hub"
+                    to="/business/mumbai/mumbai-immigration-hub"
                     className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
                   >
                     🏢 Mumbai Business
@@ -582,7 +582,7 @@ export default function Index() {
             ].map((city, index) => (
               <Link
                 key={city}
-                to={`/city/${city.toLowerCase()}`}
+                to={`/business/${city.toLowerCase()}`}
                 className="group relative"
               >
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105 border border-gray-100">

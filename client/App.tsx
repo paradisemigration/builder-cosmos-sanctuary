@@ -49,14 +49,14 @@ const App = () => (
             <Route path="/login" element={<Login />} />
 
             {/* City-specific business listing routes */}
-            <Route path="/city/:city" element={<CityBusinessListing />} />
+            <Route path="/business/:city" element={<CityBusinessListing />} />
 
             {/* Legacy business profile route for backward compatibility */}
             <Route path="/business/:id" element={<BusinessProfile />} />
 
-            {/* New SEO-friendly business profile route: /city/city/company-name */}
+            {/* New SEO-friendly business profile route: /business/city/company-name */}
             <Route
-              path="/city/:city/:companyName"
+              path="/business/:city/:companyName"
               element={<BusinessProfile />}
             />
 
