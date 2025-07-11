@@ -377,6 +377,36 @@ export default function CityBusinessListing() {
         </div>
       </section>
 
+      {/* Browse by Category */}
+      <section className="py-12 bg-gray-100">
+        <div className="container mx-auto max-w-6xl px-4">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+            Browse Services in {cityName}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Object.entries(categoryMapping).map(([slug, name]) => (
+              <Link
+                key={slug}
+                to={`/business/${city}/${slug}`}
+                className="p-4 bg-white rounded-lg border hover:shadow-md transition-shadow group"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{getCategoryIcon(slug)}</span>
+                  <div>
+                    <p className="font-medium text-gray-900 text-sm group-hover:text-blue-600 transition-colors">
+                      {name}
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      {slug.replace("-", " ")}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       {businesses.length > 0 && (
         <section className="py-12 bg-blue-50">
