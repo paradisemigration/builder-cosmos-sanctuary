@@ -48,17 +48,17 @@ const App = () => (
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
 
-            {/* City-specific business listing routes - more specific routes first */}
-            <Route path="/business/:city" element={<CityBusinessListing />} />
+            {/* City-specific business listing routes */}
+            <Route path="/city/:city" element={<CityBusinessListing />} />
 
-            {/* New SEO-friendly business profile route: /business/city/company-name */}
+            {/* Legacy business profile route for backward compatibility */}
+            <Route path="/business/:id" element={<BusinessProfile />} />
+
+            {/* New SEO-friendly business profile route: /city/city/company-name */}
             <Route
-              path="/business/:city/:companyName"
+              path="/city/:city/:companyName"
               element={<BusinessProfile />}
             />
-
-            {/* Legacy business profile route for backward compatibility - numeric IDs only */}
-            <Route path="/business/:id" element={<BusinessProfile />} />
 
             {/* SEO-friendly category and location routes */}
             <Route
