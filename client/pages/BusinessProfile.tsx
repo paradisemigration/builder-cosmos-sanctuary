@@ -351,7 +351,8 @@ export default function BusinessProfile() {
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       <span className="font-semibold">{business.rating}</span>
                       <span className="text-blue-100">
-                        ({business.reviewCount} reviews)
+                        ({business.reviews?.length || business.reviewCount || 0}{" "}
+                        reviews)
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
@@ -380,7 +381,7 @@ export default function BusinessProfile() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white rounded-xl p-4 text-center shadow-sm border">
                   <div className="text-2xl font-bold text-blue-600">
-                    {business.reviewCount}+
+                    {business.reviews?.length || business.reviewCount || 0}+
                   </div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
@@ -497,7 +498,8 @@ export default function BusinessProfile() {
                         </span>
                       </div>
                       <span className="text-gray-600">
-                        ({business.reviewCount} reviews)
+                        ({business.reviews?.length || business.reviewCount || 0}{" "}
+                        reviews)
                       </span>
                     </div>
                   </div>
