@@ -217,6 +217,9 @@ class GooglePlacesAPI {
         reviewCount: user_ratings_total || 0,
         reviews: processedReviews,
 
+        // Images for SQLite database
+        images: imagesForDB,
+
         // Location
         coordinates: geometry?.location
           ? {
