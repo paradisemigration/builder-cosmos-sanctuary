@@ -374,7 +374,7 @@ export default function AdminPanel() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {import.meta.env.MODE === "development" ? (
+                    {isLocalDevelopment ? (
                       <ImageUpload
                         onUpload={(urls) =>
                           console.log("Gallery uploaded:", urls)
