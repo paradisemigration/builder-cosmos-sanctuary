@@ -514,8 +514,7 @@ export default function Browse() {
                           <div className="flex items-center gap-1">
                             <Users className="h-4 w-4" />
                             <span>
-                              Showing {filteredBusinesses.length} of{" "}
-                              {sampleBusinesses.length} consultants
+                              {filteredBusinesses.length} consultants loaded
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
