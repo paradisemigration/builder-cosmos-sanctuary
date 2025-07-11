@@ -359,6 +359,35 @@ app.get("/api/test-upload", (req, res) => {
   });
 });
 
+// Verify image storage status
+app.get("/api/images/status", async (req, res) => {
+  try {
+    const stats = await sqliteDatabase.getStatistics();
+
+    // Get sample business with images
+    const businessResult = await sqliteDatabase.getBusinesses({ limit: 1 });
+    const sampleBusiness = businessResult.businesses[0];
+
+    res.json({
+      success: true,
+      imageStorage: {
+        totalImages: stats.totalImages || 0,
+        totalBusinesses: stats.totalBusinesses || 0,
+        storageType: "Google Cloud Storage",
+        bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME,
+        sampleImageUrl: sampleBusiness?.images?.[0]?.cloudStorageUrl || null,
+        isConfigured: !!process.env.GOOGLE_CLOUD_PROJECT_ID,
+      },
+    });
+  } catch (error) {
+    console.error("Image status error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
 
 // Start a new scraping job
