@@ -87,7 +87,7 @@ export default function Browse() {
 
   // Use business data hook for API integration
   const {
-    businesses: filteredBusinesses,
+    businesses: apiBusiness,
     loading: businessesLoading,
     error: businessesError,
     pagination,
@@ -95,6 +95,73 @@ export default function Browse() {
     loadMore,
     hasMore,
   } = useBusinessData(apiFilters);
+
+  // Use sample data as fallback when API fails
+  const [filteredBusinesses, setFilteredBusinesses] =
+    useState<Business[]>(sampleBusinesses);
+
+  // Filter logic for fallback data
+  useEffect(() => {
+    if (apiBusiness.length > 0) {
+      setFilteredBusinesses(apiBusiness);
+    } else {
+      // Use sample data with client-side filtering
+      let filtered = [...sampleBusinesses];
+
+      // Text search
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+          (business) =>
+            business.name.toLowerCase().includes(query) ||
+            business.description.toLowerCase().includes(query) ||
+            business.category.toLowerCase().includes(query) ||
+            business.services.some((service) =>
+              service.toLowerCase().includes(query),
+            ),
+        );
+      }
+
+      // Category filter
+      if (selectedCategory && selectedCategory !== "all") {
+        filtered = filtered.filter((business) =>
+          business.category
+            .toLowerCase()
+            .includes(selectedCategory.toLowerCase()),
+        );
+      }
+
+      // Location filter
+      if (selectedZone && selectedZone !== "all") {
+        filtered = filtered.filter(
+          (business) =>
+            business.city.toLowerCase().includes(selectedZone.toLowerCase()) ||
+            business.address.toLowerCase().includes(selectedZone.toLowerCase()),
+        );
+      }
+
+      // Sort
+      switch (filters.sortBy) {
+        case "rating":
+          filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        case "reviews":
+          filtered.sort((a, b) => b.reviewCount - a.reviewCount);
+          break;
+        case "name":
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+      }
+
+      setFilteredBusinesses(filtered);
+    }
+  }, [
+    apiBusiness,
+    searchQuery,
+    selectedCategory,
+    selectedZone,
+    filters.sortBy,
+  ]);
 
   // Initialize page title on mount
   useEffect(() => {
