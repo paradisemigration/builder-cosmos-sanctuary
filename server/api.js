@@ -790,6 +790,56 @@ app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
   }
 });
 
+// Fix reviewCount for all businesses to match actual review count
+app.post("/api/fix-review-counts", async (req, res) => {
+  try {
+    console.log("🚀 Fixing reviewCount for all businesses...");
+
+    // Get all businesses
+    const result = await sqliteDatabase.getBusinesses({ limit: 9999 });
+    const businesses = result.businesses;
+
+    let updatedCount = 0;
+
+    for (const business of businesses) {
+      const actualReviewCount = business.reviews?.length || 0;
+      if (business.reviewCount !== actualReviewCount) {
+        await new Promise((resolve, reject) => {
+          sqliteDatabase.db.run(
+            "UPDATE businesses SET reviewCount = ? WHERE id = ?",
+            [actualReviewCount, business.id],
+            function (err) {
+              if (err) {
+                console.error(`Error updating business ${business.id}:`, err);
+                reject(err);
+              } else {
+                console.log(
+                  `✅ Updated business ${business.name}: ${business.reviewCount} → ${actualReviewCount} reviews`,
+                );
+                updatedCount++;
+                resolve();
+              }
+            },
+          );
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Review counts fixed for ${updatedCount} businesses`,
+      totalBusinesses: businesses.length,
+      updatedCount,
+    });
+  } catch (error) {
+    console.error("Fix review counts error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Migrate data from memory to SQLite database
 app.post("/api/migrate-to-sqlite", async (req, res) => {
   try {
