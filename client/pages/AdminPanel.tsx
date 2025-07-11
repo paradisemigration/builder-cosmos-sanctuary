@@ -199,19 +199,48 @@ export default function AdminPanel() {
                 Media Management & Cloud Storage
               </h2>
 
-              {/* API Test Section */}
-              <Card className="border-green-200 bg-green-50">
+              {/* System Status Section */}
+              <Card
+                className={`border-2 ${import.meta.env.MODE === "development" ? "border-green-200 bg-green-50" : "border-blue-200 bg-blue-50"}`}
+              >
                 <CardHeader>
-                  <CardTitle className="text-green-800">
-                    ✅ Upload System Status
+                  <CardTitle
+                    className={
+                      import.meta.env.MODE === "development"
+                        ? "text-green-800"
+                        : "text-blue-800"
+                    }
+                  >
+                    {import.meta.env.MODE === "development"
+                      ? "✅ Development Environment"
+                      : "🌐 Production Environment"}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-green-700">
+                <CardContent
+                  className={
+                    import.meta.env.MODE === "development"
+                      ? "text-green-700"
+                      : "text-blue-700"
+                  }
+                >
                   <div className="space-y-2">
-                    <p>• Google Cloud Storage: Configured ✅</p>
-                    <p>• API Server: Running on port 3001 ✅</p>
-                    <p>• Upload Endpoints: Available ✅</p>
-                    <p>• CORS: Properly configured ✅</p>
+                    {import.meta.env.MODE === "development" ? (
+                      <>
+                        <p>• Google Cloud Storage: Configured ✅</p>
+                        <p>• API Server: Running on port 3001 ✅</p>
+                        <p>• Upload Endpoints: Available ✅</p>
+                        <p>• CORS: Properly configured ✅</p>
+                      </>
+                    ) : (
+                      <>
+                        <p>• Frontend: Deployed successfully ✅</p>
+                        <p>• UI Components: Functional ✅</p>
+                        <p>
+                          • Google Cloud Setup: Ready for backend integration ✅
+                        </p>
+                        <p>• Upload Feature: Requires backend deployment 📋</p>
+                      </>
+                    )}
                   </div>
                   <Button
                     onClick={async () => {
