@@ -83,6 +83,91 @@ export default function AdminPanel() {
     ogImage: "",
   });
 
+  // Modal states for different admin functions
+  const [showBusinessDetails, setShowBusinessDetails] = useState(false);
+  const [showEditBusiness, setShowEditBusiness] = useState(false);
+  const [showReviewDetails, setShowReviewDetails] = useState(false);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
+    null,
+  );
+  const [selectedReview, setSelectedReview] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  // Sample review data
+  const sampleReviews = [
+    {
+      id: 1,
+      title: "Excellent visa consultation service!",
+      content:
+        "I had a wonderful experience with their team. They guided me through the entire student visa process for Canada. Very professional and responsive. Highly recommended for anyone looking for visa assistance.",
+      rating: 5,
+      businessName: "VISApro Consultants",
+      businessId: "1",
+      userName: "Priya Sharma",
+      userEmail: "priya.sharma@email.com",
+      date: "2024-01-15",
+      status: "approved",
+      helpful: 12,
+    },
+    {
+      id: 2,
+      title: "Good service but slow response",
+      content:
+        "They helped me get my work visa approved but the communication was a bit slow. Overall satisfied with the outcome.",
+      rating: 4,
+      businessName: "Global Immigration Services",
+      businessId: "2",
+      userName: "Rahul Kumar",
+      userEmail: "rahul.k@email.com",
+      date: "2024-01-12",
+      status: "approved",
+      helpful: 8,
+    },
+    {
+      id: 3,
+      title: "Suspicious review - possible spam",
+      content:
+        "Best service ever!!! 100% guarantee success rate amazing team contact now for best deals!!!",
+      rating: 5,
+      businessName: "Quick Visa Solutions",
+      businessId: "3",
+      userName: "Test User",
+      userEmail: "test@spam.com",
+      date: "2024-01-10",
+      status: "flagged",
+      helpful: 0,
+    },
+  ];
+
+  // Sample user data
+  const sampleUsers = [
+    {
+      id: 1,
+      name: "Amit Patel",
+      email: "amit.patel@email.com",
+      type: "business",
+      status: "active",
+      joinDate: "2023-08-15",
+      lastActive: "2 hours ago",
+      businessCount: 1,
+      reviewsCount: 0,
+      phone: "+91 98765 43210",
+    },
+    {
+      id: 2,
+      name: "Sneha Desai",
+      email: "sneha.desai@email.com",
+      type: "individual",
+      status: "active",
+      joinDate: "2024-01-05",
+      lastActive: "1 day ago",
+      businessCount: 0,
+      reviewsCount: 3,
+      phone: "+91 87654 32109",
+    },
+  ];
+
   // SEO data for different pages
   const [pageSEOData, setPageSEOData] = useState({
     home: {
@@ -512,23 +597,32 @@ export default function AdminPanel() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleViewBusiness(business)}
+                              >
                                 <Eye className="h-4 w-4 mr-2" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link
-                                  to={`/admin/business/${business.id}/edit`}
-                                >
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </Link>
+                              <DropdownMenuItem
+                                onClick={() => handleEditBusiness(business)}
+                              >
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleApproveBusiness(business.id)
+                                }
+                              >
                                 <CheckCircle className="h-4 w-4 mr-2" />
                                 Approve
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
+                              <DropdownMenuItem
+                                className="text-red-600"
+                                onClick={() =>
+                                  handleDeleteBusiness(business.id)
+                                }
+                              >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </DropdownMenuItem>
@@ -621,33 +715,33 @@ export default function AdminPanel() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <TableRow key={i}>
+                    {sampleUsers.map((user) => (
+                      <TableRow key={user.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                               <Users className="h-5 w-5 text-gray-600" />
                             </div>
                             <div>
-                              <p className="font-medium">User {i}</p>
+                              <p className="font-medium">{user.name}</p>
                               <p className="text-sm text-gray-600">
-                                user{i}@example.com
+                                {user.email}
                               </p>
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline">
-                            {i % 2 === 0 ? "Business" : "Individual"}
+                          <Badge variant="outline" className="capitalize">
+                            {user.type}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge className="bg-green-100 text-green-800">
-                            Active
+                          <Badge className="bg-green-100 text-green-800 capitalize">
+                            {user.status}
                           </Badge>
                         </TableCell>
-                        <TableCell>Jan 2024</TableCell>
-                        <TableCell>2 hours ago</TableCell>
+                        <TableCell>{user.joinDate}</TableCell>
+                        <TableCell>{user.lastActive}</TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -656,15 +750,22 @@ export default function AdminPanel() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleViewUser(user)}
+                              >
                                 <Eye className="h-4 w-4 mr-2" />
                                 View Profile
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleViewUser(user)}
+                              >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit User
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
+                              <DropdownMenuItem
+                                className="text-red-600"
+                                onClick={() => handleSuspendUser(user.id)}
+                              >
                                 <XCircle className="h-4 w-4 mr-2" />
                                 Suspend
                               </DropdownMenuItem>
@@ -770,24 +871,24 @@ export default function AdminPanel() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <TableRow key={i}>
+                    {sampleReviews.map((review) => (
+                      <TableRow key={review.id}>
                         <TableCell>
                           <div>
-                            <p className="font-medium">Great service!</p>
+                            <p className="font-medium">{review.title}</p>
                             <p className="text-sm text-gray-600">
-                              They helped me get my visa approved quickly...
+                              {review.content.substring(0, 60)}...
                             </p>
                           </div>
                         </TableCell>
-                        <TableCell>Business {i}</TableCell>
+                        <TableCell>{review.businessName}</TableCell>
                         <TableCell>
                           <div className="flex items-center">
                             {Array.from({ length: 5 }).map((_, index) => (
                               <Star
                                 key={index}
                                 className={`h-4 w-4 ${
-                                  index < 4
+                                  index < review.rating
                                     ? "text-yellow-400 fill-current"
                                     : "text-gray-300"
                                 }`}
@@ -796,11 +897,19 @@ export default function AdminPanel() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className="bg-green-100 text-green-800">
-                            Approved
+                          <Badge
+                            className={
+                              review.status === "approved"
+                                ? "bg-green-100 text-green-800"
+                                : review.status === "flagged"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-orange-100 text-orange-800"
+                            }
+                          >
+                            {review.status}
                           </Badge>
                         </TableCell>
-                        <TableCell>Jan 15, 2024</TableCell>
+                        <TableCell>{review.date}</TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -809,15 +918,22 @@ export default function AdminPanel() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleViewReview(review)}
+                              >
                                 <Eye className="h-4 w-4 mr-2" />
                                 View Full Review
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleFlagReview(review.id)}
+                              >
                                 <Flag className="h-4 w-4 mr-2" />
                                 Flag as Spam
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
+                              <DropdownMenuItem
+                                className="text-red-600"
+                                onClick={() => handleDeleteReview(review.id)}
+                              >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </DropdownMenuItem>
@@ -1190,6 +1306,483 @@ export default function AdminPanel() {
                         </div>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Business Details Modal */}
+              {showBusinessDetails && selectedBusiness && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        Business Details
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowBusinessDetails(false)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={selectedBusiness.logo}
+                          alt={selectedBusiness.name}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                        <div>
+                          <h4 className="text-xl font-semibold">
+                            {selectedBusiness.name}
+                          </h4>
+                          <p className="text-gray-600">
+                            {selectedBusiness.category}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Contact Email
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedBusiness.email}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Phone
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedBusiness.phone}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Location
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedBusiness.city}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Rating
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                            <span>{selectedBusiness.rating}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Status
+                          </label>
+                          <Badge
+                            className={
+                              selectedBusiness.isVerified
+                                ? "bg-green-100 text-green-800"
+                                : "bg-orange-100 text-orange-800"
+                            }
+                          >
+                            {selectedBusiness.isVerified
+                              ? "Verified"
+                              : "Pending"}
+                          </Badge>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Plan
+                          </label>
+                          <Badge variant="outline">
+                            {selectedBusiness.plan || "Premium"}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Description
+                        </label>
+                        <p className="text-gray-900">
+                          {selectedBusiness.description}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Address
+                        </label>
+                        <p className="text-gray-900">
+                          {selectedBusiness.address}
+                        </p>
+                      </div>
+                      <div className="flex justify-end gap-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowBusinessDetails(false)}
+                        >
+                          Close
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setShowBusinessDetails(false);
+                            handleEditBusiness(selectedBusiness);
+                          }}
+                        >
+                          Edit Business
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Review Details Modal */}
+              {showReviewDetails && selectedReview && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        Review Details
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowReviewDetails(false)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                              <Star
+                                key={index}
+                                className={`h-5 w-5 ${
+                                  index < selectedReview.rating
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                            <span className="font-semibold">
+                              {selectedReview.rating}/5
+                            </span>
+                          </div>
+                          <Badge
+                            className={
+                              selectedReview.status === "approved"
+                                ? "bg-green-100 text-green-800"
+                                : selectedReview.status === "flagged"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-orange-100 text-orange-800"
+                            }
+                          >
+                            {selectedReview.status}
+                          </Badge>
+                        </div>
+                        <h4 className="text-xl font-semibold mb-2">
+                          {selectedReview.title}
+                        </h4>
+                        <p className="text-gray-700 leading-relaxed">
+                          {selectedReview.content}
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Reviewer
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedReview.userName}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {selectedReview.userEmail}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Business
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedReview.businessName}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Date
+                          </label>
+                          <p className="text-gray-900">{selectedReview.date}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Helpful Votes
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedReview.helpful}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-4 pt-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowReviewDetails(false)}
+                        >
+                          Close
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleFlagReview(selectedReview.id)}
+                        >
+                          <Flag className="h-4 w-4 mr-2" />
+                          Flag Review
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleDeleteReview(selectedReview.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete Review
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* User Details Modal */}
+              {showUserDetails && selectedUser && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        User Profile
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowUserDetails(false)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                          <Users className="h-8 w-8 text-gray-600" />
+                        </div>
+                        <div>
+                          <h4 className="text-xl font-semibold">
+                            {selectedUser.name}
+                          </h4>
+                          <p className="text-gray-600 capitalize">
+                            {selectedUser.type} User
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Email
+                          </label>
+                          <p className="text-gray-900">{selectedUser.email}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Phone
+                          </label>
+                          <p className="text-gray-900">{selectedUser.phone}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Join Date
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedUser.joinDate}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Last Active
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedUser.lastActive}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Status
+                          </label>
+                          <Badge className="bg-green-100 text-green-800 capitalize">
+                            {selectedUser.status}
+                          </Badge>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            User Type
+                          </label>
+                          <Badge variant="outline" className="capitalize">
+                            {selectedUser.type}
+                          </Badge>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Business Listings
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedUser.businessCount}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Reviews Written
+                          </label>
+                          <p className="text-gray-900">
+                            {selectedUser.reviewsCount}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-4 pt-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowUserDetails(false)}
+                        >
+                          Close
+                        </Button>
+                        <Button variant="outline">Edit User</Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleSuspendUser(selectedUser.id)}
+                        >
+                          <XCircle className="h-4 w-4 mr-2" />
+                          Suspend User
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Business Edit Modal */}
+              {showEditBusiness && selectedBusiness && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        Edit Business
+                      </h3>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowEditBusiness(false)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Business Name
+                        </label>
+                        <Input defaultValue={selectedBusiness.name} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Category
+                        </label>
+                        <Select defaultValue={selectedBusiness.category}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Student Visa Consultants">
+                              Student Visa Consultants
+                            </SelectItem>
+                            <SelectItem value="Work Visa Consultants">
+                              Work Visa Consultants
+                            </SelectItem>
+                            <SelectItem value="Tourist Visa Consultants">
+                              Tourist Visa Consultants
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email
+                        </label>
+                        <Input
+                          type="email"
+                          defaultValue={selectedBusiness.email}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Phone
+                        </label>
+                        <Input defaultValue={selectedBusiness.phone} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          City
+                        </label>
+                        <Input defaultValue={selectedBusiness.city} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Status
+                        </label>
+                        <Select
+                          defaultValue={
+                            selectedBusiness.isVerified ? "verified" : "pending"
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="verified">Verified</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Description
+                        </label>
+                        <textarea
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                          rows={3}
+                          defaultValue={selectedBusiness.description}
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Address
+                        </label>
+                        <textarea
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                          rows={2}
+                          defaultValue={selectedBusiness.address}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-4 pt-6">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowEditBusiness(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          alert("Business updated successfully!");
+                          setShowEditBusiness(false);
+                        }}
+                      >
+                        Save Changes
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
