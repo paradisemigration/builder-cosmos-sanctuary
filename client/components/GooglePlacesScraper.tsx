@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -369,7 +368,12 @@ export function GooglePlacesScraper() {
                       {activeJob.currentCity} - {activeJob.currentCategory}
                     </Badge>
                   </div>
-                  <Progress value={activeJob.progress} className="w-full" />
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${activeJob.progress}%` }}
+                    ></div>
+                  </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       Businesses Found: {activeJob.totalBusinesses || 0}
