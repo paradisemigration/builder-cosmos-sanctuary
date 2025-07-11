@@ -48,7 +48,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { sampleBusinesses, Business } from "@/lib/data";
+import { sampleBusinesses, type Business } from "@/lib/data";
 import { ReviewManagement } from "@/components/ReviewManagement";
 import { Navigation } from "@/components/Navigation";
 
