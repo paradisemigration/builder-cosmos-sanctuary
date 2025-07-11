@@ -225,6 +225,7 @@ export default function AdminStatus() {
 
     // Auto-refresh every 15 seconds (increased from 10 to reduce load)
     const interval = setInterval(() => {
+      // Only auto-refresh if not currently loading
       if (!loadingRef && !loading) {
         loadStatus();
       }
@@ -234,7 +235,7 @@ export default function AdminStatus() {
       clearTimeout(timeoutId);
       clearInterval(interval);
     };
-  }, [loadingRef, loading]);
+  }, []); // Remove dependencies to prevent infinite loop
 
   return (
     <div className="min-h-screen bg-gray-50">
