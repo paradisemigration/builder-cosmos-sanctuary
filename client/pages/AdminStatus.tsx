@@ -105,6 +105,33 @@ export default function AdminStatus() {
         });
       }
 
+      // Load image storage status
+      try {
+        const imageStatusController = new AbortController();
+        const imageStatusTimeout = setTimeout(
+          () => imageStatusController.abort(),
+          10000,
+        );
+
+        const imageStatusResponse = await fetch("/api/images/status", {
+          signal: imageStatusController.signal,
+        });
+        clearTimeout(imageStatusTimeout);
+
+        if (imageStatusResponse.ok) {
+          const imageStatusResult = await imageStatusResponse.json();
+          if (imageStatusResult.success) {
+            setImageStatus(imageStatusResult.imageStorage);
+          }
+        }
+      } catch (imageError) {
+        console.warn("Image status failed:", imageError.message);
+        setImageStatus({
+          error: "Image status unavailable",
+          errorType: "fetch_failed",
+        });
+      }
+
       if (statsResult.success) {
         setStats(statsResult.stats);
       }
