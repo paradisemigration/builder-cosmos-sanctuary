@@ -508,6 +508,43 @@ class SQLiteDatabase {
     });
   }
 
+  async findDuplicates() {
+    return new Promise((resolve, reject) => {
+      // Find businesses with same googlePlaceId or same name+city combination
+      const sql = `
+        SELECT
+          googlePlaceId,
+          name,
+          city,
+          COUNT(*) as count,
+          GROUP_CONCAT(id) as business_ids
+        FROM businesses
+        WHERE googlePlaceId IS NOT NULL
+        GROUP BY googlePlaceId
+        HAVING COUNT(*) > 1
+        UNION
+        SELECT
+          'name_city_duplicate' as googlePlaceId,
+          name,
+          city,
+          COUNT(*) as count,
+          GROUP_CONCAT(id) as business_ids
+        FROM businesses
+        GROUP BY LOWER(name), LOWER(city)
+        HAVING COUNT(*) > 1
+      `;
+
+      this.db.all(sql, (err, rows) => {
+        if (err) {
+          console.error("Error finding duplicates:", err);
+          resolve([]);
+        } else {
+          resolve(rows || []);
+        }
+      });
+    });
+  }
+
   async getStatistics() {
     return new Promise((resolve, reject) => {
       const sql = "SELECT * FROM statistics WHERE id = 1";

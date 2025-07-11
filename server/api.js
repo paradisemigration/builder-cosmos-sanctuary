@@ -436,6 +436,29 @@ app.get("/api/database/diagnostic", async (req, res) => {
   }
 });
 
+// Check for duplicates in database
+app.get("/api/database/duplicates", async (req, res) => {
+  try {
+    const duplicates = await sqliteDatabase.findDuplicates();
+
+    res.json({
+      success: true,
+      duplicates: duplicates || [],
+      count: duplicates?.length || 0,
+      message:
+        duplicates?.length > 0
+          ? `Found ${duplicates.length} potential duplicates`
+          : "No duplicates found",
+    });
+  } catch (error) {
+    console.error("Find duplicates error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // ============ GOOGLE PLACES SCRAPING ENDPOINTS ============
 
 // Start a new scraping job
