@@ -231,6 +231,45 @@ export default function AdminPanel() {
                 </CardContent>
               </Card>
 
+              {/* Image Upload Sections */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building className="h-5 w-5" />
+                      Business Logos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ImageUpload
+                      onUpload={(urls) => console.log("Logos uploaded:", urls)}
+                      multiple={true}
+                      maxFiles={5}
+                      folder="logos"
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      Gallery Images
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ImageUpload
+                      onUpload={(urls) =>
+                        console.log("Gallery uploaded:", urls)
+                      }
+                      multiple={true}
+                      maxFiles={20}
+                      folder="gallery"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+
               {/* Media Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card>
