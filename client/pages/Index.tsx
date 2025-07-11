@@ -516,9 +516,9 @@ export default function Index() {
               </div>
 
               <div className="mt-3 text-xs text-yellow-700 text-center">
-                Click any button above to test navigation. All 16 cities
-                directory pages are now available. Check browser console for
-                debug info.
+                🚀 Complete Navigation Test: 16 Cities × 8 Categories = 128
+                subcategory pages + main pages. Check browser console for debug
+                info.
               </div>
             </div>
           </div>
