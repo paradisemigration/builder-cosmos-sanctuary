@@ -17,11 +17,7 @@ import {
   Search,
   CheckCircle,
 } from "lucide-react";
-import {
-  businessCategories,
-  indianCities,
-  type Business,
-} from "@/lib/data";
+import { businessCategories, indianCities, type Business } from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
@@ -34,25 +30,23 @@ export default function CategoryLocationPage() {
   const getDisplayName = (slug: string, type: "location" | "category") => {
     if (type === "location") {
       // Check Indian cities
-      return (
-        indianCities.find(
-          (city) =>
-            city
-              .toLowerCase()
-              .replace(/[^a-z0-9]/g, "-")
-              .replace(/-+/g, "-")
-              .replace(/^-|-$/g, "") === slug,
-        ) || slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ")
-              .toLowerCase()
-              .replace(/[^a-z0-9]/g, "-")
-              .replace(/-+/g, "-")
-              .replace(/^-|-$/g, "") === slug,
-        ) ||
-        // Handle direct city names (e.g., "dubai" -> "Dubai")
-        (slug.length > 2
-          ? slug.charAt(0).toUpperCase() + slug.slice(1)
-          : slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()))
+      const cityMatch = indianCities.find(
+        (city) =>
+          city
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, "") === slug,
       );
+
+      if (cityMatch) {
+        return cityMatch;
+      }
+
+      // Handle direct city names (e.g., "delhi" -> "Delhi")
+      return slug.length > 2
+        ? slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ")
+        : slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
     } else {
       // Handle category mapping with better matching
       const categoryMatch = businessCategories.find(
