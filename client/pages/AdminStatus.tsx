@@ -18,16 +18,39 @@ export default function AdminStatus() {
 
       // Load scraping stats
       const statsResponse = await fetch("/api/scraping/stats");
+      if (!statsResponse.ok) {
+        throw new Error(`Stats API error: ${statsResponse.status}`);
+      }
       const statsResult = await statsResponse.json();
 
       // Load diagnostic info
       const diagnosticResponse = await fetch("/api/database/diagnostic");
+      if (!diagnosticResponse.ok) {
+        throw new Error(`Diagnostic API error: ${diagnosticResponse.status}`);
+      }
       const diagnosticResult = await diagnosticResponse.json();
 
-      setStats(statsResult.stats);
-      setDiagnostic(diagnosticResult.diagnostic);
+      if (statsResult.success) {
+        setStats(statsResult.stats);
+      }
+
+      if (diagnosticResult.success) {
+        setDiagnostic(diagnosticResult.diagnostic);
+      }
     } catch (error) {
       console.error("Failed to load status:", error);
+      // Set default empty state to prevent UI errors
+      setStats({
+        totalBusinesses: 0,
+        totalImages: 0,
+        totalReviews: 0,
+        averageRating: 0,
+        scraping: { isRunning: false },
+      });
+      setDiagnostic({
+        actualBusinessCount: 0,
+        totalFromQuery: 0,
+      });
     } finally {
       setLoading(false);
     }
