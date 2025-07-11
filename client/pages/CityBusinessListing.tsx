@@ -146,6 +146,28 @@ export default function CityBusinessListing() {
     topRated: businesses.filter((b) => b.rating >= 4.5).length,
   };
 
+  const getCategoryIcon = (categorySlug: string) => {
+    switch (categorySlug) {
+      case "study-abroad":
+      case "education-services":
+        return "🎓";
+      case "work-permit":
+        return "💼";
+      case "immigration-consultants":
+        return "⚖️";
+      case "visa-consultants":
+        return "📋";
+      case "visa-services":
+        return "🛂";
+      case "immigration-services":
+        return "🏛️";
+      case "overseas-services":
+        return "🌍";
+      default:
+        return "🏢";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
