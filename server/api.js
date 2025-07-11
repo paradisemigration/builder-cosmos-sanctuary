@@ -339,6 +339,19 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Test upload endpoint
+app.get("/api/test-upload", (req, res) => {
+  res.json({
+    success: true,
+    message: "Upload endpoint is ready",
+    config: {
+      maxFileSize: "10MB",
+      allowedTypes: "images",
+      googleCloudConfigured: !!process.env.GOOGLE_CLOUD_PROJECT_ID,
+    },
+  });
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
