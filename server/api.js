@@ -827,6 +827,8 @@ app.get("/api/scraping/stats", async (req, res) => {
         // Use SQLite stats as primary, fallback to memory
         totalBusinesses:
           sqliteStats.totalBusinesses || memoryStats.totalBusinesses || 0,
+        totalGooglePlaces:
+          sqliteStats.totalGooglePlaces || memoryStats.totalGooglePlaces || 0,
         totalImages: sqliteStats.totalImages || memoryStats.totalImages || 0,
         totalReviews: sqliteStats.totalReviews || memoryStats.totalReviews || 0,
         averageRating:
