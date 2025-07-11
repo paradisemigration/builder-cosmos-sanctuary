@@ -1175,11 +1175,10 @@ app.post("/api/admin/assign-business-images-batch", async (req, res) => {
 // Get bulk assignment status
 app.get("/api/admin/business-images-status", async (req, res) => {
   try {
-    const database = getDatabase();
-    const totalBusinesses = database
+    const totalBusinesses = bulkDatabase
       .prepare("SELECT COUNT(*) as count FROM businesses")
       .get();
-    const withImages = database
+    const withImages = bulkDatabase
       .prepare(
         `
       SELECT COUNT(*) as count FROM businesses
@@ -1190,7 +1189,7 @@ app.get("/api/admin/business-images-status", async (req, res) => {
     `,
       )
       .get();
-    const withPlaceholders = database
+    const withPlaceholders = bulkDatabase
       .prepare(
         `
       SELECT COUNT(*) as count FROM businesses
