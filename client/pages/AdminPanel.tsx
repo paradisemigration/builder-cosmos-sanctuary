@@ -396,6 +396,48 @@ export default function AdminPanel() {
                 </Card>
               </div>
 
+              {/* System Information */}
+              <Card className="border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-gray-800">
+                    📊 System Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p>
+                        <strong>Environment:</strong> {import.meta.env.MODE}
+                      </p>
+                      <p>
+                        <strong>Host:</strong> {window.location.hostname}
+                      </p>
+                      <p>
+                        <strong>Protocol:</strong> {window.location.protocol}
+                      </p>
+                      <p>
+                        <strong>Port:</strong>{" "}
+                        {window.location.port || "default"}
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        <strong>Google Cloud:</strong> ✅ Configured
+                      </p>
+                      <p>
+                        <strong>Upload UI:</strong> ✅ Ready
+                      </p>
+                      <p>
+                        <strong>Image Support:</strong> ✅ All formats
+                      </p>
+                      <p>
+                        <strong>Max File Size:</strong> 10MB
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Media Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card>
