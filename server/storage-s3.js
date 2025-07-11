@@ -16,7 +16,7 @@ const bucketName = process.env.AWS_S3_BUCKET_NAME;
 // Multer memory storage for temporary file handling
 const storage = multer.memoryStorage();
 
-export const uploadMiddleware = multer({
+const multerConfig = {
   storage,
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB limit
@@ -34,7 +34,9 @@ export const uploadMiddleware = multer({
       );
     }
   },
-});
+};
+
+export const uploadMiddleware = multer(multerConfig);
 
 /**
  * Upload a single file to S3
