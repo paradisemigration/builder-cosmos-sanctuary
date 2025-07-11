@@ -80,7 +80,7 @@ export default function AdminStatus() {
 
       for (let i = 0; i <= 2; i++) {
         try {
-          console.log(`📊 Loading stats attempt ${i + 1}/3...`);
+          console.log(`���� Loading stats attempt ${i + 1}/3...`);
           const statsController = new AbortController();
           const statsTimeout = setTimeout(() => statsController.abort(), 12000);
 
@@ -555,13 +555,22 @@ export default function AdminStatus() {
               <CardContent>
                 {stats ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div className="text-center p-4 bg-blue-50 rounded">
                         <div className="text-2xl font-bold text-blue-600">
                           {stats.totalBusinesses || 0}
                         </div>
                         <div className="text-sm text-gray-600">
                           Total Businesses
+                        </div>
+                      </div>
+
+                      <div className="text-center p-4 bg-indigo-50 rounded">
+                        <div className="text-2xl font-bold text-indigo-600">
+                          {stats.totalGooglePlaces || 0}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Google Places
                         </div>
                       </div>
 
@@ -588,6 +597,13 @@ export default function AdminStatus() {
                           {stats.averageRating?.toFixed(1) || 0}
                         </div>
                         <div className="text-sm text-gray-600">Avg Rating</div>
+                      </div>
+
+                      <div className="text-center p-4 bg-teal-50 rounded">
+                        <div className="text-2xl font-bold text-teal-600">
+                          {stats.citiesCount || 0}
+                        </div>
+                        <div className="text-sm text-gray-600">Cities</div>
                       </div>
                     </div>
 
