@@ -164,7 +164,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                       Sign In
                     </Button>
                   </Link>
-                  <Link to="/plans">
+                  <Link to="/list-business">
                     <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                       List Your Business
                     </Button>
