@@ -29,13 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  businessCategories,
-  dubaiZones,
-  indianCities,
-  uaeCities,
-  Business,
-} from "@/lib/data";
+import { businessCategories, indianCities, Business } from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
