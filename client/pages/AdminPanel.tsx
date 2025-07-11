@@ -338,15 +338,32 @@ export default function AdminPanel() {
                     <CardTitle className="flex items-center gap-2">
                       <Building className="h-5 w-5" />
                       Business Logos
+                      {import.meta.env.MODE !== "development" && (
+                        <Badge variant="secondary" className="ml-2">
+                          Demo
+                        </Badge>
+                      )}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ImageUpload
-                      onUpload={(urls) => console.log("Logos uploaded:", urls)}
-                      multiple={true}
-                      maxFiles={5}
-                      folder="logos"
-                    />
+                    {import.meta.env.MODE === "development" ? (
+                      <ImageUpload
+                        onUpload={(urls) =>
+                          console.log("Logos uploaded:", urls)
+                        }
+                        multiple={true}
+                        maxFiles={5}
+                        folder="logos"
+                      />
+                    ) : (
+                      <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                        <Building className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                        <p className="mb-2">Upload functionality ready</p>
+                        <p className="text-sm">
+                          Requires backend server deployment
+                        </p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -355,17 +372,32 @@ export default function AdminPanel() {
                     <CardTitle className="flex items-center gap-2">
                       <BarChart3 className="h-5 w-5" />
                       Gallery Images
+                      {import.meta.env.MODE !== "development" && (
+                        <Badge variant="secondary" className="ml-2">
+                          Demo
+                        </Badge>
+                      )}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ImageUpload
-                      onUpload={(urls) =>
-                        console.log("Gallery uploaded:", urls)
-                      }
-                      multiple={true}
-                      maxFiles={20}
-                      folder="gallery"
-                    />
+                    {import.meta.env.MODE === "development" ? (
+                      <ImageUpload
+                        onUpload={(urls) =>
+                          console.log("Gallery uploaded:", urls)
+                        }
+                        multiple={true}
+                        maxFiles={20}
+                        folder="gallery"
+                      />
+                    ) : (
+                      <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                        <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                        <p className="mb-2">Gallery upload ready</p>
+                        <p className="text-sm">
+                          Requires backend server deployment
+                        </p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
