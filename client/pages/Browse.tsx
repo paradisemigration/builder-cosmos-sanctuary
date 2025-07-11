@@ -485,8 +485,8 @@ export default function Browse() {
                     {/* Load More Button */}
                     {hasMore &&
                       !searchQuery &&
-                      !selectedCategory &&
-                      !selectedZone && (
+                      (!selectedCategory || selectedCategory === "all") &&
+                      (!selectedZone || selectedZone === "all") && (
                         <div className="text-center mt-8">
                           <Button
                             onClick={loadMore}
