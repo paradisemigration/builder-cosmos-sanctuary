@@ -24,6 +24,29 @@ export default function AdminStatus() {
       setLoading(true);
       setLoadingRef(true);
 
+      // Test server connectivity first
+      let serverAvailable = false;
+      try {
+        const healthController = new AbortController();
+        const healthTimeout = setTimeout(() => healthController.abort(), 5000);
+
+        const healthResponse = await fetch("/api/health", {
+          signal: healthController.signal,
+        });
+        clearTimeout(healthTimeout);
+
+        serverAvailable = healthResponse.ok;
+      } catch (healthError) {
+        console.warn("Server health check failed:", healthError.message);
+        serverAvailable = false;
+      }
+
+      if (!serverAvailable) {
+        throw new Error(
+          "API server is not responding. Please check if the backend server is running.",
+        );
+      }
+
       // Load scraping stats with timeout
       const statsController = new AbortController();
       const statsTimeout = setTimeout(() => statsController.abort(), 10000);
@@ -86,6 +109,23 @@ export default function AdminStatus() {
       }
     } catch (error) {
       console.error("Failed to load status:", error);
+
+      // Determine error type for better user messaging
+      let errorMessage = error.message;
+      let errorType = "unknown";
+
+      if (error.message.includes("Failed to fetch")) {
+        errorType = "network";
+        errorMessage =
+          "Cannot connect to API server. The backend may be offline.";
+      } else if (error.message.includes("aborted")) {
+        errorType = "timeout";
+        errorMessage = "Request timed out. Server may be slow or overloaded.";
+      } else if (error.message.includes("not responding")) {
+        errorType = "server_down";
+        errorMessage = error.message;
+      }
+
       // Set default empty state to prevent UI errors
       setStats({
         totalBusinesses: 0,
@@ -93,12 +133,14 @@ export default function AdminStatus() {
         totalReviews: 0,
         averageRating: 0,
         scraping: { isRunning: false },
-        error: error.message,
+        error: errorMessage,
+        errorType,
       });
       setDiagnostic({
         actualBusinessCount: 0,
         totalFromQuery: 0,
-        error: error.message,
+        error: errorMessage,
+        errorType,
       });
     } finally {
       setLoading(false);
@@ -201,9 +243,64 @@ export default function AdminStatus() {
       <div className="pt-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Admin Status Dashboard
-            </h1>
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-3xl font-bold text-gray-900">
+                Admin Status Dashboard
+              </h1>
+
+              {/* Server Status Indicator */}
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    stats?.error
+                      ? "bg-red-500"
+                      : stats
+                        ? "bg-green-500"
+                        : "bg-yellow-500"
+                  }`}
+                ></div>
+                <span
+                  className={`text-sm font-medium ${
+                    stats?.error
+                      ? "text-red-700"
+                      : stats
+                        ? "text-green-700"
+                        : "text-yellow-700"
+                  }`}
+                >
+                  {stats?.error
+                    ? "Server Offline"
+                    : stats
+                      ? "Server Online"
+                      : "Connecting..."}
+                </span>
+              </div>
+            </div>
+
+            {/* Error Alert */}
+            {stats?.error && (
+              <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="text-red-500 text-xl">⚠️</div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-red-900 mb-1">
+                      API Server Connection Failed
+                    </h3>
+                    <p className="text-red-700 text-sm mb-2">{stats.error}</p>
+                    <div className="text-red-600 text-xs">
+                      <strong>Possible solutions:</strong>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Check if the backend server is running</li>
+                        <li>Verify API endpoints are accessible</li>
+                        <li>Check network connectivity</li>
+                        <li>Try refreshing the page</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-4">
               <Button onClick={loadStatus} disabled={loading}>
                 <RefreshCw
@@ -214,8 +311,13 @@ export default function AdminStatus() {
 
               <Button
                 onClick={startScraping}
-                disabled={scrapingLoading || stats?.scraping?.isRunning}
+                disabled={
+                  scrapingLoading || stats?.scraping?.isRunning || stats?.error
+                }
                 variant={stats?.scraping?.isRunning ? "destructive" : "default"}
+                title={
+                  stats?.error ? "Cannot start scraping: Server offline" : ""
+                }
               >
                 {stats?.scraping?.isRunning ? (
                   <>
@@ -232,8 +334,13 @@ export default function AdminStatus() {
 
               <Button
                 onClick={fetchAllReviews}
-                disabled={reviewsLoading || stats?.scraping?.isRunning}
+                disabled={
+                  reviewsLoading || stats?.scraping?.isRunning || stats?.error
+                }
                 variant="outline"
+                title={
+                  stats?.error ? "Cannot fetch reviews: Server offline" : ""
+                }
               >
                 {reviewsLoading ? (
                   <>
