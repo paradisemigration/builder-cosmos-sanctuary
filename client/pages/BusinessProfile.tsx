@@ -1,1023 +1,694 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Star,
   MapPin,
   Phone,
-  Globe,
   Mail,
-  MessageCircle,
+  Globe,
   Clock,
-  CheckCircle,
-  AlertTriangle,
-  Share2,
-  Heart,
-  Calendar,
-  Camera,
-  Flag,
+  Shield,
   ExternalLink,
-  Navigation,
-  ArrowLeft,
+  MessageCircle,
+  Camera,
+  CheckCircle,
   Award,
   Users,
-  TrendingUp,
-  ChevronDown,
-  ChevronUp,
-  Eye,
-  ThumbsUp,
-  Send,
-  Sparkles,
-  Shield,
+  Calendar,
+  Download,
+  Share2,
+  Heart,
+  Flag,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Navigation as Nav } from "@/components/Navigation";
-import { sampleBusinesses, Business, Review } from "@/lib/data";
-import { ReviewModal } from "@/components/ReviewModal";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { sampleBusinesses, type Business } from "@/lib/data";
 
 export default function BusinessProfile() {
-  const { id } = useParams();
-  const [activeTab, setActiveTab] = useState("overview");
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [businessReviews, setBusinessReviews] = useState<Review[]>([]);
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-  const [showAllReviews, setShowAllReviews] = useState(false);
-  const [visibleSections, setVisibleSections] = useState<string[]>([]);
-  const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set());
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const [business, setBusiness] = useState<Business | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const business = sampleBusinesses.find((b) => b.id === id);
-
-  // Function declarations
-  const handleSubmitReview = () => {
-    setIsReviewModalOpen(true);
-  };
-
-  const handleReviewSubmitted = (reviewData: {
-    rating: number;
-    comment: string;
-    userName: string;
-    userAvatar?: string;
-  }) => {
-    const newReview: Review = {
-      id: `review_${Date.now()}`,
-      userId: `user_${Date.now()}`,
-      userName: reviewData.userName,
-      userAvatar: reviewData.userAvatar,
-      rating: reviewData.rating,
-      comment: reviewData.comment,
-      isVerified: true,
-      date: new Date().toLocaleDateString(),
-    };
-
-    setBusinessReviews((prev) => [newReview, ...prev]);
-  };
-
-  const handleWhatsAppClick = () => {
-    if (business?.whatsapp) {
-      const message = `Hi! I found your business "${business.name}" on Trusted Immigration. I'd like to know more about your services.`;
-      const whatsappUrl = `https://wa.me/${business.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
-    }
-  };
-
-  const toggleLikeReview = (reviewId: string) => {
-    setLikedReviews((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(reviewId)) {
-        newSet.delete(reviewId);
-      } else {
-        newSet.add(reviewId);
-      }
-      return newSet;
-    });
-  };
-
-  // Scroll animations
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => [
-              ...prev,
-              entry.target.getAttribute("data-section") || "",
-            ]);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
+    // In a real app, this would be an API call
+    const foundBusiness = sampleBusinesses.find((b) => b.id === id);
+    setBusiness(foundBusiness || null);
+    setLoading(false);
 
-    const sections = document.querySelectorAll("[data-section]");
-    sections.forEach((section) => {
-      observerRef.current?.observe(section);
-    });
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, []);
-
-  // Initialize business reviews
-  useEffect(() => {
-    if (business) {
-      setBusinessReviews(business.reviews);
+    if (foundBusiness) {
+      document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.address.split(",").pop()?.trim()} | VisaConsult India`;
     }
-  }, [business]);
+  }, [id]);
 
-  const visibleReviews = showAllReviews
-    ? businessReviews
-    : businessReviews.slice(0, 3);
-
-  if (!business) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="w-24 h-24 mx-auto mb-6 bg-white/10 rounded-full flex items-center justify-center">
-            <AlertTriangle className="w-12 h-12 text-red-400" />
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="pt-24 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <div className="animate-pulse space-y-4">
+              <div className="h-64 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 bg-gray-300 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold mb-4">Business Not Found</h1>
-          <p className="text-blue-100 mb-8">
-            The business you're looking for doesn't exist.
-          </p>
-          <Link to="/browse">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Browse All Businesses
-            </Button>
-          </Link>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
-      {/* Enhanced Navigation */}
-      <Nav />
-
-      {/* Hero Section with Stunning Animations */}
-      <div
-        className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white overflow-hidden pt-20"
-        data-section="hero"
-      >
-        {/* Enhanced Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-purple-800/40 to-blue-900/50"></div>
-
-          {/* Floating Geometric Shapes */}
-          <div className="absolute top-16 left-8 w-48 h-48 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute top-32 right-12 w-36 h-36 bg-gradient-to-br from-purple-400/25 to-pink-500/25 rounded-full blur-2xl animate-float-medium"></div>
-          <div className="absolute bottom-20 left-1/4 w-44 h-44 bg-gradient-to-br from-green-400/20 to-teal-500/20 rounded-full blur-3xl animate-float-fast"></div>
-          <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full blur-2xl animate-float-slow"></div>
-          <div className="absolute bottom-32 right-8 w-40 h-40 bg-gradient-to-br from-rose-400/20 to-red-500/20 rounded-full blur-3xl animate-float-medium"></div>
-
-          {/* Moving Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse opacity-50"></div>
-
-          {/* Enhanced Particle System */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 50 }).map((_, i) => (
-              <div
-                key={i}
-                className={`absolute rounded-full animate-twinkle ${
-                  i % 3 === 0
-                    ? "w-2 h-2 bg-white/40"
-                    : i % 3 === 1
-                      ? "w-1 h-1 bg-cyan-300/50"
-                      : "w-1.5 h-1.5 bg-purple-300/40"
-                }`}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 4}s`,
-                  animationDuration: `${3 + Math.random() * 3}s`,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Floating Lines */}
-          <div className="absolute inset-0">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-px h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent animate-float-slow"
-                style={{
-                  left: `${10 + i * 12}%`,
-                  top: `${Math.random() * 80}%`,
-                  animationDelay: `${i * 0.5}s`,
-                  transform: `rotate(${Math.random() * 45}deg)`,
-                }}
-              />
-            ))}
+  if (!business) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="pt-24 px-4">
+          <div className="container mx-auto max-w-6xl text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Business Not Found
+            </h1>
+            <p className="text-gray-600 mb-8">
+              The business you're looking for doesn't exist.
+            </p>
+            <Button asChild>
+              <Link to="/browse">Browse All Consultants</Link>
+            </Button>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-16 relative">
-          {/* Back Navigation */}
-          <div
-            className={`mb-6 transition-all duration-1000 ${
-              visibleSections.includes("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            <Link to="/browse">
-              <Button
-                variant="outline"
-                className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 transition-all duration-300 group"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
-                Back to Browse
-              </Button>
-            </Link>
-          </div>
+  const images = business.gallery || [
+    business.coverImage || "/api/placeholder/800/400",
+  ];
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
-          {/* Centered Business Header Section - Full Width */}
-          <div
-            className={`transition-all duration-1000 ${
-              visibleSections.includes("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "200ms" }}
-          >
-            <div className="text-center mb-6 md:mb-8 max-w-4xl mx-auto px-4">
-              {business.logo && (
-                <div className="relative mx-auto mb-4 md:mb-6">
-                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-white border-4 md:border-6 border-white shadow-2xl mx-auto">
-                    <img
-                      src={business.logo}
-                      alt={`${business.name} logo`}
-                      className="w-full h-full object-cover"
-                    />
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle contact form submission
+    alert("Message sent successfully!");
+    setShowContactForm(false);
+  };
+
+  const shareProfile = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: business.name,
+        text: `Check out ${business.name} - Trusted visa consultant`,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
+    }
+  };
+
+  const businessHours = business.openingHours || {
+    Monday: "9:00 AM - 6:00 PM",
+    Tuesday: "9:00 AM - 6:00 PM",
+    Wednesday: "9:00 AM - 6:00 PM",
+    Thursday: "9:00 AM - 6:00 PM",
+    Friday: "9:00 AM - 6:00 PM",
+    Saturday: "10:00 AM - 4:00 PM",
+    Sunday: "Closed",
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+
+      {/* Hero Section */}
+      <section className="pt-20 pb-8 bg-white">
+        <div className="container mx-auto max-w-6xl px-4">
+          {/* Header */}
+          <div className="flex flex-col lg:flex-row gap-8 mb-8">
+            <div className="flex-1">
+              <div className="flex items-start gap-4 mb-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={business.logo} alt={business.name} />
+                  <AvatarFallback className="text-lg font-bold">
+                    {business.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      {business.name}
+                    </h1>
+                    {business.isVerified && (
+                      <Badge className="bg-green-100 text-green-800 border-green-200">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        Verified
+                      </Badge>
+                    )}
                   </div>
-                </div>
-              )}
-
-              <div className="space-y-3 md:space-y-4">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight px-2">
-                  {business.name}
-                </h1>
-
-                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
-                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 backdrop-blur-sm text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
+                  <p className="text-lg text-gray-600 mb-2">
                     {business.category}
-                  </Badge>
-
-                  {business.isVerified && (
-                    <Badge className="bg-green-500/20 text-green-300 border-green-400/30 backdrop-blur-sm animate-pulse text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
-                      <Shield className="w-4 h-4 md:w-5 md:h-5 mr-1.5 md:mr-2" />
-                      Verified
-                    </Badge>
-                  )}
-
-                  {business.isScamReported && (
-                    <Badge className="bg-red-500/20 text-red-300 border-red-400/30 backdrop-blur-sm text-sm md:text-base lg:text-lg px-3 md:px-4 py-1.5 md:py-2">
-                      <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 mr-1.5 md:mr-2" />
-                      Reported
-                    </Badge>
-                  )}
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-medium">{business.rating}</span>
+                      <span>({business.reviewCount} reviews)</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{business.address.split(",").pop()?.trim()}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* Business Details Section */}
-              <div className="space-y-4 md:space-y-6 mt-6 md:mt-8 px-4">
-                {/* Rating Section */}
-                <div className="text-center mb-4 md:mb-6">
-                  <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-                    <div className="flex items-center gap-0.5 md:gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-all duration-300 ${
-                            i < Math.floor(business.rating)
-                              ? "text-yellow-400 fill-yellow-400 drop-shadow-sm scale-110"
-                              : "text-gray-400"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-lg md:text-xl lg:text-2xl font-bold text-white">
-                      {business.rating}
-                    </span>
-                    <span className="text-blue-200 text-sm md:text-lg">
-                      ({business.reviewCount} reviews)
-                    </span>
+            {/* Quick Actions */}
+            <div className="lg:w-80">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Contact Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button className="w-full" size="sm">
+                      <Phone className="h-4 w-4 mr-2" />
+                      Call Now
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      size="sm"
+                      onClick={() => setShowContactForm(true)}
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Email
+                    </Button>
                   </div>
-                </div>
-
-                {/* Description */}
-                <div className="text-center mb-6 md:mb-8">
-                  <p className="text-blue-100 leading-relaxed text-sm md:text-base lg:text-lg max-w-3xl mx-auto px-2">
-                    {business.description}
-                  </p>
-                </div>
-
-                {/* Contact Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-w-2xl mx-auto">
-                  <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
-                    <MapPin className="w-4 h-4 md:w-5 md:h-5 text-cyan-400 flex-shrink-0" />
-                    <span className="truncate text-center">
-                      {business.address}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
-                    <Phone className="w-4 h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
-                    <span className="text-center">{business.phone}</span>
-                  </div>
-
-                  {business.email && (
-                    <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
-                      <Mail className="w-4 h-4 md:w-5 md:h-5 text-purple-400 flex-shrink-0" />
-                      <span className="truncate text-center">
-                        {business.email}
-                      </span>
-                    </div>
-                  )}
 
                   {business.website && (
-                    <div className="flex items-center justify-center gap-2 md:gap-3 text-blue-200 text-sm md:text-base bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 border border-white/20">
-                      <Globe className="w-4 h-4 md:w-5 md:h-5 text-blue-400 flex-shrink-0" />
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      size="sm"
+                      asChild
+                    >
                       <a
                         href={business.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-300 hover:text-white transition-colors duration-300 truncate hover:underline text-center"
                       >
+                        <Globe className="h-4 w-4 mr-2" />
                         Visit Website
+                        <ExternalLink className="h-3 w-3 ml-1" />
                       </a>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Enhanced Action Buttons - Centered */}
-          <div
-            className={`max-w-lg mx-auto mt-8 transition-all duration-1000 ${
-              visibleSections.includes("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "400ms" }}
-          >
-            <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl">
-              <CardContent className="p-4 md:p-6">
-                <div className="space-y-3 md:space-y-4">
-                  <Button
-                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                    size="lg"
-                    onClick={() =>
-                      window.open(`tel:${business.phone}`, "_self")
-                    }
-                  >
-                    <Phone className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
-                    📞 Call Now
-                  </Button>
-
-                  {business.whatsapp && (
-                    <Button
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                      size="lg"
-                      onClick={handleWhatsAppClick}
-                    >
-                      <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-bounce" />
-                      💬 WhatsApp
                     </Button>
                   )}
 
-                  <Button
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 md:py-4 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                    size="lg"
-                    onClick={() => {
-                      const address = encodeURIComponent(business.address);
-                      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
-                      window.open(mapsUrl, "_blank");
-                    }}
-                  >
-                    <Navigation className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 group-hover:animate-pulse" />
-                    🗺️ Get Directions
-                  </Button>
-
-                  <div className="grid grid-cols-3 gap-2 mt-4 md:mt-6">
+                  <div className="flex gap-2">
                     <Button
-                      className="bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                      variant="outline"
                       size="sm"
-                      onClick={() => {
-                        if (navigator.share) {
-                          navigator.share({
-                            title: business.name,
-                            text: `Check out ${business.name} on Trusted Immigration`,
-                            url: window.location.href,
-                          });
-                        } else {
-                          navigator.clipboard.writeText(window.location.href);
-                          alert("Link copied to clipboard!");
-                        }
-                      }}
+                      onClick={() => setIsFavorite(!isFavorite)}
+                      className={
+                        isFavorite ? "text-red-600 border-red-200" : ""
+                      }
                     >
-                      <Share2 className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-xs block">Share</span>
+                      <Heart
+                        className={`h-4 w-4 ${isFavorite ? "fill-red-600" : ""}`}
+                      />
                     </Button>
-                    <Button
-                      className="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                      size="sm"
-                      onClick={() => {
-                        const saved = localStorage.getItem("savedBusinesses");
-                        const savedList = saved ? JSON.parse(saved) : [];
-                        if (!savedList.includes(business.id)) {
-                          savedList.push(business.id);
-                          localStorage.setItem(
-                            "savedBusinesses",
-                            JSON.stringify(savedList),
-                          );
-                          alert("Business saved to your favorites!");
-                        } else {
-                          alert("Business already saved!");
-                        }
-                      }}
-                    >
-                      <Heart className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-all duration-300" />
-                      <span className="text-xs block">Save</span>
+                    <Button variant="outline" size="sm" onClick={shareProfile}>
+                      <Share2 className="h-4 w-4" />
                     </Button>
-                    <Button
-                      className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-2 md:py-3 px-1 md:px-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                      size="sm"
-                      onClick={() => {
-                        const reason = prompt(
-                          "Please tell us why you want to report this business:",
-                        );
-                        if (reason) {
-                          alert(
-                            "Thank you for your report. We will review it shortly.",
-                          );
-                        }
-                      }}
-                    >
-                      <Flag className="w-3 h-3 md:w-4 md:h-4 mb-1 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-xs block">Report</span>
+                    <Button variant="outline" size="sm">
+                      <Flag className="h-4 w-4" />
                     </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Opening Hours Card */}
-            {business.openingHours && (
-              <Card className="mt-4 md:mt-6 bg-white/10 backdrop-blur-xl border-white/20 shadow-xl">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center text-white text-base md:text-lg">
-                    <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 text-cyan-400" />
-                    ⏰ Opening Hours
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-1 md:space-y-2">
-                    {Object.entries(business.openingHours).map(
-                      ([day, hours]) => (
-                        <div
-                          key={day}
-                          className="flex justify-between items-center py-1"
-                        >
-                          <span className="font-medium text-blue-200 text-sm">
-                            {day}
-                          </span>
-                          <span className="text-white text-xs md:text-sm bg-white/10 px-2 py-1 rounded-lg">
-                            {hours}
-                          </span>
-                        </div>
-                      ),
-                    )}
                   </div>
                 </CardContent>
               </Card>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Content Tabs - Mobile Responsive Design */}
-      <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12"
-        data-section="content"
-      >
-        <div
-          className={`transition-all duration-1000 ${visibleSections.includes("content") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-        >
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            {/* Enhanced Mobile-First TabsList */}
-            <div className="sticky top-16 md:top-20 z-40 mb-6 md:mb-8">
-              <TabsList className="w-full h-auto bg-gradient-to-r from-white via-blue-50 to-purple-50 backdrop-blur-xl border-2 border-blue-200/50 rounded-2xl p-2 md:p-3 shadow-2xl">
-                <div className="grid grid-cols-3 gap-1 md:gap-2 w-full">
-                  <TabsTrigger
-                    value="overview"
-                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-blue-50"
-                  >
-                    <Award className="w-3 h-3 md:w-4 md:h-4" />
-                    <span>Overview</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="services"
-                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-green-50"
-                  >
-                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
-                    <span>Services</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="photos"
-                    className="flex flex-col items-center gap-1 md:gap-2 rounded-xl font-bold text-xs md:text-sm text-gray-700 py-2 md:py-3 px-2 md:px-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 transition-all duration-300 hover:bg-pink-50"
-                  >
-                    <Camera className="w-3 h-3 md:w-4 md:h-4" />
-                    <span>Photos</span>
-                  </TabsTrigger>
-                </div>
-              </TabsList>
             </div>
-
-            {/* Overview Tab Content */}
-            <TabsContent value="overview" className="w-full mt-0">
-              <div className="space-y-4 md:space-y-6">
-                <Card className="bg-gradient-to-br from-white via-white to-blue-50/30 border-2 border-blue-100/50 shadow-xl">
-                  <CardHeader className="pb-3 md:pb-4">
-                    <CardTitle className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
-                      <Award className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-blue-600" />
-                      💼 About This Business
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 md:space-y-6">
-                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-                      {business.description}
-                    </p>
-
-                    {business.licenseNo && (
-                      <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 md:p-4 lg:p-6 rounded-xl md:rounded-2xl border border-green-200/50">
-                        <h4 className="font-bold text-green-800 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
-                          <Shield className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
-                          🏛️ License Information
-                        </h4>
-                        <p className="text-green-700 font-medium text-xs md:text-sm lg:text-base">
-                          License No: {business.licenseNo}
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 lg:gap-4">
-                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-blue-200/50 text-center">
-                        <Users className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-blue-600 mx-auto mb-1 md:mb-2" />
-                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-blue-800">
-                          {business.reviewCount}
-                        </div>
-                        <div className="text-blue-600 text-xs md:text-sm">
-                          Happy Customers
-                        </div>
-                      </div>
-                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-green-200/50 text-center">
-                        <Star className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-green-600 mx-auto mb-1 md:mb-2" />
-                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-green-800">
-                          {business.rating}
-                        </div>
-                        <div className="text-green-600 text-xs md:text-sm">
-                          Average Rating
-                        </div>
-                      </div>
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-2 md:p-3 lg:p-4 rounded-lg md:rounded-xl border border-purple-200/50 text-center col-span-2 md:col-span-1">
-                        <TrendingUp className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8 text-purple-600 mx-auto mb-1 md:mb-2" />
-                        <div className="text-sm md:text-lg lg:text-2xl font-bold text-purple-800">
-                          {business.isVerified ? "✓" : "✗"}
-                        </div>
-                        <div className="text-purple-600 text-xs md:text-sm">
-                          Verified Status
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Quick Actions */}
-                <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl">
-                  <CardHeader className="pb-3 md:pb-4">
-                    <CardTitle className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
-                      <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
-                      ⚡ Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                      <Button className="justify-start bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 md:py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
-                        <Calendar className="w-4 h-4 mr-2 md:mr-3 group-hover:animate-bounce" />
-                        📅 Book Consultation
-                      </Button>
-                      <Button
-                        onClick={handleSubmitReview}
-                        className="justify-start bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-2 md:py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                      >
-                        <Star className="w-4 h-4 mr-2 md:mr-3 group-hover:animate-bounce" />
-                        ⭐ Write Review
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* Services Tab Content */}
-            <TabsContent value="services" className="w-full mt-0">
-              <div className="space-y-4 md:space-y-6">
-                <Card className="bg-gradient-to-br from-white via-white to-green-50/30 border-2 border-green-100/50 shadow-xl">
-                  <CardHeader className="pb-3 md:pb-4">
-                    <CardTitle className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
-                      <CheckCircle className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-green-600" />
-                      🛠️ Services Offered
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
-                      {business.services.map((service, index) => (
-                        <div
-                          key={index}
-                          className="group p-3 md:p-4 lg:p-6 bg-gradient-to-br from-white to-green-50/50 border-2 border-green-100/50 rounded-xl md:rounded-2xl hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
-                        >
-                          <div className="text-xl md:text-2xl lg:text-3xl mb-2 md:mb-3 lg:mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                            {index % 6 === 0
-                              ? "🛂"
-                              : index % 6 === 1
-                                ? "📋"
-                                : index % 6 === 2
-                                  ? "🛡️"
-                                  : index % 6 === 3
-                                    ? "👨‍💼"
-                                    : index % 6 === 4
-                                      ? "📝"
-                                      : "✈️"}
-                          </div>
-                          <h4 className="font-bold text-gray-800 mb-2 md:mb-3 text-sm md:text-base lg:text-lg group-hover:text-green-600 transition-colors duration-300">
-                            {service}
-                          </h4>
-                          <p className="text-gray-600 leading-relaxed text-xs md:text-sm lg:text-base mb-2 md:mb-3 lg:mb-4">
-                            Professional {service.toLowerCase()} services with
-                            expert guidance and verified credentials.
-                          </p>
-                          <Badge className="bg-green-100 text-green-700 font-medium text-xs md:text-sm">
-                            ✅ Expert Service
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* Photos Tab Content */}
-            <TabsContent value="photos" className="w-full mt-0">
-              <div className="space-y-4 md:space-y-6">
-                <Card className="bg-gradient-to-br from-white via-white to-pink-50/30 border-2 border-pink-100/50 shadow-xl">
-                  <CardHeader className="pb-3 md:pb-4">
-                    <CardTitle className="flex items-center justify-between">
-                      <span className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
-                        <Camera className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-pink-600" />
-                        📸 Photos
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-2 border-pink-200 text-pink-700 hover:bg-pink-50 font-semibold rounded-xl transition-all duration-300 group"
-                      >
-                        <Camera className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 group-hover:animate-bounce" />
-                        📷 Add
-                      </Button>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4">
-                      {business.gallery?.map((photo, index) => (
-                        <div
-                          key={index}
-                          className="group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl md:rounded-2xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                          onClick={() => {
-                            setSelectedImage(photo);
-                            setIsImageModalOpen(true);
-                          }}
-                        >
-                          <img
-                            src={photo}
-                            alt={`${business.name} photo ${index + 1}`}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
-                      ))}
-
-                      {/* Placeholder photos */}
-                      {[...Array(8)].map((_, index) => (
-                        <div
-                          key={`placeholder-${index}`}
-                          className="group aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                        >
-                          <div className="text-center">
-                            <Camera className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mx-auto mb-1 md:mb-2 group-hover:animate-bounce" />
-                            <p className="text-xs text-gray-500">Add Photo</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
-
-      {/* Separate Reviews Section */}
-      <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12 bg-gradient-to-br from-slate-50 via-blue-50/20 to-purple-50/10"
-        data-section="reviews"
-      >
-        <div
-          className={`transition-all duration-1000 ${visibleSections.includes("reviews") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-        >
-          {/* Reviews Section Header */}
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-800 mb-4 md:mb-6">
-              ⭐ Customer Reviews & Testimonials
-            </h2>
-            <p className="text-gray-600 text-base md:text-lg lg:text-xl max-w-3xl mx-auto">
-              See what our valued customers have to say about their experience
-              with {business.name}
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8 xl:gap-12">
-            {/* Reviews List */}
-            <div className="xl:col-span-2 space-y-4 md:space-y-6 lg:space-y-8">
-              {visibleReviews.map((review, index) => (
-                <Card
-                  key={review.id}
-                  className="bg-gradient-to-br from-white via-white to-purple-50/30 border border-purple-100/50 md:border-2 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02]"
-                >
-                  <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8">
-                    <div className="flex items-start gap-3 sm:gap-4 md:gap-6">
-                      <Avatar className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 border-2 md:border-3 border-purple-200 shadow-lg flex-shrink-0">
-                        <AvatarImage src={review.userAvatar} />
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs sm:text-sm md:text-lg">
-                          {review.userName
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 md:mb-3 lg:mb-4 gap-2 sm:gap-0">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
-                            <h4 className="font-bold text-gray-800 text-sm sm:text-base md:text-lg">
-                              {review.userName}
-                            </h4>
-                            {review.isVerified && (
-                              <Badge className="bg-green-100 text-green-700 border-green-200 font-medium text-xs sm:text-sm w-fit">
-                                <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
-                                Verified Customer
-                              </Badge>
-                            )}
-                          </div>
-                          <span className="text-xs sm:text-sm md:text-base text-gray-500 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-full font-medium self-start sm:self-auto">
-                            {review.date}
-                          </span>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3 md:mb-4 lg:mb-6">
-                          <div className="flex items-center gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-all duration-300 ${
-                                  i < review.rating
-                                    ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-base sm:text-lg md:text-xl font-bold text-gray-800">
-                            {review.rating}.0 / 5.0
-                          </span>
-                        </div>
-
-                        <p className="text-gray-700 mb-4 sm:mb-6 md:mb-8 leading-relaxed text-sm sm:text-base md:text-lg">
-                          "{review.comment}"
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 md:gap-6">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleLikeReview(review.id)}
-                            className={`transition-all duration-300 text-xs sm:text-sm md:text-base w-fit ${
-                              likedReviews.has(review.id)
-                                ? "text-red-600 bg-red-50"
-                                : "text-gray-600 hover:text-red-600 hover:bg-red-50"
-                            }`}
-                          >
-                            <ThumbsUp
-                              className={`w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2 ${likedReviews.has(review.id) ? "fill-current" : ""}`}
-                            />
-                            Helpful {likedReviews.has(review.id) ? "(1)" : ""}
-                          </Button>
-                          <span className="text-gray-400 text-xs sm:text-sm md:text-base hidden sm:inline">
-                            |
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 text-xs sm:text-sm md:text-base w-fit"
-                          >
-                            <Eye className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
-                            View Response
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-
-              {businessReviews.length > 3 && (
-                <div className="text-center">
-                  <Button
-                    onClick={() => setShowAllReviews(!showAllReviews)}
-                    variant="outline"
-                    className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 md:border-2 text-blue-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 font-semibold px-4 sm:px-6 md:px-8 lg:px-12 py-2 sm:py-3 md:py-4 rounded-lg md:rounded-xl transition-all duration-300 group text-sm sm:text-base md:text-lg"
-                  >
-                    {showAllReviews ? (
-                      <>
-                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
-                        <span className="hidden sm:inline">
-                          Show Less Reviews
-                        </span>
-                        <span className="sm:hidden">Show Less</span>
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
-                        <span className="hidden sm:inline">
-                          Show All {businessReviews.length} Reviews
-                        </span>
-                        <span className="sm:hidden">
-                          Show All ({businessReviews.length})
-                        </span>
-                      </>
-                    )}
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            {/* Review Writing Section & Stats */}
-            <div className="space-y-4 md:space-y-6 lg:space-y-8">
-              {/* Review Stats Card */}
-              <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border border-blue-200/50 md:border-2 shadow-xl">
-                <CardHeader className="pb-3 md:pb-4">
-                  <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-gray-800 text-center">
-                    📊 Review Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <div className="mb-4 md:mb-6">
-                    <div className="text-3xl sm:text-4xl md:text-5xl font-black text-blue-600 mb-2">
-                      {business.rating}
-                    </div>
-                    <div className="flex justify-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${
-                            i < Math.floor(business.rating)
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-gray-300"
+          {/* Image Gallery */}
+          {images.length > 0 && (
+            <div className="relative mb-8">
+              <div className="relative h-64 md:h-96 rounded-lg overflow-hidden">
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`${business.name} - Image ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                {images.length > 1 && (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="absolute left-4 top-1/2 -translate-y-1/2"
+                      onClick={prevImage}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="absolute right-4 top-1/2 -translate-y-1/2"
+                      onClick={nextImage}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                      {images.map((_, index) => (
+                        <button
+                          key={index}
+                          className={`w-2 h-2 rounded-full ${
+                            index === currentImageIndex
+                              ? "bg-white"
+                              : "bg-white/50"
                           }`}
+                          onClick={() => setCurrentImageIndex(index)}
                         />
                       ))}
                     </div>
-                    <p className="text-gray-600 font-medium text-sm sm:text-base">
-                      Based on {business.reviewCount} reviews
-                    </p>
-                  </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
-                  <div className="space-y-1.5 md:space-y-2 text-left">
-                    {[5, 4, 3, 2, 1].map((stars) => {
-                      const percentage = Math.random() * 60 + 20; // Mock percentage
-                      return (
-                        <div
-                          key={stars}
-                          className="flex items-center gap-1.5 md:gap-2"
-                        >
-                          <span className="text-xs sm:text-sm font-medium w-6 sm:w-8">
-                            {stars}★
-                          </span>
-                          <div className="flex-1 bg-gray-200 rounded-full h-1.5 md:h-2">
-                            <div
-                              className="bg-gradient-to-r from-yellow-400 to-orange-400 h-1.5 md:h-2 rounded-full"
-                              style={{ width: `${percentage}%` }}
-                            ></div>
+      {/* Main Content Tabs */}
+      <section className="pb-16">
+        <div className="container mx-auto max-w-6xl px-4">
+          <Tabs defaultValue="about" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6">
+              <TabsTrigger value="about">About</TabsTrigger>
+              <TabsTrigger value="services">Services</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="photos">Photos</TabsTrigger>
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+              <TabsTrigger value="hours">Hours</TabsTrigger>
+            </TabsList>
+
+            {/* About Tab */}
+            <TabsContent value="about">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>About {business.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700 leading-relaxed mb-4">
+                        {business.description}
+                      </p>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">
+                            Specializations
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {business.services.map((service, index) => (
+                              <Badge key={index} variant="secondary">
+                                {service}
+                              </Badge>
+                            ))}
                           </div>
-                          <span className="text-xs sm:text-sm text-gray-600 w-8 sm:w-10">
-                            {Math.round(percentage)}%
-                          </span>
                         </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
+                        {business.licenseNo && (
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2">
+                              License Information
+                            </h4>
+                            <p className="text-gray-600">
+                              License No: {business.licenseNo}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-              {/* Write Review Card */}
-              <Card className="xl:sticky xl:top-24 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 border border-yellow-200/50 md:border-2 shadow-xl">
-                <CardHeader className="pb-3 md:pb-4">
-                  <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3 justify-center">
-                    <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
-                    <span className="hidden sm:inline">⭐ Write a Review</span>
-                    <span className="sm:hidden">⭐ Write Review</span>
-                  </CardTitle>
+                {/* Sidebar Info */}
+                <div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Quick Info</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <Award className="h-4 w-4 text-orange-600" />
+                        <span className="text-sm">Established Business</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-orange-600" />
+                        <span className="text-sm">
+                          {business.reviewCount}+ Happy Customers
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-orange-600" />
+                        <span className="text-sm">Verified & Trusted</span>
+                      </div>
+                      <Separator />
+                      <div>
+                        <h4 className="font-semibold mb-2">Payment Methods</h4>
+                        <div className="text-sm text-gray-600">
+                          Cash, Card, UPI, Bank Transfer
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-2">Languages</h4>
+                        <div className="text-sm text-gray-600">
+                          Hindi, English, Regional Languages
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Services Tab */}
+            <TabsContent value="services">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Services Offered</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-4 md:py-6">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 md:mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-xl">
-                      <Star className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {business.services.map((service, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                      >
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span className="font-medium">{service}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h4 className="font-semibold text-blue-900 mb-2">
+                      Countries We Serve
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "USA",
+                        "Canada",
+                        "UK",
+                        "Australia",
+                        "Germany",
+                        "UAE",
+                        "Singapore",
+                        "New Zealand",
+                      ].map((country) => (
+                        <Badge
+                          key={country}
+                          className="bg-blue-100 text-blue-800 border-blue-300"
+                        >
+                          {country}
+                        </Badge>
+                      ))}
                     </div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3">
-                      Share Your Experience
-                    </h3>
-                    <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-xs sm:text-sm md:text-base px-2">
-                      Help others by sharing your experience with{" "}
-                      {business.name}. Your honest feedback helps build trust in
-                      our community.
-                    </p>
-                    <Button
-                      onClick={handleSubmitReview}
-                      className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg rounded-lg md:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
-                      size="lg"
-                    >
-                      <Send className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2 sm:mr-3 group-hover:animate-bounce" />
-                      <span className="hidden sm:inline">
-                        ✍️ Write Your Review
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Reviews Tab */}
+            <TabsContent value="reviews">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Customer Reviews</CardTitle>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                        <span className="text-2xl font-bold">
+                          {business.rating}
+                        </span>
+                      </div>
+                      <div className="text-gray-600">
+                        Based on {business.reviewCount} reviews
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {business.reviews.slice(0, 5).map((review) => (
+                        <div
+                          key={review.id}
+                          className="border-b pb-4 last:border-b-0"
+                        >
+                          <div className="flex items-start gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarImage src={review.userAvatar} />
+                              <AvatarFallback>
+                                {review.userName[0]}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium">
+                                  {review.userName}
+                                </span>
+                                {review.isVerified && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
+                                    Verified
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1 mb-2">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`h-4 w-4 ${
+                                      i < review.rating
+                                        ? "fill-yellow-400 text-yellow-400"
+                                        : "text-gray-300"
+                                    }`}
+                                  />
+                                ))}
+                                <span className="text-sm text-gray-500 ml-2">
+                                  {new Date(review.date).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <p className="text-gray-700">{review.comment}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* Photos Tab */}
+            <TabsContent value="photos">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Photos & Videos</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {images.map((image, index) => (
+                      <div
+                        key={index}
+                        className="relative aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-75 transition-opacity"
+                        onClick={() => setCurrentImageIndex(index)}
+                      >
+                        <img
+                          src={image}
+                          alt={`${business.name} - Photo ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Contact Tab */}
+            <TabsContent value="contact">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Contact Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Phone className="h-5 w-5 text-orange-600" />
+                      <div>
+                        <p className="font-medium">Phone</p>
+                        <p className="text-gray-600">{business.phone}</p>
+                      </div>
+                    </div>
+                    {business.whatsapp && (
+                      <div className="flex items-center gap-3">
+                        <MessageCircle className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="font-medium">WhatsApp</p>
+                          <p className="text-gray-600">{business.whatsapp}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-orange-600" />
+                      <div>
+                        <p className="font-medium">Email</p>
+                        <p className="text-gray-600">{business.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-5 w-5 text-orange-600 mt-1" />
+                      <div>
+                        <p className="font-medium">Address</p>
+                        <p className="text-gray-600">{business.address}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Send a Message</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="name">Your Name</Label>
+                        <Input id="name" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <Input id="phone" type="tel" />
+                      </div>
+                      <div>
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea
+                          id="message"
+                          rows={4}
+                          placeholder="Tell us about your visa requirements..."
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full">
+                        Send Message
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* Hours Tab */}
+            <TabsContent value="hours">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Business Hours</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {Object.entries(businessHours).map(([day, hours]) => (
+                      <div
+                        key={day}
+                        className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                      >
+                        <span className="font-medium">{day}</span>
+                        <span
+                          className={`${hours === "Closed" ? "text-red-600" : "text-gray-600"}`}
+                        >
+                          {hours}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-5 w-5 text-green-600" />
+                      <span className="font-medium text-green-900">
+                        Currently Open
                       </span>
-                      <span className="sm:hidden">✍️ Write Review</span>
-                    </Button>
-                    <p className="text-xs text-gray-500 mt-3 md:mt-4 bg-white/60 p-2 md:p-3 rounded-lg">
-                      🔐 Sign in with Google or Facebook to verify your review
-                      and build trust
+                    </div>
+                    <p className="text-sm text-green-700 mt-1">
+                      Closes at 6:00 PM today
                     </p>
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
+            </TabsContent>
+          </Tabs>
         </div>
-      </div>
+      </section>
 
-      {/* Review Modal */}
-      <ReviewModal
-        isOpen={isReviewModalOpen}
-        onClose={() => setIsReviewModalOpen(false)}
-        businessName={business.name}
-        businessId={business.id}
-        onReviewSubmitted={handleReviewSubmitted}
-      />
-
-      {/* Image Modal */}
-      {isImageModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={() => setIsImageModalOpen(false)}
-        >
-          <div className="relative max-w-4xl max-h-full">
-            <img
-              src={selectedImage}
-              alt="Full size"
-              className="max-w-full max-h-full object-contain rounded-2xl"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              className="absolute top-4 right-4 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
-              onClick={() => setIsImageModalOpen(false)}
-            >
-              ✕
-            </Button>
-          </div>
+      {/* Contact Form Modal */}
+      {showContactForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Contact {business.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div>
+                  <Label htmlFor="modal-name">Your Name</Label>
+                  <Input id="modal-name" required />
+                </div>
+                <div>
+                  <Label htmlFor="modal-email">Email</Label>
+                  <Input id="modal-email" type="email" required />
+                </div>
+                <div>
+                  <Label htmlFor="modal-message">Message</Label>
+                  <Textarea id="modal-message" rows={3} required />
+                </div>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1">
+                    Send
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowContactForm(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>
