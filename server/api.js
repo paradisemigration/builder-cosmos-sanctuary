@@ -786,11 +786,18 @@ app.post("/api/migrate-to-sqlite", async (req, res) => {
 // Get scraping statistics
 app.get("/api/scraping/stats", async (req, res) => {
   try {
-    const sqliteStats = await sqliteDatabase.getStatistics();
-    const memoryStats = database.getStatistics();
-    const scrapingStatus = scraper.getStatus();
+    console.log("📊 Loading scraping stats...");
 
-    res.json({
+    const sqliteStats = await sqliteDatabase.getStatistics();
+    console.log("✅ SQLite stats loaded:", sqliteStats);
+
+    const memoryStats = database.getStatistics();
+    console.log("✅ Memory stats loaded:", memoryStats);
+
+    const scrapingStatus = scraper.getStatus();
+    console.log("✅ Scraping status loaded:", scrapingStatus);
+
+    const response = {
       success: true,
       stats: {
         // Use SQLite stats as primary, fallback to memory
@@ -810,12 +817,17 @@ app.get("/api/scraping/stats", async (req, res) => {
           memory: memoryStats,
         },
       },
-    });
+    };
+
+    console.log("📊 Sending stats response");
+    res.json(response);
   } catch (error) {
-    console.error("Get scraping stats error:", error);
+    console.error("❌ Get scraping stats error:", error.message);
+    console.error("❌ Full error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 });
