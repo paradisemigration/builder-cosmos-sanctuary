@@ -319,6 +319,10 @@ export default function AdminStatus() {
         console.log("✅ Scraping stopped successfully");
       } else {
         console.warn("⚠️ Stop scraping failed:", result.message);
+        // Show user-friendly message for no active job
+        if (result.message === "No active scraping job") {
+          console.log("ℹ️ No active scraping job to stop");
+        }
       }
 
       // Reload status after stopping
