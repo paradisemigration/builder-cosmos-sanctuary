@@ -394,6 +394,63 @@ export default function Index() {
                 </div>
               </div>
 
+              {/* City Category Pages */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-yellow-700 mb-2">
+                  City Category Pages (8 Categories):
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                  <Link
+                    to="/business/delhi/study-abroad"
+                    className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
+                  >
+                    🎓 Study Abroad
+                  </Link>
+                  <Link
+                    to="/business/delhi/immigration-consultants"
+                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                  >
+                    ⚖️ Immigration
+                  </Link>
+                  <Link
+                    to="/business/delhi/visa-consultants"
+                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                  >
+                    📋 Visa Consultants
+                  </Link>
+                  <Link
+                    to="/business/delhi/work-permit"
+                    className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
+                  >
+                    💼 Work Permit
+                  </Link>
+                  <Link
+                    to="/business/mumbai/visa-services"
+                    className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
+                  >
+                    🛂 Visa Services
+                  </Link>
+                  <Link
+                    to="/business/bangalore/immigration-services"
+                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                  >
+                    🏛️ Immigration Svc
+                  </Link>
+                  <Link
+                    to="/business/chennai/overseas-services"
+                    className="px-3 py-2 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
+                  >
+                    🌍 Overseas Svc
+                  </Link>
+                  <Link
+                    to="/business/pune/education-services"
+                    className="px-3 py-2 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
+                  >
+                    📚 Education Svc
+                  </Link>
+                </div>
+              </div>
+
               <div className="mt-3 text-xs text-yellow-700 text-center">
                 Click any button above to test navigation. All 16 cities
                 directory pages are now available. Check browser console for
