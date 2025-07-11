@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Star,
   MapPin,
@@ -10,17 +10,25 @@ import {
   Shield,
   ExternalLink,
   MessageCircle,
-  Camera,
   CheckCircle,
   Award,
   Users,
-  Calendar,
-  Download,
+  Camera,
   Share2,
   Heart,
   Flag,
-  ChevronLeft,
+  ArrowLeft,
+  Calendar,
+  ThumbsUp,
+  Eye,
   ChevronRight,
+  PlayCircle,
+  Download,
+  Send,
+  Verified,
+  BadgeCheck,
+  TrendingUp,
+  Building,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -33,34 +41,52 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { sampleBusinesses, type Business } from "@/lib/data";
+import { toast } from "sonner";
 
 export default function BusinessProfile() {
-  const { id } = useParams<{ id: string }>();
+  const { city, companyName } = useParams<{
+    city: string;
+    companyName: string;
+  }>();
+  const navigate = useNavigate();
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showContactForm, setShowContactForm] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
-    // In a real app, this would be an API call
-    const foundBusiness = sampleBusinesses.find((b) => b.id === id);
-    setBusiness(foundBusiness || null);
+    // Convert URL params back to find business
+    // In real app, would search by city and company name slug
+    const searchName = companyName?.replace(/-/g, " ");
+    const searchCity = city?.replace(/-/g, " ");
+
+    const foundBusiness =
+      sampleBusinesses.find(
+        (b) =>
+          b.name.toLowerCase().includes(searchName?.toLowerCase() || "") &&
+          b.city.toLowerCase().includes(searchCity?.toLowerCase() || ""),
+      ) || sampleBusinesses[0]; // Fallback to first business for demo
+
+    setBusiness(foundBusiness);
     setLoading(false);
 
     if (foundBusiness) {
-      document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.address.split(",").pop()?.trim()} | VisaConsult India`;
+      document.title = `${foundBusiness.name} - Visa Consultant in ${foundBusiness.city} | VisaConsult India`;
+      document.description = `${foundBusiness.description.substring(0, 150)}...`;
     }
-  }, [id]);
+  }, [city, companyName]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <div className="pt-24 px-4">
-          <div className="container mx-auto max-w-6xl">
-            <div className="animate-pulse space-y-4">
-              <div className="h-64 bg-gray-300 rounded-lg"></div>
+          <div className="container mx-auto max-w-7xl">
+            <div className="animate-pulse space-y-6">
+              <div className="h-80 bg-gray-300 rounded-xl"></div>
               <div className="h-8 bg-gray-300 rounded w-1/2"></div>
               <div className="h-4 bg-gray-300 rounded w-1/3"></div>
             </div>
@@ -75,12 +101,12 @@ export default function BusinessProfile() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <div className="pt-24 px-4">
-          <div className="container mx-auto max-w-6xl text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="container mx-auto max-w-7xl text-center py-20">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
               Business Not Found
             </h1>
             <p className="text-gray-600 mb-8">
-              The business you're looking for doesn't exist.
+              The business you're looking for doesn't exist or has been moved.
             </p>
             <Button asChild>
               <Link to="/browse">Browse All Consultants</Link>
@@ -94,17 +120,10 @@ export default function BusinessProfile() {
   const images = business.gallery || [
     business.coverImage || "/api/placeholder/800/400",
   ];
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle contact form submission
-    alert("Message sent successfully!");
+    toast.success("Message sent successfully! We'll get back to you soon.");
     setShowContactForm(false);
   };
 
@@ -112,13 +131,18 @@ export default function BusinessProfile() {
     if (navigator.share) {
       navigator.share({
         title: business.name,
-        text: `Check out ${business.name} - Trusted visa consultant`,
+        text: `Check out ${business.name} - Trusted visa consultant in ${business.city}`,
         url: window.location.href,
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!");
     }
+  };
+
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
   };
 
   const businessHours = business.openingHours || {
@@ -131,87 +155,423 @@ export default function BusinessProfile() {
     Sunday: "Closed",
   };
 
+  const generateSlug = (name: string) => {
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-20 pb-8 bg-white">
-        <div className="container mx-auto max-w-6xl px-4">
-          {/* Header */}
-          <div className="flex flex-col lg:flex-row gap-8 mb-8">
-            <div className="flex-1">
-              <div className="flex items-start gap-4 mb-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src={business.logo} alt={business.name} />
-                  <AvatarFallback className="text-lg font-bold">
-                    {business.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">
-                      {business.name}
-                    </h1>
+      {/* Hero Section with Cover */}
+      <section className="relative pt-20">
+        {/* Cover Image */}
+        <div className="relative h-80 bg-gradient-to-r from-blue-600 to-purple-600 overflow-hidden">
+          <img
+            src={business.coverImage || "/api/placeholder/1200/320"}
+            alt={business.name}
+            className="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
+          />
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+          {/* Back Button */}
+          <div className="absolute top-6 left-4">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => navigate(-1)}
+              className="bg-white/90 hover:bg-white"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+          </div>
+
+          {/* Actions */}
+          <div className="absolute top-6 right-4 flex gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleFavorite}
+              className={`bg-white/90 hover:bg-white ${isFavorite ? "text-red-600" : ""}`}
+            >
+              <Heart
+                className={`h-4 w-4 ${isFavorite ? "fill-red-600" : ""}`}
+              />
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={shareProfile}
+              className="bg-white/90 hover:bg-white"
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="bg-white/90 hover:bg-white"
+            >
+              <Flag className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Business Info Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <div className="container mx-auto max-w-7xl">
+              <div className="flex items-end gap-6">
+                <div className="relative">
+                  <Avatar className="h-24 w-24 border-4 border-white shadow-xl">
+                    <AvatarImage src={business.logo} alt={business.name} />
+                    <AvatarFallback className="text-2xl font-bold bg-white text-gray-800">
+                      {business.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  {business.isVerified && (
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
+                      <BadgeCheck className="h-4 w-4 text-white" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 text-white">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h1 className="text-3xl font-bold">{business.name}</h1>
                     {business.isVerified && (
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
-                        <CheckCircle className="h-3 w-3 mr-1" />
+                      <Badge className="bg-green-500 text-white border-0">
+                        <Verified className="h-3 w-3 mr-1" />
                         Verified
                       </Badge>
                     )}
                   </div>
-                  <p className="text-lg text-gray-600 mb-2">
+                  <p className="text-lg text-blue-100 mb-2">
                     {business.category}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-6 text-sm">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{business.rating}</span>
-                      <span>({business.reviewCount} reviews)</span>
+                      <span className="font-semibold">{business.rating}</span>
+                      <span className="text-blue-100">
+                        ({business.reviewCount} reviews)
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
-                      <span>{business.address.split(",").pop()?.trim()}</span>
+                      <span>{business.city}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      <span>2.5K views</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Quick Actions */}
-            <div className="lg:w-80">
-              <Card>
+      {/* Main Content */}
+      <section className="py-8">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm border">
+                  <div className="text-2xl font-bold text-blue-600">
+                    {business.reviewCount}+
+                  </div>
+                  <div className="text-sm text-gray-600">Happy Clients</div>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm border">
+                  <div className="text-2xl font-bold text-green-600">95%</div>
+                  <div className="text-sm text-gray-600">Success Rate</div>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm border">
+                  <div className="text-2xl font-bold text-purple-600">10+</div>
+                  <div className="text-sm text-gray-600">Years Experience</div>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm border">
+                  <div className="text-2xl font-bold text-orange-600">24h</div>
+                  <div className="text-sm text-gray-600">Response Time</div>
+                </div>
+              </div>
+
+              {/* About Section */}
+              <Card className="shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-lg">Contact Information</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building className="h-5 w-5 text-blue-600" />
+                    About {business.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    {business.description}
+                  </p>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">
+                        Specializations
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {business.services.slice(0, 6).map((service, index) => (
+                          <Badge
+                            key={index}
+                            variant="secondary"
+                            className="bg-blue-50 text-blue-700"
+                          >
+                            {service}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">
+                        Countries Served
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "USA",
+                          "Canada",
+                          "UK",
+                          "Australia",
+                          "Germany",
+                          "UAE",
+                        ].map((country) => (
+                          <Badge
+                            key={country}
+                            variant="outline"
+                            className="border-green-200 text-green-700"
+                          >
+                            {country}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Services */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    Services Offered
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {business.services.map((service, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                      >
+                        <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <span className="text-gray-700">{service}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Reviews Section */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Star className="h-5 w-5 text-yellow-500" />
+                      Customer Reviews
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                        <span className="text-xl font-bold">
+                          {business.rating}
+                        </span>
+                      </div>
+                      <span className="text-gray-600">
+                        ({business.reviewCount} reviews)
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {business.reviews
+                      .slice(0, showAllReviews ? business.reviews.length : 3)
+                      .map((review) => (
+                        <div
+                          key={review.id}
+                          className="border-b pb-4 last:border-b-0"
+                        >
+                          <div className="flex items-start gap-4">
+                            <Avatar className="h-10 w-10">
+                              <AvatarImage src={review.userAvatar} />
+                              <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                                {review.userName[0]}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-semibold text-gray-900">
+                                  {review.userName}
+                                </span>
+                                {review.isVerified && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs bg-green-100 text-green-700"
+                                  >
+                                    Verified Client
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className="flex">
+                                  {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star
+                                      key={i}
+                                      className={`h-4 w-4 ${
+                                        i < review.rating
+                                          ? "fill-yellow-400 text-yellow-400"
+                                          : "text-gray-300"
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                                <span className="text-sm text-gray-500">
+                                  {new Date(review.date).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <p className="text-gray-700 leading-relaxed">
+                                {review.comment}
+                              </p>
+                              <div className="flex items-center gap-4 mt-3">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-gray-500 hover:text-gray-700"
+                                >
+                                  <ThumbsUp className="h-4 w-4 mr-1" />
+                                  Helpful (12)
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-gray-500 hover:text-gray-700"
+                                >
+                                  Reply
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+
+                  {business.reviews.length > 3 && (
+                    <div className="mt-4 text-center">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowAllReviews(!showAllReviews)}
+                      >
+                        {showAllReviews
+                          ? "Show Less"
+                          : `View All ${business.reviews.length} Reviews`}
+                        <ChevronRight
+                          className={`h-4 w-4 ml-1 transition-transform ${showAllReviews ? "rotate-90" : ""}`}
+                        />
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Photo Gallery */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Camera className="h-5 w-5 text-purple-600" />
+                    Photos & Videos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {images.slice(0, 8).map((image, index) => (
+                      <div
+                        key={index}
+                        className="relative aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-75 transition-opacity group"
+                        onClick={() => setCurrentImageIndex(index)}
+                      >
+                        <img
+                          src={image}
+                          alt={`${business.name} - Photo ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        {index === 7 && images.length > 8 && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white font-semibold">
+                            +{images.length - 8} more
+                          </div>
+                        )}
+                        {index === 0 && (
+                          <div className="absolute top-2 left-2">
+                            <PlayCircle className="h-6 w-6 text-white" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Contact Card */}
+              <Card className="shadow-sm sticky top-24">
+                <CardHeader>
+                  <CardTitle className="text-lg">Get in Touch</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Call & Message Buttons */}
                   <div className="grid grid-cols-2 gap-2">
-                    <Button className="w-full" size="sm">
+                    <Button className="w-full bg-green-600 hover:bg-green-700">
                       <Phone className="h-4 w-4 mr-2" />
-                      Call Now
+                      Call
                     </Button>
                     <Button
                       variant="outline"
                       className="w-full"
-                      size="sm"
                       onClick={() => setShowContactForm(true)}
                     >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Email
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Message
                     </Button>
                   </div>
 
+                  {/* WhatsApp */}
+                  <Button className="w-full bg-green-500 hover:bg-green-600 text-white">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    WhatsApp Chat
+                  </Button>
+
+                  {/* Website */}
                   {business.website && (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      size="sm"
-                      asChild
-                    >
+                    <Button variant="outline" className="w-full" asChild>
                       <a
                         href={business.website}
                         target="_blank"
@@ -224,410 +584,72 @@ export default function BusinessProfile() {
                     </Button>
                   )}
 
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsFavorite(!isFavorite)}
-                      className={
-                        isFavorite ? "text-red-600 border-red-200" : ""
-                      }
-                    >
-                      <Heart
-                        className={`h-4 w-4 ${isFavorite ? "fill-red-600" : ""}`}
-                      />
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={shareProfile}>
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Flag className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+                  <Separator />
 
-          {/* Image Gallery */}
-          {images.length > 0 && (
-            <div className="relative mb-8">
-              <div className="relative h-64 md:h-96 rounded-lg overflow-hidden">
-                <img
-                  src={images[currentImageIndex]}
-                  alt={`${business.name} - Image ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                {images.length > 1 && (
-                  <>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="absolute left-4 top-1/2 -translate-y-1/2"
-                      onClick={prevImage}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="absolute right-4 top-1/2 -translate-y-1/2"
-                      onClick={nextImage}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {images.map((_, index) => (
-                        <button
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${
-                            index === currentImageIndex
-                              ? "bg-white"
-                              : "bg-white/50"
-                          }`}
-                          onClick={() => setCurrentImageIndex(index)}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Main Content Tabs */}
-      <section className="pb-16">
-        <div className="container mx-auto max-w-6xl px-4">
-          <Tabs defaultValue="about" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6">
-              <TabsTrigger value="about">About</TabsTrigger>
-              <TabsTrigger value="services">Services</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="photos">Photos</TabsTrigger>
-              <TabsTrigger value="contact">Contact</TabsTrigger>
-              <TabsTrigger value="hours">Hours</TabsTrigger>
-            </TabsList>
-
-            {/* About Tab */}
-            <TabsContent value="about">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>About {business.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-700 leading-relaxed mb-4">
-                        {business.description}
-                      </p>
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">
-                            Specializations
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {business.services.map((service, index) => (
-                              <Badge key={index} variant="secondary">
-                                {service}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        {business.licenseNo && (
-                          <div>
-                            <h4 className="font-semibold text-gray-900 mb-2">
-                              License Information
-                            </h4>
-                            <p className="text-gray-600">
-                              License No: {business.licenseNo}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Sidebar Info */}
-                <div>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Quick Info</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Award className="h-4 w-4 text-orange-600" />
-                        <span className="text-sm">Established Business</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-orange-600" />
-                        <span className="text-sm">
-                          {business.reviewCount}+ Happy Customers
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-orange-600" />
-                        <span className="text-sm">Verified & Trusted</span>
-                      </div>
-                      <Separator />
-                      <div>
-                        <h4 className="font-semibold mb-2">Payment Methods</h4>
-                        <div className="text-sm text-gray-600">
-                          Cash, Card, UPI, Bank Transfer
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-2">Languages</h4>
-                        <div className="text-sm text-gray-600">
-                          Hindi, English, Regional Languages
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </TabsContent>
-
-            {/* Services Tab */}
-            <TabsContent value="services">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Services Offered</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {business.services.map((service, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                      >
-                        <CheckCircle className="h-5 w-5 text-green-600" />
-                        <span className="font-medium">{service}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-semibold text-blue-900 mb-2">
-                      Countries We Serve
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        "USA",
-                        "Canada",
-                        "UK",
-                        "Australia",
-                        "Germany",
-                        "UAE",
-                        "Singapore",
-                        "New Zealand",
-                      ].map((country) => (
-                        <Badge
-                          key={country}
-                          className="bg-blue-100 text-blue-800 border-blue-300"
-                        >
-                          {country}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Reviews Tab */}
-            <TabsContent value="reviews">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Customer Reviews</CardTitle>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                        <span className="text-2xl font-bold">
-                          {business.rating}
-                        </span>
-                      </div>
-                      <div className="text-gray-600">
-                        Based on {business.reviewCount} reviews
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {business.reviews.slice(0, 5).map((review) => (
-                        <div
-                          key={review.id}
-                          className="border-b pb-4 last:border-b-0"
-                        >
-                          <div className="flex items-start gap-3">
-                            <Avatar className="h-10 w-10">
-                              <AvatarImage src={review.userAvatar} />
-                              <AvatarFallback>
-                                {review.userName[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium">
-                                  {review.userName}
-                                </span>
-                                {review.isVerified && (
-                                  <Badge
-                                    variant="secondary"
-                                    className="text-xs"
-                                  >
-                                    Verified
-                                  </Badge>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-1 mb-2">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className={`h-4 w-4 ${
-                                      i < review.rating
-                                        ? "fill-yellow-400 text-yellow-400"
-                                        : "text-gray-300"
-                                    }`}
-                                  />
-                                ))}
-                                <span className="text-sm text-gray-500 ml-2">
-                                  {new Date(review.date).toLocaleDateString()}
-                                </span>
-                              </div>
-                              <p className="text-gray-700">{review.comment}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* Photos Tab */}
-            <TabsContent value="photos">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Photos & Videos</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {images.map((image, index) => (
-                      <div
-                        key={index}
-                        className="relative aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-75 transition-opacity"
-                        onClick={() => setCurrentImageIndex(index)}
-                      >
-                        <img
-                          src={image}
-                          alt={`${business.name} - Photo ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Contact Tab */}
-            <TabsContent value="contact">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Contact Details</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-orange-600" />
-                      <div>
-                        <p className="font-medium">Phone</p>
-                        <p className="text-gray-600">{business.phone}</p>
-                      </div>
-                    </div>
-                    {business.whatsapp && (
-                      <div className="flex items-center gap-3">
-                        <MessageCircle className="h-5 w-5 text-green-600" />
-                        <div>
-                          <p className="font-medium">WhatsApp</p>
-                          <p className="text-gray-600">{business.whatsapp}</p>
-                        </div>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-orange-600" />
-                      <div>
-                        <p className="font-medium">Email</p>
-                        <p className="text-gray-600">{business.email}</p>
-                      </div>
-                    </div>
+                  {/* Contact Details */}
+                  <div className="space-y-3 text-sm">
                     <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-orange-600 mt-1" />
+                      <Phone className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Address</p>
-                        <p className="text-gray-600">{business.address}</p>
+                        <div className="font-medium">Phone</div>
+                        <div className="text-gray-600">{business.phone}</div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Send a Message</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <Mail className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
                       <div>
-                        <Label htmlFor="name">Your Name</Label>
-                        <Input id="name" required />
+                        <div className="font-medium">Email</div>
+                        <div className="text-gray-600 break-all">
+                          {business.email}
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" required />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Phone Number</Label>
-                        <Input id="phone" type="tel" />
-                      </div>
-                      <div>
-                        <Label htmlFor="message">Message</Label>
-                        <Textarea
-                          id="message"
-                          rows={4}
-                          placeholder="Tell us about your visa requirements..."
-                          required
-                        />
-                      </div>
-                      <Button type="submit" className="w-full">
-                        Send Message
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
+                    </div>
 
-            {/* Hours Tab */}
-            <TabsContent value="hours">
-              <Card>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <div className="font-medium">Address</div>
+                        <div className="text-gray-600">{business.address}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Quick Actions */}
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Download className="h-4 w-4 mr-1" />
+                      Brochure
+                    </Button>
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      Book Call
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Business Hours */}
+              <Card className="shadow-sm">
                 <CardHeader>
-                  <CardTitle>Business Hours</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Clock className="h-5 w-5 text-blue-600" />
+                    Business Hours
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {Object.entries(businessHours).map(([day, hours]) => (
-                      <div
-                        key={day}
-                        className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
-                      >
+                      <div key={day} className="flex justify-between text-sm">
                         <span className="font-medium">{day}</span>
                         <span
-                          className={`${hours === "Closed" ? "text-red-600" : "text-gray-600"}`}
+                          className={
+                            hours === "Closed"
+                              ? "text-red-600"
+                              : "text-gray-600"
+                          }
                         >
                           {hours}
                         </span>
@@ -635,48 +657,115 @@ export default function BusinessProfile() {
                     ))}
                   </div>
 
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-green-600" />
-                      <span className="font-medium text-green-900">
-                        Currently Open
-                      </span>
+                  <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center gap-2 text-green-800">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="font-medium text-sm">Open Now</span>
                     </div>
-                    <p className="text-sm text-green-700 mt-1">
+                    <p className="text-xs text-green-700 mt-1">
                       Closes at 6:00 PM today
                     </p>
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
+
+              {/* Trust Indicators */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Shield className="h-5 w-5 text-green-600" />
+                    Why Choose Us
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      {
+                        icon: BadgeCheck,
+                        text: "Verified & Trusted",
+                        color: "text-green-600",
+                      },
+                      {
+                        icon: Award,
+                        text: "10+ Years Experience",
+                        color: "text-blue-600",
+                      },
+                      {
+                        icon: Users,
+                        text: "500+ Happy Clients",
+                        color: "text-purple-600",
+                      },
+                      {
+                        icon: TrendingUp,
+                        text: "95% Success Rate",
+                        color: "text-orange-600",
+                      },
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <item.icon className={`h-4 w-4 ${item.color}`} />
+                        <span className="text-sm text-gray-700">
+                          {item.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Contact Form Modal */}
       {showContactForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-lg">
             <CardHeader>
-              <CardTitle>Contact {business.name}</CardTitle>
+              <CardTitle>Send Message to {business.name}</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="modal-name">Your Name</Label>
-                  <Input id="modal-name" required />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name">Your Name</Label>
+                    <Input id="name" required />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input id="phone" type="tel" required />
+                  </div>
                 </div>
                 <div>
-                  <Label htmlFor="modal-email">Email</Label>
-                  <Input id="modal-email" type="email" required />
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input id="email" type="email" required />
                 </div>
                 <div>
-                  <Label htmlFor="modal-message">Message</Label>
-                  <Textarea id="modal-message" rows={3} required />
+                  <Label htmlFor="service">Service Interested In</Label>
+                  <select
+                    id="service"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select a service</option>
+                    {business.services.slice(0, 5).map((service) => (
+                      <option key={service} value={service}>
+                        {service}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className="flex gap-2">
+                <div>
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea
+                    id="message"
+                    rows={4}
+                    placeholder="Tell us about your visa requirements, destination country, timeline..."
+                    required
+                  />
+                </div>
+                <div className="flex gap-3 pt-2">
                   <Button type="submit" className="flex-1">
-                    Send
+                    <Send className="h-4 w-4 mr-2" />
+                    Send Message
                   </Button>
                   <Button
                     type="button"
