@@ -1106,7 +1106,19 @@ app.get("/api/scraping/export", (req, res) => {
 import {
   assignBulkBusinessImages,
   assignAllBusinessImages,
+  setDatabase,
 } from "./bulk-image-assignment.js";
+
+// Set database context for bulk operations
+import Database from "better-sqlite3";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const dbPath = path.join(__dirname, "visaconsult.db");
+const bulkDatabase = new Database(dbPath);
+setDatabase(bulkDatabase);
 
 // Assign images to all businesses (batch processing)
 app.post("/api/admin/assign-all-business-images", async (req, res) => {

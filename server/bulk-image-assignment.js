@@ -1,15 +1,12 @@
 import fetch from "node-fetch";
 import { uploadToS3 } from "./storage-s3.js";
-import Database from "better-sqlite3";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// We'll get the database instance from the API context when the functions are called
+let database = null;
 
-// Initialize database connection
-const dbPath = path.join(__dirname, "visaconsult.db");
-const database = new Database(dbPath);
+function setDatabase(db) {
+  database = db;
+}
 
 // Curated business-appropriate images from Unsplash
 const businessLogos = [
@@ -194,6 +191,8 @@ export async function assignBulkBusinessImages(options = {}) {
     throw error;
   }
 }
+
+export { setDatabase };
 
 export async function assignAllBusinessImages() {
   console.log("🚀 Starting complete bulk image assignment for all businesses");
