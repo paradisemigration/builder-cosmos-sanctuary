@@ -25,17 +25,16 @@ export function DebugPageInfo() {
 
       return pageName;
     } else if (path.startsWith("/business/")) {
-      const businessId = path.split("/")[2];
-      return `Business Profile - ID: ${businessId}`;
-    } else if (
-      path.split("/").length === 3 &&
-      path !== "/" &&
-      !path.startsWith("/category") &&
-      !path.startsWith("/location")
-    ) {
-      // Handle new business profile URL structure: /city/company-name
-      const [, city, companyName] = path.split("/");
-      return `Business Profile - ${city}/${companyName}`;
+      const pathParts = path.split("/");
+      if (pathParts.length === 3) {
+        // Legacy structure: /business/id
+        const businessId = pathParts[2];
+        return `Business Profile - ID: ${businessId}`;
+      } else if (pathParts.length === 4) {
+        // New structure: /business/city/company-name
+        const [, , city, companyName] = pathParts;
+        return `Business Profile - ${city}/${companyName}`;
+      }
     } else if (path === "/add-business") {
       return "Add Business";
     } else if (path === "/login") {
