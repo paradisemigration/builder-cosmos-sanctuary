@@ -656,6 +656,42 @@ app.get("/api/scraping/validate-api", async (req, res) => {
   }
 });
 
+// Fetch all reviews for existing businesses
+app.post("/api/scraping/fetch-all-reviews", async (req, res) => {
+  try {
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    console.log("🚀 Starting to fetch all reviews for existing businesses...");
+
+    // Start the review fetching process in the background
+    scraper
+      .fetchAllReviewsForExistingBusinesses()
+      .then((result) => {
+        console.log("✅ Review fetching completed:", result);
+      })
+      .catch((error) => {
+        console.error("❌ Review fetching failed:", error);
+      });
+
+    res.json({
+      success: true,
+      message: "Review fetching started successfully",
+      note: "Process is running in the background. Check console logs for progress.",
+    });
+  } catch (error) {
+    console.error("Fetch all reviews error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Migrate data from memory to SQLite database
 app.post("/api/migrate-to-sqlite", async (req, res) => {
   try {
