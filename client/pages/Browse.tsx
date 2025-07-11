@@ -85,7 +85,7 @@ export default function Browse() {
     sortOrder: "desc",
   };
 
-  // Use business data hook for API integration
+  // Use business data hook for API integration (disabled auto-fetch for demo)
   const {
     businesses: apiBusiness,
     loading: businessesLoading,
@@ -94,7 +94,7 @@ export default function Browse() {
     refetch,
     loadMore,
     hasMore,
-  } = useBusinessData(apiFilters);
+  } = useBusinessData(apiFilters, false);
 
   // Use sample data as fallback when API fails
   const [filteredBusinesses, setFilteredBusinesses] =
