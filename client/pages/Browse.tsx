@@ -242,7 +242,7 @@ export default function Browse() {
                     <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
                       type="text"
-                      placeholder="Search consultants, services..."
+                      placeholder="Search from 310+ real consultants in database..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10 h-12 border-gray-200"
