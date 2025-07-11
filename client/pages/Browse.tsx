@@ -85,13 +85,26 @@ export default function Browse() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const pageSize = 25;
+
   // Load real scraped businesses from database
-  const loadScrapedBusinesses = async () => {
+  const loadScrapedBusinesses = async (page = 1, append = false) => {
     try {
-      setLoading(true);
+      if (page === 1) {
+        setLoading(true);
+        setCurrentPage(1);
+      } else {
+        setLoadingMore(true);
+      }
       setError(null);
 
-      const response = await fetch("/api/scraped-businesses?limit=9999");
+      const response = await fetch(
+        `/api/scraped-businesses?page=${page}&limit=${pageSize}`,
+      );
       const result = await response.json();
 
       if (result.success) {
@@ -111,8 +124,21 @@ export default function Browse() {
           }),
         );
 
-        console.log("Mapped businesses:", mappedBusinesses.length);
-        setScrapedBusinesses(mappedBusinesses);
+        console.log(
+          `Loaded page ${page}:`,
+          mappedBusinesses.length,
+          "businesses",
+        );
+
+        if (append) {
+          setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
+        } else {
+          setScrapedBusinesses(mappedBusinesses);
+        }
+
+        // Check if there are more pages
+        setHasMore(mappedBusinesses.length === pageSize);
+        setCurrentPage(page);
       } else {
         setError("Failed to load businesses");
       }
@@ -121,6 +147,14 @@ export default function Browse() {
       setError("Failed to load businesses");
     } finally {
       setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  // Load more businesses
+  const loadMore = () => {
+    if (!loadingMore && hasMore) {
+      loadScrapedBusinesses(currentPage + 1, true);
     }
   };
 
@@ -477,15 +511,42 @@ export default function Browse() {
                       ))}
                     </div>
 
+                    {/* Load More Button */}
+                    {hasMore &&
+                      !searchQuery &&
+                      !selectedCategory &&
+                      !selectedZone && (
+                        <div className="text-center mt-8">
+                          <Button
+                            onClick={loadMore}
+                            disabled={loadingMore}
+                            className="px-8 py-3"
+                            variant="outline"
+                          >
+                            {loadingMore ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                                Loading...
+                              </>
+                            ) : (
+                              "Load More Consultants"
+                            )}
+                          </Button>
+                          <p className="text-xs text-gray-500 mt-2">
+                            Loading {pageSize} more businesses
+                          </p>
+                        </div>
+                      )}
+
                     {/* Results Summary */}
-                    {filteredBusinesses.length > 0 && (
-                      <div className="text-center mt-8">
-                        <p className="text-sm text-gray-600">
-                          Showing {filteredBusinesses.length} of{" "}
-                          {scrapedBusinesses.length} total consultants
-                        </p>
-                      </div>
-                    )}
+                    <div className="text-center mt-8">
+                      <p className="text-sm text-gray-600">
+                        Showing {filteredBusinesses.length} consultants
+                        {!searchQuery && !selectedCategory && !selectedZone && (
+                          <span> • Page {currentPage} of results</span>
+                        )}
+                      </p>
+                    </div>
 
                     {/* Results Summary */}
                     <div className="mt-8 pt-6 border-t border-gray-200">
