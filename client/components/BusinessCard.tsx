@@ -198,7 +198,9 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{business.rating}</span>
-                  <span>({business.reviewCount})</span>
+                  <span>
+                    ({business.reviews?.length || business.reviewCount || 0})
+                  </span>
                 </div>
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" />
