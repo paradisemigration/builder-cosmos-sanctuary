@@ -27,6 +27,15 @@ export function DebugPageInfo() {
     } else if (path.startsWith("/business/")) {
       const businessId = path.split("/")[2];
       return `Business Profile - ID: ${businessId}`;
+    } else if (
+      path.split("/").length === 3 &&
+      path !== "/" &&
+      !path.startsWith("/category") &&
+      !path.startsWith("/location")
+    ) {
+      // Handle new business profile URL structure: /city/company-name
+      const [, city, companyName] = path.split("/");
+      return `Business Profile - ${city}/${companyName}`;
     } else if (path === "/add-business") {
       return "Add Business";
     } else if (path === "/login") {
