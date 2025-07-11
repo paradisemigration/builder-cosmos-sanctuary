@@ -47,7 +47,8 @@ export function Navigation({ className = "" }: NavigationProps) {
               <h1 className="text-2xl font-black bg-gradient-to-r from-orange-500 via-purple-600 to-orange-600 bg-clip-text text-transparent">
                 <span className="inline-flex items-center gap-2">
                   <Globe className="w-6 h-6 text-orange-500" />
-                  Trusted<span className="text-gray-800">Immigration</span>
+                  VisaConsult India Trusted
+                  <span className="text-gray-800">Immigration</span>
                   <Sparkles className="w-4 h-4 text-purple-500" />
                 </span>
               </h1>
