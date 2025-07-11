@@ -14,8 +14,9 @@ import DataMigration from "./migrate-to-sqlite.js";
 
 const app = express();
 
-// Initialize business scraper
+// Initialize business scraper and Google Places API
 const scraper = new BusinessScraper(process.env.GOOGLE_PLACES_API_KEY);
+const googlePlaces = new GooglePlaces(process.env.GOOGLE_PLACES_API_KEY);
 
 // Middleware
 app.use(
