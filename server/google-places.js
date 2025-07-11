@@ -145,7 +145,7 @@ class GooglePlacesAPI {
       const addressParts = formatted_address?.split(",") || [];
       const city = this.extractCityFromAddress(addressParts);
 
-      // Download and store photos in Google Cloud Storage
+      // Download and store photos in AWS S3
       const imageUrls = [];
       const imagesForDB = [];
       let logo = null;
@@ -154,8 +154,10 @@ class GooglePlacesAPI {
       const photosToProcess = photos.slice(0, 5);
       for (let i = 0; i < photosToProcess.length; i++) {
         const photo = photosToProcess[i];
-        const imageUrl = await this.downloadAndStorePhoto(
+        const imageUrl = await this.downloadAndStorePhotoToS3(
           photo.photo_reference,
+          place_id,
+          i,
         );
         if (imageUrl) {
           if (i === 0) {
@@ -207,10 +209,10 @@ class GooglePlacesAPI {
         email: "", // Not available from Places API
         website: website || "",
 
-        // Media
+        // Media - with AWS S3 storage
         logo: logo || "/api/placeholder/80/80",
         coverImage: imageUrls[1] || "/api/placeholder/800/400",
-        gallery: imageUrls.slice(2) || [],
+        gallery: JSON.stringify(imageUrls.slice(2) || []), // Store gallery as JSON string
 
         // Ratings & Reviews
         rating: rating || 0,
