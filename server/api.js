@@ -362,11 +362,15 @@ app.get("/api/test-upload", (req, res) => {
 // Verify image storage status with detailed GCS info
 app.get("/api/images/status", async (req, res) => {
   try {
+    console.log("🖼️ Loading image status...");
+
     const stats = await sqliteDatabase.getStatistics();
+    console.log("✅ Stats loaded for image status");
 
     // Get sample businesses with images to check GCS status
     const businessResult = await sqliteDatabase.getBusinesses({ limit: 10 });
-    const businesses = businessResult.businesses;
+    const businesses = businessResult.businesses || [];
+    console.log(`✅ Found ${businesses.length} businesses for image analysis`);
 
     // Count images with and without cloud storage URLs
     let totalImagesWithGCS = 0;
@@ -375,10 +379,18 @@ app.get("/api/images/status", async (req, res) => {
     let sampleBusinessWithImages = null;
 
     for (const business of businesses) {
-      if (business.images && business.images.length > 0) {
+      if (
+        business.images &&
+        Array.isArray(business.images) &&
+        business.images.length > 0
+      ) {
         sampleBusinessWithImages = business;
         for (const image of business.images) {
-          if (image.cloudStorageUrl && image.cloudStorageUrl !== null) {
+          if (
+            image.cloudStorageUrl &&
+            image.cloudStorageUrl !== null &&
+            image.cloudStorageUrl !== ""
+          ) {
             totalImagesWithGCS++;
             if (!sampleGCSUrl) {
               sampleGCSUrl = image.cloudStorageUrl;
@@ -390,7 +402,11 @@ app.get("/api/images/status", async (req, res) => {
       }
     }
 
-    res.json({
+    console.log(
+      `📊 Image analysis: ${totalImagesWithGCS} with GCS, ${totalImagesWithoutGCS} without GCS`,
+    );
+
+    const response = {
       success: true,
       imageStorage: {
         totalImages: stats.totalImages || 0,
@@ -410,7 +426,10 @@ app.get("/api/images/status", async (req, res) => {
               imageCount: sampleBusinessWithImages.images?.length || 0,
               imagesWithGCS:
                 sampleBusinessWithImages.images?.filter(
-                  (img) => img.cloudStorageUrl,
+                  (img) =>
+                    img.cloudStorageUrl &&
+                    img.cloudStorageUrl !== null &&
+                    img.cloudStorageUrl !== "",
                 )?.length || 0,
             }
           : null,
@@ -425,12 +444,17 @@ app.get("/api/images/status", async (req, res) => {
             : "❌ Missing",
         },
       },
-    });
+    };
+
+    console.log("🖼️ Sending image status response");
+    res.json(response);
   } catch (error) {
-    console.error("Image status error:", error);
+    console.error("❌ Image status error:", error.message);
+    console.error("❌ Full error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 });
