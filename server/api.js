@@ -243,20 +243,17 @@ app.put(
 
       // Handle file uploads similar to create
       if (req.files?.logo?.[0]) {
-        const logoResult = await uploadToGCS(req.files.logo[0], "logos");
+        const logoResult = await uploadToS3(req.files.logo[0], "logos");
         businessData.logo = logoResult.publicUrl;
       }
 
       if (req.files?.coverImage?.[0]) {
-        const coverResult = await uploadToGCS(
-          req.files.coverImage[0],
-          "covers",
-        );
+        const coverResult = await uploadToS3(req.files.coverImage[0], "covers");
         businessData.coverImage = coverResult.publicUrl;
       }
 
       if (req.files?.gallery?.length > 0) {
-        const galleryResults = await uploadMultipleToGCS(
+        const galleryResults = await uploadMultipleToS3(
           req.files.gallery,
           "gallery",
         );
@@ -322,7 +319,7 @@ app.delete("/api/businesses/:id", async (req, res) => {
 // Delete image
 app.delete("/api/images/:fileName", async (req, res) => {
   try {
-    await deleteFromGCS(req.params.fileName);
+    await deleteFromS3(req.params.fileName);
 
     res.json({
       success: true,
