@@ -122,7 +122,7 @@ class BusinessScraper {
                 if (existingBusiness) {
                   duplicatesSkipped++;
                   console.log(
-                    `⏭️  Duplicate found: ${businessData.name} (${place.place_id}) - Skipping...`,
+                    `���️  Duplicate found: ${businessData.name} (${place.place_id}) - Skipping...`,
                   );
                   // Just count it but don't add to processed (to avoid duplicates in results)
                   continue;
@@ -251,6 +251,7 @@ class BusinessScraper {
     } finally {
       this.isRunning = false;
       this.currentJob = null;
+      this.shouldStop = false;
     }
   }
 
