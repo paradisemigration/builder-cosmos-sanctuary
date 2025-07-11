@@ -68,7 +68,7 @@ app.post(
 // Upload multiple images
 app.post(
   "/api/upload/multiple",
-  uploadMiddleware.multiple("images", 10),
+  uploadMiddleware.array("images", 10),
   async (req, res) => {
     try {
       if (!req.files || req.files.length === 0) {
