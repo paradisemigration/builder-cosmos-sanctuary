@@ -201,33 +201,62 @@ export default function Index() {
 
             {/* Debug Test Links - Remove in production */}
             <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h3 className="font-bold text-yellow-800 mb-2">
-                🔧 Debug Test Links:
+              <h3 className="font-bold text-yellow-800 mb-3">
+                🔧 Navigation Test Links:
               </h3>
-              <div className="flex flex-wrap gap-4 justify-center text-sm">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                 <Link
-                  to="/business/delhi/delhi-global-visa-consultants"
-                  className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                  to="/about"
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
                 >
-                  Test New URL: /business/delhi/delhi-global-visa-consultants
+                  📄 About
+                </Link>
+                <Link
+                  to="/contact"
+                  className="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
+                >
+                  📞 Contact
+                </Link>
+                <Link
+                  to="/browse"
+                  className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                >
+                  🔍 Browse
+                </Link>
+                <Link
+                  to="/add-business"
+                  className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
+                >
+                  ➕ Add Business
+                </Link>
+                <Link
+                  to="/admin"
+                  className="px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-center"
+                >
+                  ⚙️ Admin
+                </Link>
+                <Link
+                  to="/login"
+                  className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                >
+                  🔐 Login
                 </Link>
                 <Link
                   to="/business/1"
-                  className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                  className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
                 >
-                  Test Legacy URL: /business/1
+                  🏢 Business (Legacy)
                 </Link>
-                <button
-                  onClick={() =>
-                    console.log(
-                      "Business cards:",
-                      document.querySelectorAll("[data-business-card]"),
-                    )
-                  }
-                  className="px-3 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
+                <Link
+                  to="/business/delhi/delhi-global-visa-consultants"
+                  className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
                 >
-                  Debug Business Cards
-                </button>
+                  🏢 Business (New)
+                </Link>
+              </div>
+              <div className="mt-3 text-xs text-yellow-700 text-center">
+                Click any button above to test navigation. Check browser console
+                for debug info.
               </div>
             </div>
           </div>
