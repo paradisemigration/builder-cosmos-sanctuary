@@ -85,11 +85,22 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
       .toUpperCase();
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("Business card clicked:", {
+        business: business.name,
+        city: business.city,
+        url: businessUrl,
+        targetUrl: businessUrl,
+      });
+    }
+  };
+
   return (
     <Card
       className={`group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}
     >
-      <Link to={businessUrl} className="block">
+      <Link to={businessUrl} className="block" onClick={handleCardClick}>
         {/* Header with Cover Image */}
         <div className="relative h-32 bg-gradient-to-r from-blue-500 to-purple-600">
           {business.coverImage && !imageError ? (
