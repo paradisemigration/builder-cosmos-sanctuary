@@ -420,9 +420,9 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                             value="all"
                             className="rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg py-2 md:py-3"
                           >
-                            All UAE Cities
+                            All Indian Cities
                           </SelectItem>
-                          {uaeCities.map((city) => (
+                          {indianCities.map((city) => (
                             <SelectItem
                               key={city}
                               value={city}
