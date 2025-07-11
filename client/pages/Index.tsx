@@ -57,7 +57,7 @@ export default function Index() {
     if (location && location !== "all") searchParams.set("location", location);
     if (category && category !== "all") searchParams.set("category", category);
 
-    navigate(`/browse?${searchParams.toString()}`);
+    navigate(`/business?${searchParams.toString()}`);
   };
 
   const topCities = [
@@ -66,7 +66,7 @@ export default function Index() {
     { name: "Bangalore", count: "320+", icon: "💻" },
     { name: "Chennai", count: "250+", icon: "🌊" },
     { name: "Hyderabad", count: "200+", icon: "💎" },
-    { name: "Kolkata", count: "180+", icon: "🎭" },
+    { name: "Kolkata", count: "180+", icon: "���" },
     { name: "Pune", count: "150+", icon: "🎓" },
     { name: "Ahmedabad", count: "120+", icon: "🏗️" },
   ];
@@ -218,7 +218,7 @@ export default function Index() {
                   📞 Contact
                 </Link>
                 <Link
-                  to="/browse"
+                  to="/business"
                   className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
                 >
                   🔍 Browse
@@ -312,7 +312,7 @@ export default function Index() {
                 className={`${visa.color} hover:shadow-lg transition-all duration-300 cursor-pointer group`}
                 onClick={() =>
                   navigate(
-                    `/browse?category=${encodeURIComponent(visa.type + " Consultants")}`,
+                    `/business?category=${encodeURIComponent(visa.type + " Consultants")}`,
                   )
                 }
               >
@@ -367,7 +367,7 @@ export default function Index() {
               <Card
                 key={index}
                 className="hover:shadow-lg transition-all duration-300 cursor-pointer group bg-white"
-                onClick={() => navigate(`/browse?location=${city.name}`)}
+                onClick={() => navigate(`/business?location=${city.name}`)}
               >
                 <CardContent className="p-6 text-center">
                   <div className="text-3xl mb-3">{city.icon}</div>
@@ -423,7 +423,7 @@ export default function Index() {
           <div className="text-center mt-8">
             <Button
               variant="outline"
-              onClick={() => navigate("/browse")}
+              onClick={() => navigate("/business")}
               size="lg"
             >
               View All Consultants <ArrowRight className="h-4 w-4 ml-2" />
@@ -504,7 +504,7 @@ export default function Index() {
 
           <div className="text-center mt-8">
             <Button asChild variant="outline" size="lg">
-              <Link to="/browse">View All Cities</Link>
+              <Link to="/business">View All Cities</Link>
             </Button>
           </div>
         </div>
