@@ -204,83 +204,200 @@ export default function Index() {
               <h3 className="font-bold text-yellow-800 mb-3">
                 🔧 Navigation Test Links:
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
-                <Link
-                  to="/about"
-                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                >
-                  📄 About
-                </Link>
-                <Link
-                  to="/contact"
-                  className="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
-                >
-                  📞 Contact
-                </Link>
-                <Link
-                  to="/business"
-                  className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
-                >
-                  🔍 Browse
-                </Link>
-                <Link
-                  to="/add-business"
-                  className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
-                >
-                  ➕ Add Business
-                </Link>
-                <Link
-                  to="/admin"
-                  className="px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-center"
-                >
-                  ⚙️ Admin
-                </Link>
-                <Link
-                  to="/login"
-                  className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
-                >
-                  🔐 Login
-                </Link>
-                <Link
-                  to="/city/delhi"
-                  className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
-                >
-                  🏛️ Delhi City
-                </Link>
-                <Link
-                  to="/city/mumbai"
-                  className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
-                >
-                  🌆 Mumbai City
-                </Link>
-                <Link
-                  to="/business/1"
-                  className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
-                >
-                  🏢 Business (Legacy)
-                </Link>
-                <Link
-                  to="/city/delhi/delhi-global-visa-consultants"
-                  className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
-                >
-                  🏢 Business (New)
-                </Link>
-                <Link
-                  to="/privacy"
-                  className="px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-center"
-                >
-                  🔒 Privacy
-                </Link>
-                <Link
-                  to="/terms"
-                  className="px-3 py-2 bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-colors text-center"
-                >
-                  📋 Terms
-                </Link>
+
+              {/* Main Pages */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-yellow-700 mb-2">
+                  Main Pages:
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm">
+                  <Link
+                    to="/about"
+                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                  >
+                    📄 About
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
+                  >
+                    📞 Contact
+                  </Link>
+                  <Link
+                    to="/business"
+                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                  >
+                    🔍 Browse
+                  </Link>
+                  <Link
+                    to="/add-business"
+                    className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
+                  >
+                    ➕ Add Business
+                  </Link>
+                  <Link
+                    to="/admin"
+                    className="px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-center"
+                  >
+                    ⚙️ Admin
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                  >
+                    🔐 Login
+                  </Link>
+                  <Link
+                    to="/privacy"
+                    className="px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-center"
+                  >
+                    🔒 Privacy
+                  </Link>
+                  <Link
+                    to="/terms"
+                    className="px-3 py-2 bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-colors text-center"
+                  >
+                    📋 Terms
+                  </Link>
+                </div>
               </div>
+
+              {/* All 16 Cities Directory Pages */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-yellow-700 mb-2">
+                  All 16 Cities Directory Pages:
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 text-sm">
+                  <Link
+                    to="/city/delhi"
+                    className="px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-center"
+                  >
+                    🏛️ Delhi
+                  </Link>
+                  <Link
+                    to="/city/mumbai"
+                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                  >
+                    🌆 Mumbai
+                  </Link>
+                  <Link
+                    to="/city/bangalore"
+                    className="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
+                  >
+                    🌿 Bangalore
+                  </Link>
+                  <Link
+                    to="/city/chennai"
+                    className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
+                  >
+                    🏖️ Chennai
+                  </Link>
+                  <Link
+                    to="/city/hyderabad"
+                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
+                  >
+                    💎 Hyderabad
+                  </Link>
+                  <Link
+                    to="/city/kolkata"
+                    className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
+                  >
+                    🎭 Kolkata
+                  </Link>
+                  <Link
+                    to="/city/pune"
+                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
+                  >
+                    🎓 Pune
+                  </Link>
+                  <Link
+                    to="/city/ahmedabad"
+                    className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
+                  >
+                    🏺 Ahmedabad
+                  </Link>
+                  <Link
+                    to="/city/jaipur"
+                    className="px-3 py-2 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
+                  >
+                    🏰 Jaipur
+                  </Link>
+                  <Link
+                    to="/city/lucknow"
+                    className="px-3 py-2 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
+                  >
+                    🕌 Lucknow
+                  </Link>
+                  <Link
+                    to="/city/indore"
+                    className="px-3 py-2 bg-lime-100 text-lime-700 rounded hover:bg-lime-200 transition-colors text-center"
+                  >
+                    🌾 Indore
+                  </Link>
+                  <Link
+                    to="/city/chandigarh"
+                    className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
+                  >
+                    🌹 Chandigarh
+                  </Link>
+                  <Link
+                    to="/city/gurgaon"
+                    className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
+                  >
+                    🏙️ Gurgaon
+                  </Link>
+                  <Link
+                    to="/city/noida"
+                    className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
+                  >
+                    🏢 Noida
+                  </Link>
+                  <Link
+                    to="/city/dehradun"
+                    className="px-3 py-2 bg-sky-100 text-sky-700 rounded hover:bg-sky-200 transition-colors text-center"
+                  >
+                    ⛰️ Dehradun
+                  </Link>
+                  <Link
+                    to="/city/kochi"
+                    className="px-3 py-2 bg-violet-100 text-violet-700 rounded hover:bg-violet-200 transition-colors text-center"
+                  >
+                    🏝️ Kochi
+                  </Link>
+                </div>
+              </div>
+
+              {/* Sample Business Pages */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-yellow-700 mb-2">
+                  Sample Business Pages:
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                  <Link
+                    to="/business/1"
+                    className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
+                  >
+                    🏢 Business (Legacy)
+                  </Link>
+                  <Link
+                    to="/city/delhi/delhi-global-visa-consultants"
+                    className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
+                  >
+                    🏢 Business (New URL)
+                  </Link>
+                  <Link
+                    to="/city/mumbai/mumbai-immigration-hub"
+                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
+                  >
+                    🏢 Mumbai Business
+                  </Link>
+                </div>
+              </div>
+
               <div className="mt-3 text-xs text-yellow-700 text-center">
-                Click any button above to test navigation. Check browser console
-                for debug info.
+                Click any button above to test navigation. All 16 cities
+                directory pages are now available. Check browser console for
+                debug info.
               </div>
             </div>
           </div>
