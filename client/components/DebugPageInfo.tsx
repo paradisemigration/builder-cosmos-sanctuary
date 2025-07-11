@@ -25,13 +25,17 @@ export function DebugPageInfo() {
 
       return pageName;
     } else if (path.startsWith("/business/")) {
+      // Legacy structure: /business/id
+      const businessId = path.split("/")[2];
+      return `Business Profile - ID: ${businessId}`;
+    } else if (path.startsWith("/city/")) {
       const pathParts = path.split("/");
       if (pathParts.length === 3) {
-        // Legacy structure: /business/id
-        const businessId = pathParts[2];
-        return `Business Profile - ID: ${businessId}`;
+        // City listing: /city/city-name
+        const [, , city] = pathParts;
+        return `City Business Listing - ${city}`;
       } else if (pathParts.length === 4) {
-        // New structure: /business/city/company-name
+        // Business profile: /city/city/company-name
         const [, , city, companyName] = pathParts;
         return `Business Profile - ${city}/${companyName}`;
       }
