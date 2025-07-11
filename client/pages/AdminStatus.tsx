@@ -665,6 +665,33 @@ export default function AdminStatus() {
                   </>
                 )}
               </Button>
+
+              <Button
+                onClick={assignAllBusinessImages}
+                disabled={
+                  imageAssignmentLoading ||
+                  stats?.scraping?.isRunning ||
+                  stats?.error
+                }
+                variant="default"
+                title={
+                  stats?.error
+                    ? "Cannot assign images: Server offline"
+                    : "Assign professional business logos and cover images to all 1135+ businesses using AWS S3 storage"
+                }
+              >
+                {imageAssignmentLoading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Assigning Images...
+                  </>
+                ) : (
+                  <>
+                    <Camera className="h-4 w-4 mr-2" />
+                    Assign All Business Images
+                  </>
+                )}
+              </Button>
             </div>
           </div>
 
