@@ -401,17 +401,13 @@ export default function Browse() {
                     ))}
                   </div>
 
-                  {/* Load More / Pagination */}
-                  {hasMore && (
+                  {/* Results Summary */}
+                  {filteredBusinesses.length > 0 && (
                     <div className="text-center mt-8">
-                      <Button
-                        onClick={() => loadMore()}
-                        disabled={businessesLoading}
-                        size="lg"
-                        variant="outline"
-                      >
-                        {businessesLoading ? "Loading..." : "Load More"}
-                      </Button>
+                      <p className="text-sm text-gray-600">
+                        Showing {filteredBusinesses.length} of{" "}
+                        {scrapedBusinesses.length} total consultants
+                      </p>
                     </div>
                   )}
 
