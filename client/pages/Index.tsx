@@ -420,7 +420,7 @@ export default function Index() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => navigate("/add-business")}
+              onClick={() => navigate("/plans")}
               size="lg"
               className="border-white text-white hover:bg-white hover:text-gray-900"
             >
