@@ -190,7 +190,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Cities</SelectItem>
+                <SelectItem value="all">All Cities</SelectItem>
                 {indianCities.map((city) => (
                   <SelectItem key={city} value={city}>
                     {city}
