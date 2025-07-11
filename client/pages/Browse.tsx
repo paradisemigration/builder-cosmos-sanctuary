@@ -166,11 +166,11 @@ export default function Browse() {
   // Use real scraped businesses for filtering
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
 
-  // Filter logic for real scraped data
+  // Filter logic for real scraped data (client-side filtering for loaded data)
   useEffect(() => {
     let filtered = [...scrapedBusinesses];
 
-    // Text search
+    // Text search (only for loaded businesses)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -185,7 +185,7 @@ export default function Browse() {
       );
     }
 
-    // Category filter
+    // Category filter (only for loaded businesses)
     if (selectedCategory && selectedCategory !== "all") {
       filtered = filtered.filter(
         (business) =>
@@ -198,7 +198,7 @@ export default function Browse() {
       );
     }
 
-    // Location filter
+    // Location filter (only for loaded businesses)
     if (selectedZone && selectedZone !== "all") {
       filtered = filtered.filter(
         (business) =>
@@ -235,6 +235,21 @@ export default function Browse() {
     selectedZone,
     filters.sortBy,
   ]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    if (searchQuery || selectedCategory !== "all" || selectedZone !== "all") {
+      // When filtering, load all data and reset pagination
+      setCurrentPage(1);
+      setHasMore(false);
+      loadScrapedBusinesses(1, false);
+    } else {
+      // Reset to first page when clearing filters
+      setCurrentPage(1);
+      setHasMore(true);
+      loadScrapedBusinesses(1, false);
+    }
+  }, [searchQuery, selectedCategory, selectedZone]);
 
   // Initialize page title on mount
   useEffect(() => {
