@@ -49,6 +49,9 @@ class SQLiteDatabase {
         isVerified BOOLEAN DEFAULT 1,
         businessHours TEXT,
         priceLevel INTEGER,
+        logo TEXT,
+        coverImage TEXT,
+        gallery TEXT,
         createdAt TEXT,
         updatedAt TEXT,
         scrapedAt TEXT
