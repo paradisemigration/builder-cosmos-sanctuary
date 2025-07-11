@@ -40,7 +40,13 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/browse" element={<Browse />} />
+
+            {/* Legacy business profile route for backward compatibility */}
             <Route path="/business/:id" element={<BusinessProfile />} />
+
+            {/* New SEO-friendly business profile route: /city/company-name */}
+            <Route path="/:city/:companyName" element={<BusinessProfile />} />
+
             <Route path="/list-business" element={<ListBusiness />} />
             <Route path="/plans" element={<ListingPlans />} />
             <Route path="/add-business" element={<AddBusiness />} />
@@ -53,10 +59,6 @@ const App = () => (
             />
             <Route
               path="/location/:location"
-              element={<CategoryLocationPage />}
-            />
-            <Route
-              path="/:location/:category"
               element={<CategoryLocationPage />}
             />
 
