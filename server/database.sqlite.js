@@ -28,6 +28,12 @@ class SQLiteDatabase {
     });
   }
 
+  getAddColumnSQL(tableName, columnName, columnType) {
+    return `
+      ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType};
+    `;
+  }
+
   async createTables() {
     const sql = `
       -- Businesses table
