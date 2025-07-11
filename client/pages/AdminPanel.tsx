@@ -275,10 +275,10 @@ export default function AdminPanel() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-purple-700">
-                  {import.meta.env.MODE === "development" ? (
+                  {isLocalDevelopment ? (
                     <>
                       <p className="mb-4">
-                        ✅ <strong>Development Environment Active</strong>
+                        ✅ <strong>Local Development Environment Active</strong>
                       </p>
                       <p className="mb-4">
                         Your Google Cloud Storage is configured and ready for
