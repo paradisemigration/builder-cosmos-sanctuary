@@ -95,13 +95,13 @@ const businessCoverImages = [
   "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Office meeting
 ];
 
-// Business gallery photos for creating comprehensive business profiles
+// Optimized business gallery photos for comprehensive business profiles
 const businessGalleryImages = [
   // Office interiors and workspaces
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
   "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=800&h=600&fit=crop&crop=center",
 
   // Business meetings and consultations
