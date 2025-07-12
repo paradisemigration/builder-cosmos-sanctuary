@@ -372,6 +372,13 @@ export function GooglePlacesScraper() {
   };
 
   const startScraping = async () => {
+    if (backendAvailable === false) {
+      toast.error(
+        "Backend API is required for scraping. Please deploy the backend server.",
+      );
+      return;
+    }
+
     if (selectedCities.length === 0 || selectedCategories.length === 0) {
       toast.error("Please select at least one city and one category");
       return;
