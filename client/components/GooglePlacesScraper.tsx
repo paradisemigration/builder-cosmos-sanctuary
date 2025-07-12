@@ -39,6 +39,12 @@ import { toast } from "sonner";
 export function GooglePlacesScraper() {
   // Configure API base URL based on environment
   const getApiUrl = (endpoint: string) => {
+    // Check for manual override first
+    const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
+    if (override) {
+      return `${override}${endpoint}`;
+    }
+
     // Check if we're in production and need a different API URL
     const baseUrl = import.meta.env.VITE_API_URL || "";
     // If no base URL configured, assume same-origin API
