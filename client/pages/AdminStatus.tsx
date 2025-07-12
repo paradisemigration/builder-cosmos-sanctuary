@@ -541,6 +541,7 @@ export default function AdminStatus() {
       isMounted = false;
       clearTimeout(timeoutId);
       clearInterval(interval);
+      clearInterval(progressInterval);
     };
   }, []); // Remove dependencies to prevent infinite loop
 
