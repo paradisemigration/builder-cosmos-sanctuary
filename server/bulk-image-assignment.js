@@ -409,6 +409,10 @@ export async function assignAllBusinessImages() {
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
+    // Mark as completed
+    bulkProgress.isRunning = false;
+    bulkProgress.currentProgress = 100;
+
     console.log(`\n🎉 ALL BUSINESSES PROCESSED!`);
     console.log(`📊 Final Statistics:`);
     console.log(`   Total Processed: ${totalProcessed}`);
