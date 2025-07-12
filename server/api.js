@@ -1734,9 +1734,29 @@ app.get("/api/admin/image-fetch-progress", async (req, res) => {
   try {
     const progress = bulkImageFetcher.getProgress();
 
+    // Get actual image statistics from database
+    const imageStats = await new Promise((resolve, reject) => {
+      sqliteDatabase.db.all(
+        `
+        SELECT
+          COUNT(*) as total_businesses,
+          COUNT(CASE WHEN logo IS NOT NULL AND logo != '' THEN 1 END) as businesses_with_logos,
+          COUNT(CASE WHEN coverImage IS NOT NULL AND coverImage != '' THEN 1 END) as businesses_with_covers,
+          COUNT(CASE WHEN gallery IS NOT NULL AND gallery != '' AND gallery != '[]' THEN 1 END) as businesses_with_galleries
+        FROM businesses
+      `,
+        [],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows[0]);
+        },
+      );
+    });
+
     res.json({
       success: true,
       progress,
+      imageStats,
     });
   } catch (error) {
     console.error("Get image fetch progress error:", error);
