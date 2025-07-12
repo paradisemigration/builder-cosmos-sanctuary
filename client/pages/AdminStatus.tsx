@@ -864,6 +864,47 @@ export default function AdminStatus() {
                 <CardTitle>Business Images Status</CardTitle>
               </CardHeader>
               <CardContent>
+                {/* Bulk Assignment Progress Bar */}
+                {bulkProgress?.isRunning && (
+                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-sm font-medium text-blue-900">
+                        Bulk Image Assignment In Progress
+                      </div>
+                      <div className="text-sm text-blue-700">
+                        {bulkProgress.currentProgress}%
+                      </div>
+                    </div>
+
+                    <div className="w-full bg-blue-200 rounded-full h-3 mb-3">
+                      <div
+                        className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                        style={{ width: `${bulkProgress.currentProgress}%` }}
+                      ></div>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-blue-700">
+                      <div>
+                        <strong>Processed:</strong>{" "}
+                        {bulkProgress.processedItems}/{bulkProgress.totalItems}
+                      </div>
+                      <div>
+                        <strong>Success:</strong> {bulkProgress.successCount}
+                      </div>
+                      <div>
+                        <strong>Batch:</strong> {bulkProgress.currentBatch}/
+                        {bulkProgress.totalBatches}
+                      </div>
+                      <div>
+                        <strong>ETA:</strong>{" "}
+                        {bulkProgress.estimatedTimeRemaining
+                          ? `${bulkProgress.estimatedTimeRemaining}s`
+                          : "Calculating..."}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {imageStats?.error ? (
                   <div className="text-center py-4">
                     <p className="text-red-600">
