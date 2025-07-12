@@ -141,49 +141,64 @@ class SQLiteDatabase {
   }
 
   async addMissingColumns() {
-    return new Promise((resolve, reject) => {
-      try {
-        // Check if columns exist and add them if missing
-        const addColumnIfNotExists = (tableName, columnName, columnType) => {
-          try {
-            // First check if column exists by querying table info
-            const columnsResult = this.db
-              .prepare(`PRAGMA table_info(${tableName})`)
-              .all();
-            const columnExists =
-              Array.isArray(columnsResult) &&
-              columnsResult.some((col) => col.name === columnName);
+    try {
+      // Check if columns exist and add them if missing
+      const addColumnIfNotExists = (tableName, columnName, columnType) => {
+        try {
+          // Check if the database connection is ready
+          if (!this.db) {
+            console.log(`⚠️ Database not ready for column ${columnName}`);
+            return;
+          }
 
-            if (!columnExists) {
-              this.db.exec(
-                `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType}`,
-              );
-              console.log(`✅ Added column ${columnName} to ${tableName}`);
-            } else {
-              console.log(
-                `ℹ️ Column ${columnName} already exists in ${tableName}`,
-              );
-            }
-          } catch (error) {
+          // First check if column exists by querying table info
+          const columnsResult = this.db
+            .prepare(`PRAGMA table_info(${tableName})`)
+            .all();
+
+          if (!Array.isArray(columnsResult)) {
+            console.log(`⚠️ Could not get table info for ${tableName}`);
+            return;
+          }
+
+          const columnExists = columnsResult.some(
+            (col) => col.name === columnName,
+          );
+
+          if (!columnExists) {
+            this.db.exec(
+              `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType}`,
+            );
+            console.log(`✅ Added column ${columnName} to ${tableName}`);
+          } else {
+            console.log(
+              `ℹ️ Column ${columnName} already exists in ${tableName}`,
+            );
+          }
+        } catch (error) {
+          if (error.message.includes("duplicate column name")) {
+            console.log(
+              `ℹ️ Column ${columnName} already exists in ${tableName}`,
+            );
+          } else {
             console.error(
               `❌ Error checking/adding column ${columnName}:`,
               error.message,
             );
-            // Don't throw, just log and continue
           }
-        };
+          // Don't throw, just log and continue
+        }
+      };
 
-        addColumnIfNotExists("businesses", "logo", "TEXT");
-        addColumnIfNotExists("businesses", "coverImage", "TEXT");
-        addColumnIfNotExists("businesses", "gallery", "TEXT");
+      addColumnIfNotExists("businesses", "logo", "TEXT");
+      addColumnIfNotExists("businesses", "coverImage", "TEXT");
+      addColumnIfNotExists("businesses", "gallery", "TEXT");
 
-        console.log("✅ Column migration completed");
-        resolve();
-      } catch (error) {
-        console.error("❌ Column migration failed:", error);
-        reject(error);
-      }
-    });
+      console.log("✅ Column migration completed");
+    } catch (error) {
+      console.error("❌ Column migration failed:", error);
+      // Don't throw - let the app continue even if migration fails
+    }
   }
 
   // Business operations
