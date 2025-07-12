@@ -909,7 +909,8 @@ export function GooglePlacesScraper() {
                     isLoading ||
                     !!activeJob ||
                     selectedCities.length === 0 ||
-                    selectedCategories.length === 0
+                    selectedCategories.length === 0 ||
+                    backendAvailable === false
                   }
                   className="w-full"
                 >
@@ -917,6 +918,11 @@ export function GooglePlacesScraper() {
                     <>
                       <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                       Starting...
+                    </>
+                  ) : backendAvailable === false ? (
+                    <>
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      Backend API Required
                     </>
                   ) : (
                     <>
