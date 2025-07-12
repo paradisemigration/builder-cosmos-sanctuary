@@ -127,9 +127,9 @@ const businessGalleryImages = [
   // Business exteriors and buildings
   "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
   "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
-  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
 ];
 
 async function downloadImageAsBuffer(url) {
