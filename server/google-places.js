@@ -193,7 +193,7 @@ class GooglePlacesAPI {
       const city = this.extractCityFromAddress(addressParts);
 
       // Check if automatic S3 upload is enabled
-      let useS3Upload = true; // Default to true for new scraping
+      let useS3Upload = false; // Default to false for faster scraping
       try {
         // Try to import the config, if it fails just use default
         const { autoS3ImageUpload } = await import("./api.js");
