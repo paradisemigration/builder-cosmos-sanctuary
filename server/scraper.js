@@ -16,7 +16,7 @@ class BusinessScraper {
       cities = [],
       categories = [],
       maxResultsPerSearch = 20,
-      delay = 1000, // Delay between API calls
+      delay = 500, // Delay between API calls
       jobId = null,
     } = config;
 

@@ -587,7 +587,7 @@ app.post("/api/scraping/start", async (req, res) => {
       cities = [],
       categories = [],
       maxResultsPerSearch = 15,
-      delay = 1500,
+      delay = 500,
     } = req.body;
 
     if (!cities.length || !categories.length) {
