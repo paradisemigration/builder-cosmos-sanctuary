@@ -498,9 +498,29 @@ export function GooglePlacesScraper() {
             <CardContent className="space-y-6">
               {/* Cities Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Cities ({selectedCities.length} selected)
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Select Cities ({selectedCities.length} selected)
+                  </label>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={selectAllCities}
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
+                      Select All
+                    </Button>
+                    <Button
+                      onClick={deselectAllCities}
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
+                      Clear All
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-4 gap-2 mb-3">
                   {defaultCities.map((city) => (
                     <div key={city} className="flex items-center space-x-2">
