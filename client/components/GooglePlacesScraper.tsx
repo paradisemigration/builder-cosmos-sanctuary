@@ -1332,13 +1332,13 @@ export function GooglePlacesScraper() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                       <div className="text-center p-2 bg-green-50 rounded">
                         <div className="text-lg font-bold text-green-700">
-                          {imageUploadProgress.progress.successful}
+                          {imageUploadProgress?.progress?.successful || 0}
                         </div>
                         <div className="text-xs text-green-600">Successful</div>
                       </div>
                       <div className="text-center p-2 bg-red-50 rounded">
                         <div className="text-lg font-bold text-red-700">
-                          {imageUploadProgress.progress.failed}
+                          {imageUploadProgress?.progress?.failed || 0}
                         </div>
                         <div className="text-xs text-red-600">Failed</div>
                       </div>
