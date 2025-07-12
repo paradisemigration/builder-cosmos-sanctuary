@@ -41,7 +41,8 @@ export function GooglePlacesScraper() {
   const getApiUrl = (endpoint: string) => {
     // Check if we're in production and need a different API URL
     const baseUrl = import.meta.env.VITE_API_URL || "";
-    return `${baseUrl}${endpoint}`;
+    // If no base URL configured, assume same-origin API
+    return baseUrl ? `${baseUrl}${endpoint}` : endpoint;
   };
 
   // Detect if backend is available
