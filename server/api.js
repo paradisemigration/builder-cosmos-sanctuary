@@ -435,7 +435,9 @@ app.get("/api/images/status", async (req, res) => {
           projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
             ? "✅ Set"
             : "❌ Missing",
-          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE ? "✅ Set" : "��� Missing",
+          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE
+            ? "✅ Set"
+            : "���� Missing",
           bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME
             ? "✅ Set"
             : "❌ Missing",
@@ -1264,6 +1266,83 @@ app.post("/api/admin/stop-bulk-assignment", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Stop bulk assignment error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get S3 image upload statistics
+app.get("/api/admin/s3-image-stats", async (req, res) => {
+  try {
+    const dbPath = path.join(__dirname, "visaconsult.db");
+    const statsDb = new Database(dbPath);
+
+    // Get total businesses
+    const totalBusinesses = statsDb
+      .prepare("SELECT COUNT(*) as count FROM businesses")
+      .get().count;
+
+    // Get businesses with S3 logos
+    const businessesWithLogos = statsDb
+      .prepare(
+        "SELECT COUNT(*) as count FROM businesses WHERE logo IS NOT NULL AND logo != '' AND logo LIKE '%s3%'",
+      )
+      .get().count;
+
+    // Get businesses with S3 cover images
+    const businessesWithCovers = statsDb
+      .prepare(
+        "SELECT COUNT(*) as count FROM businesses WHERE coverImage IS NOT NULL AND coverImage != '' AND coverImage LIKE '%s3%'",
+      )
+      .get().count;
+
+    // Get businesses with S3 gallery images
+    const businessesWithGallery = statsDb
+      .prepare(
+        "SELECT COUNT(*) as count FROM businesses WHERE gallery IS NOT NULL AND gallery != '[]' AND gallery LIKE '%s3%'",
+      )
+      .get().count;
+
+    // Get total S3 images (approximate count from gallery JSON)
+    const galleryImages = statsDb
+      .prepare(
+        "SELECT gallery FROM businesses WHERE gallery IS NOT NULL AND gallery != '[]' AND gallery LIKE '%s3%'",
+      )
+      .all();
+    let totalGalleryImages = 0;
+    galleryImages.forEach((row) => {
+      try {
+        const gallery = JSON.parse(row.gallery);
+        totalGalleryImages += gallery.length;
+      } catch (e) {
+        // Skip invalid JSON
+      }
+    });
+
+    const totalS3Images =
+      businessesWithLogos + businessesWithCovers + totalGalleryImages;
+
+    statsDb.close();
+
+    res.json({
+      success: true,
+      stats: {
+        totalBusinesses,
+        businessesWithLogos,
+        businessesWithCovers,
+        businessesWithGallery,
+        totalGalleryImages,
+        totalS3Images,
+        completionPercentage:
+          totalBusinesses > 0
+            ? Math.round((businessesWithLogos / totalBusinesses) * 100)
+            : 0,
+      },
+    });
+  } catch (error) {
+    console.error("S3 stats error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
