@@ -144,7 +144,13 @@ export function GooglePlacesScraper() {
 
   useEffect(() => {
     loadInitialData();
-    const interval = setInterval(loadStats, 5000); // Update stats every 5 seconds
+
+    // Reduce polling frequency in production to avoid overwhelming the server
+    const pollInterval = window.location.hostname.includes("fly.dev")
+      ? 15000
+      : 5000; // 15s in prod, 5s in dev
+    const interval = setInterval(loadStats, pollInterval);
+
     return () => clearInterval(interval);
   }, []);
 
