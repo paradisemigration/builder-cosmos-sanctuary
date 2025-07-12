@@ -310,6 +310,22 @@ export function GooglePlacesScraper() {
     }
   };
 
+  const selectAllCities = () => {
+    setSelectedCities([...defaultCities]);
+  };
+
+  const deselectAllCities = () => {
+    setSelectedCities([]);
+  };
+
+  const selectAllCategories = () => {
+    setSelectedCategories([...defaultCategories]);
+  };
+
+  const deselectAllCategories = () => {
+    setSelectedCategories([]);
+  };
+
   const exportData = async () => {
     try {
       const response = await fetch("/api/scraping/export");
