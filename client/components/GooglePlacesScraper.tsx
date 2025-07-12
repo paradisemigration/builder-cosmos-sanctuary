@@ -1213,9 +1213,11 @@ export function GooglePlacesScraper() {
 
                         if (result.success) {
                           toast.success(
-                            `Bulk image fetching started! Processing all businesses. ${result.config.estimatedDuration}. Check progress in console.`,
+                            `Bulk image fetching started! Processing all businesses. ${result.config.estimatedDuration}. Check progress below.`,
                           );
                           loadStats();
+                          setShowImageProgress(true);
+                          loadImageUploadProgress();
                         } else {
                           toast.error(
                             result.error ||
