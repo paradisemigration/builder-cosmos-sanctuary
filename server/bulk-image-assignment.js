@@ -347,6 +347,14 @@ export async function assignAllBusinessImages() {
   console.log("🚀 Starting complete bulk image assignment for all businesses");
 
   try {
+    // Initialize progress tracking
+    bulkProgress.isRunning = true;
+    bulkProgress.startTime = Date.now();
+    bulkProgress.currentProgress = 0;
+    bulkProgress.processedItems = 0;
+    bulkProgress.successCount = 0;
+    bulkProgress.errorCount = 0;
+
     // Get total count of businesses
     const totalCount = database
       .prepare("SELECT COUNT(*) as count FROM businesses")
@@ -354,14 +362,20 @@ export async function assignAllBusinessImages() {
     console.log(`📊 Total businesses in database: ${totalCount}`);
 
     const batchSize = 50; // Process in smaller batches for stability
+    const totalBatches = Math.ceil(totalCount / batchSize);
     let offset = 0;
     let totalProcessed = 0;
     let totalSuccess = 0;
     let totalErrors = 0;
+    let currentBatch = 0;
+
+    // Initialize progress
+    updateProgress(0, totalCount, 0, 0, 0, totalBatches);
 
     while (offset < totalCount) {
+      currentBatch++;
       console.log(
-        `\n📦 Processing batch ${Math.floor(offset / batchSize) + 1} (businesses ${offset + 1}-${Math.min(offset + batchSize, totalCount)})`,
+        `\n📦 Processing batch ${currentBatch} (businesses ${offset + 1}-${Math.min(offset + batchSize, totalCount)})`,
       );
 
       const result = await assignBulkBusinessImages({
@@ -376,9 +390,14 @@ export async function assignAllBusinessImages() {
 
       offset += batchSize;
 
-      // Progress update
-      console.log(
-        `📈 Progress: ${totalProcessed}/${totalCount} businesses processed (${Math.round((totalProcessed / totalCount) * 100)}%)`,
+      // Update progress
+      updateProgress(
+        totalProcessed,
+        totalCount,
+        totalSuccess,
+        totalErrors,
+        currentBatch,
+        totalBatches,
       );
 
       // Break if no more businesses to process
