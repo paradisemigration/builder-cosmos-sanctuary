@@ -227,6 +227,11 @@ export function GooglePlacesScraper() {
   };
 
   const loadScrapingJobs = async () => {
+    if (backendAvailable === false) {
+      console.log("🚫 Skipping loadScrapingJobs - backend unavailable");
+      return;
+    }
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -265,6 +270,11 @@ export function GooglePlacesScraper() {
   };
 
   const loadStats = async (retryCount = 0) => {
+    if (backendAvailable === false) {
+      console.log("🚫 Skipping loadStats - backend unavailable");
+      return;
+    }
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
@@ -323,6 +333,11 @@ export function GooglePlacesScraper() {
   };
 
   const loadScrapedBusinesses = async () => {
+    if (backendAvailable === false) {
+      console.log("🚫 Skipping loadScrapedBusinesses - backend unavailable");
+      return;
+    }
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
