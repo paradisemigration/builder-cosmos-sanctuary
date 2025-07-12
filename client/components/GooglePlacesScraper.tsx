@@ -207,18 +207,8 @@ export function GooglePlacesScraper() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const hostname = window.location.hostname;
 
-    // Check if we have a configured API URL
-    const hasApiUrl = apiUrl && apiUrl.trim() !== "";
-
-    // If no API URL is configured, assume no backend
-    if (!hasApiUrl) {
-      setBackendAvailable(false);
-      setBackendChecked(true);
-      return false;
-    }
-
-    // If API URL is configured, try to connect regardless of environment
-    // This allows for deployed backends with proper API URLs
+    // Try to connect to backend - either configured URL or same-origin
+    // This allows for both configured external APIs and same-origin deployments
 
     // Only reach here in development with valid API URL
     try {
