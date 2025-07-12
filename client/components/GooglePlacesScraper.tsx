@@ -158,18 +158,39 @@ export function GooglePlacesScraper() {
 
   const loadScrapingJobs = async () => {
     try {
-      const response = await fetch("/api/scraping/jobs");
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch("/api/scraping/jobs", {
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
-        setScrapingJobs(result.jobs);
-        const runningJob = result.jobs.find((job) => job.status === "running");
+        setScrapingJobs(result.jobs || []);
+        const runningJob = (result.jobs || []).find(
+          (job) => job.status === "running",
+        );
         if (runningJob) {
           setActiveJob(runningJob);
         }
+      } else {
+        setScrapingJobs([]);
       }
     } catch (error) {
       console.error("Load jobs error:", error);
+      setScrapingJobs([]);
+      setActiveJob(null);
     }
   };
 
