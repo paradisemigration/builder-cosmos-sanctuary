@@ -203,14 +203,29 @@ export function GooglePlacesScraper() {
   const checkBackendHealth = async () => {
     if (backendChecked) return backendAvailable;
 
-    // Smart backend detection
-    const apiUrl = import.meta.env.VITE_API_URL;
+    // Detect frontend-only deployments
     const hostname = window.location.hostname;
+    const isFrontendOnlyDeployment =
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io");
 
-    // Try to connect to backend - either configured URL or same-origin
-    // This allows for both configured external APIs and same-origin deployments
+    // If this is a frontend-only deployment, immediately mark as unavailable
+    if (isFrontendOnlyDeployment) {
+      setBackendAvailable(false);
+      setBackendChecked(true);
+      return false;
+    }
 
-    // Only reach here in development with valid API URL
+    // Only attempt connection in localhost development
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (!hostname.includes("localhost") && !apiUrl) {
+      setBackendAvailable(false);
+      setBackendChecked(true);
+      return false;
+    }
+
     try {
       // Create a promise that will resolve with timeout
       const timeoutPromise = new Promise((_, reject) => {
