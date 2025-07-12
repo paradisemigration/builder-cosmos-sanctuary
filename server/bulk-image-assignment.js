@@ -102,31 +102,31 @@ const businessGalleryImages = [
   "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
   "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
   "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
-  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
 
   // Business meetings and consultations
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
 
   // Professional services and consultation
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
 
   // Reception and waiting areas
-  "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1560472355-536de3962603?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1601582589907-f92af5ed9db8?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1560472355-536de3962603?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1601582589907-f92af5ed9db8?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
 
   // Business exteriors and buildings
-  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&crop=center",
-  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center",
+  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&h=400&fit=crop&crop=center&q=80&auto=compress",
   "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop&crop=center",
   "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&h=600&fit=crop&crop=center",
   "https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&h=600&fit=crop&crop=center",
