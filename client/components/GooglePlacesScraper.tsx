@@ -68,6 +68,8 @@ export function GooglePlacesScraper() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [customCity, setCustomCity] = useState("");
   const [customCategory, setCustomCategory] = useState("");
+  const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [showImageProgress, setShowImageProgress] = useState(false);
 
   // Predefined options
   const defaultCities = [
