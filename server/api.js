@@ -882,7 +882,7 @@ app.post("/api/refresh-review-counts-from-google", async (req, res) => {
           totalProcessed++;
 
           // Small delay to respect API rate limits
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 50));
         } catch (error) {
           console.error(
             `��� Error processing ${business.name}:`,
