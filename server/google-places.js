@@ -129,8 +129,8 @@ class GooglePlacesAPI {
         `📸 Downloading image ${imageIndex + 1} for place: ${placeId}`,
       );
 
-      // Get the full-size photo URL from Google Places
-      const photoUrl = `${this.baseUrl}/photo?maxwidth=800&photoreference=${photoReference}&key=${this.apiKey}`;
+      // Get the optimized photo URL from Google Places (smaller size for faster download)
+      const photoUrl = `${this.baseUrl}/photo?maxwidth=600&photoreference=${photoReference}&key=${this.apiKey}`;
 
       // Download the image
       const response = await fetch(photoUrl);
