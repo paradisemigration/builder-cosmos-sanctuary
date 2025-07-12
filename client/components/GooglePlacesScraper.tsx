@@ -217,7 +217,7 @@ export function GooglePlacesScraper() {
         setTimeout(() => reject(new Error("timeout")), 2000);
       });
 
-      const fetchPromise = fetch(`${apiUrl}/api/scraping/stats`, {
+      const fetchPromise = fetch(getApiUrl("/api/scraping/stats"), {
         method: "HEAD",
         mode: "cors",
       });
