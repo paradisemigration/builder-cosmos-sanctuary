@@ -58,23 +58,23 @@ function updateProgress(
   );
 }
 
-// Curated business-appropriate images from Unsplash
+// Optimized business-appropriate images from Unsplash (reduced size + compression)
 const businessLogos = [
-  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop&crop=center", // Office building
-  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop&crop=center", // Modern office
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop&crop=center", // Business center
-  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=400&fit=crop&crop=center", // Office space
-  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=400&fit=crop&crop=center", // Professional office
-  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=400&fit=crop&crop=center", // Business building
-  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=400&fit=crop&crop=center", // Corporate office
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center", // Team meeting
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center", // Professional workspace
-  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=400&h=400&fit=crop&crop=center", // Business consultation
-  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop&crop=center", // Glass building
-  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=400&h=400&fit=crop&crop=center", // Modern workspace
-  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=400&h=400&fit=crop&crop=center", // Business handshake
-  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=400&fit=crop&crop=center", // Professional meeting
-  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=400&fit=crop&crop=center", // Business consultation
+  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Office building
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Modern office
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Business center
+  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Office space
+  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Professional office
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Business building
+  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Corporate office
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Team meeting
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Professional workspace
+  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Business consultation
+  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Glass building
+  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Modern workspace
+  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Business handshake
+  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Professional meeting
+  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=300&h=300&fit=crop&crop=center&q=80&auto=compress", // Business consultation
 ];
 
 const businessCoverImages = [
@@ -171,7 +171,7 @@ export async function assignBulkBusinessImages(options = {}) {
   } = options;
 
   console.log(
-    `🎨 Starting bulk image assignment for businesses (limit: ${limit}, offset: ${offset})`,
+    `��� Starting bulk image assignment for businesses (limit: ${limit}, offset: ${offset})`,
   );
 
   try {
