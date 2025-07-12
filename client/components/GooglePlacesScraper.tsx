@@ -308,7 +308,7 @@ export function GooglePlacesScraper() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/scraping/start", {
+      const response = await fetch(getApiUrl("/api/scraping/start"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -358,7 +358,9 @@ export function GooglePlacesScraper() {
       }
 
       // Fallback to general stop API
-      const response = await fetch("/api/scraping/stop", { method: "POST" });
+      const response = await fetch(getApiUrl("/api/scraping/stop"), {
+        method: "POST",
+      });
       const result = await response.json();
 
       if (result.success) {
@@ -448,7 +450,7 @@ export function GooglePlacesScraper() {
 
   const exportData = async () => {
     try {
-      const response = await fetch("/api/scraping/export");
+      const response = await fetch(getApiUrl("/api/scraping/export"));
       const blob = await response.blob();
 
       const url = window.URL.createObjectURL(blob);
