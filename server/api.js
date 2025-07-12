@@ -1472,37 +1472,49 @@ app.post("/api/admin/collect-abu-dhabi-data", async (req, res) => {
       });
     }
 
-    // Abu Dhabi configuration
+    // Abu Dhabi configuration - Maximum data collection
     const abuDhabiConfig = {
       cities: ["Abu Dhabi"],
       categories: [
-        "visa consultant",
-        "immigration lawyer",
-        "Visa agent",
-        "immigration consultants",
-        "Immigration & naturalization service",
-        "Work Visa Consultants",
-        "MARA Agent",
-        "Overseas Services",
-        "Canada Immigration Consultants",
-        "Europe Work Visa Agent",
-        "study abroad consultant",
-        "education consultants",
-        "travel agency",
+        "visa consultant Abu Dhabi",
+        "immigration lawyer Abu Dhabi",
+        "visa agent Abu Dhabi",
+        "immigration consultants Abu Dhabi",
+        "Immigration naturalization service Abu Dhabi",
+        "Work Visa Consultants Abu Dhabi",
+        "MARA Agent Abu Dhabi",
+        "Overseas Services Abu Dhabi",
+        "Canada Immigration Consultants Abu Dhabi",
+        "Europe Work Visa Agent Abu Dhabi",
+        "study abroad consultant Abu Dhabi",
+        "education consultants Abu Dhabi",
+        "travel agency Abu Dhabi",
       ],
-      maxResultsPerSearch: 20,
-      delay: 300,
+      maxResultsPerSearch: 60, // Maximum results per category
+      delay: 200, // Fast collection
       jobId: `abu-dhabi-${Date.now()}`,
     };
+
+    console.log(`📋 Categories to search: ${abuDhabiConfig.categories.length}`);
+    console.log(
+      `🔍 Max results per category: ${abuDhabiConfig.maxResultsPerSearch}`,
+    );
+    console.log(
+      `📊 Expected total searches: ${abuDhabiConfig.categories.length}`,
+    );
 
     // Start data collection in background
     scraper
       .scrapeBusinesses(abuDhabiConfig)
       .then((result) => {
         console.log("✅ Abu Dhabi data collection completed!");
+        console.log(`📊 Final Results:`);
         console.log(
-          `📊 Results: ${result.totalBusinesses} businesses collected`,
+          `   • Total businesses collected: ${result.totalBusinesses}`,
         );
+        console.log(`   • Duplicates skipped: ${result.duplicatesSkipped}`);
+        console.log(`   • Total searches performed: ${result.totalSearches}`);
+        console.log(`   • Errors: ${result.errors?.length || 0}`);
       })
       .catch((error) => {
         console.error("❌ Abu Dhabi data collection failed:", error);
@@ -1510,12 +1522,13 @@ app.post("/api/admin/collect-abu-dhabi-data", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Abu Dhabi data collection started",
+      message: "Abu Dhabi data collection started successfully!",
       config: {
         city: "Abu Dhabi",
         categories: abuDhabiConfig.categories.length,
-        totalSearches:
-          abuDhabiConfig.cities.length * abuDhabiConfig.categories.length,
+        maxPerCategory: abuDhabiConfig.maxResultsPerSearch,
+        totalSearches: abuDhabiConfig.categories.length,
+        estimatedResults: abuDhabiConfig.categories.length * 30, // Realistic estimate
       },
     });
   } catch (error) {
