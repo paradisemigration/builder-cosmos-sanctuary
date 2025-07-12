@@ -435,9 +435,7 @@ app.get("/api/images/status", async (req, res) => {
           projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
             ? "✅ Set"
             : "❌ Missing",
-          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE
-            ? "✅ Set"
-            : "���� Missing",
+          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE ? "✅ Set" : "��� Missing",
           bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME
             ? "✅ Set"
             : "❌ Missing",
@@ -1343,6 +1341,116 @@ app.get("/api/admin/s3-image-stats", async (req, res) => {
     });
   } catch (error) {
     console.error("S3 stats error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// ============ BACKUP ENDPOINTS ============
+
+// Download database backup
+app.get("/api/admin/backup/database", async (req, res) => {
+  try {
+    const dbPath = path.join(__dirname, "visaconsult.db");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `visaconsult_database_backup_${timestamp}.sqlite`;
+
+    res.setHeader("Content-Type", "application/octet-stream");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    // Stream the database file
+    const fs = await import("fs");
+    const fileStream = fs.createReadStream(dbPath);
+    fileStream.pipe(res);
+
+    console.log(`📦 Database backup downloaded: ${filename}`);
+  } catch (error) {
+    console.error("Database backup error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Download full website backup (zip)
+app.get("/api/admin/backup/full", async (req, res) => {
+  try {
+    const archiver = require("archiver");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `visaconsult_full_backup_${timestamp}.zip`;
+
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    const archive = archiver("zip", {
+      zlib: { level: 9 }, // Maximum compression
+    });
+
+    archive.pipe(res);
+
+    // Add database
+    archive.file(path.join(__dirname, "visaconsult.db"), {
+      name: "database/visaconsult.db",
+    });
+
+    // Add server files
+    archive.directory(__dirname, "server");
+
+    // Add client files (if accessible)
+    const clientPath = path.join(__dirname, "../client");
+    const fs = await import("fs");
+    if (fs.existsSync(clientPath)) {
+      archive.directory(clientPath, "client");
+    }
+
+    // Add package files
+    const packagePath = path.join(__dirname, "../package.json");
+    if (fs.existsSync(packagePath)) {
+      archive.file(packagePath, { name: "package.json" });
+    }
+
+    archive.finalize();
+
+    console.log(`📦 Full backup downloaded: ${filename}`);
+  } catch (error) {
+    console.error("Full backup error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get backup history (mock for now - can be enhanced with actual file tracking)
+app.get("/api/admin/backup/history", async (req, res) => {
+  try {
+    // This is a mock response - in production, you'd track actual backup files
+    const mockHistory = [
+      {
+        filename: `visaconsult_database_backup_${new Date().toISOString().split("T")[0]}.sqlite`,
+        created: new Date().toISOString(),
+        size: "2.4 MB",
+        type: "database",
+        downloadUrl: "/api/admin/backup/database",
+      },
+      {
+        filename: `visaconsult_full_backup_${new Date().toISOString().split("T")[0]}.zip`,
+        created: new Date().toISOString(),
+        size: "15.8 MB",
+        type: "full",
+        downloadUrl: "/api/admin/backup/full",
+      },
+    ];
+
+    res.json({
+      success: true,
+      backups: mockHistory.slice(0, 10), // Last 10 backups
+    });
+  } catch (error) {
+    console.error("Backup history error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
