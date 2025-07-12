@@ -42,119 +42,62 @@ async function collectIndianCitiesData() {
   console.log(`🔢 Total searches: ${INDIAN_CITIES_CONFIG.totalSearches}`);
 
   const startTime = Date.now();
-  let currentSearch = 0;
 
   try {
-    // Initialize database connection
-    await sqliteDatabase.initialize();
+    // Create comprehensive category list with cities
+    const searchCategories = [];
 
     for (const city of INDIAN_CITIES_CONFIG.cities) {
-      console.log(`\n🏙️ Processing city: ${city}`);
-
       for (const category of INDIAN_CITIES_CONFIG.categories) {
-        currentSearch++;
-        const searchTerm = `${category} ${city}`;
-        const progressPercent = Math.round(
-          (currentSearch / INDIAN_CITIES_CONFIG.totalSearches) * 100,
-        );
-
-        console.log(
-          `\n🔍 Search ${currentSearch}/${INDIAN_CITIES_CONFIG.totalSearches} (${progressPercent}%)`,
-        );
-        console.log(`📝 Query: "${searchTerm}" in ${city}`);
-
-        try {
-          // Perform the search and scraping
-          const searchConfig = {
-            query: searchTerm,
-            location: city,
-            maxResults: INDIAN_CITIES_CONFIG.maxResultsPerSearch,
-            delay: INDIAN_CITIES_CONFIG.delay,
-            useS3Upload: true, // Enable S3 image upload
-            targetCity: city,
-            category: category,
-          };
-
-          const results = await scraper.scrapeGooglePlaces(searchConfig);
-
-          if (results && results.businesses) {
-            const newBusinesses = results.businesses.filter(
-              (b) => !b.isDuplicate,
-            ).length;
-            const duplicates = results.businesses.filter(
-              (b) => b.isDuplicate,
-            ).length;
-
-            INDIAN_CITIES_CONFIG.totalBusinesses += newBusinesses;
-            INDIAN_CITIES_CONFIG.totalDuplicates += duplicates;
-
-            console.log(
-              `✅ Found ${results.businesses.length} places (${newBusinesses} new, ${duplicates} duplicates)`,
-            );
-          } else {
-            console.log(`⚠️ No results for "${searchTerm}" in ${city}`);
-          }
-
-          // Progress summary every 10 searches
-          if (currentSearch % 10 === 0) {
-            console.log(`\n📊 Progress Update:`);
-            console.log(
-              `   • Searches completed: ${currentSearch}/${INDIAN_CITIES_CONFIG.totalSearches}`,
-            );
-            console.log(
-              `   • Total new businesses: ${INDIAN_CITIES_CONFIG.totalBusinesses}`,
-            );
-            console.log(
-              `   • Total duplicates: ${INDIAN_CITIES_CONFIG.totalDuplicates}`,
-            );
-            console.log(
-              `   • Cities processed: ${Math.ceil(currentSearch / INDIAN_CITIES_CONFIG.categories.length)}/${INDIAN_CITIES_CONFIG.cities.length}`,
-            );
-          }
-        } catch (searchError) {
-          console.error(
-            `❌ Error searching "${searchTerm}" in ${city}:`,
-            searchError.message,
-          );
-          // Continue with next search instead of failing completely
-        }
-
-        // Small delay between searches to respect API limits
-        await new Promise((resolve) =>
-          setTimeout(resolve, INDIAN_CITIES_CONFIG.delay),
-        );
+        searchCategories.push(`${category} ${city}`);
       }
-
-      // Longer delay between cities
-      console.log(`✅ Completed ${city} - Taking a short break...`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
+
+    // Use the scraper.scrapeBusinesses method for consistency
+    const scrapingConfig = {
+      cities: INDIAN_CITIES_CONFIG.cities,
+      categories: searchCategories,
+      maxResultsPerSearch: INDIAN_CITIES_CONFIG.maxResultsPerSearch,
+      delay: INDIAN_CITIES_CONFIG.delay,
+      jobId: `indian-cities-${Date.now()}`,
+      useS3Upload: true, // Enable S3 image upload
+    };
+
+    console.log(
+      `🔧 Starting scraping job with ${searchCategories.length} search terms...`,
+    );
+
+    const result = await scraper.scrapeBusinesses(scrapingConfig);
 
     const endTime = Date.now();
     const durationMinutes = Math.round((endTime - startTime) / 1000 / 60);
 
     console.log(`\n🎉 Indian cities data collection completed!`);
     console.log(`📊 Final Results:`);
-    console.log(`   • Total searches performed: ${currentSearch}`);
     console.log(
-      `   • Total new businesses collected: ${INDIAN_CITIES_CONFIG.totalBusinesses}`,
+      `   • Total searches performed: ${result.totalSearches || searchCategories.length}`,
     );
     console.log(
-      `   • Total duplicates skipped: ${INDIAN_CITIES_CONFIG.totalDuplicates}`,
+      `   • Total new businesses collected: ${result.totalBusinesses || 0}`,
+    );
+    console.log(
+      `   • Total duplicates skipped: ${result.duplicatesSkipped || 0}`,
     );
     console.log(`   • Cities processed: ${INDIAN_CITIES_CONFIG.cities.length}`);
     console.log(
       `   • Categories per city: ${INDIAN_CITIES_CONFIG.categories.length}`,
     );
     console.log(`   • Duration: ${durationMinutes} minutes`);
+    console.log(`   • Errors: ${result.errors?.length || 0}`);
 
     return {
       success: true,
-      totalSearches: currentSearch,
-      totalBusinesses: INDIAN_CITIES_CONFIG.totalBusinesses,
-      totalDuplicates: INDIAN_CITIES_CONFIG.totalDuplicates,
+      totalSearches: result.totalSearches || searchCategories.length,
+      totalBusinesses: result.totalBusinesses || 0,
+      totalDuplicates: result.duplicatesSkipped || 0,
       citiesProcessed: INDIAN_CITIES_CONFIG.cities.length,
       durationMinutes: durationMinutes,
+      errors: result.errors || [],
     };
   } catch (error) {
     console.error("❌ Indian cities data collection failed:", error);
