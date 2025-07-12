@@ -1239,6 +1239,23 @@ app.get("/api/admin/business-images-status", async (req, res) => {
   }
 });
 
+// Get bulk assignment progress
+app.get("/api/admin/bulk-assignment-progress", async (req, res) => {
+  try {
+    const progress = getBulkProgress();
+    res.json({
+      success: true,
+      progress,
+    });
+  } catch (error) {
+    console.error("Bulk progress error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
