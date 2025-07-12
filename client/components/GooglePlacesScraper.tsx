@@ -174,7 +174,7 @@ export function GooglePlacesScraper() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await fetch("/api/scraping/jobs", {
+      const response = await fetch(getApiUrl("/api/scraping/jobs"), {
         signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
@@ -212,7 +212,7 @@ export function GooglePlacesScraper() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-      const response = await fetch("/api/scraping/stats", {
+      const response = await fetch(getApiUrl("/api/scraping/stats"), {
         signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
@@ -270,12 +270,15 @@ export function GooglePlacesScraper() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await fetch("/api/scraped-businesses?limit=50", {
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        getApiUrl("/api/scraped-businesses?limit=50"),
+        {
+          signal: controller.signal,
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       clearTimeout(timeoutId);
 
