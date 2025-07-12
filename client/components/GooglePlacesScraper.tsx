@@ -33,6 +33,8 @@ import {
   Users,
   Database,
   Globe,
+  Image,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 
