@@ -611,6 +611,45 @@ export function GooglePlacesScraper() {
     }
   };
 
+  // Real-time image upload progress monitoring
+  const loadImageUploadProgress = async () => {
+    if (backendAvailable === false) return;
+
+    try {
+      const response = await fetch(
+        getApiUrl("/api/admin/image-fetch-progress"),
+      );
+      const result = await response.json();
+
+      if (result.success) {
+        setImageUploadProgress(result);
+
+        // Auto-hide progress when complete
+        if (!result.progress.isRunning && showImageProgress) {
+          setTimeout(() => setShowImageProgress(false), 5000);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load image progress:", error);
+    }
+  };
+
+  // Start real-time monitoring when image upload is active
+  useEffect(() => {
+    let interval = null;
+
+    if (showImageProgress && backendAvailable) {
+      // Poll every 2 seconds for real-time updates
+      interval = setInterval(loadImageUploadProgress, 2000);
+      // Load immediately
+      loadImageUploadProgress();
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [showImageProgress, backendAvailable]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
