@@ -678,6 +678,23 @@ export function GooglePlacesScraper() {
                 >
                   Retry Connection
                 </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const debugInfo = {
+                      hostname: window.location.hostname,
+                      apiUrl: import.meta.env.VITE_API_URL,
+                      override: localStorage.getItem("VITE_API_URL_OVERRIDE"),
+                      testUrl: getApiUrl("/api/scraping/stats"),
+                      backendAvailable,
+                      backendChecked,
+                    };
+                    alert(`Debug Info:\n${JSON.stringify(debugInfo, null, 2)}`);
+                  }}
+                >
+                  Debug Info
+                </Button>
               </div>
             </div>
           </div>
