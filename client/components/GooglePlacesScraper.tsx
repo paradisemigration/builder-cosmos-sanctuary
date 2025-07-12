@@ -254,14 +254,32 @@ export function GooglePlacesScraper() {
 
   const loadScrapedBusinesses = async () => {
     try {
-      const response = await fetch("/api/scraped-businesses?limit=50");
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch("/api/scraped-businesses?limit=50", {
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
-        setScrapedBusinesses(result.businesses);
+        setScrapedBusinesses(result.businesses || []);
+      } else {
+        setScrapedBusinesses([]);
       }
     } catch (error) {
       console.error("Load businesses error:", error);
+      setScrapedBusinesses([]);
     }
   };
 
