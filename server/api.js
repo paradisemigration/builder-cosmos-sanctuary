@@ -12,6 +12,7 @@ import GooglePlaces from "./google-places.js";
 import database from "./database.js";
 import sqliteDatabase from "./database.sqlite.js";
 import DataMigration from "./migrate-to-sqlite.js";
+import bulkImageFetcher from "./bulk-image-fetcher.js";
 
 const app = express();
 
