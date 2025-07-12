@@ -44,6 +44,12 @@ export function GooglePlacesScraper() {
     return `${baseUrl}${endpoint}`;
   };
 
+  // Detect if backend is available
+  const [backendAvailable, setBackendAvailable] = useState<boolean | null>(
+    null,
+  );
+  const [backendChecked, setBackendChecked] = useState(false);
+
   const [activeJob, setActiveJob] = useState(null);
   const [scrapingJobs, setScrapingJobs] = useState([]);
   const [scrapedBusinesses, setScrapedBusinesses] = useState([]);
