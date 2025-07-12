@@ -724,6 +724,7 @@ export default function AdminStatus() {
                 onClick={assignAllBusinessImages}
                 disabled={
                   imageAssignmentLoading ||
+                  bulkProgress?.isRunning ||
                   stats?.scraping?.isRunning ||
                   stats?.error
                 }
@@ -731,13 +732,17 @@ export default function AdminStatus() {
                 title={
                   stats?.error
                     ? "Cannot assign images: Server offline"
-                    : "Assign professional business logos and cover images to all 1135+ businesses using AWS S3 storage"
+                    : bulkProgress?.isRunning
+                      ? "Bulk assignment is currently running"
+                      : "Assign professional business logos and cover images to all 1203+ businesses using AWS S3 storage"
                 }
               >
-                {imageAssignmentLoading ? (
+                {imageAssignmentLoading || bulkProgress?.isRunning ? (
                   <>
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Assigning Images...
+                    {bulkProgress?.isRunning
+                      ? `Assigning... ${bulkProgress.currentProgress}%`
+                      : "Starting Assignment..."}
                   </>
                 ) : (
                   <>
