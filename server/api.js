@@ -1458,6 +1458,75 @@ app.get("/api/admin/backup/history", async (req, res) => {
   }
 });
 
+// ============ ABU DHABI DATA COLLECTION ============
+
+// Collect Abu Dhabi visa consultant data
+app.post("/api/admin/collect-abu-dhabi-data", async (req, res) => {
+  try {
+    console.log("🚀 Starting Abu Dhabi data collection...");
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    // Abu Dhabi configuration
+    const abuDhabiConfig = {
+      cities: ["Abu Dhabi"],
+      categories: [
+        "visa consultant",
+        "immigration lawyer",
+        "Visa agent",
+        "immigration consultants",
+        "Immigration & naturalization service",
+        "Work Visa Consultants",
+        "MARA Agent",
+        "Overseas Services",
+        "Canada Immigration Consultants",
+        "Europe Work Visa Agent",
+        "study abroad consultant",
+        "education consultants",
+        "travel agency",
+      ],
+      maxResultsPerSearch: 20,
+      delay: 300,
+      jobId: `abu-dhabi-${Date.now()}`,
+    };
+
+    // Start data collection in background
+    scraper
+      .scrapeBusinesses(abuDhabiConfig)
+      .then((result) => {
+        console.log("✅ Abu Dhabi data collection completed!");
+        console.log(
+          `📊 Results: ${result.totalBusinesses} businesses collected`,
+        );
+      })
+      .catch((error) => {
+        console.error("❌ Abu Dhabi data collection failed:", error);
+      });
+
+    res.json({
+      success: true,
+      message: "Abu Dhabi data collection started",
+      config: {
+        city: "Abu Dhabi",
+        categories: abuDhabiConfig.categories.length,
+        totalSearches:
+          abuDhabiConfig.cities.length * abuDhabiConfig.categories.length,
+      },
+    });
+  } catch (error) {
+    console.error("Abu Dhabi collection error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
