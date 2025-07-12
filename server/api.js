@@ -1108,6 +1108,7 @@ import {
   assignAllBusinessImages,
   setDatabase,
   getBulkProgress,
+  stopBulkAssignment,
 } from "./bulk-image-assignment.js";
 
 // Set database context for bulk operations
