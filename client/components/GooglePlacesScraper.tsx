@@ -1278,7 +1278,7 @@ export function GooglePlacesScraper() {
                 </div>
 
                 {/* Real-time Image Upload Progress */}
-                {showImageProgress && imageUploadProgress && (
+                {showImageProgress && (
                   <div className="bg-white border border-purple-200 rounded-lg p-4 mb-4">
                     <h4 className="text-sm font-medium text-purple-800 mb-3 flex items-center">
                       <Upload className="w-4 h-4 mr-2" />
