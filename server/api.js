@@ -1378,7 +1378,7 @@ app.get("/api/admin/backup/database", async (req, res) => {
 // Download full website backup (zip)
 app.get("/api/admin/backup/full", async (req, res) => {
   try {
-    const archiver = require("archiver");
+    const { default: archiver } = await import("archiver");
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename = `visaconsult_full_backup_${timestamp}.zip`;
 
