@@ -280,7 +280,7 @@ export async function assignBulkBusinessImages(options = {}) {
               );
 
               // Small delay between gallery uploads
-              await new Promise((resolve) => setTimeout(resolve, 200));
+              await new Promise((resolve) => setTimeout(resolve, 100));
             } catch (galleryError) {
               console.error(
                 `❌ Failed to upload gallery image ${g + 1}:`,
@@ -316,7 +316,7 @@ export async function assignBulkBusinessImages(options = {}) {
         console.log(`✅ Updated business: ${business.name}`);
 
         // Add small delay to avoid overwhelming the image service
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       } catch (error) {
         errorCount++;
         console.error(`❌ Error processing business ${business.name}:`, error);
@@ -406,7 +406,7 @@ export async function assignAllBusinessImages() {
       }
 
       // Add delay between batches
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     // Mark as completed
