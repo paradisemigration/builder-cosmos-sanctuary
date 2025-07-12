@@ -152,6 +152,7 @@ export default function AdminPanel() {
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
     loadDashboardData();
+    loadBackupHistory();
   }, []);
 
   if (!user || user.role !== "admin") {
