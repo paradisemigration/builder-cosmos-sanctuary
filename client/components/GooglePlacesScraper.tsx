@@ -37,6 +37,13 @@ import {
 import { toast } from "sonner";
 
 export function GooglePlacesScraper() {
+  // Configure API base URL based on environment
+  const getApiUrl = (endpoint: string) => {
+    // Check if we're in production and need a different API URL
+    const baseUrl = import.meta.env.VITE_API_URL || "";
+    return `${baseUrl}${endpoint}`;
+  };
+
   const [activeJob, setActiveJob] = useState(null);
   const [scrapingJobs, setScrapingJobs] = useState([]);
   const [scrapedBusinesses, setScrapedBusinesses] = useState([]);
