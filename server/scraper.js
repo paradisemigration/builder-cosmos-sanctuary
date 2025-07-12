@@ -338,7 +338,7 @@ class BusinessScraper {
           }
 
           // Add delay to respect API rate limits
-          await new Promise((resolve) => setTimeout(resolve, 300));
+          await new Promise((resolve) => setTimeout(resolve, 150));
         } catch (error) {
           console.error(
             `❌ Error fetching reviews for ${business.name}:`,
