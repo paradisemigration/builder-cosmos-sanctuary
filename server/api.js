@@ -1690,6 +1690,78 @@ app.post("/api/admin/collect-indian-cities-data", async (req, res) => {
   }
 });
 
+// Bulk Image Fetching Endpoints
+app.post("/api/admin/fetch-all-images", async (req, res) => {
+  try {
+    console.log("🖼️ Starting bulk image fetching...");
+
+    // Start the bulk image fetching process in the background
+    bulkImageFetcher
+      .fetchAllBusinessImages()
+      .then((result) => {
+        console.log("✅ Bulk image fetching completed:", result);
+      })
+      .catch((error) => {
+        console.error("❌ Bulk image fetching failed:", error);
+      });
+
+    const stats = await bulkImageFetcher.getProgress();
+
+    res.json({
+      success: true,
+      message: "Bulk image fetching started successfully!",
+      config: {
+        description:
+          "Fetching logos, cover photos, and gallery images from Google Places API",
+        storageLocation: "AWS S3",
+        estimatedDuration: "15-30 minutes depending on number of businesses",
+        rateLimit: "100ms delay between requests",
+      },
+      progress: stats,
+      note: "Process is running in the background. Use /api/admin/image-fetch-progress to monitor progress.",
+    });
+  } catch (error) {
+    console.error("Bulk image fetching error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get bulk image fetching progress
+app.get("/api/admin/image-fetch-progress", async (req, res) => {
+  try {
+    const progress = bulkImageFetcher.getProgress();
+
+    res.json({
+      success: true,
+      progress,
+    });
+  } catch (error) {
+    console.error("Get image fetch progress error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Stop bulk image fetching
+app.post("/api/admin/stop-image-fetch", async (req, res) => {
+  try {
+    const result = await bulkImageFetcher.stop();
+
+    res.json(result);
+  } catch (error) {
+    console.error("Stop image fetching error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
