@@ -125,7 +125,9 @@ class GooglePlacesAPI {
   // Download and store a photo in AWS S3 for scraped businesses
   async downloadAndStorePhotoToS3(photoReference, placeId, imageIndex) {
     try {
-      console.log(`📸 Downloading image ${imageIndex + 1} for place: ${placeId}`);
+      console.log(
+        `📸 Downloading image ${imageIndex + 1} for place: ${placeId}`,
+      );
 
       // Get the full-size photo URL from Google Places
       const photoUrl = `${this.baseUrl}/photo?maxwidth=800&photoreference=${photoReference}&key=${this.apiKey}`;
@@ -147,16 +149,21 @@ class GooglePlacesAPI {
       };
 
       // Determine folder based on image index
-      const folder = imageIndex === 0 ? "logos" : (imageIndex === 1 ? "covers" : "gallery");
+      const folder =
+        imageIndex === 0 ? "logos" : imageIndex === 1 ? "covers" : "gallery";
 
       // Upload to S3
       const s3Result = await uploadToS3(file, folder);
 
-      console.log(`✅ Image ${imageIndex + 1} uploaded to S3: ${s3Result.publicUrl}`);
+      console.log(
+        `✅ Image ${imageIndex + 1} uploaded to S3: ${s3Result.publicUrl}`,
+      );
       return s3Result.publicUrl;
-
     } catch (error) {
-      console.error(`❌ Error downloading/storing photo ${imageIndex + 1}:`, error);
+      console.error(
+        `❌ Error downloading/storing photo ${imageIndex + 1}:`,
+        error,
+      );
       return null;
     }
   }
@@ -201,7 +208,9 @@ class GooglePlacesAPI {
       let logo = null;
 
       if (useS3Upload && photos && photos.length > 0) {
-        console.log(`📸 Auto S3 upload enabled - processing ${photos.length} photos for ${name}`);
+        console.log(
+          `📸 Auto S3 upload enabled - processing ${photos.length} photos for ${name}`,
+        );
 
         // Process up to 5 photos
         const photosToProcess = photos.slice(0, 5);
@@ -229,14 +238,12 @@ class GooglePlacesAPI {
           }
         }
       } else {
-        console.log(`📷 S3 upload disabled or no photos - using placeholders for ${name}`);
+        console.log(
+          `📷 S3 upload disabled or no photos - using placeholders for ${name}`,
+        );
         // Use placeholder images when S3 upload is disabled or no photos available
         logo = "/api/placeholder/80/80";
         imageUrls.push("/api/placeholder/800/400"); // Cover image placeholder
-      }
-
-        // Add delay to respect API rate limits
-        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       // Process ALL reviews (no limit)
