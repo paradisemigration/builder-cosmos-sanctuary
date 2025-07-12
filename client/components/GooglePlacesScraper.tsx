@@ -189,22 +189,32 @@ export function GooglePlacesScraper() {
     if (backendChecked) return backendAvailable;
 
     try {
+      // Silent health check - completely suppress errors
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
 
-      // Try a simple health check endpoint, or any endpoint
-      const response = await fetch(getApiUrl("/api/scraping/stats"), {
+      // Don't use getApiUrl if it might be empty or invalid
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl || apiUrl.trim() === "") {
+        // No API URL configured - assume backend not available
+        setBackendAvailable(false);
+        setBackendChecked(true);
+        return false;
+      }
+
+      const response = await fetch(`${apiUrl}/api/scraping/stats`, {
         signal: controller.signal,
-        method: "HEAD", // Use HEAD to avoid downloading data
+        method: "HEAD",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
-      const available = response.ok || response.status < 500; // Consider 4xx as "available but endpoint might not exist"
+      const available = response.ok;
       setBackendAvailable(available);
       setBackendChecked(true);
       return available;
     } catch (error) {
-      console.log("Backend health check failed:", error.message);
+      // Completely silent - no console logs
       setBackendAvailable(false);
       setBackendChecked(true);
       return false;
