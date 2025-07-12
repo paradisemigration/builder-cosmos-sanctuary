@@ -1283,7 +1283,7 @@ export function GooglePlacesScraper() {
                     <h4 className="text-sm font-medium text-purple-800 mb-3 flex items-center">
                       <Upload className="w-4 h-4 mr-2" />
                       AWS S3 Image Upload Progress
-                      {imageUploadProgress.progress.isRunning && (
+                      {imageUploadProgress?.progress?.isRunning && (
                         <RefreshCw className="w-3 h-3 ml-2 animate-spin" />
                       )}
                     </h4>
