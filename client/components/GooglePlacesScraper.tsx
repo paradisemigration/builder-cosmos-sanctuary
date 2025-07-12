@@ -608,26 +608,54 @@ export function GooglePlacesScraper() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <div className="flex items-center">
             <AlertCircle className="h-5 w-5 text-blue-600 mr-2" />
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-medium text-blue-800">
                 Backend API Not Available
               </h3>
               <p className="text-sm text-blue-700 mt-1">
-                The scraping features require a backend API server. This is a
-                frontend-only deployment.
+                To enable scraping with your Google Places API key, deploy the
+                backend:
               </p>
-              <div className="mt-2 text-xs text-blue-600">
+              <div className="mt-2 text-xs text-blue-600 space-y-1">
                 <p>
-                  • Deploy a Node.js backend server with the scraping API
-                  endpoints
+                  <strong>Option 1:</strong> Deploy backend to:{" "}
+                  <code>your-app-api.fly.dev</code>
                 </p>
                 <p>
-                  • Set VITE_API_URL environment variable to your backend URL
+                  <strong>Option 2:</strong> Same domain backend:{" "}
+                  <code>https://{window.location.hostname}:3001</code>
                 </p>
                 <p>
-                  • The UI is fully functional, only data scraping requires the
-                  backend
+                  <strong>Option 3:</strong> External backend + set VITE_API_URL
                 </p>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const url = prompt(
+                      "Enter your backend API URL:\n(e.g., https://your-api.fly.dev or https://your-app.fly.dev:3001)",
+                    );
+                    if (url && url.trim()) {
+                      localStorage.setItem("VITE_API_URL_OVERRIDE", url.trim());
+                      window.location.reload();
+                    }
+                  }}
+                >
+                  Configure API URL
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setBackendAvailable(null);
+                    setBackendChecked(false);
+                    loadInitialData();
+                  }}
+                >
+                  Retry Connection
+                </Button>
               </div>
             </div>
           </div>
