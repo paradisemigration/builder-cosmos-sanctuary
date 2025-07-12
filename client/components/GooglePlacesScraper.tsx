@@ -1141,6 +1141,69 @@ export function GooglePlacesScraper() {
                   </Button>
                 </div>
 
+                {/* Bulk Image Fetching */}
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4">
+                  <h4 className="text-sm font-medium text-purple-800 mb-2">
+                    🖼️ Bulk Image Fetching
+                  </h4>
+                  <p className="text-xs text-purple-700 mb-2">
+                    Fetch logos, cover photos, and gallery images from Google
+                    Places API for all businesses
+                  </p>
+                  <p className="text-xs text-purple-600 mb-3">
+                    Automatically uploads to AWS S3 and skips businesses that
+                    already have images
+                  </p>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        const response = await fetch(
+                          getApiUrl("/api/admin/fetch-all-images"),
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                          },
+                        );
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                          toast.success(
+                            `Bulk image fetching started! Processing all businesses. ${result.config.estimatedDuration}. Check progress in console.`,
+                          );
+                          loadStats();
+                        } else {
+                          toast.error(
+                            result.error ||
+                              "Failed to start bulk image fetching",
+                          );
+                        }
+                      } catch (error) {
+                        toast.error("Failed to start bulk image fetching");
+                        console.error("Bulk image fetching error:", error);
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={isLoading || backendAvailable === false}
+                    size="sm"
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Starting Image Fetch...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 mr-2" />
+                        Fetch All Business Images
+                      </>
+                    )}
+                  </Button>
+                </div>
+
                 {/* Regular Scraping */}
                 <div className="bg-gray-50 rounded-lg p-3">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">
