@@ -1362,19 +1362,19 @@ export function GooglePlacesScraper() {
                     <div className="text-xs text-gray-600 flex items-center justify-between">
                       <span>
                         Status:{" "}
-                        {imageUploadProgress.progress.isRunning ? (
+                        {imageUploadProgress?.progress?.isRunning ? (
                           <span className="text-purple-600 font-medium">
                             Processing...
                           </span>
                         ) : (
                           <span className="text-green-600 font-medium">
-                            Completed
+                            {imageUploadProgress ? "Completed" : "Ready"}
                           </span>
                         )}
                       </span>
                       <span>
                         Gallery:{" "}
-                        {imageUploadProgress.imageStats
+                        {imageUploadProgress?.imageStats
                           ?.businesses_with_galleries || 0}{" "}
                         businesses
                       </span>
