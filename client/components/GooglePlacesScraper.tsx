@@ -202,25 +202,22 @@ export function GooglePlacesScraper() {
   const checkBackendHealth = async () => {
     if (backendChecked) return backendAvailable;
 
-    // Comprehensive production environment detection
+    // Smart backend detection
     const apiUrl = import.meta.env.VITE_API_URL;
     const hostname = window.location.hostname;
 
-    // Check for known production hosting platforms
-    const isKnownProduction =
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io") ||
-      hostname.includes("surge.sh") ||
-      !hostname.includes("localhost");
+    // Check if we have a configured API URL
+    const hasApiUrl = apiUrl && apiUrl.trim() !== "";
 
-    // If in production OR no API URL configured, assume no backend
-    if (isKnownProduction || !apiUrl || apiUrl.trim() === "") {
+    // If no API URL is configured, assume no backend
+    if (!hasApiUrl) {
       setBackendAvailable(false);
       setBackendChecked(true);
       return false;
     }
+
+    // If API URL is configured, try to connect regardless of environment
+    // This allows for deployed backends with proper API URLs
 
     // Only reach here in development with valid API URL
     try {
