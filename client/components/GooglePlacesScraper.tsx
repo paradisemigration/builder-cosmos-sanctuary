@@ -222,14 +222,8 @@ export function GooglePlacesScraper() {
       return false;
     }
 
+    // Only reach here in development with valid API URL
     try {
-      if (!apiUrl || apiUrl.trim() === "") {
-        // No API URL configured - assume backend not available
-        setBackendAvailable(false);
-        setBackendChecked(true);
-        return false;
-      }
-
       // Create a promise that will resolve with timeout
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error("timeout")), 2000);
