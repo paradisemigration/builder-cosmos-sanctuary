@@ -31,7 +31,7 @@ class BulkImageFetcher {
     };
 
     try {
-      console.log("🚀 Starting bulk image fetching process...");
+      console.log("🚀 Starting SUPER FAST bulk image fetching process...");
 
       // Get all businesses that need image processing
       const businesses = await this.getBusinessesNeedingImages();
@@ -41,80 +41,99 @@ class BulkImageFetcher {
         `📊 Found ${businesses.length} businesses that need image processing`,
       );
 
-      for (let i = 0; i < businesses.length; i++) {
-        const business = businesses[i];
+      // Process in parallel batches of 10 for super fast processing
+      const BATCH_SIZE = 10;
+      const batches = [];
 
-        try {
-          console.log(
-            `\n🔄 Processing [${i + 1}/${businesses.length}]: ${business.name}`,
-          );
-
-          if (!business.googlePlaceId) {
-            console.log("⚠️ No Google Place ID, skipping...");
-            this.progress.skipped++;
-            continue;
-          }
-
-          // Check if business already has all images
-          if (this.hasAllImages(business)) {
-            console.log("✅ Already has images, skipping...");
-            this.progress.skipped++;
-            this.progress.processed++;
-            continue;
-          }
-
-          // Fetch place details to get photos
-          const placeDetails = await this.fetchPlaceDetails(
-            business.googlePlaceId,
-          );
-
-          if (
-            !placeDetails ||
-            !placeDetails.photos ||
-            placeDetails.photos.length === 0
-          ) {
-            console.log("⚠️ No photos available from Google Places");
-            this.progress.failed++;
-            this.progress.processed++;
-            continue;
-          }
-
-          // Process photos (logo, cover, gallery)
-          const imageUrls = await this.processBusinessPhotos(
-            business,
-            placeDetails.photos,
-          );
-
-          // Update database with image URLs
-          await this.updateBusinessImages(business.id, imageUrls);
-
-          console.log(`✅ Successfully processed images for ${business.name}`);
-          this.progress.successful++;
-
-          // Rate limiting - wait 100ms between requests
-          await this.delay(100);
-        } catch (error) {
-          console.error(`❌ Error processing ${business.name}:`, error.message);
-          this.progress.failed++;
-        }
-
-        this.progress.processed++;
-
-        // Log progress every 10 businesses
-        if ((i + 1) % 10 === 0) {
-          console.log(
-            `\n📈 Progress: ${this.progress.processed}/${this.progress.total} (${Math.round((this.progress.processed / this.progress.total) * 100)}%)`,
-          );
-        }
+      for (let i = 0; i < businesses.length; i += BATCH_SIZE) {
+        batches.push(businesses.slice(i, i + BATCH_SIZE));
       }
 
-      console.log("\n🎉 Bulk image fetching completed!");
+      console.log(
+        `🔥 Processing ${batches.length} parallel batches of ${BATCH_SIZE} businesses each`,
+      );
+
+      for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+
+        console.log(
+          `\n🚀 Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} businesses)`,
+        );
+
+        // Process entire batch in parallel
+        const batchPromises = batch.map(async (business, businessIndex) => {
+          try {
+            if (!business.googlePlaceId) {
+              this.progress.skipped++;
+              return;
+            }
+
+            // Check if business already has all images
+            if (this.hasAllImages(business)) {
+              this.progress.skipped++;
+              this.progress.processed++;
+              return;
+            }
+
+            // Fetch place details to get photos
+            const placeDetails = await this.fetchPlaceDetails(
+              business.googlePlaceId,
+            );
+
+            if (
+              !placeDetails ||
+              !placeDetails.photos ||
+              placeDetails.photos.length === 0
+            ) {
+              this.progress.failed++;
+              this.progress.processed++;
+              return;
+            }
+
+            // Process photos (logo, cover, gallery)
+            const imageUrls = await this.processBusinessPhotos(
+              business,
+              placeDetails.photos,
+            );
+
+            // Update database with image URLs
+            await this.updateBusinessImages(business.id, imageUrls);
+
+            this.progress.successful++;
+            this.progress.processed++;
+
+            console.log(
+              `  ✅ [${batchIndex * BATCH_SIZE + businessIndex + 1}] ${business.name}`,
+            );
+          } catch (error) {
+            console.error(
+              `  ❌ [${batchIndex * BATCH_SIZE + businessIndex + 1}] ${business.name}:`,
+              error.message,
+            );
+            this.progress.failed++;
+            this.progress.processed++;
+          }
+        });
+
+        // Wait for entire batch to complete
+        await Promise.all(batchPromises);
+
+        // Minimal delay between batches (reduced from 100ms per business to 50ms per batch)
+        await this.delay(50);
+
+        // Log progress every batch
+        console.log(
+          `📈 Batch ${batchIndex + 1}/${batches.length} completed - Total Progress: ${this.progress.processed}/${this.progress.total} (${Math.round((this.progress.processed / this.progress.total) * 100)}%)`,
+        );
+      }
+
+      console.log("\n🎉 SUPER FAST bulk image fetching completed!");
       console.log(`📊 Final stats:`, this.progress);
 
       return {
         success: true,
         progress: this.progress,
-        message: "Bulk image fetching completed successfully",
+        message: "Super fast bulk image fetching completed successfully",
       };
     } catch (error) {
       console.error("❌ Bulk image fetching failed:", error);
