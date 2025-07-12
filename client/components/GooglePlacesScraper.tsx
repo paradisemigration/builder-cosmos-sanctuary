@@ -167,7 +167,41 @@ export function GooglePlacesScraper() {
     return () => clearInterval(interval);
   }, []);
 
+  // Check if backend API is available
+  const checkBackendHealth = async () => {
+    if (backendChecked) return backendAvailable;
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      // Try a simple health check endpoint, or any endpoint
+      const response = await fetch(getApiUrl("/api/scraping/stats"), {
+        signal: controller.signal,
+        method: "HEAD", // Use HEAD to avoid downloading data
+      });
+
+      clearTimeout(timeoutId);
+      const available = response.ok || response.status < 500; // Consider 4xx as "available but endpoint might not exist"
+      setBackendAvailable(available);
+      setBackendChecked(true);
+      return available;
+    } catch (error) {
+      console.log("Backend health check failed:", error.message);
+      setBackendAvailable(false);
+      setBackendChecked(true);
+      return false;
+    }
+  };
+
   const loadInitialData = async () => {
+    const isBackendAvailable = await checkBackendHealth();
+
+    if (!isBackendAvailable) {
+      console.log("🚫 Backend unavailable - skipping API calls");
+      return;
+    }
+
     await Promise.all([
       loadScrapingJobs(),
       loadStats(),
