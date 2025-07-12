@@ -578,9 +578,29 @@ export function GooglePlacesScraper() {
 
               {/* Categories Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Categories ({selectedCategories.length} selected)
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Select Categories ({selectedCategories.length} selected)
+                  </label>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={selectAllCategories}
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
+                      Select All
+                    </Button>
+                    <Button
+                      onClick={deselectAllCategories}
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-xs"
+                    >
+                      Clear All
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {defaultCategories.map((category) => (
                     <div key={category} className="flex items-center space-x-2">
