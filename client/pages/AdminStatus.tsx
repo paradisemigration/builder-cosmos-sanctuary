@@ -400,7 +400,9 @@ export default function AdminStatus() {
 
       if (result.success) {
         console.log("✅ Bulk image assignment started");
-        alert("Bulk image assignment started! Check server logs for progress.");
+        alert("Bulk image assignment started! Watch the progress bar below.");
+        // Start monitoring progress
+        setTimeout(loadBulkProgress, 1000);
         // Reload image stats after a delay
         setTimeout(loadImageStats, 2000);
       } else {
