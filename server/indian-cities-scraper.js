@@ -1,5 +1,4 @@
 import { scraper } from "./scraper.js";
-import { sqliteDatabase } from "./sqlite-database.js";
 
 // Indian cities configuration for comprehensive data collection
 const INDIAN_CITIES_CONFIG = {
