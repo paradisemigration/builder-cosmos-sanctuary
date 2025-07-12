@@ -1077,6 +1077,70 @@ export function GooglePlacesScraper() {
                   </Button>
                 </div>
 
+                {/* Indian Cities Data Collection */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                  <h4 className="text-sm font-medium text-blue-800 mb-2">
+                    🇮🇳 Indian Cities Data Collection
+                  </h4>
+                  <p className="text-xs text-blue-700 mb-2">
+                    Collect visa consultant data for 12 major Indian cities with
+                    5 categories
+                  </p>
+                  <p className="text-xs text-blue-600 mb-3">
+                    Cities: Delhi, Mumbai, Chennai, Bangalore, Gurgaon, Noida,
+                    Ahmedabad, Pune, Kochi, Chandigarh, Hyderabad, Jaipur
+                  </p>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        const response = await fetch(
+                          getApiUrl("/api/admin/collect-indian-cities-data"),
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                          },
+                        );
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                          toast.success(
+                            `Indian cities data collection started! Processing ${result.config.cities.length} cities × ${result.config.categories.length} categories. Estimated: ${result.config.estimatedResults} businesses in ${result.config.estimatedDuration}.`,
+                          );
+                          loadScrapingJobs();
+                          loadStats();
+                        } else {
+                          toast.error(
+                            result.error ||
+                              "Failed to start Indian cities collection",
+                          );
+                        }
+                      } catch (error) {
+                        toast.error("Failed to start Indian cities collection");
+                        console.error("Indian cities collection error:", error);
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={isLoading || backendAvailable === false}
+                    size="sm"
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Collecting Data...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 mr-2" />
+                        Collect Indian Cities Data
+                      </>
+                    )}
+                  </Button>
+                </div>
+
                 {/* Regular Scraping */}
                 <div className="bg-gray-50 rounded-lg p-3">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">
