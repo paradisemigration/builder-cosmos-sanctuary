@@ -1238,6 +1238,57 @@ app.get("/api/admin/business-images-status", async (req, res) => {
   }
 });
 
+// Configuration for automatic S3 image upload during scraping
+let autoS3ImageUpload = true; // Default to enabled
+
+// Get automatic S3 upload configuration
+app.get("/api/admin/auto-s3-config", (req, res) => {
+  try {
+    res.json({
+      success: true,
+      config: {
+        autoS3ImageUpload,
+        description: "Automatically upload scraped business images to AWS S3",
+      },
+    });
+  } catch (error) {
+    console.error("Get auto S3 config error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Update automatic S3 upload configuration
+app.post("/api/admin/auto-s3-config", (req, res) => {
+  try {
+    const { enabled } = req.body;
+    autoS3ImageUpload = Boolean(enabled);
+
+    console.log(
+      `🔧 Auto S3 image upload ${autoS3ImageUpload ? "ENABLED" : "DISABLED"}`,
+    );
+
+    res.json({
+      success: true,
+      config: {
+        autoS3ImageUpload,
+        message: `Automatic S3 image upload ${autoS3ImageUpload ? "enabled" : "disabled"}`,
+      },
+    });
+  } catch (error) {
+    console.error("Update auto S3 config error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Export the configuration for use in scraper
+export { autoS3ImageUpload };
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
