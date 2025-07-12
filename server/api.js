@@ -1540,6 +1540,86 @@ app.post("/api/admin/collect-abu-dhabi-data", async (req, res) => {
   }
 });
 
+// Collect Sharjah visa consultant data
+app.post("/api/admin/collect-sharjah-data", async (req, res) => {
+  try {
+    console.log("🚀 Starting Sharjah data collection...");
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    // Sharjah configuration - Maximum data collection
+    const sharjahConfig = {
+      cities: ["Sharjah"],
+      categories: [
+        "visa consultant Sharjah",
+        "immigration lawyer Sharjah",
+        "visa agent Sharjah",
+        "immigration consultants Sharjah",
+        "Immigration naturalization service Sharjah",
+        "Work Visa Consultants Sharjah",
+        "MARA Agent Sharjah",
+        "Overseas Services Sharjah",
+        "Canada Immigration Consultants Sharjah",
+        "Europe Work Visa Agent Sharjah",
+        "study abroad consultant Sharjah",
+        "education consultants Sharjah",
+        "travel agency Sharjah",
+      ],
+      maxResultsPerSearch: 60, // Maximum results per category
+      delay: 200, // Fast collection
+      jobId: `sharjah-${Date.now()}`,
+    };
+
+    console.log(`📋 Categories to search: ${sharjahConfig.categories.length}`);
+    console.log(
+      `🔍 Max results per category: ${sharjahConfig.maxResultsPerSearch}`,
+    );
+    console.log(
+      `📊 Expected total searches: ${sharjahConfig.categories.length}`,
+    );
+
+    // Start data collection in background
+    scraper
+      .scrapeBusinesses(sharjahConfig)
+      .then((result) => {
+        console.log("✅ Sharjah data collection completed!");
+        console.log(`📊 Final Results:`);
+        console.log(
+          `   • Total businesses collected: ${result.totalBusinesses}`,
+        );
+        console.log(`   • Duplicates skipped: ${result.duplicatesSkipped}`);
+        console.log(`   • Total searches performed: ${result.totalSearches}`);
+        console.log(`   • Errors: ${result.errors?.length || 0}`);
+      })
+      .catch((error) => {
+        console.error("❌ Sharjah data collection failed:", error);
+      });
+
+    res.json({
+      success: true,
+      message: "Sharjah data collection started successfully!",
+      config: {
+        city: "Sharjah",
+        categories: sharjahConfig.categories.length,
+        maxPerCategory: sharjahConfig.maxResultsPerSearch,
+        totalSearches: sharjahConfig.categories.length,
+        estimatedResults: sharjahConfig.categories.length * 30, // Realistic estimate
+      },
+    });
+  } catch (error) {
+    console.error("Sharjah collection error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
