@@ -203,15 +203,14 @@ class BulkImageFetcher {
     };
 
     try {
-      // Process up to 5 photos (1 for logo, 1 for cover, 3 for gallery)
+      // Process up to 5 photos (1 for logo, 1 for cover, 3 for gallery) IN PARALLEL
       const maxPhotos = Math.min(photos.length, 5);
 
-      for (let i = 0; i < maxPhotos; i++) {
-        const photo = photos[i];
-
+      // Create all photo processing promises simultaneously for parallel execution
+      const photoPromises = photos.slice(0, maxPhotos).map(async (photo, i) => {
         try {
           // Download photo from Google Places
-          const photoUrl = await this.getPhotoUrl(photo.photo_reference, 800); // Max width 800px
+          const photoUrl = this.getPhotoUrl(photo.photo_reference, 800); // Max width 800px
           const imageBuffer = await this.downloadImage(photoUrl);
 
           // Create file object for S3 upload
@@ -225,24 +224,44 @@ class BulkImageFetcher {
           // Upload to S3
           const uploadResult = await uploadToS3(file, "business-images");
 
-          // Assign to appropriate field
-          if (i === 0 && !business.logo) {
-            imageUrls.logo = uploadResult.publicUrl;
-          } else if (i === 1 && !business.coverImage) {
-            imageUrls.coverImage = uploadResult.publicUrl;
-          } else {
-            imageUrls.gallery.push(uploadResult.publicUrl);
-          }
-
-          console.log(`  ✅ Uploaded image ${i + 1}/${maxPhotos}`);
+          return {
+            index: i,
+            url: uploadResult.publicUrl,
+            success: true,
+          };
         } catch (error) {
           console.error(
             `  ❌ Failed to process photo ${i + 1}:`,
             error.message,
           );
-          continue;
+          return {
+            index: i,
+            success: false,
+            error: error.message,
+          };
         }
-      }
+      });
+
+      // Wait for all photos to process in parallel
+      const results = await Promise.all(photoPromises);
+
+      // Assign results to appropriate fields
+      results.forEach((result) => {
+        if (result.success) {
+          if (result.index === 0 && !business.logo) {
+            imageUrls.logo = result.url;
+          } else if (result.index === 1 && !business.coverImage) {
+            imageUrls.coverImage = result.url;
+          } else {
+            imageUrls.gallery.push(result.url);
+          }
+        }
+      });
+
+      const successCount = results.filter((r) => r.success).length;
+      console.log(
+        `  ✅ Uploaded ${successCount}/${maxPhotos} images in parallel`,
+      );
     } catch (error) {
       console.error("Error processing business photos:", error);
     }
