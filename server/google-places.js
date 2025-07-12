@@ -222,11 +222,18 @@ class GooglePlacesAPI {
             imagesForDB.push({
               photoReference: photo.photo_reference,
               height: photo.height,
-            width: photo.width,
-            htmlAttributions: photo.html_attributions || [],
-            cloudStorageUrl: imageUrl, // GCS URL
-          });
+              width: photo.width,
+              htmlAttributions: photo.html_attributions || [],
+              cloudStorageUrl: imageUrl, // S3 URL
+            });
+          }
         }
+      } else {
+        console.log(`📷 S3 upload disabled or no photos - using placeholders for ${name}`);
+        // Use placeholder images when S3 upload is disabled or no photos available
+        logo = "/api/placeholder/80/80";
+        imageUrls.push("/api/placeholder/800/400"); // Cover image placeholder
+      }
 
         // Add delay to respect API rate limits
         await new Promise((resolve) => setTimeout(resolve, 100));
