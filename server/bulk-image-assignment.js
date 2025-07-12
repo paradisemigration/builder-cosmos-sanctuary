@@ -348,7 +348,7 @@ export async function assignAllBusinessImages() {
 
   try {
     // Initialize progress tracking
-    bulkProgress.isRunning = true;
+    bulkProgress.isRunning = false;
     bulkProgress.startTime = Date.now();
     bulkProgress.currentProgress = 0;
     bulkProgress.processedItems = 0;
