@@ -188,13 +188,25 @@ export function GooglePlacesScraper() {
   const checkBackendHealth = async () => {
     if (backendChecked) return backendAvailable;
 
+    // Quick check for production environment without backend
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const isProduction =
+      window.location.hostname.includes("fly.dev") ||
+      window.location.hostname.includes("vercel.app") ||
+      window.location.hostname.includes("netlify.app");
+
+    if (isProduction && (!apiUrl || apiUrl.trim() === "")) {
+      // Production environment without API URL - assume no backend
+      setBackendAvailable(false);
+      setBackendChecked(true);
+      return false;
+    }
+
     try {
       // Silent health check - completely suppress errors
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
 
-      // Don't use getApiUrl if it might be empty or invalid
-      const apiUrl = import.meta.env.VITE_API_URL;
       if (!apiUrl || apiUrl.trim() === "") {
         // No API URL configured - assume backend not available
         setBackendAvailable(false);
