@@ -1016,37 +1016,103 @@ export function GooglePlacesScraper() {
                 )}
               </div>
 
-              {/* Start Scraping */}
+              {/* Abu Dhabi Data Collection */}
               <div className="pt-4 border-t">
-                <Button
-                  onClick={startScraping}
-                  disabled={
-                    isLoading ||
-                    !!activeJob ||
-                    selectedCities.length === 0 ||
-                    selectedCategories.length === 0 ||
-                    backendAvailable === false
-                  }
-                  className="w-full"
-                >
-                  {isLoading ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                      Starting...
-                    </>
-                  ) : backendAvailable === false ? (
-                    <>
-                      <AlertCircle className="w-4 h-4 mr-2" />
-                      Backend API Required
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-2" />
-                      Start Scraping ({selectedCities.length} cities ×{" "}
-                      {selectedCategories.length} categories)
-                    </>
-                  )}
-                </Button>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                  <h4 className="text-sm font-medium text-green-800 mb-2">
+                    🇦🇪 Abu Dhabi Data Collection
+                  </h4>
+                  <p className="text-xs text-green-700 mb-3">
+                    Collect visa consultant data for Abu Dhabi with 13
+                    categories (20 results per category)
+                  </p>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        const response = await fetch(
+                          getApiUrl("/api/admin/collect-abu-dhabi-data"),
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                          },
+                        );
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                          toast.success(
+                            `Abu Dhabi data collection started! Processing ${result.config.totalSearches} searches.`,
+                          );
+                          loadScrapingJobs();
+                          loadStats();
+                        } else {
+                          toast.error(
+                            result.error ||
+                              "Failed to start Abu Dhabi collection",
+                          );
+                        }
+                      } catch (error) {
+                        toast.error("Failed to start Abu Dhabi collection");
+                        console.error("Abu Dhabi collection error:", error);
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={isLoading || backendAvailable === false}
+                    size="sm"
+                    className="w-full"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Collecting Data...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 mr-2" />
+                        Collect Abu Dhabi Data
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Regular Scraping */}
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Custom Scraping
+                  </h4>
+                  <Button
+                    onClick={startScraping}
+                    disabled={
+                      isLoading ||
+                      !!activeJob ||
+                      selectedCities.length === 0 ||
+                      selectedCategories.length === 0 ||
+                      backendAvailable === false
+                    }
+                    className="w-full"
+                    variant="outline"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Starting...
+                      </>
+                    ) : backendAvailable === false ? (
+                      <>
+                        <AlertCircle className="w-4 h-4 mr-2" />
+                        Backend API Required
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-4 h-4 mr-2" />
+                        Start Custom Scraping ({selectedCities.length} cities ×{" "}
+                        {selectedCategories.length} categories)
+                      </>
+                    )}
+                  </Button>
+                </div>
                 {selectedCities.length > 0 && selectedCategories.length > 0 && (
                   <p className="text-sm text-gray-600 mt-2 text-center">
                     Estimated time: ~
