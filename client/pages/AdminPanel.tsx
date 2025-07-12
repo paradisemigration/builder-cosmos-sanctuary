@@ -72,6 +72,83 @@ export default function AdminPanel() {
     }
   };
 
+  // Backup functions
+  const downloadDatabaseBackup = async () => {
+    try {
+      setBackupLoading(true);
+      const response = await fetch("/api/admin/backup/database");
+
+      if (!response.ok) {
+        throw new Error("Failed to create database backup");
+      }
+
+      const blob = await response.blob();
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const filename = `visaconsult_database_backup_${timestamp}.sqlite`;
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      // Update backup history
+      loadBackupHistory();
+    } catch (error) {
+      console.error("Database backup failed:", error);
+      alert("Failed to create database backup");
+    } finally {
+      setBackupLoading(false);
+    }
+  };
+
+  const downloadFullBackup = async () => {
+    try {
+      setBackupLoading(true);
+      const response = await fetch("/api/admin/backup/full");
+
+      if (!response.ok) {
+        throw new Error("Failed to create full backup");
+      }
+
+      const blob = await response.blob();
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const filename = `visaconsult_full_backup_${timestamp}.zip`;
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      // Update backup history
+      loadBackupHistory();
+    } catch (error) {
+      console.error("Full backup failed:", error);
+      alert("Failed to create full backup");
+    } finally {
+      setBackupLoading(false);
+    }
+  };
+
+  const loadBackupHistory = async () => {
+    try {
+      const response = await fetch("/api/admin/backup/history");
+      const result = await response.json();
+      if (result.success) {
+        setBackupHistory(result.backups || []);
+      }
+    } catch (error) {
+      console.error("Failed to load backup history:", error);
+    }
+  };
+
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
     loadDashboardData();
