@@ -529,6 +529,14 @@ export default function AdminStatus() {
       }
     }, 30000);
 
+    // Monitor bulk progress every 5 seconds if running
+    const progressInterval = setInterval(() => {
+      if (isMounted && (bulkProgress?.isRunning || imageAssignmentLoading)) {
+        loadBulkProgress();
+        loadImageStats(); // Also refresh image stats during bulk assignment
+      }
+    }, 5000);
+
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
