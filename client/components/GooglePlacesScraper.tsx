@@ -156,6 +156,20 @@ export function GooglePlacesScraper() {
   ];
 
   useEffect(() => {
+    // Immediate detection for known production environments
+    const isKnownProduction =
+      window.location.hostname.includes("fly.dev") ||
+      window.location.hostname.includes("vercel.app") ||
+      window.location.hostname.includes("netlify.app");
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    if (isKnownProduction && (!apiUrl || apiUrl.trim() === "")) {
+      // Known production environment without API URL - set as unavailable immediately
+      setBackendAvailable(false);
+      setBackendChecked(true);
+      return; // Skip all API-related initialization
+    }
+
     loadInitialData();
 
     // Only set up polling if backend is available
