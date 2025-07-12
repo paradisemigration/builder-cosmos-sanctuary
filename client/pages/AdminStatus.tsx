@@ -24,6 +24,7 @@ export default function AdminStatus() {
   const [imageAssignmentLoading, setImageAssignmentLoading] = useState(false);
   const [imageStats, setImageStats] = useState<any>(null);
   const [loadingRef, setLoadingRef] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState<any>(null);
 
   const loadStatus = async (retryCount = 0) => {
     const maxRetries = 3;
