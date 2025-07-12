@@ -1620,6 +1620,75 @@ app.post("/api/admin/collect-sharjah-data", async (req, res) => {
   }
 });
 
+// ============ INDIAN CITIES DATA COLLECTION ============
+
+// Collect Indian cities visa consultant data
+app.post("/api/admin/collect-indian-cities-data", async (req, res) => {
+  try {
+    console.log("🚀 Starting Indian cities data collection...");
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    // Import the Indian cities collection module
+    const { collectIndianCitiesData, INDIAN_CITIES_CONFIG } = await import(
+      "./indian-cities-scraper.js"
+    );
+
+    console.log(`🏙️ Cities to process: ${INDIAN_CITIES_CONFIG.cities.length}`);
+    console.log(
+      `📋 Categories per city: ${INDIAN_CITIES_CONFIG.categories.length}`,
+    );
+    console.log(
+      `🔍 Max results per search: ${INDIAN_CITIES_CONFIG.maxResultsPerSearch}`,
+    );
+    console.log(
+      `📊 Total searches planned: ${INDIAN_CITIES_CONFIG.totalSearches}`,
+    );
+
+    // Start data collection in background
+    collectIndianCitiesData()
+      .then((result) => {
+        console.log("✅ Indian cities data collection completed!");
+        console.log(`📊 Final Results:`);
+        console.log(
+          `   • Total businesses collected: ${result.totalBusinesses}`,
+        );
+        console.log(`   • Duplicates skipped: ${result.totalDuplicates}`);
+        console.log(`   • Total searches performed: ${result.totalSearches}`);
+        console.log(`   • Cities processed: ${result.citiesProcessed}`);
+        console.log(`   • Duration: ${result.durationMinutes} minutes`);
+      })
+      .catch((error) => {
+        console.error("❌ Indian cities data collection failed:", error);
+      });
+
+    res.json({
+      success: true,
+      message: "Indian cities data collection started successfully!",
+      config: {
+        cities: INDIAN_CITIES_CONFIG.cities,
+        categories: INDIAN_CITIES_CONFIG.categories,
+        maxPerSearch: INDIAN_CITIES_CONFIG.maxResultsPerSearch,
+        totalSearches: INDIAN_CITIES_CONFIG.totalSearches,
+        estimatedResults: INDIAN_CITIES_CONFIG.totalSearches * 30, // Realistic estimate
+        estimatedDuration: `${Math.round(INDIAN_CITIES_CONFIG.totalSearches * 0.5)} minutes`,
+      },
+      note: "Process is running in the background. Check console logs for progress.",
+    });
+  } catch (error) {
+    console.error("Indian cities collection error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
