@@ -1023,8 +1023,8 @@ export function GooglePlacesScraper() {
                     🇦🇪 Abu Dhabi Data Collection
                   </h4>
                   <p className="text-xs text-green-700 mb-3">
-                    Collect visa consultant data for Abu Dhabi with 13
-                    categories (20 results per category)
+                    Collect maximum visa consultant data for Abu Dhabi with 13
+                    categories (up to 60 results per category)
                   </p>
                   <Button
                     onClick={async () => {
@@ -1042,7 +1042,7 @@ export function GooglePlacesScraper() {
 
                         if (result.success) {
                           toast.success(
-                            `Abu Dhabi data collection started! Processing ${result.config.totalSearches} searches.`,
+                            `Abu Dhabi data collection started! Processing ${result.config.categories} categories, up to ${result.config.maxPerCategory} results each. Estimated: ${result.config.estimatedResults} businesses.`,
                           );
                           loadScrapingJobs();
                           loadStats();
