@@ -173,16 +173,61 @@ export function GooglePlacesScraper() {
     }
   };
 
-  const loadStats = async () => {
+  const loadStats = async (retryCount = 0) => {
     try {
-      const response = await fetch("/api/scraping/stats");
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch("/api/scraping/stats", {
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
         setStats(result.stats);
+      } else {
+        console.warn("Stats API returned success=false:", result);
+        // Set fallback stats
+        setStats({
+          totalBusinesses: 0,
+          totalGooglePlaces: 0,
+          totalReviews: 0,
+          averageRating: 0,
+          citiesCount: 0,
+        });
       }
     } catch (error) {
       console.error("Load stats error:", error);
+
+      // Retry logic for network errors
+      if (
+        retryCount < 2 &&
+        (error.name === "AbortError" || error.message.includes("fetch"))
+      ) {
+        console.log(`Retrying stats load (attempt ${retryCount + 1}/3)...`);
+        setTimeout(() => loadStats(retryCount + 1), 2000);
+        return;
+      }
+
+      // Set fallback stats on final failure
+      setStats({
+        totalBusinesses: 0,
+        totalGooglePlaces: 0,
+        totalReviews: 0,
+        averageRating: 0,
+        citiesCount: 0,
+        error: "Unable to load stats - API unavailable",
+      });
     }
   };
 
