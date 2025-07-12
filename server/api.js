@@ -435,7 +435,7 @@ app.get("/api/images/status", async (req, res) => {
           projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
             ? "✅ Set"
             : "❌ Missing",
-          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE ? "✅ Set" : "❌ Missing",
+          keyFile: process.env.GOOGLE_CLOUD_KEY_FILE ? "✅ Set" : "��� Missing",
           bucketName: process.env.GOOGLE_CLOUD_BUCKET_NAME
             ? "✅ Set"
             : "❌ Missing",
@@ -1249,6 +1249,20 @@ app.get("/api/admin/bulk-assignment-progress", async (req, res) => {
     });
   } catch (error) {
     console.error("Bulk progress error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Stop bulk assignment
+app.post("/api/admin/stop-bulk-assignment", async (req, res) => {
+  try {
+    const result = stopBulkAssignment();
+    res.json(result);
+  } catch (error) {
+    console.error("Stop bulk assignment error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
