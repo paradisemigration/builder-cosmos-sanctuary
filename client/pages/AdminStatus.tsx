@@ -515,6 +515,7 @@ export default function AdminStatus() {
       if (isMounted && !loadingRef && !loading) {
         console.log("���� Initial status load");
         loadStatus();
+        loadBulkProgress(); // Also load bulk progress on mount
       }
     }, 100);
 
