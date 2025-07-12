@@ -77,6 +77,7 @@ export function GooglePlacesScraper() {
   ];
 
   const defaultCategories = [
+    // General visa services
     "visa consultant",
     "immigration lawyer",
     "study abroad consultant",
@@ -85,6 +86,40 @@ export function GooglePlacesScraper() {
     "education consultant",
     "overseas education",
     "student visa services",
+    "Visa consulting services",
+    "Visa agent",
+    "Immigration Consultants",
+
+    // Europe services
+    "Europe Work Visa Consultants",
+    "Europe Work Visa Agent",
+
+    // Canada services
+    "Canada Visa Agent",
+    "Canada Immigration Consultants",
+    "Canada PR Visa Agents",
+    "Canada Work Permit Consultant",
+    "Canada Express Entry Consultant",
+    "Best Canada Immigration Agency",
+    "Canada Student Visa Consultant",
+    "Canada Tourist Visa Agents",
+
+    // USA services
+    "USA Student Visa Consultants",
+    "US Immigration Consultants",
+    "USA Tourist Visa Agents",
+
+    // UK services
+    "UK Immigration Consultants",
+    "UK Work Visa Consultants",
+    "UK Student Visa Consultants",
+
+    // Australia services
+    "MARA Agent",
+    "Australia PR Consultant",
+    "Australia Immigration Agents",
+    "Australia Student Visa Services",
+    "Australia Work Visa Consultants",
   ];
 
   useEffect(() => {
