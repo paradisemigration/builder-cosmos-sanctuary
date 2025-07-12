@@ -436,7 +436,7 @@ class BusinessScraper {
           "Lucknow",
         ],
         maxResultsPerSearch: 15,
-        delay: 500,
+        delay: 300,
       },
       student_visa: {
         categories: [
@@ -457,7 +457,7 @@ class BusinessScraper {
           "Kochi",
         ],
         maxResultsPerSearch: 10,
-        delay: 400,
+        delay: 250,
       },
       immigration_lawyers: {
         categories: [
@@ -477,7 +477,7 @@ class BusinessScraper {
           "Hyderabad",
         ],
         maxResultsPerSearch: 8,
-        delay: 600,
+        delay: 350,
       },
     };
   }
