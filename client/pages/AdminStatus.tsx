@@ -466,6 +466,29 @@ export default function AdminStatus() {
     }
   };
 
+  const loadBulkProgress = async () => {
+    try {
+      const response = await fetch("/api/admin/bulk-assignment-progress", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setBulkProgress(result.progress);
+        console.log("📈 Bulk progress loaded:", result.progress);
+      } else {
+        console.error("❌ Failed to load bulk progress:", result.error);
+      }
+    } catch (error) {
+      console.error("❌ Error loading bulk progress:", error);
+    }
+  };
+
   // Force refresh function that bypasses loading checks
   const forceRefresh = async () => {
     console.log("Force refresh triggered");
