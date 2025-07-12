@@ -352,7 +352,7 @@ export async function assignBulkBusinessImages(options = {}) {
 export { setDatabase };
 
 export async function assignAllBusinessImages() {
-  console.log("🚀 Starting complete bulk image assignment for all businesses");
+  console.log("��� Starting complete bulk image assignment for all businesses");
 
   try {
     // Initialize progress tracking
@@ -380,11 +380,17 @@ export async function assignAllBusinessImages() {
     // Initialize progress
     updateProgress(0, totalCount, 0, 0, 0, totalBatches);
 
-    while (offset < totalCount) {
+    while (offset < totalCount && !bulkProgress.shouldStop) {
       currentBatch++;
       console.log(
         `\n📦 Processing batch ${currentBatch} (businesses ${offset + 1}-${Math.min(offset + batchSize, totalCount)})`,
       );
+
+      // Check if stop requested
+      if (bulkProgress.shouldStop) {
+        console.log("🛑 Bulk assignment stopped by user request");
+        break;
+      }
 
       const result = await assignBulkBusinessImages({
         limit: batchSize,
