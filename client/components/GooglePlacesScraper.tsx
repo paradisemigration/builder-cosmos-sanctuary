@@ -217,10 +217,6 @@ export function GooglePlacesScraper() {
     }
 
     try {
-      // Silent health check - completely suppress errors
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-
       if (!apiUrl || apiUrl.trim() === "") {
         // No API URL configured - assume backend not available
         setBackendAvailable(false);
@@ -228,19 +224,25 @@ export function GooglePlacesScraper() {
         return false;
       }
 
-      const response = await fetch(`${apiUrl}/api/scraping/stats`, {
-        signal: controller.signal,
+      // Create a promise that will resolve with timeout
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("timeout")), 2000);
+      });
+
+      const fetchPromise = fetch(`${apiUrl}/api/scraping/stats`, {
         method: "HEAD",
         mode: "cors",
       });
 
-      clearTimeout(timeoutId);
-      const available = response.ok;
+      // Race between fetch and timeout
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+
+      const available = response && response.ok;
       setBackendAvailable(available);
       setBackendChecked(true);
       return available;
     } catch (error) {
-      // Completely silent - no console logs
+      // Completely silent - no console logs, handles timeout and fetch errors
       setBackendAvailable(false);
       setBackendChecked(true);
       return false;
