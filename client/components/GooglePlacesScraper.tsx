@@ -650,6 +650,18 @@ export function GooglePlacesScraper() {
     };
   }, [showImageProgress, backendAvailable]);
 
+  // Check for running image upload process on component mount
+  useEffect(() => {
+    if (backendAvailable) {
+      loadImageUploadProgress().then(() => {
+        // If image upload is running, show progress bar
+        if (imageUploadProgress?.progress?.isRunning) {
+          setShowImageProgress(true);
+        }
+      });
+    }
+  }, [backendAvailable]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
