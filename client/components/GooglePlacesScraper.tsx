@@ -158,13 +158,30 @@ export function GooglePlacesScraper() {
   useEffect(() => {
     loadInitialData();
 
-    // Reduce polling frequency in production to avoid overwhelming the server
-    const pollInterval = window.location.hostname.includes("fly.dev")
-      ? 15000
-      : 5000; // 15s in prod, 5s in dev
-    const interval = setInterval(loadStats, pollInterval);
+    // Only set up polling if backend is available
+    const setupPolling = async () => {
+      const isBackendAvailable = await checkBackendHealth();
+      if (isBackendAvailable) {
+        // Reduce polling frequency in production to avoid overwhelming the server
+        const pollInterval = window.location.hostname.includes("fly.dev")
+          ? 15000
+          : 5000; // 15s in prod, 5s in dev
+        const interval = setInterval(() => {
+          if (backendAvailable) {
+            loadStats();
+          }
+        }, pollInterval);
 
-    return () => clearInterval(interval);
+        return () => clearInterval(interval);
+      }
+    };
+
+    const cleanup = setupPolling();
+    return () => {
+      if (cleanup instanceof Promise) {
+        cleanup.then((fn) => fn && fn());
+      }
+    };
   }, []);
 
   // Check if backend API is available
