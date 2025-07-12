@@ -1,10 +1,10 @@
 import fetch from "node-fetch";
 import { uploadToS3 } from "./storage-s3.js";
-import SQLiteDatabase from "./database.sqlite.js";
+import sqliteDatabase from "./database.sqlite.js";
 
 class BulkImageFetcher {
   constructor() {
-    this.db = new SQLiteDatabase();
+    this.db = sqliteDatabase;
     this.apiKey = process.env.GOOGLE_PLACES_API_KEY;
     this.isRunning = false;
     this.progress = {
@@ -129,8 +129,8 @@ class BulkImageFetcher {
       // Get businesses that don't have logo, coverImage, or gallery
       const sql = `
         SELECT id, googlePlaceId, name, logo, coverImage, gallery
-        FROM businesses 
-        WHERE googlePlaceId IS NOT NULL 
+        FROM businesses
+        WHERE googlePlaceId IS NOT NULL
         AND (logo IS NULL OR logo = '' OR coverImage IS NULL OR coverImage = '' OR gallery IS NULL OR gallery = '')
         ORDER BY createdAt DESC
       `;
@@ -280,7 +280,7 @@ class BulkImageFetcher {
       params.push(businessId);
 
       const sql = `
-        UPDATE businesses 
+        UPDATE businesses
         SET ${updates.join(", ")}, updatedAt = ?
         WHERE id = ?
       `;
