@@ -1,4 +1,7 @@
-import { scraper } from "./scraper.js";
+import BusinessScraper from "./scraper.js";
+
+// Initialize scraper instance
+const scraper = new BusinessScraper();
 
 // Indian cities configuration for comprehensive data collection
 const INDIAN_CITIES_CONFIG = {
