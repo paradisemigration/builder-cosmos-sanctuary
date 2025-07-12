@@ -120,6 +120,26 @@ export function GooglePlacesScraper() {
     "Australia Immigration Agents",
     "Australia Student Visa Services",
     "Australia Work Visa Consultants",
+
+    // General immigration services
+    "Immigration & naturalization service",
+
+    // European work permit visa agencies
+    "Germany Work permit Visa agency",
+    "Czech Republic work permit visa agency",
+    "Cyprus work visa permit agency",
+    "Netherlands Work permit Visa agency",
+    "France work permit visa agency",
+    "Hungary work permit visa agency",
+    "Romania work permit visa agency",
+    "Poland work permit agents agency",
+    "Spain work permit visa agency",
+    "Portugal work permit visa agency",
+    "Italy seasonal work permit visa agency",
+    "Malta work permit visa agency",
+    "Luxembourg work visa agency",
+    "Greece work permit agency",
+    "Norway Work Permit Visa agency",
   ];
 
   useEffect(() => {
