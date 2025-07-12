@@ -125,9 +125,7 @@ class GooglePlacesAPI {
   // Download and store a photo in AWS S3 for scraped businesses
   async downloadAndStorePhotoToS3(photoReference, placeId, imageIndex) {
     try {
-      console.log(
-        `📸 Downloading image ${imageIndex + 1} for place: ${placeId}`,
-      );
+      console.log(`📸 Downloading image ${imageIndex + 1} for place: ${placeId}`);
 
       // Get the full-size photo URL from Google Places
       const photoUrl = `${this.baseUrl}/photo?maxwidth=800&photoreference=${photoReference}&key=${this.apiKey}`;
@@ -149,21 +147,16 @@ class GooglePlacesAPI {
       };
 
       // Determine folder based on image index
-      const folder =
-        imageIndex === 0 ? "logos" : imageIndex === 1 ? "covers" : "gallery";
+      const folder = imageIndex === 0 ? "logos" : (imageIndex === 1 ? "covers" : "gallery");
 
       // Upload to S3
       const s3Result = await uploadToS3(file, folder);
 
-      console.log(
-        `✅ Image ${imageIndex + 1} uploaded to S3: ${s3Result.publicUrl}`,
-      );
+      console.log(`✅ Image ${imageIndex + 1} uploaded to S3: ${s3Result.publicUrl}`);
       return s3Result.publicUrl;
+
     } catch (error) {
-      console.error(
-        `❌ Error downloading/storing photo ${imageIndex + 1}:`,
-        error,
-      );
+      console.error(`❌ Error downloading/storing photo ${imageIndex + 1}:`, error);
       return null;
     }
   }
@@ -192,30 +185,43 @@ class GooglePlacesAPI {
       const addressParts = formatted_address?.split(",") || [];
       const city = this.extractCityFromAddress(addressParts);
 
-      // Download and store photos in AWS S3
+      // Check if automatic S3 upload is enabled
+      let useS3Upload = true; // Default to true for new scraping
+      try {
+        // Try to import the config, if it fails just use default
+        const { autoS3ImageUpload } = await import("./api.js");
+        useS3Upload = autoS3ImageUpload;
+      } catch (error) {
+        console.log("ℹ️ Using default S3 upload configuration");
+      }
+
+      // Download and store photos in AWS S3 (if enabled) or use placeholders
       const imageUrls = [];
       const imagesForDB = [];
       let logo = null;
 
-      // Process up to 5 photos
-      const photosToProcess = photos.slice(0, 5);
-      for (let i = 0; i < photosToProcess.length; i++) {
-        const photo = photosToProcess[i];
-        const imageUrl = await this.downloadAndStorePhotoToS3(
-          photo.photo_reference,
-          place_id,
-          i,
-        );
-        if (imageUrl) {
-          if (i === 0) {
-            logo = imageUrl; // First image as logo
-          }
-          imageUrls.push(imageUrl);
+      if (useS3Upload && photos && photos.length > 0) {
+        console.log(`📸 Auto S3 upload enabled - processing ${photos.length} photos for ${name}`);
 
-          // Format image data for SQLite database
-          imagesForDB.push({
-            photoReference: photo.photo_reference,
-            height: photo.height,
+        // Process up to 5 photos
+        const photosToProcess = photos.slice(0, 5);
+        for (let i = 0; i < photosToProcess.length; i++) {
+          const photo = photosToProcess[i];
+          const imageUrl = await this.downloadAndStorePhotoToS3(
+            photo.photo_reference,
+            place_id,
+            i,
+          );
+          if (imageUrl) {
+            if (i === 0) {
+              logo = imageUrl; // First image as logo
+            }
+            imageUrls.push(imageUrl);
+
+            // Format image data for SQLite database
+            imagesForDB.push({
+              photoReference: photo.photo_reference,
+              height: photo.height,
             width: photo.width,
             htmlAttributions: photo.html_attributions || [],
             cloudStorageUrl: imageUrl, // GCS URL
