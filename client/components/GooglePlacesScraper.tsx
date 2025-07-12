@@ -1292,27 +1292,37 @@ export function GooglePlacesScraper() {
                     <div className="mb-3">
                       <div className="flex justify-between text-xs text-gray-600 mb-1">
                         <span>
-                          {imageUploadProgress.progress.processed} /{" "}
-                          {imageUploadProgress.progress.total} businesses
+                          {imageUploadProgress?.progress?.processed || 0} /{" "}
+                          {imageUploadProgress?.progress?.total || 0} businesses
                         </span>
                         <span>
-                          {Math.round(
-                            (imageUploadProgress.progress.processed /
-                              imageUploadProgress.progress.total) *
-                              100,
-                          )}
+                          {imageUploadProgress?.progress?.total
+                            ? Math.round(
+                                (imageUploadProgress.progress.processed /
+                                  imageUploadProgress.progress.total) *
+                                  100,
+                              )
+                            : 0}
                           %
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className={`h-2 rounded-full transition-all duration-300 ${
-                            imageUploadProgress.progress.isRunning
+                            imageUploadProgress?.progress?.isRunning
                               ? "bg-purple-600"
                               : "bg-green-600"
                           }`}
                           style={{
-                            width: `${Math.round((imageUploadProgress.progress.processed / imageUploadProgress.progress.total) * 100)}%`,
+                            width: `${
+                              imageUploadProgress?.progress?.total
+                                ? Math.round(
+                                    (imageUploadProgress.progress.processed /
+                                      imageUploadProgress.progress.total) *
+                                      100,
+                                  )
+                                : 0
+                            }%`,
                           }}
                         ></div>
                       </div>
