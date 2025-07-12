@@ -82,17 +82,17 @@ const businessCoverImages = [
   "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Office interior
   "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Modern office
   "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Professional office
-  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200&h=600&fit=crop&crop=center", // Office building
-  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&h=600&fit=crop&crop=center", // Business building
-  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=600&fit=crop&crop=center", // Corporate office
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=600&fit=crop&crop=center", // Team meeting
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop&crop=center", // Professional workspace
-  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1200&h=600&fit=crop&crop=center", // Business consultation
-  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=1200&h=600&fit=crop&crop=center", // Modern workspace
-  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=1200&h=600&fit=crop&crop=center", // Business handshake
-  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1200&h=600&fit=crop&crop=center", // Professional meeting
-  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=600&fit=crop&crop=center", // Business consultation
-  "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=1200&h=600&fit=crop&crop=center", // Office meeting
+  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Office building
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Business building
+  "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Corporate office
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Team meeting
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Professional workspace
+  "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Business consultation
+  "https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Modern workspace
+  "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Business handshake
+  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Professional meeting
+  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Business consultation
+  "https://images.unsplash.com/photo-1556155092-8707de31f9c4?w=800&h=400&fit=crop&crop=center&q=80&auto=compress", // Office meeting
 ];
 
 // Business gallery photos for creating comprehensive business profiles
