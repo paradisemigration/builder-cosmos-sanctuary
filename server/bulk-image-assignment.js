@@ -429,6 +429,8 @@ export async function assignAllBusinessImages() {
       totalErrors,
     };
   } catch (error) {
+    // Mark as failed
+    bulkProgress.isRunning = false;
     console.error("❌ Complete bulk assignment failed:", error);
     throw error;
   }
