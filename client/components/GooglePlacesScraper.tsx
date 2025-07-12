@@ -434,6 +434,12 @@ export function GooglePlacesScraper() {
     setIsLoading(true);
 
     try {
+      console.log("Starting scraping with:", {
+        cities: selectedCities,
+        categories: selectedCategories,
+        apiUrl: getApiUrl("/api/scraping/start"),
+      });
+
       const response = await fetch(getApiUrl("/api/scraping/start"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -441,11 +447,18 @@ export function GooglePlacesScraper() {
           cities: selectedCities,
           categories: selectedCategories,
           maxResultsPerSearch: 15,
-          delay: 1500,
+          delay: 300, // Use optimized delay
         }),
       });
 
+      console.log("Scraping response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
+      console.log("Scraping response:", result);
 
       if (result.success) {
         toast.success(`Scraping started! Job ID: ${result.jobId}`);
@@ -454,10 +467,13 @@ export function GooglePlacesScraper() {
         // Start polling for updates
         pollJobStatus(result.jobId);
       } else {
-        toast.error(result.error || "Failed to start scraping");
+        const errorMsg = result.error || "Unknown error occurred";
+        toast.error(`Failed to start scraping: ${errorMsg}`);
+        console.error("Scraping failed:", result);
       }
     } catch (error) {
-      toast.error("Failed to start scraping");
+      const errorMsg = error.message || "Network or server error";
+      toast.error(`Failed to start scraping: ${errorMsg}`);
       console.error("Start scraping error:", error);
     } finally {
       setIsLoading(false);
