@@ -4,8 +4,58 @@ import { uploadToS3 } from "./storage-s3.js";
 // We'll get the database instance from the API context when the functions are called
 let database = null;
 
+// Progress tracking for bulk operations
+let bulkProgress = {
+  isRunning: false,
+  currentProgress: 0,
+  totalItems: 0,
+  processedItems: 0,
+  successCount: 0,
+  errorCount: 0,
+  startTime: null,
+  estimatedTimeRemaining: null,
+  currentBatch: 0,
+  totalBatches: 0,
+};
+
 function setDatabase(db) {
   database = db;
+}
+
+export function getBulkProgress() {
+  return { ...bulkProgress };
+}
+
+function updateProgress(
+  processed,
+  total,
+  success = 0,
+  errors = 0,
+  batch = 0,
+  totalBatches = 0,
+) {
+  bulkProgress.processedItems = processed;
+  bulkProgress.totalItems = total;
+  bulkProgress.successCount = success;
+  bulkProgress.errorCount = errors;
+  bulkProgress.currentProgress =
+    total > 0 ? Math.round((processed / total) * 100) : 0;
+  bulkProgress.currentBatch = batch;
+  bulkProgress.totalBatches = totalBatches;
+
+  // Calculate estimated time remaining
+  if (bulkProgress.startTime && processed > 0) {
+    const elapsed = Date.now() - bulkProgress.startTime;
+    const avgTimePerItem = elapsed / processed;
+    const remaining = total - processed;
+    bulkProgress.estimatedTimeRemaining = Math.round(
+      (remaining * avgTimePerItem) / 1000,
+    ); // in seconds
+  }
+
+  console.log(
+    `📈 Progress Update: ${processed}/${total} (${bulkProgress.currentProgress}%) - Batch ${batch}/${totalBatches}`,
+  );
 }
 
 // Curated business-appropriate images from Unsplash
