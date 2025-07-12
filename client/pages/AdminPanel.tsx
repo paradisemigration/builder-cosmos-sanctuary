@@ -752,6 +752,184 @@ export default function AdminPanel() {
           <TabsContent value="scraper">
             <GooglePlacesScraper />
           </TabsContent>
+
+          <TabsContent value="backup">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Backup & Export
+              </h2>
+
+              {/* Backup Actions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Download className="h-5 w-5" />
+                      Database Backup
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-gray-600">
+                      Download complete SQLite database with all businesses,
+                      reviews, and metadata.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        onClick={downloadDatabaseBackup}
+                        disabled={backupLoading}
+                        className="w-full"
+                      >
+                        {backupLoading ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            Creating Backup...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Database Backup
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-xs text-gray-500">
+                        File: visaconsult_database_backup_
+                        {new Date().toISOString().split("T")[0]}.sqlite
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Download className="h-5 w-5" />
+                      Full Website Backup
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-gray-600">
+                      Download complete website backup including database,
+                      server files, and configurations.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        onClick={downloadFullBackup}
+                        disabled={backupLoading}
+                        className="w-full"
+                        variant="secondary"
+                      >
+                        {backupLoading ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            Creating Backup...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Full Backup
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-xs text-gray-500">
+                        File: visaconsult_full_backup_
+                        {new Date().toISOString().split("T")[0]}.zip
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Backup History */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Backup History</CardTitle>
+                    <Button
+                      onClick={loadBackupHistory}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Refresh
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {backupHistory.length > 0 ? (
+                    <div className="space-y-3">
+                      {backupHistory.map((backup, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
+                          <div>
+                            <p className="font-medium">{backup.filename}</p>
+                            <p className="text-sm text-gray-600">
+                              {new Date(backup.created).toLocaleString()}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">{backup.size}</Badge>
+                            <Button
+                              onClick={() =>
+                                window.open(backup.downloadUrl, "_blank")
+                              }
+                              size="sm"
+                              variant="outline"
+                            >
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">
+                        No backup history available
+                      </p>
+                      <p className="text-sm text-gray-400 mt-1">
+                        Create your first backup above to see history here
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Backup Information */}
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-blue-800">
+                    📋 Backup Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-blue-700">
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      <strong>Database Backup:</strong> Contains all business
+                      data, reviews, and metadata
+                    </p>
+                    <p>
+                      <strong>Full Backup:</strong> Includes database + server
+                      code + configurations
+                    </p>
+                    <p>
+                      <strong>Naming Convention:</strong> Files include
+                      timestamp for easy organization
+                    </p>
+                    <p>
+                      <strong>Storage:</strong> Backups are generated on-demand
+                      and downloaded locally
+                    </p>
+                    <p>
+                      <strong>Recommended:</strong> Create regular backups
+                      before major changes
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
