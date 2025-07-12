@@ -7,6 +7,7 @@ let database = null;
 // Progress tracking for bulk operations
 let bulkProgress = {
   isRunning: false,
+  shouldStop: true,
   currentProgress: 0,
   totalItems: 0,
   processedItems: 0,
@@ -24,6 +25,13 @@ function setDatabase(db) {
 
 export function getBulkProgress() {
   return { ...bulkProgress };
+}
+
+export function stopBulkAssignment() {
+  bulkProgress.shouldStop = true;
+  bulkProgress.isRunning = false;
+  console.log("🛑 Bulk assignment stop requested");
+  return { success: true, message: "Bulk assignment stopped" };
 }
 
 function updateProgress(
