@@ -36,8 +36,16 @@ class UltraFastSyncEngine extends EventEmitter {
     try {
       console.log("🚀 Initializing Ultra-Fast Sync Engine...");
 
-      // Initialize S3 service
-      await s3Service.initialize();
+      // Try to initialize S3 service, but don't fail if it doesn't work
+      try {
+        await s3Service.initialize();
+        console.log("✅ S3 Service initialized in sync engine");
+      } catch (error) {
+        console.log(
+          "⚠️ S3 Service failed in sync engine, continuing without photo uploads:",
+          error.message,
+        );
+      }
 
       console.log("✅ Ultra-Fast Sync Engine ready");
       console.log(`⚡ Concurrency: ${this.config.concurrencyLimit}`);
@@ -80,7 +88,7 @@ class UltraFastSyncEngine extends EventEmitter {
       this.stats.totalBusinesses = businesses.length;
 
       if (businesses.length === 0) {
-        console.log("✅ No businesses need syncing");
+        console.log("�� No businesses need syncing");
         this.isRunning = false;
         this.emit("syncCompleted", { stats: this.stats });
         return { success: true, message: "No businesses need syncing" };
@@ -214,8 +222,8 @@ class UltraFastSyncEngine extends EventEmitter {
     return new Promise((resolve, reject) => {
       const sql = `
         SELECT id, googlePlaceId, name, logo_s3_url, cover_s3_url, photos_s3_urls, s3_sync_status
-        FROM businesses 
-        WHERE googlePlaceId IS NOT NULL 
+        FROM businesses
+        WHERE googlePlaceId IS NOT NULL
         AND (s3_sync_status IS NULL OR s3_sync_status = 'pending' OR s3_sync_status = 'failed')
         ORDER BY id ASC
       `;
@@ -326,7 +334,7 @@ class UltraFastSyncEngine extends EventEmitter {
       params.push(businessId);
 
       const sql = `
-        UPDATE businesses 
+        UPDATE businesses
         SET ${updates.join(", ")}, updatedAt = ?
         WHERE id = ?
       `;
@@ -344,7 +352,7 @@ class UltraFastSyncEngine extends EventEmitter {
   async updateSyncStatus(businessId, status, errorMessage = null) {
     return new Promise((resolve, reject) => {
       const sql = `
-        UPDATE businesses 
+        UPDATE businesses
         SET s3_sync_status = ?, s3_sync_date = ?, updatedAt = ?
         WHERE id = ?
       `;
