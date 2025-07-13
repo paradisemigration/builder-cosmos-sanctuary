@@ -81,13 +81,24 @@ export function ManualImageUpload() {
       hostname.includes("netlify.app") ||
       hostname.includes("github.io");
 
-    // If this is a frontend-only deployment, immediately mark as unavailable
-    if (isFrontendOnlyDeployment) {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      if (!apiUrl) {
-        setBackendAvailable(false);
-        return false;
-      }
+    // Check for API URL configuration
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+    // If this is a frontend-only deployment without API URL, immediately mark as unavailable
+    if (isFrontendOnlyDeployment && !apiUrl && !hasApiOverride) {
+      console.log(
+        "🚫 Frontend-only deployment detected without API URL - backend unavailable",
+      );
+      setBackendAvailable(false);
+      return false;
+    }
+
+    // Only attempt fetch if we're in localhost development or have API URL configured
+    if (!hostname.includes("localhost") && !apiUrl && !hasApiOverride) {
+      console.log("🚫 No API URL configured - backend unavailable");
+      setBackendAvailable(false);
+      return false;
     }
 
     try {
@@ -105,6 +116,7 @@ export function ManualImageUpload() {
       setBackendAvailable(available);
       return available;
     } catch (error) {
+      console.log("🚫 Backend health check failed:", error.message);
       setBackendAvailable(false);
       return false;
     }
