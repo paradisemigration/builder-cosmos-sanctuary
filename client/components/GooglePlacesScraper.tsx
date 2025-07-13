@@ -1379,7 +1379,9 @@ export function GooglePlacesScraper() {
                           </span>
                         ) : (
                           <span className="text-green-600 font-medium">
-                            {imageUploadProgress ? "Completed" : "Ready"}
+                            {imageUploadProgress?.progress?.total
+                              ? "Last Run Completed"
+                              : "Ready to Start"}
                           </span>
                         )}
                       </span>
@@ -1390,6 +1392,16 @@ export function GooglePlacesScraper() {
                         businesses
                       </span>
                     </div>
+
+                    {/* Last run summary */}
+                    {imageUploadProgress?.progress?.total &&
+                      !imageUploadProgress?.progress?.isRunning && (
+                        <div className="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded">
+                          Last upload: {imageUploadProgress.progress.successful}{" "}
+                          successful, {imageUploadProgress.progress.failed}{" "}
+                          failed
+                        </div>
+                      )}
                   </div>
                 )}
 
