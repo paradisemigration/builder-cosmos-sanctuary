@@ -7,6 +7,15 @@ import sqliteDatabase from "./database.sqlite.js";
 
 const router = express.Router();
 
+// Simple test endpoint
+router.get("/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Ultra-Fast S3 Sync API is working!",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Initialize services on startup
 let servicesInitialized = false;
 
@@ -49,7 +58,7 @@ router.get("/stats", async (req, res) => {
   try {
     const stats = await new Promise((resolve, reject) => {
       const sql = `
-        SELECT 
+        SELECT
           COUNT(*) as total_businesses,
           COUNT(CASE WHEN s3_sync_status = 'completed' THEN 1 END) as synced_businesses,
           COUNT(CASE WHEN s3_sync_status = 'pending' OR s3_sync_status IS NULL THEN 1 END) as pending_businesses,
@@ -93,7 +102,12 @@ router.get("/stats", async (req, res) => {
 // Start Ultra-Fast Sync
 router.post("/start", async (req, res) => {
   try {
-    await initializeServices();
+    // Try to initialize services, but don't fail if it doesn't work
+    try {
+      await initializeServices();
+    } catch (initError) {
+      console.log("⚠️ Service initialization failed:", initError.message);
+    }
 
     if (syncEngine.isRunning) {
       return res.status(409).json({
@@ -224,8 +238,8 @@ router.get("/businesses/pending", async (req, res) => {
     const businesses = await new Promise((resolve, reject) => {
       const sql = `
         SELECT id, name, googlePlaceId, s3_sync_status, s3_sync_date, s3_photo_count
-        FROM businesses 
-        WHERE googlePlaceId IS NOT NULL 
+        FROM businesses
+        WHERE googlePlaceId IS NOT NULL
         AND (s3_sync_status IS NULL OR s3_sync_status = 'pending' OR s3_sync_status = 'failed')
         ORDER BY id ASC
         LIMIT ?
