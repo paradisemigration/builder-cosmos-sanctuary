@@ -455,7 +455,14 @@ export function UltraFastS3SyncEnhanced() {
       }
     } catch (error) {
       console.error("Stop sync error:", error);
-      toast.error("Failed to stop sync");
+      if (error.message.includes("409")) {
+        toast.info("⏹️ Sync is not currently running");
+        setSyncProgress(null);
+      } else if (error.message.includes("404")) {
+        toast.error("Backend API not available");
+      } else {
+        toast.error("Failed to stop sync: " + error.message);
+      }
     }
   };
 
