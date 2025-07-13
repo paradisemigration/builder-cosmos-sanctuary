@@ -1270,17 +1270,21 @@ export function GooglePlacesScraper() {
                   {/* Progress Bar Toggle Button */}
                   <Button
                     onClick={() => {
-                      setShowImageProgress(!showImageProgress);
-                      if (!showImageProgress) {
+                      const newState = !showImageProgress;
+                      setShowImageProgress(newState);
+                      if (newState) {
+                        // Always load data when showing progress
                         loadImageUploadProgress();
                       }
                     }}
-                    variant="outline"
+                    variant={showImageProgress ? "secondary" : "outline"}
                     size="sm"
-                    className="w-full mt-2"
+                    className="w-full mt-2 bg-purple-100 hover:bg-purple-200 border-purple-300"
                   >
                     <Image className="w-4 h-4 mr-2" />
-                    {showImageProgress ? "Hide" : "Show"} Image Progress
+                    {showImageProgress
+                      ? "Hide Progress Bar"
+                      : "Show Image Upload Progress"}
                   </Button>
                 </div>
 
