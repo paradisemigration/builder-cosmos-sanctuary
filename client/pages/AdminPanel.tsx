@@ -625,9 +625,10 @@ export default function AdminPanel() {
                       <div className="text-center pt-4 border-t">
                         <div className="flex items-center justify-center gap-4">
                           <p className="text-sm text-gray-600">
-                            Showing {businesses.length} of{" "}
-                            {stats?.totalBusinesses || businesses.length}{" "}
-                            businesses
+                            Showing {Math.min(businesses.length, 100)} of{" "}
+                            {businesses.length} businesses
+                            {businesses.length > 100 &&
+                              " (first 100 displayed)"}
                           </p>
                           <Button
                             onClick={() => window.open("/business", "_blank")}
