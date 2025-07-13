@@ -105,10 +105,47 @@ export default function AdminPanel() {
       const statsResult = await statsResponse.json();
 
       // Load all businesses for dashboard (no limit) with cache busting for forced refresh
-      const businessesResponse = await fetch(
-        `/api/scraped-businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
-      );
-      const businessesResult = await businessesResponse.json();
+      let businessesResponse, businessesResult;
+
+      try {
+        // Try primary endpoint first
+        businessesResponse = await fetch(
+          `/api/scraped-businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
+        );
+
+        if (!businessesResponse.ok) {
+          throw new Error(
+            `HTTP ${businessesResponse.status}: ${businessesResponse.statusText}`,
+          );
+        }
+
+        businessesResult = await businessesResponse.json();
+        console.log("Primary API response:", businessesResult);
+      } catch (primaryError) {
+        console.log(
+          "Primary API failed, trying alternative endpoint:",
+          primaryError.message,
+        );
+
+        // Try alternative endpoint that we know works
+        try {
+          businessesResponse = await fetch(
+            `/api/businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
+          );
+
+          if (!businessesResponse.ok) {
+            throw new Error(
+              `HTTP ${businessesResponse.status}: ${businessesResponse.statusText}`,
+            );
+          }
+
+          businessesResult = await businessesResponse.json();
+          console.log("Alternative API response:", businessesResult);
+        } catch (altError) {
+          console.error("Both API endpoints failed:", altError.message);
+          businessesResult = { success: false, businesses: [], total: 0 };
+        }
+      }
 
       // Load Ultra-Fast S3 Sync stats for additional dashboard data
       try {
