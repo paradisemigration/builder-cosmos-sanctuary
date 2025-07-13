@@ -71,6 +71,45 @@ export function ManualImageUpload() {
     return baseUrl ? `${baseUrl}${endpoint}` : endpoint;
   };
 
+  // Check if backend API is available
+  const checkBackendHealth = async () => {
+    // Detect frontend-only deployments
+    const hostname = window.location.hostname;
+    const isFrontendOnlyDeployment =
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io");
+
+    // If this is a frontend-only deployment, immediately mark as unavailable
+    if (isFrontendOnlyDeployment) {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        setBackendAvailable(false);
+        return false;
+      }
+    }
+
+    try {
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("timeout")), 3000);
+      });
+
+      const fetchPromise = fetch(getApiUrl("/api/scraping/stats"), {
+        method: "HEAD",
+        mode: "cors",
+      });
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+      const available = response && response.ok;
+      setBackendAvailable(available);
+      return available;
+    } catch (error) {
+      setBackendAvailable(false);
+      return false;
+    }
+  };
+
   // Load businesses missing images
   const loadBusinessesMissingImages = async () => {
     try {
