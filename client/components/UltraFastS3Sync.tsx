@@ -92,12 +92,28 @@ export function UltraFastS3Sync() {
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
+      // Early detection - don't make any fetch calls on frontend-only deployments
       if (isKnownFrontendOnly()) {
         console.log(
-          "🚫 Frontend-only deployment detected - backend unavailable",
+          "🚫 UltraFastS3Sync: Frontend-only deployment detected - backend unavailable",
         );
         setBackendAvailable(false);
         return false;
+      }
+
+      // Additional check - if we're on fly.dev without API URL, don't fetch
+      const hostname = window.location.hostname;
+      if (hostname.includes("fly.dev")) {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+        if (!apiUrl && !hasApiOverride) {
+          console.log(
+            "🚫 UltraFastS3Sync: Fly.dev deployment without API URL - skipping fetch",
+          );
+          setBackendAvailable(false);
+          return false;
+        }
       }
 
       const timeoutPromise = new Promise((_, reject) => {
@@ -114,7 +130,10 @@ export function UltraFastS3Sync() {
       setBackendAvailable(available);
       return available;
     } catch (error) {
-      console.log("🚫 Backend health check failed:", error.message);
+      console.log(
+        "🚫 UltraFastS3Sync: Backend health check failed:",
+        error.message,
+      );
       setBackendAvailable(false);
       return false;
     }
