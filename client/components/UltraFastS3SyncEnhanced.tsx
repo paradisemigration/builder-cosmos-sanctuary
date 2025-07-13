@@ -119,26 +119,13 @@ export function UltraFastS3SyncEnhanced() {
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
-      // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
-      const hostname = window.location.hostname;
-      if (
-        hostname.includes("fly.dev") ||
-        hostname.includes("vercel.app") ||
-        hostname.includes("netlify.app") ||
-        hostname.includes("github.io")
-      ) {
-        console.log(
-          "🚫 UltraFastS3SyncEnhanced: ABSOLUTE SAFETY - Frontend-only platform detected, no fetch calls",
-        );
-        setBackendAvailable(false);
-        return false;
-      }
+      // Check if we have an API URL configured
+      const apiUrl =
+        localStorage.getItem("VITE_API_URL_OVERRIDE") ||
+        import.meta.env.VITE_API_URL;
 
-      // Only allow fetch calls on localhost development
-      if (!hostname.includes("localhost")) {
-        console.log(
-          "🚫 UltraFastS3SyncEnhanced: Not localhost - assuming frontend-only, no fetch",
-        );
+      if (!apiUrl) {
+        console.log("🚫 UltraFastS3SyncEnhanced: No API URL configured");
         setBackendAvailable(false);
         return false;
       }
@@ -168,14 +155,12 @@ export function UltraFastS3SyncEnhanced() {
 
   // Load sync statistics
   const loadSyncStats = async () => {
-    // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
-    const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io")
-    ) {
+    // Check if we have an API URL configured
+    const apiUrl =
+      localStorage.getItem("VITE_API_URL_OVERRIDE") ||
+      import.meta.env.VITE_API_URL;
+
+    if (!apiUrl) {
       console.log(
         "🚫 UltraFastS3SyncEnhanced: ABSOLUTE SAFETY - Frontend-only platform detected, no stats load",
       );
