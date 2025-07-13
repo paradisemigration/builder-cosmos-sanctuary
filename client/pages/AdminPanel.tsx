@@ -326,17 +326,6 @@ export default function AdminPanel() {
                 </Badge>
               )}
 
-              {/* API Configuration Button */}
-              <Button
-                onClick={() => setApiConfigOpen(true)}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <Settings className="h-4 w-4" />
-                API Config
-              </Button>
-
               <Button
                 variant="outline"
                 size="sm"
@@ -631,7 +620,7 @@ export default function AdminPanel() {
                   >
                     {import.meta.env.MODE === "development"
                       ? "✅ Development Environment"
-                      : "���� Production Environment"}
+                      : "🌐 Production Environment"}
                   </CardTitle>
                 </CardHeader>
                 <CardContent
