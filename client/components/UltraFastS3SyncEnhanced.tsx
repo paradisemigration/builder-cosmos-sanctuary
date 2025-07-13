@@ -323,6 +323,15 @@ export function UltraFastS3SyncEnhanced() {
 
   // Stop Ultra-Fast Sync
   const stopUltraFastSync = async () => {
+    const apiUrl =
+      localStorage.getItem("VITE_API_URL_OVERRIDE") ||
+      import.meta.env.VITE_API_URL;
+
+    if (!apiUrl) {
+      toast.error("Backend API not configured");
+      return;
+    }
+
     try {
       const response = await fetch(getApiUrl("/api/ultra-fast-sync/stop"), {
         method: "POST",
