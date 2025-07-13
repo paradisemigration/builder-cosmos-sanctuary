@@ -1782,6 +1782,141 @@ app.post("/api/admin/stop-image-fetch", async (req, res) => {
   }
 });
 
+// Get businesses missing images for manual upload
+app.get("/api/admin/businesses-missing-images", async (req, res) => {
+  try {
+    const businesses = await new Promise((resolve, reject) => {
+      const sql = `
+        SELECT id, googlePlaceId, name, city, logo, coverImage, gallery
+        FROM businesses
+        WHERE (logo IS NULL OR logo = '' OR
+               coverImage IS NULL OR coverImage = '' OR
+               gallery IS NULL OR gallery = '' OR gallery = '[]')
+        ORDER BY name ASC
+        LIMIT 100
+      `;
+
+      sqliteDatabase.db.all(sql, [], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows || []);
+        }
+      });
+    });
+
+    res.json({
+      success: true,
+      businesses,
+      count: businesses.length,
+    });
+  } catch (error) {
+    console.error("Get businesses missing images error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Upload single business image to S3
+app.post(
+  "/api/admin/upload-business-image",
+  uploadMiddleware.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          error: "No image file provided",
+        });
+      }
+
+      const { businessId, imageType } = req.body;
+
+      if (!businessId || !imageType) {
+        return res.status(400).json({
+          success: false,
+          error: "Business ID and image type are required",
+        });
+      }
+
+      // Upload to S3
+      const uploadResult = await uploadToS3(req.file, "business-images");
+
+      // Update database
+      let updateField;
+      let updateValue = uploadResult.publicUrl;
+
+      if (imageType === "logo") {
+        updateField = "logo";
+      } else if (imageType === "cover") {
+        updateField = "coverImage";
+      } else if (imageType === "gallery") {
+        // For gallery, we need to add to existing array
+        const existingGallery = await new Promise((resolve, reject) => {
+          sqliteDatabase.db.get(
+            "SELECT gallery FROM businesses WHERE id = ?",
+            [businessId],
+            (err, row) => {
+              if (err) reject(err);
+              else resolve(row?.gallery);
+            },
+          );
+        });
+
+        let galleryArray = [];
+        try {
+          galleryArray = existingGallery ? JSON.parse(existingGallery) : [];
+        } catch (e) {
+          galleryArray = [];
+        }
+
+        galleryArray.push(uploadResult.publicUrl);
+        updateField = "gallery";
+        updateValue = JSON.stringify(galleryArray);
+      } else {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid image type. Must be 'logo', 'cover', or 'gallery'",
+        });
+      }
+
+      // Update database
+      await new Promise((resolve, reject) => {
+        const sql = `UPDATE businesses SET ${updateField} = ?, updatedAt = ? WHERE id = ?`;
+        sqliteDatabase.db.run(
+          sql,
+          [updateValue, new Date().toISOString(), businessId],
+          function (err) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(this.changes);
+            }
+          },
+        );
+      });
+
+      console.log(
+        `✅ Manual upload: ${imageType} for business ${businessId} uploaded to S3`,
+      );
+
+      res.json({
+        success: true,
+        imageUrl: uploadResult.publicUrl,
+        message: `${imageType} uploaded successfully`,
+      });
+    } catch (error) {
+      console.error("Manual image upload error:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  },
+);
+
 // Test endpoint to debug specific business image upload
 app.post("/api/admin/test-business-images/:businessId", async (req, res) => {
   try {
