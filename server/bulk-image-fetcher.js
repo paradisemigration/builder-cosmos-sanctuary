@@ -172,14 +172,20 @@ class BulkImageFetcher {
   }
 
   hasAllImages(business) {
-    return (
-      business.logo &&
-      business.logo.trim() !== "" &&
-      business.coverImage &&
-      business.coverImage.trim() !== "" &&
+    // Be less restrictive - only skip if ALL images are present and not empty
+    const hasLogo = business.logo && business.logo.trim() !== "";
+    const hasCover = business.coverImage && business.coverImage.trim() !== "";
+    const hasGallery =
       business.gallery &&
-      business.gallery.trim() !== ""
+      business.gallery.trim() !== "" &&
+      business.gallery !== "[]";
+
+    console.log(
+      `🔍 [${business.name}] Image check: Logo(${hasLogo}) Cover(${hasCover}) Gallery(${hasGallery})`,
     );
+
+    // Only skip if business has ALL three types of images
+    return hasLogo && hasCover && hasGallery;
   }
 
   async fetchPlaceDetails(placeId) {
