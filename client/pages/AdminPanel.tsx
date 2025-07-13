@@ -76,16 +76,6 @@ export default function AdminPanel() {
       return;
     }
 
-    // Early check - don't even try if we know it's frontend-only
-    if (isKnownFrontendOnly()) {
-      console.log(
-        "🚫 AdminPanel: Frontend-only deployment - skipping dashboard data load",
-      );
-      setBackendAvailable(false);
-      setLoading(false);
-      return;
-    }
-
     // If backend is already known to be unavailable, don't call checkBackendHealth
     if (backendAvailable === false) {
       console.log(
@@ -641,7 +631,7 @@ export default function AdminPanel() {
                   >
                     {import.meta.env.MODE === "development"
                       ? "✅ Development Environment"
-                      : "🌐 Production Environment"}
+                      : "���� Production Environment"}
                   </CardTitle>
                 </CardHeader>
                 <CardContent
