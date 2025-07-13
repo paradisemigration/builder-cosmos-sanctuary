@@ -1065,7 +1065,7 @@ export default function AdminPanel() {
           </TabsContent>
 
           <TabsContent value="ultra-sync">
-            <UltraFastS3Sync />
+            <UltraFastS3SyncEnhanced />
           </TabsContent>
 
           <TabsContent value="backup">
