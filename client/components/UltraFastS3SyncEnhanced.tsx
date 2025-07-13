@@ -532,7 +532,7 @@ export function UltraFastS3SyncEnhanced() {
             <Zap className="w-6 h-6 mr-2 text-yellow-500" />
             Ultra-Fast S3 Sync Engine
           </h2>
-          <p className="text-gray-600 flex items-center">
+          <div className="text-gray-600 flex items-center">
             Advanced concurrent image sync with real-time monitoring
             {sseConnected ? (
               <div className="flex items-center ml-2">
@@ -551,7 +551,7 @@ export function UltraFastS3SyncEnhanced() {
                 </button>
               </div>
             )}
-          </p>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button
