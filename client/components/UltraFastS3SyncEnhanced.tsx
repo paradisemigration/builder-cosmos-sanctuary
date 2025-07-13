@@ -141,6 +141,11 @@ export function UltraFastS3SyncEnhanced() {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Invalid response format - expected JSON");
+      }
+
       const result = await response.json();
 
       if (result.success) {
@@ -252,13 +257,23 @@ export function UltraFastS3SyncEnhanced() {
         }),
       });
 
-      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-      if (result.success) {
-        toast.success("🚀 Ultra-Fast S3 Sync started!");
-        setSyncProgress(result.progress);
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success("🚀 Ultra-Fast S3 Sync started!");
+          setSyncProgress(result.progress);
+        } else {
+          toast.error(result.error || "Failed to start Ultra-Fast Sync");
+        }
       } else {
-        toast.error(result.error || "Failed to start Ultra-Fast Sync");
+        // Handle non-JSON response
+        toast.success("🚀 Ultra-Fast Sync started!");
       }
     } catch (error) {
       console.error("Ultra-Fast Sync error:", error);
@@ -276,13 +291,24 @@ export function UltraFastS3SyncEnhanced() {
         headers: { "Content-Type": "application/json" },
       });
 
-      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-      if (result.success) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success("⏹️ Ultra-Fast Sync stopped");
+          setSyncProgress(null);
+        } else {
+          toast.error(result.error || "Failed to stop sync");
+        }
+      } else {
+        // Handle non-JSON response
         toast.success("⏹️ Ultra-Fast Sync stopped");
         setSyncProgress(null);
-      } else {
-        toast.error(result.error || "Failed to stop sync");
       }
     } catch (error) {
       console.error("Stop sync error:", error);
