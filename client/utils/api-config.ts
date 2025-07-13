@@ -1,41 +1,14 @@
 /**
  * API Configuration Utility
- * Centralized API endpoint configuration for frontend-backend connectivity
+ * For same domain deployment - frontend and backend on same server
  */
 
-export interface ApiConfig {
-  baseUrl: string;
-  isConfigured: boolean;
-  isLocal: boolean;
-}
-
 /**
- * Get the configured API base URL
- */
-export function getApiBaseUrl(): string {
-  const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
-  if (override) {
-    return override.trim();
-  }
-
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl.trim();
-  }
-
-  return "";
-}
-
-/**
- * Build full API URL from endpoint
+ * Build API URL from endpoint (relative URLs for same domain)
  */
 export function getApiUrl(endpoint: string): string {
-  const baseUrl = getApiBaseUrl();
-  if (!baseUrl) return endpoint;
-
-  // Ensure endpoint starts with /
-  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-  return `${baseUrl}${cleanEndpoint}`;
+  // For same domain deployment, just return the endpoint as-is
+  return endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
 }
 
 /**
@@ -91,90 +64,16 @@ export function saveApiUrl(url: string): void {
 }
 
 /**
- * Test API connection
+ * Test backend connection (simple check for same domain deployment)
  */
-export async function testApiConnection(baseUrl?: string): Promise<{
-  success: boolean;
-  error?: string;
-  details?: string;
-}> {
+export async function testBackendConnection(): Promise<boolean> {
   try {
-    const testUrl = baseUrl || getApiBaseUrl();
-    if (!testUrl) {
-      return {
-        success: false,
-        error: "No API URL provided",
-        details: "Please enter a valid API URL",
-      };
-    }
-
-    // Validate URL format
-    try {
-      new URL(testUrl);
-    } catch {
-      return {
-        success: false,
-        error: "Invalid URL format",
-        details: "Please enter a valid URL (e.g., https://api.example.com)",
-      };
-    }
-
-    // Try multiple endpoints to test connectivity
-    const testEndpoints = [
-      "/api/ultra-fast-sync/stats",
-      "/api/health",
-      "/api/status",
-      "/",
-    ];
-
-    let lastError: string = "Unknown error";
-
-    for (const endpoint of testEndpoints) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch(`${testUrl}${endpoint}`, {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            Accept: "application/json",
-          },
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok || response.status === 404) {
-          // 404 is fine - means server is responding
-          return { success: true };
-        }
-
-        lastError = `HTTP ${response.status}: ${response.statusText}`;
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          lastError = "Request timeout (5s)";
-        } else if (error.message.includes("CORS")) {
-          lastError = "CORS policy blocking request";
-        } else if (error.message.includes("network")) {
-          lastError = "Network error - server unreachable";
-        } else {
-          lastError = error.message || "Connection failed";
-        }
-      }
-    }
-
-    return {
-      success: false,
-      error: "Connection failed",
-      details: lastError,
-    };
-  } catch (error: any) {
-    return {
-      success: false,
-      error: "Test failed",
-      details: error.message || "Unknown error occurred",
-    };
+    const response = await fetch("/api/ultra-fast-sync/stats", {
+      method: "HEAD",
+    });
+    return response.ok || response.status === 404; // 404 is fine - server responding
+  } catch {
+    return false;
   }
 }
 

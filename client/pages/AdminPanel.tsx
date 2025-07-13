@@ -7,7 +7,6 @@ import { DemoUpload } from "@/components/DemoUpload";
 import { GooglePlacesScraper } from "@/components/GooglePlacesScraper";
 import { ManualImageUpload } from "@/components/ManualImageUpload";
 import { UltraFastS3SyncEnhanced } from "@/components/UltraFastS3SyncEnhanced";
-import { ApiConfigBanner } from "@/components/ApiConfigBanner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,91 +37,23 @@ export default function AdminPanel() {
   const [backendAvailable, setBackendAvailable] = useState<boolean | null>(
     null,
   );
-  const [apiUrl, setApiUrl] = useState(
-    localStorage.getItem("VITE_API_URL_OVERRIDE") || "",
-  );
-  const [apiConfigOpen, setApiConfigOpen] = useState(false);
 
   // Detect if we're in a local development environment
   const isLocalDevelopment =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1";
 
-  // Early detection of frontend-only deployment
-  const isKnownFrontendOnly = () => {
-    const hostname = window.location.hostname;
-    const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io");
-
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-    return isFrontendOnlyDeployment && !apiUrl && !hasApiOverride;
-  };
-
-  // Check if backend API is available
+  // Check if backend API is available (simple check for same domain)
   const checkBackendHealth = async () => {
     try {
-      // Multiple layers of detection to prevent ANY fetch calls on frontend-only deployments
-      if (isKnownFrontendOnly()) {
-        console.log(
-          "🚫 AdminPanel: Frontend-only deployment detected - backend unavailable",
-        );
-        setBackendAvailable(false);
-        return false;
-      }
-
-      // Additional check for fly.dev specifically
-      const hostname = window.location.hostname;
-      if (hostname.includes("fly.dev")) {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-        if (!apiUrl && !hasApiOverride) {
-          console.log(
-            "🚫 AdminPanel: Fly.dev deployment without API URL - no fetch",
-          );
-          setBackendAvailable(false);
-          return false;
-        }
-      }
-
-      // If we're on any known frontend-only platform, don't fetch
-      if (
-        hostname.includes("vercel.app") ||
-        hostname.includes("netlify.app") ||
-        hostname.includes("github.io")
-      ) {
-        console.log("🚫 AdminPanel: Known frontend-only platform - no fetch");
-        setBackendAvailable(false);
-        return false;
-      }
-
-      // Only make fetch call if we're in localhost development with potential backend
-      if (!hostname.includes("localhost")) {
-        console.log("🚫 AdminPanel: Not localhost - assuming frontend-only");
-        setBackendAvailable(false);
-        return false;
-      }
-
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("timeout")), 3000);
-      });
-
-      const fetchPromise = fetch("/api/scraping/stats", {
+      const response = await fetch("/api/ultra-fast-sync/stats", {
         method: "HEAD",
-        mode: "cors",
       });
-
-      const response = await Promise.race([fetchPromise, timeoutPromise]);
-      const available = response && response.ok;
+      const available = response.ok || response.status === 404;
       setBackendAvailable(available);
       return available;
     } catch (error) {
-      console.log("🚫 AdminPanel: Backend health check failed:", error.message);
+      console.log("Backend health check failed:", error.message);
       setBackendAvailable(false);
       return false;
     }
@@ -272,54 +203,6 @@ export default function AdminPanel() {
       alert("Failed to create full backup");
     } finally {
       setBackupLoading(false);
-    }
-  };
-
-  // Configure API base URL
-  const getApiUrl = (endpoint: string) => {
-    const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
-    if (override) {
-      return `${override}${endpoint}`;
-    }
-    const baseUrl = import.meta.env.VITE_API_URL || "";
-    return baseUrl ? `${baseUrl}${endpoint}` : endpoint;
-  };
-
-  // Save API URL configuration
-  const saveApiUrl = () => {
-    if (apiUrl.trim()) {
-      localStorage.setItem("VITE_API_URL_OVERRIDE", apiUrl.trim());
-      setBackendAvailable(null); // Reset to trigger health check
-      setApiConfigOpen(false);
-      setTimeout(() => {
-        window.location.reload(); // Refresh to apply new API URL
-      }, 100);
-    } else {
-      localStorage.removeItem("VITE_API_URL_OVERRIDE");
-      setBackendAvailable(false);
-      setApiConfigOpen(false);
-    }
-  };
-
-  // Test API connection
-  const testApiConnection = async () => {
-    try {
-      const testUrl = apiUrl.trim() || getApiUrl("");
-      const response = await fetch(`${testUrl}/api/ultra-fast-sync/stats`, {
-        method: "HEAD",
-        mode: "cors",
-      });
-
-      if (response.ok) {
-        toast.success("API connection successful!");
-        return true;
-      } else {
-        toast.error(`API test failed: ${response.status}`);
-        return false;
-      }
-    } catch (error) {
-      toast.error(`API test failed: ${error.message}`);
-      return false;
     }
   };
 
@@ -514,20 +397,6 @@ export default function AdminPanel() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* API Configuration Banner */}
-      <div className="container mx-auto max-w-7xl px-4 pt-6">
-        <ApiConfigBanner
-          backendAvailable={backendAvailable}
-          onConfigSaved={() => {
-            setBackendAvailable(null);
-            // Trigger health check after configuration
-            setTimeout(() => {
-              loadDashboardData();
-            }, 1000);
-          }}
-        />
       </div>
 
       {/* Main Content */}

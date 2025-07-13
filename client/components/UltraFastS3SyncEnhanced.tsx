@@ -91,15 +91,8 @@ export function UltraFastS3SyncEnhanced() {
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  // Configure API base URL
-  const getApiUrl = (endpoint: string) => {
-    const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
-    if (override) {
-      return `${override}${endpoint}`;
-    }
-    const baseUrl = import.meta.env.VITE_API_URL || "";
-    return baseUrl ? `${baseUrl}${endpoint}` : endpoint;
-  };
+  // Use relative URLs for same domain deployment
+  const getApiUrl = (endpoint: string) => endpoint;
 
   // Early detection of frontend-only deployment
   const isKnownFrontendOnly = () => {
@@ -288,14 +281,8 @@ export function UltraFastS3SyncEnhanced() {
 
   // Start Ultra-Fast Sync
   const startUltraFastSync = async () => {
-    const apiUrl =
-      localStorage.getItem("VITE_API_URL_OVERRIDE") ||
-      import.meta.env.VITE_API_URL;
-
-    if (!apiUrl || backendAvailable === false) {
-      toast.error(
-        "Backend API not configured or unavailable. Please configure API URL in settings.",
-      );
+    if (backendAvailable === false) {
+      toast.error("Backend API not available");
       return;
     }
 
