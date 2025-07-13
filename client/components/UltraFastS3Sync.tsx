@@ -92,6 +92,21 @@ export function UltraFastS3Sync() {
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
+      // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
+      const hostname = window.location.hostname;
+      if (
+        hostname.includes("fly.dev") ||
+        hostname.includes("vercel.app") ||
+        hostname.includes("netlify.app") ||
+        hostname.includes("github.io")
+      ) {
+        console.log(
+          "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected, no fetch calls",
+        );
+        setBackendAvailable(false);
+        return false;
+      }
+
       // Early detection - don't make any fetch calls on frontend-only deployments
       if (isKnownFrontendOnly()) {
         console.log(
@@ -101,19 +116,13 @@ export function UltraFastS3Sync() {
         return false;
       }
 
-      // Additional check - if we're on fly.dev without API URL, don't fetch
-      const hostname = window.location.hostname;
-      if (hostname.includes("fly.dev")) {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-        if (!apiUrl && !hasApiOverride) {
-          console.log(
-            "🚫 UltraFastS3Sync: Fly.dev deployment without API URL - skipping fetch",
-          );
-          setBackendAvailable(false);
-          return false;
-        }
+      // Only allow fetch calls on localhost development
+      if (!hostname.includes("localhost")) {
+        console.log(
+          "🚫 UltraFastS3Sync: Not localhost - assuming frontend-only, no fetch",
+        );
+        setBackendAvailable(false);
+        return false;
       }
 
       const timeoutPromise = new Promise((_, reject) => {
