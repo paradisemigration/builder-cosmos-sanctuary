@@ -445,11 +445,37 @@ export function ManualImageUpload() {
           onClick={loadBusinessesMissingImages}
           variant="outline"
           size="sm"
+          disabled={backendAvailable === false}
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh
         </Button>
       </div>
+
+      {/* Backend Status Alert */}
+      {backendAvailable === false && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <AlertCircle className="h-5 w-5 text-blue-600 mr-2" />
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-blue-800">
+                Backend API Not Available
+              </h3>
+              <p className="text-sm text-blue-700 mt-1">
+                Manual image upload requires a backend API connection. The
+                automatic image upload and manual upload features are not
+                available in this frontend-only deployment.
+              </p>
+              <div className="mt-2 text-xs text-blue-600">
+                <p>
+                  This feature requires the backend server to be deployed and
+                  accessible.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
