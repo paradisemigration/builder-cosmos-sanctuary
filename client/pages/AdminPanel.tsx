@@ -31,6 +31,9 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(false);
   const [backupLoading, setBackupLoading] = useState(false);
   const [backupHistory, setBackupHistory] = useState<any[]>([]);
+  const [backendAvailable, setBackendAvailable] = useState<boolean | null>(
+    null,
+  );
 
   // Detect if we're in a local development environment
   const isLocalDevelopment =
