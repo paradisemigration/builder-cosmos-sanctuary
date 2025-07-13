@@ -210,14 +210,45 @@ export default function AdminPanel() {
   };
 
   const loadBackupHistory = async () => {
+    // Early check - don't even try if we know it's frontend-only
+    if (isKnownFrontendOnly()) {
+      console.log(
+        "🚫 AdminPanel: Frontend-only deployment - skipping backup history load",
+      );
+      setBackendAvailable(false);
+      return;
+    }
+
+    // Check backend availability first
+    const isBackendAvailable = await checkBackendHealth();
+
+    if (!isBackendAvailable) {
+      console.log(
+        "🚫 AdminPanel: Backend unavailable - skipping backup history load",
+      );
+      return;
+    }
+
     try {
       const response = await fetch("/api/admin/backup/history");
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
       if (result.success) {
         setBackupHistory(result.backups || []);
       }
     } catch (error) {
       console.error("Failed to load backup history:", error);
+
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        console.log(
+          "🚫 AdminPanel: Backup history fetch failed - backend unavailable",
+        );
+        setBackendAvailable(false);
+      }
     }
   };
 
