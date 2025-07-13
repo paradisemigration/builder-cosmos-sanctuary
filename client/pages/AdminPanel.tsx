@@ -552,7 +552,7 @@ export default function AdminPanel() {
 
                       {/* Listings Rows */}
                       <div className="max-h-96 overflow-y-auto space-y-2">
-                        {businesses.map((business, index) => (
+                        {businesses.slice(0, 100).map((business, index) => (
                           <div
                             key={business.id || index}
                             className="grid grid-cols-6 gap-4 p-4 border rounded-lg hover:bg-gray-50"
