@@ -1782,6 +1782,79 @@ app.post("/api/admin/stop-image-fetch", async (req, res) => {
   }
 });
 
+// Test endpoint to debug specific business image upload
+app.post("/api/admin/test-business-images/:businessId", async (req, res) => {
+  try {
+    const { businessId } = req.params;
+
+    // Get business details
+    const business = await new Promise((resolve, reject) => {
+      sqliteDatabase.db.get(
+        "SELECT id, googlePlaceId, name, logo, coverImage, gallery FROM businesses WHERE id = ?",
+        [businessId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        },
+      );
+    });
+
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        error: "Business not found",
+      });
+    }
+
+    console.log(`🔍 Testing image fetch for business: ${business.name}`);
+
+    // Test Google Places API call
+    let googlePlacesResult = null;
+    let error = null;
+
+    if (business.googlePlaceId) {
+      try {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${business.googlePlaceId}&fields=photos,name&key=${process.env.GOOGLE_PLACES_API_KEY}`;
+        const response = await fetch(url);
+        googlePlacesResult = await response.json();
+      } catch (err) {
+        error = err.message;
+      }
+    }
+
+    res.json({
+      success: true,
+      business: {
+        id: business.id,
+        name: business.name,
+        googlePlaceId: business.googlePlaceId,
+        currentImages: {
+          logo: business.logo,
+          coverImage: business.coverImage,
+          gallery: business.gallery,
+        },
+      },
+      googlePlacesAPI: {
+        status: googlePlacesResult?.status,
+        photoCount: googlePlacesResult?.result?.photos?.length || 0,
+        hasPhotos: !!(googlePlacesResult?.result?.photos?.length > 0),
+        error: error,
+      },
+      debug: {
+        needsImages:
+          !business.logo || !business.coverImage || !business.gallery,
+        apiKeyConfigured: !!process.env.GOOGLE_PLACES_API_KEY,
+      },
+    });
+  } catch (error) {
+    console.error("Test business images error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Configuration for automatic S3 image upload during scraping
 let autoS3ImageUpload = true; // Default to enabled
 
