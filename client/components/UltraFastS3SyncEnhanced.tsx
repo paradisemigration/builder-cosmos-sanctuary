@@ -497,12 +497,25 @@ export function UltraFastS3SyncEnhanced() {
       setupSSE();
     }
 
+    // Auto-retry SSE connection every 10 seconds if not connected
+    const retryInterval = setInterval(() => {
+      if (
+        !sseConnected &&
+        (!eventSourceRef.current ||
+          eventSourceRef.current.readyState === EventSource.CLOSED)
+      ) {
+        console.log("🔄 Auto-retrying SSE connection...");
+        setupSSE();
+      }
+    }, 10000);
+
     return () => {
+      clearInterval(retryInterval);
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
       }
     };
-  }, []);
+  }, [sseConnected]);
 
   useEffect(() => {
     if (backendAvailable === true) {
