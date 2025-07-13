@@ -88,35 +88,42 @@ export function ManualImageUpload() {
 
   // Check if backend API is available
   const checkBackendHealth = async () => {
-    // Detect frontend-only deployments
-    const hostname = window.location.hostname;
-    const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io");
-
-    // Check for API URL configuration
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-    // If this is a frontend-only deployment without API URL, immediately mark as unavailable
-    if (isFrontendOnlyDeployment && !apiUrl && !hasApiOverride) {
-      console.log(
-        "🚫 Frontend-only deployment detected without API URL - backend unavailable",
-      );
-      setBackendAvailable(false);
-      return false;
-    }
-
-    // Only attempt fetch if we're in localhost development or have API URL configured
-    if (!hostname.includes("localhost") && !apiUrl && !hasApiOverride) {
-      console.log("🚫 No API URL configured - backend unavailable");
-      setBackendAvailable(false);
-      return false;
-    }
-
     try {
+      // Detect frontend-only deployments
+      const hostname = window.location.hostname;
+      const isFrontendOnlyDeployment =
+        hostname.includes("fly.dev") ||
+        hostname.includes("vercel.app") ||
+        hostname.includes("netlify.app") ||
+        hostname.includes("github.io");
+
+      // Check for API URL configuration
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+      // If this is a frontend-only deployment without API URL, immediately mark as unavailable
+      if (isFrontendOnlyDeployment && !apiUrl && !hasApiOverride) {
+        console.log(
+          "🚫 Frontend-only deployment detected without API URL - backend unavailable",
+        );
+        setBackendAvailable(false);
+        return false;
+      }
+
+      // Only attempt fetch if we're in localhost development or have API URL configured
+      if (!hostname.includes("localhost") && !apiUrl && !hasApiOverride) {
+        console.log("🚫 No API URL configured - backend unavailable");
+        setBackendAvailable(false);
+        return false;
+      }
+
+      // Double-check: if we're still on a known frontend-only domain, don't fetch
+      if (isFrontendOnlyDeployment) {
+        console.log("🚫 Skipping fetch on frontend-only deployment");
+        setBackendAvailable(false);
+        return false;
+      }
+
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error("timeout")), 3000);
       });
