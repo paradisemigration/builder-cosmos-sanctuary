@@ -755,6 +755,10 @@ export default function AdminPanel() {
             <GooglePlacesScraper />
           </TabsContent>
 
+          <TabsContent value="manual-upload">
+            <ManualImageUpload />
+          </TabsContent>
+
           <TabsContent value="backup">
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-900">
