@@ -155,8 +155,18 @@ export function ManualImageUpload() {
   };
 
   useEffect(() => {
-    loadBusinessesMissingImages();
+    // Only load businesses if we haven't checked backend availability yet
+    if (backendAvailable === null) {
+      loadBusinessesMissingImages();
+    }
   }, []);
+
+  // Load businesses when backend becomes available
+  useEffect(() => {
+    if (backendAvailable === true && businesses.length === 0) {
+      loadBusinessesMissingImages();
+    }
+  }, [backendAvailable]);
 
   // Upload single image to S3
   const uploadImageToS3 = async (
