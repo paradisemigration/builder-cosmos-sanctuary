@@ -287,6 +287,8 @@ export function UltraFastS3SyncEnhanced() {
   const startUltraFastSync = async () => {
     try {
       setLoading(true);
+
+      // Try the API first
       const response = await fetch(getApiUrl("/api/ultra-fast-sync/start"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -298,6 +300,12 @@ export function UltraFastS3SyncEnhanced() {
       });
 
       if (!response.ok) {
+        // If API is not available (404), run in simulation mode
+        if (response.status === 404) {
+          toast.info("Running Ultra-Fast S3 Sync in demo mode...");
+          startSimulationMode();
+          return;
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -313,14 +321,79 @@ export function UltraFastS3SyncEnhanced() {
         }
       } else {
         // Handle non-JSON response
-        toast.success("🚀 Ultra-Fast Sync started!");
+        toast.success("🚀 Ultra-Fast S3 Sync started!");
       }
     } catch (error) {
       console.error("Ultra-Fast Sync error:", error);
-      toast.error("Failed to start Ultra-Fast Sync");
+
+      // If fetch fails completely, try simulation mode
+      if (error.message.includes("404") || error.message.includes("fetch")) {
+        toast.info("Backend API not available. Running in demo mode...");
+        startSimulationMode();
+      } else {
+        toast.error("Failed to start Ultra-Fast Sync: " + error.message);
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  // Simulation mode for demo purposes when backend is not available
+  const startSimulationMode = () => {
+    toast.success("🚀 Ultra-Fast S3 Sync started in demo mode!");
+
+    const mockProgress = {
+      isRunning: true,
+      currentBatch: 1,
+      totalBatches: 15,
+      stats: {
+        totalBusinesses: 1500,
+        processed: 0,
+        successful: 0,
+        failed: 0,
+        skipped: 0,
+        startTime: new Date().toISOString(),
+        errors: [],
+      },
+      config: { concurrency, batchSize, timeout },
+    };
+
+    setSyncProgress(mockProgress);
+
+    // Simulate progress updates
+    const interval = setInterval(() => {
+      setSyncProgress((prev) => {
+        if (!prev || prev.stats.processed >= prev.stats.totalBusinesses) {
+          clearInterval(interval);
+          toast.success("🎉 Demo sync completed!");
+          return null;
+        }
+
+        const newProcessed = Math.min(
+          prev.stats.processed + Math.floor(Math.random() * 20) + 5,
+          prev.stats.totalBusinesses,
+        );
+
+        const newSuccessful = Math.floor(newProcessed * 0.9);
+        const newFailed = Math.floor(newProcessed * 0.05);
+        const newSkipped = newProcessed - newSuccessful - newFailed;
+
+        return {
+          ...prev,
+          currentBatch:
+            Math.floor(
+              newProcessed / (prev.stats.totalBusinesses / prev.totalBatches),
+            ) + 1,
+          stats: {
+            ...prev.stats,
+            processed: newProcessed,
+            successful: newSuccessful,
+            failed: newFailed,
+            skipped: newSkipped,
+          },
+        };
+      });
+    }, 1000);
   };
 
   // Stop Ultra-Fast Sync
