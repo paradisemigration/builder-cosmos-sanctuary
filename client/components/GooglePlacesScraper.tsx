@@ -1351,7 +1351,7 @@ export function GooglePlacesScraper() {
                       </div>
                       <div className="text-center p-2 bg-orange-50 rounded">
                         <div className="text-lg font-bold text-orange-700">
-                          {imageUploadProgress.imageStats
+                          {imageUploadProgress?.imageStats
                             ?.businesses_with_covers || 0}
                         </div>
                         <div className="text-xs text-orange-600">Covers</div>
