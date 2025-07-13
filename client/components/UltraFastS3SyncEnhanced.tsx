@@ -461,89 +461,81 @@ export function UltraFastS3SyncEnhanced() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                  {/* Quick Config */}
-                  <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Concurrency
-                      </label>
-                      <input
-                        type="number"
-                        value={concurrency}
-                        onChange={(e) => setConcurrency(Number(e.target.value))}
-                        className="w-full mt-1 px-3 py-2 border rounded-md"
-                        min="1"
-                        max="50"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Batch Size
-                      </label>
-                      <input
-                        type="number"
-                        value={batchSize}
-                        onChange={(e) => setBatchSize(Number(e.target.value))}
-                        className="w-full mt-1 px-3 py-2 border rounded-md"
-                        min="10"
-                        max="500"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Timeout (ms)
-                      </label>
-                      <input
-                        type="number"
-                        value={timeout}
-                        onChange={(e) => setTimeout(Number(e.target.value))}
-                        className="w-full mt-1 px-3 py-2 border rounded-md"
-                        min="1000"
-                        max="30000"
-                      />
-                    </div>
-                  </div>
+              {/* Quick Config */}
+              <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Concurrency
+                  </label>
+                  <input
+                    type="number"
+                    value={concurrency}
+                    onChange={(e) => setConcurrency(Number(e.target.value))}
+                    className="w-full mt-1 px-3 py-2 border rounded-md"
+                    min="1"
+                    max="50"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Batch Size
+                  </label>
+                  <input
+                    type="number"
+                    value={batchSize}
+                    onChange={(e) => setBatchSize(Number(e.target.value))}
+                    className="w-full mt-1 px-3 py-2 border rounded-md"
+                    min="10"
+                    max="500"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Timeout (ms)
+                  </label>
+                  <input
+                    type="number"
+                    value={timeout}
+                    onChange={(e) => setTimeout(Number(e.target.value))}
+                    className="w-full mt-1 px-3 py-2 border rounded-md"
+                    min="1000"
+                    max="30000"
+                  />
+                </div>
+              </div>
 
-                  {/* Control Buttons */}
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={startUltraFastSync}
-                      disabled={
-                        loading ||
-                        syncProgress?.isRunning ||
-                        backendAvailable === false
-                      }
-                      size="lg"
-                      className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
-                    >
-                      {loading || syncProgress?.isRunning ? (
-                        <>
-                          <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                          {syncProgress?.isRunning
-                            ? "Syncing..."
-                            : "Starting..."}
-                        </>
-                      ) : (
-                        <>
-                          <Zap className="w-5 h-5 mr-2" />
-                          Start Ultra-Fast Sync
-                        </>
-                      )}
-                    </Button>
+              {/* Control Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  onClick={startUltraFastSync}
+                  disabled={loading || syncProgress?.isRunning}
+                  size="lg"
+                  className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
+                >
+                  {loading || syncProgress?.isRunning ? (
+                    <>
+                      <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                      {syncProgress?.isRunning ? "Syncing..." : "Starting..."}
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-5 h-5 mr-2" />
+                      Start Ultra-Fast Sync
+                    </>
+                  )}
+                </Button>
 
-                    {syncProgress?.isRunning && (
-                      <Button
-                        onClick={stopUltraFastSync}
-                        variant="destructive"
-                        size="lg"
-                      >
-                        <Square className="w-5 h-5 mr-2" />
-                        Stop
-                      </Button>
-                    )}
-                  </div>
-                </>
-              )}
+                {syncProgress?.isRunning && (
+                  <Button
+                    onClick={stopUltraFastSync}
+                    variant="destructive"
+                    size="lg"
+                  >
+                    <Square className="w-5 h-5 mr-2" />
+                    Stop
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
