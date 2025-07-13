@@ -285,9 +285,16 @@ export function UltraFastS3SyncEnhanced() {
         toast.info("⏹️ Sync stopped");
       });
     } catch (error) {
-      console.error("Failed to setup SSE:", error);
+      console.error("SSE Setup Error:", error);
       setSSEConnected(false);
+      toast.error("Failed to setup real-time connection");
     }
+  };
+
+  // Retry SSE connection
+  const retrySSEConnection = () => {
+    console.log("🔄 Retrying SSE connection...");
+    setupSSE();
   };
 
   const addRealtimeEvent = (type: string, data: any) => {
