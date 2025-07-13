@@ -57,6 +57,9 @@ export function ManualImageUpload() {
     null,
   );
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [backendAvailable, setBackendAvailable] = useState<boolean | null>(
+    null,
+  );
 
   // Configure API base URL
   const getApiUrl = (endpoint: string) => {
