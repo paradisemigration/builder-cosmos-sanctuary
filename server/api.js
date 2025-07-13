@@ -33,6 +33,9 @@ app.use(
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
+// Mount Ultra-Fast S3 Sync routes
+app.use("/api/ultra-fast-sync", ultraFastSyncRouter);
+
 // In-memory storage for demo (replace with database)
 let businesses = [];
 let businessIdCounter = 1;
