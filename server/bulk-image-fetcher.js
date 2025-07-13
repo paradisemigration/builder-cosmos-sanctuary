@@ -85,10 +85,17 @@ class BulkImageFetcher {
               !placeDetails.photos ||
               placeDetails.photos.length === 0
             ) {
+              console.log(
+                `⚠️ [${business.name}] No photos available - Place ID: ${business.googlePlaceId}`,
+              );
               this.progress.failed++;
               this.progress.processed++;
               return;
             }
+
+            console.log(
+              `📸 [${business.name}] Found ${placeDetails.photos.length} photos, processing...`,
+            );
 
             // Process photos (logo, cover, gallery)
             const imageUrls = await this.processBusinessPhotos(
