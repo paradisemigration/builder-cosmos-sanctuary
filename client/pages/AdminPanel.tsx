@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { ImageUpload } from "@/components/ImageUpload";
 import { DemoUpload } from "@/components/DemoUpload";
 import { GooglePlacesScraper } from "@/components/GooglePlacesScraper";
+import { ManualImageUpload } from "@/components/ManualImageUpload";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
