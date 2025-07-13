@@ -93,20 +93,88 @@ export function saveApiUrl(url: string): void {
 /**
  * Test API connection
  */
-export async function testApiConnection(baseUrl?: string): Promise<boolean> {
+export async function testApiConnection(baseUrl?: string): Promise<{
+  success: boolean;
+  error?: string;
+  details?: string;
+}> {
   try {
     const testUrl = baseUrl || getApiBaseUrl();
-    if (!testUrl) return false;
+    if (!testUrl) {
+      return {
+        success: false,
+        error: "No API URL provided",
+        details: "Please enter a valid API URL",
+      };
+    }
 
-    const response = await fetch(`${testUrl}/api/ultra-fast-sync/stats`, {
-      method: "HEAD",
-      mode: "cors",
-    });
+    // Validate URL format
+    try {
+      new URL(testUrl);
+    } catch {
+      return {
+        success: false,
+        error: "Invalid URL format",
+        details: "Please enter a valid URL (e.g., https://api.example.com)",
+      };
+    }
 
-    return response.ok;
-  } catch (error) {
-    console.error("API connection test failed:", error);
-    return false;
+    // Try multiple endpoints to test connectivity
+    const testEndpoints = [
+      "/api/ultra-fast-sync/stats",
+      "/api/health",
+      "/api/status",
+      "/",
+    ];
+
+    let lastError: string = "Unknown error";
+
+    for (const endpoint of testEndpoints) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        const response = await fetch(`${testUrl}${endpoint}`, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            Accept: "application/json",
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok || response.status === 404) {
+          // 404 is fine - means server is responding
+          return { success: true };
+        }
+
+        lastError = `HTTP ${response.status}: ${response.statusText}`;
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          lastError = "Request timeout (5s)";
+        } else if (error.message.includes("CORS")) {
+          lastError = "CORS policy blocking request";
+        } else if (error.message.includes("network")) {
+          lastError = "Network error - server unreachable";
+        } else {
+          lastError = error.message || "Connection failed";
+        }
+      }
+    }
+
+    return {
+      success: false,
+      error: "Connection failed",
+      details: lastError,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: "Test failed",
+      details: error.message || "Unknown error occurred",
+    };
   }
 }
 

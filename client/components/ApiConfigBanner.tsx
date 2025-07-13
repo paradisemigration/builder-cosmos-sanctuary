@@ -32,14 +32,17 @@ export function ApiConfigBanner({
 
     setTesting(true);
     try {
-      const isConnected = await testApiConnection(apiUrl.trim());
-      if (isConnected) {
+      const result = await testApiConnection(apiUrl.trim());
+      if (result.success) {
         toast.success("✅ API connection successful!");
       } else {
-        toast.error("❌ API connection failed - check URL and server status");
+        toast.error(`❌ Connection failed: ${result.error}`, {
+          description: result.details,
+          duration: 5000,
+        });
       }
-    } catch (error) {
-      toast.error(`Connection test failed: ${error.message}`);
+    } catch (error: any) {
+      toast.error(`Test failed: ${error.message || "Unknown error"}`);
     } finally {
       setTesting(false);
     }
@@ -133,10 +136,20 @@ export function ApiConfigBanner({
                 placeholder="https://your-backend-api.com"
                 className="w-full px-3 py-2 text-sm border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <p className="text-xs text-blue-600 mt-1">
-                Example: <code>https://your-app.fly.dev</code> or{" "}
-                <code>http://localhost:3001</code>
-              </p>
+              <div className="text-xs text-blue-600 mt-1 space-y-1">
+                <p>
+                  <strong>Examples:</strong>
+                </p>
+                <div className="grid grid-cols-1 gap-1 font-mono">
+                  <code>https://your-app.fly.dev</code>
+                  <code>https://your-app.railway.app</code>
+                  <code>http://localhost:3001</code>
+                </div>
+                <p className="text-blue-500 mt-2">
+                  ⚠️ Make sure your backend server allows CORS for: <br />
+                  <code>{window.location.origin}</code>
+                </p>
+              </div>
             </div>
 
             <div className="flex justify-end space-x-2">
