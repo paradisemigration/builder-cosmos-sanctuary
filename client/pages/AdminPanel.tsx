@@ -88,6 +88,27 @@ export default function AdminPanel() {
 
   // Load real data from API
   const loadDashboardData = async () => {
+    // Early check - don't even try if we know it's frontend-only
+    if (isKnownFrontendOnly()) {
+      console.log(
+        "🚫 AdminPanel: Frontend-only deployment - skipping dashboard data load",
+      );
+      setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
+    // Check backend availability first
+    const isBackendAvailable = await checkBackendHealth();
+
+    if (!isBackendAvailable) {
+      console.log(
+        "🚫 AdminPanel: Backend unavailable - skipping dashboard data load",
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
 
