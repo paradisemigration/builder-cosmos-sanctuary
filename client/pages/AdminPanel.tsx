@@ -20,6 +20,7 @@ import {
   BarChart3,
   Download,
   RefreshCw,
+  AlertCircle,
 } from "lucide-react";
 
 export default function AdminPanel() {
