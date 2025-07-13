@@ -463,6 +463,38 @@ export default function AdminPanel() {
               </p>
             </div>
             <div className="flex items-center gap-4">
+              {/* Backend Status Badge */}
+              {backendAvailable === null ? (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <RefreshCw className="h-3 w-3 animate-spin" />
+                  Checking Backend
+                </Badge>
+              ) : backendAvailable ? (
+                <Badge variant="default" className="flex items-center gap-1">
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                  Backend Connected
+                </Badge>
+              ) : (
+                <Badge
+                  variant="destructive"
+                  className="flex items-center gap-1"
+                >
+                  <AlertCircle className="h-3 w-3" />
+                  Backend Unavailable
+                </Badge>
+              )}
+
+              {/* API Configuration Button */}
+              <Button
+                onClick={() => setApiConfigOpen(true)}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
+              >
+                <Settings className="h-4 w-4" />
+                API Config
+              </Button>
+
               <Button
                 variant="outline"
                 size="sm"
