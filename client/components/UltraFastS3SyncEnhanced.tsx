@@ -216,19 +216,36 @@ export function UltraFastS3SyncEnhanced() {
   // Setup Server-Sent Events for real-time updates
   const setupSSE = () => {
     try {
-      const eventSource = new EventSource(
-        getApiUrl("/api/ultra-fast-sync/progress-stream"),
-      );
+      // Close existing connection if any
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+
+      const sseUrl = getApiUrl("/api/ultra-fast-sync/progress-stream");
+      console.log("🔌 Attempting SSE connection to:", sseUrl);
+
+      const eventSource = new EventSource(sseUrl);
       eventSourceRef.current = eventSource;
 
       eventSource.onopen = () => {
         setSSEConnected(true);
         console.log("📡 SSE Connected for real-time sync progress");
+        toast.success("Real-time connection established!");
       };
 
-      eventSource.onerror = () => {
+      eventSource.onerror = (error) => {
         setSSEConnected(false);
-        console.log("📡 SSE Connection lost");
+        console.log("📡 SSE Connection error:", error);
+        console.log("📡 SSE readyState:", eventSource.readyState);
+
+        // Don't spam error messages - only show once
+        setTimeout(() => {
+          if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+            toast.error("Real-time connection lost", {
+              description: "Live updates may not work properly",
+            });
+          }
+        }, 2000);
       };
 
       // Handle sync events
@@ -498,9 +515,21 @@ export function UltraFastS3SyncEnhanced() {
           <p className="text-gray-600 flex items-center">
             Advanced concurrent image sync with real-time monitoring
             {sseConnected ? (
-              <Wifi className="w-4 h-4 ml-2 text-green-600" />
+              <div className="flex items-center ml-2">
+                <Wifi className="w-4 h-4 text-green-600" />
+                <span className="text-xs text-green-600 ml-1">Live</span>
+              </div>
             ) : (
-              <WifiOff className="w-4 h-4 ml-2 text-red-600" />
+              <div className="flex items-center ml-2">
+                <WifiOff className="w-4 h-4 text-red-600" />
+                <span className="text-xs text-red-600 ml-1">Disconnected</span>
+                <button
+                  onClick={retrySSEConnection}
+                  className="text-xs text-blue-600 hover:text-blue-800 ml-2 underline"
+                >
+                  Retry
+                </button>
+              </div>
             )}
           </p>
         </div>
