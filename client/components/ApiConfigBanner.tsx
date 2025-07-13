@@ -22,6 +22,17 @@ export function ApiConfigBanner({
   const [apiUrl, setApiUrl] = useState(getApiConfig().baseUrl);
   const [testing, setTesting] = useState(false);
 
+  // Validate URL format in real-time
+  const isValidUrl = (url: string): boolean => {
+    if (!url.trim()) return false;
+    try {
+      const parsed = new URL(url.trim());
+      return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
+
   const config = getApiConfig();
 
   const handleTestConnection = async () => {
@@ -129,13 +140,30 @@ export function ApiConfigBanner({
               <label className="block text-xs font-medium text-blue-800 mb-1">
                 Backend API URL
               </label>
-              <input
-                type="url"
-                value={apiUrl}
-                onChange={(e) => setApiUrl(e.target.value)}
-                placeholder="https://your-backend-api.com"
-                className="w-full px-3 py-2 text-sm border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              <div className="relative">
+                <input
+                  type="url"
+                  value={apiUrl}
+                  onChange={(e) => setApiUrl(e.target.value)}
+                  placeholder="https://your-backend-api.com"
+                  className={`w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
+                    apiUrl.trim() && !isValidUrl(apiUrl)
+                      ? "border-red-300 focus:ring-red-500"
+                      : apiUrl.trim() && isValidUrl(apiUrl)
+                        ? "border-green-300 focus:ring-green-500"
+                        : "border-blue-300 focus:ring-blue-500"
+                  }`}
+                />
+                {apiUrl.trim() && (
+                  <div className="absolute right-2 top-2">
+                    {isValidUrl(apiUrl) ? (
+                      <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    ) : (
+                      <div className="h-2 w-2 bg-red-500 rounded-full"></div>
+                    )}
+                  </div>
+                )}
+              </div>
               <div className="text-xs text-blue-600 mt-1 space-y-1">
                 <p>
                   <strong>Examples:</strong>
@@ -165,7 +193,7 @@ export function ApiConfigBanner({
                 size="sm"
                 variant="outline"
                 onClick={handleTestConnection}
-                disabled={!apiUrl.trim() || testing}
+                disabled={!apiUrl.trim() || !isValidUrl(apiUrl) || testing}
                 className="h-7"
               >
                 {testing ? (
@@ -183,7 +211,7 @@ export function ApiConfigBanner({
               <Button
                 size="sm"
                 onClick={handleSaveConfig}
-                disabled={!apiUrl.trim()}
+                disabled={!apiUrl.trim() || !isValidUrl(apiUrl)}
                 className="h-7"
               >
                 Save & Apply
