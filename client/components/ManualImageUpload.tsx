@@ -112,21 +112,43 @@ export function ManualImageUpload() {
 
   // Load businesses missing images
   const loadBusinessesMissingImages = async () => {
+    // Check backend availability first
+    const isBackendAvailable = await checkBackendHealth();
+
+    if (!isBackendAvailable) {
+      console.log("🚫 Backend unavailable - skipping businesses load");
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await fetch(
         getApiUrl("/api/admin/businesses-missing-images"),
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
         setBusinesses(result.businesses || []);
       } else {
-        toast.error("Failed to load businesses");
+        toast.error(
+          "Failed to load businesses: " + (result.error || "Unknown error"),
+        );
       }
     } catch (error) {
       console.error("Error loading businesses:", error);
-      toast.error("Error loading businesses");
+
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        toast.error("Cannot connect to backend API");
+        setBackendAvailable(false);
+      } else {
+        toast.error("Error loading businesses: " + error.message);
+      }
     } finally {
       setLoading(false);
     }
