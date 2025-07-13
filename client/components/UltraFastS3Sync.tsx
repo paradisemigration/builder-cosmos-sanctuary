@@ -279,6 +279,11 @@ export function UltraFastS3Sync() {
 
   // Stop ultra-fast sync
   const stopUltraFastSync = async () => {
+    if (backendAvailable === false || isKnownFrontendOnly()) {
+      toast.error("Backend API connection required");
+      return;
+    }
+
     try {
       const response = await fetch(
         getApiUrl("/api/admin/stop-ultra-fast-sync"),
@@ -287,6 +292,10 @@ export function UltraFastS3Sync() {
           headers: { "Content-Type": "application/json" },
         },
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const result = await response.json();
 
@@ -297,8 +306,14 @@ export function UltraFastS3Sync() {
         toast.error(result.error || "Failed to stop sync");
       }
     } catch (error) {
-      console.error("Stop sync error:", error);
-      toast.error("Failed to stop sync");
+      console.error("UltraFastS3Sync: Stop sync error:", error);
+
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        toast.error("Cannot connect to backend API");
+        setBackendAvailable(false);
+      } else {
+        toast.error("Failed to stop sync: " + error.message);
+      }
     }
   };
 
