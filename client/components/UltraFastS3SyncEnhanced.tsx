@@ -461,13 +461,6 @@ export function UltraFastS3SyncEnhanced() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {backendAvailable === false ? (
-                <div className="text-center p-8 text-gray-500">
-                  <AlertCircle className="w-12 h-12 mx-auto mb-2 text-blue-600" />
-                  <p>Backend API connection required for Ultra-Fast Sync</p>
-                </div>
-              ) : (
-                <>
                   {/* Quick Config */}
                   <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
                     <div>
