@@ -189,21 +189,6 @@ export function ManualImageUpload() {
     }
   };
 
-  // Early detection of frontend-only deployment
-  const isKnownFrontendOnly = () => {
-    const hostname = window.location.hostname;
-    const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io");
-
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-    return isFrontendOnlyDeployment && !apiUrl && !hasApiOverride;
-  };
-
   useEffect(() => {
     // Early check - if we know it's frontend-only, set backend as unavailable immediately
     if (isKnownFrontendOnly()) {
