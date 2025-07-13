@@ -59,10 +59,44 @@ export default function AdminPanel() {
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
+      // Multiple layers of detection to prevent ANY fetch calls on frontend-only deployments
       if (isKnownFrontendOnly()) {
         console.log(
           "🚫 AdminPanel: Frontend-only deployment detected - backend unavailable",
         );
+        setBackendAvailable(false);
+        return false;
+      }
+
+      // Additional check for fly.dev specifically
+      const hostname = window.location.hostname;
+      if (hostname.includes("fly.dev")) {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+        if (!apiUrl && !hasApiOverride) {
+          console.log(
+            "🚫 AdminPanel: Fly.dev deployment without API URL - no fetch",
+          );
+          setBackendAvailable(false);
+          return false;
+        }
+      }
+
+      // If we're on any known frontend-only platform, don't fetch
+      if (
+        hostname.includes("vercel.app") ||
+        hostname.includes("netlify.app") ||
+        hostname.includes("github.io")
+      ) {
+        console.log("🚫 AdminPanel: Known frontend-only platform - no fetch");
+        setBackendAvailable(false);
+        return false;
+      }
+
+      // Only make fetch call if we're in localhost development with potential backend
+      if (!hostname.includes("localhost")) {
+        console.log("🚫 AdminPanel: Not localhost - assuming frontend-only");
         setBackendAvailable(false);
         return false;
       }
