@@ -761,6 +761,10 @@ export default function AdminPanel() {
             <ManualImageUpload />
           </TabsContent>
 
+          <TabsContent value="ultra-sync">
+            <UltraFastS3Sync />
+          </TabsContent>
+
           <TabsContent value="backup">
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-900">
