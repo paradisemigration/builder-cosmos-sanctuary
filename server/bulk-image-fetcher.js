@@ -177,14 +177,33 @@ class BulkImageFetcher {
 
   async fetchPlaceDetails(placeId) {
     try {
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${this.apiKey}`;
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos,name&key=${this.apiKey}`;
 
       const response = await fetch(url);
       const data = await response.json();
 
+      console.log(`📡 Google Places API Response for ${placeId}:`, {
+        status: data.status,
+        hasResult: !!data.result,
+        hasPhotos: !!data.result?.photos,
+        photoCount: data.result?.photos?.length || 0,
+        businessName: data.result?.name,
+      });
+
       if (data.status !== "OK") {
+        console.error(
+          `❌ Google Places API error for ${placeId}:`,
+          data.status,
+          data.error_message,
+        );
         throw new Error(
           `Google Places API error: ${data.status} - ${data.error_message || "Unknown error"}`,
+        );
+      }
+
+      if (!data.result?.photos || data.result.photos.length === 0) {
+        console.log(
+          `⚠️ No photos found for business: ${data.result?.name || placeId}`,
         );
       }
 
