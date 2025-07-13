@@ -431,15 +431,27 @@ export function UltraFastS3SyncEnhanced() {
             )}
           </p>
         </div>
-        <Button
-          onClick={loadSyncStats}
-          variant="outline"
-          size="sm"
-          disabled={backendAvailable === false}
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={runDatabaseMigration}
+            variant="outline"
+            size="sm"
+            disabled={loading}
+            className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+          >
+            <Database className="h-4 w-4 mr-2" />
+            Setup S3 Columns
+          </Button>
+          <Button
+            onClick={loadSyncStats}
+            variant="outline"
+            size="sm"
+            disabled={loading}
+          >
+            <RefreshCw className="w-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {/* Statistics Cards */}
