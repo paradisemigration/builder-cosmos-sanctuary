@@ -52,9 +52,9 @@ class EnhancedS3Service {
   async validateConfiguration() {
     console.log("🔍 Validating S3 Configuration...");
 
-    // 1. Validate credentials
+    // 1. Validate credentials with bucket access
     try {
-      await this.s3.getCallerIdentity().promise();
+      await this.s3.headBucket({ Bucket: this.bucketName }).promise();
       this.configurationStatus.credentials = true;
       console.log("  ✅ AWS Credentials valid");
     } catch (error) {
