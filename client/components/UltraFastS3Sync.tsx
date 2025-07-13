@@ -359,10 +359,38 @@ export function UltraFastS3Sync() {
   };
 
   useEffect(() => {
+    // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
+    const hostname = window.location.hostname;
+    if (
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io")
+    ) {
+      console.log(
+        "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected in useEffect",
+      );
+      setBackendAvailable(false);
+      return;
+    }
+
     // Early check - if we know it's frontend-only, set backend as unavailable immediately
     if (isKnownFrontendOnly()) {
       console.log(
         "🚫 UltraFastS3Sync: Early detection - Frontend-only deployment without API URL",
+      );
+      setBackendAvailable(false);
+      return;
+    }
+
+    // Additional check for fly.dev specifically to prevent any calls
+    if (
+      hostname.includes("fly.dev") &&
+      !import.meta.env.VITE_API_URL &&
+      !localStorage.getItem("VITE_API_URL_OVERRIDE")
+    ) {
+      console.log(
+        "🚫 UltraFastS3Sync: Fly.dev without API config - preventing all calls",
       );
       setBackendAvailable(false);
       return;
