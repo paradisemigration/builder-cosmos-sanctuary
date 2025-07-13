@@ -138,15 +138,43 @@ export default function AdminPanel() {
       }
 
       if (businessesResult.success) {
-        setBusinesses(businessesResult.businesses || []);
+        const allBusinesses = businessesResult.businesses || [];
+        setBusinesses(allBusinesses);
 
-        // Update stats with accurate total from the businesses query
-        if (businessesResult.total) {
-          setStats((prev) => ({
-            ...prev,
-            totalBusinesses: businessesResult.total,
-          }));
-        }
+        // Calculate real-time stats from actual business data
+        const totalReviews = allBusinesses.reduce((sum, business) => {
+          return sum + (business.reviewCount || business.reviews?.length || 0);
+        }, 0);
+
+        const totalImages = allBusinesses.reduce((sum, business) => {
+          return sum + (business.images?.length || 0);
+        }, 0);
+
+        const ratingsSum = allBusinesses.reduce((sum, business) => {
+          const rating = parseFloat(business.rating) || 0;
+          return rating > 0 ? sum + rating : sum;
+        }, 0);
+
+        const businessesWithRatings = allBusinesses.filter(
+          (business) => parseFloat(business.rating) > 0,
+        ).length;
+
+        const averageRating =
+          businessesWithRatings > 0 ? ratingsSum / businessesWithRatings : 0;
+
+        const businessesWithGooglePlaces = allBusinesses.filter(
+          (business) => business.googlePlaceId,
+        ).length;
+
+        // Update stats with real calculated values
+        setStats((prev) => ({
+          ...prev,
+          totalBusinesses: allBusinesses.length,
+          totalReviews: totalReviews,
+          totalImages: totalImages,
+          averageRating: averageRating,
+          totalGooglePlaces: businessesWithGooglePlaces,
+        }));
       }
 
       if (forceRefresh) {
