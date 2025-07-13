@@ -299,6 +299,20 @@ export default function AdminPanel() {
       return;
     }
 
+    // Additional check for fly.dev specifically to prevent any calls
+    const hostname = window.location.hostname;
+    if (
+      hostname.includes("fly.dev") &&
+      !import.meta.env.VITE_API_URL &&
+      !localStorage.getItem("VITE_API_URL_OVERRIDE")
+    ) {
+      console.log(
+        "🚫 AdminPanel: Fly.dev without API config - preventing all calls",
+      );
+      setBackendAvailable(false);
+      return;
+    }
+
     // Only load data if we haven't determined backend availability yet
     if (backendAvailable === null) {
       loadDashboardData();
