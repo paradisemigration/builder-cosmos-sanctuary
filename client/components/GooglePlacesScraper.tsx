@@ -650,17 +650,24 @@ export function GooglePlacesScraper() {
     };
   }, [showImageProgress, backendAvailable]);
 
-  // Check for running image upload process on component mount
+  // Check for running image upload process on component mount and auto-show if running
   useEffect(() => {
     if (backendAvailable) {
       loadImageUploadProgress().then(() => {
-        // If image upload is running, show progress bar
+        // Auto-show progress bar if image upload is running
         if (imageUploadProgress?.progress?.isRunning) {
           setShowImageProgress(true);
         }
       });
     }
   }, [backendAvailable]);
+
+  // Also check when imageUploadProgress changes
+  useEffect(() => {
+    if (imageUploadProgress?.progress?.isRunning && !showImageProgress) {
+      setShowImageProgress(true);
+    }
+  }, [imageUploadProgress]);
 
   return (
     <div className="space-y-6">
