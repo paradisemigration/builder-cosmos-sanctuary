@@ -73,8 +73,31 @@ router.get("/stats", async (req, res) => {
       `;
 
       sqliteDatabase.db.get(sql, [], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          console.log(
+            "S3 columns not found, using fallback stats:",
+            err.message,
+          );
+          // Fallback if S3 columns don't exist yet
+          const fallbackSql = `SELECT COUNT(*) as total_businesses FROM businesses WHERE googlePlaceId IS NOT NULL`;
+          sqliteDatabase.db.get(fallbackSql, [], (fallbackErr, fallbackRow) => {
+            if (fallbackErr) reject(fallbackErr);
+            else
+              resolve({
+                total_businesses: fallbackRow?.total_businesses || 0,
+                synced_businesses: 0,
+                pending_businesses: fallbackRow?.total_businesses || 0,
+                failed_businesses: 0,
+                businesses_with_logos: 0,
+                businesses_with_covers: 0,
+                businesses_with_photos: 0,
+                total_s3_photos: 0,
+                last_sync_date: null,
+              });
+          });
+        } else {
+          resolve(row);
+        }
       });
     });
 
