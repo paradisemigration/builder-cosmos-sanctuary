@@ -334,6 +334,31 @@ export default function AdminPanel() {
         </div>
       </div>
 
+      {/* Backend Status Alert */}
+      {backendAvailable === false && (
+        <div className="container mx-auto max-w-7xl px-4 pt-6">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <AlertCircle className="h-5 w-5 text-blue-600 mr-2" />
+              <div className="flex-1">
+                <h3 className="text-sm font-medium text-blue-800">
+                  Backend API Not Available
+                </h3>
+                <p className="text-sm text-blue-700 mt-1">
+                  This appears to be a frontend-only deployment. Advanced
+                  features like data scraping, image uploads, backups, and
+                  real-time statistics require a backend API connection.
+                </p>
+                <p className="text-xs text-blue-600 mt-2">
+                  Some dashboard features may show placeholder data or be
+                  disabled.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="container mx-auto max-w-7xl px-4 py-6">
         <Tabs
