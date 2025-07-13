@@ -49,8 +49,37 @@ async function initializeServices() {
 
 // SSE endpoint for real-time progress
 router.get("/progress-stream", (req, res) => {
-  const clientId = sseService.addClient(res);
-  console.log(`📡 New SSE connection: Client ${clientId}`);
+  console.log("📡 SSE connection request received");
+
+  // Set SSE headers
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Cache-Control",
+  });
+
+  // Send initial connection event
+  res.write(
+    `data: ${JSON.stringify({ type: "connected", timestamp: new Date().toISOString() })}\n\n`,
+  );
+
+  try {
+    const clientId = sseService.addClient(res);
+    console.log(`📡 New SSE connection established: Client ${clientId}`);
+  } catch (error) {
+    console.error("SSE service error:", error.message);
+    // Fallback: manual SSE handling if service fails
+    res.write(
+      `data: ${JSON.stringify({ type: "error", message: "SSE service unavailable" })}\n\n`,
+    );
+  }
+
+  // Handle client disconnect
+  req.on("close", () => {
+    console.log("📡 SSE client disconnected");
+  });
 });
 
 // Get sync statistics
