@@ -221,15 +221,6 @@ export default function AdminPanel() {
       return;
     }
 
-    // Early check - don't even try if we know it's frontend-only
-    if (isKnownFrontendOnly()) {
-      console.log(
-        "🚫 AdminPanel: Frontend-only deployment - skipping backup history load",
-      );
-      setBackendAvailable(false);
-      return;
-    }
-
     // If backend is already known to be unavailable, don't call checkBackendHealth
     if (backendAvailable === false) {
       console.log(
@@ -273,29 +264,6 @@ export default function AdminPanel() {
 
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
-
-    // Early check - if we know it's frontend-only, set backend as unavailable immediately
-    if (isKnownFrontendOnly()) {
-      console.log(
-        "🚫 AdminPanel: Early detection - Frontend-only deployment without API URL",
-      );
-      setBackendAvailable(false);
-      return;
-    }
-
-    // Additional check for fly.dev specifically to prevent any calls
-    const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") &&
-      !import.meta.env.VITE_API_URL &&
-      !localStorage.getItem("VITE_API_URL_OVERRIDE")
-    ) {
-      console.log(
-        "🚫 AdminPanel: Fly.dev without API config - preventing all calls",
-      );
-      setBackendAvailable(false);
-      return;
-    }
 
     // Only load data if we haven't determined backend availability yet
     if (backendAvailable === null) {
