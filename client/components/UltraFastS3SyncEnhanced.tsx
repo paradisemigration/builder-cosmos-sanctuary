@@ -94,21 +94,6 @@ export function UltraFastS3SyncEnhanced() {
   // Use relative URLs for same domain deployment
   const getApiUrl = (endpoint: string) => endpoint;
 
-  // Early detection of frontend-only deployment
-  const isKnownFrontendOnly = () => {
-    const hostname = window.location.hostname;
-    const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
-      hostname.includes("github.io");
-
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
-
-    return isFrontendOnlyDeployment && !apiUrl && !hasApiOverride;
-  };
-
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
@@ -207,7 +192,7 @@ export function UltraFastS3SyncEnhanced() {
 
   // Setup Server-Sent Events for real-time updates
   const setupSSE = () => {
-    if (backendAvailable === false || isKnownFrontendOnly()) {
+    if (backendAvailable === false) {
       return;
     }
 
