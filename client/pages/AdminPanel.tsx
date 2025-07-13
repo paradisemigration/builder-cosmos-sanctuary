@@ -101,8 +101,23 @@ export default function AdminPanel() {
 
       // Load scraping statistics with cache busting for forced refresh
       const timestamp = forceRefresh ? `?t=${Date.now()}` : "";
-      const statsResponse = await fetch(`/api/scraping/stats${timestamp}`);
-      const statsResult = await statsResponse.json();
+      let statsResponse, statsResult;
+
+      try {
+        statsResponse = await fetch(`/api/scraping/stats${timestamp}`);
+
+        if (!statsResponse.ok) {
+          throw new Error(
+            `HTTP ${statsResponse.status}: ${statsResponse.statusText}`,
+          );
+        }
+
+        statsResult = await statsResponse.json();
+        console.log("Stats API response:", statsResult);
+      } catch (statsError) {
+        console.log("Stats API failed:", statsError.message);
+        statsResult = { success: false, stats: {} };
+      }
 
       // Load all businesses for dashboard (no limit) with cache busting for forced refresh
       let businessesResponse, businessesResult;
