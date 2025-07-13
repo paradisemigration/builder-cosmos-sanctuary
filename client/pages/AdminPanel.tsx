@@ -123,12 +123,36 @@ export default function AdminPanel() {
 
   // Load real data from API
   const loadDashboardData = async () => {
+    // Absolute safety check - prevent ANY calls on fly.dev
+    const hostname = window.location.hostname;
+    if (
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app")
+    ) {
+      console.log(
+        "🚫 AdminPanel: ABSOLUTE SAFETY - Frontend-only platform detected, no dashboard load",
+      );
+      setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
     // Early check - don't even try if we know it's frontend-only
     if (isKnownFrontendOnly()) {
       console.log(
         "🚫 AdminPanel: Frontend-only deployment - skipping dashboard data load",
       );
       setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
+    // If backend is already known to be unavailable, don't call checkBackendHealth
+    if (backendAvailable === false) {
+      console.log(
+        "🚫 AdminPanel: Backend already known unavailable - skipping dashboard data load",
+      );
       setLoading(false);
       return;
     }
