@@ -219,13 +219,14 @@ export default function AdminPanel() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="listings">Listings</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="scraper">Data Scraper</TabsTrigger>
             <TabsTrigger value="manual-upload">Manual Upload</TabsTrigger>
+            <TabsTrigger value="ultra-sync">Ultra-Fast Sync</TabsTrigger>
             <TabsTrigger value="backup">Backup</TabsTrigger>
           </TabsList>
 
@@ -590,7 +591,7 @@ export default function AdminPanel() {
                       }
                       variant="outline"
                     >
-                      ���� Deploy Backend Guide
+                      📖 Deploy Backend Guide
                     </Button>
                   </div>
                 </CardContent>
