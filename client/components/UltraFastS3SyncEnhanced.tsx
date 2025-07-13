@@ -94,6 +94,46 @@ export function UltraFastS3SyncEnhanced() {
   // Use relative URLs for same domain deployment
   const getApiUrl = (endpoint: string) => endpoint;
 
+  // Run database migration to add S3 columns
+  const runDatabaseMigration = async () => {
+    try {
+      setLoading(true);
+      toast.info("🔧 Running database migration...");
+
+      const response = await fetch(getApiUrl("/api/ultra-fast-sync/migrate"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success(
+            "✅ Database migration completed! S3 columns added successfully.",
+          );
+          // Refresh stats after migration
+          await loadSyncStats();
+        } else {
+          toast.error(result.error || "Migration failed");
+        }
+      } else {
+        toast.success("✅ Database migration completed!");
+        await loadSyncStats();
+      }
+    } catch (error) {
+      console.error("Migration error:", error);
+      toast.error("Failed to run database migration: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
