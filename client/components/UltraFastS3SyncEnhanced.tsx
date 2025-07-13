@@ -147,14 +147,6 @@ export function UltraFastS3SyncEnhanced() {
       return;
     }
 
-    if (backendAvailable === false) {
-      console.log(
-        "🚫 UltraFastS3SyncEnhanced: Backend unavailable - skipping stats load",
-      );
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       const response = await fetch(getApiUrl("/api/ultra-fast-sync/stats"));
@@ -192,10 +184,6 @@ export function UltraFastS3SyncEnhanced() {
 
   // Setup Server-Sent Events for real-time updates
   const setupSSE = () => {
-    if (backendAvailable === false) {
-      return;
-    }
-
     try {
       const eventSource = new EventSource(
         getApiUrl("/api/ultra-fast-sync/progress-stream"),
@@ -266,11 +254,6 @@ export function UltraFastS3SyncEnhanced() {
 
   // Start Ultra-Fast Sync
   const startUltraFastSync = async () => {
-    if (backendAvailable === false) {
-      toast.error("Backend API not available");
-      return;
-    }
-
     try {
       setLoading(true);
       const response = await fetch(getApiUrl("/api/ultra-fast-sync/start"), {
