@@ -369,14 +369,6 @@ export function UltraFastS3SyncEnhanced() {
       return;
     }
 
-    if (isKnownFrontendOnly()) {
-      console.log(
-        "🚫 UltraFastS3SyncEnhanced: Early detection - Frontend-only deployment",
-      );
-      setBackendAvailable(false);
-      return;
-    }
-
     if (backendAvailable === null) {
       loadSyncStats();
       setupSSE();
