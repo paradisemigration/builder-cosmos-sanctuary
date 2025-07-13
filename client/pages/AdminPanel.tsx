@@ -516,91 +516,19 @@ export default function AdminPanel() {
         </div>
       </div>
 
-      {/* Backend Status Alert */}
-      {backendAvailable === false && (
-        <div className="container mx-auto max-w-7xl px-4 pt-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center">
-              <AlertCircle className="h-5 w-5 text-blue-600 mr-2" />
-              <div className="flex-1">
-                <h3 className="text-sm font-medium text-blue-800">
-                  Backend API Not Available
-                </h3>
-                <p className="text-sm text-blue-700 mt-1">
-                  This appears to be a frontend-only deployment. Advanced
-                  features like data scraping, image uploads, backups, and
-                  real-time statistics require a backend API connection.
-                </p>
-                <div className="mt-3 flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      const url = prompt(
-                        "Enter your backend API URL:\n(e.g., https://your-api.fly.dev or http://localhost:3001)",
-                      );
-                      if (url && url.trim()) {
-                        localStorage.setItem(
-                          "VITE_API_URL_OVERRIDE",
-                          url.trim(),
-                        );
-                        // Store the Google API key for the backend
-                        localStorage.setItem(
-                          "GOOGLE_PLACES_API_KEY",
-                          "AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8",
-                        );
-                        window.location.reload();
-                      }
-                    }}
-                  >
-                    Configure Backend API
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      // Quick setup for localhost development
-                      localStorage.setItem(
-                        "VITE_API_URL_OVERRIDE",
-                        "http://localhost:3001",
-                      );
-                      localStorage.setItem(
-                        "GOOGLE_PLACES_API_KEY",
-                        "AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8",
-                      );
-                      window.location.reload();
-                    }}
-                  >
-                    Setup Localhost Backend
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      const debugInfo = {
-                        hostname: window.location.hostname,
-                        apiUrl: import.meta.env.VITE_API_URL,
-                        override: localStorage.getItem("VITE_API_URL_OVERRIDE"),
-                        googleApiKey: "AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8",
-                        backendAvailable,
-                      };
-                      alert(
-                        `Configuration Info:\n${JSON.stringify(debugInfo, null, 2)}`,
-                      );
-                    }}
-                  >
-                    Show Config
-                  </Button>
-                </div>
-                <p className="text-xs text-blue-600 mt-2">
-                  Google Places API Key: AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8
-                  (Ready to use)
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* API Configuration Banner */}
+      <div className="container mx-auto max-w-7xl px-4 pt-6">
+        <ApiConfigBanner
+          backendAvailable={backendAvailable}
+          onConfigSaved={() => {
+            setBackendAvailable(null);
+            // Trigger health check after configuration
+            setTimeout(() => {
+              loadDashboardData();
+            }, 1000);
+          }}
+        />
+      </div>
 
       {/* Main Content */}
       <div className="container mx-auto max-w-7xl px-4 py-6">
