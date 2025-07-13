@@ -203,19 +203,34 @@ export function UltraFastS3Sync() {
 
   // Load sync progress
   const loadSyncProgress = async () => {
-    if (backendAvailable === false) return;
+    // Don't make calls if backend is unavailable or frontend-only
+    if (backendAvailable === false || isKnownFrontendOnly()) {
+      return;
+    }
 
     try {
       const response = await fetch(
         getApiUrl("/api/admin/ultra-fast-sync-progress"),
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
         setSyncProgress(result.progress);
       }
     } catch (error) {
-      console.error("Failed to load sync progress:", error);
+      console.error("UltraFastS3Sync: Failed to load sync progress:", error);
+
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        console.log(
+          "🚫 UltraFastS3Sync: Sync progress fetch failed - backend unavailable",
+        );
+        setBackendAvailable(false);
+      }
     }
   };
 
