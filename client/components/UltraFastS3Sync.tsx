@@ -141,15 +141,31 @@ export function UltraFastS3Sync() {
 
   // Load sync statistics
   const loadSyncStats = async () => {
+    // Early check - don't even try if we know it's frontend-only
     if (isKnownFrontendOnly()) {
-      console.log("🚫 Frontend-only deployment - skipping stats load");
+      console.log(
+        "🚫 UltraFastS3Sync: Frontend-only deployment - skipping stats load",
+      );
       setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
+    // Check backend availability first without making extra calls
+    if (backendAvailable === false) {
+      console.log(
+        "🚫 UltraFastS3Sync: Backend already known to be unavailable - skipping stats load",
+      );
+      setLoading(false);
       return;
     }
 
     const isBackendAvailable = await checkBackendHealth();
     if (!isBackendAvailable) {
-      console.log("🚫 Backend unavailable - skipping stats load");
+      console.log(
+        "🚫 UltraFastS3Sync: Backend unavailable - skipping stats load",
+      );
+      setLoading(false);
       return;
     }
 
