@@ -124,6 +124,14 @@ export function ManualImageUpload() {
 
   // Load businesses missing images
   const loadBusinessesMissingImages = async () => {
+    // Early check - don't even try if we know it's frontend-only
+    if (isKnownFrontendOnly()) {
+      console.log("🚫 Frontend-only deployment - skipping businesses load");
+      setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
     // Check backend availability first
     const isBackendAvailable = await checkBackendHealth();
 
