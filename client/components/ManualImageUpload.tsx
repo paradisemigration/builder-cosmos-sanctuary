@@ -536,7 +536,12 @@ export function ManualImageUpload() {
           <CardTitle>Businesses Missing Images</CardTitle>
         </CardHeader>
         <CardContent>
-          {loading ? (
+          {backendAvailable === false ? (
+            <div className="text-center p-8 text-gray-500">
+              <AlertCircle className="w-12 h-12 mx-auto mb-2 text-blue-600" />
+              <p>Backend API connection required for manual image upload</p>
+            </div>
+          ) : loading ? (
             <div className="flex items-center justify-center p-8">
               <RefreshCw className="w-6 h-6 animate-spin mr-2" />
               <span>Loading businesses...</span>
