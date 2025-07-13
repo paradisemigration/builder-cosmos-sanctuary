@@ -104,9 +104,9 @@ export default function AdminPanel() {
       const statsResponse = await fetch(`/api/scraping/stats${timestamp}`);
       const statsResult = await statsResponse.json();
 
-      // Load businesses with cache busting for forced refresh
+      // Load all businesses for dashboard (no limit) with cache busting for forced refresh
       const businessesResponse = await fetch(
-        `/api/scraped-businesses?limit=100${forceRefresh ? "&t=" + Date.now() : ""}`,
+        `/api/scraped-businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
       );
       const businessesResult = await businessesResponse.json();
 
