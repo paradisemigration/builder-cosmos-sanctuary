@@ -133,20 +133,6 @@ export function UltraFastS3SyncEnhanced() {
 
   // Load sync statistics
   const loadSyncStats = async () => {
-    // Check if we have an API URL configured
-    const apiUrl =
-      localStorage.getItem("VITE_API_URL_OVERRIDE") ||
-      import.meta.env.VITE_API_URL;
-
-    if (!apiUrl) {
-      console.log(
-        "🚫 UltraFastS3SyncEnhanced: ABSOLUTE SAFETY - Frontend-only platform detected, no stats load",
-      );
-      setBackendAvailable(false);
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       const response = await fetch(getApiUrl("/api/ultra-fast-sync/stats"));
