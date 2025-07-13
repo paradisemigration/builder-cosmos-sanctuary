@@ -254,9 +254,30 @@ export default function AdminPanel() {
 
   useEffect(() => {
     document.title = "Admin Panel - VisaConsult India";
-    loadDashboardData();
-    loadBackupHistory();
+
+    // Early check - if we know it's frontend-only, set backend as unavailable immediately
+    if (isKnownFrontendOnly()) {
+      console.log(
+        "🚫 AdminPanel: Early detection - Frontend-only deployment without API URL",
+      );
+      setBackendAvailable(false);
+      return;
+    }
+
+    // Only load data if we haven't determined backend availability yet
+    if (backendAvailable === null) {
+      loadDashboardData();
+      loadBackupHistory();
+    }
   }, []);
+
+  // Load data when backend becomes available
+  useEffect(() => {
+    if (backendAvailable === true) {
+      loadDashboardData();
+      loadBackupHistory();
+    }
+  }, [backendAvailable]);
 
   if (!user || user.role !== "admin") {
     return (
