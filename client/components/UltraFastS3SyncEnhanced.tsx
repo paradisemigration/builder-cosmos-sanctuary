@@ -288,8 +288,14 @@ export function UltraFastS3SyncEnhanced() {
 
   // Start Ultra-Fast Sync
   const startUltraFastSync = async () => {
-    if (backendAvailable === false || isKnownFrontendOnly()) {
-      toast.error("Backend API connection required for Ultra-Fast Sync");
+    const apiUrl =
+      localStorage.getItem("VITE_API_URL_OVERRIDE") ||
+      import.meta.env.VITE_API_URL;
+
+    if (!apiUrl || backendAvailable === false) {
+      toast.error(
+        "Backend API not configured or unavailable. Please configure API URL in settings.",
+      );
       return;
     }
 
