@@ -26,8 +26,22 @@ async function initializeServices() {
     console.log("🔧 Initializing Ultra-Fast S3 Sync services...");
 
     // Run database migration
-    const migration = new S3ColumnsMigration();
-    await migration.runMigration();
+    try {
+      const migration = new S3ColumnsMigration();
+      await migration.runMigration();
+      console.log("✅ Database migration completed");
+    } catch (migrationError) {
+      console.log("⚠️ Database migration warning:", migrationError.message);
+    }
+
+    // Initialize S3 service first
+    try {
+      await s3Service.initialize();
+      console.log("✅ S3 Service initialized successfully");
+    } catch (s3Error) {
+      console.log("⚠️ S3 Service initialization failed:", s3Error.message);
+      console.log("📸 Photo uploads will be skipped, but sync will continue");
+    }
 
     // Initialize sync engine
     await syncEngine.initialize();
