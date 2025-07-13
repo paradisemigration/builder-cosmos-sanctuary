@@ -40,6 +40,52 @@ export default function AdminPanel() {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1";
 
+  // Early detection of frontend-only deployment
+  const isKnownFrontendOnly = () => {
+    const hostname = window.location.hostname;
+    const isFrontendOnlyDeployment =
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io");
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+    return isFrontendOnlyDeployment && !apiUrl && !hasApiOverride;
+  };
+
+  // Check if backend API is available
+  const checkBackendHealth = async () => {
+    try {
+      if (isKnownFrontendOnly()) {
+        console.log(
+          "🚫 AdminPanel: Frontend-only deployment detected - backend unavailable",
+        );
+        setBackendAvailable(false);
+        return false;
+      }
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("timeout")), 3000);
+      });
+
+      const fetchPromise = fetch("/api/scraping/stats", {
+        method: "HEAD",
+        mode: "cors",
+      });
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+      const available = response && response.ok;
+      setBackendAvailable(available);
+      return available;
+    } catch (error) {
+      console.log("🚫 AdminPanel: Backend health check failed:", error.message);
+      setBackendAvailable(false);
+      return false;
+    }
+  };
+
   // Load real data from API
   const loadDashboardData = async () => {
     try {
