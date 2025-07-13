@@ -360,7 +360,7 @@ export default function AdminPanel() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={loadDashboardData}
+                onClick={() => loadDashboardData(true)}
                 disabled={loading}
               >
                 <RefreshCw
@@ -423,7 +423,7 @@ export default function AdminPanel() {
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="h-8 w-8 text-indigo-600 flex items-center justify-center">
-                        🗺️
+                        ��️
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">
@@ -686,7 +686,7 @@ export default function AdminPanel() {
                         import.meta.env.MODE === "production";
                       const message = isProduction
                         ? `🌐 Production Environment Detected\n\n✅ Frontend: Fully deployed and functional\n📋 Backend: Not deployed (normal for frontend-only hosting)\n🚀 Features: UI/UX, navigation, forms all working\n\nTo enable image uploads:\n1. Deploy the Node.js API server\n2. Configure VITE_API_URL environment variable\n3. Set up Google Cloud Storage bucket`
-                        : `🔧 Development Environment\n\n✅ Frontend: Running on ${window.location.origin}\n✅ Backend: Should be running on localhost:3001\n✅ Google Cloud: Configured with credentials\n\nAll systems ready for testing!`;
+                        : `🔧 Development Environment\n\n✅ Frontend: Running on ${window.location.origin}\n✅ Backend: Should be running on localhost:3001\n��� Google Cloud: Configured with credentials\n\nAll systems ready for testing!`;
 
                       alert(message);
                     }}
