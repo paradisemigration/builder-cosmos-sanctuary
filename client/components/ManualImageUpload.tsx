@@ -61,6 +61,21 @@ export function ManualImageUpload() {
     null,
   );
 
+  // Early detection of frontend-only deployment
+  const isKnownFrontendOnly = () => {
+    const hostname = window.location.hostname;
+    const isFrontendOnlyDeployment =
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io");
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
+
+    return isFrontendOnlyDeployment && !apiUrl && !hasApiOverride;
+  };
+
   // Configure API base URL
   const getApiUrl = (endpoint: string) => {
     const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
