@@ -325,7 +325,7 @@ export default function AdminPanel() {
     // If backend is already known to be unavailable, don't call checkBackendHealth
     if (backendAvailable === false) {
       console.log(
-        "🚫 AdminPanel: Backend already known unavailable - skipping backup history load",
+        "���� AdminPanel: Backend already known unavailable - skipping backup history load",
       );
       return;
     }
@@ -481,6 +481,36 @@ export default function AdminPanel() {
                 Dashboard Overview
               </h2>
 
+              {/* Debug Info */}
+              {loading && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center">
+                    <RefreshCw className="h-5 w-5 text-blue-600 animate-spin mr-2" />
+                    <span className="text-blue-800">
+                      Loading dashboard data...
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {!loading && businesses.length === 0 && backendAvailable && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
+                    <span className="text-yellow-800">
+                      No businesses loaded from API. Expected 1500+ businesses.
+                    </span>
+                    <Button
+                      onClick={() => loadDashboardData(true)}
+                      className="ml-4"
+                      size="sm"
+                    >
+                      Retry Loading
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 <Card>
@@ -492,7 +522,9 @@ export default function AdminPanel() {
                           Total Listings
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          {loading ? "..." : stats?.totalBusinesses || 0}
+                          {loading
+                            ? "..."
+                            : stats?.totalBusinesses || businesses.length || 0}
                         </p>
                       </div>
                     </div>
