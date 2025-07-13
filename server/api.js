@@ -13,6 +13,7 @@ import database from "./database.js";
 import sqliteDatabase from "./database.sqlite.js";
 import DataMigration from "./migrate-to-sqlite.js";
 import bulkImageFetcher from "./bulk-image-fetcher.js";
+import ultraFastSyncRouter from "./api-ultra-fast-sync.js";
 
 const app = express();
 
