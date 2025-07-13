@@ -147,7 +147,7 @@ export function UltraFastS3SyncEnhanced() {
       return;
     }
 
-    if (backendAvailable === false || isKnownFrontendOnly()) {
+    if (backendAvailable === false) {
       console.log(
         "🚫 UltraFastS3SyncEnhanced: Backend unavailable - skipping stats load",
       );
