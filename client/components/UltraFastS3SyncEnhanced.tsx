@@ -448,7 +448,7 @@ export function UltraFastS3SyncEnhanced() {
             size="sm"
             disabled={loading}
           >
-            <RefreshCw className="w-4 w-4 mr-2" />
+            <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
           </Button>
         </div>
