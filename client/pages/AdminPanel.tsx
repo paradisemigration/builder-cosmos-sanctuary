@@ -60,7 +60,7 @@ export default function AdminPanel() {
   };
 
   // Load real data from API
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (forceRefresh = false) => {
     // Absolute safety check - prevent ANY calls on fly.dev
     const hostname = window.location.hostname;
     if (
@@ -76,8 +76,8 @@ export default function AdminPanel() {
       return;
     }
 
-    // If backend is already known to be unavailable, don't call checkBackendHealth
-    if (backendAvailable === false) {
+    // If backend is already known to be unavailable and not forcing refresh, skip
+    if (backendAvailable === false && !forceRefresh) {
       console.log(
         "🚫 AdminPanel: Backend already known unavailable - skipping dashboard data load",
       );
@@ -85,7 +85,7 @@ export default function AdminPanel() {
       return;
     }
 
-    // Check backend availability first
+    // Check backend availability first (or re-check if forcing refresh)
     const isBackendAvailable = await checkBackendHealth();
 
     if (!isBackendAvailable) {
@@ -99,18 +99,42 @@ export default function AdminPanel() {
     try {
       setLoading(true);
 
-      // Load scraping statistics
-      const statsResponse = await fetch("/api/scraping/stats");
+      // Load scraping statistics with cache busting for forced refresh
+      const timestamp = forceRefresh ? `?t=${Date.now()}` : "";
+      const statsResponse = await fetch(`/api/scraping/stats${timestamp}`);
       const statsResult = await statsResponse.json();
 
-      // Load businesses
+      // Load businesses with cache busting for forced refresh
       const businessesResponse = await fetch(
-        "/api/scraped-businesses?limit=100",
+        `/api/scraped-businesses?limit=100${forceRefresh ? "&t=" + Date.now() : ""}`,
       );
       const businessesResult = await businessesResponse.json();
 
+      // Load Ultra-Fast S3 Sync stats for additional dashboard data
+      try {
+        const s3StatsResponse = await fetch(
+          `/api/ultra-fast-sync/stats${timestamp}`,
+        );
+        if (s3StatsResponse.ok) {
+          const s3StatsResult = await s3StatsResponse.json();
+          if (s3StatsResult.success) {
+            // Merge S3 stats with scraping stats
+            setStats((prev) => ({
+              ...prev,
+              ...statsResult.stats,
+              ...s3StatsResult.stats,
+            }));
+          }
+        }
+      } catch (s3Error) {
+        console.log("S3 stats not available:", s3Error.message);
+      }
+
       if (statsResult.success) {
-        setStats(statsResult.stats);
+        setStats((prev) => ({
+          ...prev,
+          ...statsResult.stats,
+        }));
       }
 
       if (businessesResult.success) {
@@ -124,8 +148,15 @@ export default function AdminPanel() {
           }));
         }
       }
+
+      if (forceRefresh) {
+        toast.success("Dashboard data refreshed successfully");
+      }
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
+      if (forceRefresh) {
+        toast.error("Failed to refresh dashboard data");
+      }
     } finally {
       setLoading(false);
     }
