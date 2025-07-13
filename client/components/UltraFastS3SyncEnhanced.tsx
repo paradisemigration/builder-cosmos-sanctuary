@@ -429,6 +429,12 @@ export function UltraFastS3SyncEnhanced() {
       });
 
       if (!response.ok) {
+        // Handle 409 (Conflict) - sync not running
+        if (response.status === 409) {
+          toast.info("⏹️ Sync is not currently running");
+          setSyncProgress(null);
+          return;
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
