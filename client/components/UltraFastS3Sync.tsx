@@ -150,6 +150,22 @@ export function UltraFastS3Sync() {
 
   // Load sync statistics
   const loadSyncStats = async () => {
+    // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
+    const hostname = window.location.hostname;
+    if (
+      hostname.includes("fly.dev") ||
+      hostname.includes("vercel.app") ||
+      hostname.includes("netlify.app") ||
+      hostname.includes("github.io")
+    ) {
+      console.log(
+        "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected, no stats load",
+      );
+      setBackendAvailable(false);
+      setLoading(false);
+      return;
+    }
+
     // Early check - don't even try if we know it's frontend-only
     if (isKnownFrontendOnly()) {
       console.log(
