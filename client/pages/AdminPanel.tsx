@@ -6,7 +6,7 @@ import { ImageUpload } from "@/components/ImageUpload";
 import { DemoUpload } from "@/components/DemoUpload";
 import { GooglePlacesScraper } from "@/components/GooglePlacesScraper";
 import { ManualImageUpload } from "@/components/ManualImageUpload";
-import { UltraFastS3Sync } from "@/components/UltraFastS3Sync";
+import { UltraFastS3SyncEnhanced } from "@/components/UltraFastS3SyncEnhanced";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
