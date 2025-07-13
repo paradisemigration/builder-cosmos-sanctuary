@@ -236,7 +236,7 @@ export function UltraFastS3Sync() {
 
   // Start ultra-fast sync
   const startUltraFastSync = async () => {
-    if (backendAvailable === false) {
+    if (backendAvailable === false || isKnownFrontendOnly()) {
       toast.error("Backend API connection required for Ultra-Fast Sync");
       return;
     }
