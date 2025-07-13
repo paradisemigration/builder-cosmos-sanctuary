@@ -304,16 +304,27 @@ export function UltraFastS3Sync() {
   };
 
   useEffect(() => {
+    // Early check - if we know it's frontend-only, set backend as unavailable immediately
     if (isKnownFrontendOnly()) {
       console.log(
-        "🚫 Early detection: Frontend-only deployment without API URL",
+        "🚫 UltraFastS3Sync: Early detection - Frontend-only deployment without API URL",
       );
       setBackendAvailable(false);
       return;
     }
 
-    loadSyncStats();
+    // Only load stats if we haven't determined backend availability yet
+    if (backendAvailable === null) {
+      loadSyncStats();
+    }
   }, []);
+
+  // Load stats when backend becomes available
+  useEffect(() => {
+    if (backendAvailable === true && !syncStats) {
+      loadSyncStats();
+    }
+  }, [backendAvailable]);
 
   // Auto-refresh progress when sync is running
   useEffect(() => {
