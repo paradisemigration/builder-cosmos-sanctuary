@@ -189,30 +189,33 @@ export default function AdminPanel() {
       {/* Header */}
       <div className="pt-20 pb-6 px-4 bg-white border-b">
         <div className="container mx-auto max-w-7xl">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                 Admin Dashboard
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm md:text-base">
                 Manage your visa consultant directory
               </p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={loadDashboardData}
                 disabled={loading}
+                className="flex-1 sm:flex-none text-xs sm:text-sm"
               >
                 <RefreshCw
-                  className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                  className={`h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ${loading ? "animate-spin" : ""}`}
                 />
-                Refresh Data
+                <span className="hidden sm:inline">Refresh Data</span>
+                <span className="sm:hidden">Refresh</span>
               </Button>
-              <Button size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export Report
+              <Button size="sm" className="flex-1 sm:flex-none text-xs sm:text-sm">
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Export Report</span>
+                <span className="sm:hidden">Export</span>
               </Button>
             </div>
           </div>
