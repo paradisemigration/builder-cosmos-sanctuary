@@ -170,25 +170,28 @@ export function GlobalDebugPopup() {
                     <div className="text-gray-700 mt-1">{debugInfo.currentPage}</div>
                   </div>
 
-                  <div className="border-b pb-2">
+                  <div className="border-b pb-3">
                     <span className="font-medium text-purple-600">🏷️ Title:</span>
-                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                    <div className="text-gray-700 break-words mt-1 bg-white p-3 rounded border text-sm">
                       {debugInfo.metaData.title}
                     </div>
+                    <div className="text-xs text-gray-500 mt-1">Length: {debugInfo.metaData.title.length} characters</div>
                   </div>
 
-                  <div className="border-b pb-2">
+                  <div className="border-b pb-3">
                     <span className="font-medium text-green-600">📝 Description:</span>
-                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                    <div className="text-gray-700 break-words mt-1 bg-white p-3 rounded border text-sm">
                       {debugInfo.metaData.description}
                     </div>
+                    <div className="text-xs text-gray-500 mt-1">Length: {debugInfo.metaData.description.length} characters</div>
                   </div>
 
-                  <div className="border-b pb-2">
+                  <div className="border-b pb-3">
                     <span className="font-medium text-orange-600">🔑 Keywords:</span>
-                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                    <div className="text-gray-700 break-words mt-1 bg-white p-3 rounded border text-sm">
                       {debugInfo.metaData.keywords}
                     </div>
+                    <div className="text-xs text-gray-500 mt-1">Length: {debugInfo.metaData.keywords.length} characters</div>
                   </div>
 
                   {debugInfo.metaData.ogTitle && (
