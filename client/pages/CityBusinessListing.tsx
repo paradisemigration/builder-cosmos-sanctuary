@@ -74,14 +74,13 @@ export default function CityBusinessListing() {
       return;
     }
 
-    // Filter businesses by city
-    const cityBusinesses = sampleBusinesses.filter(
-      (business) => business.city.toLowerCase() === city.toLowerCase(),
-    );
+    // Reset pagination when city changes
+    setCurrentPage(1);
+    setBusinesses([]);
+    setFilteredBusinesses([]);
 
-    setBusinesses(cityBusinesses);
-    setFilteredBusinesses(cityBusinesses);
-    setLoading(false);
+    // Fetch businesses from API
+    fetchBusinesses(1, true);
 
     // Set page meta data with SEO optimization
     const metaData = generateCityMeta(cityName);
