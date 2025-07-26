@@ -279,6 +279,7 @@ const App = () => (
             {/* Catch-all route - must be last */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <SiteFooter />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
