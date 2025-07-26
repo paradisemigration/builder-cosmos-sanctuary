@@ -126,12 +126,13 @@ export function GlobalDebugPopup() {
       <div
         className="fixed top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded shadow-lg z-[9999] max-w-xs"
         style={{ fontFamily: 'monospace', lineHeight: '1.2' }}
-        title={`Path: ${location.pathname}`}
+        title={`Path: ${location.pathname}\nClick red bug button for full details`}
       >
         <div className="text-yellow-200 font-bold mb-1">DEBUG: {location.pathname}</div>
         <div className="truncate text-white">T: {debugInfo.metaData.title}</div>
         <div className="truncate text-white">D: {debugInfo.metaData.description}</div>
         <div className="truncate text-white">K: {debugInfo.metaData.keywords}</div>
+        <div className="text-yellow-200 font-bold">META: {debugInfo.metaData.allMetaTags.length} tags</div>
       </div>
       
       {!isOpen ? (
