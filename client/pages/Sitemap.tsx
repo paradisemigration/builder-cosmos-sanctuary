@@ -13,11 +13,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { 
-  indianCities, 
-  categoryMapping, 
-  businessCategories 
-} from "@/lib/data";
+import {
+  allCities,
+  allIndianCities,
+  uaeCities,
+  allCategories,
+  getCitySlug,
+  getAllCombinations
+} from "@/lib/all-categories";
 
 export default function Sitemap() {
   const [searchQuery, setSearchQuery] = useState("");
