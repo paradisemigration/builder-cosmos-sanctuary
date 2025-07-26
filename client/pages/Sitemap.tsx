@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Building, Grid, List, Filter } from "lucide-react";
+import { Search, MapPin, Building, Grid, List, Filter, Download, Globe, FileText } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,12 +21,16 @@ import {
   getCitySlug,
   getAllCombinations,
 } from "@/lib/all-categories";
+import { downloadSitemap, downloadRobotsTxt, generateSitemapURLs } from "@/lib/sitemap-generator";
 
 export default function Sitemap() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  // Generate sitemap URLs for SEO
+  const sitemapURLs = useMemo(() => generateSitemapURLs(), []);
 
   // Use the comprehensive combinations from the utility function
   const allCombinations = useMemo(() => {
@@ -90,8 +94,36 @@ export default function Sitemap() {
             </h1>
             <p className="text-xl text-blue-100 mb-6">
               Browse {allCities.length} cities and {allCategories.length}{" "}
-              categories
+              categories with {sitemapURLs.length} SEO-optimized pages
             </p>
+
+            {/* SEO Tools */}
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              <Button
+                variant="secondary"
+                onClick={downloadSitemap}
+                className="flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download XML Sitemap
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={downloadRobotsTxt}
+                className="flex items-center gap-2"
+              >
+                <FileText className="w-4 h-4" />
+                Download robots.txt
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+                onClick={() => window.open('https://search.google.com/search-console', '_blank')}
+              >
+                <Globe className="w-4 h-4" />
+                Google Search Console
+              </Button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-md mx-auto">
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
@@ -108,9 +140,9 @@ export default function Sitemap() {
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
                   <p className="text-2xl font-bold">
-                    {allCities.length * allCategories.length}
+                    {sitemapURLs.length}
                   </p>
-                  <p className="text-sm text-blue-100">Total Pages</p>
+                  <p className="text-sm text-blue-100">SEO Pages</p>
                 </CardContent>
               </Card>
             </div>
@@ -288,6 +320,50 @@ export default function Sitemap() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* SEO Information Section */}
+      <section className="py-8 bg-blue-50">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Globe className="w-5 h-5 text-blue-600" />
+              SEO & Google Crawling Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">XML Sitemap</h4>
+                <p className="text-sm text-gray-600 mb-3">
+                  Complete XML sitemap with {sitemapURLs.length} URLs for Google Search Console submission.
+                </p>
+                <Button size="sm" onClick={downloadSitemap} className="flex items-center gap-2">
+                  <Download className="w-4 h-4" />
+                  Download Sitemap
+                </Button>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Robots.txt</h4>
+                <p className="text-sm text-gray-600 mb-3">
+                  Optimized robots.txt file with proper crawling instructions and sitemap reference.
+                </p>
+                <Button size="sm" variant="outline" onClick={downloadRobotsTxt} className="flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Download robots.txt
+                </Button>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">SEO Features</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Canonical URLs</li>
+                  <li>• Meta descriptions</li>
+                  <li>• Structured data</li>
+                  <li>• Open Graph tags</li>
+                  <li>• Breadcrumb navigation</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
