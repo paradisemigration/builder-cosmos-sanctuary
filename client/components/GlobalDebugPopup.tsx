@@ -210,6 +210,31 @@ export function GlobalDebugPopup() {
                 </div>
               </div>
 
+              {/* All Meta Tags */}
+              <div>
+                <h3 className="font-semibold mb-2 text-gray-800">🏷️ All Meta Tags ({debugInfo.metaData.allMetaTags.length})</h3>
+                <div className="bg-gray-50 p-3 rounded border text-xs max-h-48 overflow-y-auto">
+                  {debugInfo.metaData.allMetaTags.length > 0 ? (
+                    <div className="space-y-2">
+                      {debugInfo.metaData.allMetaTags.map((meta, index) => (
+                        <div key={index} className="bg-white p-2 rounded border">
+                          <div className="flex items-start gap-2">
+                            <span className="font-medium text-blue-600 min-w-0 flex-shrink-0">
+                              {meta.property ? `property="${meta.property}"` : `name="${meta.name}"`}:
+                            </span>
+                            <span className="text-gray-700 break-all">
+                              {meta.content}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-gray-500 italic">No meta tags found</div>
+                  )}
+                </div>
+              </div>
+
               {/* Browser Info */}
               <div>
                 <h3 className="font-semibold mb-2 text-gray-800">💻 Browser Info</h3>
