@@ -1851,6 +1851,100 @@ app.post("/api/admin/auto-s3-config", (req, res) => {
   }
 });
 
+// Get businesses from Google Maps API for specific city and category
+app.get("/api/google-maps-businesses", async (req, res) => {
+  try {
+    const { city, category, limit = 20 } = req.query;
+
+    if (!city || !category) {
+      return res.status(400).json({
+        success: false,
+        error: "City and category parameters are required",
+      });
+    }
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    console.log(`🔍 Searching Google Maps for ${category} in ${city}...`);
+
+    // Construct search query for Google Places API
+    const query = `${category} in ${city}`;
+
+    try {
+      // Use the Google Places API to search for businesses
+      const results = await googlePlaces.searchPlaces(query, {
+        fields: ['place_id', 'name', 'formatted_address', 'rating', 'user_ratings_total', 'formatted_phone_number', 'website', 'business_status', 'geometry'],
+        limit: parseInt(limit),
+      });
+
+      if (results.success && results.places && results.places.length > 0) {
+        // Transform Google Places results to our business format
+        const businesses = results.places.map((place, index) => ({
+          id: place.place_id || `gm-${index}`,
+          googlePlaceId: place.place_id,
+          name: place.name || 'Unknown Business',
+          category: category,
+          description: `${category} in ${city}`,
+          address: place.formatted_address || '',
+          city: city,
+          phone: place.formatted_phone_number || '',
+          website: place.website || '',
+          rating: place.rating || 0,
+          reviewCount: place.user_ratings_total || 0,
+          latitude: place.geometry?.location?.lat || null,
+          longitude: place.geometry?.location?.lng || null,
+          businessStatus: place.business_status || 'OPERATIONAL',
+          source: 'google_maps',
+          services: [category],
+          images: [],
+          isVerified: true,
+          isFeatured: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
+
+        console.log(`✅ Found ${businesses.length} businesses from Google Maps`);
+
+        res.json({
+          success: true,
+          businesses,
+          total: businesses.length,
+          source: 'google_maps',
+          query: query,
+        });
+      } else {
+        console.log(`❌ No businesses found on Google Maps for ${category} in ${city}`);
+        res.json({
+          success: true,
+          businesses: [],
+          total: 0,
+          source: 'google_maps',
+          query: query,
+          message: `No businesses found for ${category} in ${city}`,
+        });
+      }
+    } catch (apiError) {
+      console.error("Google Places API error:", apiError);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch data from Google Maps API",
+        details: apiError.message,
+      });
+    }
+  } catch (error) {
+    console.error("Google Maps businesses endpoint error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Export the configuration for use in scraper
 export { autoS3ImageUpload };
 
