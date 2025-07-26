@@ -87,6 +87,17 @@ export function Navigation({ className = "" }: NavigationProps) {
               </Link>
 
               <Link
+                to="/all-cities-categories"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isCurrentPage("/all-cities-categories")
+                    ? "bg-purple-100 text-purple-700"
+                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+                }`}
+              >
+                Browse All
+              </Link>
+
+              <Link
                 to="/plans"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isCurrentPage("/plans")
