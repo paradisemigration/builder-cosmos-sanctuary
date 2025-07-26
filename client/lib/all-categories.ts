@@ -185,6 +185,197 @@ export const allCategories = [
     name: "Long-term Residence",
     description: "Long-term residence permits and renewals",
   },
+
+  // Additional Services from the 54-category list (6 new categories)
+  {
+    slug: "immigration-services",
+    name: "Immigration Services",
+    description: "Comprehensive immigration support and services",
+  },
+  {
+    slug: "overseas-education",
+    name: "Overseas Education",
+    description: "International education consultancy and guidance",
+  },
+  {
+    slug: "student-visa-services",
+    name: "Student Visa Services",
+    description: "Student visa processing and educational permits",
+  },
+  {
+    slug: "visa-consulting-services",
+    name: "Visa Consulting Services",
+    description: "Professional visa consultation and advisory services",
+  },
+  {
+    slug: "europe-work-visa-consultants",
+    name: "Europe Work Visa Consultants",
+    description: "European work visa and employment specialists",
+  },
+
+  // Country-Specific Services (18 new categories)
+  {
+    slug: "canada-visa-agent",
+    name: "Canada Visa Agent",
+    description: "Authorized Canada visa processing agents",
+  },
+  {
+    slug: "canada-pr-visa-agents",
+    name: "Canada PR Visa Agents",
+    description: "Canada permanent residence visa specialists",
+  },
+  {
+    slug: "canada-work-permit-consultant",
+    name: "Canada Work Permit Consultant",
+    description: "Canada work permit and employment visa services",
+  },
+  {
+    slug: "canada-express-entry-consultant",
+    name: "Canada Express Entry Consultant",
+    description: "Canada Express Entry immigration program specialists",
+  },
+  {
+    slug: "best-canada-immigration-agency",
+    name: "Best Canada Immigration Agency",
+    description: "Top-rated Canada immigration agencies and services",
+  },
+  {
+    slug: "canada-student-visa-consultant",
+    name: "Canada Student Visa Consultant",
+    description: "Canada student visa and study permit services",
+  },
+  {
+    slug: "canada-tourist-visa-agents",
+    name: "Canada Tourist Visa Agents",
+    description: "Canada tourist and visitor visa specialists",
+  },
+  {
+    slug: "usa-student-visa-consultants",
+    name: "USA Student Visa Consultants",
+    description: "US F1 and student visa specialists",
+  },
+  {
+    slug: "us-immigration-consultants",
+    name: "US Immigration Consultants",
+    description: "United States immigration and visa services",
+  },
+  {
+    slug: "usa-tourist-visa-agents",
+    name: "USA Tourist Visa Agents",
+    description: "US tourist and visitor visa processing agents",
+  },
+  {
+    slug: "uk-immigration-consultants",
+    name: "UK Immigration Consultants",
+    description: "United Kingdom immigration and visa services",
+  },
+  {
+    slug: "uk-work-visa-consultants",
+    name: "UK Work Visa Consultants",
+    description: "UK work visa and employment permit specialists",
+  },
+  {
+    slug: "uk-student-visa-consultants",
+    name: "UK Student Visa Consultants",
+    description: "UK student visa and Tier 4 visa services",
+  },
+  {
+    slug: "australia-pr-consultant",
+    name: "Australia PR Consultant",
+    description: "Australia permanent residence and skilled migration",
+  },
+  {
+    slug: "australia-immigration-agents",
+    name: "Australia Immigration Agents",
+    description: "Licensed Australia immigration and visa agents",
+  },
+  {
+    slug: "australia-student-visa-services",
+    name: "Australia Student Visa Services",
+    description: "Australia student visa and education services",
+  },
+  {
+    slug: "australia-work-visa-consultants",
+    name: "Australia Work Visa Consultants",
+    description: "Australia work visa and employment specialists",
+  },
+
+  // European Country Work Permit Services (15 new categories)
+  {
+    slug: "germany-work-permit-visa-agency",
+    name: "Germany Work Permit Visa Agency",
+    description: "Germany work permit and employment visa services",
+  },
+  {
+    slug: "czech-republic-work-permit-visa-agency",
+    name: "Czech Republic Work Permit Visa Agency",
+    description: "Czech Republic work permit and visa services",
+  },
+  {
+    slug: "cyprus-work-visa-permit-agency",
+    name: "Cyprus Work Visa Permit Agency",
+    description: "Cyprus work visa and employment permit services",
+  },
+  {
+    slug: "netherlands-work-permit-visa-agency",
+    name: "Netherlands Work Permit Visa Agency",
+    description: "Netherlands work permit and visa processing services",
+  },
+  {
+    slug: "france-work-permit-visa-agency",
+    name: "France Work Permit Visa Agency",
+    description: "France work permit and employment visa services",
+  },
+  {
+    slug: "hungary-work-permit-visa-agency",
+    name: "Hungary Work Permit Visa Agency",
+    description: "Hungary work permit and visa processing services",
+  },
+  {
+    slug: "romania-work-permit-visa-agency",
+    name: "Romania Work Permit Visa Agency",
+    description: "Romania work permit and employment visa services",
+  },
+  {
+    slug: "poland-work-permit-agents-agency",
+    name: "Poland Work Permit Agents Agency",
+    description: "Poland work permit and visa processing agents",
+  },
+  {
+    slug: "spain-work-permit-visa-agency",
+    name: "Spain Work Permit Visa Agency",
+    description: "Spain work permit and employment visa services",
+  },
+  {
+    slug: "portugal-work-permit-visa-agency",
+    name: "Portugal Work Permit Visa Agency",
+    description: "Portugal work permit and visa processing services",
+  },
+  {
+    slug: "italy-seasonal-work-permit-visa-agency",
+    name: "Italy Seasonal Work Permit Visa Agency",
+    description: "Italy seasonal work permit and visa services",
+  },
+  {
+    slug: "malta-work-permit-visa-agency",
+    name: "Malta Work Permit Visa Agency",
+    description: "Malta work permit and employment visa services",
+  },
+  {
+    slug: "luxembourg-work-visa-agency",
+    name: "Luxembourg Work Visa Agency",
+    description: "Luxembourg work permit and visa processing services",
+  },
+  {
+    slug: "greece-work-permit-agency",
+    name: "Greece Work Permit Agency",
+    description: "Greece work permit and employment visa services",
+  },
+  {
+    slug: "norway-work-permit-visa-agency",
+    name: "Norway Work Permit Visa Agency",
+    description: "Norway work permit and visa processing services",
+  },
 ];
 
 // All Indian cities (80+ cities)
