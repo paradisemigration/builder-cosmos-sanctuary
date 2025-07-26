@@ -129,7 +129,7 @@ export default function Sitemap() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Cities</SelectItem>
-                  {indianCities.slice(0, 20).map(city => (
+                  {allCities.slice(0, 20).map(city => (
                     <SelectItem key={city} value={city}>{city}</SelectItem>
                   ))}
                 </SelectContent>
