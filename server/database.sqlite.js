@@ -667,31 +667,33 @@ class SQLiteDatabase {
           const stats = {};
           let totalCount = 0;
 
-          rows.forEach(row => {
+          rows.forEach((row) => {
             if (!stats[row.city]) {
               stats[row.city] = {
                 city: row.city,
                 categories: [],
-                totalCount: 0
+                totalCount: 0,
               };
             }
 
             stats[row.city].categories.push({
               category: row.category,
-              count: row.count
+              count: row.count,
             });
             stats[row.city].totalCount += row.count;
             totalCount += row.count;
           });
 
           // Convert to array and sort by total count descending
-          const result = Object.values(stats).sort((a, b) => b.totalCount - a.totalCount);
+          const result = Object.values(stats).sort(
+            (a, b) => b.totalCount - a.totalCount,
+          );
 
           resolve({
             cityCategoryBreakdown: result,
             totalBusinesses: totalCount,
             totalCities: result.length,
-            totalCategories: [...new Set(rows.map(r => r.category))].length
+            totalCategories: [...new Set(rows.map((r) => r.category))].length,
           });
         }
       });

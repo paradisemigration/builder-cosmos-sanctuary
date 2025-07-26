@@ -64,7 +64,10 @@ export default function AdminPanel() {
             setCityCategoryStats(cityCategoryResult.data);
           }
         } else {
-          console.warn("City-category stats endpoint not available:", cityCategoryResponse.status);
+          console.warn(
+            "City-category stats endpoint not available:",
+            cityCategoryResponse.status,
+          );
         }
       } catch (error) {
         console.warn("City-category stats not available:", error);
@@ -233,7 +236,10 @@ export default function AdminPanel() {
                 <span className="hidden sm:inline">Refresh Data</span>
                 <span className="sm:hidden">Refresh</span>
               </Button>
-              <Button size="sm" className="flex-1 sm:flex-none text-xs sm:text-sm">
+              <Button
+                size="sm"
+                className="flex-1 sm:flex-none text-xs sm:text-sm"
+              >
                 <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Export Report</span>
                 <span className="sm:hidden">Export</span>
@@ -251,12 +257,24 @@ export default function AdminPanel() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
-            <TabsTrigger value="dashboard" className="text-xs sm:text-sm">Dashboard</TabsTrigger>
-            <TabsTrigger value="listings" className="text-xs sm:text-sm">Listings</TabsTrigger>
-            <TabsTrigger value="users" className="text-xs sm:text-sm">Users</TabsTrigger>
-            <TabsTrigger value="media" className="text-xs sm:text-sm">Media</TabsTrigger>
-            <TabsTrigger value="scraper" className="text-xs sm:text-sm">Scraper</TabsTrigger>
-            <TabsTrigger value="backup" className="text-xs sm:text-sm">Backup</TabsTrigger>
+            <TabsTrigger value="dashboard" className="text-xs sm:text-sm">
+              Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="listings" className="text-xs sm:text-sm">
+              Listings
+            </TabsTrigger>
+            <TabsTrigger value="users" className="text-xs sm:text-sm">
+              Users
+            </TabsTrigger>
+            <TabsTrigger value="media" className="text-xs sm:text-sm">
+              Media
+            </TabsTrigger>
+            <TabsTrigger value="scraper" className="text-xs sm:text-sm">
+              Scraper
+            </TabsTrigger>
+            <TabsTrigger value="backup" className="text-xs sm:text-sm">
+              Backup
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
@@ -360,51 +378,68 @@ export default function AdminPanel() {
                       City & Category Breakdown
                     </h2>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="hidden sm:inline">{cityCategoryStats.totalCities} Cities</span>
+                      <span className="hidden sm:inline">
+                        {cityCategoryStats.totalCities} Cities
+                      </span>
                       <span>•</span>
-                      <span className="hidden sm:inline">{cityCategoryStats.totalCategories} Categories</span>
+                      <span className="hidden sm:inline">
+                        {cityCategoryStats.totalCategories} Categories
+                      </span>
                       <span>•</span>
                       <span>{cityCategoryStats.totalBusinesses} Total</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                    {cityCategoryStats.cityCategoryBreakdown.map((cityData, index) => (
-                      <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                              {cityData.city}
-                            </CardTitle>
-                            <Badge variant="outline" className="text-xs md:text-sm">
-                              {cityData.totalCount} total
-                            </Badge>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="max-h-48 overflow-y-auto space-y-2">
-                            {cityData.categories.map((categoryData, catIndex) => (
-                              <div
-                                key={catIndex}
-                                className="flex items-center justify-between p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                    {cityCategoryStats.cityCategoryBreakdown.map(
+                      (cityData, index) => (
+                        <Card
+                          key={index}
+                          className="hover:shadow-lg transition-shadow duration-200"
+                        >
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <CardTitle className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                                {cityData.city}
+                              </CardTitle>
+                              <Badge
+                                variant="outline"
+                                className="text-xs md:text-sm"
                               >
-                                <span className="text-sm font-medium text-gray-700 truncate flex-1 mr-2">
-                                  {categoryData.category}
-                                </span>
-                                <Badge variant="secondary" className="text-xs">
-                                  {categoryData.count}
-                                </Badge>
-                              </div>
-                            ))}
-                          </div>
-                          {cityData.categories.length > 5 && (
-                            <p className="text-xs text-gray-500 text-center pt-2 border-t">
-                              {cityData.categories.length} categories
-                            </p>
-                          )}
-                        </CardContent>
-                      </Card>
-                    ))}
+                                {cityData.totalCount} total
+                              </Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-2">
+                            <div className="max-h-48 overflow-y-auto space-y-2">
+                              {cityData.categories.map(
+                                (categoryData, catIndex) => (
+                                  <div
+                                    key={catIndex}
+                                    className="flex items-center justify-between p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                                  >
+                                    <span className="text-sm font-medium text-gray-700 truncate flex-1 mr-2">
+                                      {categoryData.category}
+                                    </span>
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs"
+                                    >
+                                      {categoryData.count}
+                                    </Badge>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                            {cityData.categories.length > 5 && (
+                              <p className="text-xs text-gray-500 text-center pt-2 border-t">
+                                {cityData.categories.length} categories
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
