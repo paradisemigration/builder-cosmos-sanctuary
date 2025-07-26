@@ -80,7 +80,7 @@ export default function Sitemap() {
               All Cities & Categories
             </h1>
             <p className="text-xl text-blue-100 mb-6">
-              Browse {indianCities.length} cities and {Object.keys(categoryMapping).length} categories
+              Browse {allCities.length} cities and {allCategories.length} categories
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-md mx-auto">
               <Card className="bg-white/10 border-white/20 text-white">
