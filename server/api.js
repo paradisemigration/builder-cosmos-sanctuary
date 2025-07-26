@@ -36,6 +36,58 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 let businesses = [];
 let businessIdCounter = 1;
 
+// Sample businesses for fallback when database is empty
+const sampleBusinesses = [
+  {
+    id: 'sample-1',
+    name: 'Delhi Immigration Services',
+    category: 'Immigration Consultants',
+    description: 'Professional immigration and visa consultation services',
+    address: 'Connaught Place, New Delhi',
+    city: 'Delhi',
+    phone: '+91-11-12345678',
+    website: 'https://example.com',
+    rating: 4.5,
+    reviewCount: 120,
+    services: ['Immigration Consultants', 'Visa Consultants', 'Study Abroad'],
+    isVerified: true,
+    isFeatured: false,
+  },
+  {
+    id: 'sample-2',
+    name: 'Norway Work Permit Experts Delhi',
+    category: 'Norway Work Permit Visa Agency',
+    description: 'Specialized Norway work permit and visa processing services',
+    address: 'Karol Bagh, New Delhi',
+    city: 'Delhi',
+    phone: '+91-11-87654321',
+    website: 'https://example.com',
+    rating: 4.7,
+    reviewCount: 85,
+    services: ['Norway Work Permit Visa Agency', 'Work Permit', 'European Visas'],
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    id: 'sample-3',
+    name: 'Mumbai Visa Consultants',
+    category: 'Visa Consultants',
+    description: 'Complete visa consultation and documentation services',
+    address: 'Andheri West, Mumbai',
+    city: 'Mumbai',
+    phone: '+91-22-12345678',
+    website: 'https://example.com',
+    rating: 4.3,
+    reviewCount: 200,
+    services: ['Visa Consultants', 'Tourist Visa', 'Business Visa'],
+    isVerified: true,
+    isFeatured: false,
+  },
+];
+
+// Make sample businesses available globally
+global.sampleBusinesses = sampleBusinesses;
+
 // Upload single image
 app.post(
   "/api/upload/single",
