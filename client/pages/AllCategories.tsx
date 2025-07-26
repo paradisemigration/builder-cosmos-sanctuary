@@ -43,7 +43,9 @@ export default function AllCategories() {
       core: allCategories.slice(0, 12),
       specialized: allCategories.slice(12, 24),
       uae: allCategories.slice(24, 36),
-      additional: allCategories.slice(36, 48)
+      additional: allCategories.slice(36, 48),
+      countrySpecific: allCategories.slice(48, 65),
+      european: allCategories.slice(65, 87)
     };
   }, []);
 
