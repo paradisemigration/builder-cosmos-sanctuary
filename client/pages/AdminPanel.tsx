@@ -59,6 +59,10 @@ export default function AdminPanel() {
         setStats(statsResult.stats);
       }
 
+      if (cityCategoryResult.success) {
+        setCityCategoryStats(cityCategoryResult.data);
+      }
+
       if (businessesResult.success) {
         setBusinesses(businessesResult.businesses || []);
 
