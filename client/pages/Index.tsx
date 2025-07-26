@@ -32,6 +32,7 @@ import {
   indianCities,
   visaTypes,
 } from "@/lib/data";
+import { setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
