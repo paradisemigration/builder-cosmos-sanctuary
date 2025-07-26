@@ -18,8 +18,8 @@ export function SiteFooter() {
               <div className="text-xs text-blue-400 font-medium">INDIA</div>
             </div>
             <p className="text-gray-400 mb-4 text-sm">
-              India's trusted platform for finding verified visa and immigration consultants. 
-              Connect with expert consultants across {indianCities.length} cities and {allCategories.length} service categories.
+              India's trusted platform for finding verified visa and immigration consultants.
+              Connect with expert consultants across {allCities.length} cities and {categoryList.length} service categories.
             </p>
             <div className="flex items-center space-x-4">
               <Link
