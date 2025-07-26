@@ -71,13 +71,13 @@ export function SiteFooter() {
               Services
             </h3>
             <div className="space-y-1">
-              {allCategories.map(([slug, name]) => (
+              {categoryList.slice(0, 12).map((category) => (
                 <Link
-                  key={slug}
-                  to={`/category/${slug}`}
+                  key={category.slug}
+                  to={`/category/${category.slug}`}
                   className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
                 >
-                  {name}
+                  {category.name}
                 </Link>
               ))}
             </div>
