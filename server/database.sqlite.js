@@ -644,6 +644,60 @@ class SQLiteDatabase {
     });
   }
 
+  async getCityCategoryStats() {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT
+          COALESCE(b.scrapedCity, b.city, 'Unknown') as city,
+          COALESCE(b.scrapedCategory, b.category, 'Visa Consultant') as category,
+          COUNT(*) as count
+        FROM businesses b
+        GROUP BY
+          COALESCE(b.scrapedCity, b.city, 'Unknown'),
+          COALESCE(b.scrapedCategory, b.category, 'Visa Consultant')
+        ORDER BY city, category
+      `;
+
+      this.db.all(sql, (err, rows) => {
+        if (err) {
+          console.error("Error getting city-category statistics:", err);
+          reject(err);
+        } else {
+          // Group by city for easier frontend consumption
+          const stats = {};
+          let totalCount = 0;
+
+          rows.forEach(row => {
+            if (!stats[row.city]) {
+              stats[row.city] = {
+                city: row.city,
+                categories: [],
+                totalCount: 0
+              };
+            }
+
+            stats[row.city].categories.push({
+              category: row.category,
+              count: row.count
+            });
+            stats[row.city].totalCount += row.count;
+            totalCount += row.count;
+          });
+
+          // Convert to array and sort by total count descending
+          const result = Object.values(stats).sort((a, b) => b.totalCount - a.totalCount);
+
+          resolve({
+            cityCategoryBreakdown: result,
+            totalBusinesses: totalCount,
+            totalCities: result.length,
+            totalCategories: [...new Set(rows.map(r => r.category))].length
+          });
+        }
+      });
+    });
+  }
+
   generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
