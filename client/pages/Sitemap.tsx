@@ -309,13 +309,13 @@ export default function Sitemap() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {Object.entries(categoryMapping).map(([slug, name]) => (
+                  {allCategories.map((category) => (
                     <Link
-                      key={slug}
-                      to={`/category/${slug}`}
+                      key={category.slug}
+                      to={`/category/${category.slug}`}
                       className="block p-2 text-sm text-purple-600 hover:bg-purple-50 rounded transition-colors"
                     >
-                      {name}
+                      {category.name}
                     </Link>
                   ))}
                 </div>
