@@ -30,6 +30,13 @@ export function GlobalDebugPopup() {
     timestamp: '',
     userAgent: '',
     screenSize: { width: 0, height: 0 },
+    metaData: {
+      title: '',
+      description: '',
+      keywords: '',
+      ogTitle: '',
+      ogDescription: ''
+    },
     apiCalls: []
   });
   
@@ -76,7 +83,7 @@ export function GlobalDebugPopup() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
           <div className="bg-white w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-lg shadow-xl">
             <div className="flex items-center justify-between p-4 border-b bg-gray-50">
-              <h2 className="text-lg font-semibold">🐛 Global Debug Info</h2>
+              <h2 className="text-lg font-semibold">���� Global Debug Info</h2>
               <button
                 onClick={() => setIsOpen(false)}
                 className="text-gray-500 hover:text-gray-700 text-xl font-bold"
