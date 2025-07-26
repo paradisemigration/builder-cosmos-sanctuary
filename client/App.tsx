@@ -43,6 +43,7 @@ import Sitemap from "./pages/Sitemap";
 import AllCitiesCategories from "./pages/AllCitiesCategories";
 import AllCategories from "./pages/AllCategories";
 import MainPages from "./pages/MainPages";
+import CategoryPage from "./pages/CategoryPage";
 import { SiteFooter } from "./components/SiteFooter";
 
 // Simple ProtectedRoute component to avoid auth issues
