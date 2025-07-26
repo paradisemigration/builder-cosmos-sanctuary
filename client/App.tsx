@@ -251,6 +251,10 @@ const App = () => (
             <Route path="/cant-find-business" element={<CantFindBusiness />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+
+            {/* Browse All Pages */}
+            <Route path="/sitemap" element={<Sitemap />} />
+            <Route path="/all-cities-categories" element={<AllCitiesCategories />} />
             <Route
               path="/help"
               element={
