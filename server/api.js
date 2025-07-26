@@ -1032,6 +1032,27 @@ app.get("/api/scraping/stats", async (req, res) => {
   }
 });
 
+// Get city and category wise statistics
+app.get("/api/city-category-stats", async (req, res) => {
+  try {
+    console.log("📊 Loading city and category wise stats...");
+
+    const stats = await sqliteDatabase.getCityCategoryStats();
+    console.log("✅ City-Category stats loaded:", stats);
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    console.error("❌ Get city-category stats error:", error.message);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // Get scraped businesses with filters from SQLite database
 app.get("/api/scraped-businesses", async (req, res) => {
   try {
