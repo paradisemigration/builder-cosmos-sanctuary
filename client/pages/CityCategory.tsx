@@ -99,29 +99,12 @@ export default function CityCategory() {
     setFilteredBusinesses(filteredByCityAndCategory);
     setLoading(false);
 
-    // Set page title with SEO format
-    document.title = `Top 10 ${categoryName} In ${cityName} - VisaConsult India`;
+    // Set page meta data with SEO optimization
+    const metaData = generateCityCategoryMeta(cityName, categoryName);
+    setPageMeta(metaData);
 
-    // Set meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        `Find the top 10 ${categoryName.toLowerCase()} in ${cityName}. Compare ratings, reviews, and services of verified ${categoryName.toLowerCase()} at VisaConsult India. Expert guidance for all your visa needs.`
-      );
-    }
-
-    // Set meta keywords
-    let metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (!metaKeywords) {
-      metaKeywords = document.createElement('meta');
-      metaKeywords.setAttribute('name', 'keywords');
-      document.head.appendChild(metaKeywords);
-    }
-    metaKeywords.setAttribute(
-      "content",
-      `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} in ${cityName.toLowerCase()}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, best ${categoryName.toLowerCase()}, top ${categoryName.toLowerCase()}`
-    );
+    // Set canonical URL
+    setCanonicalUrl(`/business/${city}/${category}`);
   }, [city, category, cityName, categoryName, navigate]);
 
   useEffect(() => {
