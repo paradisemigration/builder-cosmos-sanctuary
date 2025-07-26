@@ -41,6 +41,7 @@ import {
   getCategoryBySlug,
   getCitySlug,
 } from "@/lib/all-categories";
+import { generateCityCategoryMeta, setPageMeta, setCanonicalUrl } from "@/lib/meta-utils";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
