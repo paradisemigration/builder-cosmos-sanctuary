@@ -40,7 +40,8 @@ export function GlobalDebugPopup() {
       description: '',
       keywords: '',
       ogTitle: '',
-      ogDescription: ''
+      ogDescription: '',
+      allMetaTags: []
     },
     apiCalls: []
   });
