@@ -141,30 +141,48 @@ export function GlobalDebugPopup() {
               {/* Meta Data Info */}
               <div>
                 <h3 className="font-semibold mb-2 text-gray-800">📍 Page Meta Data</h3>
-                <div className="bg-gray-50 p-3 rounded border text-sm space-y-2">
-                  <div><span className="font-medium">Path:</span> {debugInfo.currentPage}</div>
-                  <div>
-                    <span className="font-medium">Title:</span>
-                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.title || 'No title found'}</div>
+                <div className="bg-gray-50 p-3 rounded border text-sm space-y-3">
+                  <div className="border-b pb-2">
+                    <span className="font-medium text-blue-600">📂 Path:</span>
+                    <div className="text-gray-700 mt-1">{debugInfo.currentPage}</div>
                   </div>
-                  <div>
-                    <span className="font-medium">Description:</span>
-                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.description || 'No description found'}</div>
+
+                  <div className="border-b pb-2">
+                    <span className="font-medium text-purple-600">🏷️ Title:</span>
+                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                      {debugInfo.metaData.title}
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium">Keywords:</span>
-                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.keywords || 'No keywords found'}</div>
+
+                  <div className="border-b pb-2">
+                    <span className="font-medium text-green-600">📝 Description:</span>
+                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                      {debugInfo.metaData.description}
+                    </div>
                   </div>
+
+                  <div className="border-b pb-2">
+                    <span className="font-medium text-orange-600">🔑 Keywords:</span>
+                    <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                      {debugInfo.metaData.keywords}
+                    </div>
+                  </div>
+
                   {debugInfo.metaData.ogTitle && (
-                    <div>
-                      <span className="font-medium">OG Title:</span>
-                      <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.ogTitle}</div>
+                    <div className="border-b pb-2">
+                      <span className="font-medium text-red-600">🌐 OG Title:</span>
+                      <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                        {debugInfo.metaData.ogTitle}
+                      </div>
                     </div>
                   )}
+
                   {debugInfo.metaData.ogDescription && (
                     <div>
-                      <span className="font-medium">OG Description:</span>
-                      <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.ogDescription}</div>
+                      <span className="font-medium text-red-600">🌐 OG Description:</span>
+                      <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
+                        {debugInfo.metaData.ogDescription}
+                      </div>
                     </div>
                   )}
                 </div>
