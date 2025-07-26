@@ -61,7 +61,7 @@ export default function CityBusinessListing() {
 
   // Convert URL param back to proper city name
   const cityName = city
-    ? city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ")
+    ? city.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
     : "";
 
   // Function to fetch businesses from API
