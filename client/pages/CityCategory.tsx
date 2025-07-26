@@ -54,8 +54,9 @@ export default function CityCategory() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Convert URL params to proper names
-  const cityName = city ? city.charAt(0).toUpperCase() + city.slice(1) : "";
-  const categoryName = category ? categoryMapping[category] || category : "";
+  const cityName = city ? city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, ' ') : "";
+  const categoryInfo = category ? getCategoryBySlug(category) : null;
+  const categoryName = categoryInfo?.name || category || "";
   const categorySlug = category || "";
 
   useEffect(() => {
@@ -67,8 +68,8 @@ export default function CityCategory() {
     setLoading(true);
 
     // Validate city exists
-    const cityExists = indianCities.some(
-      (c) => c.toLowerCase() === city.toLowerCase(),
+    const cityExists = allCities.some(
+      (c) => getCitySlug(c) === city.toLowerCase(),
     );
 
     if (!cityExists) {
@@ -77,7 +78,7 @@ export default function CityCategory() {
     }
 
     // Validate category exists
-    if (!categoryMapping[category]) {
+    if (!categoryInfo) {
       navigate(`/business/${city}`);
       return;
     }
