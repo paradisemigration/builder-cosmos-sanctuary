@@ -92,15 +92,18 @@ export function SiteFooter() {
               {/* Generate popular combinations */}
               {['Delhi', 'Mumbai', 'Bangalore', 'Chennai'].map(city => (
                 <div key={city}>
-                  {['immigration-consultants', 'visa-consultants', 'study-abroad'].map(category => (
-                    <Link
-                      key={`${city}-${category}`}
-                      to={`/business/${city.toLowerCase()}/${category}`}
-                      className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
-                    >
-                      {categoryMapping[category]} in {city}
-                    </Link>
-                  ))}
+                  {['immigration-consultants', 'visa-consultants', 'study-abroad-consultant'].map(categorySlug => {
+                    const category = categoryList.find(c => c.slug === categorySlug);
+                    return category ? (
+                      <Link
+                        key={`${city}-${categorySlug}`}
+                        to={`/business/${city.toLowerCase()}/${categorySlug}`}
+                        className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
+                      >
+                        {category.name} in {city}
+                      </Link>
+                    ) : null;
+                  })}
                 </div>
               ))}
             </div>
