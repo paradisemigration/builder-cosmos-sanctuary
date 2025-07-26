@@ -250,12 +250,13 @@ export default function AllCategories() {
       <section className="py-8">
         <div className="container mx-auto max-w-7xl px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="all">All ({allCategories.length})</TabsTrigger>
-              <TabsTrigger value="core">Core (12)</TabsTrigger>
-              <TabsTrigger value="specialized">Specialized (12)</TabsTrigger>
-              <TabsTrigger value="uae">UAE Services (12)</TabsTrigger>
-              <TabsTrigger value="additional">Additional (12)</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 mb-8">
+              <TabsTrigger value="all" className="text-xs sm:text-sm">All ({allCategories.length})</TabsTrigger>
+              <TabsTrigger value="core" className="text-xs sm:text-sm">Core (12)</TabsTrigger>
+              <TabsTrigger value="specialized" className="text-xs sm:text-sm">Specialized (12)</TabsTrigger>
+              <TabsTrigger value="uae" className="text-xs sm:text-sm">UAE (12)</TabsTrigger>
+              <TabsTrigger value="countrySpecific" className="text-xs sm:text-sm">Country-Specific (17)</TabsTrigger>
+              <TabsTrigger value="european" className="text-xs sm:text-sm">European (22)</TabsTrigger>
             </TabsList>
 
             {/* All Categories */}
