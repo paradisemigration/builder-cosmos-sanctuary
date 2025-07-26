@@ -60,7 +60,7 @@ export function SiteFooter() {
               to="/all-cities-categories"
               className="inline-block mt-3 text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
-              View all {indianCities.length} cities →
+              View all {allCities.length} cities →
             </Link>
           </div>
 
