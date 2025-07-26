@@ -41,7 +41,7 @@ import {
   getCategoryBySlug,
   getCitySlug,
 } from "@/lib/all-categories";
-import { generateCityCategoryMeta, setPageMeta, setCanonicalUrl } from "@/lib/meta-utils";
+import { generateCityCategoryMeta, setPageMeta, setSEOLinks, setBreadcrumbStructuredData, setCityServiceStructuredData } from "@/lib/meta-utils";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
@@ -103,8 +103,28 @@ export default function CityCategory() {
     const metaData = generateCityCategoryMeta(cityName, categoryName);
     setPageMeta(metaData);
 
-    // Set canonical URL
-    setCanonicalUrl(`/business/${city}/${category}`);
+    // Set SEO links for better Google crawling
+    setSEOLinks({
+      canonical: `/business/${city}/${category}`,
+      alternate: [
+        `/business/${city}/${category}`,
+        `/category/${category}`,
+        `/business/${city}`
+      ]
+    });
+
+    // Set breadcrumb structured data
+    setBreadcrumbStructuredData([
+      { name: 'Home', url: '/' },
+      { name: 'Browse', url: '/business' },
+      { name: cityName, url: `/business/${city}` },
+      { name: categoryName, url: `/business/${city}/${category}` }
+    ]);
+
+    // Set city service structured data
+    if (categoryInfo) {
+      setCityServiceStructuredData(cityName, categoryName, categoryInfo.description);
+    }
   }, [city, category, cityName, categoryName, navigate]);
 
   useEffect(() => {
