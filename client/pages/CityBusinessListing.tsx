@@ -677,6 +677,9 @@ export default function CityBusinessListing() {
           </div>
         </section>
       )}
+
+      {/* Debug Popup */}
+      <DebugPopup debugInfo={debugInfo} />
     </div>
   );
 }
