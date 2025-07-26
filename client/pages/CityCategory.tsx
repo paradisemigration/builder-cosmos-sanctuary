@@ -386,8 +386,19 @@ export default function CityCategory() {
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5" />
                   <div>
-                    <p className="text-sm text-blue-100">Total Consultants</p>
-                    <p className="text-xl font-bold">{businesses.length}</p>
+                    <p className="text-sm text-blue-100">{categoryName}</p>
+                    <p className="text-xl font-bold">{categoryBusinesses.length}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/10 border-white/20 text-white">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5" />
+                  <div>
+                    <p className="text-sm text-blue-100">All {cityName} Businesses</p>
+                    <p className="text-xl font-bold">{cityBusinesses.length}</p>
                   </div>
                 </div>
               </CardContent>
@@ -399,25 +410,17 @@ export default function CityCategory() {
                   <div>
                     <p className="text-sm text-blue-100">Average Rating</p>
                     <p className="text-xl font-bold">
-                      {businesses.length > 0
+                      {categoryBusinesses.length > 0
                         ? (
-                            businesses.reduce((sum, b) => sum + b.rating, 0) /
-                            businesses.length
+                            categoryBusinesses.reduce((sum, b) => sum + (b.rating || 0), 0) /
+                            categoryBusinesses.length
+                          ).toFixed(1)
+                        : cityBusinesses.length > 0
+                        ? (
+                            cityBusinesses.reduce((sum, b) => sum + (b.rating || 0), 0) /
+                            cityBusinesses.length
                           ).toFixed(1)
                         : "N/A"}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-white/10 border-white/20 text-white">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5" />
-                  <div>
-                    <p className="text-sm text-blue-100">Total Reviews</p>
-                    <p className="text-xl font-bold">
-                      {businesses.reduce((sum, b) => sum + b.reviewCount, 0)}
                     </p>
                   </div>
                 </div>
