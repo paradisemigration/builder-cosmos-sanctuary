@@ -41,7 +41,7 @@ import {
   getCitySlug,
   popularCombinations,
 } from "@/lib/all-categories";
-import { generateCategoryMeta, setPageMeta, setCanonicalUrl } from "@/lib/meta-utils";
+import { generateCategoryMeta, setPageMeta, setSEOLinks, setBreadcrumbStructuredData } from "@/lib/meta-utils";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
@@ -140,8 +140,21 @@ export default function CategoryPage() {
     const metaData = generateCategoryMeta(categoryInfo.name, categoryInfo.description);
     setPageMeta(metaData);
 
-    // Set canonical URL
-    setCanonicalUrl(`/category/${category}`);
+    // Set SEO links for better Google crawling
+    setSEOLinks({
+      canonical: `/category/${category}`,
+      alternate: [
+        `/category/${category}`,
+        '/all-categories'
+      ]
+    });
+
+    // Set breadcrumb structured data
+    setBreadcrumbStructuredData([
+      { name: 'Home', url: '/' },
+      { name: 'Categories', url: '/all-categories' },
+      { name: categoryInfo.name, url: `/category/${category}` }
+    ]);
   }, [categoryInfo, navigate]);
 
   const getCategoryIcon = (slug: string) => {
