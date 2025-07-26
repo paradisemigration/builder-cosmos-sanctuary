@@ -39,6 +39,8 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import AdminStatus from "./pages/AdminStatus";
+import Sitemap from "./pages/Sitemap";
+import AllCitiesCategories from "./pages/AllCitiesCategories";
 
 // Simple ProtectedRoute component to avoid auth issues
 function ProtectedRoute({
