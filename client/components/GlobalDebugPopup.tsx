@@ -217,18 +217,21 @@ export function GlobalDebugPopup() {
               {/* All Meta Tags */}
               <div>
                 <h3 className="font-semibold mb-2 text-gray-800">🏷️ All Meta Tags ({debugInfo.metaData.allMetaTags.length})</h3>
-                <div className="bg-gray-50 p-3 rounded border text-xs max-h-48 overflow-y-auto">
+                <div className="bg-gray-50 p-3 rounded border max-h-96 overflow-y-auto">
                   {debugInfo.metaData.allMetaTags.length > 0 ? (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {debugInfo.metaData.allMetaTags.map((meta, index) => (
-                        <div key={index} className="bg-white p-2 rounded border">
-                          <div className="flex items-start gap-2">
-                            <span className="font-medium text-blue-600 min-w-0 flex-shrink-0">
-                              {meta.property ? `property="${meta.property}"` : `name="${meta.name}"`}:
+                        <div key={index} className="bg-white p-3 rounded border">
+                          <div className="mb-2">
+                            <span className="font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded text-sm">
+                              {meta.property ? `property="${meta.property}"` : `name="${meta.name}"`}
                             </span>
-                            <span className="text-gray-700 break-all">
-                              {meta.content}
-                            </span>
+                          </div>
+                          <div className="text-gray-700 break-words text-sm leading-relaxed bg-gray-50 p-2 rounded">
+                            {meta.content}
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            Length: {meta.content.length} characters
                           </div>
                         </div>
                       ))}
