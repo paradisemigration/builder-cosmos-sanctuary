@@ -41,6 +41,7 @@ import NotFound from "./pages/NotFound";
 import AdminStatus from "./pages/AdminStatus";
 import Sitemap from "./pages/Sitemap";
 import AllCitiesCategories from "./pages/AllCitiesCategories";
+import { SiteFooter } from "./components/SiteFooter";
 
 // Simple ProtectedRoute component to avoid auth issues
 function ProtectedRoute({
