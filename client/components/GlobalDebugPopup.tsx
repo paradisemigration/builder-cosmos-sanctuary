@@ -124,14 +124,14 @@ export function GlobalDebugPopup() {
     <>
       {/* Always visible test indicator */}
       <div
-        className="fixed top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded shadow-lg z-[9999] max-w-xs"
-        style={{ fontFamily: 'monospace', lineHeight: '1.2' }}
-        title={`Path: ${location.pathname}\nClick red bug button for full details`}
+        className="fixed top-2 right-2 bg-green-500 text-white px-3 py-2 text-xs rounded shadow-lg z-[9999] max-w-lg"
+        style={{ fontFamily: 'monospace', lineHeight: '1.3', minWidth: '350px' }}
+        title="Click red bug button for detailed popup"
       >
         <div className="text-yellow-200 font-bold mb-1">DEBUG: {location.pathname}</div>
-        <div className="truncate text-white">T: {debugInfo.metaData.title}</div>
-        <div className="truncate text-white">D: {debugInfo.metaData.description}</div>
-        <div className="truncate text-white">K: {debugInfo.metaData.keywords}</div>
+        <div className="text-white break-words">T: {debugInfo.metaData.title}</div>
+        <div className="text-white break-words">D: {debugInfo.metaData.description.substring(0, 100)}{debugInfo.metaData.description.length > 100 ? '...' : ''}</div>
+        <div className="text-white break-words">K: {debugInfo.metaData.keywords}</div>
         <div className="text-yellow-200 font-bold">META: {debugInfo.metaData.allMetaTags.length} tags</div>
       </div>
       
