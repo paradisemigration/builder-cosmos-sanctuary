@@ -34,17 +34,23 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
 
   if (!isOpen) {
     return (
-      <button
-        onClick={() => {
-          console.log("Debug button clicked!");
-          setIsOpen(true);
-        }}
-        className="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg font-bold text-lg border-2 border-white"
-        style={{ width: '60px', height: '60px', zIndex: 9999 }}
-        title="Open Debug Info"
-      >
-        🐛
-      </button>
+      <>
+        {/* Test element to confirm component renders */}
+        <div className="fixed top-4 right-4 bg-yellow-400 p-2 text-black text-xs" style={{ zIndex: 9999 }}>
+          DEBUG LOADED
+        </div>
+        <button
+          onClick={() => {
+            console.log("Debug button clicked!");
+            setIsOpen(true);
+          }}
+          className="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg font-bold text-lg border-2 border-white"
+          style={{ width: '60px', height: '60px', zIndex: 9999 }}
+          title="Open Debug Info"
+        >
+          🐛
+        </button>
+      </>
     );
   }
 
