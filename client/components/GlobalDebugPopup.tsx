@@ -86,11 +86,14 @@ export function GlobalDebugPopup() {
   return (
     <>
       {/* Always visible test indicator */}
-      <div 
-        className="fixed top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded shadow-lg z-[9999]"
+      <div
+        className="fixed top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded shadow-lg z-[9999] max-w-sm"
         style={{ fontFamily: 'monospace' }}
+        title={`Path: ${location.pathname}`}
       >
-        DEBUG: {location.pathname}
+        <div className="truncate">
+          {debugInfo.metaData.title ? `TITLE: ${debugInfo.metaData.title}` : `DEBUG: ${location.pathname}`}
+        </div>
       </div>
       
       {!isOpen ? (
