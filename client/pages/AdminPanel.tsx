@@ -45,6 +45,10 @@ export default function AdminPanel() {
       const statsResponse = await fetch("/api/scraping/stats");
       const statsResult = await statsResponse.json();
 
+      // Load city-category statistics
+      const cityCategoryResponse = await fetch("/api/city-category-stats");
+      const cityCategoryResult = await cityCategoryResponse.json();
+
       // Load businesses
       const businessesResponse = await fetch(
         "/api/scraped-businesses?limit=100",
@@ -506,7 +510,7 @@ export default function AdminPanel() {
                         <p>• Frontend: Deployed successfully ✅</p>
                         <p>• UI Components: Functional ✅</p>
                         <p>
-                          ��� Google Cloud Setup: Ready for backend integration ✅
+                          • Google Cloud Setup: Ready for backend integration ✅
                         </p>
                         <p>• Upload Feature: Requires backend deployment 📋</p>
                       </>
