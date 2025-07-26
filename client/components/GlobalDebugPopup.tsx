@@ -9,6 +9,13 @@ interface GlobalDebugInfo {
     width: number;
     height: number;
   };
+  metaData: {
+    title: string;
+    description: string;
+    keywords: string;
+    ogTitle: string;
+    ogDescription: string;
+  };
   apiCalls: Array<{
     url: string;
     method: string;
