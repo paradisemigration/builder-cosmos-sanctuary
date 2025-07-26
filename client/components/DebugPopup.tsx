@@ -32,50 +32,48 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
 
   if (!isOpen) {
     return (
-      <Button
+      <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 z-50 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg"
-        size="sm"
+        className="fixed bottom-4 right-4 z-50 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg font-bold text-lg"
+        style={{ width: '60px', height: '60px' }}
+        title="Open Debug Info"
       >
-        <Bug className="w-4 h-4" />
-      </Button>
+        🐛
+      </button>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Bug className="w-5 h-5" />
-            Debug Information
-          </CardTitle>
-          <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)}>
-            <X className="w-4 h-4" />
-          </Button>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-lg shadow-xl">
+        <div className="flex items-center justify-between p-4 border-b bg-gray-50">
+          <h2 className="text-lg font-semibold">🐛 Debug Information</h2>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-gray-500 hover:text-gray-700 text-xl font-bold"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="p-4 space-y-6">
           {/* Business Counts */}
           <div>
-            <h3 className="font-semibold mb-2 flex items-center gap-2">
-              <Database className="w-4 h-4" />
-              Business Counts
-            </h3>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="text-center p-2 bg-blue-50 rounded">
-                <div className="text-lg font-bold text-blue-600">
+            <h3 className="font-semibold mb-3 text-gray-800">📊 Business Counts</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-3 bg-blue-50 rounded border">
+                <div className="text-xl font-bold text-blue-600">
                   {debugInfo.categoryBusinesses}
                 </div>
                 <div className="text-xs text-blue-600">Category Specific</div>
               </div>
-              <div className="text-center p-2 bg-green-50 rounded">
-                <div className="text-lg font-bold text-green-600">
+              <div className="text-center p-3 bg-green-50 rounded border">
+                <div className="text-xl font-bold text-green-600">
                   {debugInfo.cityBusinesses}
                 </div>
                 <div className="text-xs text-green-600">City Businesses</div>
               </div>
-              <div className="text-center p-2 bg-purple-50 rounded">
-                <div className="text-lg font-bold text-purple-600">
+              <div className="text-center p-3 bg-purple-50 rounded border">
+                <div className="text-xl font-bold text-purple-600">
                   {debugInfo.totalBusinesses}
                 </div>
                 <div className="text-xs text-purple-600">Total Displayed</div>
@@ -85,57 +83,37 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
 
           {/* Search Parameters */}
           <div>
-            <h3 className="font-semibold mb-2 flex items-center gap-2">
-              <Search className="w-4 h-4" />
-              Search Parameters
-            </h3>
-            <div className="space-y-1 text-sm">
-              <div>
-                <span className="font-medium">URL City:</span>{" "}
-                {debugInfo.searchParams.city}
-              </div>
-              <div>
-                <span className="font-medium">URL Category:</span>{" "}
-                {debugInfo.searchParams.category}
-              </div>
-              <div>
-                <span className="font-medium">Resolved City:</span>{" "}
-                {debugInfo.searchParams.cityName}
-              </div>
-              <div>
-                <span className="font-medium">Resolved Category:</span>{" "}
-                {debugInfo.searchParams.categoryName}
-              </div>
+            <h3 className="font-semibold mb-3 text-gray-800">🔍 Search Parameters</h3>
+            <div className="bg-gray-50 p-3 rounded border space-y-2 text-sm">
+              <div><span className="font-medium">URL City:</span> {debugInfo.searchParams.city}</div>
+              <div><span className="font-medium">URL Category:</span> {debugInfo.searchParams.category}</div>
+              <div><span className="font-medium">Resolved City:</span> {debugInfo.searchParams.cityName}</div>
+              <div><span className="font-medium">Resolved Category:</span> {debugInfo.searchParams.categoryName}</div>
             </div>
           </div>
 
           {/* API Calls */}
           <div>
-            <h3 className="font-semibold mb-2 flex items-center gap-2">
-              <Globe className="w-4 h-4" />
-              API Calls
-            </h3>
+            <h3 className="font-semibold mb-3 text-gray-800">🌐 API Calls</h3>
             <div className="space-y-2">
               {debugInfo.apiCalls.map((call, index) => (
-                <div key={index} className="text-sm p-2 bg-gray-50 rounded">
-                  <div className="flex items-center justify-between">
-                    <Badge
-                      variant={
-                        call.status === "success" ? "default" : "destructive"
-                      }
+                <div key={index} className="text-sm p-3 bg-gray-50 rounded border">
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        call.status === "success"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
                     >
                       {call.status}
-                    </Badge>
-                    <span className="text-xs text-gray-500">
-                      {call.timestamp}
                     </span>
+                    <span className="text-xs text-gray-500">{call.timestamp}</span>
                   </div>
-                  <div className="font-mono text-xs break-all mt-1">
+                  <div className="font-mono text-xs break-all text-gray-600 mb-1">
                     {call.url}
                   </div>
-                  <div className="text-xs text-gray-600">
-                    Results: {call.count}
-                  </div>
+                  <div className="text-xs text-gray-600">Results: {call.count}</div>
                 </div>
               ))}
             </div>
@@ -143,56 +121,48 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
 
           {/* Meta Data */}
           <div>
-            <h3 className="font-semibold mb-2">Meta Data</h3>
-            <div className="space-y-2 text-sm">
+            <h3 className="font-semibold mb-3 text-gray-800">📝 Meta Data</h3>
+            <div className="bg-gray-50 p-3 rounded border space-y-3 text-sm">
               <div>
                 <span className="font-medium">Title:</span>
-                <div className="text-xs text-gray-600 break-words">
-                  {debugInfo.metaData.title}
-                </div>
+                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.title}</div>
               </div>
               <div>
                 <span className="font-medium">Description:</span>
-                <div className="text-xs text-gray-600 break-words">
-                  {debugInfo.metaData.description}
-                </div>
+                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.description}</div>
               </div>
               <div>
                 <span className="font-medium">Keywords:</span>
-                <div className="text-xs text-gray-600 break-words">
-                  {debugInfo.metaData.keywords}
-                </div>
+                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.keywords}</div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
           <div className="pt-4 border-t">
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
+            <div className="flex gap-3">
+              <button
+                className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
                 onClick={() => {
                   console.log("Debug Info:", debugInfo);
+                  alert("Debug info logged to console!");
                 }}
               >
-                Log to Console
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
+                📋 Log to Console
+              </button>
+              <button
+                className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
                 onClick={() => {
-                  navigator.clipboard.writeText(
-                    JSON.stringify(debugInfo, null, 2),
-                  );
+                  navigator.clipboard.writeText(JSON.stringify(debugInfo, null, 2));
+                  alert("Debug info copied to clipboard!");
                 }}
               >
-                Copy JSON
-              </Button>
+                📄 Copy JSON
+              </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
