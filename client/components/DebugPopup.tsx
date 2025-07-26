@@ -36,7 +36,10 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
     return (
       <>
         {/* Test element to confirm component renders */}
-        <div className="fixed top-4 right-4 bg-yellow-400 p-2 text-black text-xs" style={{ zIndex: 9999 }}>
+        <div
+          className="fixed top-4 right-4 bg-yellow-400 p-2 text-black text-xs"
+          style={{ zIndex: 9999 }}
+        >
           DEBUG LOADED
         </div>
         <button
@@ -45,7 +48,7 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
             setIsOpen(true);
           }}
           className="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg font-bold text-lg border-2 border-white"
-          style={{ width: '60px', height: '60px', zIndex: 9999 }}
+          style={{ width: "60px", height: "60px", zIndex: 9999 }}
           title="Open Debug Info"
         >
           🐛
@@ -69,7 +72,9 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
         <div className="p-4 space-y-6">
           {/* Business Counts */}
           <div>
-            <h3 className="font-semibold mb-3 text-gray-800">📊 Business Counts</h3>
+            <h3 className="font-semibold mb-3 text-gray-800">
+              📊 Business Counts
+            </h3>
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center p-3 bg-blue-50 rounded border">
                 <div className="text-xl font-bold text-blue-600">
@@ -94,12 +99,26 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
 
           {/* Search Parameters */}
           <div>
-            <h3 className="font-semibold mb-3 text-gray-800">🔍 Search Parameters</h3>
+            <h3 className="font-semibold mb-3 text-gray-800">
+              🔍 Search Parameters
+            </h3>
             <div className="bg-gray-50 p-3 rounded border space-y-2 text-sm">
-              <div><span className="font-medium">URL City:</span> {debugInfo.searchParams.city}</div>
-              <div><span className="font-medium">URL Category:</span> {debugInfo.searchParams.category}</div>
-              <div><span className="font-medium">Resolved City:</span> {debugInfo.searchParams.cityName}</div>
-              <div><span className="font-medium">Resolved Category:</span> {debugInfo.searchParams.categoryName}</div>
+              <div>
+                <span className="font-medium">URL City:</span>{" "}
+                {debugInfo.searchParams.city}
+              </div>
+              <div>
+                <span className="font-medium">URL Category:</span>{" "}
+                {debugInfo.searchParams.category}
+              </div>
+              <div>
+                <span className="font-medium">Resolved City:</span>{" "}
+                {debugInfo.searchParams.cityName}
+              </div>
+              <div>
+                <span className="font-medium">Resolved Category:</span>{" "}
+                {debugInfo.searchParams.categoryName}
+              </div>
             </div>
           </div>
 
@@ -108,7 +127,10 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
             <h3 className="font-semibold mb-3 text-gray-800">🌐 API Calls</h3>
             <div className="space-y-2">
               {debugInfo.apiCalls.map((call, index) => (
-                <div key={index} className="text-sm p-3 bg-gray-50 rounded border">
+                <div
+                  key={index}
+                  className="text-sm p-3 bg-gray-50 rounded border"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${
@@ -119,12 +141,16 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
                     >
                       {call.status}
                     </span>
-                    <span className="text-xs text-gray-500">{call.timestamp}</span>
+                    <span className="text-xs text-gray-500">
+                      {call.timestamp}
+                    </span>
                   </div>
                   <div className="font-mono text-xs break-all text-gray-600 mb-1">
                     {call.url}
                   </div>
-                  <div className="text-xs text-gray-600">Results: {call.count}</div>
+                  <div className="text-xs text-gray-600">
+                    Results: {call.count}
+                  </div>
                 </div>
               ))}
             </div>
@@ -136,15 +162,21 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
             <div className="bg-gray-50 p-3 rounded border space-y-3 text-sm">
               <div>
                 <span className="font-medium">Title:</span>
-                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.title}</div>
+                <div className="text-xs text-gray-600 break-words mt-1">
+                  {debugInfo.metaData.title}
+                </div>
               </div>
               <div>
                 <span className="font-medium">Description:</span>
-                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.description}</div>
+                <div className="text-xs text-gray-600 break-words mt-1">
+                  {debugInfo.metaData.description}
+                </div>
               </div>
               <div>
                 <span className="font-medium">Keywords:</span>
-                <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.keywords}</div>
+                <div className="text-xs text-gray-600 break-words mt-1">
+                  {debugInfo.metaData.keywords}
+                </div>
               </div>
             </div>
           </div>
@@ -164,7 +196,9 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
               <button
                 className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
                 onClick={() => {
-                  navigator.clipboard.writeText(JSON.stringify(debugInfo, null, 2));
+                  navigator.clipboard.writeText(
+                    JSON.stringify(debugInfo, null, 2),
+                  );
                   alert("Debug info copied to clipboard!");
                 }}
               >
