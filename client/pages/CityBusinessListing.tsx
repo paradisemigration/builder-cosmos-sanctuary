@@ -429,11 +429,14 @@ export default function CityBusinessListing() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {filteredBusinesses.length} Consultants Found
+                {totalBusinesses} Consultants Found
               </h2>
               <p className="text-gray-600">
-                Showing results for {cityName}
+                Showing {filteredBusinesses.length} of {totalBusinesses} results for {cityName}
                 {selectedCategory !== "all" && ` in ${selectedCategory}`}
+              </p>
+              <p className="text-sm text-gray-500">
+                Page {currentPage} of {totalPages}
               </p>
             </div>
 
