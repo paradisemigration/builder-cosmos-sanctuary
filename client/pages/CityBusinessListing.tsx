@@ -137,6 +137,25 @@ export default function CityBusinessListing() {
           );
           setHasMore(page < (result.totalPages || 1));
 
+          // Update debug info with final counts
+          const metaData = generateCityMeta(cityName);
+          setDebugInfo(prev => ({
+            ...prev,
+            cityBusinesses: newBusinesses.length,
+            totalBusinesses: result.total || newBusinesses.length,
+            metaData: {
+              title: metaData.title,
+              description: metaData.description,
+              keywords: metaData.keywords
+            },
+            searchParams: {
+              city: city || '',
+              category: '',
+              cityName,
+              categoryName: ''
+            }
+          }));
+
           setLoading(false);
           setLoadingMore(false);
           return;
