@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./global.css";
 import {
   BrowserRouter,
@@ -7,6 +7,7 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
+import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
 // Add required UI providers
 import { Toaster } from "@/components/ui/toaster";
@@ -156,15 +157,21 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SimpleNavigation />
-          <Routes>
+const App = () => {
+  // Initialize SEO crawling setup
+  useEffect(() => {
+    setupSEOCrawling();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SimpleNavigation />
+            <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/business" element={<Browse />} />
@@ -281,14 +288,15 @@ const App = () => (
               }
             />
 
-            {/* Catch-all route - must be last */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <SiteFooter />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+              {/* Catch-all route - must be last */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <SiteFooter />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
