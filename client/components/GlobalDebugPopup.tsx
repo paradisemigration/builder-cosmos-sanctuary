@@ -115,7 +115,7 @@ export function GlobalDebugPopup() {
 
       console.log("GlobalDebugPopup loaded on:", location.pathname);
       console.log("Meta data extracted:", metaData);
-    }, 100); // Small delay to ensure meta tags are set
+    }, 500); // Increased delay to ensure meta tags are set
 
     return () => clearTimeout(timer);
   }, [location]);
