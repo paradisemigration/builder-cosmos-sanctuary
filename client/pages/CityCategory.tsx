@@ -327,51 +327,7 @@ export default function CityCategory() {
     }
   }, [categoryBusinesses, cityBusinesses, categoryDataLoaded, cityDataLoaded, city, category, cityName, categoryName]);
 
-  useEffect(() => {
-    // Combine category businesses (first) with city businesses (second)
-    const allBusinesses = [...categoryBusinesses, ...cityBusinesses];
 
-    // Remove duplicates
-    const uniqueBusinesses = allBusinesses.filter(
-      (business, index, arr) =>
-        index ===
-        arr.findIndex(
-          (b) => b.name === business.name && b.address === business.address,
-        ),
-    );
-
-    let filtered = uniqueBusinesses;
-
-    // Search filter
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (business) =>
-          business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          business.description
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          business.services.some((service) =>
-            service.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-      );
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "rating":
-          return b.rating - a.rating;
-        case "reviews":
-          return b.reviewCount - a.reviewCount;
-        case "name":
-          return a.name.localeCompare(b.name);
-        default:
-          return 0;
-      }
-    });
-
-    setFilteredBusinesses(filtered);
-  }, [categoryBusinesses, cityBusinesses, searchQuery, sortBy]);
 
   const getCategoryIcon = (categorySlug: string) => {
     switch (categorySlug) {
