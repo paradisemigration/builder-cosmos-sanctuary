@@ -41,7 +41,13 @@ import {
   getCategoryBySlug,
   getCitySlug,
 } from "@/lib/all-categories";
-import { generateCityCategoryMeta, setPageMeta, setSEOLinks, setBreadcrumbStructuredData, setCityServiceStructuredData } from "@/lib/meta-utils";
+import {
+  generateCityCategoryMeta,
+  setPageMeta,
+  setSEOLinks,
+  setBreadcrumbStructuredData,
+  setCityServiceStructuredData,
+} from "@/lib/meta-utils";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
@@ -105,21 +111,25 @@ export default function CityCategory() {
       alternate: [
         `/business/${city}/${category}`,
         `/category/${category}`,
-        `/business/${city}`
-      ]
+        `/business/${city}`,
+      ],
     });
 
     // Set breadcrumb structured data
     setBreadcrumbStructuredData([
-      { name: 'Home', url: '/' },
-      { name: 'Browse', url: '/business' },
+      { name: "Home", url: "/" },
+      { name: "Browse", url: "/business" },
       { name: cityName, url: `/business/${city}` },
-      { name: categoryName, url: `/business/${city}/${category}` }
+      { name: categoryName, url: `/business/${city}/${category}` },
     ]);
 
     // Set city service structured data
     if (categoryInfo) {
-      setCityServiceStructuredData(cityName, categoryName, categoryInfo.description);
+      setCityServiceStructuredData(
+        cityName,
+        categoryName,
+        categoryInfo.description,
+      );
     }
 
     async function fetchCategoryBusinesses() {
@@ -128,16 +138,20 @@ export default function CityCategory() {
         const response = await fetch(
           `/api/google-maps-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         if (response.ok) {
           const result = await response.json();
-          if (result.success && result.businesses && result.businesses.length > 0) {
+          if (
+            result.success &&
+            result.businesses &&
+            result.businesses.length > 0
+          ) {
             setCategoryBusinesses(result.businesses);
             setCategoryDataLoaded(true);
             return;
@@ -146,12 +160,16 @@ export default function CityCategory() {
 
         // If Google Maps API fails, try scraped data
         const scrapedResponse = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`,
         );
 
         if (scrapedResponse.ok) {
           const scrapedResult = await scrapedResponse.json();
-          if (scrapedResult.success && scrapedResult.businesses && scrapedResult.businesses.length > 0) {
+          if (
+            scrapedResult.success &&
+            scrapedResult.businesses &&
+            scrapedResult.businesses.length > 0
+          ) {
             setCategoryBusinesses(scrapedResult.businesses);
             setCategoryDataLoaded(true);
             return;
@@ -161,7 +179,7 @@ export default function CityCategory() {
         // No category-specific data found
         setCategoryDataLoaded(true);
       } catch (error) {
-        console.error('Error fetching category businesses:', error);
+        console.error("Error fetching category businesses:", error);
         setCategoryDataLoaded(true);
       }
     }
@@ -170,7 +188,7 @@ export default function CityCategory() {
       try {
         // Fetch all businesses for the city
         const response = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=50`
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=50`,
         );
 
         if (response.ok) {
@@ -182,26 +200,29 @@ export default function CityCategory() {
 
         // Also include sample businesses for the city as fallback
         const sampleCityBusinesses = sampleBusinesses.filter(
-          (business) => business.city.toLowerCase() === city.toLowerCase()
+          (business) => business.city.toLowerCase() === city.toLowerCase(),
         );
 
-        setCityBusinesses(prev => {
+        setCityBusinesses((prev) => {
           const combined = [...prev, ...sampleCityBusinesses];
           // Remove duplicates by name and address
-          const unique = combined.filter((business, index, arr) =>
-            index === arr.findIndex(b =>
-              b.name === business.name && b.address === business.address
-            )
+          const unique = combined.filter(
+            (business, index, arr) =>
+              index ===
+              arr.findIndex(
+                (b) =>
+                  b.name === business.name && b.address === business.address,
+              ),
           );
           return unique;
         });
 
         setCityDataLoaded(true);
       } catch (error) {
-        console.error('Error fetching city businesses:', error);
+        console.error("Error fetching city businesses:", error);
         // Use sample businesses as fallback
         const sampleCityBusinesses = sampleBusinesses.filter(
-          (business) => business.city.toLowerCase() === city.toLowerCase()
+          (business) => business.city.toLowerCase() === city.toLowerCase(),
         );
         setCityBusinesses(sampleCityBusinesses);
         setCityDataLoaded(true);
@@ -216,10 +237,12 @@ export default function CityCategory() {
       const combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
 
       // Remove duplicates
-      const uniqueBusinesses = combinedBusinesses.filter((business, index, arr) =>
-        index === arr.findIndex(b =>
-          b.name === business.name && b.address === business.address
-        )
+      const uniqueBusinesses = combinedBusinesses.filter(
+        (business, index, arr) =>
+          index ===
+          arr.findIndex(
+            (b) => b.name === business.name && b.address === business.address,
+          ),
       );
 
       setFilteredBusinesses(uniqueBusinesses);
@@ -232,10 +255,12 @@ export default function CityCategory() {
     const allBusinesses = [...categoryBusinesses, ...cityBusinesses];
 
     // Remove duplicates
-    const uniqueBusinesses = allBusinesses.filter((business, index, arr) =>
-      index === arr.findIndex(b =>
-        b.name === business.name && b.address === business.address
-      )
+    const uniqueBusinesses = allBusinesses.filter(
+      (business, index, arr) =>
+        index ===
+        arr.findIndex(
+          (b) => b.name === business.name && b.address === business.address,
+        ),
     );
 
     let filtered = uniqueBusinesses;
@@ -387,7 +412,9 @@ export default function CityCategory() {
                   <Building className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">{categoryName}</p>
-                    <p className="text-xl font-bold">{categoryBusinesses.length}</p>
+                    <p className="text-xl font-bold">
+                      {categoryBusinesses.length}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -397,7 +424,9 @@ export default function CityCategory() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5" />
                   <div>
-                    <p className="text-sm text-blue-100">All {cityName} Businesses</p>
+                    <p className="text-sm text-blue-100">
+                      All {cityName} Businesses
+                    </p>
                     <p className="text-xl font-bold">{cityBusinesses.length}</p>
                   </div>
                 </div>
@@ -412,15 +441,19 @@ export default function CityCategory() {
                     <p className="text-xl font-bold">
                       {categoryBusinesses.length > 0
                         ? (
-                            categoryBusinesses.reduce((sum, b) => sum + (b.rating || 0), 0) /
-                            categoryBusinesses.length
+                            categoryBusinesses.reduce(
+                              (sum, b) => sum + (b.rating || 0),
+                              0,
+                            ) / categoryBusinesses.length
                           ).toFixed(1)
                         : cityBusinesses.length > 0
-                        ? (
-                            cityBusinesses.reduce((sum, b) => sum + (b.rating || 0), 0) /
-                            cityBusinesses.length
-                          ).toFixed(1)
-                        : "N/A"}
+                          ? (
+                              cityBusinesses.reduce(
+                                (sum, b) => sum + (b.rating || 0),
+                                0,
+                              ) / cityBusinesses.length
+                            ).toFixed(1)
+                          : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -485,7 +518,7 @@ export default function CityCategory() {
       <section className="py-8">
         <div className="container mx-auto max-w-6xl px-4">
           {(categoryBusinesses.length === 0 && cityBusinesses.length === 0) ||
-           (searchQuery && filteredBusinesses.length === 0) ? (
+          (searchQuery && filteredBusinesses.length === 0) ? (
             <div className="text-center py-16">
               <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
@@ -500,10 +533,7 @@ export default function CityCategory() {
               </p>
               <div className="flex gap-4 justify-center">
                 {searchQuery && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setSearchQuery("")}
-                  >
+                  <Button variant="outline" onClick={() => setSearchQuery("")}>
                     Clear Search
                   </Button>
                 )}
@@ -527,10 +557,12 @@ export default function CityCategory() {
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-2xl font-semibold text-gray-900">
-                          {categoryBusinesses.length} {categoryName} in {cityName}
+                          {categoryBusinesses.length} {categoryName} in{" "}
+                          {cityName}
                         </h2>
                         <p className="text-gray-600 mt-1">
-                          Google Maps API results for {categoryName.toLowerCase()}
+                          Google Maps API results for{" "}
+                          {categoryName.toLowerCase()}
                         </p>
                       </div>
                       <Badge variant="default" className="text-sm bg-green-600">
@@ -546,13 +578,19 @@ export default function CityCategory() {
                       }
                     >
                       {categoryBusinesses
-                        .filter(business => {
+                        .filter((business) => {
                           if (!searchQuery) return true;
                           return (
-                            business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            business.services?.some(service =>
-                              service.toLowerCase().includes(searchQuery.toLowerCase())
+                            business.name
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase()) ||
+                            business.description
+                              ?.toLowerCase()
+                              .includes(searchQuery.toLowerCase()) ||
+                            business.services?.some((service) =>
+                              service
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()),
                             )
                           );
                         })
@@ -561,7 +599,9 @@ export default function CityCategory() {
                             case "rating":
                               return (b.rating || 0) - (a.rating || 0);
                             case "reviews":
-                              return (b.reviewCount || 0) - (a.reviewCount || 0);
+                              return (
+                                (b.reviewCount || 0) - (a.reviewCount || 0)
+                              );
                             case "name":
                               return a.name.localeCompare(b.name);
                             default:
@@ -585,13 +625,13 @@ export default function CityCategory() {
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-2xl font-semibold text-gray-900">
-                          {categoryBusinesses.length > 0 ? 'All Other' : 'All'} Businesses in {cityName}
+                          {categoryBusinesses.length > 0 ? "All Other" : "All"}{" "}
+                          Businesses in {cityName}
                         </h2>
                         <p className="text-gray-600 mt-1">
                           {categoryBusinesses.length > 0
                             ? `Additional businesses and services in ${cityName}`
-                            : `All available businesses in ${cityName}`
-                          }
+                            : `All available businesses in ${cityName}`}
                         </p>
                       </div>
                       <Badge variant="secondary" className="text-sm">
@@ -607,13 +647,19 @@ export default function CityCategory() {
                       }
                     >
                       {cityBusinesses
-                        .filter(business => {
+                        .filter((business) => {
                           if (!searchQuery) return true;
                           return (
-                            business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            business.services?.some(service =>
-                              service.toLowerCase().includes(searchQuery.toLowerCase())
+                            business.name
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase()) ||
+                            business.description
+                              ?.toLowerCase()
+                              .includes(searchQuery.toLowerCase()) ||
+                            business.services?.some((service) =>
+                              service
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()),
                             )
                           );
                         })
@@ -622,7 +668,9 @@ export default function CityCategory() {
                             case "rating":
                               return (b.rating || 0) - (a.rating || 0);
                             case "reviews":
-                              return (b.reviewCount || 0) - (a.reviewCount || 0);
+                              return (
+                                (b.reviewCount || 0) - (a.reviewCount || 0)
+                              );
                             case "name":
                               return a.name.localeCompare(b.name);
                             default:

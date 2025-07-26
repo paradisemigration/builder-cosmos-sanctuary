@@ -43,24 +43,24 @@ export default function Index() {
   // Set homepage SEO meta data
   useEffect(() => {
     const homePageMeta = {
-      title: 'VisaConsult India - Find Top Rated Visa Consultants & Immigration Experts',
-      description: 'Find trusted visa consultants and immigration experts across India and UAE. Compare services, read authentic reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications. Professional visa consultation with proven success rates.',
-      keywords: 'visa consultants, immigration consultants, study abroad consultants, work permit agents, tourist visa services, immigration lawyers, pr consultants, visa agents, visa processing, visa services, immigration services, best visa consultants, top immigration experts, visa consultation, visa guidance',
-      robots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
-      author: 'VisaConsult India',
-      viewport: 'width=device-width, initial-scale=1.0'
+      title:
+        "VisaConsult India - Find Top Rated Visa Consultants & Immigration Experts",
+      description:
+        "Find trusted visa consultants and immigration experts across India and UAE. Compare services, read authentic reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications. Professional visa consultation with proven success rates.",
+      keywords:
+        "visa consultants, immigration consultants, study abroad consultants, work permit agents, tourist visa services, immigration lawyers, pr consultants, visa agents, visa processing, visa services, immigration services, best visa consultants, top immigration experts, visa consultation, visa guidance",
+      robots:
+        "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      author: "VisaConsult India",
+      viewport: "width=device-width, initial-scale=1.0",
     };
 
     setPageMeta(homePageMeta);
 
     // Set SEO links for homepage
     setSEOLinks({
-      canonical: '/',
-      alternate: [
-        '/',
-        '/business',
-        '/all-categories'
-      ]
+      canonical: "/",
+      alternate: ["/", "/business", "/all-categories"],
     });
   }, []);
 

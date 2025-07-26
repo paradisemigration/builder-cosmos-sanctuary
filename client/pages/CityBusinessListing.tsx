@@ -34,7 +34,12 @@ import {
   categoryMapping,
   type Business,
 } from "@/lib/data";
-import { generateCityMeta, setPageMeta, setSEOLinks, setBreadcrumbStructuredData } from "@/lib/meta-utils";
+import {
+  generateCityMeta,
+  setPageMeta,
+  setSEOLinks,
+  setBreadcrumbStructuredData,
+} from "@/lib/meta-utils";
 
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
@@ -79,17 +84,14 @@ export default function CityBusinessListing() {
     // Set SEO links for better Google crawling
     setSEOLinks({
       canonical: `/business/${city}`,
-      alternate: [
-        `/business/${city}`,
-        '/business'
-      ]
+      alternate: [`/business/${city}`, "/business"],
     });
 
     // Set breadcrumb structured data
     setBreadcrumbStructuredData([
-      { name: 'Home', url: '/' },
-      { name: 'Browse', url: '/business' },
-      { name: cityName, url: `/business/${city}` }
+      { name: "Home", url: "/" },
+      { name: "Browse", url: "/business" },
+      { name: cityName, url: `/business/${city}` },
     ]);
   }, [city, cityName, navigate]);
 

@@ -1,6 +1,16 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Building, Grid, List, Filter, Download, Globe, FileText } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Building,
+  Grid,
+  List,
+  Filter,
+  Download,
+  Globe,
+  FileText,
+} from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +31,11 @@ import {
   getCitySlug,
   getAllCombinations,
 } from "@/lib/all-categories";
-import { downloadSitemap, downloadRobotsTxt, generateSitemapURLs } from "@/lib/sitemap-generator";
+import {
+  downloadSitemap,
+  downloadRobotsTxt,
+  generateSitemapURLs,
+} from "@/lib/sitemap-generator";
 
 export default function Sitemap() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -118,7 +132,12 @@ export default function Sitemap() {
               <Button
                 variant="outline"
                 className="flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
-                onClick={() => window.open('https://search.google.com/search-console', '_blank')}
+                onClick={() =>
+                  window.open(
+                    "https://search.google.com/search-console",
+                    "_blank",
+                  )
+                }
               >
                 <Globe className="w-4 h-4" />
                 Google Search Console
@@ -139,9 +158,7 @@ export default function Sitemap() {
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">
-                    {sitemapURLs.length}
-                  </p>
+                  <p className="text-2xl font-bold">{sitemapURLs.length}</p>
                   <p className="text-sm text-blue-100">SEO Pages</p>
                 </CardContent>
               </Card>
@@ -335,9 +352,14 @@ export default function Sitemap() {
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">XML Sitemap</h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Complete XML sitemap with {sitemapURLs.length} URLs for Google Search Console submission.
+                  Complete XML sitemap with {sitemapURLs.length} URLs for Google
+                  Search Console submission.
                 </p>
-                <Button size="sm" onClick={downloadSitemap} className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={downloadSitemap}
+                  className="flex items-center gap-2"
+                >
                   <Download className="w-4 h-4" />
                   Download Sitemap
                 </Button>
@@ -345,9 +367,15 @@ export default function Sitemap() {
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Robots.txt</h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Optimized robots.txt file with proper crawling instructions and sitemap reference.
+                  Optimized robots.txt file with proper crawling instructions
+                  and sitemap reference.
                 </p>
-                <Button size="sm" variant="outline" onClick={downloadRobotsTxt} className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={downloadRobotsTxt}
+                  className="flex items-center gap-2"
+                >
                   <FileText className="w-4 h-4" />
                   Download robots.txt
                 </Button>

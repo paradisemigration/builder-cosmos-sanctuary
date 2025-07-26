@@ -1,6 +1,16 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, Building, MapPin, Users, TrendingUp, Filter, Grid, List, Star } from "lucide-react";
+import {
+  Search,
+  Building,
+  MapPin,
+  Users,
+  TrendingUp,
+  Filter,
+  Grid,
+  List,
+  Star,
+} from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +24,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { allCategories, allCities, allIndianCities, uaeCities, popularCombinations } from "@/lib/all-categories";
+import {
+  allCategories,
+  allCities,
+  allIndianCities,
+  uaeCities,
+  popularCombinations,
+} from "@/lib/all-categories";
 
 export default function AllCategories() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,10 +43,11 @@ export default function AllCategories() {
     let filtered = allCategories;
 
     if (searchQuery) {
-      filtered = filtered.filter(cat =>
-        cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cat.slug.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (cat) =>
+          cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cat.slug.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -45,49 +62,59 @@ export default function AllCategories() {
       uae: allCategories.slice(24, 36),
       additional: allCategories.slice(36, 48),
       countrySpecific: allCategories.slice(48, 65),
-      european: allCategories.slice(65, 87)
+      european: allCategories.slice(65, 87),
     };
   }, []);
 
   const getCategoryUrl = (slug: string) => `/category/${slug}`;
   const getCityCategoryUrl = (city: string, slug: string) =>
-    `/business/${city.toLowerCase().replace(/\s+/g, '-')}/${slug}`;
+    `/business/${city.toLowerCase().replace(/\s+/g, "-")}/${slug}`;
 
   const getCategoryIcon = (slug: string) => {
-    if (slug.includes('student') || slug.includes('education') || slug.includes('study')) {
+    if (
+      slug.includes("student") ||
+      slug.includes("education") ||
+      slug.includes("study")
+    ) {
       return "🎓";
-    } else if (slug.includes('work') || slug.includes('business')) {
+    } else if (slug.includes("work") || slug.includes("business")) {
       return "💼";
-    } else if (slug.includes('family') || slug.includes('visit')) {
+    } else if (slug.includes("family") || slug.includes("visit")) {
       return "👨‍👩‍👧‍👦";
-    } else if (slug.includes('golden') || slug.includes('pr') || slug.includes('citizenship')) {
+    } else if (
+      slug.includes("golden") ||
+      slug.includes("pr") ||
+      slug.includes("citizenship")
+    ) {
       return "🏆";
-    } else if (slug.includes('canada')) {
+    } else if (slug.includes("canada")) {
       return "🇨🇦";
-    } else if (slug.includes('australia')) {
+    } else if (slug.includes("australia")) {
       return "🇦🇺";
-    } else if (slug.includes('usa')) {
+    } else if (slug.includes("usa")) {
       return "🇺🇸";
-    } else if (slug.includes('uk')) {
+    } else if (slug.includes("uk")) {
       return "🇬🇧";
-    } else if (slug.includes('europe')) {
+    } else if (slug.includes("europe")) {
       return "🇪🇺";
-    } else if (slug.includes('uae') || slug.includes('dubai') || slug.includes('emirates')) {
+    } else if (
+      slug.includes("uae") ||
+      slug.includes("dubai") ||
+      slug.includes("emirates")
+    ) {
       return "🇦🇪";
     }
     return "🏛️";
   };
 
   const renderCategoryCard = (category: any) => (
-    <Card 
-      key={category.slug} 
+    <Card
+      key={category.slug}
       className="hover:shadow-lg transition-all duration-200 group border-2 hover:border-blue-300"
     >
       <CardHeader className="pb-3">
         <div className="flex items-start gap-3">
-          <div className="text-2xl">
-            {getCategoryIcon(category.slug)}
-          </div>
+          <div className="text-2xl">{getCategoryIcon(category.slug)}</div>
           <div className="flex-1 min-w-0">
             <CardTitle className="text-lg group-hover:text-blue-600 transition-colors mb-1">
               {category.name}
@@ -120,7 +147,7 @@ export default function AllCategories() {
               View All {category.name}
             </Button>
           </Link>
-          
+
           <div className="text-xs text-gray-500">
             <p className="mb-1">Popular in:</p>
             <div className="flex flex-wrap gap-1">
@@ -133,7 +160,9 @@ export default function AllCategories() {
                   {city}
                 </Link>
               ))}
-              <span className="px-2 py-1 text-gray-400">+{allCities.length - 3} more</span>
+              <span className="px-2 py-1 text-gray-400">
+                +{allCities.length - 3} more
+              </span>
             </div>
           </div>
         </div>
@@ -153,9 +182,10 @@ export default function AllCategories() {
               All {allCategories.length} Service Categories
             </h1>
             <p className="text-xl text-blue-100 mb-6">
-              Complete directory of visa and immigration services across India and UAE
+              Complete directory of visa and immigration services across India
+              and UAE
             </p>
-            
+
             {/* Search */}
             <div className="max-w-md mx-auto mb-6">
               <div className="relative">
@@ -185,7 +215,9 @@ export default function AllCategories() {
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{allCategories.length * allCities.length}</p>
+                  <p className="text-2xl font-bold">
+                    {allCategories.length * allCities.length}
+                  </p>
                   <p className="text-sm text-blue-100">Total Pages</p>
                 </CardContent>
               </Card>
@@ -205,7 +237,10 @@ export default function AllCategories() {
         <div className="container mx-auto max-w-7xl px-4">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             <div className="flex items-center gap-4">
-              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+              <Select
+                value={selectedCountry}
+                onValueChange={setSelectedCountry}
+              >
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Filter by region" />
                 </SelectTrigger>
@@ -251,12 +286,27 @@ export default function AllCategories() {
         <div className="container mx-auto max-w-7xl px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 mb-8">
-              <TabsTrigger value="all" className="text-xs sm:text-sm">All ({allCategories.length})</TabsTrigger>
-              <TabsTrigger value="core" className="text-xs sm:text-sm">Core (12)</TabsTrigger>
-              <TabsTrigger value="specialized" className="text-xs sm:text-sm">Specialized (12)</TabsTrigger>
-              <TabsTrigger value="uae" className="text-xs sm:text-sm">UAE (12)</TabsTrigger>
-              <TabsTrigger value="countrySpecific" className="text-xs sm:text-sm">Country-Specific (17)</TabsTrigger>
-              <TabsTrigger value="european" className="text-xs sm:text-sm">European (22)</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs sm:text-sm">
+                All ({allCategories.length})
+              </TabsTrigger>
+              <TabsTrigger value="core" className="text-xs sm:text-sm">
+                Core (12)
+              </TabsTrigger>
+              <TabsTrigger value="specialized" className="text-xs sm:text-sm">
+                Specialized (12)
+              </TabsTrigger>
+              <TabsTrigger value="uae" className="text-xs sm:text-sm">
+                UAE (12)
+              </TabsTrigger>
+              <TabsTrigger
+                value="countrySpecific"
+                className="text-xs sm:text-sm"
+              >
+                Country-Specific (17)
+              </TabsTrigger>
+              <TabsTrigger value="european" className="text-xs sm:text-sm">
+                European (22)
+              </TabsTrigger>
             </TabsList>
 
             {/* All Categories */}
@@ -266,7 +316,8 @@ export default function AllCategories() {
                   All Service Categories
                 </h2>
                 <p className="text-gray-600">
-                  Complete list of all {allCategories.length} visa and immigration service categories
+                  Complete list of all {allCategories.length} visa and
+                  immigration service categories
                 </p>
               </div>
 
@@ -352,7 +403,8 @@ export default function AllCategories() {
                   Country-Specific Services
                 </h2>
                 <p className="text-gray-600">
-                  Specialized visa services for specific countries (Canada, USA, UK, Australia)
+                  Specialized visa services for specific countries (Canada, USA,
+                  UK, Australia)
                 </p>
               </div>
 
@@ -388,7 +440,9 @@ export default function AllCategories() {
               <TrendingUp className="w-6 h-6 text-orange-500" />
               Popular Category-City Combinations
             </h2>
-            <p className="text-gray-600">Most searched combinations across India and UAE</p>
+            <p className="text-gray-600">
+              Most searched combinations across India and UAE
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -400,12 +454,16 @@ export default function AllCategories() {
               >
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {allCategories.find(c => c.slug === combo.category)?.name} in {combo.city}
+                    {allCategories.find((c) => c.slug === combo.category)?.name}{" "}
+                    in {combo.city}
                   </h3>
                   <Badge variant="secondary">{combo.searches}/month</Badge>
                 </div>
                 <p className="text-sm text-gray-600">
-                  {allCategories.find(c => c.slug === combo.category)?.description}
+                  {
+                    allCategories.find((c) => c.slug === combo.category)
+                      ?.description
+                  }
                 </p>
               </Link>
             ))}
@@ -413,9 +471,7 @@ export default function AllCategories() {
 
           <div className="text-center mt-8">
             <Link to="/all-cities-categories">
-              <Button size="lg">
-                View All City-Category Combinations
-              </Button>
+              <Button size="lg">View All City-Category Combinations</Button>
             </Link>
           </div>
         </div>
