@@ -44,11 +44,26 @@ export function GlobalDebugPopup() {
 
   // Function to extract meta data from document head
   const extractMetaData = () => {
-    const title = document.title || '';
-    const description = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-    const keywords = document.querySelector('meta[name="keywords"]')?.getAttribute('content') || '';
+    const title = document.title || 'No title found';
+
+    // Try multiple selectors for description
+    const description =
+      document.querySelector('meta[name="description"]')?.getAttribute('content') ||
+      document.querySelector('meta[property="description"]')?.getAttribute('content') ||
+      'No description found';
+
+    // Try multiple selectors for keywords
+    const keywords =
+      document.querySelector('meta[name="keywords"]')?.getAttribute('content') ||
+      document.querySelector('meta[property="keywords"]')?.getAttribute('content') ||
+      'No keywords found';
+
+    // Open Graph tags
     const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '';
     const ogDescription = document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '';
+
+    // Debug logging
+    console.log('Meta extraction:', { title, description, keywords, ogTitle, ogDescription });
 
     return {
       title,
