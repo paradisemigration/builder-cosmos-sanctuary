@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Building, Mail, Phone, Globe } from "lucide-react";
-import { indianCities, categoryMapping } from "@/lib/data";
+import { allCities, allIndianCities, allCategories } from "@/lib/all-categories";
 
 export function SiteFooter() {
   // Get top cities for the footer
