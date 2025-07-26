@@ -188,7 +188,7 @@ const App = () => (
             {/* SEO-friendly category and location routes */}
             <Route
               path="/category/:category"
-              element={<CategoryLocationPage />}
+              element={<CategoryPage />}
             />
             <Route
               path="/location/:location"
