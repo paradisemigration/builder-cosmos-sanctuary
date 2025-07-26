@@ -41,6 +41,7 @@ import {
   getCitySlug,
   popularCombinations,
 } from "@/lib/all-categories";
+import { generateCategoryMeta, setPageMeta, setCanonicalUrl } from "@/lib/meta-utils";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
