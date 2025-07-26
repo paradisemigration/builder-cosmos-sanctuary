@@ -344,6 +344,38 @@ export default function AllCategories() {
                 {categoryGroups.additional.map(renderCategoryCard)}
               </div>
             </TabsContent>
+
+            {/* Country-Specific Services */}
+            <TabsContent value="countrySpecific">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Country-Specific Services
+                </h2>
+                <p className="text-gray-600">
+                  Specialized visa services for specific countries (Canada, USA, UK, Australia)
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {categoryGroups.countrySpecific.map(renderCategoryCard)}
+              </div>
+            </TabsContent>
+
+            {/* European Services */}
+            <TabsContent value="european">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  European Work Permit Services
+                </h2>
+                <p className="text-gray-600">
+                  Work permit and visa services for European countries
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {categoryGroups.european.map(renderCategoryCard)}
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
       </section>
