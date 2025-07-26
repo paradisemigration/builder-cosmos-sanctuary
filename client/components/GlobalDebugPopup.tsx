@@ -15,6 +15,11 @@ interface GlobalDebugInfo {
     keywords: string;
     ogTitle: string;
     ogDescription: string;
+    allMetaTags: Array<{
+      name: string;
+      content: string;
+      property?: string;
+    }>;
   };
   apiCalls: Array<{
     url: string;
@@ -26,71 +31,51 @@ interface GlobalDebugInfo {
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [debugInfo, setDebugInfo] = useState<GlobalDebugInfo>({
-    currentPage: "",
-    timestamp: "",
-    userAgent: "",
+    currentPage: '',
+    timestamp: '',
+    userAgent: '',
     screenSize: { width: 0, height: 0 },
     metaData: {
-      title: "",
-      description: "",
-      keywords: "",
-      ogTitle: "",
-      ogDescription: "",
+      title: '',
+      description: '',
+      keywords: '',
+      ogTitle: '',
+      ogDescription: ''
     },
-    apiCalls: [],
+    apiCalls: []
   });
-
+  
   const location = useLocation();
 
   // Function to extract meta data from document head
   const extractMetaData = () => {
-    const title = document.title || "No title found";
+    const title = document.title || 'No title found';
 
     // Try multiple selectors for description
     const description =
-      document
-        .querySelector('meta[name="description"]')
-        ?.getAttribute("content") ||
-      document
-        .querySelector('meta[property="description"]')
-        ?.getAttribute("content") ||
-      "No description found";
+      document.querySelector('meta[name="description"]')?.getAttribute('content') ||
+      document.querySelector('meta[property="description"]')?.getAttribute('content') ||
+      'No description found';
 
     // Try multiple selectors for keywords
     const keywords =
-      document
-        .querySelector('meta[name="keywords"]')
-        ?.getAttribute("content") ||
-      document
-        .querySelector('meta[property="keywords"]')
-        ?.getAttribute("content") ||
-      "No keywords found";
+      document.querySelector('meta[name="keywords"]')?.getAttribute('content') ||
+      document.querySelector('meta[property="keywords"]')?.getAttribute('content') ||
+      'No keywords found';
 
     // Open Graph tags
-    const ogTitle =
-      document
-        .querySelector('meta[property="og:title"]')
-        ?.getAttribute("content") || "";
-    const ogDescription =
-      document
-        .querySelector('meta[property="og:description"]')
-        ?.getAttribute("content") || "";
+    const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '';
+    const ogDescription = document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '';
 
     // Debug logging
-    console.log("Meta extraction:", {
-      title,
-      description,
-      keywords,
-      ogTitle,
-      ogDescription,
-    });
+    console.log('Meta extraction:', { title, description, keywords, ogTitle, ogDescription });
 
     return {
       title,
       description,
       keywords,
       ogTitle,
-      ogDescription,
+      ogDescription
     };
   };
 
@@ -105,10 +90,10 @@ export function GlobalDebugPopup() {
         userAgent: navigator.userAgent,
         screenSize: {
           width: window.innerWidth,
-          height: window.innerHeight,
+          height: window.innerHeight
         },
         metaData,
-        apiCalls: [],
+        apiCalls: []
       });
 
       console.log("GlobalDebugPopup loaded on:", location.pathname);
@@ -123,21 +108,15 @@ export function GlobalDebugPopup() {
       {/* Always visible test indicator */}
       <div
         className="fixed top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded shadow-lg z-[9999] max-w-xs"
-        style={{ fontFamily: "monospace", lineHeight: "1.2" }}
+        style={{ fontFamily: 'monospace', lineHeight: '1.2' }}
         title={`Path: ${location.pathname}`}
       >
-        <div className="text-yellow-200 font-bold mb-1">
-          DEBUG: {location.pathname}
-        </div>
+        <div className="text-yellow-200 font-bold mb-1">DEBUG: {location.pathname}</div>
         <div className="truncate text-white">T: {debugInfo.metaData.title}</div>
-        <div className="truncate text-white">
-          D: {debugInfo.metaData.description}
-        </div>
-        <div className="truncate text-white">
-          K: {debugInfo.metaData.keywords}
-        </div>
+        <div className="truncate text-white">D: {debugInfo.metaData.description}</div>
+        <div className="truncate text-white">K: {debugInfo.metaData.keywords}</div>
       </div>
-
+      
       {!isOpen ? (
         <button
           onClick={() => {
@@ -145,16 +124,13 @@ export function GlobalDebugPopup() {
             setIsOpen(true);
           }}
           className="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-lg font-bold text-lg border-2 border-white transition-all hover:scale-110"
-          style={{ width: "60px", height: "60px", zIndex: 9998 }}
+          style={{ width: '60px', height: '60px', zIndex: 9998 }}
           title="Open Global Debug Info"
         >
           🐛
         </button>
       ) : (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-          style={{ zIndex: 9999 }}
-        >
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
           <div className="bg-white w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-lg shadow-xl">
             <div className="flex items-center justify-between p-4 border-b bg-gray-50">
               <h2 className="text-lg font-semibold">🐛 Global Debug Info</h2>
@@ -165,43 +141,33 @@ export function GlobalDebugPopup() {
                 ✕
               </button>
             </div>
-
+            
             <div className="p-4 space-y-4">
               {/* Meta Data Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">
-                  📍 Page Meta Data
-                </h3>
+                <h3 className="font-semibold mb-2 text-gray-800">📍 Page Meta Data</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm space-y-3">
                   <div className="border-b pb-2">
                     <span className="font-medium text-blue-600">📂 Path:</span>
-                    <div className="text-gray-700 mt-1">
-                      {debugInfo.currentPage}
-                    </div>
+                    <div className="text-gray-700 mt-1">{debugInfo.currentPage}</div>
                   </div>
 
                   <div className="border-b pb-2">
-                    <span className="font-medium text-purple-600">
-                      🏷️ Title:
-                    </span>
+                    <span className="font-medium text-purple-600">🏷️ Title:</span>
                     <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
                       {debugInfo.metaData.title}
                     </div>
                   </div>
 
                   <div className="border-b pb-2">
-                    <span className="font-medium text-green-600">
-                      📝 Description:
-                    </span>
+                    <span className="font-medium text-green-600">📝 Description:</span>
                     <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
                       {debugInfo.metaData.description}
                     </div>
                   </div>
 
                   <div className="border-b pb-2">
-                    <span className="font-medium text-orange-600">
-                      🔑 Keywords:
-                    </span>
+                    <span className="font-medium text-orange-600">🔑 Keywords:</span>
                     <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
                       {debugInfo.metaData.keywords}
                     </div>
@@ -209,9 +175,7 @@ export function GlobalDebugPopup() {
 
                   {debugInfo.metaData.ogTitle && (
                     <div className="border-b pb-2">
-                      <span className="font-medium text-red-600">
-                        🌐 OG Title:
-                      </span>
+                      <span className="font-medium text-red-600">🌐 OG Title:</span>
                       <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
                         {debugInfo.metaData.ogTitle}
                       </div>
@@ -220,9 +184,7 @@ export function GlobalDebugPopup() {
 
                   {debugInfo.metaData.ogDescription && (
                     <div>
-                      <span className="font-medium text-red-600">
-                        🌐 OG Description:
-                      </span>
+                      <span className="font-medium text-red-600">🌐 OG Description:</span>
                       <div className="text-gray-700 break-words mt-1 bg-white p-2 rounded border">
                         {debugInfo.metaData.ogDescription}
                       </div>
@@ -233,19 +195,11 @@ export function GlobalDebugPopup() {
 
               {/* Browser Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">
-                  💻 Browser Info
-                </h3>
+                <h3 className="font-semibold mb-2 text-gray-800">💻 Browser Info</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm">
-                  <div>
-                    <span className="font-medium">Screen:</span>{" "}
-                    {debugInfo.screenSize.width} x {debugInfo.screenSize.height}
-                  </div>
-                  <div>
-                    <span className="font-medium">User Agent:</span>
-                    <div className="text-xs text-gray-600 break-all mt-1">
-                      {debugInfo.userAgent}
-                    </div>
+                  <div><span className="font-medium">Screen:</span> {debugInfo.screenSize.width} x {debugInfo.screenSize.height}</div>
+                  <div><span className="font-medium">User Agent:</span> 
+                    <div className="text-xs text-gray-600 break-all mt-1">{debugInfo.userAgent}</div>
                   </div>
                 </div>
               </div>
@@ -254,14 +208,8 @@ export function GlobalDebugPopup() {
               <div>
                 <h3 className="font-semibold mb-2 text-gray-800">💾 Storage</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm">
-                  <div>
-                    <span className="font-medium">Local Storage Items:</span>{" "}
-                    {localStorage.length}
-                  </div>
-                  <div>
-                    <span className="font-medium">Session Storage Items:</span>{" "}
-                    {sessionStorage.length}
-                  </div>
+                  <div><span className="font-medium">Local Storage Items:</span> {localStorage.length}</div>
+                  <div><span className="font-medium">Session Storage Items:</span> {sessionStorage.length}</div>
                 </div>
               </div>
 
@@ -285,12 +233,10 @@ export function GlobalDebugPopup() {
                       const data = {
                         ...debugInfo,
                         fullURL: window.location.href,
-                        localStorage: { ...localStorage },
-                        timestamp: new Date().toISOString(),
+                        localStorage: {...localStorage},
+                        timestamp: new Date().toISOString()
                       };
-                      navigator.clipboard.writeText(
-                        JSON.stringify(data, null, 2),
-                      );
+                      navigator.clipboard.writeText(JSON.stringify(data, null, 2));
                       alert("Debug info copied to clipboard!");
                     }}
                   >
