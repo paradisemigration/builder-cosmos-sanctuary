@@ -1,4 +1,4 @@
-// Complete list of 48 categories found in scraping data
+// Complete list of 87 categories including all requested services
 export const allCategories = [
   // Core Visa & Immigration Services (12)
   {
