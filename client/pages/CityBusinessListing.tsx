@@ -144,10 +144,11 @@ export default function CityBusinessListing() {
 
   useEffect(() => {
     // Validate city exists
-    if (
-      !city ||
-      !indianCities.some((c) => c.toLowerCase() === city.toLowerCase())
-    ) {
+    const cityExists = allCities.some(
+      (c) => getCitySlug(c) === city.toLowerCase(),
+    );
+
+    if (!city || !cityExists) {
       navigate("/business");
       return;
     }
