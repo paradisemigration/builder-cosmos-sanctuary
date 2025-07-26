@@ -160,7 +160,7 @@ export default function CityCategory() {
 
         // If Google Maps API fails, try scraped data
         const scrapedResponse = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`,
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`,
         );
 
         if (scrapedResponse.ok) {
