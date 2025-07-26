@@ -73,6 +73,8 @@ export default function CityBusinessListing() {
         setLoadingMore(true);
       }
 
+      console.log(`Fetching businesses for city: "${cityName}", page: ${page}`);
+
       // First try to fetch from database/API
       const response = await fetch(
         `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`
