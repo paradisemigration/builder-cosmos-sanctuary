@@ -405,23 +405,23 @@ export default function CityCategory() {
             Other Services in {cityName}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {Object.entries(categoryMapping)
-              .filter(([slug]) => slug !== category)
+            {allCategories
+              .filter((cat) => cat.slug !== category)
               .slice(0, 8)
-              .map(([slug, name]) => (
+              .map((cat) => (
                 <Link
-                  key={slug}
-                  to={`/business/${city}/${slug}`}
+                  key={cat.slug}
+                  to={`/business/${city}/${cat.slug}`}
                   className="p-4 bg-white rounded-lg border hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3">
-                    {getCategoryIcon(slug)}
+                    {getCategoryIcon(cat.slug)}
                     <div>
                       <p className="font-medium text-gray-900 text-sm">
-                        {name}
+                        {cat.name}
                       </p>
                       <p className="text-gray-500 text-xs">
-                        {slug.replace("-", " ")}
+                        {cat.slug.replace("-", " ")}
                       </p>
                     </div>
                   </div>
