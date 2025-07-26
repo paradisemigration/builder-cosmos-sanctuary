@@ -34,6 +34,7 @@ import {
   categoryMapping,
   type Business,
 } from "@/lib/data";
+import { generateCityMeta, setPageMeta, setCanonicalUrl } from "@/lib/meta-utils";
 
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
