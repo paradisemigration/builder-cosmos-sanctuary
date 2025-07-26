@@ -67,9 +67,14 @@ export default function CityCategory() {
     categoryBusinesses: 0,
     cityBusinesses: 0,
     totalBusinesses: 0,
-    apiCalls: [] as Array<{url: string; status: string; count: number; timestamp: string}>,
-    metaData: { title: '', description: '', keywords: '' },
-    searchParams: { city: '', category: '', cityName: '', categoryName: '' }
+    apiCalls: [] as Array<{
+      url: string;
+      status: string;
+      count: number;
+      timestamp: string;
+    }>,
+    metaData: { title: "", description: "", keywords: "" },
+    searchParams: { city: "", category: "", cityName: "", categoryName: "" },
   });
 
   // Convert URL params to proper names
@@ -176,14 +181,17 @@ export default function CityCategory() {
           const scrapedResult = await scrapedResponse.json();
 
           // Update debug info
-          setDebugInfo(prev => ({
+          setDebugInfo((prev) => ({
             ...prev,
-            apiCalls: [...prev.apiCalls, {
-              url: scrapedUrl,
-              status: 'success',
-              count: scrapedResult.businesses?.length || 0,
-              timestamp: scrapedTimestamp
-            }]
+            apiCalls: [
+              ...prev.apiCalls,
+              {
+                url: scrapedUrl,
+                status: "success",
+                count: scrapedResult.businesses?.length || 0,
+                timestamp: scrapedTimestamp,
+              },
+            ],
           }));
 
           if (
@@ -197,14 +205,17 @@ export default function CityCategory() {
           }
         } else {
           // Update debug info for failed call
-          setDebugInfo(prev => ({
+          setDebugInfo((prev) => ({
             ...prev,
-            apiCalls: [...prev.apiCalls, {
-              url: scrapedUrl,
-              status: 'failed',
-              count: 0,
-              timestamp: scrapedTimestamp
-            }]
+            apiCalls: [
+              ...prev.apiCalls,
+              {
+                url: scrapedUrl,
+                status: "failed",
+                count: 0,
+                timestamp: scrapedTimestamp,
+              },
+            ],
           }));
         }
 
@@ -229,14 +240,17 @@ export default function CityCategory() {
           const result = await response.json();
 
           // Update debug info
-          setDebugInfo(prev => ({
+          setDebugInfo((prev) => ({
             ...prev,
-            apiCalls: [...prev.apiCalls, {
-              url: apiUrl,
-              status: 'success',
-              count: result.businesses?.length || 0,
-              timestamp
-            }]
+            apiCalls: [
+              ...prev.apiCalls,
+              {
+                url: apiUrl,
+                status: "success",
+                count: result.businesses?.length || 0,
+                timestamp,
+              },
+            ],
           }));
 
           if (result.success && result.businesses) {
@@ -244,14 +258,17 @@ export default function CityCategory() {
           }
         } else {
           // Update debug info for failed call
-          setDebugInfo(prev => ({
+          setDebugInfo((prev) => ({
             ...prev,
-            apiCalls: [...prev.apiCalls, {
-              url: apiUrl,
-              status: 'failed',
-              count: 0,
-              timestamp
-            }]
+            apiCalls: [
+              ...prev.apiCalls,
+              {
+                url: apiUrl,
+                status: "failed",
+                count: 0,
+                timestamp,
+              },
+            ],
           }));
         }
 
@@ -307,7 +324,7 @@ export default function CityCategory() {
 
       // Update debug info
       const metaData = generateCityCategoryMeta(cityName, categoryName);
-      setDebugInfo(prev => ({
+      setDebugInfo((prev) => ({
         ...prev,
         categoryBusinesses: categoryBusinesses.length,
         cityBusinesses: cityBusinesses.length,
@@ -315,19 +332,26 @@ export default function CityCategory() {
         metaData: {
           title: metaData.title,
           description: metaData.description,
-          keywords: metaData.keywords
+          keywords: metaData.keywords,
         },
         searchParams: {
-          city: city || '',
-          category: category || '',
+          city: city || "",
+          category: category || "",
           cityName,
-          categoryName
-        }
+          categoryName,
+        },
       }));
     }
-  }, [categoryBusinesses, cityBusinesses, categoryDataLoaded, cityDataLoaded, city, category, cityName, categoryName]);
-
-
+  }, [
+    categoryBusinesses,
+    cityBusinesses,
+    categoryDataLoaded,
+    cityDataLoaded,
+    city,
+    category,
+    cityName,
+    categoryName,
+  ]);
 
   const getCategoryIcon = (categorySlug: string) => {
     switch (categorySlug) {

@@ -54,11 +54,7 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
             <Bug className="w-5 h-5" />
             Debug Information
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsOpen(false)}
-          >
+          <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)}>
             <X className="w-4 h-4" />
           </Button>
         </CardHeader>
@@ -98,10 +94,22 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
               Search Parameters
             </h3>
             <div className="space-y-1 text-sm">
-              <div><span className="font-medium">URL City:</span> {debugInfo.searchParams.city}</div>
-              <div><span className="font-medium">URL Category:</span> {debugInfo.searchParams.category}</div>
-              <div><span className="font-medium">Resolved City:</span> {debugInfo.searchParams.cityName}</div>
-              <div><span className="font-medium">Resolved Category:</span> {debugInfo.searchParams.categoryName}</div>
+              <div>
+                <span className="font-medium">URL City:</span>{" "}
+                {debugInfo.searchParams.city}
+              </div>
+              <div>
+                <span className="font-medium">URL Category:</span>{" "}
+                {debugInfo.searchParams.category}
+              </div>
+              <div>
+                <span className="font-medium">Resolved City:</span>{" "}
+                {debugInfo.searchParams.cityName}
+              </div>
+              <div>
+                <span className="font-medium">Resolved Category:</span>{" "}
+                {debugInfo.searchParams.categoryName}
+              </div>
             </div>
           </div>
 
@@ -115,13 +123,23 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
               {debugInfo.apiCalls.map((call, index) => (
                 <div key={index} className="text-sm p-2 bg-gray-50 rounded">
                   <div className="flex items-center justify-between">
-                    <Badge variant={call.status === 'success' ? 'default' : 'destructive'}>
+                    <Badge
+                      variant={
+                        call.status === "success" ? "default" : "destructive"
+                      }
+                    >
                       {call.status}
                     </Badge>
-                    <span className="text-xs text-gray-500">{call.timestamp}</span>
+                    <span className="text-xs text-gray-500">
+                      {call.timestamp}
+                    </span>
                   </div>
-                  <div className="font-mono text-xs break-all mt-1">{call.url}</div>
-                  <div className="text-xs text-gray-600">Results: {call.count}</div>
+                  <div className="font-mono text-xs break-all mt-1">
+                    {call.url}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Results: {call.count}
+                  </div>
                 </div>
               ))}
             </div>
@@ -133,15 +151,21 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
             <div className="space-y-2 text-sm">
               <div>
                 <span className="font-medium">Title:</span>
-                <div className="text-xs text-gray-600 break-words">{debugInfo.metaData.title}</div>
+                <div className="text-xs text-gray-600 break-words">
+                  {debugInfo.metaData.title}
+                </div>
               </div>
               <div>
                 <span className="font-medium">Description:</span>
-                <div className="text-xs text-gray-600 break-words">{debugInfo.metaData.description}</div>
+                <div className="text-xs text-gray-600 break-words">
+                  {debugInfo.metaData.description}
+                </div>
               </div>
               <div>
                 <span className="font-medium">Keywords:</span>
-                <div className="text-xs text-gray-600 break-words">{debugInfo.metaData.keywords}</div>
+                <div className="text-xs text-gray-600 break-words">
+                  {debugInfo.metaData.keywords}
+                </div>
               </div>
             </div>
           </div>
@@ -153,7 +177,7 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  console.log('Debug Info:', debugInfo);
+                  console.log("Debug Info:", debugInfo);
                 }}
               >
                 Log to Console
@@ -162,7 +186,9 @@ export function DebugPopup({ debugInfo }: DebugPopupProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  navigator.clipboard.writeText(JSON.stringify(debugInfo, null, 2));
+                  navigator.clipboard.writeText(
+                    JSON.stringify(debugInfo, null, 2),
+                  );
                 }}
               >
                 Copy JSON

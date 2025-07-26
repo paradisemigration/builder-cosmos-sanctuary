@@ -64,9 +64,14 @@ export default function CityBusinessListing() {
     categoryBusinesses: 0,
     cityBusinesses: 0,
     totalBusinesses: 0,
-    apiCalls: [] as Array<{url: string; status: string; count: number; timestamp: string}>,
-    metaData: { title: '', description: '', keywords: '' },
-    searchParams: { city: '', category: '', cityName: '', categoryName: '' }
+    apiCalls: [] as Array<{
+      url: string;
+      status: string;
+      count: number;
+      timestamp: string;
+    }>,
+    metaData: { title: "", description: "", keywords: "" },
+    searchParams: { city: "", category: "", cityName: "", categoryName: "" },
   });
 
   // Convert URL param back to proper city name
@@ -102,14 +107,17 @@ export default function CityBusinessListing() {
         // Update debug info
         const timestamp = new Date().toLocaleTimeString();
         const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`;
-        setDebugInfo(prev => ({
+        setDebugInfo((prev) => ({
           ...prev,
-          apiCalls: [...prev.apiCalls, {
-            url: apiUrl,
-            status: 'success',
-            count: result.businesses?.length || 0,
-            timestamp
-          }]
+          apiCalls: [
+            ...prev.apiCalls,
+            {
+              url: apiUrl,
+              status: "success",
+              count: result.businesses?.length || 0,
+              timestamp,
+            },
+          ],
         }));
 
         if (
@@ -139,21 +147,21 @@ export default function CityBusinessListing() {
 
           // Update debug info with final counts
           const metaData = generateCityMeta(cityName);
-          setDebugInfo(prev => ({
+          setDebugInfo((prev) => ({
             ...prev,
             cityBusinesses: newBusinesses.length,
             totalBusinesses: result.total || newBusinesses.length,
             metaData: {
               title: metaData.title,
               description: metaData.description,
-              keywords: metaData.keywords
+              keywords: metaData.keywords,
             },
             searchParams: {
-              city: city || '',
-              category: '',
+              city: city || "",
+              category: "",
               cityName,
-              categoryName: ''
-            }
+              categoryName: "",
+            },
           }));
 
           setLoading(false);
