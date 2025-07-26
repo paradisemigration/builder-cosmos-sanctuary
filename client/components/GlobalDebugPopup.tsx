@@ -294,6 +294,20 @@ export function GlobalDebugPopup() {
                   <button
                     className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
                     onClick={() => {
+                      const newMetaData = extractMetaData();
+                      setDebugInfo(prev => ({
+                        ...prev,
+                        metaData: newMetaData,
+                        timestamp: new Date().toLocaleString()
+                      }));
+                      alert("Meta data refreshed!");
+                    }}
+                  >
+                    🔄 Refresh Meta
+                  </button>
+                  <button
+                    className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
+                    onClick={() => {
                       window.location.reload();
                     }}
                   >
