@@ -68,15 +68,31 @@ export function GlobalDebugPopup() {
     const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '';
     const ogDescription = document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '';
 
+    // Extract ALL meta tags
+    const allMetaTags: Array<{name: string; content: string; property?: string}> = [];
+    const metaTags = document.querySelectorAll('meta');
+
+    metaTags.forEach((meta) => {
+      const name = meta.getAttribute('name') || meta.getAttribute('property') || meta.getAttribute('http-equiv') || '';
+      const content = meta.getAttribute('content') || '';
+      const property = meta.getAttribute('property') || undefined;
+
+      if (name && content) {
+        allMetaTags.push({ name, content, property });
+      }
+    });
+
     // Debug logging
-    console.log('Meta extraction:', { title, description, keywords, ogTitle, ogDescription });
+    console.log('Meta extraction:', { title, description, keywords, ogTitle, ogDescription, allMetaTags });
+    console.log('Total meta tags found:', allMetaTags.length);
 
     return {
       title,
       description,
       keywords,
       ogTitle,
-      ogDescription
+      ogDescription,
+      allMetaTags
     };
   };
 
