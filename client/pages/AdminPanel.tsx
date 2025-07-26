@@ -226,13 +226,13 @@ export default function AdminPanel() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="listings">Listings</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="media">Media</TabsTrigger>
-            <TabsTrigger value="scraper">Data Scraper</TabsTrigger>
-            <TabsTrigger value="backup">Backup</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
+            <TabsTrigger value="dashboard" className="text-xs sm:text-sm">Dashboard</TabsTrigger>
+            <TabsTrigger value="listings" className="text-xs sm:text-sm">Listings</TabsTrigger>
+            <TabsTrigger value="users" className="text-xs sm:text-sm">Users</TabsTrigger>
+            <TabsTrigger value="media" className="text-xs sm:text-sm">Media</TabsTrigger>
+            <TabsTrigger value="scraper" className="text-xs sm:text-sm">Scraper</TabsTrigger>
+            <TabsTrigger value="backup" className="text-xs sm:text-sm">Backup</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
