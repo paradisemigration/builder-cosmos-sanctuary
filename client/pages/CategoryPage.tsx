@@ -136,29 +136,12 @@ export default function CategoryPage() {
 
     fetchBusinesses();
 
-    // Set page title with SEO format
-    document.title = `Best ${categoryInfo.name} In India & UAE - VisaConsult India`;
+    // Set page meta data with SEO optimization
+    const metaData = generateCategoryMeta(categoryInfo.name, categoryInfo.description);
+    setPageMeta(metaData);
 
-    // Set meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        `Find the best ${categoryInfo.name.toLowerCase()} across India and UAE. Compare top-rated ${categoryInfo.name.toLowerCase()} in 100+ cities. ${categoryInfo.description} Get expert visa guidance at VisaConsult India.`
-      );
-    }
-
-    // Set meta keywords
-    let metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (!metaKeywords) {
-      metaKeywords = document.createElement('meta');
-      metaKeywords.setAttribute('name', 'keywords');
-      document.head.appendChild(metaKeywords);
-    }
-    metaKeywords.setAttribute(
-      "content",
-      `${categoryInfo.name.toLowerCase()}, best ${categoryInfo.name.toLowerCase()}, ${categoryInfo.name.toLowerCase()} india, ${categoryInfo.name.toLowerCase()} uae, visa consultants, immigration services, ${categoryInfo.slug.replace(/-/g, ' ')}`
-    );
+    // Set canonical URL
+    setCanonicalUrl(`/category/${category}`);
   }, [categoryInfo, navigate]);
 
   const getCategoryIcon = (slug: string) => {
