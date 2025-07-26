@@ -141,8 +141,8 @@ export default function Sitemap() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {Object.values(categoryMapping).map(category => (
-                    <SelectItem key={category} value={category}>{category}</SelectItem>
+                  {allCategories.map(category => (
+                    <SelectItem key={category.slug} value={category.name}>{category.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
