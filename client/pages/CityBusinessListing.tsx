@@ -62,7 +62,12 @@ export default function CityBusinessListing() {
 
   // Convert URL param back to proper city name
   const cityName = city
-    ? city.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+    ? city
+        .split("-")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ")
     : "";
 
   // Function to fetch businesses from API
@@ -78,14 +83,18 @@ export default function CityBusinessListing() {
 
       // First try to fetch from database/API
       const response = await fetch(
-        `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`
+        `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
       );
 
       if (response.ok) {
         const result = await response.json();
-        console.log('API Response:', result);
+        console.log("API Response:", result);
 
-        if (result.success && result.businesses && result.businesses.length > 0) {
+        if (
+          result.success &&
+          result.businesses &&
+          result.businesses.length > 0
+        ) {
           const newBusinesses = result.businesses;
 
           if (resetList || page === 1) {
@@ -93,28 +102,34 @@ export default function CityBusinessListing() {
             setFilteredBusinesses(newBusinesses);
           } else {
             // Append to existing list for load more
-            setBusinesses(prev => [...prev, ...newBusinesses]);
-            setFilteredBusinesses(prev => [...prev, ...newBusinesses]);
+            setBusinesses((prev) => [...prev, ...newBusinesses]);
+            setFilteredBusinesses((prev) => [...prev, ...newBusinesses]);
           }
 
           setTotalBusinesses(result.total || newBusinesses.length);
-          setTotalPages(result.totalPages || Math.ceil((result.total || newBusinesses.length) / ITEMS_PER_PAGE));
+          setTotalPages(
+            result.totalPages ||
+              Math.ceil(
+                (result.total || newBusinesses.length) / ITEMS_PER_PAGE,
+              ),
+          );
           setHasMore(page < (result.totalPages || 1));
 
           setLoading(false);
           setLoadingMore(false);
           return;
         } else {
-          console.log('No businesses found in API response');
+          console.log("No businesses found in API response");
         }
       } else {
-        console.log('API response not OK:', response.status);
+        console.log("API response not OK:", response.status);
       }
 
       // Fallback to sample data if API fails
-      console.log('API failed, using sample data');
+      console.log("API failed, using sample data");
       const cityBusinesses = sampleBusinesses.filter(
-        (business) => business.city.toLowerCase() === (city?.toLowerCase() || ''),
+        (business) =>
+          business.city.toLowerCase() === (city?.toLowerCase() || ""),
       );
 
       if (resetList || page === 1) {
@@ -125,13 +140,13 @@ export default function CityBusinessListing() {
       setTotalBusinesses(cityBusinesses.length);
       setTotalPages(Math.ceil(cityBusinesses.length / ITEMS_PER_PAGE));
       setHasMore(false);
-
     } catch (error) {
-      console.error('Error fetching businesses:', error);
+      console.error("Error fetching businesses:", error);
 
       // Fallback to sample data on error
       const cityBusinesses = sampleBusinesses.filter(
-        (business) => business.city.toLowerCase() === (city?.toLowerCase() || ''),
+        (business) =>
+          business.city.toLowerCase() === (city?.toLowerCase() || ""),
       );
 
       if (resetList || page === 1) {
@@ -440,7 +455,8 @@ export default function CityBusinessListing() {
                 {totalBusinesses} Consultants Found
               </h2>
               <p className="text-gray-600">
-                Showing {filteredBusinesses.length} of {totalBusinesses} results for {cityName}
+                Showing {filteredBusinesses.length} of {totalBusinesses} results
+                for {cityName}
                 {selectedCategory !== "all" && ` in ${selectedCategory}`}
               </p>
               <p className="text-sm text-gray-500">
@@ -521,7 +537,7 @@ export default function CityBusinessListing() {
                         const newPage = currentPage - 1;
                         setCurrentPage(newPage);
                         fetchBusinesses(newPage, true);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       disabled={loading}
                     >
@@ -542,7 +558,7 @@ export default function CityBusinessListing() {
                         const newPage = currentPage + 1;
                         setCurrentPage(newPage);
                         fetchBusinesses(newPage, true);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       disabled={loading}
                     >
@@ -561,7 +577,9 @@ export default function CityBusinessListing() {
                       disabled={loadingMore}
                       className="bg-blue-600 hover:bg-blue-700"
                     >
-                      {loadingMore ? 'Loading...' : `Load More (${Math.min(ITEMS_PER_PAGE, totalBusinesses - filteredBusinesses.length)} more)`}
+                      {loadingMore
+                        ? "Loading..."
+                        : `Load More (${Math.min(ITEMS_PER_PAGE, totalBusinesses - filteredBusinesses.length)} more)`}
                     </Button>
                   )}
                 </div>
