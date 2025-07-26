@@ -99,6 +99,19 @@ export default function CityBusinessListing() {
         const result = await response.json();
         console.log("API Response:", result);
 
+        // Update debug info
+        const timestamp = new Date().toLocaleTimeString();
+        const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`;
+        setDebugInfo(prev => ({
+          ...prev,
+          apiCalls: [...prev.apiCalls, {
+            url: apiUrl,
+            status: 'success',
+            count: result.businesses?.length || 0,
+            timestamp
+          }]
+        }));
+
         if (
           result.success &&
           result.businesses &&
