@@ -65,7 +65,7 @@ export default function AllCitiesCategories() {
               Browse All Cities & Categories
             </h1>
             <p className="text-xl text-blue-100 mb-6">
-              Find visa consultants across {indianCities.length} cities and {Object.keys(categoryMapping).length} service categories
+              Find visa consultants across {allCities.length} cities and {allCategories.length} service categories
             </p>
             
             {/* Search */}
