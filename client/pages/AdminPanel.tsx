@@ -42,37 +42,58 @@ export default function AdminPanel() {
       setLoading(true);
 
       // Load scraping statistics
-      const statsResponse = await fetch("/api/scraping/stats");
-      const statsResult = await statsResponse.json();
+      try {
+        const statsResponse = await fetch("/api/scraping/stats");
+        if (!statsResponse.ok) {
+          throw new Error(`Stats API error: ${statsResponse.status}`);
+        }
+        const statsResult = await statsResponse.json();
+        if (statsResult.success) {
+          setStats(statsResult.stats);
+        }
+      } catch (error) {
+        console.error("Failed to load stats:", error);
+      }
 
-      // Load city-category statistics
-      const cityCategoryResponse = await fetch("/api/city-category-stats");
-      const cityCategoryResult = await cityCategoryResponse.json();
+      // Load city-category statistics (optional - don't fail if this doesn't work)
+      try {
+        const cityCategoryResponse = await fetch("/api/city-category-stats");
+        if (cityCategoryResponse.ok) {
+          const cityCategoryResult = await cityCategoryResponse.json();
+          if (cityCategoryResult.success) {
+            setCityCategoryStats(cityCategoryResult.data);
+          }
+        } else {
+          console.warn("City-category stats endpoint not available:", cityCategoryResponse.status);
+        }
+      } catch (error) {
+        console.warn("City-category stats not available:", error);
+        // This is optional, so we don't show this error to the user
+      }
 
       // Load businesses
-      const businessesResponse = await fetch(
-        "/api/scraped-businesses?limit=100",
-      );
-      const businessesResult = await businessesResponse.json();
-
-      if (statsResult.success) {
-        setStats(statsResult.stats);
-      }
-
-      if (cityCategoryResult.success) {
-        setCityCategoryStats(cityCategoryResult.data);
-      }
-
-      if (businessesResult.success) {
-        setBusinesses(businessesResult.businesses || []);
-
-        // Update stats with accurate total from the businesses query
-        if (businessesResult.total) {
-          setStats((prev) => ({
-            ...prev,
-            totalBusinesses: businessesResult.total,
-          }));
+      try {
+        const businessesResponse = await fetch(
+          "/api/scraped-businesses?limit=100",
+        );
+        if (!businessesResponse.ok) {
+          throw new Error(`Business API error: ${businessesResponse.status}`);
         }
+        const businessesResult = await businessesResponse.json();
+
+        if (businessesResult.success) {
+          setBusinesses(businessesResult.businesses || []);
+
+          // Update stats with accurate total from the businesses query
+          if (businessesResult.total) {
+            setStats((prev) => ({
+              ...prev,
+              totalBusinesses: businessesResult.total,
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load businesses:", error);
       }
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
@@ -656,7 +677,7 @@ export default function AdminPanel() {
                       }
                       variant="outline"
                     >
-                      📖 Deploy Backend Guide
+                      ���� Deploy Backend Guide
                     </Button>
                   </div>
                 </CardContent>
