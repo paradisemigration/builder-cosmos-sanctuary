@@ -4,8 +4,8 @@ import { allCities, allIndianCities, allCategories } from "@/lib/all-categories"
 
 export function SiteFooter() {
   // Get top cities for the footer
-  const topCities = indianCities.slice(0, 24);
-  const allCategories = Object.entries(categoryMapping);
+  const topCities = allIndianCities.slice(0, 24);
+  const categoryList = allCategories;
 
   return (
     <footer className="bg-gray-900 text-gray-300">
