@@ -258,6 +258,8 @@ const App = () => (
             {/* Browse All Pages */}
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/all-cities-categories" element={<AllCitiesCategories />} />
+            <Route path="/all-categories" element={<AllCategories />} />
+            <Route path="/main-pages" element={<MainPages />} />
             <Route
               path="/help"
               element={
