@@ -22,18 +22,19 @@ export default function AllCitiesCategories() {
 
   // Filter cities based on search
   const filteredCities = useMemo(() => {
-    if (!searchQuery) return indianCities;
-    return indianCities.filter(city =>
+    if (!searchQuery) return allCities;
+    return allCities.filter(city =>
       city.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
-    if (!searchQuery) return Object.entries(categoryMapping);
-    return Object.entries(categoryMapping).filter(([slug, name]) =>
-      name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      slug.toLowerCase().includes(searchQuery.toLowerCase())
+    if (!searchQuery) return allCategories;
+    return allCategories.filter(category =>
+      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
 
