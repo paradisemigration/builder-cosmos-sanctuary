@@ -47,12 +47,15 @@ export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
   const navigate = useNavigate();
 
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
+  const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("rating");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [categoryDataLoaded, setCategoryDataLoaded] = useState(false);
+  const [cityDataLoaded, setCityDataLoaded] = useState(false);
 
   // Convert URL params to proper names
   const cityName = city
@@ -86,18 +89,11 @@ export default function CityCategory() {
       return;
     }
 
-    // Filter businesses by city and category
-    const filteredByCity = sampleBusinesses.filter(
-      (business) => business.city.toLowerCase() === city.toLowerCase(),
-    );
+    // Fetch category-specific businesses from Google Maps API
+    fetchCategoryBusinesses();
 
-    const filteredByCityAndCategory = filteredByCity.filter(
-      (business) => business.category === categoryName,
-    );
-
-    setBusinesses(filteredByCityAndCategory);
-    setFilteredBusinesses(filteredByCityAndCategory);
-    setLoading(false);
+    // Fetch all city businesses as fallback
+    fetchCityBusinesses();
 
     // Set page meta data with SEO optimization
     const metaData = generateCityCategoryMeta(cityName, categoryName);
@@ -125,10 +121,124 @@ export default function CityCategory() {
     if (categoryInfo) {
       setCityServiceStructuredData(cityName, categoryName, categoryInfo.description);
     }
+
+    async function fetchCategoryBusinesses() {
+      try {
+        // First try to fetch from Google Maps API via our backend
+        const response = await fetch(
+          `/api/google-maps-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.businesses && result.businesses.length > 0) {
+            setCategoryBusinesses(result.businesses);
+            setCategoryDataLoaded(true);
+            return;
+          }
+        }
+
+        // If Google Maps API fails, try scraped data
+        const scrapedResponse = await fetch(
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`
+        );
+
+        if (scrapedResponse.ok) {
+          const scrapedResult = await scrapedResponse.json();
+          if (scrapedResult.success && scrapedResult.businesses && scrapedResult.businesses.length > 0) {
+            setCategoryBusinesses(scrapedResult.businesses);
+            setCategoryDataLoaded(true);
+            return;
+          }
+        }
+
+        // No category-specific data found
+        setCategoryDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching category businesses:', error);
+        setCategoryDataLoaded(true);
+      }
+    }
+
+    async function fetchCityBusinesses() {
+      try {
+        // Fetch all businesses for the city
+        const response = await fetch(
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=50`
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.businesses) {
+            setCityBusinesses(result.businesses);
+          }
+        }
+
+        // Also include sample businesses for the city as fallback
+        const sampleCityBusinesses = sampleBusinesses.filter(
+          (business) => business.city.toLowerCase() === city.toLowerCase()
+        );
+
+        setCityBusinesses(prev => {
+          const combined = [...prev, ...sampleCityBusinesses];
+          // Remove duplicates by name and address
+          const unique = combined.filter((business, index, arr) =>
+            index === arr.findIndex(b =>
+              b.name === business.name && b.address === business.address
+            )
+          );
+          return unique;
+        });
+
+        setCityDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching city businesses:', error);
+        // Use sample businesses as fallback
+        const sampleCityBusinesses = sampleBusinesses.filter(
+          (business) => business.city.toLowerCase() === city.toLowerCase()
+        );
+        setCityBusinesses(sampleCityBusinesses);
+        setCityDataLoaded(true);
+      }
+    }
   }, [city, category, cityName, categoryName, navigate]);
 
+  // Update filtered businesses when data loads
   useEffect(() => {
-    let filtered = businesses;
+    if (categoryDataLoaded && cityDataLoaded) {
+      // Combine category businesses (priority) with city businesses
+      const combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
+
+      // Remove duplicates
+      const uniqueBusinesses = combinedBusinesses.filter((business, index, arr) =>
+        index === arr.findIndex(b =>
+          b.name === business.name && b.address === business.address
+        )
+      );
+
+      setFilteredBusinesses(uniqueBusinesses);
+      setLoading(false);
+    }
+  }, [categoryBusinesses, cityBusinesses, categoryDataLoaded, cityDataLoaded]);
+
+  useEffect(() => {
+    // Combine category businesses (first) with city businesses (second)
+    const allBusinesses = [...categoryBusinesses, ...cityBusinesses];
+
+    // Remove duplicates
+    const uniqueBusinesses = allBusinesses.filter((business, index, arr) =>
+      index === arr.findIndex(b =>
+        b.name === business.name && b.address === business.address
+      )
+    );
+
+    let filtered = uniqueBusinesses;
 
     // Search filter
     if (searchQuery) {
@@ -159,7 +269,7 @@ export default function CityCategory() {
     });
 
     setFilteredBusinesses(filtered);
-  }, [businesses, searchQuery, sortBy]);
+  }, [categoryBusinesses, cityBusinesses, searchQuery, sortBy]);
 
   const getCategoryIcon = (categorySlug: string) => {
     switch (categorySlug) {
