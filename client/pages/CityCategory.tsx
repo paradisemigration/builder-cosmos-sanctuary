@@ -32,11 +32,15 @@ import { Badge } from "@/components/ui/badge";
 import {
   sampleBusinesses,
   businessCategories,
-  indianCities,
-  categoryMapping,
-  categorySlugs,
   type Business,
 } from "@/lib/data";
+import {
+  allCities,
+  allCategories,
+  completeCategoryMapping,
+  getCategoryBySlug,
+  getCitySlug
+} from "@/lib/all-categories";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
