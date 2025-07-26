@@ -304,8 +304,28 @@ export default function CityCategory() {
 
       setFilteredBusinesses(uniqueBusinesses);
       setLoading(false);
+
+      // Update debug info
+      const metaData = generateCityCategoryMeta(cityName, categoryName);
+      setDebugInfo(prev => ({
+        ...prev,
+        categoryBusinesses: categoryBusinesses.length,
+        cityBusinesses: cityBusinesses.length,
+        totalBusinesses: uniqueBusinesses.length,
+        metaData: {
+          title: metaData.title,
+          description: metaData.description,
+          keywords: metaData.keywords
+        },
+        searchParams: {
+          city: city || '',
+          category: category || '',
+          cityName,
+          categoryName
+        }
+      }));
     }
-  }, [categoryBusinesses, cityBusinesses, categoryDataLoaded, cityDataLoaded]);
+  }, [categoryBusinesses, cityBusinesses, categoryDataLoaded, cityDataLoaded, city, category, cityName, categoryName]);
 
   useEffect(() => {
     // Combine category businesses (first) with city businesses (second)
