@@ -43,7 +43,20 @@ export default function Index() {
   useEffect(() => {
     const fetchFeaturedBusinesses = async () => {
       try {
-        const response = await fetch("/api/scraped-businesses?limit=6");
+        // Add small delay to ensure server is ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        const response = await fetch("/api/scraped-businesses?limit=6", {
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`API error: ${response.status} - ${response.statusText}`);
@@ -51,23 +64,31 @@ export default function Index() {
 
         const result = await response.json();
 
-        if (result.success && result.businesses) {
+        if (result.success && result.businesses && result.businesses.length > 0) {
           setFeaturedBusinesses(result.businesses);
+          console.log("✅ Successfully loaded featured businesses from API");
         } else {
           console.warn("API returned unsuccessful result or no businesses:", result);
           // Fallback to sample data if API fails
           setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
         }
       } catch (error) {
-        console.error("Error fetching featured businesses:", error);
+        if (error.name === 'AbortError') {
+          console.error("API request timed out after 5 seconds");
+        } else {
+          console.error("Error fetching featured businesses:", error);
+        }
         // Fallback to sample data if fetch fails completely
         setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
+        console.log("⚠️ Using sample data as fallback");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedBusinesses();
+    // Add a small delay before making the request to ensure everything is initialized
+    const timer = setTimeout(fetchFeaturedBusinesses, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
