@@ -186,10 +186,7 @@ const App = () => (
             />
 
             {/* SEO-friendly category and location routes */}
-            <Route
-              path="/category/:category"
-              element={<CategoryPage />}
-            />
+            <Route path="/category/:category" element={<CategoryPage />} />
             <Route
               path="/location/:location"
               element={<CategoryLocationPage />}
@@ -258,7 +255,10 @@ const App = () => (
 
             {/* Browse All Pages */}
             <Route path="/sitemap" element={<Sitemap />} />
-            <Route path="/all-cities-categories" element={<AllCitiesCategories />} />
+            <Route
+              path="/all-cities-categories"
+              element={<AllCitiesCategories />}
+            />
             <Route path="/all-categories" element={<AllCategories />} />
             <Route path="/main-pages" element={<MainPages />} />
             <Route

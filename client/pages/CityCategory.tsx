@@ -39,7 +39,7 @@ import {
   allCategories,
   completeCategoryMapping,
   getCategoryBySlug,
-  getCitySlug
+  getCitySlug,
 } from "@/lib/all-categories";
 
 export default function CityCategory() {
@@ -54,7 +54,9 @@ export default function CityCategory() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Convert URL params to proper names
-  const cityName = city ? city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, ' ') : "";
+  const cityName = city
+    ? city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ")
+    : "";
   const categoryInfo = category ? getCategoryBySlug(category) : null;
   const categoryName = categoryInfo?.name || category || "";
   const categorySlug = category || "";

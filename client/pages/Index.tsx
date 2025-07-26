@@ -44,7 +44,7 @@ export default function Index() {
     const fetchFeaturedBusinesses = async () => {
       try {
         // Add small delay to ensure server is ready
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
@@ -52,28 +52,37 @@ export default function Index() {
         const response = await fetch("/api/scraped-businesses?limit=6", {
           signal: controller.signal,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          throw new Error(`API error: ${response.status} - ${response.statusText}`);
+          throw new Error(
+            `API error: ${response.status} - ${response.statusText}`,
+          );
         }
 
         const result = await response.json();
 
-        if (result.success && result.businesses && result.businesses.length > 0) {
+        if (
+          result.success &&
+          result.businesses &&
+          result.businesses.length > 0
+        ) {
           setFeaturedBusinesses(result.businesses);
           console.log("✅ Successfully loaded featured businesses from API");
         } else {
-          console.warn("API returned unsuccessful result or no businesses:", result);
+          console.warn(
+            "API returned unsuccessful result or no businesses:",
+            result,
+          );
           // Fallback to sample data if API fails
           setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
         }
       } catch (error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           console.error("API request timed out after 5 seconds");
         } else {
           console.error("Error fetching featured businesses:", error);

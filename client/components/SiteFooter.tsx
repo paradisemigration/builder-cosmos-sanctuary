@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { MapPin, Building, Mail, Phone, Globe } from "lucide-react";
-import { allCities, allIndianCities, allCategories } from "@/lib/all-categories";
+import {
+  allCities,
+  allIndianCities,
+  allCategories,
+} from "@/lib/all-categories";
 
 export function SiteFooter() {
   // Get top cities for the footer
@@ -18,8 +22,10 @@ export function SiteFooter() {
               <div className="text-xs text-blue-400 font-medium">INDIA</div>
             </div>
             <p className="text-gray-400 mb-4 text-sm">
-              India's trusted platform for finding verified visa and immigration consultants.
-              Connect with expert consultants across {allCities.length} cities and {categoryList.length} service categories.
+              India's trusted platform for finding verified visa and immigration
+              consultants. Connect with expert consultants across{" "}
+              {allCities.length} cities and {categoryList.length} service
+              categories.
             </p>
             <div className="flex items-center space-x-4">
               <Link
@@ -46,10 +52,10 @@ export function SiteFooter() {
               Top Cities
             </h3>
             <div className="grid grid-cols-2 gap-1">
-              {topCities.map(city => (
+              {topCities.map((city) => (
                 <Link
                   key={city}
-                  to={`/business/${city.toLowerCase().replace(/\s+/g, '-')}`}
+                  to={`/business/${city.toLowerCase().replace(/\s+/g, "-")}`}
                   className="text-sm text-gray-400 hover:text-white transition-colors py-1"
                 >
                   {city}
@@ -90,10 +96,16 @@ export function SiteFooter() {
             </h3>
             <div className="space-y-1">
               {/* Generate popular combinations */}
-              {['Delhi', 'Mumbai', 'Bangalore', 'Chennai'].map(city => (
+              {["Delhi", "Mumbai", "Bangalore", "Chennai"].map((city) => (
                 <div key={city}>
-                  {['immigration-consultants', 'visa-consultants', 'study-abroad-consultant'].map(categorySlug => {
-                    const category = categoryList.find(c => c.slug === categorySlug);
+                  {[
+                    "immigration-consultants",
+                    "visa-consultants",
+                    "study-abroad-consultant",
+                  ].map((categorySlug) => {
+                    const category = categoryList.find(
+                      (c) => c.slug === categorySlug,
+                    );
                     return category ? (
                       <Link
                         key={`${city}-${categorySlug}`}
@@ -153,11 +165,17 @@ export function SiteFooter() {
           {/* SEO Text Block */}
           <div className="mt-6 text-xs text-gray-500 leading-relaxed">
             <p>
-              VisaConsult India is the leading platform connecting individuals with verified visa and immigration consultants
-              across {allCities.length} major cities in India and UAE. Our comprehensive directory includes specialists in {categoryList.length} service
-              categories including immigration consulting, student visa services, work permit assistance, and study abroad guidance.
-              Whether you're looking for consultants in metros like Delhi, Mumbai, Bangalore, and Chennai, or international cities like Dubai and Abu Dhabi,
-              our platform helps you find trusted professionals for all your visa and immigration needs.
+              VisaConsult India is the leading platform connecting individuals
+              with verified visa and immigration consultants across{" "}
+              {allCities.length} major cities in India and UAE. Our
+              comprehensive directory includes specialists in{" "}
+              {categoryList.length} service categories including immigration
+              consulting, student visa services, work permit assistance, and
+              study abroad guidance. Whether you're looking for consultants in
+              metros like Delhi, Mumbai, Bangalore, and Chennai, or
+              international cities like Dubai and Abu Dhabi, our platform helps
+              you find trusted professionals for all your visa and immigration
+              needs.
             </p>
           </div>
         </div>

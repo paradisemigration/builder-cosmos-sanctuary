@@ -90,8 +90,18 @@ export function Navigation({ className = "" }: NavigationProps) {
               <div className="relative group">
                 <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700 hover:text-purple-600 hover:bg-purple-50 flex items-center gap-1">
                   Browse All
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
@@ -101,28 +111,36 @@ export function Navigation({ className = "" }: NavigationProps) {
                       className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                     >
                       <div className="font-medium">Cities & Categories</div>
-                      <div className="text-xs text-gray-500">Browse by location and service type</div>
+                      <div className="text-xs text-gray-500">
+                        Browse by location and service type
+                      </div>
                     </Link>
                     <Link
                       to="/all-categories"
                       className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                     >
                       <div className="font-medium">All 48 Categories</div>
-                      <div className="text-xs text-gray-500">Complete service directory</div>
+                      <div className="text-xs text-gray-500">
+                        Complete service directory
+                      </div>
                     </Link>
                     <Link
                       to="/sitemap"
                       className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                     >
                       <div className="font-medium">Complete Sitemap</div>
-                      <div className="text-xs text-gray-500">All pages and combinations</div>
+                      <div className="text-xs text-gray-500">
+                        All pages and combinations
+                      </div>
                     </Link>
                     <Link
                       to="/main-pages"
                       className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                     >
                       <div className="font-medium">All Main Pages</div>
-                      <div className="text-xs text-gray-500">Admin, login, and feature pages</div>
+                      <div className="text-xs text-gray-500">
+                        Admin, login, and feature pages
+                      </div>
                     </Link>
                   </div>
                 </div>

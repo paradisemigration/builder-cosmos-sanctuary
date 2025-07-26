@@ -8,13 +8,23 @@ import { categoryMapping } from "@/lib/data";
 export function PopularCombinations() {
   // Popular cities
   const popularCities = [
-    "Delhi", "Mumbai", "Bangalore", "Chennai", 
-    "Hyderabad", "Pune", "Ahmedabad", "Kolkata"
+    "Delhi",
+    "Mumbai",
+    "Bangalore",
+    "Chennai",
+    "Hyderabad",
+    "Pune",
+    "Ahmedabad",
+    "Kolkata",
   ];
 
   // Popular categories
   const popularCategories = [
-    { slug: "immigration-consultants", name: "Immigration Lawyers", searches: "2.5k" },
+    {
+      slug: "immigration-consultants",
+      name: "Immigration Lawyers",
+      searches: "2.5k",
+    },
     { slug: "visa-consultants", name: "Visa Consultants", searches: "1.8k" },
     { slug: "study-abroad", name: "Study Abroad", searches: "1.5k" },
     { slug: "work-permit", name: "Work Permit", searches: "1.2k" },
@@ -22,12 +32,42 @@ export function PopularCombinations() {
 
   // Generate popular combinations
   const popularCombinations = [
-    { city: "Delhi", category: "immigration-consultants", name: "Immigration Lawyers in Delhi", count: "150+" },
-    { city: "Mumbai", category: "visa-consultants", name: "Visa Consultants in Mumbai", count: "130+" },
-    { city: "Bangalore", category: "study-abroad", name: "Study Abroad in Bangalore", count: "120+" },
-    { city: "Chennai", category: "work-permit", name: "Work Permit in Chennai", count: "100+" },
-    { city: "Hyderabad", category: "immigration-consultants", name: "Immigration Lawyers in Hyderabad", count: "95+" },
-    { city: "Pune", category: "visa-consultants", name: "Visa Consultants in Pune", count: "85+" },
+    {
+      city: "Delhi",
+      category: "immigration-consultants",
+      name: "Immigration Lawyers in Delhi",
+      count: "150+",
+    },
+    {
+      city: "Mumbai",
+      category: "visa-consultants",
+      name: "Visa Consultants in Mumbai",
+      count: "130+",
+    },
+    {
+      city: "Bangalore",
+      category: "study-abroad",
+      name: "Study Abroad in Bangalore",
+      count: "120+",
+    },
+    {
+      city: "Chennai",
+      category: "work-permit",
+      name: "Work Permit in Chennai",
+      count: "100+",
+    },
+    {
+      city: "Hyderabad",
+      category: "immigration-consultants",
+      name: "Immigration Lawyers in Hyderabad",
+      count: "95+",
+    },
+    {
+      city: "Pune",
+      category: "visa-consultants",
+      name: "Visa Consultants in Pune",
+      count: "85+",
+    },
   ];
 
   return (
@@ -51,7 +91,7 @@ export function PopularCombinations() {
             Top Service Categories
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {popularCategories.map(category => (
+            {popularCategories.map((category) => (
               <Link
                 key={category.slug}
                 to={`/category/${category.slug}`}
@@ -136,7 +176,7 @@ export function PopularCombinations() {
             Browse by City
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-            {popularCities.map(city => (
+            {popularCities.map((city) => (
               <Link
                 key={city}
                 to={`/business/${city.toLowerCase()}`}
@@ -157,7 +197,9 @@ export function PopularCombinations() {
         <div className="text-center">
           <div className="max-w-2xl mx-auto">
             <p className="text-gray-600 mb-6">
-              Explore all {popularCities.length * Object.keys(categoryMapping).length}+ city-category combinations
+              Explore all{" "}
+              {popularCities.length * Object.keys(categoryMapping).length}+
+              city-category combinations
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
@@ -166,9 +208,7 @@ export function PopularCombinations() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/sitemap">
-                  View Complete Sitemap
-                </Link>
+                <Link to="/sitemap">View Complete Sitemap</Link>
               </Button>
             </div>
           </div>

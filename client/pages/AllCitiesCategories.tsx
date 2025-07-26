@@ -1,6 +1,13 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Building, Search, TrendingUp, Star, Users } from "lucide-react";
+import {
+  MapPin,
+  Building,
+  Search,
+  TrendingUp,
+  Star,
+  Users,
+} from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +20,7 @@ import {
   uaeCities,
   allCategories,
   completeCategoryMapping,
-  getCitySlug
+  getCitySlug,
 } from "@/lib/all-categories";
 
 export default function AllCitiesCategories() {
@@ -23,35 +30,45 @@ export default function AllCitiesCategories() {
   // Filter cities based on search
   const filteredCities = useMemo(() => {
     if (!searchQuery) return allCities;
-    return allCities.filter(city =>
-      city.toLowerCase().includes(searchQuery.toLowerCase())
+    return allCities.filter((city) =>
+      city.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery]);
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
     if (!searchQuery) return allCategories;
-    return allCategories.filter(category =>
-      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return allCategories.filter(
+      (category) =>
+        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        category.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        category.description.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery]);
 
   // Popular cities (based on business centers in India)
   const popularCities = [
-    "Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Kolkata",
-    "Pune", "Ahmedabad", "Jaipur", "Gurgaon", "Noida", "Chandigarh"
+    "Delhi",
+    "Mumbai",
+    "Bangalore",
+    "Chennai",
+    "Hyderabad",
+    "Kolkata",
+    "Pune",
+    "Ahmedabad",
+    "Jaipur",
+    "Gurgaon",
+    "Noida",
+    "Chandigarh",
   ];
 
-  const getCityUrl = (city: string) => 
-    `/business/${city.toLowerCase().replace(/\s+/g, '-')}`;
+  const getCityUrl = (city: string) =>
+    `/business/${city.toLowerCase().replace(/\s+/g, "-")}`;
 
-  const getCategoryUrl = (slug: string) => 
-    `/category/${slug}`;
+  const getCategoryUrl = (slug: string) => `/category/${slug}`;
 
   const getCityCategoryUrl = (city: string, slug: string) =>
-    `/business/${city.toLowerCase().replace(/\s+/g, '-')}/${slug}`;
+    `/business/${city.toLowerCase().replace(/\s+/g, "-")}/${slug}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -65,9 +82,10 @@ export default function AllCitiesCategories() {
               Browse All Cities & Categories
             </h1>
             <p className="text-xl text-blue-100 mb-6">
-              Find visa consultants across {allCities.length} cities and {allCategories.length} service categories
+              Find visa consultants across {allCities.length} cities and{" "}
+              {allCategories.length} service categories
             </p>
-            
+
             {/* Search */}
             <div className="max-w-md mx-auto">
               <div className="relative">
@@ -97,7 +115,9 @@ export default function AllCitiesCategories() {
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{allCities.length * allCategories.length}</p>
+                  <p className="text-2xl font-bold">
+                    {allCities.length * allCategories.length}
+                  </p>
                   <p className="text-sm text-blue-100">Total Pages</p>
                 </CardContent>
               </Card>
@@ -117,8 +137,12 @@ export default function AllCitiesCategories() {
         <div className="container mx-auto max-w-7xl px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="cities">Cities ({filteredCities.length})</TabsTrigger>
-              <TabsTrigger value="categories">Categories ({filteredCategories.length})</TabsTrigger>
+              <TabsTrigger value="cities">
+                Cities ({filteredCities.length})
+              </TabsTrigger>
+              <TabsTrigger value="categories">
+                Categories ({filteredCategories.length})
+              </TabsTrigger>
               <TabsTrigger value="popular">Popular Combinations</TabsTrigger>
             </TabsList>
 
@@ -129,7 +153,8 @@ export default function AllCitiesCategories() {
                   All Cities in India
                 </h2>
                 <p className="text-gray-600">
-                  Choose a city to view all visa consultants and services available
+                  Choose a city to view all visa consultants and services
+                  available
                 </p>
               </div>
 
@@ -141,7 +166,7 @@ export default function AllCitiesCategories() {
                     Popular Cities
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                    {popularCities.map(city => (
+                    {popularCities.map((city) => (
                       <Link
                         key={city}
                         to={getCityUrl(city)}
@@ -167,12 +192,14 @@ export default function AllCitiesCategories() {
               {/* All Cities */}
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  {searchQuery ? `Cities matching "${searchQuery}"` : "All Cities"}
+                  {searchQuery
+                    ? `Cities matching "${searchQuery}"`
+                    : "All Cities"}
                 </h3>
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {filteredCities.map(city => (
+                {filteredCities.map((city) => (
                   <Link
                     key={city}
                     to={getCityUrl(city)}
@@ -221,7 +248,10 @@ export default function AllCitiesCategories() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCategories.map(([slug, name]) => (
-                  <Card key={slug} className="hover:shadow-lg transition-all duration-200 group border-2 hover:border-purple-300">
+                  <Card
+                    key={slug}
+                    className="hover:shadow-lg transition-all duration-200 group border-2 hover:border-purple-300"
+                  >
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
@@ -248,7 +278,7 @@ export default function AllCitiesCategories() {
                           <span>50+ consultants</span>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Link
                           to={getCategoryUrl(slug)}
@@ -258,7 +288,7 @@ export default function AllCitiesCategories() {
                             View All {name}
                           </Button>
                         </Link>
-                        
+
                         {/* Show top 3 cities for this category */}
                         <div className="text-xs text-gray-500">
                           <p className="mb-1">Popular in:</p>
@@ -308,8 +338,11 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {popularCities.slice(0, 12).map(city => (
-                  <Card key={city} className="hover:shadow-lg transition-shadow duration-200">
+                {popularCities.slice(0, 12).map((city) => (
+                  <Card
+                    key={city}
+                    className="hover:shadow-lg transition-shadow duration-200"
+                  >
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
@@ -320,27 +353,30 @@ export default function AllCitiesCategories() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(categoryMapping).slice(0, 4).map(([slug, name]) => (
-                          <Link
-                            key={slug}
-                            to={getCityCategoryUrl(city, slug)}
-                            className="block p-2 text-sm bg-gray-50 hover:bg-blue-50 rounded transition-colors group"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-gray-700 group-hover:text-blue-600">
-                                {name}
-                              </span>
-                              <Badge variant="secondary" className="text-xs">
-                                {Math.floor(Math.random() * 50) + 10}
-                              </Badge>
-                            </div>
-                          </Link>
-                        ))}
+                        {Object.entries(categoryMapping)
+                          .slice(0, 4)
+                          .map(([slug, name]) => (
+                            <Link
+                              key={slug}
+                              to={getCityCategoryUrl(city, slug)}
+                              className="block p-2 text-sm bg-gray-50 hover:bg-blue-50 rounded transition-colors group"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-700 group-hover:text-blue-600">
+                                  {name}
+                                </span>
+                                <Badge variant="secondary" className="text-xs">
+                                  {Math.floor(Math.random() * 50) + 10}
+                                </Badge>
+                              </div>
+                            </Link>
+                          ))}
                         <Link
                           to={getCityUrl(city)}
                           className="block text-center text-sm text-blue-600 hover:underline pt-2"
                         >
-                          View all {Object.keys(categoryMapping).length} categories →
+                          View all {Object.keys(categoryMapping).length}{" "}
+                          categories →
                         </Link>
                       </div>
                     </CardContent>
@@ -363,14 +399,15 @@ export default function AllCitiesCategories() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild>
-              <Link to="/add-business">
-                List Your Business
-              </Link>
+              <Link to="/add-business">List Your Business</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600" asChild>
-              <Link to="/contact">
-                Contact Support
-              </Link>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-blue-600"
+              asChild
+            >
+              <Link to="/contact">Contact Support</Link>
             </Button>
           </div>
         </div>

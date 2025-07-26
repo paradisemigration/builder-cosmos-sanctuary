@@ -19,7 +19,7 @@ import {
   uaeCities,
   allCategories,
   getCitySlug,
-  getAllCombinations
+  getAllCombinations,
 } from "@/lib/all-categories";
 
 export default function Sitemap() {
@@ -39,34 +39,43 @@ export default function Sitemap() {
 
     // Search filter
     if (searchQuery) {
-      filtered = filtered.filter(combo =>
-        combo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        combo.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (combo.city && combo.city.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (combo.category && combo.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      filtered = filtered.filter(
+        (combo) =>
+          combo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          combo.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (combo.city &&
+            combo.city.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (combo.category &&
+            combo.category.toLowerCase().includes(searchQuery.toLowerCase())),
       );
     }
 
     // City filter
     if (selectedCity !== "all") {
-      filtered = filtered.filter(combo => 
-        combo.city === selectedCity || combo.type === 'category'
+      filtered = filtered.filter(
+        (combo) => combo.city === selectedCity || combo.type === "category",
       );
     }
 
     // Category filter
     if (selectedCategory !== "all") {
-      filtered = filtered.filter(combo =>
-        combo.category === selectedCategory || combo.type === 'city'
+      filtered = filtered.filter(
+        (combo) => combo.category === selectedCategory || combo.type === "city",
       );
     }
 
     return filtered;
   }, [allCombinations, searchQuery, selectedCity, selectedCategory]);
 
-  const cityPageCount = filteredCombinations.filter(c => c.type === 'city').length;
-  const categoryPageCount = filteredCombinations.filter(c => c.type === 'category').length;
-  const cityCategoriPageCount = filteredCombinations.filter(c => c.type === 'city-category').length;
+  const cityPageCount = filteredCombinations.filter(
+    (c) => c.type === "city",
+  ).length;
+  const categoryPageCount = filteredCombinations.filter(
+    (c) => c.type === "category",
+  ).length;
+  const cityCategoriPageCount = filteredCombinations.filter(
+    (c) => c.type === "city-category",
+  ).length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -80,7 +89,8 @@ export default function Sitemap() {
               All Cities & Categories
             </h1>
             <p className="text-xl text-blue-100 mb-6">
-              Browse {allCities.length} cities and {allCategories.length} categories
+              Browse {allCities.length} cities and {allCategories.length}{" "}
+              categories
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-md mx-auto">
               <Card className="bg-white/10 border-white/20 text-white">
@@ -97,7 +107,9 @@ export default function Sitemap() {
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{allCities.length * allCategories.length}</p>
+                  <p className="text-2xl font-bold">
+                    {allCities.length * allCategories.length}
+                  </p>
                   <p className="text-sm text-blue-100">Total Pages</p>
                 </CardContent>
               </Card>
@@ -129,20 +141,27 @@ export default function Sitemap() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Cities</SelectItem>
-                  {allCities.slice(0, 20).map(city => (
-                    <SelectItem key={city} value={city}>{city}</SelectItem>
+                  {allCities.slice(0, 20).map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Filter by category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {allCategories.map(category => (
-                    <SelectItem key={category.slug} value={category.name}>{category.name}</SelectItem>
+                  {allCategories.map((category) => (
+                    <SelectItem key={category.slug} value={category.name}>
+                      {category.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -179,7 +198,7 @@ export default function Sitemap() {
             </span>
             <span>•</span>
             <span>
-              <strong>{categoryPageCount}</strong> category pages  
+              <strong>{categoryPageCount}</strong> category pages
             </span>
             <span>•</span>
             <span>
@@ -222,9 +241,9 @@ export default function Sitemap() {
                 >
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-blue-50 rounded-lg flex-shrink-0">
-                      {combo.type === 'city' ? (
+                      {combo.type === "city" ? (
                         <MapPin className="w-4 h-4 text-blue-600" />
-                      ) : combo.type === 'category' ? (
+                      ) : combo.type === "category" ? (
                         <Building className="w-4 h-4 text-purple-600" />
                       ) : (
                         <div className="flex">
@@ -244,17 +263,23 @@ export default function Sitemap() {
                         <Badge
                           variant="outline"
                           className={`text-xs ${
-                            combo.type === 'city'
-                              ? 'text-blue-600 border-blue-200'
-                              : combo.type === 'category'
-                              ? 'text-purple-600 border-purple-200'
-                              : 'text-green-600 border-green-200'
+                            combo.type === "city"
+                              ? "text-blue-600 border-blue-200"
+                              : combo.type === "category"
+                                ? "text-purple-600 border-purple-200"
+                                : "text-green-600 border-green-200"
                           }`}
                         >
-                          {combo.type === 'city' ? 'City' : combo.type === 'category' ? 'Category' : 'City + Category'}
+                          {combo.type === "city"
+                            ? "City"
+                            : combo.type === "category"
+                              ? "Category"
+                              : "City + Category"}
                         </Badge>
                         {combo.city && (
-                          <span className="text-xs text-gray-500">{combo.city}</span>
+                          <span className="text-xs text-gray-500">
+                            {combo.city}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -280,7 +305,7 @@ export default function Sitemap() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-2">
-                  {allCities.slice(0, 16).map(city => (
+                  {allCities.slice(0, 16).map((city) => (
                     <Link
                       key={city}
                       to={`/business/${getCitySlug(city)}`}

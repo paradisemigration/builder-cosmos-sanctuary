@@ -1,9 +1,23 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { 
-  Search, Filter, MapPin, Star, ChevronDown, Grid, List, SortAsc, 
-  Users, Building, TrendingUp, ArrowLeft, Briefcase, GraduationCap,
-  Globe, Award, Flag
+import {
+  Search,
+  Filter,
+  MapPin,
+  Star,
+  ChevronDown,
+  Grid,
+  List,
+  SortAsc,
+  Users,
+  Building,
+  TrendingUp,
+  ArrowLeft,
+  Briefcase,
+  GraduationCap,
+  Globe,
+  Award,
+  Flag,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -18,20 +32,20 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  allCities, 
-  allIndianCities, 
-  uaeCities, 
-  allCategories, 
+import {
+  allCities,
+  allIndianCities,
+  uaeCities,
+  allCategories,
   getCategoryBySlug,
   getCitySlug,
-  popularCombinations
+  popularCombinations,
 } from "@/lib/all-categories";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -48,21 +62,21 @@ export default function CategoryPage() {
   // Filter cities based on search and country selection
   const filteredCities = useMemo(() => {
     let cities = allCities;
-    
+
     // Filter by country
     if (selectedCountry === "india") {
       cities = allIndianCities;
     } else if (selectedCountry === "uae") {
       cities = uaeCities;
     }
-    
+
     // Filter by search
     if (searchQuery) {
-      cities = cities.filter(city =>
-        city.toLowerCase().includes(searchQuery.toLowerCase())
+      cities = cities.filter((city) =>
+        city.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
-    
+
     // Sort cities
     cities.sort((a, b) => {
       switch (sortBy) {
@@ -70,7 +84,14 @@ export default function CategoryPage() {
           return a.localeCompare(b);
         case "popular":
           // Put popular cities first
-          const popularCities = ["Delhi", "Mumbai", "Bangalore", "Chennai", "Dubai", "Abu Dhabi"];
+          const popularCities = [
+            "Delhi",
+            "Mumbai",
+            "Bangalore",
+            "Chennai",
+            "Dubai",
+            "Abu Dhabi",
+          ];
           const aIndex = popularCities.indexOf(a);
           const bIndex = popularCities.indexOf(b);
           if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
@@ -81,7 +102,7 @@ export default function CategoryPage() {
           return 0;
       }
     });
-    
+
     return cities;
   }, [searchQuery, selectedCountry, sortBy]);
 
@@ -91,12 +112,14 @@ export default function CategoryPage() {
       navigate("/all-categories");
       return;
     }
-    
+
     const fetchBusinesses = async () => {
       try {
         setLoading(true);
         // Try to fetch real data from API
-        const response = await fetch(`/api/scraped-businesses?category=${encodeURIComponent(categoryInfo.name)}&limit=50`);
+        const response = await fetch(
+          `/api/scraped-businesses?category=${encodeURIComponent(categoryInfo.name)}&limit=50`,
+        );
         if (response.ok) {
           const result = await response.json();
           if (result.success && result.businesses) {
@@ -111,27 +134,42 @@ export default function CategoryPage() {
     };
 
     fetchBusinesses();
-    
+
     // Set page title
     document.title = `${categoryInfo.name} - All Cities | VisaConsult India`;
   }, [categoryInfo, navigate]);
 
   const getCategoryIcon = (slug: string) => {
-    if (slug.includes('student') || slug.includes('education') || slug.includes('study')) {
+    if (
+      slug.includes("student") ||
+      slug.includes("education") ||
+      slug.includes("study")
+    ) {
       return <GraduationCap className="w-6 h-6" />;
-    } else if (slug.includes('work') || slug.includes('business')) {
+    } else if (slug.includes("work") || slug.includes("business")) {
       return <Briefcase className="w-6 h-6" />;
-    } else if (slug.includes('golden') || slug.includes('pr') || slug.includes('citizenship')) {
+    } else if (
+      slug.includes("golden") ||
+      slug.includes("pr") ||
+      slug.includes("citizenship")
+    ) {
       return <Award className="w-6 h-6" />;
-    } else if (slug.includes('canada') || slug.includes('australia') || slug.includes('usa') || slug.includes('uk') || slug.includes('europe')) {
+    } else if (
+      slug.includes("canada") ||
+      slug.includes("australia") ||
+      slug.includes("usa") ||
+      slug.includes("uk") ||
+      slug.includes("europe")
+    ) {
       return <Flag className="w-6 h-6" />;
-    } else if (slug.includes('uae') || slug.includes('dubai')) {
+    } else if (slug.includes("uae") || slug.includes("dubai")) {
       return <Globe className="w-6 h-6" />;
     }
     return <Building className="w-6 h-6" />;
   };
 
-  const getCityUrl = (city: string) => `/business/${getCitySlug(city)}/${category}`;
+  const getCityUrl = (city: string) =>
+    `/business/${getCitySlug(city)}/${category}`;
 
   if (!categoryInfo) {
     return (
@@ -141,8 +179,12 @@ export default function CategoryPage() {
           <div className="container mx-auto max-w-6xl">
             <div className="text-center py-20">
               <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-gray-600 mb-4">Category Not Found</h1>
-              <p className="text-gray-500 mb-6">The category you're looking for doesn't exist.</p>
+              <h1 className="text-2xl font-bold text-gray-600 mb-4">
+                Category Not Found
+              </h1>
+              <p className="text-gray-500 mb-6">
+                The category you're looking for doesn't exist.
+              </p>
               <Button onClick={() => navigate("/all-categories")}>
                 View All Categories
               </Button>
@@ -167,7 +209,10 @@ export default function CategoryPage() {
                 Home
               </Link>
               <span>/</span>
-              <Link to="/all-categories" className="text-blue-100 hover:text-white">
+              <Link
+                to="/all-categories"
+                className="text-blue-100 hover:text-white"
+              >
                 Categories
               </Link>
               <span>/</span>
@@ -211,7 +256,9 @@ export default function CategoryPage() {
                   <MapPin className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">Available in</p>
-                    <p className="text-xl font-bold">{allCities.length} Cities</p>
+                    <p className="text-xl font-bold">
+                      {allCities.length} Cities
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -222,7 +269,9 @@ export default function CategoryPage() {
                   <Building className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">Total Consultants</p>
-                    <p className="text-xl font-bold">{businesses.length || "50+"}</p>
+                    <p className="text-xl font-bold">
+                      {businesses.length || "50+"}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -270,7 +319,10 @@ export default function CategoryPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+              <Select
+                value={selectedCountry}
+                onValueChange={setSelectedCountry}
+              >
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -362,10 +414,11 @@ export default function CategoryPage() {
             >
               {filteredCities.map((city) => {
                 const isUAE = uaeCities.includes(city);
-                const isPopular = popularCombinations.some(combo => 
-                  combo.city === city && combo.category === categoryInfo.slug
+                const isPopular = popularCombinations.some(
+                  (combo) =>
+                    combo.city === city && combo.category === categoryInfo.slug,
                 );
-                
+
                 return (
                   <Link
                     key={city}
@@ -377,8 +430,12 @@ export default function CategoryPage() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`p-3 rounded-lg ${isUAE ? 'bg-orange-100' : 'bg-blue-100'} group-hover:${isUAE ? 'bg-orange-200' : 'bg-blue-200'} transition-colors`}>
-                        <MapPin className={`w-5 h-5 ${isUAE ? 'text-orange-600' : 'text-blue-600'}`} />
+                      <div
+                        className={`p-3 rounded-lg ${isUAE ? "bg-orange-100" : "bg-blue-100"} group-hover:${isUAE ? "bg-orange-200" : "bg-blue-200"} transition-colors`}
+                      >
+                        <MapPin
+                          className={`w-5 h-5 ${isUAE ? "text-orange-600" : "text-blue-600"}`}
+                        />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
@@ -396,7 +453,7 @@ export default function CategoryPage() {
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge variant="outline" className="text-xs">
-                            {isUAE ? 'UAE' : 'India'}
+                            {isUAE ? "UAE" : "India"}
                           </Badge>
                           <span className="text-xs text-gray-500">
                             10+ consultants
@@ -420,7 +477,7 @@ export default function CategoryPage() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allCategories
-              .filter(cat => cat.slug !== categoryInfo.slug)
+              .filter((cat) => cat.slug !== categoryInfo.slug)
               .slice(0, 8)
               .map((cat) => (
                 <Link

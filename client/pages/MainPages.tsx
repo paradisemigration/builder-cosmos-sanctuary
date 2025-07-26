@@ -1,9 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { 
-  Home, Search, MapPin, Building, DollarSign, Plus, Info, Phone, HelpCircle, 
-  Shield, FileText, LogIn, Settings, Upload, Activity, Users, Grid, Star,
-  AlertTriangle, ExternalLink, ChevronRight, Clock, TrendingUp
+import {
+  Home,
+  Search,
+  MapPin,
+  Building,
+  DollarSign,
+  Plus,
+  Info,
+  Phone,
+  HelpCircle,
+  Shield,
+  FileText,
+  LogIn,
+  Settings,
+  Upload,
+  Activity,
+  Users,
+  Grid,
+  Star,
+  AlertTriangle,
+  ExternalLink,
+  ChevronRight,
+  Clock,
+  TrendingUp,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -19,54 +39,130 @@ export default function MainPages() {
   // Group pages by category
   const pageGroups = {
     main: [
-      { ...mainPageLinks.find(p => p.path === "/"), icon: Home, color: "blue" },
-      { ...mainPageLinks.find(p => p.path === "/business"), icon: Search, color: "green" },
-      { ...mainPageLinks.find(p => p.path === "/all-cities-categories"), icon: Grid, color: "purple" },
-      { ...mainPageLinks.find(p => p.path === "/sitemap"), icon: MapPin, color: "orange" },
+      {
+        ...mainPageLinks.find((p) => p.path === "/"),
+        icon: Home,
+        color: "blue",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/business"),
+        icon: Search,
+        color: "green",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/all-cities-categories"),
+        icon: Grid,
+        color: "purple",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/sitemap"),
+        icon: MapPin,
+        color: "orange",
+      },
     ],
     business: [
-      { ...mainPageLinks.find(p => p.path === "/plans"), icon: DollarSign, color: "yellow" },
-      { ...mainPageLinks.find(p => p.path === "/add-business"), icon: Plus, color: "green" },
-      { ...mainPageLinks.find(p => p.path === "/dashboard"), icon: Activity, color: "blue" },
-      { ...mainPageLinks.find(p => p.path === "/cant-find-business"), icon: AlertTriangle, color: "orange" },
+      {
+        ...mainPageLinks.find((p) => p.path === "/plans"),
+        icon: DollarSign,
+        color: "yellow",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/add-business"),
+        icon: Plus,
+        color: "green",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/dashboard"),
+        icon: Activity,
+        color: "blue",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/cant-find-business"),
+        icon: AlertTriangle,
+        color: "orange",
+      },
     ],
     info: [
-      { ...mainPageLinks.find(p => p.path === "/about"), icon: Info, color: "blue" },
-      { ...mainPageLinks.find(p => p.path === "/contact"), icon: Phone, color: "green" },
-      { ...mainPageLinks.find(p => p.path === "/help"), icon: HelpCircle, color: "purple" },
+      {
+        ...mainPageLinks.find((p) => p.path === "/about"),
+        icon: Info,
+        color: "blue",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/contact"),
+        icon: Phone,
+        color: "green",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/help"),
+        icon: HelpCircle,
+        color: "purple",
+      },
     ],
     legal: [
-      { ...mainPageLinks.find(p => p.path === "/privacy"), icon: Shield, color: "red" },
-      { ...mainPageLinks.find(p => p.path === "/terms"), icon: FileText, color: "blue" },
+      {
+        ...mainPageLinks.find((p) => p.path === "/privacy"),
+        icon: Shield,
+        color: "red",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/terms"),
+        icon: FileText,
+        color: "blue",
+      },
     ],
     admin: [
-      { ...mainPageLinks.find(p => p.path === "/login"), icon: LogIn, color: "gray" },
-      { ...mainPageLinks.find(p => p.path === "/admin"), icon: Settings, color: "red" },
-      { ...mainPageLinks.find(p => p.path === "/admin/bulk-upload"), icon: Upload, color: "purple" },
-      { ...mainPageLinks.find(p => p.path === "/admin/status"), icon: Activity, color: "orange" },
-    ]
+      {
+        ...mainPageLinks.find((p) => p.path === "/login"),
+        icon: LogIn,
+        color: "gray",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/admin"),
+        icon: Settings,
+        color: "red",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/admin/bulk-upload"),
+        icon: Upload,
+        color: "purple",
+      },
+      {
+        ...mainPageLinks.find((p) => p.path === "/admin/status"),
+        icon: Activity,
+        color: "orange",
+      },
+    ],
   };
 
   // Filter pages based on search
-  const filteredPages = searchQuery 
-    ? mainPageLinks.filter(page => 
-        page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        page.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPages = searchQuery
+    ? mainPageLinks.filter(
+        (page) =>
+          page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          page.description.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : mainPageLinks;
 
   const getIconComponent = (iconName: any) => {
     const IconComponent = iconName;
-    return IconComponent ? <IconComponent className="w-5 h-5" /> : <Building className="w-5 h-5" />;
+    return IconComponent ? (
+      <IconComponent className="w-5 h-5" />
+    ) : (
+      <Building className="w-5 h-5" />
+    );
   };
 
   const getColorClasses = (color: string) => {
     const colors = {
       blue: "border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100",
       green: "border-green-200 bg-green-50 text-green-600 hover:bg-green-100",
-      purple: "border-purple-200 bg-purple-50 text-purple-600 hover:bg-purple-100",
-      orange: "border-orange-200 bg-orange-50 text-orange-600 hover:bg-orange-100",
-      yellow: "border-yellow-200 bg-yellow-50 text-yellow-600 hover:bg-yellow-100",
+      purple:
+        "border-purple-200 bg-purple-50 text-purple-600 hover:bg-purple-100",
+      orange:
+        "border-orange-200 bg-orange-50 text-orange-600 hover:bg-orange-100",
+      yellow:
+        "border-yellow-200 bg-yellow-50 text-yellow-600 hover:bg-yellow-100",
       red: "border-red-200 bg-red-50 text-red-600 hover:bg-red-100",
       gray: "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100",
     };
@@ -74,16 +170,14 @@ export default function MainPages() {
   };
 
   const renderPageCard = (page: any, showIcon = true) => (
-    <Link
-      key={page.path}
-      to={page.path}
-      className="group block"
-    >
+    <Link key={page.path} to={page.path} className="group block">
       <Card className="hover:shadow-lg transition-all duration-200 border-2 hover:border-blue-300">
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
             {showIcon && page.icon && (
-              <div className={`p-3 rounded-lg border-2 ${getColorClasses(page.color)} transition-colors`}>
+              <div
+                className={`p-3 rounded-lg border-2 ${getColorClasses(page.color)} transition-colors`}
+              >
                 {getIconComponent(page.icon)}
               </div>
             )}
@@ -91,9 +185,7 @@ export default function MainPages() {
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
                 {page.name}
               </h3>
-              <p className="text-sm text-gray-600 mb-2">
-                {page.description}
-              </p>
+              <p className="text-sm text-gray-600 mb-2">{page.description}</p>
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">
                   {page.path}
@@ -114,7 +206,7 @@ export default function MainPages() {
         {title}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {pages.filter(p => p).map(page => renderPageCard(page))}
+        {pages.filter((p) => p).map((page) => renderPageCard(page))}
       </div>
     </div>
   );
@@ -133,7 +225,7 @@ export default function MainPages() {
             <p className="text-xl text-blue-100 mb-6">
               Complete directory of all important pages and features
             </p>
-            
+
             {/* Search */}
             <div className="max-w-md mx-auto mb-6">
               <div className="relative">
@@ -192,9 +284,9 @@ export default function MainPages() {
                   Found {filteredPages.length} pages matching your search
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPages.map(page => renderPageCard(page, false))}
+                {filteredPages.map((page) => renderPageCard(page, false))}
               </div>
             </div>
           ) : (
@@ -217,8 +309,9 @@ export default function MainPages() {
                       Quick Access to All Features
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto">
-                      Navigate to any section of VisaConsult India platform. Find consultants, 
-                      manage your business, access admin tools, or get support.
+                      Navigate to any section of VisaConsult India platform.
+                      Find consultants, manage your business, access admin
+                      tools, or get support.
                     </p>
                   </div>
 
@@ -230,8 +323,12 @@ export default function MainPages() {
                           <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">
                             <Search className="w-6 h-6 text-green-600" />
                           </div>
-                          <h3 className="font-semibold text-gray-900 mb-2">Find Consultants</h3>
-                          <p className="text-sm text-gray-600">Search and browse consultants</p>
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            Find Consultants
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Search and browse consultants
+                          </p>
                         </CardContent>
                       </Card>
                     </Link>
@@ -242,8 +339,12 @@ export default function MainPages() {
                           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-200 transition-colors">
                             <Plus className="w-6 h-6 text-blue-600" />
                           </div>
-                          <h3 className="font-semibold text-gray-900 mb-2">List Business</h3>
-                          <p className="text-sm text-gray-600">Add your business to directory</p>
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            List Business
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Add your business to directory
+                          </p>
                         </CardContent>
                       </Card>
                     </Link>
@@ -254,8 +355,12 @@ export default function MainPages() {
                           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-red-200 transition-colors">
                             <Settings className="w-6 h-6 text-red-600" />
                           </div>
-                          <h3 className="font-semibold text-gray-900 mb-2">Admin Panel</h3>
-                          <p className="text-sm text-gray-600">Manage platform (Admin only)</p>
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            Admin Panel
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Manage platform (Admin only)
+                          </p>
                         </CardContent>
                       </Card>
                     </Link>
@@ -266,8 +371,12 @@ export default function MainPages() {
                           <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 transition-colors">
                             <HelpCircle className="w-6 h-6 text-purple-600" />
                           </div>
-                          <h3 className="font-semibold text-gray-900 mb-2">Get Help</h3>
-                          <p className="text-sm text-gray-600">Support and FAQ</p>
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            Get Help
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Support and FAQ
+                          </p>
                         </CardContent>
                       </Card>
                     </Link>
@@ -286,22 +395,34 @@ export default function MainPages() {
                         <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           <div>
-                            <p className="font-medium text-gray-900">48 Service Categories Added</p>
-                            <p className="text-sm text-gray-600">Complete category directory now available</p>
+                            <p className="font-medium text-gray-900">
+                              48 Service Categories Added
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Complete category directory now available
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           <div>
-                            <p className="font-medium text-gray-900">UAE Cities Integration</p>
-                            <p className="text-sm text-gray-600">Now covering Dubai, Abu Dhabi, and more UAE cities</p>
+                            <p className="font-medium text-gray-900">
+                              UAE Cities Integration
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Now covering Dubai, Abu Dhabi, and more UAE cities
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
                           <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                           <div>
-                            <p className="font-medium text-gray-900">Enhanced Admin Panel</p>
-                            <p className="text-sm text-gray-600">City-category statistics and mobile responsiveness</p>
+                            <p className="font-medium text-gray-900">
+                              Enhanced Admin Panel
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              City-category statistics and mobile responsiveness
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -312,17 +433,29 @@ export default function MainPages() {
 
               {/* Main Pages */}
               <TabsContent value="main">
-                {renderPageGroup("Main Navigation Pages", pageGroups.main, Home)}
+                {renderPageGroup(
+                  "Main Navigation Pages",
+                  pageGroups.main,
+                  Home,
+                )}
               </TabsContent>
 
               {/* Business */}
               <TabsContent value="business">
-                {renderPageGroup("Business & Listings", pageGroups.business, Building)}
+                {renderPageGroup(
+                  "Business & Listings",
+                  pageGroups.business,
+                  Building,
+                )}
               </TabsContent>
 
               {/* Information */}
               <TabsContent value="info">
-                {renderPageGroup("Information & Support", pageGroups.info, Info)}
+                {renderPageGroup(
+                  "Information & Support",
+                  pageGroups.info,
+                  Info,
+                )}
               </TabsContent>
 
               {/* Legal */}
@@ -336,13 +469,20 @@ export default function MainPages() {
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Shield className="w-5 h-5 text-red-600" />
-                      <h3 className="font-semibold text-red-900">Admin Access Required</h3>
+                      <h3 className="font-semibold text-red-900">
+                        Admin Access Required
+                      </h3>
                     </div>
                     <p className="text-sm text-red-700">
-                      These pages require admin privileges. Login with admin credentials to access.
+                      These pages require admin privileges. Login with admin
+                      credentials to access.
                     </p>
                   </div>
-                  {renderPageGroup("Administrative Tools", pageGroups.admin, Settings)}
+                  {renderPageGroup(
+                    "Administrative Tools",
+                    pageGroups.admin,
+                    Settings,
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
@@ -357,18 +497,20 @@ export default function MainPages() {
             Explore Our Complete Platform
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Access thousands of verified consultants across 48 categories and 100+ cities
+            Access thousands of verified consultants across 48 categories and
+            100+ cities
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild>
-              <Link to="/all-cities-categories">
-                Browse All Categories
-              </Link>
+              <Link to="/all-cities-categories">Browse All Categories</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600" asChild>
-              <Link to="/sitemap">
-                View Complete Sitemap
-              </Link>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-blue-600"
+              asChild
+            >
+              <Link to="/sitemap">View Complete Sitemap</Link>
             </Button>
           </div>
         </div>
