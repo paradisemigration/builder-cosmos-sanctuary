@@ -485,21 +485,80 @@ export default function CityBusinessListing() {
               </CardContent>
             </Card>
           ) : (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "space-y-4"
-              }
-            >
-              {filteredBusinesses.map((business) => (
-                <BusinessCard
-                  key={business.id}
-                  business={business}
-                  className={viewMode === "list" ? "flex-row" : ""}
-                />
-              ))}
-            </div>
+            <>
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    : "space-y-4"
+                }
+              >
+                {filteredBusinesses.map((business) => (
+                  <BusinessCard
+                    key={business.id}
+                    business={business}
+                    className={viewMode === "list" ? "flex-row" : ""}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {(hasMore || currentPage > 1) && (
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  {/* Previous Page */}
+                  {currentPage > 1 && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const newPage = currentPage - 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, true);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={loading}
+                    >
+                      ← Previous Page
+                    </Button>
+                  )}
+
+                  {/* Page Info */}
+                  <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  {/* Next Page */}
+                  {hasMore && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const newPage = currentPage + 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, true);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={loading}
+                    >
+                      Next Page →
+                    </Button>
+                  )}
+
+                  {/* Load More (Alternative) */}
+                  {hasMore && (
+                    <Button
+                      onClick={() => {
+                        const newPage = currentPage + 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, false); // Don't reset list
+                      }}
+                      disabled={loadingMore}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {loadingMore ? 'Loading...' : `Load More (${Math.min(ITEMS_PER_PAGE, totalBusinesses - filteredBusinesses.length)} more)`}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
