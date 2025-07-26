@@ -48,6 +48,7 @@ import {
   setBreadcrumbStructuredData,
   setCityServiceStructuredData,
 } from "@/lib/meta-utils";
+import { DebugPopup } from "@/components/DebugPopup";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
@@ -62,6 +63,14 @@ export default function CityCategory() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [categoryDataLoaded, setCategoryDataLoaded] = useState(false);
   const [cityDataLoaded, setCityDataLoaded] = useState(false);
+  const [debugInfo, setDebugInfo] = useState({
+    categoryBusinesses: 0,
+    cityBusinesses: 0,
+    totalBusinesses: 0,
+    apiCalls: [] as Array<{url: string; status: string; count: number; timestamp: string}>,
+    metaData: { title: '', description: '', keywords: '' },
+    searchParams: { city: '', category: '', cityName: '', categoryName: '' }
+  });
 
   // Convert URL params to proper names
   const cityName = city
@@ -186,16 +195,41 @@ export default function CityCategory() {
 
     async function fetchCityBusinesses() {
       try {
-        // Fetch all businesses for the city
-        const response = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=200`,
-        );
+        // Fetch all businesses for the city with higher limit
+        const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
+        const response = await fetch(apiUrl);
+
+        // Log API call for debugging
+        const timestamp = new Date().toLocaleTimeString();
 
         if (response.ok) {
           const result = await response.json();
+
+          // Update debug info
+          setDebugInfo(prev => ({
+            ...prev,
+            apiCalls: [...prev.apiCalls, {
+              url: apiUrl,
+              status: 'success',
+              count: result.businesses?.length || 0,
+              timestamp
+            }]
+          }));
+
           if (result.success && result.businesses) {
             setCityBusinesses(result.businesses);
           }
+        } else {
+          // Update debug info for failed call
+          setDebugInfo(prev => ({
+            ...prev,
+            apiCalls: [...prev.apiCalls, {
+              url: apiUrl,
+              status: 'failed',
+              count: 0,
+              timestamp
+            }]
+          }));
         }
 
         // Also include sample businesses for the city as fallback
