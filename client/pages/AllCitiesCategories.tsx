@@ -7,11 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  indianCities, 
-  categoryMapping,
-  businessCategories
-} from "@/lib/data";
+import {
+  allCities,
+  allIndianCities,
+  uaeCities,
+  allCategories,
+  completeCategoryMapping,
+  getCitySlug
+} from "@/lib/all-categories";
 
 export default function AllCitiesCategories() {
   const [searchQuery, setSearchQuery] = useState("");
