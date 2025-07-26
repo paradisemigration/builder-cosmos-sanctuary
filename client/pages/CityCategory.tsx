@@ -167,13 +167,25 @@ export default function CityCategory() {
           }
         }
 
-        // If Google Maps API fails, try scraped data
-        const scrapedResponse = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`,
-        );
+        // If Google Maps API fails, try scraped data with higher limit
+        const scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=500`;
+        const scrapedResponse = await fetch(scrapedUrl);
+        const scrapedTimestamp = new Date().toLocaleTimeString();
 
         if (scrapedResponse.ok) {
           const scrapedResult = await scrapedResponse.json();
+
+          // Update debug info
+          setDebugInfo(prev => ({
+            ...prev,
+            apiCalls: [...prev.apiCalls, {
+              url: scrapedUrl,
+              status: 'success',
+              count: scrapedResult.businesses?.length || 0,
+              timestamp: scrapedTimestamp
+            }]
+          }));
+
           if (
             scrapedResult.success &&
             scrapedResult.businesses &&
@@ -183,6 +195,17 @@ export default function CityCategory() {
             setCategoryDataLoaded(true);
             return;
           }
+        } else {
+          // Update debug info for failed call
+          setDebugInfo(prev => ({
+            ...prev,
+            apiCalls: [...prev.apiCalls, {
+              url: scrapedUrl,
+              status: 'failed',
+              count: 0,
+              timestamp: scrapedTimestamp
+            }]
+          }));
         }
 
         // No category-specific data found
