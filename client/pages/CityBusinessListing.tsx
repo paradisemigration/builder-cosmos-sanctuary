@@ -98,6 +98,83 @@ export default function CityBusinessListing() {
       { name: "Browse", url: "/business" },
       { name: cityName, url: `/business/${city}` },
     ]);
+
+    async function fetchBusinesses(page = 1, resetList = false) {
+      try {
+        if (page === 1) {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+
+        // First try to fetch from database/API
+        const response = await fetch(
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.businesses) {
+            const newBusinesses = result.businesses;
+
+            if (resetList || page === 1) {
+              setBusinesses(newBusinesses);
+              setFilteredBusinesses(newBusinesses);
+            } else {
+              // Append to existing list for load more
+              setBusinesses(prev => [...prev, ...newBusinesses]);
+              setFilteredBusinesses(prev => [...prev, ...newBusinesses]);
+            }
+
+            setTotalBusinesses(result.total || newBusinesses.length);
+            setTotalPages(result.totalPages || Math.ceil((result.total || newBusinesses.length) / ITEMS_PER_PAGE));
+            setHasMore(page < (result.totalPages || 1));
+
+            if (page === 1) {
+              setLoading(false);
+            } else {
+              setLoadingMore(false);
+            }
+            return;
+          }
+        }
+
+        // Fallback to sample data if API fails
+        console.log('API failed, using sample data');
+        const cityBusinesses = sampleBusinesses.filter(
+          (business) => business.city.toLowerCase() === city.toLowerCase(),
+        );
+
+        if (resetList || page === 1) {
+          setBusinesses(cityBusinesses);
+          setFilteredBusinesses(cityBusinesses);
+        }
+
+        setTotalBusinesses(cityBusinesses.length);
+        setTotalPages(Math.ceil(cityBusinesses.length / ITEMS_PER_PAGE));
+        setHasMore(false);
+
+      } catch (error) {
+        console.error('Error fetching businesses:', error);
+
+        // Fallback to sample data on error
+        const cityBusinesses = sampleBusinesses.filter(
+          (business) => business.city.toLowerCase() === city.toLowerCase(),
+        );
+
+        if (resetList || page === 1) {
+          setBusinesses(cityBusinesses);
+          setFilteredBusinesses(cityBusinesses);
+        }
+
+        setTotalBusinesses(cityBusinesses.length);
+        setTotalPages(Math.ceil(cityBusinesses.length / ITEMS_PER_PAGE));
+        setHasMore(false);
+      }
+
+      setLoading(false);
+      setLoadingMore(false);
+    }
   }, [city, cityName, navigate]);
 
   useEffect(() => {
