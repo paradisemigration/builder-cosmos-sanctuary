@@ -28,54 +28,9 @@ export default function Sitemap() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Generate all city-category combinations
+  // Use the comprehensive combinations from the utility function
   const allCombinations = useMemo(() => {
-    const combinations = [];
-    
-    // Add city-only pages
-    indianCities.forEach(city => {
-      combinations.push({
-        type: 'city',
-        city: city,
-        category: null,
-        slug: city.toLowerCase().replace(/\s+/g, '-'),
-        url: `/business/${city.toLowerCase().replace(/\s+/g, '-')}`,
-        title: `All Consultants in ${city}`,
-        description: `Browse all visa and immigration consultants in ${city}`
-      });
-    });
-
-    // Add city-category combinations
-    indianCities.forEach(city => {
-      Object.entries(categoryMapping).forEach(([slug, categoryName]) => {
-        combinations.push({
-          type: 'city-category',
-          city: city,
-          category: categoryName,
-          categorySlug: slug,
-          slug: `${city.toLowerCase().replace(/\s+/g, '-')}/${slug}`,
-          url: `/business/${city.toLowerCase().replace(/\s+/g, '-')}/${slug}`,
-          title: `${categoryName} in ${city}`,
-          description: `Find trusted ${categoryName.toLowerCase()} in ${city}`
-        });
-      });
-    });
-
-    // Add category-only pages
-    Object.entries(categoryMapping).forEach(([slug, categoryName]) => {
-      combinations.push({
-        type: 'category',
-        city: null,
-        category: categoryName,
-        categorySlug: slug,
-        slug: slug,
-        url: `/category/${slug}`,
-        title: `${categoryName} - All Cities`,
-        description: `Find ${categoryName.toLowerCase()} across all cities in India`
-      });
-    });
-
-    return combinations;
+    return getAllCombinations();
   }, []);
 
   // Filter combinations based on search and filters
