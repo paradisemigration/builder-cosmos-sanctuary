@@ -1,5 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
-import { categorySlugs } from "@/lib/data";
+import { allCategorySlugs } from "@/lib/all-categories";
 import CityCategory from "@/pages/CityCategory";
 import BusinessProfile from "@/pages/BusinessProfile";
 
