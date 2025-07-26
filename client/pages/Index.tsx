@@ -44,14 +44,24 @@ export default function Index() {
     const fetchFeaturedBusinesses = async () => {
       try {
         const response = await fetch("/api/scraped-businesses?limit=6");
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status} - ${response.statusText}`);
+        }
+
         const result = await response.json();
-        if (result.success) {
-          setFeaturedBusinesses(result.businesses || []);
+
+        if (result.success && result.businesses) {
+          setFeaturedBusinesses(result.businesses);
+        } else {
+          console.warn("API returned unsuccessful result or no businesses:", result);
+          // Fallback to sample data if API fails
+          setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
         }
       } catch (error) {
         console.error("Error fetching featured businesses:", error);
-        // Fallback to empty array if fetch fails
-        setFeaturedBusinesses([]);
+        // Fallback to sample data if fetch fails completely
+        setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
       } finally {
         setLoading(false);
       }
