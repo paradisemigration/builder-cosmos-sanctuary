@@ -119,12 +119,35 @@ export function GlobalDebugPopup() {
             </div>
             
             <div className="p-4 space-y-4">
-              {/* Current Page Info */}
+              {/* Meta Data Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">📍 Current Page</h3>
-                <div className="bg-gray-50 p-3 rounded border text-sm">
+                <h3 className="font-semibold mb-2 text-gray-800">📍 Page Meta Data</h3>
+                <div className="bg-gray-50 p-3 rounded border text-sm space-y-2">
                   <div><span className="font-medium">Path:</span> {debugInfo.currentPage}</div>
-                  <div><span className="font-medium">Timestamp:</span> {debugInfo.timestamp}</div>
+                  <div>
+                    <span className="font-medium">Title:</span>
+                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.title || 'No title found'}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium">Description:</span>
+                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.description || 'No description found'}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium">Keywords:</span>
+                    <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.keywords || 'No keywords found'}</div>
+                  </div>
+                  {debugInfo.metaData.ogTitle && (
+                    <div>
+                      <span className="font-medium">OG Title:</span>
+                      <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.ogTitle}</div>
+                    </div>
+                  )}
+                  {debugInfo.metaData.ogDescription && (
+                    <div>
+                      <span className="font-medium">OG Description:</span>
+                      <div className="text-xs text-gray-600 break-words mt-1">{debugInfo.metaData.ogDescription}</div>
+                    </div>
+                  )}
                 </div>
               </div>
 
