@@ -85,19 +85,19 @@ export default function Sitemap() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-md mx-auto">
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{indianCities.length}</p>
+                  <p className="text-2xl font-bold">{allCities.length}</p>
                   <p className="text-sm text-blue-100">Cities</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{Object.keys(categoryMapping).length}</p>
+                  <p className="text-2xl font-bold">{allCategories.length}</p>
                   <p className="text-sm text-blue-100">Categories</p>
                 </CardContent>
               </Card>
               <Card className="bg-white/10 border-white/20 text-white">
                 <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold">{indianCities.length * Object.keys(categoryMapping).length}</p>
+                  <p className="text-2xl font-bold">{allCities.length * allCategories.length}</p>
                   <p className="text-sm text-blue-100">Total Pages</p>
                 </CardContent>
               </Card>
