@@ -481,23 +481,34 @@ export default function CityCategory() {
       {/* Results */}
       <section className="py-8">
         <div className="container mx-auto max-w-6xl px-4">
-          {filteredBusinesses.length === 0 ? (
+          {(categoryBusinesses.length === 0 && cityBusinesses.length === 0) ||
+           (searchQuery && filteredBusinesses.length === 0) ? (
             <div className="text-center py-16">
               <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                No {categoryName} Found in {cityName}
+                {searchQuery
+                  ? `No results found for "${searchQuery}"`
+                  : `No businesses found`}
               </h3>
               <p className="text-gray-500 mb-6">
                 {searchQuery
-                  ? `No results found for "${searchQuery}"`
-                  : `We don't have any ${categoryName.toLowerCase()} listed in ${cityName} yet.`}
+                  ? `Try adjusting your search terms or browse all businesses in ${cityName}`
+                  : `We're working on adding more ${categoryName.toLowerCase()} in ${cityName}. Check back soon or browse all businesses in the city.`}
               </p>
               <div className="flex gap-4 justify-center">
+                {searchQuery && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setSearchQuery("")}
+                  >
+                    Clear Search
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   onClick={() => navigate(`/business/${city}`)}
                 >
-                  Browse All {cityName} Consultants
+                  Browse All {cityName} Businesses
                 </Button>
                 <Button onClick={() => navigate("/add-business")}>
                   List Your Business
@@ -506,29 +517,125 @@ export default function CityCategory() {
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">
-                  {filteredBusinesses.length} {categoryName} in {cityName}
-                </h2>
-                <Badge variant="secondary" className="text-sm">
-                  {filteredBusinesses.length} results
-                </Badge>
-              </div>
+              <div className="space-y-8">
+                {/* Category-specific results section */}
+                {categoryBusinesses.length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-2xl font-semibold text-gray-900">
+                          {categoryBusinesses.length} {categoryName} in {cityName}
+                        </h2>
+                        <p className="text-gray-600 mt-1">
+                          Google Maps API results for {categoryName.toLowerCase()}
+                        </p>
+                      </div>
+                      <Badge variant="default" className="text-sm bg-green-600">
+                        {categoryBusinesses.length} verified results
+                      </Badge>
+                    </div>
 
-              <div
-                className={
-                  viewMode === "grid"
-                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    : "space-y-4"
-                }
-              >
-                {filteredBusinesses.map((business) => (
-                  <BusinessCard
-                    key={business.id}
-                    business={business}
-                    viewMode={viewMode}
-                  />
-                ))}
+                    <div
+                      className={
+                        viewMode === "grid"
+                          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+                          : "space-y-4 mb-8"
+                      }
+                    >
+                      {categoryBusinesses
+                        .filter(business => {
+                          if (!searchQuery) return true;
+                          return (
+                            business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            business.services?.some(service =>
+                              service.toLowerCase().includes(searchQuery.toLowerCase())
+                            )
+                          );
+                        })
+                        .sort((a, b) => {
+                          switch (sortBy) {
+                            case "rating":
+                              return (b.rating || 0) - (a.rating || 0);
+                            case "reviews":
+                              return (b.reviewCount || 0) - (a.reviewCount || 0);
+                            case "name":
+                              return a.name.localeCompare(b.name);
+                            default:
+                              return 0;
+                          }
+                        })
+                        .map((business, index) => (
+                          <BusinessCard
+                            key={`category-${business.id || index}`}
+                            business={business}
+                            viewMode={viewMode}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* City businesses section */}
+                {cityBusinesses.length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-2xl font-semibold text-gray-900">
+                          {categoryBusinesses.length > 0 ? 'All Other' : 'All'} Businesses in {cityName}
+                        </h2>
+                        <p className="text-gray-600 mt-1">
+                          {categoryBusinesses.length > 0
+                            ? `Additional businesses and services in ${cityName}`
+                            : `All available businesses in ${cityName}`
+                          }
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="text-sm">
+                        {cityBusinesses.length} listings
+                      </Badge>
+                    </div>
+
+                    <div
+                      className={
+                        viewMode === "grid"
+                          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                          : "space-y-4"
+                      }
+                    >
+                      {cityBusinesses
+                        .filter(business => {
+                          if (!searchQuery) return true;
+                          return (
+                            business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            business.services?.some(service =>
+                              service.toLowerCase().includes(searchQuery.toLowerCase())
+                            )
+                          );
+                        })
+                        .sort((a, b) => {
+                          switch (sortBy) {
+                            case "rating":
+                              return (b.rating || 0) - (a.rating || 0);
+                            case "reviews":
+                              return (b.reviewCount || 0) - (a.reviewCount || 0);
+                            case "name":
+                              return a.name.localeCompare(b.name);
+                            default:
+                              return 0;
+                          }
+                        })
+                        .map((business, index) => (
+                          <BusinessCard
+                            key={`city-${business.id || index}`}
+                            business={business}
+                            viewMode={viewMode}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
