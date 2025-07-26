@@ -327,6 +327,63 @@ export default function AdminPanel() {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* City and Category Breakdown */}
+              {cityCategoryStats && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                      City & Category Breakdown
+                    </h2>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="hidden sm:inline">{cityCategoryStats.totalCities} Cities</span>
+                      <span>•</span>
+                      <span className="hidden sm:inline">{cityCategoryStats.totalCategories} Categories</span>
+                      <span>•</span>
+                      <span>{cityCategoryStats.totalBusinesses} Total</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                    {cityCategoryStats.cityCategoryBreakdown.map((cityData, index) => (
+                      <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                              {cityData.city}
+                            </CardTitle>
+                            <Badge variant="outline" className="text-xs md:text-sm">
+                              {cityData.totalCount} total
+                            </Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="max-h-48 overflow-y-auto space-y-2">
+                            {cityData.categories.map((categoryData, catIndex) => (
+                              <div
+                                key={catIndex}
+                                className="flex items-center justify-between p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                              >
+                                <span className="text-sm font-medium text-gray-700 truncate flex-1 mr-2">
+                                  {categoryData.category}
+                                </span>
+                                <Badge variant="secondary" className="text-xs">
+                                  {categoryData.count}
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                          {cityData.categories.length > 5 && (
+                            <p className="text-xs text-gray-500 text-center pt-2 border-t">
+                              {cityData.categories.length} categories
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </TabsContent>
 
