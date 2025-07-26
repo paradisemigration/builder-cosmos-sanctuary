@@ -223,7 +223,7 @@ export default function AdminPanel() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto max-w-7xl px-4 py-6">
+      <div className="container mx-auto max-w-7xl px-4 py-4 md:py-6">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
