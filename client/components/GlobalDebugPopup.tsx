@@ -60,18 +60,27 @@ export function GlobalDebugPopup() {
   };
 
   useEffect(() => {
-    setDebugInfo({
-      currentPage: location.pathname,
-      timestamp: new Date().toLocaleString(),
-      userAgent: navigator.userAgent,
-      screenSize: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      },
-      apiCalls: []
-    });
-    
-    console.log("GlobalDebugPopup loaded on:", location.pathname);
+    // Wait a bit for meta tags to be set by page components
+    const timer = setTimeout(() => {
+      const metaData = extractMetaData();
+
+      setDebugInfo({
+        currentPage: location.pathname,
+        timestamp: new Date().toLocaleString(),
+        userAgent: navigator.userAgent,
+        screenSize: {
+          width: window.innerWidth,
+          height: window.innerHeight
+        },
+        metaData,
+        apiCalls: []
+      });
+
+      console.log("GlobalDebugPopup loaded on:", location.pathname);
+      console.log("Meta data extracted:", metaData);
+    }, 100); // Small delay to ensure meta tags are set
+
+    return () => clearTimeout(timer);
   }, [location]);
 
   return (
