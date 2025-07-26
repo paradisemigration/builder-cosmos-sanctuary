@@ -12,7 +12,7 @@ export default function CityRouteHandler() {
   }
 
   // Check if the second parameter is a known category slug
-  const isCategory = categorySlugs.includes(category);
+  const isCategory = allCategorySlugs.includes(category);
 
   if (isCategory) {
     // Show category page
