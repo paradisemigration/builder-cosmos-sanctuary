@@ -188,7 +188,7 @@ export default function CityCategory() {
       try {
         // Fetch all businesses for the city
         const response = await fetch(
-          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=50`,
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=200`,
         );
 
         if (response.ok) {
