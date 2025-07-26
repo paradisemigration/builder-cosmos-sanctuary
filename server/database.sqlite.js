@@ -178,7 +178,7 @@ class SQLiteDatabase {
         } catch (error) {
           if (error.message.includes("duplicate column name")) {
             console.log(
-              `ℹ️ Column ${columnName} already exists in ${tableName}`,
+              `ℹ�� Column ${columnName} already exists in ${tableName}`,
             );
           } else {
             console.error(
@@ -532,6 +532,26 @@ class SQLiteDatabase {
         }
       });
     });
+  }
+
+  // Helper method to get businesses by city only
+  async getBusinessesByCity(city, limit = 50) {
+    return this.getBusinesses({ city, limit });
+  }
+
+  // Helper method to get businesses by category only
+  async getBusinessesByCategory(category, limit = 50) {
+    return this.getBusinesses({ category, limit });
+  }
+
+  // Helper method to get businesses by both city and category
+  async getBusinessesByCityAndCategory(city, category, limit = 50) {
+    return this.getBusinesses({ city, category, limit });
+  }
+
+  // Helper method to get all businesses with a limit
+  async getAllBusinesses(limit = 50) {
+    return this.getBusinesses({ limit });
   }
 
   async getBusinessReviews(businessId) {
