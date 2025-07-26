@@ -71,8 +71,29 @@ export default function CityBusinessListing() {
     setFilteredBusinesses(cityBusinesses);
     setLoading(false);
 
-    // Set page title
-    document.title = `Visa Consultants in ${cityName} - VisaConsult India`;
+    // Set page title with SEO format
+    document.title = `Top 10 Visa Consultants In ${cityName} - VisaConsult India`;
+
+    // Set meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        `Find the top 10 visa consultants in ${cityName}. Compare ratings, reviews, and services of verified immigration experts. Get expert guidance for student visa, work visa, tourist visa, and more at VisaConsult India.`
+      );
+    }
+
+    // Set meta keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute(
+      "content",
+      `visa consultants ${cityName.toLowerCase()}, immigration consultants ${cityName.toLowerCase()}, best visa agents ${cityName.toLowerCase()}, visa services ${cityName.toLowerCase()}, study abroad ${cityName.toLowerCase()}, work visa ${cityName.toLowerCase()}, tourist visa ${cityName.toLowerCase()}`
+    );
   }, [city, cityName, navigate]);
 
   useEffect(() => {
