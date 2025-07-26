@@ -296,6 +296,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <SiteFooter />
+            <GlobalDebugPopup />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
