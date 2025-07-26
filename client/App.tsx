@@ -46,6 +46,7 @@ import AllCategories from "./pages/AllCategories";
 import MainPages from "./pages/MainPages";
 import CategoryPage from "./pages/CategoryPage";
 import { SiteFooter } from "./components/SiteFooter";
+import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
 // Simple ProtectedRoute component to avoid auth issues
 function ProtectedRoute({
