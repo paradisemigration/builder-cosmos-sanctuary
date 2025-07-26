@@ -40,6 +40,30 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Set homepage SEO meta data
+  useEffect(() => {
+    const homePageMeta = {
+      title: 'VisaConsult India - Find Top Rated Visa Consultants & Immigration Experts',
+      description: 'Find trusted visa consultants and immigration experts across India and UAE. Compare services, read authentic reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications. Professional visa consultation with proven success rates.',
+      keywords: 'visa consultants, immigration consultants, study abroad consultants, work permit agents, tourist visa services, immigration lawyers, pr consultants, visa agents, visa processing, visa services, immigration services, best visa consultants, top immigration experts, visa consultation, visa guidance',
+      robots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      author: 'VisaConsult India',
+      viewport: 'width=device-width, initial-scale=1.0'
+    };
+
+    setPageMeta(homePageMeta);
+
+    // Set SEO links for homepage
+    setSEOLinks({
+      canonical: '/',
+      alternate: [
+        '/',
+        '/business',
+        '/all-categories'
+      ]
+    });
+  }, []);
+
   // Fetch real featured businesses from database
   useEffect(() => {
     const fetchFeaturedBusinesses = async () => {
@@ -128,7 +152,7 @@ export default function Index() {
     { name: "Mumbai", count: "380+", icon: "🌆" },
     { name: "Bangalore", count: "320+", icon: "💻" },
     { name: "Chennai", count: "250+", icon: "🌊" },
-    { name: "Hyderabad", count: "200+", icon: "💎" },
+    { name: "Hyderabad", count: "200+", icon: "���" },
     { name: "Kolkata", count: "180+", icon: "���" },
     { name: "Pune", count: "150+", icon: "🎓" },
     { name: "Ahmedabad", count: "120+", icon: "🏗️" },
