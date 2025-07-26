@@ -60,6 +60,14 @@ export default function CityBusinessListing() {
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const ITEMS_PER_PAGE = 50;
+  const [debugInfo, setDebugInfo] = useState({
+    categoryBusinesses: 0,
+    cityBusinesses: 0,
+    totalBusinesses: 0,
+    apiCalls: [] as Array<{url: string; status: string; count: number; timestamp: string}>,
+    metaData: { title: '', description: '', keywords: '' },
+    searchParams: { city: '', category: '', cityName: '', categoryName: '' }
+  });
 
   // Convert URL param back to proper city name
   const cityName = city
