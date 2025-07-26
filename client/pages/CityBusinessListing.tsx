@@ -83,7 +83,9 @@ export default function CityBusinessListing() {
 
       if (response.ok) {
         const result = await response.json();
-        if (result.success && result.businesses) {
+        console.log('API Response:', result);
+
+        if (result.success && result.businesses && result.businesses.length > 0) {
           const newBusinesses = result.businesses;
 
           if (resetList || page === 1) {
@@ -102,7 +104,11 @@ export default function CityBusinessListing() {
           setLoading(false);
           setLoadingMore(false);
           return;
+        } else {
+          console.log('No businesses found in API response');
         }
+      } else {
+        console.log('API response not OK:', response.status);
       }
 
       // Fallback to sample data if API fails
