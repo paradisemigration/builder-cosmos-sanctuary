@@ -26,6 +26,7 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [stats, setStats] = useState<any>(null);
   const [businesses, setBusinesses] = useState<any[]>([]);
+  const [cityCategoryStats, setCityCategoryStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [backupLoading, setBackupLoading] = useState(false);
   const [backupHistory, setBackupHistory] = useState<any[]>([]);
@@ -505,7 +506,7 @@ export default function AdminPanel() {
                         <p>• Frontend: Deployed successfully ✅</p>
                         <p>• UI Components: Functional ✅</p>
                         <p>
-                          • Google Cloud Setup: Ready for backend integration ✅
+                          ��� Google Cloud Setup: Ready for backend integration ✅
                         </p>
                         <p>• Upload Feature: Requires backend deployment 📋</p>
                       </>
