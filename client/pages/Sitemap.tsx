@@ -280,10 +280,10 @@ export default function Sitemap() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-2">
-                  {indianCities.slice(0, 16).map(city => (
+                  {allCities.slice(0, 16).map(city => (
                     <Link
                       key={city}
-                      to={`/business/${city.toLowerCase().replace(/\s+/g, '-')}`}
+                      to={`/business/${getCitySlug(city)}`}
                       className="p-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors"
                     >
                       {city}
@@ -291,10 +291,10 @@ export default function Sitemap() {
                   ))}
                 </div>
                 <Link
-                  to="/business"
+                  to="/all-cities-categories"
                   className="inline-block mt-4 text-sm text-blue-600 font-medium hover:underline"
                 >
-                  View all {indianCities.length} cities →
+                  View all {allCities.length} cities →
                 </Link>
               </CardContent>
             </Card>
