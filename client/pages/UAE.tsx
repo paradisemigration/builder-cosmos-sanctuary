@@ -255,15 +255,16 @@ export default function UAE() {
       </section>
 
       {/* UAE Cities Section */}
-      <section className="py-16 px-4 bg-red-50">
+      <section className="py-20 px-4 bg-gradient-to-br from-red-50 via-white to-green-50">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Visa Consultants by Emirate
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Find trusted professionals in your city across all seven Emirates
             </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-green-500 mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
