@@ -308,7 +308,7 @@ export default function CategoryPage() {
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5" />
                   <div>
-                    <p className="text-sm text-blue-100">Total Consultants</p>
+                    <p className={`text-sm ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>Total Consultants</p>
                     <p className="text-xl font-bold">
                       {businesses.length || "50+"}
                     </p>
