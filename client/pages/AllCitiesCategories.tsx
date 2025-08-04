@@ -353,7 +353,7 @@ export default function AllCitiesCategories() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(completeCategoryMapping)
+                        {Object.entries(completeCategoryMapping || {})
                           .slice(0, 4)
                           .map(([slug, name]) => (
                             <Link
