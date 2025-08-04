@@ -293,7 +293,7 @@ export default function AllCitiesCategories() {
                         <div className="text-xs text-gray-500">
                           <p className="mb-1">Popular in:</p>
                           <div className="flex flex-wrap gap-1">
-                            {popularCities.slice(0, 3).map((city, index) => (
+                            {(popularCities || []).slice(0, 3).map((city, index) => (
                               <Link
                                 key={city}
                                 to={getCityCategoryUrl(city, slug)}
