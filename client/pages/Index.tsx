@@ -639,6 +639,34 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Country Selection Section */}
+      <section className="py-8 px-4 bg-gradient-to-r from-orange-50 via-white to-green-50 border-b">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center">
+            <p className="text-lg text-gray-600 mb-6">
+              Looking for visa consultants in other countries?
+            </p>
+            <div className="flex justify-center gap-6">
+              <div className="text-center p-4 bg-white rounded-lg shadow-sm border-2 border-orange-200">
+                <div className="w-12 h-8 bg-gradient-to-b from-orange-500 via-white to-green-500 rounded shadow mx-auto mb-2 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                </div>
+                <p className="font-semibold text-gray-900">India</p>
+                <p className="text-sm text-green-600">Current Location</p>
+              </div>
+
+              <Link to="/uae" className="group">
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm border-2 hover:border-red-300 transition-all hover:shadow-md">
+                  <div className="w-12 h-8 bg-gradient-to-r from-red-500 via-white to-green-500 rounded shadow mx-auto mb-2"></div>
+                  <p className="font-semibold text-gray-900 group-hover:text-red-600">UAE</p>
+                  <p className="text-sm text-gray-600 group-hover:text-red-500">Switch to UAE</p>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Visa Services Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
