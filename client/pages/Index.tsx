@@ -270,9 +270,16 @@ export default function Index() {
       <section className="relative pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
+            {/* India Flag */}
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-12 bg-gradient-to-b from-orange-500 via-white to-green-500 rounded shadow-lg border-2 border-gray-200 flex items-center justify-center">
+                <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+              </div>
+            </div>
+
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Find India's Most
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-green-600">
                 {" "}
                 Trusted{" "}
               </span>
