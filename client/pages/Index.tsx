@@ -127,16 +127,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    document.title =
-      "VisaConsult India - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services";
-
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "India's largest directory of verified visa consultants. Find trusted immigration experts for student visa, work visa, tourist visa in Delhi, Mumbai, Bangalore & all major cities. Compare ratings & reviews.",
-      );
-    }
+    // SEO is now handled by SEOHead component
   }, []);
 
   const handleSearch = (query: string, location: string, category: string) => {
