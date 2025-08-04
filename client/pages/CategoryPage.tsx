@@ -286,10 +286,10 @@ export default function CategoryPage() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                {categoryInfo.name}
+                {categoryInfo.name} in {country === 'uae' ? 'UAE' : 'India'}
               </h1>
-              <p className="text-blue-100 text-lg">
-                {categoryInfo.description}
+              <p className={`text-lg ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>
+                {categoryInfo.description} Find top-rated professionals across {country === 'uae' ? 'all Emirates' : 'India'}.
               </p>
             </div>
           </div>
