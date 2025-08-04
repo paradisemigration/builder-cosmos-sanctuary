@@ -375,7 +375,7 @@ export default function AllCitiesCategories() {
                           to={getCityUrl(city)}
                           className="block text-center text-sm text-blue-600 hover:underline pt-2"
                         >
-                          View all {Object.keys(categoryMapping).length}{" "}
+                          View all {Object.keys(completeCategoryMapping).length}{" "}
                           categories →
                         </Link>
                       </div>
