@@ -271,7 +271,7 @@ export default function AllCitiesCategories() {
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
-                          <span>{indianCities.length} cities</span>
+                          <span>{allIndianCities.length} cities</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Building className="w-4 h-4" />
