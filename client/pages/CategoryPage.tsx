@@ -146,24 +146,27 @@ export default function CategoryPage() {
 
     fetchBusinesses();
 
-    // Set page meta data with SEO optimization
+    // Set page meta data with SEO optimization (country-specific)
+    const countryName = country === 'uae' ? 'UAE' : 'India';
+    const baseUrl = country === 'uae' ? '/uae' : '';
+
     const metaData = generateCategoryMeta(
-      categoryInfo.name,
-      categoryInfo.description,
+      `${categoryInfo.name} in ${countryName}`,
+      `${categoryInfo.description} Find top-rated ${categoryInfo.name.toLowerCase()} across ${countryName}.`,
     );
     setPageMeta(metaData);
 
     // Set SEO links for better Google crawling
     setSEOLinks({
-      canonical: `/category/${category}`,
-      alternate: [`/category/${category}`, "/all-categories"],
+      canonical: `${baseUrl}/category/${category}`,
+      alternate: [`${baseUrl}/category/${category}`, `${baseUrl}/all-categories`],
     });
 
     // Set breadcrumb structured data
     setBreadcrumbStructuredData([
-      { name: "Home", url: "/" },
-      { name: "Categories", url: "/all-categories" },
-      { name: categoryInfo.name, url: `/category/${category}` },
+      { name: "Home", url: baseUrl || "/" },
+      { name: "Categories", url: `${baseUrl}/all-categories` },
+      { name: `${categoryInfo.name} in ${countryName}`, url: `${baseUrl}/category/${category}` },
     ]);
   }, [categoryInfo, navigate]);
 
