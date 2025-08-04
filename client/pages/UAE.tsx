@@ -120,19 +120,29 @@ export default function UAE() {
           }
         }}
       />
-      
+
       <Navigation />
 
       {/* Hero Section with UAE Flag Theme */}
-      <section className="relative pt-20 pb-16 px-4 bg-gradient-to-r from-red-600 via-white to-green-600">
-        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+      <section className="relative pt-20 pb-16 px-4 overflow-hidden">
+        {/* Dubai Skyline Background */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"
+          }}
+        ></div>
+        {/* UAE Flag Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/90 via-white/20 to-green-600/90"></div>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/30"></div>
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center">
             {/* UAE Flag */}
             <div className="flex justify-center mb-6">
               <div className="w-16 h-12 bg-gradient-to-r from-red-500 via-white to-green-500 rounded shadow-lg border-2 border-gray-200"></div>
             </div>
-            
+
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
               UAE's Leading Visa
               <span className="block text-yellow-300">Consultation Platform</span>
@@ -153,7 +163,7 @@ export default function UAE() {
                   className="border-0 bg-transparent text-lg focus:ring-0 flex-1"
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
-                <Button 
+                <Button
                   onClick={handleSearch}
                   className="rounded-full px-8 bg-red-600 hover:bg-red-700"
                 >
@@ -322,11 +332,11 @@ export default function UAE() {
                           <CheckCircle className="h-5 w-5 text-green-500" />
                         )}
                       </div>
-                      
+
                       <Badge variant="outline" className="mb-3">
                         {business.category}
                       </Badge>
-                      
+
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-yellow-500 fill-current" />
@@ -366,7 +376,7 @@ export default function UAE() {
               <h3 className="text-xl font-bold mb-2">Verified Professionals</h3>
               <p className="opacity-90">All consultants are verified and licensed</p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Globe className="h-8 w-8" />
@@ -374,7 +384,7 @@ export default function UAE() {
               <h3 className="text-xl font-bold mb-2">UAE-Wide Coverage</h3>
               <p className="opacity-90">Services across all seven Emirates</p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="h-8 w-8" />
@@ -382,7 +392,7 @@ export default function UAE() {
               <h3 className="text-xl font-bold mb-2">24/7 Support</h3>
               <p className="opacity-90">Round-the-clock assistance available</p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="h-8 w-8" />
