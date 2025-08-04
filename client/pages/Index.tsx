@@ -249,19 +249,19 @@ export default function Index() {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "VisaConsult India",
-          "description": "India's largest directory of verified visa consultants",
-          "url": window.location.origin,
-          "logo": `${window.location.origin}/images/logo-india.png`,
-          "contactPoint": {
+          name: "VisaConsult India",
+          description: "India's largest directory of verified visa consultants",
+          url: window.location.origin,
+          logo: `${window.location.origin}/images/logo-india.png`,
+          contactPoint: {
             "@type": "ContactPoint",
-            "telephone": "+91-xxx-xxxx",
-            "contactType": "customer service"
+            telephone: "+91-xxx-xxxx",
+            contactType: "customer service",
           },
-          "areaServed": {
+          areaServed: {
             "@type": "Country",
-            "name": "India"
-          }
+            name: "India",
+          },
         }}
       />
       <Navigation />
@@ -658,8 +658,12 @@ export default function Index() {
               <Link to="/uae" className="group">
                 <div className="text-center p-4 bg-white rounded-lg shadow-sm border-2 hover:border-red-300 transition-all hover:shadow-md">
                   <div className="w-12 h-8 bg-gradient-to-r from-red-500 via-white to-green-500 rounded shadow mx-auto mb-2"></div>
-                  <p className="font-semibold text-gray-900 group-hover:text-red-600">UAE</p>
-                  <p className="text-sm text-gray-600 group-hover:text-red-500">Switch to UAE</p>
+                  <p className="font-semibold text-gray-900 group-hover:text-red-600">
+                    UAE
+                  </p>
+                  <p className="text-sm text-gray-600 group-hover:text-red-500">
+                    Switch to UAE
+                  </p>
                 </div>
               </Link>
             </div>

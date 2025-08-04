@@ -55,8 +55,8 @@ export default function CategoryPage() {
   const location = useLocation();
 
   // Detect if this is a UAE route
-  const isUAERoute = location.pathname.startsWith('/uae/');
-  const country = isUAERoute ? 'uae' : 'india';
+  const isUAERoute = location.pathname.startsWith("/uae/");
+  const country = isUAERoute ? "uae" : "india";
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
@@ -74,7 +74,7 @@ export default function CategoryPage() {
   // Filter cities based on search and country context
   const filteredCities = useMemo(() => {
     // Use country-specific cities based on route
-    let cities = country === 'uae' ? uaeCities : allIndianCities;
+    let cities = country === "uae" ? uaeCities : allIndianCities;
 
     // Filter by search
     if (searchQuery) {
@@ -142,8 +142,8 @@ export default function CategoryPage() {
     fetchBusinesses();
 
     // Set page meta data with SEO optimization (country-specific)
-    const countryName = country === 'uae' ? 'UAE' : 'India';
-    const baseUrl = country === 'uae' ? '/uae' : '';
+    const countryName = country === "uae" ? "UAE" : "India";
+    const baseUrl = country === "uae" ? "/uae" : "";
 
     const metaData = generateCategoryMeta(
       `${categoryInfo.name} in ${countryName}`,
@@ -154,14 +154,20 @@ export default function CategoryPage() {
     // Set SEO links for better Google crawling
     setSEOLinks({
       canonical: `${baseUrl}/category/${category}`,
-      alternate: [`${baseUrl}/category/${category}`, `${baseUrl}/all-categories`],
+      alternate: [
+        `${baseUrl}/category/${category}`,
+        `${baseUrl}/all-categories`,
+      ],
     });
 
     // Set breadcrumb structured data
     setBreadcrumbStructuredData([
       { name: "Home", url: baseUrl || "/" },
       { name: "Categories", url: `${baseUrl}/all-categories` },
-      { name: `${categoryInfo.name} in ${countryName}`, url: `${baseUrl}/category/${category}` },
+      {
+        name: `${categoryInfo.name} in ${countryName}`,
+        url: `${baseUrl}/category/${category}`,
+      },
     ]);
   }, [categoryInfo, navigate]);
 
@@ -195,7 +201,7 @@ export default function CategoryPage() {
   };
 
   const getCityUrl = (city: string) =>
-    `${country === 'uae' ? '/uae' : ''}/business/${getCitySlug(city)}/${category}`;
+    `${country === "uae" ? "/uae" : ""}/business/${getCitySlug(city)}/${category}`;
 
   if (!categoryInfo) {
     return (
@@ -223,38 +229,45 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SEOHead
-        {...generateCategorySEO(categoryInfo.name, country)}
-      />
+      <SEOHead {...generateCategorySEO(categoryInfo.name, country)} />
       <Navigation />
 
       {/* Header Section */}
-      <section className={`pt-20 pb-8 text-white ${
-        country === 'uae'
-          ? 'bg-gradient-to-r from-red-600 to-green-600'
-          : 'bg-gradient-to-r from-blue-600 to-purple-600'
-      }`}>
+      <section
+        className={`pt-20 pb-8 text-white ${
+          country === "uae"
+            ? "bg-gradient-to-r from-red-600 to-green-600"
+            : "bg-gradient-to-r from-blue-600 to-purple-600"
+        }`}
+      >
         <div className="container mx-auto max-w-6xl px-4">
           {/* Country Flag */}
           <div className="flex justify-center mb-4">
-            <div className={`w-12 h-8 rounded shadow-lg border border-white/20 ${
-              country === 'uae'
-                ? 'bg-gradient-to-r from-red-500 via-white to-green-500'
-                : 'bg-gradient-to-b from-orange-500 via-white to-green-500 flex items-center justify-center'
-            }`}>
-              {country === 'india' && <div className="w-2 h-2 bg-blue-600 rounded-full"></div>}
+            <div
+              className={`w-12 h-8 rounded shadow-lg border border-white/20 ${
+                country === "uae"
+                  ? "bg-gradient-to-r from-red-500 via-white to-green-500"
+                  : "bg-gradient-to-b from-orange-500 via-white to-green-500 flex items-center justify-center"
+              }`}
+            >
+              {country === "india" && (
+                <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+              )}
             </div>
           </div>
 
           {/* Breadcrumb */}
           <nav className="mb-6">
             <div className="flex items-center space-x-2 text-sm">
-              <Link to={country === 'uae' ? '/uae' : '/'} className="text-blue-100 hover:text-white">
-                {country === 'uae' ? 'UAE Home' : 'Home'}
+              <Link
+                to={country === "uae" ? "/uae" : "/"}
+                className="text-blue-100 hover:text-white"
+              >
+                {country === "uae" ? "UAE Home" : "Home"}
               </Link>
               <span>/</span>
               <Link
-                to={`${country === 'uae' ? '/uae' : ''}/all-categories`}
+                to={`${country === "uae" ? "/uae" : ""}/all-categories`}
                 className="text-blue-100 hover:text-white"
               >
                 Categories
@@ -284,10 +297,13 @@ export default function CategoryPage() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                {categoryInfo.name} in {country === 'uae' ? 'UAE' : 'India'}
+                {categoryInfo.name} in {country === "uae" ? "UAE" : "India"}
               </h1>
-              <p className={`text-lg ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>
-                {categoryInfo.description} Find top-rated professionals across {country === 'uae' ? 'all Emirates' : 'India'}.
+              <p
+                className={`text-lg ${country === "uae" ? "text-red-100" : "text-blue-100"}`}
+              >
+                {categoryInfo.description} Find top-rated professionals across{" "}
+                {country === "uae" ? "all Emirates" : "India"}.
               </p>
             </div>
           </div>
@@ -299,9 +315,16 @@ export default function CategoryPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5" />
                   <div>
-                    <p className={`text-sm ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>Available in</p>
+                    <p
+                      className={`text-sm ${country === "uae" ? "text-red-100" : "text-blue-100"}`}
+                    >
+                      Available in
+                    </p>
                     <p className="text-xl font-bold">
-                      {country === 'uae' ? uaeCities.length : allIndianCities.length} {country === 'uae' ? 'Emirates' : 'Cities'}
+                      {country === "uae"
+                        ? uaeCities.length
+                        : allIndianCities.length}{" "}
+                      {country === "uae" ? "Emirates" : "Cities"}
                     </p>
                   </div>
                 </div>
@@ -312,7 +335,11 @@ export default function CategoryPage() {
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5" />
                   <div>
-                    <p className={`text-sm ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>Total Consultants</p>
+                    <p
+                      className={`text-sm ${country === "uae" ? "text-red-100" : "text-blue-100"}`}
+                    >
+                      Total Consultants
+                    </p>
                     <p className="text-xl font-bold">
                       {businesses.length || "50+"}
                     </p>

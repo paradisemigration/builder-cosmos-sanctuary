@@ -153,7 +153,6 @@ export function GlobalDebugPopup() {
     <>
       {/* Always visible test indicator */}
 
-
       {!isOpen ? (
         <button
           onClick={() => {

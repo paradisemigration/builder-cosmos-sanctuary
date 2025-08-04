@@ -180,7 +180,8 @@ export default function AllCitiesCategories() {
                             {city}
                           </h4>
                           <p className="text-sm text-gray-600 mt-1">
-                            {Object.keys(completeCategoryMapping || {}).length} categories
+                            {Object.keys(completeCategoryMapping || {}).length}{" "}
+                            categories
                           </p>
                         </div>
                       </Link>
@@ -214,7 +215,8 @@ export default function AllCitiesCategories() {
                           {city}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {Object.keys(completeCategoryMapping || {}).length} categories
+                          {Object.keys(completeCategoryMapping || {}).length}{" "}
+                          categories
                         </p>
                       </div>
                     </div>
@@ -293,15 +295,17 @@ export default function AllCitiesCategories() {
                         <div className="text-xs text-gray-500">
                           <p className="mb-1">Popular in:</p>
                           <div className="flex flex-wrap gap-1">
-                            {(popularCities || []).slice(0, 3).map((city, index) => (
-                              <Link
-                                key={city}
-                                to={getCityCategoryUrl(city, category.slug)}
-                                className="px-2 py-1 bg-gray-100 rounded text-blue-600 hover:bg-blue-50 transition-colors"
-                              >
-                                {city}
-                              </Link>
-                            ))}
+                            {(popularCities || [])
+                              .slice(0, 3)
+                              .map((city, index) => (
+                                <Link
+                                  key={city}
+                                  to={getCityCategoryUrl(city, category.slug)}
+                                  className="px-2 py-1 bg-gray-100 rounded text-blue-600 hover:bg-blue-50 transition-colors"
+                                >
+                                  {city}
+                                </Link>
+                              ))}
                             <span className="px-2 py-1 text-gray-400">
                               +{allIndianCities.length - 3} more
                             </span>
@@ -375,7 +379,8 @@ export default function AllCitiesCategories() {
                           to={getCityUrl(city)}
                           className="block text-center text-sm text-blue-600 hover:underline pt-2"
                         >
-                          View all {Object.keys(completeCategoryMapping || {}).length}{" "}
+                          View all{" "}
+                          {Object.keys(completeCategoryMapping || {}).length}{" "}
                           categories →
                         </Link>
                       </div>

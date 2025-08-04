@@ -32,27 +32,49 @@ export default function UAE() {
   const popularCategories = [
     { slug: "visa-consultant", name: "Visa Consultant", count: "200+" },
     { slug: "immigration-lawyer", name: "Immigration Lawyer", count: "150+" },
-    { slug: "work-visa-consultants", name: "Work Visa Consultants", count: "180+" },
-    { slug: "study-abroad-consultant", name: "Study Abroad Consultant", count: "120+" },
-    { slug: "tourist-visa-services", name: "Tourist Visa Services", count: "90+" },
-    { slug: "family-visa-consultants", name: "Family Visa Consultants", count: "110+" },
+    {
+      slug: "work-visa-consultants",
+      name: "Work Visa Consultants",
+      count: "180+",
+    },
+    {
+      slug: "study-abroad-consultant",
+      name: "Study Abroad Consultant",
+      count: "120+",
+    },
+    {
+      slug: "tourist-visa-services",
+      name: "Tourist Visa Services",
+      count: "90+",
+    },
+    {
+      slug: "family-visa-consultants",
+      name: "Family Visa Consultants",
+      count: "110+",
+    },
   ];
 
   // Featured UAE cities with real images
   const cityImages = {
-    "Dubai": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Abu Dhabi": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Sharjah": "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Ajman": "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Ras Al Khaimah": "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Fujairah": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    Dubai:
+      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Abu Dhabi":
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    Sharjah:
+      "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    Ajman:
+      "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Ras Al Khaimah":
+      "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    Fujairah:
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   };
 
-  const featuredCities = uaeCities.map(city => ({
+  const featuredCities = uaeCities.map((city) => ({
     name: city,
     businesses: Math.floor(Math.random() * 50) + 20,
     image: cityImages[city] || cityImages["Dubai"],
-    description: `Find trusted visa consultants in ${city}`
+    description: `Find trusted visa consultants in ${city}`,
   }));
 
   // Load sample UAE businesses
@@ -69,7 +91,7 @@ export default function UAE() {
           rating: 4.8,
           reviews: 245,
           verified: true,
-          image: "/images/businesses/emirates-visa.jpg"
+          image: "/images/businesses/emirates-visa.jpg",
         },
         {
           id: 2,
@@ -79,7 +101,7 @@ export default function UAE() {
           rating: 4.9,
           reviews: 189,
           verified: true,
-          image: "/images/businesses/abu-dhabi-immigration.jpg"
+          image: "/images/businesses/abu-dhabi-immigration.jpg",
         },
         {
           id: 3,
@@ -89,7 +111,7 @@ export default function UAE() {
           rating: 4.7,
           reviews: 156,
           verified: true,
-          image: "/images/businesses/sharjah-study.jpg"
+          image: "/images/businesses/sharjah-study.jpg",
         },
       ];
       setBusinesses(sampleBusinesses);
@@ -114,19 +136,19 @@ export default function UAE() {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "VisaConsult UAE",
-          "description": "Leading visa consultation platform in UAE",
-          "url": `${window.location.origin}/uae`,
-          "logo": `${window.location.origin}/images/logo-uae.png`,
-          "contactPoint": {
+          name: "VisaConsult UAE",
+          description: "Leading visa consultation platform in UAE",
+          url: `${window.location.origin}/uae`,
+          logo: `${window.location.origin}/images/logo-uae.png`,
+          contactPoint: {
             "@type": "ContactPoint",
-            "telephone": "+971-xxx-xxxx",
-            "contactType": "customer service"
+            telephone: "+971-xxx-xxxx",
+            contactType: "customer service",
           },
-          "areaServed": {
+          areaServed: {
             "@type": "Country",
-            "name": "United Arab Emirates"
-          }
+            name: "United Arab Emirates",
+          },
         }}
       />
 
@@ -138,7 +160,8 @@ export default function UAE() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
           }}
         ></div>
         {/* UAE Flag Gradient Overlay */}
@@ -162,8 +185,9 @@ export default function UAE() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white/95 mb-10 max-w-4xl mx-auto drop-shadow-lg leading-relaxed">
-              Connect with trusted visa consultants across Dubai, Abu Dhabi, Sharjah and all Emirates.
-              Expert immigration services for work visas, study abroad, and more.
+              Connect with trusted visa consultants across Dubai, Abu Dhabi,
+              Sharjah and all Emirates. Expert immigration services for work
+              visas, study abroad, and more.
             </p>
 
             {/* Enhanced Search Bar */}
@@ -191,15 +215,21 @@ export default function UAE() {
             {/* Enhanced Stats */}
             <div className="flex justify-center gap-8 lg:gap-12">
               <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="text-4xl font-bold text-yellow-300 mb-1">500+</div>
-                <div className="text-sm text-white/90">Verified Consultants</div>
+                <div className="text-4xl font-bold text-yellow-300 mb-1">
+                  500+
+                </div>
+                <div className="text-sm text-white/90">
+                  Verified Consultants
+                </div>
               </div>
               <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                 <div className="text-4xl font-bold text-yellow-300 mb-1">6</div>
                 <div className="text-sm text-white/90">Emirates Covered</div>
               </div>
               <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="text-4xl font-bold text-yellow-300 mb-1">10K+</div>
+                <div className="text-4xl font-bold text-yellow-300 mb-1">
+                  10K+
+                </div>
                 <div className="text-sm text-white/90">Successful Cases</div>
               </div>
             </div>
@@ -215,7 +245,8 @@ export default function UAE() {
               Popular Visa Services in UAE
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Explore our most requested immigration services across the Emirates
+              Explore our most requested immigration services across the
+              Emirates
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-green-500 mx-auto mt-6"></div>
           </div>
@@ -233,14 +264,18 @@ export default function UAE() {
                       <CardTitle className="text-lg group-hover:text-red-600 transition-colors">
                         {category.name}
                       </CardTitle>
-                      <Badge variant="secondary" className="bg-red-100 text-red-700">
+                      <Badge
+                        variant="secondary"
+                        className="bg-red-100 text-red-700"
+                      >
                         {category.count}
                       </Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 mb-4">
-                      Professional {category.name.toLowerCase()} services across UAE
+                      Professional {category.name.toLowerCase()} services across
+                      UAE
                     </p>
                     <div className="flex items-center text-red-600 group-hover:text-red-700">
                       <span className="text-sm font-medium">View All</span>
@@ -286,7 +321,9 @@ export default function UAE() {
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center text-white">
                         <MapPin className="h-8 w-8 mx-auto mb-2 drop-shadow-lg" />
-                        <h3 className="text-xl font-bold drop-shadow-lg">{city.name}</h3>
+                        <h3 className="text-xl font-bold drop-shadow-lg">
+                          {city.name}
+                        </h3>
                       </div>
                     </div>
                   </div>
@@ -356,7 +393,9 @@ export default function UAE() {
                           <h3 className="font-bold text-gray-900 group-hover:text-red-600 transition-colors">
                             {business.name}
                           </h3>
-                          <p className="text-sm text-gray-600">{business.city}</p>
+                          <p className="text-sm text-gray-600">
+                            {business.city}
+                          </p>
                         </div>
                         {business.verified && (
                           <CheckCircle className="h-5 w-5 text-green-500" />
@@ -404,7 +443,9 @@ export default function UAE() {
                 <Award className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-bold mb-2">Verified Professionals</h3>
-              <p className="opacity-90">All consultants are verified and licensed</p>
+              <p className="opacity-90">
+                All consultants are verified and licensed
+              </p>
             </div>
 
             <div className="text-center">

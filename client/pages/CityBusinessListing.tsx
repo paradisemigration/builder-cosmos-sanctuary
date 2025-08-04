@@ -49,8 +49,8 @@ export default function CityBusinessListing() {
   const location = useLocation();
 
   // Detect if this is a UAE route
-  const isUAERoute = location.pathname.startsWith('/uae/');
-  const country = isUAERoute ? 'uae' : 'india';
+  const isUAERoute = location.pathname.startsWith("/uae/");
+  const country = isUAERoute ? "uae" : "india";
 
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);

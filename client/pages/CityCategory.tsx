@@ -56,8 +56,8 @@ export default function CityCategory() {
   const location = useLocation();
 
   // Detect if this is a UAE route
-  const isUAERoute = location.pathname.startsWith('/uae/');
-  const country = isUAERoute ? 'uae' : 'india';
+  const isUAERoute = location.pathname.startsWith("/uae/");
+  const country = isUAERoute ? "uae" : "india";
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
   const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);

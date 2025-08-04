@@ -95,7 +95,7 @@ export default function AdminPanel() {
       // Load scraping statistics
       const timestamp = forceRefresh ? `?t=${Date.now()}` : "";
       let statsResult = { success: false, stats: {} };
-      
+
       try {
         const statsResponse = await fetch(`/api/scraping/stats${timestamp}`);
         if (statsResponse.ok) {
@@ -108,13 +108,13 @@ export default function AdminPanel() {
 
       // Load all businesses
       let businessesResult = { success: false, businesses: [], total: 0 };
-      
+
       try {
         // Try primary endpoint first
         const businessesResponse = await fetch(
           `/api/scraped-businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
         );
-        
+
         if (businessesResponse.ok) {
           businessesResult = await businessesResponse.json();
           console.log("Primary API response:", businessesResult);
@@ -122,14 +122,17 @@ export default function AdminPanel() {
           throw new Error(`HTTP ${businessesResponse.status}`);
         }
       } catch (primaryError) {
-        console.log("Primary API failed, trying alternative:", primaryError.message);
-        
+        console.log(
+          "Primary API failed, trying alternative:",
+          primaryError.message,
+        );
+
         // Try alternative endpoint
         try {
           const businessesResponse = await fetch(
             `/api/businesses${forceRefresh ? "?t=" + Date.now() : ""}`,
           );
-          
+
           if (businessesResponse.ok) {
             businessesResult = await businessesResponse.json();
             console.log("Alternative API response:", businessesResult);
@@ -141,7 +144,9 @@ export default function AdminPanel() {
 
       // Load S3 stats if available
       try {
-        const s3StatsResponse = await fetch(`/api/ultra-fast-sync/stats${timestamp}`);
+        const s3StatsResponse = await fetch(
+          `/api/ultra-fast-sync/stats${timestamp}`,
+        );
         if (s3StatsResponse.ok) {
           const s3StatsResult = await s3StatsResponse.json();
           if (s3StatsResult.success) {
@@ -446,7 +451,9 @@ export default function AdminPanel() {
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                   <div className="flex items-center">
                     <RefreshCw className="h-5 w-5 text-blue-600 animate-spin mr-2" />
-                    <span className="text-blue-800">Loading dashboard data...</span>
+                    <span className="text-blue-800">
+                      Loading dashboard data...
+                    </span>
                   </div>
                 </div>
               )}
@@ -458,9 +465,9 @@ export default function AdminPanel() {
                     <span className="text-yellow-800">
                       No businesses loaded from API. Expected 1500+ businesses.
                     </span>
-                    <Button 
-                      onClick={() => loadDashboardData(true)} 
-                      className="ml-4" 
+                    <Button
+                      onClick={() => loadDashboardData(true)}
+                      className="ml-4"
                       size="sm"
                     >
                       Retry Loading
@@ -480,7 +487,9 @@ export default function AdminPanel() {
                           Total Listings
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          {loading ? "..." : stats?.totalBusinesses || businesses.length || 0}
+                          {loading
+                            ? "..."
+                            : stats?.totalBusinesses || businesses.length || 0}
                         </p>
                       </div>
                     </div>
@@ -667,7 +676,8 @@ export default function AdminPanel() {
                           <p className="text-sm text-gray-600">
                             Showing {Math.min(businesses.length, 100)} of{" "}
                             {businesses.length} businesses
-                            {businesses.length > 100 && " (first 100 displayed)"}
+                            {businesses.length > 100 &&
+                              " (first 100 displayed)"}
                           </p>
                           <Button
                             onClick={() => window.open("/business", "_blank")}
