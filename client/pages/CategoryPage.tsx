@@ -47,6 +47,7 @@ import {
   setSEOLinks,
   setBreadcrumbStructuredData,
 } from "@/lib/meta-utils";
+import { SEOHead, generateCategorySEO } from "@/components/SEOHead";
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
