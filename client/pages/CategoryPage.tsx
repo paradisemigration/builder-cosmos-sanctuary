@@ -70,16 +70,10 @@ export default function CategoryPage() {
     return getCategoryBySlug(category);
   }, [category]);
 
-  // Filter cities based on search and country selection
+  // Filter cities based on search and country context
   const filteredCities = useMemo(() => {
-    let cities = allCities;
-
-    // Filter by country
-    if (selectedCountry === "india") {
-      cities = allIndianCities;
-    } else if (selectedCountry === "uae") {
-      cities = uaeCities;
-    }
+    // Use country-specific cities based on route
+    let cities = country === 'uae' ? uaeCities : allIndianCities;
 
     // Filter by search
     if (searchQuery) {
