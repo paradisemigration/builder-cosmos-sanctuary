@@ -166,7 +166,7 @@ export default function AllCitiesCategories() {
                     Popular Cities
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                    {popularCities.map((city) => (
+                    {(popularCities || []).map((city) => (
                       <Link
                         key={city}
                         to={getCityUrl(city)}
