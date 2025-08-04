@@ -152,32 +152,7 @@ export function GlobalDebugPopup() {
   return (
     <>
       {/* Always visible test indicator */}
-      <div
-        className="fixed top-2 right-2 bg-green-500 text-white px-3 py-2 text-xs rounded shadow-lg z-[9999] max-w-lg"
-        style={{
-          fontFamily: "monospace",
-          lineHeight: "1.3",
-          minWidth: "350px",
-        }}
-        title="Click red bug button for detailed popup"
-      >
-        <div className="text-yellow-200 font-bold mb-1">
-          DEBUG: {location.pathname}
-        </div>
-        <div className="text-white break-words">
-          T: {debugInfo.metaData.title}
-        </div>
-        <div className="text-white break-words">
-          D: {debugInfo.metaData.description.substring(0, 100)}
-          {debugInfo.metaData.description.length > 100 ? "..." : ""}
-        </div>
-        <div className="text-white break-words">
-          K: {debugInfo.metaData.keywords}
-        </div>
-        <div className="text-yellow-200 font-bold">
-          META: {debugInfo.metaData.allMetaTags.length} tags
-        </div>
-      </div>
+
 
       {!isOpen ? (
         <button
