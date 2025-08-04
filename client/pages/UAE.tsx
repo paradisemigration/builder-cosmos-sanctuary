@@ -188,19 +188,19 @@ export default function UAE() {
               </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex justify-center gap-8 mt-12">
-              <div className="text-center text-white">
-                <div className="text-3xl font-bold text-yellow-300">500+</div>
-                <div className="text-sm">Verified Consultants</div>
+            {/* Enhanced Stats */}
+            <div className="flex justify-center gap-8 lg:gap-12">
+              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                <div className="text-4xl font-bold text-yellow-300 mb-1">500+</div>
+                <div className="text-sm text-white/90">Verified Consultants</div>
               </div>
-              <div className="text-center text-white">
-                <div className="text-3xl font-bold text-yellow-300">6</div>
-                <div className="text-sm">Emirates Covered</div>
+              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                <div className="text-4xl font-bold text-yellow-300 mb-1">6</div>
+                <div className="text-sm text-white/90">Emirates Covered</div>
               </div>
-              <div className="text-center text-white">
-                <div className="text-3xl font-bold text-yellow-300">10K+</div>
-                <div className="text-sm">Successful Cases</div>
+              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                <div className="text-4xl font-bold text-yellow-300 mb-1">10K+</div>
+                <div className="text-sm text-white/90">Successful Cases</div>
               </div>
             </div>
           </div>
