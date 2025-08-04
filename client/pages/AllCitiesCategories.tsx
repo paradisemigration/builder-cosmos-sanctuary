@@ -180,7 +180,7 @@ export default function AllCitiesCategories() {
                             {city}
                           </h4>
                           <p className="text-sm text-gray-600 mt-1">
-                            {Object.keys(categoryMapping).length} categories
+                            {Object.keys(completeCategoryMapping).length} categories
                           </p>
                         </div>
                       </Link>
