@@ -166,23 +166,25 @@ export default function UAE() {
               Expert immigration services for work visas, study abroad, and more.
             </p>
 
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto bg-white rounded-full p-2 shadow-2xl">
-              <div className="flex">
-                <Input
-                  type="text"
-                  placeholder="Search visa consultants in UAE..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border-0 bg-transparent text-lg focus:ring-0 flex-1"
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                />
-                <Button
-                  onClick={handleSearch}
-                  className="rounded-full px-8 bg-red-600 hover:bg-red-700"
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
+            {/* Enhanced Search Bar */}
+            <div className="max-w-3xl mx-auto mb-12">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-3 shadow-2xl border border-white/20">
+                <div className="flex">
+                  <Input
+                    type="text"
+                    placeholder="Search visa consultants in UAE..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="border-0 bg-transparent text-lg focus:ring-0 flex-1 px-4"
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                  />
+                  <Button
+                    onClick={handleSearch}
+                    className="rounded-xl px-8 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
 
