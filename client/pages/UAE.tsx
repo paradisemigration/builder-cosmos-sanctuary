@@ -38,11 +38,20 @@ export default function UAE() {
     { slug: "family-visa-consultants", name: "Family Visa Consultants", count: "110+" },
   ];
 
-  // Featured UAE cities with additional info
+  // Featured UAE cities with real images
+  const cityImages = {
+    "Dubai": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Abu Dhabi": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Sharjah": "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Ajman": "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Ras Al Khaimah": "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Fujairah": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+  };
+
   const featuredCities = uaeCities.map(city => ({
     name: city,
     businesses: Math.floor(Math.random() * 50) + 20,
-    image: `/images/cities/uae/${city.toLowerCase().replace(/\s+/g, "-")}.jpg`,
+    image: cityImages[city] || cityImages["Dubai"],
     description: `Find trusted visa consultants in ${city}`
   }));
 
