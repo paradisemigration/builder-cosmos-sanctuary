@@ -51,6 +51,11 @@ import {
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Detect if this is a UAE route
+  const isUAERoute = location.pathname.startsWith('/uae/');
+  const country = isUAERoute ? 'uae' : 'india';
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
