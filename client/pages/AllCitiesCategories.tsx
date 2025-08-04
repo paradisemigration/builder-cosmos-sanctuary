@@ -281,11 +281,11 @@ export default function AllCitiesCategories() {
 
                       <div className="space-y-2">
                         <Link
-                          to={getCategoryUrl(slug)}
+                          to={getCategoryUrl(category.slug)}
                           className="block w-full"
                         >
                           <Button className="w-full" variant="outline">
-                            View All {name}
+                            View All {category.name}
                           </Button>
                         </Link>
 
