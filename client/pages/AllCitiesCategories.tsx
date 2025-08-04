@@ -262,7 +262,7 @@ export default function AllCitiesCategories() {
                             {category.name}
                           </CardTitle>
                           <p className="text-sm text-gray-500 mt-1">
-                            Available in {indianCities.length} cities
+                            Available in {allIndianCities.length} cities
                           </p>
                         </div>
                       </div>
