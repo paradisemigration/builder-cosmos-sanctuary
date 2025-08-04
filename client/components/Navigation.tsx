@@ -86,6 +86,17 @@ export function Navigation({ className = "" }: NavigationProps) {
                 Find Consultants
               </Link>
 
+              <Link
+                to="/uae"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                  isCurrentPage("/uae")
+                    ? "bg-red-100 text-red-700"
+                    : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                }`}
+              >
+                🇦🇪 UAE
+              </Link>
+
               {/* Browse Dropdown */}
               <div className="relative group">
                 <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700 hover:text-purple-600 hover:bg-purple-50 flex items-center gap-1">
