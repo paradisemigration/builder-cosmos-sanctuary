@@ -109,7 +109,7 @@ export default function CategoryPage() {
     });
 
     return cities;
-  }, [searchQuery, selectedCountry, sortBy]);
+  }, [searchQuery, sortBy, country]);
 
   // Fetch businesses for this category
   useEffect(() => {
