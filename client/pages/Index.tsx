@@ -32,6 +32,7 @@ import {
   indianCities,
   visaTypes,
 } from "@/lib/data";
+import { setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,25 +40,89 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Set homepage SEO meta data
+  useEffect(() => {
+    const homePageMeta = {
+      title:
+        "VisaConsult India - Find Top Rated Visa Consultants & Immigration Experts",
+      description:
+        "Find trusted visa consultants and immigration experts across India and UAE. Compare services, read authentic reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications. Professional visa consultation with proven success rates.",
+      keywords:
+        "visa consultants, immigration consultants, study abroad consultants, work permit agents, tourist visa services, immigration lawyers, pr consultants, visa agents, visa processing, visa services, immigration services, best visa consultants, top immigration experts, visa consultation, visa guidance",
+      robots:
+        "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      author: "VisaConsult India",
+      viewport: "width=device-width, initial-scale=1.0",
+    };
+
+    setPageMeta(homePageMeta);
+
+    // Set SEO links for homepage
+    setSEOLinks({
+      canonical: "/",
+      alternate: ["/", "/business", "/all-categories"],
+    });
+  }, []);
+
   // Fetch real featured businesses from database
   useEffect(() => {
     const fetchFeaturedBusinesses = async () => {
       try {
-        const response = await fetch("/api/scraped-businesses?limit=6");
+        // Add small delay to ensure server is ready
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        const response = await fetch("/api/scraped-businesses?limit=6", {
+          signal: controller.signal,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(
+            `API error: ${response.status} - ${response.statusText}`,
+          );
+        }
+
         const result = await response.json();
-        if (result.success) {
-          setFeaturedBusinesses(result.businesses || []);
+
+        if (
+          result.success &&
+          result.businesses &&
+          result.businesses.length > 0
+        ) {
+          setFeaturedBusinesses(result.businesses);
+          console.log("✅ Successfully loaded featured businesses from API");
+        } else {
+          console.warn(
+            "API returned unsuccessful result or no businesses:",
+            result,
+          );
+          // Fallback to sample data if API fails
+          setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
         }
       } catch (error) {
-        console.error("Error fetching featured businesses:", error);
-        // Fallback to empty array if fetch fails
-        setFeaturedBusinesses([]);
+        if (error.name === "AbortError") {
+          console.error("API request timed out after 5 seconds");
+        } else {
+          console.error("Error fetching featured businesses:", error);
+        }
+        // Fallback to sample data if fetch fails completely
+        setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
+        console.log("⚠️ Using sample data as fallback");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedBusinesses();
+    // Add a small delay before making the request to ensure everything is initialized
+    const timer = setTimeout(fetchFeaturedBusinesses, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -87,7 +152,7 @@ export default function Index() {
     { name: "Mumbai", count: "380+", icon: "🌆" },
     { name: "Bangalore", count: "320+", icon: "💻" },
     { name: "Chennai", count: "250+", icon: "🌊" },
-    { name: "Hyderabad", count: "200+", icon: "💎" },
+    { name: "Hyderabad", count: "200+", icon: "���" },
     { name: "Kolkata", count: "180+", icon: "���" },
     { name: "Pune", count: "150+", icon: "🎓" },
     { name: "Ahmedabad", count: "120+", icon: "🏗️" },

@@ -34,6 +34,14 @@ import {
   categoryMapping,
   type Business,
 } from "@/lib/data";
+import { allCities, getCitySlug } from "@/lib/all-categories";
+import {
+  generateCityMeta,
+  setPageMeta,
+  setSEOLinks,
+  setBreadcrumbStructuredData,
+} from "@/lib/meta-utils";
+import { DebugPopup } from "@/components/DebugPopup";
 
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
@@ -42,37 +50,203 @@ export default function CityBusinessListing() {
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalBusinesses, setTotalBusinesses] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const ITEMS_PER_PAGE = 50;
+  const [debugInfo, setDebugInfo] = useState({
+    categoryBusinesses: 0,
+    cityBusinesses: 0,
+    totalBusinesses: 0,
+    apiCalls: [] as Array<{
+      url: string;
+      status: string;
+      count: number;
+      timestamp: string;
+    }>,
+    metaData: { title: "", description: "", keywords: "" },
+    searchParams: { city: "", category: "", cityName: "", categoryName: "" },
+  });
 
   // Convert URL param back to proper city name
   const cityName = city
-    ? city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()
+    ? city
+        .split("-")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join(" ")
     : "";
+
+  // Function to fetch businesses from API
+  const fetchBusinesses = async (page = 1, resetList = false) => {
+    try {
+      if (page === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      console.log(`Fetching businesses for city: "${cityName}", page: ${page}`);
+
+      // First try to fetch from database/API
+      const response = await fetch(
+        `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("API Response:", result);
+
+        // Update debug info
+        const timestamp = new Date().toLocaleTimeString();
+        const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`;
+        setDebugInfo((prev) => ({
+          ...prev,
+          apiCalls: [
+            ...prev.apiCalls,
+            {
+              url: apiUrl,
+              status: "success",
+              count: result.businesses?.length || 0,
+              timestamp,
+            },
+          ],
+        }));
+
+        if (
+          result.success &&
+          result.businesses &&
+          result.businesses.length > 0
+        ) {
+          const newBusinesses = result.businesses;
+
+          if (resetList || page === 1) {
+            setBusinesses(newBusinesses);
+            setFilteredBusinesses(newBusinesses);
+          } else {
+            // Append to existing list for load more
+            setBusinesses((prev) => [...prev, ...newBusinesses]);
+            setFilteredBusinesses((prev) => [...prev, ...newBusinesses]);
+          }
+
+          setTotalBusinesses(result.total || newBusinesses.length);
+          setTotalPages(
+            result.totalPages ||
+              Math.ceil(
+                (result.total || newBusinesses.length) / ITEMS_PER_PAGE,
+              ),
+          );
+          setHasMore(page < (result.totalPages || 1));
+
+          // Update debug info with final counts
+          const metaData = generateCityMeta(cityName);
+          setDebugInfo((prev) => ({
+            ...prev,
+            cityBusinesses: newBusinesses.length,
+            totalBusinesses: result.total || newBusinesses.length,
+            metaData: {
+              title: metaData.title,
+              description: metaData.description,
+              keywords: metaData.keywords,
+            },
+            searchParams: {
+              city: city || "",
+              category: "",
+              cityName,
+              categoryName: "",
+            },
+          }));
+
+          setLoading(false);
+          setLoadingMore(false);
+          return;
+        } else {
+          console.log("No businesses found in API response");
+        }
+      } else {
+        console.log("API response not OK:", response.status);
+      }
+
+      // Fallback to sample data if API fails
+      console.log("API failed, using sample data");
+      const cityBusinesses = sampleBusinesses.filter(
+        (business) =>
+          business.city.toLowerCase() === (city?.toLowerCase() || ""),
+      );
+
+      if (resetList || page === 1) {
+        setBusinesses(cityBusinesses);
+        setFilteredBusinesses(cityBusinesses);
+      }
+
+      setTotalBusinesses(cityBusinesses.length);
+      setTotalPages(Math.ceil(cityBusinesses.length / ITEMS_PER_PAGE));
+      setHasMore(false);
+    } catch (error) {
+      console.error("Error fetching businesses:", error);
+
+      // Fallback to sample data on error
+      const cityBusinesses = sampleBusinesses.filter(
+        (business) =>
+          business.city.toLowerCase() === (city?.toLowerCase() || ""),
+      );
+
+      if (resetList || page === 1) {
+        setBusinesses(cityBusinesses);
+        setFilteredBusinesses(cityBusinesses);
+      }
+
+      setTotalBusinesses(cityBusinesses.length);
+      setTotalPages(Math.ceil(cityBusinesses.length / ITEMS_PER_PAGE));
+      setHasMore(false);
+    }
+
+    setLoading(false);
+    setLoadingMore(false);
+  };
 
   useEffect(() => {
     // Validate city exists
-    if (
-      !city ||
-      !indianCities.some((c) => c.toLowerCase() === city.toLowerCase())
-    ) {
+    const cityExists = allCities.some(
+      (c) => getCitySlug(c) === city.toLowerCase(),
+    );
+
+    if (!city || !cityExists) {
       navigate("/business");
       return;
     }
 
-    // Filter businesses by city
-    const cityBusinesses = sampleBusinesses.filter(
-      (business) => business.city.toLowerCase() === city.toLowerCase(),
-    );
+    // Reset pagination when city changes
+    setCurrentPage(1);
+    setBusinesses([]);
+    setFilteredBusinesses([]);
 
-    setBusinesses(cityBusinesses);
-    setFilteredBusinesses(cityBusinesses);
-    setLoading(false);
+    // Fetch businesses from API
+    fetchBusinesses(1, true);
 
-    // Set page title
-    document.title = `Visa Consultants in ${cityName} - VisaConsult India`;
+    // Set page meta data with SEO optimization
+    const metaData = generateCityMeta(cityName);
+    setPageMeta(metaData);
+
+    // Set SEO links for better Google crawling
+    setSEOLinks({
+      canonical: `/business/${city}`,
+      alternate: [`/business/${city}`, "/business"],
+    });
+
+    // Set breadcrumb structured data
+    setBreadcrumbStructuredData([
+      { name: "Home", url: "/" },
+      { name: "Browse", url: "/business" },
+      { name: cityName, url: `/business/${city}` },
+    ]);
   }, [city, cityName, navigate]);
 
   useEffect(() => {
@@ -327,11 +501,15 @@ export default function CityBusinessListing() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {filteredBusinesses.length} Consultants Found
+                {totalBusinesses} Consultants Found
               </h2>
               <p className="text-gray-600">
-                Showing results for {cityName}
+                Showing {filteredBusinesses.length} of {totalBusinesses} results
+                for {cityName}
                 {selectedCategory !== "all" && ` in ${selectedCategory}`}
+              </p>
+              <p className="text-sm text-gray-500">
+                Page {currentPage} of {totalPages}
               </p>
             </div>
 
@@ -380,21 +558,82 @@ export default function CityBusinessListing() {
               </CardContent>
             </Card>
           ) : (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "space-y-4"
-              }
-            >
-              {filteredBusinesses.map((business) => (
-                <BusinessCard
-                  key={business.id}
-                  business={business}
-                  className={viewMode === "list" ? "flex-row" : ""}
-                />
-              ))}
-            </div>
+            <>
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    : "space-y-4"
+                }
+              >
+                {filteredBusinesses.map((business) => (
+                  <BusinessCard
+                    key={business.id}
+                    business={business}
+                    className={viewMode === "list" ? "flex-row" : ""}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {(hasMore || currentPage > 1) && (
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  {/* Previous Page */}
+                  {currentPage > 1 && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const newPage = currentPage - 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, true);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      disabled={loading}
+                    >
+                      ← Previous Page
+                    </Button>
+                  )}
+
+                  {/* Page Info */}
+                  <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  {/* Next Page */}
+                  {hasMore && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const newPage = currentPage + 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, true);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      disabled={loading}
+                    >
+                      Next Page →
+                    </Button>
+                  )}
+
+                  {/* Load More (Alternative) */}
+                  {hasMore && (
+                    <Button
+                      onClick={() => {
+                        const newPage = currentPage + 1;
+                        setCurrentPage(newPage);
+                        fetchBusinesses(newPage, false); // Don't reset list
+                      }}
+                      disabled={loadingMore}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {loadingMore
+                        ? "Loading..."
+                        : `Load More (${Math.min(ITEMS_PER_PAGE, totalBusinesses - filteredBusinesses.length)} more)`}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -446,6 +685,9 @@ export default function CityBusinessListing() {
           </div>
         </section>
       )}
+
+      {/* Debug Popup */}
+      <DebugPopup debugInfo={debugInfo} />
     </div>
   );
 }

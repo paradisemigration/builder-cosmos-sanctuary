@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./global.css";
 import {
   BrowserRouter,
@@ -7,6 +7,7 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
+import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
 // Add required UI providers
 import { Toaster } from "@/components/ui/toaster";
@@ -39,6 +40,13 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import AdminStatus from "./pages/AdminStatus";
+import Sitemap from "./pages/Sitemap";
+import AllCitiesCategories from "./pages/AllCitiesCategories";
+import AllCategories from "./pages/AllCategories";
+import MainPages from "./pages/MainPages";
+import CategoryPage from "./pages/CategoryPage";
+import { SiteFooter } from "./components/SiteFooter";
+import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
 // Simple ProtectedRoute component to avoid auth issues
 function ProtectedRoute({
@@ -150,132 +158,150 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SimpleNavigation />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/business" element={<Browse />} />
-            <Route path="/list-business" element={<ListBusiness />} />
-            <Route path="/plans" element={<ListingPlans />} />
-            <Route path="/add-business" element={<AddBusiness />} />
-            <Route path="/login" element={<Login />} />
+const App = () => {
+  // Initialize SEO crawling setup
+  useEffect(() => {
+    setupSEOCrawling();
+  }, []);
 
-            {/* City-specific business listing routes */}
-            <Route path="/business/:city" element={<CityBusinessListing />} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SimpleNavigation />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Index />} />
+              <Route path="/business" element={<Browse />} />
+              <Route path="/list-business" element={<ListBusiness />} />
+              <Route path="/plans" element={<ListingPlans />} />
+              <Route path="/add-business" element={<AddBusiness />} />
+              <Route path="/login" element={<Login />} />
 
-            {/* Legacy business profile route for backward compatibility */}
-            <Route path="/business/:id" element={<BusinessProfile />} />
+              {/* City-specific business listing routes */}
+              <Route path="/business/:city" element={<CityBusinessListing />} />
 
-            {/* Smart route handler for categories vs business profiles */}
-            <Route
-              path="/business/:city/:category"
-              element={<CityRouteHandler />}
-            />
+              {/* Legacy business profile route for backward compatibility */}
+              <Route path="/business/:id" element={<BusinessProfile />} />
 
-            {/* SEO-friendly category and location routes */}
-            <Route
-              path="/category/:category"
-              element={<CategoryLocationPage />}
-            />
-            <Route
-              path="/location/:location"
-              element={<CategoryLocationPage />}
-            />
+              {/* Smart route handler for categories vs business profiles */}
+              <Route
+                path="/business/:city/:category"
+                element={<CityRouteHandler />}
+              />
 
-            {/* Protected Routes - Require Authentication */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute requireRole="business_owner">
-                  <BusinessDashboard />
-                </ProtectedRoute>
-              }
-            />
+              {/* SEO-friendly category and location routes */}
+              <Route path="/category/:category" element={<CategoryPage />} />
+              <Route
+                path="/location/:location"
+                element={<CategoryLocationPage />}
+              />
 
-            {/* Admin Only Routes */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requireRole="admin">
-                  <AdminPanel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/bulk-upload"
-              element={
-                <ProtectedRoute requireRole="admin">
-                  <AdminBulkUpload />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/business/:id/edit"
-              element={
-                <ProtectedRoute requireRole="admin">
-                  <EditBusiness />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/status"
-              element={
-                <ProtectedRoute requireRole="admin">
-                  <AdminStatus />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes - Require Authentication */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute requireRole="business_owner">
+                    <BusinessDashboard />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Business Owner Edit Route */}
-            <Route
-              path="/business/:id/edit"
-              element={
-                <ProtectedRoute requireRole="business_owner">
-                  <EditBusiness />
-                </ProtectedRoute>
-              }
-            />
+              {/* Admin Only Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requireRole="admin">
+                    <AdminPanel />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/bulk-upload"
+                element={
+                  <ProtectedRoute requireRole="admin">
+                    <AdminBulkUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/business/:id/edit"
+                element={
+                  <ProtectedRoute requireRole="admin">
+                    <EditBusiness />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/status"
+                element={
+                  <ProtectedRoute requireRole="admin">
+                    <AdminStatus />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Static Pages */}
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cant-find-business" element={<CantFindBusiness />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route
-              path="/help"
-              element={
-                <div className="min-h-screen bg-gray-50 pt-24 px-4">
-                  <div className="container mx-auto max-w-4xl">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                      Help Center
-                    </h1>
-                    <div className="bg-white rounded-lg p-8 shadow-sm">
-                      <p className="text-lg text-gray-700 mb-4">
-                        Find answers to frequently asked questions and get
-                        support.
-                      </p>
-                      <p className="text-gray-600">Coming soon...</p>
+              {/* Business Owner Edit Route */}
+              <Route
+                path="/business/:id/edit"
+                element={
+                  <ProtectedRoute requireRole="business_owner">
+                    <EditBusiness />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Static Pages */}
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route
+                path="/cant-find-business"
+                element={<CantFindBusiness />}
+              />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+
+              {/* Browse All Pages */}
+              <Route path="/sitemap" element={<Sitemap />} />
+              <Route
+                path="/all-cities-categories"
+                element={<AllCitiesCategories />}
+              />
+              <Route path="/all-categories" element={<AllCategories />} />
+              <Route path="/main-pages" element={<MainPages />} />
+              <Route
+                path="/help"
+                element={
+                  <div className="min-h-screen bg-gray-50 pt-24 px-4">
+                    <div className="container mx-auto max-w-4xl">
+                      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+                        Help Center
+                      </h1>
+                      <div className="bg-white rounded-lg p-8 shadow-sm">
+                        <p className="text-lg text-gray-700 mb-4">
+                          Find answers to frequently asked questions and get
+                          support.
+                        </p>
+                        <p className="text-gray-600">Coming soon...</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              }
-            />
+                }
+              />
 
-            {/* Catch-all route - must be last */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+              {/* Catch-all route - must be last */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <SiteFooter />
+            <GlobalDebugPopup />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

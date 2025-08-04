@@ -40,6 +40,62 @@ app.use("/api/ultra-fast-sync", ultraFastSyncRouter);
 let businesses = [];
 let businessIdCounter = 1;
 
+// Sample businesses for fallback when database is empty
+const sampleBusinesses = [
+  {
+    id: "sample-1",
+    name: "Delhi Immigration Services",
+    category: "Immigration Consultants",
+    description: "Professional immigration and visa consultation services",
+    address: "Connaught Place, New Delhi",
+    city: "Delhi",
+    phone: "+91-11-12345678",
+    website: "https://example.com",
+    rating: 4.5,
+    reviewCount: 120,
+    services: ["Immigration Consultants", "Visa Consultants", "Study Abroad"],
+    isVerified: true,
+    isFeatured: false,
+  },
+  {
+    id: "sample-2",
+    name: "Norway Work Permit Experts Delhi",
+    category: "Norway Work Permit Visa Agency",
+    description: "Specialized Norway work permit and visa processing services",
+    address: "Karol Bagh, New Delhi",
+    city: "Delhi",
+    phone: "+91-11-87654321",
+    website: "https://example.com",
+    rating: 4.7,
+    reviewCount: 85,
+    services: [
+      "Norway Work Permit Visa Agency",
+      "Work Permit",
+      "European Visas",
+    ],
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    id: "sample-3",
+    name: "Mumbai Visa Consultants",
+    category: "Visa Consultants",
+    description: "Complete visa consultation and documentation services",
+    address: "Andheri West, Mumbai",
+    city: "Mumbai",
+    phone: "+91-22-12345678",
+    website: "https://example.com",
+    rating: 4.3,
+    reviewCount: 200,
+    services: ["Visa Consultants", "Tourist Visa", "Business Visa"],
+    isVerified: true,
+    isFeatured: false,
+  },
+];
+
+// Make sample businesses available globally
+global.sampleBusinesses = sampleBusinesses;
+
 // Upload single image
 app.post(
   "/api/upload/single",
@@ -1032,6 +1088,27 @@ app.get("/api/scraping/stats", async (req, res) => {
       success: false,
       error: error.message,
       stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    });
+  }
+});
+
+// Get city and category wise statistics
+app.get("/api/city-category-stats", async (req, res) => {
+  try {
+    console.log("📊 Loading city and category wise stats...");
+
+    const stats = await sqliteDatabase.getCityCategoryStats();
+    console.log("✅ City-Category stats loaded:", stats);
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    console.error("❌ Get city-category stats error:", error.message);
+    res.status(500).json({
+      success: false,
+      error: error.message,
     });
   }
 });
@@ -2170,6 +2247,142 @@ app.post("/api/admin/auto-s3-config", (req, res) => {
     });
   } catch (error) {
     console.error("Update auto S3 config error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Debug endpoint to check available cities
+app.get("/api/debug/cities", async (req, res) => {
+  try {
+    const cities = await new Promise((resolve, reject) => {
+      sqliteDatabase.db.all(
+        "SELECT DISTINCT city, scrapedCity, COUNT(*) as count FROM businesses GROUP BY city, scrapedCity ORDER BY count DESC LIMIT 20",
+        [],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        },
+      );
+    });
+
+    res.json({
+      success: true,
+      cities: cities,
+      totalCities: cities.length,
+    });
+  } catch (error) {
+    console.error("Debug cities error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Get businesses from Google Maps API for specific city and category
+app.get("/api/google-maps-businesses", async (req, res) => {
+  try {
+    const { city, category, limit = 20 } = req.query;
+
+    if (!city || !category) {
+      return res.status(400).json({
+        success: false,
+        error: "City and category parameters are required",
+      });
+    }
+
+    if (!process.env.GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Google Places API key not configured",
+      });
+    }
+
+    console.log(`🔍 Searching Google Maps for ${category} in ${city}...`);
+
+    // Construct search query for Google Places API
+    const query = `${category} in ${city}`;
+
+    try {
+      // Use the Google Places API to search for businesses
+      const results = await googlePlaces.searchPlaces(query, {
+        fields: [
+          "place_id",
+          "name",
+          "formatted_address",
+          "rating",
+          "user_ratings_total",
+          "formatted_phone_number",
+          "website",
+          "business_status",
+          "geometry",
+        ],
+        limit: parseInt(limit),
+      });
+
+      if (results.success && results.places && results.places.length > 0) {
+        // Transform Google Places results to our business format
+        const businesses = results.places.map((place, index) => ({
+          id: place.place_id || `gm-${index}`,
+          googlePlaceId: place.place_id,
+          name: place.name || "Unknown Business",
+          category: category,
+          description: `${category} in ${city}`,
+          address: place.formatted_address || "",
+          city: city,
+          phone: place.formatted_phone_number || "",
+          website: place.website || "",
+          rating: place.rating || 0,
+          reviewCount: place.user_ratings_total || 0,
+          latitude: place.geometry?.location?.lat || null,
+          longitude: place.geometry?.location?.lng || null,
+          businessStatus: place.business_status || "OPERATIONAL",
+          source: "google_maps",
+          services: [category],
+          images: [],
+          isVerified: true,
+          isFeatured: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
+
+        console.log(
+          `✅ Found ${businesses.length} businesses from Google Maps`,
+        );
+
+        res.json({
+          success: true,
+          businesses,
+          total: businesses.length,
+          source: "google_maps",
+          query: query,
+        });
+      } else {
+        console.log(
+          `❌ No businesses found on Google Maps for ${category} in ${city}`,
+        );
+        res.json({
+          success: true,
+          businesses: [],
+          total: 0,
+          source: "google_maps",
+          query: query,
+          message: `No businesses found for ${category} in ${city}`,
+        });
+      }
+    } catch (apiError) {
+      console.error("Google Places API error:", apiError);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch data from Google Maps API",
+        details: apiError.message,
+      });
+    }
+  } catch (error) {
+    console.error("Google Maps businesses endpoint error:", error);
     res.status(500).json({
       success: false,
       error: error.message,

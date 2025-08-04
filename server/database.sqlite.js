@@ -178,7 +178,7 @@ class SQLiteDatabase {
         } catch (error) {
           if (error.message.includes("duplicate column name")) {
             console.log(
-              `ℹ️ Column ${columnName} already exists in ${tableName}`,
+              `ℹ�� Column ${columnName} already exists in ${tableName}`,
             );
           } else {
             console.error(
@@ -534,6 +534,26 @@ class SQLiteDatabase {
     });
   }
 
+  // Helper method to get businesses by city only
+  async getBusinessesByCity(city, limit = 50) {
+    return this.getBusinesses({ city, limit });
+  }
+
+  // Helper method to get businesses by category only
+  async getBusinessesByCategory(category, limit = 50) {
+    return this.getBusinesses({ category, limit });
+  }
+
+  // Helper method to get businesses by both city and category
+  async getBusinessesByCityAndCategory(city, category, limit = 50) {
+    return this.getBusinesses({ city, category, limit });
+  }
+
+  // Helper method to get all businesses with a limit
+  async getAllBusinesses(limit = 50) {
+    return this.getBusinesses({ limit });
+  }
+
   async getBusinessReviews(businessId) {
     return new Promise((resolve, reject) => {
       const sql =
@@ -639,6 +659,62 @@ class SQLiteDatabase {
           reject(err);
         } else {
           resolve(row || {});
+        }
+      });
+    });
+  }
+
+  async getCityCategoryStats() {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT
+          COALESCE(b.scrapedCity, b.city, 'Unknown') as city,
+          COALESCE(b.scrapedCategory, b.category, 'Visa Consultant') as category,
+          COUNT(*) as count
+        FROM businesses b
+        GROUP BY
+          COALESCE(b.scrapedCity, b.city, 'Unknown'),
+          COALESCE(b.scrapedCategory, b.category, 'Visa Consultant')
+        ORDER BY city, category
+      `;
+
+      this.db.all(sql, (err, rows) => {
+        if (err) {
+          console.error("Error getting city-category statistics:", err);
+          reject(err);
+        } else {
+          // Group by city for easier frontend consumption
+          const stats = {};
+          let totalCount = 0;
+
+          rows.forEach((row) => {
+            if (!stats[row.city]) {
+              stats[row.city] = {
+                city: row.city,
+                categories: [],
+                totalCount: 0,
+              };
+            }
+
+            stats[row.city].categories.push({
+              category: row.category,
+              count: row.count,
+            });
+            stats[row.city].totalCount += row.count;
+            totalCount += row.count;
+          });
+
+          // Convert to array and sort by total count descending
+          const result = Object.values(stats).sort(
+            (a, b) => b.totalCount - a.totalCount,
+          );
+
+          resolve({
+            cityCategoryBreakdown: result,
+            totalBusinesses: totalCount,
+            totalCities: result.length,
+            totalCategories: [...new Set(rows.map((r) => r.category))].length,
+          });
         }
       });
     });
