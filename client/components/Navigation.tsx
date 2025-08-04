@@ -290,6 +290,18 @@ export function Navigation({ className = "" }: NavigationProps) {
             </Link>
 
             <Link
+              to="/uae"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                isCurrentPage("/uae")
+                  ? "bg-red-100 text-red-700"
+                  : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              🇦🇪 UAE
+            </Link>
+
+            <Link
               to="/plans"
               className={`block px-3 py-2 rounded-md text-base font-medium ${
                 isCurrentPage("/plans")
