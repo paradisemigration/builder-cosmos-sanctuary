@@ -296,7 +296,7 @@ export default function AllCitiesCategories() {
                             {(popularCities || []).slice(0, 3).map((city, index) => (
                               <Link
                                 key={city}
-                                to={getCityCategoryUrl(city, slug)}
+                                to={getCityCategoryUrl(city, category.slug)}
                                 className="px-2 py-1 bg-gray-100 rounded text-blue-600 hover:bg-blue-50 transition-colors"
                               >
                                 {city}
