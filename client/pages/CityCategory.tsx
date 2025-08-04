@@ -53,6 +53,11 @@ import { DebugPopup } from "@/components/DebugPopup";
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Detect if this is a UAE route
+  const isUAERoute = location.pathname.startsWith('/uae/');
+  const country = isUAERoute ? 'uae' : 'india';
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
   const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
