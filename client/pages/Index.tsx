@@ -115,7 +115,7 @@ export default function Index() {
         }
         // Fallback to sample data if fetch fails completely
         setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
-        console.log("⚠️ Using sample data as fallback");
+        console.log("��️ Using sample data as fallback");
       } finally {
         setLoading(false);
       }
@@ -241,6 +241,29 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <SEOHead
+        title="VisaConsult India - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services"
+        description="India's largest directory of verified visa consultants. Find trusted immigration experts for student visa, work visa, tourist visa in Delhi, Mumbai, Bangalore & all major cities. Compare ratings & reviews."
+        keywords="visa consultants india, immigration services india, student visa consultants, work visa consultants, tourist visa services, visa agents delhi, mumbai visa consultants, bangalore immigration, india visa experts"
+        country="india"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "VisaConsult India",
+          "description": "India's largest directory of verified visa consultants",
+          "url": window.location.origin,
+          "logo": `${window.location.origin}/images/logo-india.png`,
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+91-xxx-xxxx",
+            "contactType": "customer service"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
+          }
+        }}
+      />
       <Navigation />
 
       {/* Hero Section */}
