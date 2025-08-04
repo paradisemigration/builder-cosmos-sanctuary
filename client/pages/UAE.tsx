@@ -147,16 +147,21 @@ export default function UAE() {
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="text-center">
-            {/* UAE Flag */}
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-12 bg-gradient-to-r from-red-500 via-white to-green-500 rounded shadow-lg border-2 border-gray-200"></div>
+            {/* Enhanced UAE Flag */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div className="w-20 h-14 bg-gradient-to-r from-red-500 via-white to-green-500 rounded-lg shadow-2xl border-2 border-white transform hover:scale-105 transition-transform"></div>
+                <div className="absolute inset-0 rounded-lg shadow-inner bg-gradient-to-t from-black/10 to-transparent"></div>
+              </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 drop-shadow-2xl leading-tight">
               UAE's Leading Visa
-              <span className="block text-yellow-300">Consultation Platform</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-white">
+                Consultation Platform
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow">
+            <p className="text-xl md:text-2xl text-white/95 mb-10 max-w-4xl mx-auto drop-shadow-lg leading-relaxed">
               Connect with trusted visa consultants across Dubai, Abu Dhabi, Sharjah and all Emirates.
               Expert immigration services for work visas, study abroad, and more.
             </p>
