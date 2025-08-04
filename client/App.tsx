@@ -46,6 +46,7 @@ import AllCitiesCategories from "./pages/AllCitiesCategories";
 import AllCategories from "./pages/AllCategories";
 import MainPages from "./pages/MainPages";
 import CategoryPage from "./pages/CategoryPage";
+import UAE from "./pages/UAE";
 import { SiteFooter } from "./components/SiteFooter";
 import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
