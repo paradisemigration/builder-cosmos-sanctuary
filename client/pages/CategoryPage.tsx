@@ -295,9 +295,9 @@ export default function CategoryPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5" />
                   <div>
-                    <p className="text-sm text-blue-100">Available in</p>
+                    <p className={`text-sm ${country === 'uae' ? 'text-red-100' : 'text-blue-100'}`}>Available in</p>
                     <p className="text-xl font-bold">
-                      {allCities.length} Cities
+                      {country === 'uae' ? uaeCities.length : allIndianCities.length} {country === 'uae' ? 'Emirates' : 'Cities'}
                     </p>
                   </div>
                 </div>
