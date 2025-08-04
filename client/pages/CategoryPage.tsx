@@ -200,7 +200,7 @@ export default function CategoryPage() {
   };
 
   const getCityUrl = (city: string) =>
-    `/business/${getCitySlug(city)}/${category}`;
+    `${country === 'uae' ? '/uae' : ''}/business/${getCitySlug(city)}/${category}`;
 
   if (!categoryInfo) {
     return (
