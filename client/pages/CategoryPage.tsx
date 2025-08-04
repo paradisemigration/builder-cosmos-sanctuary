@@ -231,17 +231,32 @@ export default function CategoryPage() {
       <Navigation />
 
       {/* Header Section */}
-      <section className="pt-20 pb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className={`pt-20 pb-8 text-white ${
+        country === 'uae'
+          ? 'bg-gradient-to-r from-red-600 to-green-600'
+          : 'bg-gradient-to-r from-blue-600 to-purple-600'
+      }`}>
         <div className="container mx-auto max-w-6xl px-4">
+          {/* Country Flag */}
+          <div className="flex justify-center mb-4">
+            <div className={`w-12 h-8 rounded shadow-lg border border-white/20 ${
+              country === 'uae'
+                ? 'bg-gradient-to-r from-red-500 via-white to-green-500'
+                : 'bg-gradient-to-b from-orange-500 via-white to-green-500 flex items-center justify-center'
+            }`}>
+              {country === 'india' && <div className="w-2 h-2 bg-blue-600 rounded-full"></div>}
+            </div>
+          </div>
+
           {/* Breadcrumb */}
           <nav className="mb-6">
             <div className="flex items-center space-x-2 text-sm">
-              <Link to="/" className="text-blue-100 hover:text-white">
-                Home
+              <Link to={country === 'uae' ? '/uae' : '/'} className="text-blue-100 hover:text-white">
+                {country === 'uae' ? 'UAE Home' : 'Home'}
               </Link>
               <span>/</span>
               <Link
-                to="/all-categories"
+                to={`${country === 'uae' ? '/uae' : ''}/all-categories`}
                 className="text-blue-100 hover:text-white"
               >
                 Categories
