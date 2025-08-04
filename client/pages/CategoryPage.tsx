@@ -223,6 +223,9 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        {...generateCategorySEO(categoryInfo.name, country)}
+      />
       <Navigation />
 
       {/* Header Section */}
