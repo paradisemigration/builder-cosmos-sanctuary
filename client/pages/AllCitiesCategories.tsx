@@ -247,9 +247,9 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCategories.map(([slug, name]) => (
+                {filteredCategories.map((category) => (
                   <Card
-                    key={slug}
+                    key={category.slug}
                     className="hover:shadow-lg transition-all duration-200 group border-2 hover:border-purple-300"
                   >
                     <CardHeader className="pb-3">
@@ -259,7 +259,7 @@ export default function AllCitiesCategories() {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-lg group-hover:text-purple-600 transition-colors">
-                            {name}
+                            {category.name}
                           </CardTitle>
                           <p className="text-sm text-gray-500 mt-1">
                             Available in {indianCities.length} cities
