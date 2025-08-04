@@ -179,6 +179,12 @@ const App = () => {
               {/* Public Routes */}
               <Route path="/" element={<Index />} />
               <Route path="/uae" element={<UAE />} />
+
+              {/* UAE-specific routes */}
+              <Route path="/uae/category/:category" element={<CategoryPage />} />
+              <Route path="/uae/business/:city" element={<CityBusinessListing />} />
+              <Route path="/uae/business/:city/:category" element={<CityRouteHandler />} />
+
               <Route path="/business" element={<Browse />} />
               <Route path="/list-business" element={<ListBusiness />} />
               <Route path="/plans" element={<ListingPlans />} />
