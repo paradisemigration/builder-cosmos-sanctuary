@@ -199,7 +199,7 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {filteredCities.map((city) => (
+                {(filteredCities || []).map((city) => (
                   <Link
                     key={city}
                     to={getCityUrl(city)}
