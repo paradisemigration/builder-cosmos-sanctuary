@@ -303,7 +303,7 @@ export default function AllCitiesCategories() {
                               </Link>
                             ))}
                             <span className="px-2 py-1 text-gray-400">
-                              +{indianCities.length - 3} more
+                              +{allIndianCities.length - 3} more
                             </span>
                           </div>
                         </div>
