@@ -265,24 +265,35 @@ export default function UAE() {
                 to={`/business/${city.name.toLowerCase().replace(/\s+/g, "-")}`}
                 className="group"
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-200 overflow-hidden">
-                  <div className="h-48 bg-gradient-to-br from-red-400 to-green-400 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <MapPin className="h-12 w-12 mx-auto mb-2" />
-                      <h3 className="text-xl font-bold">{city.name}</h3>
+                <Card className="h-full hover:shadow-2xl transition-all duration-300 overflow-hidden border-0 shadow-lg group-hover:scale-105">
+                  <div className="h-48 relative overflow-hidden">
+                    <img
+                      src={city.image}
+                      alt={`${city.name} skyline`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    {/* UAE flag gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 via-transparent to-green-600/30"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <MapPin className="h-8 w-8 mx-auto mb-2 drop-shadow-lg" />
+                        <h3 className="text-xl font-bold drop-shadow-lg">{city.name}</h3>
+                      </div>
                     </div>
                   </div>
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 bg-white">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
                       {city.name}
                     </h3>
                     <p className="text-gray-600 mb-4">{city.description}</p>
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 flex items-center gap-1">
+                        <Building className="h-4 w-4" />
                         {city.businesses} consultants
                       </div>
-                      <div className="flex items-center text-red-600">
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      <div className="flex items-center text-red-600 group-hover:text-red-700">
+                        <span className="text-sm font-medium">Explore</span>
+                        <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
                   </CardContent>
