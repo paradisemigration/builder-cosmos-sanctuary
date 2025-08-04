@@ -100,7 +100,6 @@ export default function AdminPanel() {
     try {
       setLoading(true);
 
-<<<<<<< HEAD
       // Load scraping statistics with cache busting for forced refresh
       const timestamp = forceRefresh ? `?t=${Date.now()}` : "";
       let statsResponse, statsResult;
@@ -233,64 +232,6 @@ export default function AdminPanel() {
 
       if (forceRefresh) {
         toast.success("Dashboard data refreshed successfully");
-=======
-      // Load scraping statistics
-      try {
-        const statsResponse = await fetch("/api/scraping/stats");
-        if (!statsResponse.ok) {
-          throw new Error(`Stats API error: ${statsResponse.status}`);
-        }
-        const statsResult = await statsResponse.json();
-        if (statsResult.success) {
-          setStats(statsResult.stats);
-        }
-      } catch (error) {
-        console.error("Failed to load stats:", error);
-      }
-
-      // Load city-category statistics (optional - don't fail if this doesn't work)
-      try {
-        const cityCategoryResponse = await fetch("/api/city-category-stats");
-        if (cityCategoryResponse.ok) {
-          const cityCategoryResult = await cityCategoryResponse.json();
-          if (cityCategoryResult.success) {
-            setCityCategoryStats(cityCategoryResult.data);
-          }
-        } else {
-          console.warn(
-            "City-category stats endpoint not available:",
-            cityCategoryResponse.status,
-          );
-        }
-      } catch (error) {
-        console.warn("City-category stats not available:", error);
-        // This is optional, so we don't show this error to the user
-      }
-
-      // Load businesses
-      try {
-        const businessesResponse = await fetch(
-          "/api/scraped-businesses?limit=100",
-        );
-        if (!businessesResponse.ok) {
-          throw new Error(`Business API error: ${businessesResponse.status}`);
-        }
-        const businessesResult = await businessesResponse.json();
-
-        if (businessesResult.success) {
-          setBusinesses(businessesResult.businesses || []);
-
-          // Update stats with accurate total from the businesses query
-          if (businessesResult.total) {
-            setStats((prev) => ({
-              ...prev,
-              totalBusinesses: businessesResult.total,
-            }));
-          }
-        }
-      } catch (error) {
-        console.error("Failed to load businesses:", error);
->>>>>>> 05e047b7af01db5063fe9bccc40c217b5076ffbb
       }
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
