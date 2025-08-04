@@ -214,7 +214,7 @@ export default function AllCitiesCategories() {
                           {city}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {Object.keys(completeCategoryMapping).length} categories
+                          {Object.keys(completeCategoryMapping || {}).length} categories
                         </p>
                       </div>
                     </div>
