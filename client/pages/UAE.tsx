@@ -314,15 +314,16 @@ export default function UAE() {
       </section>
 
       {/* Featured Businesses Section */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Featured Visa Consultants in UAE
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Top-rated professionals trusted by thousands of clients
             </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-green-500 mx-auto mt-6"></div>
           </div>
 
           {loading ? (
