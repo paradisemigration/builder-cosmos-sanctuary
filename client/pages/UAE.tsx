@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/SEOHead";
+import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
 import { uaeCities, allCategories } from "@/lib/all-categories";
 import { useGeolocation } from "@/hooks/useGeolocation";
 
