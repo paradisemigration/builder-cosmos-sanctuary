@@ -92,7 +92,9 @@ export default function Index() {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/business?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/business');
     }
   };
 
