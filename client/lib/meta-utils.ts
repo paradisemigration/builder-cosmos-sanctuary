@@ -105,47 +105,31 @@ function getCategorySpecificContent(categoryName: string): {
   } else if (categoryLower.includes("australia")) {
     return {
       shortDesc: "Australia immigration consultants for skilled migration & PR visas.",
-      keywords:
-        "australia pr, skilled migration, australian visa, 189 visa, 190 visa, australia immigration",
+      keywords: "australia pr, skilled migration, australian visa, 189 visa, 190 visa, australia immigration, subclass 189, subclass 190, australia work visa, aussie immigration",
     };
-  } else if (
-    categoryLower.includes("usa") ||
-    categoryLower.includes("america")
-  ) {
+  } else if (categoryLower.includes("usa") || categoryLower.includes("america")) {
     return {
-      description:
-        "USA visa consultants for H1B, L1, EB5, student visas, and American immigration services.",
-      keywords:
-        "usa visa, h1b visa, l1 visa, eb5 visa, america immigration, us visa consultant",
+      shortDesc: "USA visa consultants for H1B, L1, EB5 & student visas.",
+      keywords: "usa visa, h1b visa, l1 visa, eb5 visa, america immigration, us visa consultant, green card, f1 visa, us work permit, american visa",
     };
-  } else if (
-    categoryLower.includes("uk") ||
-    categoryLower.includes("britain")
-  ) {
+  } else if (categoryLower.includes("uk") || categoryLower.includes("britain")) {
     return {
-      description:
-        "UK visa consultants for Tier 1, Tier 2, student visas, and British immigration services.",
-      keywords:
-        "uk visa, tier 1 visa, tier 2 visa, britain immigration, uk immigration consultant",
+      shortDesc: "UK visa consultants for Tier 1, Tier 2 & student visas.",
+      keywords: "uk visa, tier 1 visa, tier 2 visa, britain immigration, uk immigration consultant, british visa, uk work permit, uk student visa, tier 4 visa, uk spouse visa",
     };
   } else if (categoryLower.includes("europe")) {
     return {
-      description:
-        "European work visa specialists for Schengen visas, EU Blue Card, and European employment permits.",
-      keywords:
-        "europe visa, schengen visa, eu blue card, european work permit, europe immigration",
+      shortDesc: "European work visa specialists for Schengen & EU Blue Card.",
+      keywords: "europe visa, schengen visa, eu blue card, european work permit, europe immigration, schengen countries, european union visa, eu visa, european work visa, eu immigration",
     };
   } else if (categoryLower.includes("germany")) {
     return {
-      description:
-        "Germany work permit and visa consultants for EU Blue Card, job seeker visa, and German immigration.",
-      keywords:
-        "germany visa, eu blue card, germany work permit, job seeker visa, german immigration",
+      shortDesc: "Germany work permit consultants for EU Blue Card & job seeker visa.",
+      keywords: "germany visa, eu blue card, germany work permit, job seeker visa, german immigration, germany work visa, german residence permit, germany student visa, berlin visa, munich visa",
     };
   } else if (categoryLower.includes("norway")) {
     return {
-      description:
-        "Norway work permit specialists for skilled worker visas and Norwegian immigration services.",
+      shortDesc: "Norway work permit specialists for skilled worker visas.",
       keywords:
         "norway work permit, norway visa, norwegian immigration, skilled worker visa norway",
     };
