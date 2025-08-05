@@ -480,7 +480,7 @@ function setCityBusinessDirectoryStructuredData(metaData: MetaData): void {
     }
   };
 
-  setStructuredData(structuredData, 'directory');
+  setTypedStructuredData(structuredData, 'directory');
 }
 
 // Set city-only page structured data
