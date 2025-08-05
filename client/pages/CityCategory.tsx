@@ -454,11 +454,12 @@ const detectUserLocation = async (): Promise<{
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-        const response = await fetch(
+        const response = await robustFetch(
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`,
           {
             signal: controller.signal,
           },
+          2 // Only 2 retries for external APIs
         );
         clearTimeout(timeoutId);
 
