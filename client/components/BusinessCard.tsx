@@ -74,22 +74,41 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
       "Ravi Kumar",
       "Grace Kim",
       "Youssef Ibrahim",
+      "Layla Hassan",
+      "John Miller",
+      "Zara Ahmed",
+      "Carlos Rodriguez",
+      "Priya Sharma"
     ];
 
     let hash = 0;
     for (let i = 0; i < businessName.length; i++) {
-      hash = (hash << 5) - hash + businessName.charCodeAt(i);
+      hash = ((hash << 5) - hash) + businessName.charCodeAt(i);
+      hash = hash & hash; // Convert to 32-bit integer
     }
 
     // Select 3-5 reviewers deterministically
     const reviewerCount = 3 + (Math.abs(hash) % 3);
     const selectedReviewers = [];
-    for (let i = 0; i < reviewerCount; i++) {
-      const index = Math.abs(hash + i * 7) % commonNames.length;
-      if (!selectedReviewers.includes(commonNames[index])) {
-        selectedReviewers.push(commonNames[index]);
+
+    // Ensure we get unique reviewers
+    for (let i = 0; i < reviewerCount && selectedReviewers.length < 5; i++) {
+      const index = Math.abs(hash + i * 13) % commonNames.length;
+      const reviewer = commonNames[index];
+      if (!selectedReviewers.includes(reviewer)) {
+        selectedReviewers.push(reviewer);
       }
     }
+
+    // Ensure we have at least 3 reviewers
+    while (selectedReviewers.length < 3) {
+      const randomIndex = Math.abs(hash + selectedReviewers.length * 17) % commonNames.length;
+      const reviewer = commonNames[randomIndex];
+      if (!selectedReviewers.includes(reviewer)) {
+        selectedReviewers.push(reviewer);
+      }
+    }
+
     return selectedReviewers;
   };
 
