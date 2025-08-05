@@ -1637,6 +1637,8 @@ export default function CityCategory() {
         }
 
         // Step 3: If no data from API, fallback to sample data with nearby cities logic
+        console.log("API result received:", result);
+
         if (
           !result ||
           !result.success ||
