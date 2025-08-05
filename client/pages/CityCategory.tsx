@@ -93,6 +93,11 @@ const nearbyAreasMapping: Record<string, string[]> = {
 const getNearByCities = (cityName: string, country: string): string[] => {
   const normalizedCity = cityName.toLowerCase();
 
+  // Special case: Abu Dhabi should show ONLY Abu Dhabi businesses (no fallback)
+  if (normalizedCity === "abu dhabi" || normalizedCity === "abu-dhabi") {
+    return []; // No fallback for Abu Dhabi
+  }
+
   // Check if we have nearby areas mapping
   if (nearbyAreasMapping[normalizedCity]) {
     return nearbyAreasMapping[normalizedCity];
