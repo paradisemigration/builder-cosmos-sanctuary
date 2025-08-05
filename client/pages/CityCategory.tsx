@@ -204,15 +204,57 @@ const getFAQs = (categorySlug: string, cityName: string) => {
     "work-permit": [
       {
         question: `Which countries offer work permits through ${cityName} consultants?`,
-        answer: `Work permit specialists in ${cityName} can assist with applications for Canada, Australia, New Zealand, Germany, UAE, USA, and other countries with various skilled worker programs.`
+        answer: `Work permit specialists in ${cityName} can assist with applications for Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Skilled Migrant Category), Germany (EU Blue Card), UAE (Employment Visa), USA (H1B, L1), UK (Skilled Worker Visa), and other countries with various skilled worker programs. Each country has specific requirements and quotas.`
       },
       {
         question: `What is the process for obtaining a work permit through ${cityName}?`,
-        answer: `The process involves skills assessment, job search assistance, employer nomination, application submission, and visa processing. Consultants in ${cityName} guide you through each step.`
+        answer: `The comprehensive process includes: 1) Initial consultation and eligibility assessment, 2) Skills assessment and qualification verification, 3) Language proficiency testing (IELTS/TOEFL), 4) Job search assistance and employer matching, 5) Employer nomination or sponsorship, 6) Application preparation and documentation, 7) Submission to immigration authorities, 8) Biometrics and medical examinations, 9) Visa approval and pre-departure briefing. Consultants in ${cityName} provide end-to-end support throughout this 6-18 month process.`
       },
       {
         question: `How long does work permit processing take from ${cityName}?`,
-        answer: `Work permit processing times vary from 2-12 months depending on the country and program. Consultants in ${cityName} provide realistic timelines and regular updates on your application status.`
+        answer: `Processing times vary significantly by country and program: Canada Express Entry (6-8 months), Australia Skilled Independent (8-12 months), New Zealand Skilled Migrant (12-24 months), Germany EU Blue Card (2-3 months), UAE Employment Visa (1-2 months), USA H1B (3-8 months), UK Skilled Worker (3-8 weeks). Consultants in ${cityName} provide realistic timelines and regular updates throughout the process.`
+      },
+      {
+        question: `What are the eligibility requirements for work permits from ${cityName}?`,
+        answer: `General eligibility criteria include: Education qualification assessment, minimum work experience (usually 1-3 years), language proficiency (IELTS 6.5+ or equivalent), clean criminal background check, medical examination clearance, proof of funds for settlement, and age requirements (typically 18-45 years). Specific requirements vary by country and skilled occupation categories.`
+      },
+      {
+        question: `How much do work permit consultants charge in ${cityName}?`,
+        answer: `Work permit consultation fees in ${cityName} typically range from AED 8,000 to AED 25,000 depending on the destination country and complexity. This includes skills assessment, documentation, application filing, and follow-up services. Most consultants offer transparent pricing with no hidden costs and payment plans available.`
+      },
+      {
+        question: `What documents are required for work permit applications from ${cityName}?`,
+        answer: `Essential documents include: Educational certificates and transcripts, work experience letters, updated resume/CV, passport copies, IELTS/TOEFL scores, medical examination reports, police clearance certificates, bank statements, photographs, marriage certificate (if applicable), and birth certificates for dependents. All documents must be attested and translated if required.`
+      },
+      {
+        question: `Can family members accompany me on a work permit from ${cityName}?`,
+        answer: `Yes, most work permit programs allow accompanying family members including spouse and dependent children under 18-22 years. Family members can typically work and study in the destination country. Additional documentation and fees apply for dependents, and some countries have specific income requirements for family sponsorship.`
+      },
+      {
+        question: `What is the success rate for work permit applications from ${cityName}?`,
+        answer: `Success rates vary by country and applicant profile: Canada Express Entry (70-85%), Australia Skilled Programs (65-80%), New Zealand (60-75%), Germany EU Blue Card (85-95%), UAE Employment Visa (90-95%). Experienced consultants in ${cityName} typically achieve higher success rates through proper case assessment and application preparation.`
+      }
+    ],
+    "work-visa-consultants": [
+      {
+        question: `What types of work visas can consultants in ${cityName} help with?`,
+        answer: `Work visa consultants in ${cityName} specialize in various categories including: Skilled Worker Visas (Canada Express Entry, Australia SkillSelect), Employer-Sponsored Visas (H1B, L1, UK Tier 2), Temporary Work Permits (UAE Employment, Germany Job Seeker), Intra-Company Transfer Visas, Self-Employment/Investor Visas, and Working Holiday Visas for eligible countries. Each visa type has specific requirements and processing procedures.`
+      },
+      {
+        question: `How do work visa consultants in ${cityName} help with job placement?`,
+        answer: `Leading consultants in ${cityName} offer comprehensive job placement services including: Resume optimization for international standards, LinkedIn profile enhancement, job search strategy development, direct employer connections through their network, interview preparation and coaching, salary negotiation guidance, and post-landing job search support. Some have partnerships with recruitment agencies in destination countries.`
+      },
+      {
+        question: `What is the difference between work permits and work visas?`,
+        answer: `Work permits are typically temporary authorizations allowing foreign nationals to work in a country for a specific employer and duration (1-3 years, renewable). Work visas are broader immigration categories that may lead to permanent residency, often with more flexibility to change employers. Consultants in ${cityName} help you choose the right pathway based on your long-term goals and qualifications.`
+      },
+      {
+        question: `How much do work visa services cost in ${cityName}?`,
+        answer: `Work visa consultation fees in ${cityName} vary by destination and service level: Basic consultation (AED 500-1,500), Complete application processing (AED 8,000-20,000), Premium services with job placement (AED 15,000-35,000). Government fees, medical exams, and document attestation are additional. Most consultants offer package deals and payment plans.`
+      },
+      {
+        question: `What are the most popular work visa destinations from ${cityName}?`,
+        answer: `Top destinations include: Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Essential Skills, Skilled Migrant), Germany (EU Blue Card, Job Seeker Visa), UK (Skilled Worker Visa), USA (H1B, L1, O1), Singapore (Employment Pass), and European countries through various skilled worker programs. Choice depends on your profession, qualifications, and personal preferences.`
       }
     ]
   };
