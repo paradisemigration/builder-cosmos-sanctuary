@@ -105,6 +105,20 @@ const getNearByCities = (cityName: string, country: string): string[] => {
   }
 };
 
+// Generate unique city descriptions
+const getCityDescription = (cityName: string) => {
+  const descriptions = {
+    "Dubai": "Discover Dubai's leading visa and immigration consultants offering comprehensive services for work permits, tourist visas, study abroad programs, and permanent residency applications. Our verified experts provide personalized guidance with high success rates.",
+    "Abu Dhabi": "Connect with Abu Dhabi's most trusted visa consultants specializing in all types of visa applications including family visas, business permits, and immigration services. Get expert assistance with transparent pricing and reliable processing.",
+    "Sharjah": "Find experienced visa and immigration consultants in Sharjah providing affordable and efficient services for tourist visas, work permits, and study abroad guidance. Professional support for all your visa needs with excellent customer service.",
+    "Ajman": "Access reliable visa consultation services in Ajman for all your travel and immigration requirements. Our certified consultants offer competitive rates and comprehensive support for visa applications and documentation.",
+    "Delhi": "Explore Delhi's top-rated visa and immigration consultants offering expert services for international travel, study abroad programs, and permanent residency applications with proven track records and personalized assistance.",
+    "Mumbai": "Connect with Mumbai's premier visa consultants providing comprehensive immigration services, tourist visa assistance, and study abroad guidance. Get professional support for all your visa requirements with excellent success rates."
+  };
+
+  return descriptions[cityName] || `Find trusted and verified visa consultants in ${cityName}. Compare services, read reviews, and choose the best expert for your visa needs with transparent pricing and reliable service.`;
+};
+
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
   const navigate = useNavigate();
