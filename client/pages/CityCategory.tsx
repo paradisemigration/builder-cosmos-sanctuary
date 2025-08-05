@@ -117,14 +117,20 @@ export default function CityCategory() {
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
   const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
+  const [allDubaiBusinesses, setAllDubaiBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("rating");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [categoryDataLoaded, setCategoryDataLoaded] = useState(false);
   const [cityDataLoaded, setCityDataLoaded] = useState(false);
+  const [allDubaiDataLoaded, setAllDubaiDataLoaded] = useState(false);
   const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
+  const [totalAvailableBusinesses, setTotalAvailableBusinesses] = useState(0);
   const [debugInfo, setDebugInfo] = useState({
     categoryBusinesses: 0,
     cityBusinesses: 0,
