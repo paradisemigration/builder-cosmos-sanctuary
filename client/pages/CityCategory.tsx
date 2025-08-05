@@ -600,12 +600,28 @@ export default function CityCategory() {
           ),
       );
 
+      // Apply search filtering first if there's a search query
+      let searchFilteredBusinesses = uniqueBusinesses;
+      if (searchQuery) {
+        searchFilteredBusinesses = uniqueBusinesses.filter((business) => {
+          return (
+            business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            business.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            business.scrapedCategory?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            business.services?.some((service) =>
+              service.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          );
+        });
+      }
+
       // Apply pagination - show first 25 results initially
       const itemsPerPage = 25;
-      const paginatedBusinesses = uniqueBusinesses.slice(0, itemsPerPage * currentPage);
+      const paginatedBusinesses = searchFilteredBusinesses.slice(0, itemsPerPage * currentPage);
 
       setFilteredBusinesses(paginatedBusinesses);
-      setHasMoreData(uniqueBusinesses.length > paginatedBusinesses.length);
+      setHasMoreData(searchFilteredBusinesses.length > paginatedBusinesses.length);
       setLoading(false);
 
       // Update debug info
