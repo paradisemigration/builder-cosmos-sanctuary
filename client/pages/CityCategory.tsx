@@ -1731,12 +1731,7 @@ export default function CityCategory() {
                 console.log(`\n--- Trying broader search for ${nearbyCity} ---`);
 
                 // Try 1: All businesses in that city (no category filter)
-                const cityApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}`, {
-                  page: "1",
-                  limit: "25",
-                  sortBy: "rating",
-                  country: country,
-                });
+                const cityApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=25&country=${encodeURIComponent(country)}`;
 
                 console.log(`Trying all businesses API: ${cityApiUrl}`);
 
