@@ -1924,11 +1924,7 @@ export default function CityCategory() {
 
           // If no exact match, try nearby cities with accumulation
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(
-              cityName,
-              country,
-              userLocation,
-            );
+            // Use nearbyCities already declared above
 
             // Accumulate businesses from all nearby cities to get better coverage
             for (const nearbyCity_temp of nearbyCities) {
