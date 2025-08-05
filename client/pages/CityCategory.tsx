@@ -1669,6 +1669,8 @@ export default function CityCategory() {
               userLocation,
             );
 
+            console.log(`No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(', ')}`);
+
             let accumulatedBusinesses = [];
             let sourceCities = [];
 
