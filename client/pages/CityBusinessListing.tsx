@@ -236,6 +236,35 @@ const getNearByCities = (cityName: string, country: string): string[] => {
   }
 };
 
+// Generate unique content for city pages (500 words)
+const generateCityPageContent = (cityName: string, country: string) => {
+  const isUAE = country === "uae";
+  const countryName = isUAE ? "UAE" : "India";
+
+  return {
+    title: `Comprehensive Visa & Immigration Services in ${cityName}`,
+    content: `${cityName} stands as a prominent hub for visa and immigration services in ${countryName}, offering comprehensive solutions for international travel, study abroad, work permits, and permanent residency applications. The city hosts numerous experienced consultants specializing in various aspects of visa processing and immigration guidance.
+
+The visa consultation landscape in ${cityName} encompasses diverse services including tourist visa processing, business visa assistance, student visa guidance, work permit applications, and complex immigration procedures. Professional consultants in the city maintain extensive knowledge of international visa regulations, embassy requirements, and documentation standards across multiple countries.
+
+${cityName}'s strategic location and established infrastructure make it an ideal base for visa services targeting popular destinations such as USA, Canada, UK, Australia, European Union countries, and other international locations. The city's consultants leverage strong relationships with embassies, consulates, and international institutions to facilitate efficient processing.
+
+Educational consulting represents a significant sector within ${cityName}'s visa services industry. Study abroad consultants assist students with university selection, application processes, scholarship guidance, and student visa applications. These services cover undergraduate, postgraduate, and doctoral programs across globally recognized institutions.
+
+Immigration services in ${cityName} extend beyond temporary visas to include permanent residency applications, citizenship procedures, and family reunification processes. Experienced immigration lawyers and consultants provide specialized guidance for complex cases requiring legal expertise and comprehensive documentation support.
+
+The business visa and work permit sector in ${cityName} serves corporate clients, entrepreneurs, and skilled professionals seeking international opportunities. Consultants specialize in various work visa categories, investor visas, and business establishment procedures across different countries with varying requirements and regulations.
+
+Quality assurance remains paramount among ${cityName}'s visa service providers. Reputable consultants maintain high success rates through thorough preparation, accurate documentation, and comprehensive client support. They provide realistic timeline expectations and transparent fee structures to ensure client satisfaction throughout the process.
+
+Technology integration has modernized visa services in ${cityName}, with consultants utilizing digital platforms for application tracking, document management, and client communication. This technological advancement enhances efficiency and provides real-time updates on application progress.
+
+Cost considerations for visa services in ${cityName} vary significantly based on service type, destination country, and application complexity. Clients benefit from competitive pricing and comprehensive service packages that often prove more cost-effective than independent application attempts.
+
+${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`
+  };
+};
+
 // Generate unique city descriptions
 const getCityDescription = (cityName: string) => {
   const descriptions = {
@@ -1101,6 +1130,29 @@ export default function CityBusinessListing() {
           </div>
         </section>
       )}
+
+      {/* City Information Content */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto max-w-4xl px-4">
+          {(() => {
+            const contentData = generateCityPageContent(cityName, country);
+            return (
+              <>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                  {contentData.title}
+                </h2>
+                <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                  {contentData.content.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className="mb-6">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </section>
 
       {/* FAQ Section */}
       <section className="py-16 bg-white">
