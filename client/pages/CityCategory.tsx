@@ -1648,7 +1648,7 @@ export default function CityCategory() {
           result.businesses.length === 0
         ) {
           console.log(
-            "No data from API, using sample data with nearby cities fallback",
+            "No data from API for main city, trying nearby cities with real API calls",
           );
 
           // Try to find sample businesses for exact city + category
