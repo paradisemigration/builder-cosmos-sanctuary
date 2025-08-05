@@ -188,7 +188,7 @@ export default function CityBusinessListing() {
       }
 
       // Step 2: If no data found for specific area, try hierarchical fallback to database
-      if (!result || !result.success || !result.businesses || result.businesses.length === 0) {
+      if (apiAvailable && (!result || !result.success || !result.businesses || result.businesses.length === 0)) {
         console.log(`No data found for ${cityName}, trying nearby cities from database`);
 
         const nearbyCities = getNearByCities(cityName, country);
