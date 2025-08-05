@@ -535,23 +535,27 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <section className="py-16 sm:py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
             Ready to Start Your Visa Journey?
           </h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto px-4">
             Join thousands of satisfied customers who have successfully achieved their visa goals with our expert consultants.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/business">
-              <Button size="lg" variant="secondary" className="px-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
+            <Link to="/business" className="w-full sm:w-auto">
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium">
                 Find Consultants
                 <Search className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/list-business">
-              <Button size="lg" variant="outline" className="px-8 text-white border-white hover:bg-white hover:text-blue-600">
+            <Link to="/list-business" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium text-white border-white hover:bg-white hover:text-blue-600 border-2"
+              >
                 List Your Business
                 <Building className="ml-2 h-5 w-5" />
               </Button>
