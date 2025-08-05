@@ -1237,6 +1237,19 @@ export default function CityBusinessListing() {
       {/* Debug Popup */}
       <DebugPopup debugInfo={debugInfo} />
 
+      {/* Floating Call-to-Action Button */}
+      <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
+
+      {/* Enquiry Form Popup */}
+      <EnquiryPopup
+        isOpen={showEnquiryPopup}
+        onClose={() => setShowEnquiryPopup(false)}
+        onSubmit={(data) => {
+          console.log("City Business Listing Enquiry submitted:", data);
+          // Add your submission logic here
+        }}
+      />
+
       {/* Debug Page Info - Shows SEO meta information */}
       <DebugPageInfo />
     </div>
