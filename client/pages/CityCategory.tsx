@@ -249,10 +249,14 @@ export default function CityCategory() {
         let apiAvailable = false;
         if (apiFailureCount < 3) {
           try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
             const healthCheck = await fetch('/api/health', {
               method: 'HEAD',
-              signal: AbortSignal.timeout(5000) // 5 second timeout
+              signal: controller.signal
             });
+            clearTimeout(timeoutId);
             apiAvailable = healthCheck.ok;
           } catch (healthError) {
             console.log('API health check failed, API not available:', healthError);
