@@ -379,7 +379,7 @@ export default function CityBusinessListing() {
       // Check if API is available
       let apiAvailable = false;
       try {
-        const healthCheck = await fetch("/api/health", { method: "HEAD" });
+        const healthCheck = await robustFetch("/api/health", { method: "HEAD" });
         apiAvailable = healthCheck.ok;
       } catch (healthError) {
         console.log("API health check failed, will use sample data fallback");
