@@ -111,7 +111,137 @@ const getNearByCities = (cityName: string, country: string): string[] => {
     return ["Dubai", "Abu Dhabi", "Sharjah"];
   } else {
     return ["Delhi", "Mumbai", "Bangalore", "Chennai"];
-  }
+  };
+};
+
+// Generate unique FAQs for each category and city combination
+const getFAQs = (categorySlug: string, cityName: string) => {
+  const baseFAQs = {
+    "study-abroad": [
+      {
+        question: `What are the best study abroad consultants in ${cityName}?`,
+        answer: `The top study abroad consultants in ${cityName} are those with proven track records, certified credentials, and high success rates. Look for consultants who specialize in your target country and have partnerships with international universities.`
+      },
+      {
+        question: `How much do study abroad consultants charge in ${cityName}?`,
+        answer: `Study abroad consultation fees in ${cityName} typically range from AED 1,500 to AED 8,000 depending on the services included. Most consultants offer package deals that include university selection, application assistance, and visa guidance.`
+      },
+      {
+        question: `Which countries are most popular for studying abroad from ${cityName}?`,
+        answer: `Students from ${cityName} commonly choose USA, UK, Canada, Australia, Germany, and Ireland for higher education. The choice depends on factors like course availability, budget, and immigration policies.`
+      },
+      {
+        question: `What documents do I need for studying abroad from ${cityName}?`,
+        answer: `Essential documents include academic transcripts, standardized test scores (IELTS/TOEFL/GRE/GMAT), passport, statement of purpose, recommendation letters, and financial proof. Requirements vary by country and university.`
+      },
+      {
+        question: `How long does the study abroad application process take in ${cityName}?`,
+        answer: `The complete process typically takes 6-12 months from university application to visa approval. Starting early and working with experienced consultants in ${cityName} can help streamline the timeline.`
+      }
+    ],
+    "immigration-consultants": [
+      {
+        question: `How to choose the best immigration consultant in ${cityName}?`,
+        answer: `Choose licensed immigration consultants in ${cityName} with MARA/ICCRC certification, positive reviews, transparent fee structure, and specialization in your visa category. Verify their credentials and success rates.`
+      },
+      {
+        question: `What immigration services are available in ${cityName}?`,
+        answer: `Immigration consultants in ${cityName} offer services including permanent residency applications, work permits, family sponsorship, refugee claims, citizenship applications, and immigration appeals.`
+      },
+      {
+        question: `How much do immigration consultants charge in ${cityName}?`,
+        answer: `Immigration consultation fees in ${cityName} vary from AED 2,000 to AED 15,000 depending on the complexity of your case. Most consultants offer free initial assessments and transparent pricing.`
+      },
+      {
+        question: `Which countries offer the best immigration opportunities from ${cityName}?`,
+        answer: `Popular immigration destinations from ${cityName} include Canada, Australia, New Zealand, USA, and several European countries. Each has different requirements and immigration pathways.`
+      },
+      {
+        question: `What is the success rate of immigration applications from ${cityName}?`,
+        answer: `Success rates vary by country and visa category, but experienced immigration consultants in ${cityName} typically achieve 80-95% success rates for well-prepared applications with eligible candidates.`
+      }
+    ],
+    "visa-consultants": [
+      {
+        question: `What types of visas can consultants in ${cityName} help with?`,
+        answer: `Visa consultants in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`
+      },
+      {
+        question: `How long does visa processing take through ${cityName} consultants?`,
+        answer: `Processing times vary by country and visa type, ranging from 3-30 working days. Consultants in ${cityName} can provide accurate timelines and expedited services when available.`
+      },
+      {
+        question: `What documents are required for visa applications in ${cityName}?`,
+        answer: `Common requirements include valid passport, photographs, application forms, financial proof, travel itinerary, accommodation bookings, and invitation letters. Specific requirements vary by destination country.`
+      },
+      {
+        question: `Can visa consultants in ${cityName} guarantee visa approval?`,
+        answer: `Reputable consultants in ${cityName} cannot guarantee approval but can significantly increase your chances through proper documentation, application preparation, and guidance based on their experience.`
+      },
+      {
+        question: `What are the visa consultation fees in ${cityName}?`,
+        answer: `Visa consultation fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`
+      }
+    ],
+    "visit-visa-specialists": [
+      {
+        question: `Which countries can I get visit visas for from ${cityName}?`,
+        answer: `Visit visa specialists in ${cityName} can help you obtain tourist visas for USA, UK, Schengen countries, Canada, Australia, Japan, South Korea, and many other popular destinations.`
+      },
+      {
+        question: `What is the success rate for visit visas from ${cityName}?`,
+        answer: `Success rates for visit visas from ${cityName} vary by destination but experienced specialists typically achieve 85-95% approval rates for properly documented applications with eligible applicants.`
+      },
+      {
+        question: `How much does a visit visa consultation cost in ${cityName}?`,
+        answer: `Visit visa consultation fees in ${cityName} range from AED 200 to AED 1,500 depending on the destination country and services included. Many specialists offer comprehensive packages.`
+      },
+      {
+        question: `What documents do I need for a visit visa application in ${cityName}?`,
+        answer: `Required documents typically include passport, photographs, bank statements, employment letter, travel insurance, hotel bookings, flight itinerary, and invitation letters if applicable.`
+      }
+    ],
+    "work-permit": [
+      {
+        question: `Which countries offer work permits through ${cityName} consultants?`,
+        answer: `Work permit specialists in ${cityName} can assist with applications for Canada, Australia, New Zealand, Germany, UAE, USA, and other countries with various skilled worker programs.`
+      },
+      {
+        question: `What is the process for obtaining a work permit through ${cityName}?`,
+        answer: `The process involves skills assessment, job search assistance, employer nomination, application submission, and visa processing. Consultants in ${cityName} guide you through each step.`
+      },
+      {
+        question: `How long does work permit processing take from ${cityName}?`,
+        answer: `Work permit processing times vary from 2-12 months depending on the country and program. Consultants in ${cityName} provide realistic timelines and regular updates on your application status.`
+      }
+    ]
+  };
+
+  const generalFAQs = [
+    {
+      question: `Are consultation services in ${cityName} reliable?`,
+      answer: `Yes, ${cityName} has many licensed and experienced consultants. Always verify credentials, read reviews, and choose consultants with proper certifications and proven track records.`
+    },
+    {
+      question: `Do consultants in ${cityName} provide after-service support?`,
+      answer: `Most reputable consultants in ${cityName} offer comprehensive after-service support including visa tracking, pre-departure guidance, and assistance with any issues that may arise.`
+    },
+    {
+      question: `Can I get a refund if my application is rejected?`,
+      answer: `Refund policies vary by consultant in ${cityName}. Reputable firms often offer partial refunds for rejected applications or money-back guarantees under specific conditions. Always clarify this upfront.`
+    },
+    {
+      question: `How do I verify the credentials of consultants in ${cityName}?`,
+      answer: `Check for proper licensing, certifications from relevant authorities, membership in professional associations, client testimonials, and online reviews to verify consultant credentials in ${cityName}.`
+    },
+    {
+      question: `What should I avoid when choosing a consultant in ${cityName}?`,
+      answer: `Avoid consultants who guarantee success, ask for full payment upfront, lack proper credentials, have poor reviews, or make unrealistic promises about processing times or outcomes.`
+    }
+  ];
+
+  const categoryFAQs = baseFAQs[categorySlug] || [];
+  return [...categoryFAQs, ...generalFAQs].slice(0, 8); // Limit to 8 FAQs per page
 };
 
 export default function CityCategory() {
