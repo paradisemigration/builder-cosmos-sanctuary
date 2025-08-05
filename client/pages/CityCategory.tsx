@@ -1848,12 +1848,7 @@ export default function CityCategory() {
               `Total accumulated businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`,
             );
 
-            if (accumulatedBusinesses.length > 0) {
-              sampleBusinesses_filtered = accumulatedBusinesses;
-              isNearbyData = true;
-              nearbyCity = sourceCities.join(", ");
-            }
-          }
+
 
 
 
