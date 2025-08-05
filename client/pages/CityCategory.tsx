@@ -1648,28 +1648,39 @@ export default function CityCategory() {
           );
 
           // Try to find sample businesses for exact city + category
-          console.log(`Filtering sample data: cityName="${cityName}", categoryName="${categoryName}"`);
-          console.log(`Available sample businesses total: ${sampleBusinesses.length}`);
+          console.log(
+            `Filtering sample data: cityName="${cityName}", categoryName="${categoryName}"`,
+          );
+          console.log(
+            `Available sample businesses total: ${sampleBusinesses.length}`,
+          );
 
           let sampleBusinesses_filtered = sampleBusinesses.filter(
             (business) => {
-              const cityMatch = business.city.toLowerCase() === cityName.toLowerCase();
+              const cityMatch =
+                business.city.toLowerCase() === cityName.toLowerCase();
               let categoryMatch = false;
 
               if (categorySlug === "visa-consultants") {
                 // For visa-consultants, match any business with "visa" and "consultant" in category
                 const businessCategory = business.category.toLowerCase();
-                categoryMatch = businessCategory.includes("visa") && businessCategory.includes("consultant");
+                categoryMatch =
+                  businessCategory.includes("visa") &&
+                  businessCategory.includes("consultant");
               } else {
                 // For other categories, use standard matching
-                categoryMatch = business.category.toLowerCase().includes(categoryName.toLowerCase());
+                categoryMatch = business.category
+                  .toLowerCase()
+                  .includes(categoryName.toLowerCase());
               }
 
               return cityMatch && categoryMatch;
-            }
+            },
           );
 
-          console.log(`Exact city match found: ${sampleBusinesses_filtered.length} businesses`);
+          console.log(
+            `Exact city match found: ${sampleBusinesses_filtered.length} businesses`,
+          );
 
           // If no exact match, try nearby cities with category - accumulate up to 100
           if (sampleBusinesses_filtered.length === 0) {
@@ -1679,7 +1690,9 @@ export default function CityCategory() {
               userLocation,
             );
 
-            console.log(`No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(', ')}`);
+            console.log(
+              `No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
+            );
 
             let accumulatedBusinesses = [];
             let sourceCities = [];
@@ -1688,29 +1701,39 @@ export default function CityCategory() {
               console.log(`Checking nearby city: ${nearbyCity_temp}`);
 
               // Special handling for "visa-consultants" to match all visa consultant types
-              const nearbyBusinesses = sampleBusinesses.filter(
-                (business) => {
-                  const cityMatch = business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
-                  let categoryMatch = false;
+              const nearbyBusinesses = sampleBusinesses.filter((business) => {
+                const cityMatch =
+                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
+                let categoryMatch = false;
 
-                  if (categorySlug === "visa-consultants") {
-                    // For visa-consultants, match any business with "visa" and "consultant" in category
-                    const businessCategory = business.category.toLowerCase();
-                    categoryMatch = businessCategory.includes("visa") && businessCategory.includes("consultant");
-                  } else {
-                    // For other categories, use standard matching
-                    categoryMatch = business.category.toLowerCase().includes(categoryName.toLowerCase());
-                  }
-
-                  return cityMatch && categoryMatch;
+                if (categorySlug === "visa-consultants") {
+                  // For visa-consultants, match any business with "visa" and "consultant" in category
+                  const businessCategory = business.category.toLowerCase();
+                  categoryMatch =
+                    businessCategory.includes("visa") &&
+                    businessCategory.includes("consultant");
+                } else {
+                  // For other categories, use standard matching
+                  categoryMatch = business.category
+                    .toLowerCase()
+                    .includes(categoryName.toLowerCase());
                 }
+
+                return cityMatch && categoryMatch;
+              });
+
+              console.log(
+                `Found ${nearbyBusinesses.length} businesses in ${nearbyCity_temp} matching category "${categoryName}"`,
               );
 
-              console.log(`Found ${nearbyBusinesses.length} businesses in ${nearbyCity_temp} matching category "${categoryName}"`);
-
               // Debug: show what categories are available in this city
-              const cityBusinesses = sampleBusinesses.filter(b => b.city.toLowerCase() === nearbyCity_temp.toLowerCase());
-              console.log(`All categories in ${nearbyCity_temp}:`, cityBusinesses.map(b => b.category));
+              const cityBusinesses = sampleBusinesses.filter(
+                (b) => b.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
+              );
+              console.log(
+                `All categories in ${nearbyCity_temp}:`,
+                cityBusinesses.map((b) => b.category),
+              );
 
               if (nearbyBusinesses.length > 0) {
                 // Add businesses from this city, but avoid duplicates
@@ -1723,7 +1746,10 @@ export default function CityCategory() {
                     ),
                 );
 
-                accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                accumulatedBusinesses = [
+                  ...accumulatedBusinesses,
+                  ...newBusinesses,
+                ];
                 sourceCities.push(nearbyCity_temp);
 
                 console.log(
@@ -1772,7 +1798,10 @@ export default function CityCategory() {
                     ),
                 );
 
-                accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                accumulatedBusinesses = [
+                  ...accumulatedBusinesses,
+                  ...newBusinesses,
+                ];
                 sourceCities.push(nearbyCity_temp);
 
                 console.log(
