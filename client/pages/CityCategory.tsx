@@ -707,21 +707,7 @@ export default function CityCategory() {
       try {
         console.log("Fetching all Dubai businesses for comprehensive listing");
 
-        // For production, skip API calls and use sample data
-        const isProduction = window.location.hostname.includes('fly.dev') ||
-                           window.location.hostname.includes('netlify.app') ||
-                           !window.location.hostname.includes('localhost');
 
-        if (isProduction) {
-          console.log('Production environment: using sample data for Dubai businesses');
-          const sampleDubaiBusinesses = sampleBusinesses.filter(
-            (business) => business.city.toLowerCase() === 'dubai'
-          );
-          setAllDubaiBusinesses(sampleDubaiBusinesses);
-          setTotalAvailableBusinesses(sampleDubaiBusinesses.length);
-          setAllDubaiDataLoaded(true);
-          return;
-        }
 
         // Check if API is available
         let apiAvailable = false;
