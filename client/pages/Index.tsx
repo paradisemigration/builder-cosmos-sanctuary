@@ -911,141 +911,17 @@ export default function Index() {
       </section>
 
       {/* Floating Call-to-Action Button */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <Button
-          onClick={() => setShowEnquiryPopup(true)}
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-2xl rounded-full px-6 py-3 flex items-center gap-2 transform transition-all duration-300 hover:scale-105"
-        >
-          <MessageSquare className="w-5 h-5" />
-          <span className="hidden sm:inline">List Your Business</span>
-          <span className="sm:hidden">List Business</span>
-        </Button>
-      </div>
+      <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
 
       {/* Enquiry Form Popup */}
-      {showEnquiryPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-md mx-4 shadow-2xl transform transition-all duration-300 scale-100">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
-                Get the list of best Immigration Consultants in India
-              </h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowEnquiryPopup(false)}
-                className="p-1 h-8 w-8 rounded-full hover:bg-gray-100"
-              >
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                // Handle form submission
-                console.log("Form submitted:", enquiryFormData);
-                setShowEnquiryPopup(false);
-                // You can add actual form submission logic here
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={enquiryFormData.name}
-                  onChange={(e) => setEnquiryFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your full name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={enquiryFormData.phone}
-                  onChange={(e) => setEnquiryFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your phone number"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={enquiryFormData.email}
-                  onChange={(e) => setEnquiryFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  City
-                </label>
-                <select
-                  required
-                  value={enquiryFormData.city}
-                  onChange={(e) => setEnquiryFormData(prev => ({ ...prev, city: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select City</option>
-                  {allIndianCities.slice(0, 20).map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Service Category
-                </label>
-                <select
-                  required
-                  value={enquiryFormData.category}
-                  onChange={(e) => setEnquiryFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select Category</option>
-                  {allCategories.slice(0, 10).map((category) => (
-                    <option key={category.slug} value={category.slug}>{category.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowEnquiryPopup(false)}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-                >
-                  Submit Enquiry
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <EnquiryPopup
+        isOpen={showEnquiryPopup}
+        onClose={() => setShowEnquiryPopup(false)}
+        onSubmit={(data) => {
+          console.log("Enquiry submitted:", data);
+          // Add your submission logic here
+        }}
+      />
 
       {/* Debug Page Info */}
       <DebugPageInfo />
