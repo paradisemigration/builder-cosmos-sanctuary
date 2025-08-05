@@ -174,6 +174,12 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        title="Contact Us - VisaConsult India | Get Expert Immigration Help"
+        description="Contact VisaConsult India for expert immigration assistance. Get help with visa applications, study abroad, work permits and more. Phone, email and live chat support available."
+        keywords="contact visa consultants, immigration help, visa assistance India, immigration consultation, visa experts contact"
+        canonical="/contact"
+      />
       <Navigation />
 
       {/* Header Section */}
