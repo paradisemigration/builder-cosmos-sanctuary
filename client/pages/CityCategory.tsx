@@ -1664,8 +1664,129 @@ export default function CityCategory() {
           let accumulatedBusinesses = [];
           let sourceCities = [];
 
-          // If no exact match, try nearby cities with prioritized matching
-          if (sampleBusinesses_filtered.length === 0) {
+          // PHASE 1: Try exact category match from nearby cities
+          console.log("=== PHASE 1: Trying exact category from nearby cities ===");
+          for (const nearbyCity of nearbyCities.slice(0, 5)) { // Limit to first 5 cities for performance
+            try {
+              console.log(`Querying ${nearbyCity} for category: ${categoryName}`);
+
+              const nearbyApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}/category/${categorySlug}`, {
+                page: "1",
+                limit: "25",
+                sortBy: "rating",
+                country: country,
+              });
+
+              const nearbyResponse = await robustFetch(nearbyApiUrl, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+              });
+
+              const nearbyResult = await nearbyResponse.json();
+
+              if (nearbyResult && nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                console.log(`Found ${nearbyResult.businesses.length} real businesses in ${nearbyCity} for ${categoryName}`);
+
+                // Mark as nearby data and add to accumulator
+                const nearbyCityBusinesses = nearbyResult.businesses.map(business => ({
+                  ...business,
+                  isNearbyData: true,
+                  originalRequestedCity: cityName,
+                  nearbySourceCity: nearbyCity
+                }));
+
+                accumulatedBusinesses = [...accumulatedBusinesses, ...nearbyCityBusinesses];
+                sourceCities.push(nearbyCity);
+
+                if (accumulatedBusinesses.length >= 50) {
+                  console.log("Found enough businesses from exact category matches");
+                  break;
+                }
+              } else {
+                console.log(`No businesses found in ${nearbyCity} for ${categoryName}`);
+              }
+            } catch (error) {
+              console.log(`Error querying ${nearbyCity}:`, error);
+            }
+          }
+
+          // PHASE 2: If not enough, try related categories from nearby cities
+          if (accumulatedBusinesses.length < 25) {
+            console.log("=== PHASE 2: Trying related categories from nearby cities ===");
+
+            // Define related category slugs based on current category
+            let relatedCategories = [];
+            if (categorySlug.includes("consultant") || categorySlug.includes("immigration")) {
+              relatedCategories = ["visa-consultants", "immigration-consultants", "study-abroad-consultants", "work-visa-consultants"];
+            } else if (categorySlug.includes("visa")) {
+              relatedCategories = ["visa-consultants", "student-visa-consultants", "work-visa-consultants"];
+            } else {
+              relatedCategories = [categorySlug]; // Just try the same category
+            }
+
+            for (const nearbyCity of nearbyCities.slice(0, 3)) {
+              for (const relatedCategory of relatedCategories) {
+                if (relatedCategory === categorySlug) continue; // Skip if same as original
+
+                try {
+                  console.log(`Querying ${nearbyCity} for related category: ${relatedCategory}`);
+
+                  const nearbyApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}/category/${relatedCategory}`, {
+                    page: "1",
+                    limit: "10",
+                    sortBy: "rating",
+                    country: country,
+                  });
+
+                  const nearbyResponse = await robustFetch(nearbyApiUrl, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                  });
+
+                  const nearbyResult = await nearbyResponse.json();
+
+                  if (nearbyResult && nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                    console.log(`Found ${nearbyResult.businesses.length} related businesses in ${nearbyCity} for ${relatedCategory}`);
+
+                    const nearbyCityBusinesses = nearbyResult.businesses.map(business => ({
+                      ...business,
+                      isNearbyData: true,
+                      originalRequestedCity: cityName,
+                      nearbySourceCity: nearbyCity
+                    }));
+
+                    accumulatedBusinesses = [...accumulatedBusinesses, ...nearbyCityBusinesses];
+                    if (!sourceCities.includes(nearbyCity)) {
+                      sourceCities.push(nearbyCity);
+                    }
+
+                    if (accumulatedBusinesses.length >= 100) {
+                      break;
+                    }
+                  }
+                } catch (error) {
+                  console.log(`Error querying ${nearbyCity} for ${relatedCategory}:`, error);
+                }
+              }
+
+              if (accumulatedBusinesses.length >= 100) {
+                break;
+              }
+            }
+          }
+
+          console.log(`Total accumulated real businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`);
+
+          if (accumulatedBusinesses.length > 0) {
+            result = {
+              success: true,
+              businesses: accumulatedBusinesses,
+              total: accumulatedBusinesses.length,
+              source: "nearby_cities_api",
+            };
+            isNearbyData = true;
+            nearbyCity = sourceCities.join(", ");
+          }
             const nearbyCities = getNearByCities(
               cityName,
               country,
