@@ -100,66 +100,74 @@ export default function Index() {
     {
       name: "Delhi",
       count: "450+",
-      image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1555976649-8ed1b1a8edfb?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=1",
+      fallback: "https://via.placeholder.com/600x300/3B82F6/ffffff?text=Delhi",
       flag: "🇮🇳",
-      description: "India Gate & Red Fort"
+      description: "India Gate & Red Fort",
+      color: "#3B82F6"
     },
     {
       name: "Mumbai",
       count: "380+",
-      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1595655321928-8a113942ffa9?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=2",
+      fallback: "https://via.placeholder.com/600x300/6366F1/ffffff?text=Mumbai",
       flag: "🇮🇳",
-      description: "Gateway of India"
+      description: "Gateway of India",
+      color: "#6366F1"
     },
     {
       name: "Bangalore",
       count: "320+",
-      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=3",
+      fallback: "https://via.placeholder.com/600x300/10B981/ffffff?text=Bangalore",
       flag: "🇮🇳",
-      description: "Silicon Valley of India"
+      description: "Silicon Valley of India",
+      color: "#10B981"
     },
     {
       name: "Chennai",
       count: "290+",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=4",
+      fallback: "https://via.placeholder.com/600x300/F59E0B/ffffff?text=Chennai",
       flag: "🇮🇳",
-      description: "Marina Beach & Temples"
+      description: "Marina Beach & Temples",
+      color: "#F59E0B"
     },
     {
       name: "Hyderabad",
       count: "250+",
-      image: "https://images.unsplash.com/photo-1605640602903-f2b5e8be60d7?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1630471199234-5421fe466a7f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=5",
+      fallback: "https://via.placeholder.com/600x300/8B5CF6/ffffff?text=Hyderabad",
       flag: "🇮🇳",
-      description: "Charminar & Tech City"
+      description: "Charminar & Tech City",
+      color: "#8B5CF6"
     },
     {
       name: "Pune",
       count: "220+",
-      image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=6",
+      fallback: "https://via.placeholder.com/600x300/EF4444/ffffff?text=Pune",
       flag: "🇮🇳",
-      description: "Cultural Capital"
+      description: "Cultural Capital",
+      color: "#EF4444"
     },
     {
       name: "Kolkata",
       count: "200+",
-      image: "https://images.unsplash.com/photo-1558431382-27ca3415749c?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1586511925558-a4c6376fe65f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=7",
+      fallback: "https://via.placeholder.com/600x300/06B6D4/ffffff?text=Kolkata",
       flag: "🇮🇳",
-      description: "City of Joy"
+      description: "City of Joy",
+      color: "#06B6D4"
     },
     {
       name: "Ahmedabad",
       count: "180+",
-      image: "https://images.unsplash.com/photo-1619057156262-ee96b3d78f86?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1611036742383-3b3805c5b42a?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://picsum.photos/600/300?random=8",
+      fallback: "https://via.placeholder.com/600x300/F97316/ffffff?text=Ahmedabad",
       flag: "🇮🇳",
-      description: "Heritage & Innovation"
+      description: "Heritage & Innovation",
+      color: "#F97316"
     },
   ];
 
@@ -445,7 +453,20 @@ export default function Index() {
                           target.dataset.fallbackAttempted = "true";
                           target.src = city.fallback;
                         } else {
-                          target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23${index % 2 === 0 ? '3B82F6' : '6366F1'};stop-opacity:1" /><stop offset="100%" style="stop-color:%23${index % 2 === 0 ? '1E40AF' : '4338CA'};stop-opacity:1" /></linearGradient></defs><rect width="600" height="300" fill="url(%23grad${index})"/><text x="300" y="150" font-family="Arial" font-size="28" font-weight="bold" fill="white" text-anchor="middle" dy="10">${city.name}</text><text x="300" y="180" font-family="Arial" font-size="16" fill="white" text-anchor="middle" opacity="0.8">${city.description}</text></svg>`;
+                          // Create a reliable SVG fallback
+                          const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+                            <defs>
+                              <linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:${city.color || '#3B82F6'};stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:${city.color || '#1E40AF'};stop-opacity:0.8" />
+                              </linearGradient>
+                            </defs>
+                            <rect width="600" height="300" fill="url(#grad${index})"/>
+                            <text x="300" y="140" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">${city.name}</text>
+                            <text x="300" y="170" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" opacity="0.9">${city.description}</text>
+                            <text x="300" y="195" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.8">${city.count} Consultants</text>
+                          </svg>`;
+                          target.src = `data:image/svg+xml;base64,${btoa(svgContent)}`;
                         }
                       }}
                       onLoad={(e) => {
