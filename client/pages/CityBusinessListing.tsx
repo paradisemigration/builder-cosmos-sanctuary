@@ -425,7 +425,7 @@ export default function CityBusinessListing() {
         for (const nearbyCity_temp of nearbyCities) {
           try {
             console.log(`Trying nearby city: ${nearbyCity_temp}`);
-            const nearbyResponse = await fetch(
+            const nearbyResponse = await robustFetch(
               `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
             );
 
