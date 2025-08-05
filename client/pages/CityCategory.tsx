@@ -963,120 +963,65 @@ export default function CityCategory() {
           ) : (
             <>
               <div className="space-y-8">
-                {/* Category-specific results section */}
-                {categoryBusinesses.length > 0 && (
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <h2 className="text-2xl font-semibold text-gray-900">
-                          {categoryBusinesses.length} {categoryName}
-                          {isShowingNearbyData ? ` from ${categoryBusinesses[0]?.nearbyCity || 'nearby cities'}` : ` in ${cityName}`}
-                        </h2>
-                        <p className="text-gray-600 mt-1">
-                          {isShowingNearbyData
-                            ? `Expanded search results from nearby areas`
-                            : `Verified ${categoryName.toLowerCase()} businesses`
-                          }
-                        </p>
-                      </div>
-                      <Badge variant="default" className="text-sm bg-green-600">
-                        {categoryBusinesses.length} category results
-                      </Badge>
+                {/* Comprehensive Business Listing */}
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-900">
+                        {categoryBusinesses.length > 0
+                          ? `${categoryBusinesses.length} ${categoryName}${isShowingNearbyData ? ` from ${categoryBusinesses[0]?.nearbyCity || 'nearby areas'}` : ` in ${cityName}`}`
+                          : `All Businesses in ${country === 'uae' ? 'Dubai' : cityName}`
+                        }
+                        {country === 'uae' && allDubaiBusinesses.length > 0 &&
+                          ` + ${allDubaiBusinesses.length - categoryBusinesses.length} Additional Dubai Businesses`
+                        }
+                      </h2>
+                      <p className="text-gray-600 mt-1">
+                        {categoryBusinesses.length > 0 && isShowingNearbyData
+                          ? `Showing ${categoryName.toLowerCase()} from nearby areas plus all Dubai businesses`
+                          : categoryBusinesses.length > 0
+                          ? `Showing ${categoryName.toLowerCase()} and all other ${country === 'uae' ? 'Dubai' : cityName} businesses`
+                          : `All available businesses in ${country === 'uae' ? 'Dubai' : cityName}`
+                        }
+                      </p>
                     </div>
-
-                    <div
-                      className={
-                        viewMode === "grid"
-                          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
-                          : "space-y-4 mb-8"
-                      }
-                    >
-                      {categoryBusinesses
-                        .sort((a, b) => {
-                          switch (sortBy) {
-                            case "rating":
-                              return (b.rating || 0) - (a.rating || 0);
-                            case "reviews":
-                              return (
-                                (b.reviewCount || 0) - (a.reviewCount || 0)
-                              );
-                            case "name":
-                              return a.name.localeCompare(b.name);
-                            default:
-                              return 0;
-                          }
-                        })
-                        .map((business, index) => (
-                          <BusinessCard
-                            key={`category-${business.id || index}`}
-                            business={business}
-                            viewMode={viewMode}
-                          />
-                        ))}
-                    </div>
+                    <Badge variant="default" className="text-sm bg-blue-600">
+                      {filteredBusinesses.length} results
+                      {hasMoreData && ` (${debugInfo.totalBusinesses - filteredBusinesses.length} more)`}
+                    </Badge>
                   </div>
-                )}
 
-                {/* All Dubai/City businesses section */}
-                {((country === 'uae' && allDubaiBusinesses.length > 0) || (country !== 'uae' && cityBusinesses.length > 0)) && (
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <h2 className="text-2xl font-semibold text-gray-900">
-                          {categoryBusinesses.length > 0 ? "All Other" : "All"}{" "}
-                          {country === 'uae' ? 'Dubai' : cityName} Businesses
-                        </h2>
-                        <p className="text-gray-600 mt-1">
-                          {categoryBusinesses.length > 0
-                            ? `Additional businesses and services in ${country === 'uae' ? 'Dubai' : cityName}`
-                            : `All available businesses in ${country === 'uae' ? 'Dubai' : cityName}`}
-                        </p>
-                      </div>
-                      <Badge variant="secondary" className="text-sm">
-                        {country === 'uae' && allDubaiBusinesses.length > 0
-                          ? `${allDubaiBusinesses.length} Dubai listings`
-                          : `${cityBusinesses.length} listings`}
-                      </Badge>
-                    </div>
-
-                    <div
-                      className={
-                        viewMode === "grid"
-                          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                          : "space-y-4"
-                      }
-                    >
-                      {filteredBusinesses
-                        .filter((business) =>
-                          // Only show businesses that are not already shown in category section
-                          !categoryBusinesses.some(catBusiness =>
-                            catBusiness.name === business.name && catBusiness.address === business.address
-                          )
-                        )
-                        .sort((a, b) => {
-                          switch (sortBy) {
-                            case "rating":
-                              return (b.rating || 0) - (a.rating || 0);
-                            case "reviews":
-                              return (
-                                (b.reviewCount || 0) - (a.reviewCount || 0)
-                              );
-                            case "name":
-                              return a.name.localeCompare(b.name);
-                            default:
-                              return 0;
-                          }
-                        })
-                        .map((business, index) => (
-                          <BusinessCard
-                            key={`city-${business.id || index}`}
-                            business={business}
-                            viewMode={viewMode}
-                          />
-                        ))}
-                    </div>
+                  <div
+                    className={
+                      viewMode === "grid"
+                        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        : "space-y-4"
+                    }
+                  >
+                    {filteredBusinesses
+                      .sort((a, b) => {
+                        switch (sortBy) {
+                          case "rating":
+                            return (b.rating || 0) - (a.rating || 0);
+                          case "reviews":
+                            return (
+                              (b.reviewCount || 0) - (a.reviewCount || 0)
+                            );
+                          case "name":
+                            return a.name.localeCompare(b.name);
+                          default:
+                            return 0;
+                        }
+                      })
+                      .map((business, index) => (
+                        <BusinessCard
+                          key={`business-${business.id || index}`}
+                          business={business}
+                          viewMode={viewMode}
+                        />
+                      ))}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Load More Button */}
