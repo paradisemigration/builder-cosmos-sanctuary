@@ -67,11 +67,11 @@ const nearbyAreasMapping: Record<string, string[]> = {
   "mirdif": ["Dubai", "International City", "Business Bay", "Downtown Dubai"],
   "international city": ["Dubai", "Mirdif", "Business Bay", "Downtown Dubai"],
 
-  // Abu Dhabi areas
+  // Abu Dhabi areas - NO fallback for main Abu Dhabi city to show only Abu Dhabi businesses
   "al ain": ["Abu Dhabi", "Dubai", "Sharjah"],
 
   // Other UAE cities fallback to main emirates
-  "ajman": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "ajman": ["Sharjah", "Dubai"],  // Updated: Ajman should show Sharjah and Dubai businesses
   "ras al khaimah": ["Dubai", "Sharjah", "Abu Dhabi"],
   "fujairah": ["Dubai", "Sharjah", "Abu Dhabi"],
   "umm al quwain": ["Dubai", "Sharjah", "Abu Dhabi"],
