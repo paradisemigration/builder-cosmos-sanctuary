@@ -578,10 +578,14 @@ export default function CityCategory() {
         // Check if API is available
         let apiAvailable = false;
         try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
           const healthCheck = await fetch('/api/health', {
             method: 'HEAD',
-            signal: AbortSignal.timeout(5000) // 5 second timeout
+            signal: controller.signal
           });
+          clearTimeout(timeoutId);
           apiAvailable = healthCheck.ok;
         } catch (healthError) {
           console.log('API health check failed for Dubai businesses:', healthError);
@@ -591,10 +595,14 @@ export default function CityCategory() {
         if (apiAvailable) {
           try {
             // Fetch all Dubai businesses with a high limit to get comprehensive data
+            const controller2 = new AbortController();
+            const timeoutId2 = setTimeout(() => controller2.abort(), 15000); // 15 second timeout for large dataset
+
             const allDubaiUrl = `/api/scraped-businesses?city=Dubai&limit=500&page=1`;
             const response = await fetch(allDubaiUrl, {
-              signal: AbortSignal.timeout(15000) // 15 second timeout for large dataset
+              signal: controller2.signal
             });
+            clearTimeout(timeoutId2);
 
             if (response.ok) {
               const result = await response.json();
