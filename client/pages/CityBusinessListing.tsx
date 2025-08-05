@@ -198,6 +198,8 @@ export default function CityBusinessListing() {
         }
       }
 
+      // Process result if we have data (either from original city or nearby city)
+      if (result && result.success && result.businesses && result.businesses.length > 0) {
         // Update debug info
         const timestamp = new Date().toLocaleTimeString();
         const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`;
