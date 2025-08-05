@@ -119,6 +119,54 @@ const getCityDescription = (cityName: string) => {
   return descriptions[cityName] || `Find trusted and verified visa consultants in ${cityName}. Compare services, read reviews, and choose the best expert for your visa needs with transparent pricing and reliable service.`;
 };
 
+// Generate comprehensive FAQs for city pages
+const getCityFAQs = (cityName: string) => {
+  const citySpecificFAQs = [
+    {
+      question: `What types of visa services are available in ${cityName}?`,
+      answer: `${cityName} offers comprehensive visa services including tourist visas, work permits, student visas, family reunion visas, business visas, permanent residency applications, citizenship services, and emergency travel documents. The city hosts numerous certified consultants specializing in various countries and visa categories with expertise in documentation, application processing, and legal compliance.`
+    },
+    {
+      question: `How many visa consultants operate in ${cityName}?`,
+      answer: `${cityName} has over 200+ licensed visa and immigration consultants ranging from individual practitioners to large consulting firms. The city is a major hub for visa services in the region, serving both residents and visitors from across the Middle East, Asia, and Africa. Most consultants are located in business districts with easy accessibility and modern facilities.`
+    },
+    {
+      question: `What are the average consultation fees in ${cityName}?`,
+      answer: `Consultation fees in ${cityName} vary by service complexity: Basic consultations (AED 300-800), tourist visa processing (AED 500-2,000), work permit applications (AED 8,000-25,000), student visa packages (AED 3,000-12,000), and permanent residency services (AED 15,000-40,000). Government fees, document attestation, medical exams, and translation services are additional. Most consultants offer transparent pricing and package deals.`
+    },
+    {
+      question: `Which countries do ${cityName} consultants specialize in?`,
+      answer: `Consultants in ${cityName} specialize in major destinations including USA, Canada, Australia, UK, New Zealand, Germany, France, Netherlands, Sweden, Singapore, and other European and Western countries. Many also handle regional applications for GCC countries, Asian destinations, and emerging markets. Choose consultants based on their specific expertise in your target country and visa category.`
+    },
+    {
+      question: `How do I choose the best visa consultant in ${cityName}?`,
+      answer: `Select consultants in ${cityName} based on: Valid licensing and certifications (MARA, ICCRC), specialized expertise in your target country, proven track record with similar cases, transparent fee structure, positive client reviews, physical office presence, professional staff qualifications, after-service support offerings, and clear service agreements. Schedule consultations with 2-3 firms before deciding.`
+    },
+    {
+      question: `What documents do I need for visa applications in ${cityName}?`,
+      answer: `Common requirements include: Valid passport (6+ months validity), completed application forms, recent photographs (specific size requirements), educational certificates and transcripts, work experience documents, financial proof (bank statements, salary certificates), medical examination results, police clearance certificates, travel insurance, and destination-specific documents. All documents must be attested and translated if required.`
+    },
+    {
+      question: `How long does visa processing take in ${cityName}?`,
+      answer: `Processing times vary by destination and visa type: Tourist visas (3-15 working days), work permits (2-12 months), student visas (4-8 weeks), family visas (2-6 months), and permanent residency (6-24 months). Consultants in ${cityName} provide realistic timelines, track applications, and offer expedited services where available. Some embassies offer premium processing for additional fees.`
+    },
+    {
+      question: `Do ${cityName} consultants provide post-visa services?`,
+      answer: `Yes, reputable consultants in ${cityName} offer comprehensive post-visa services including: Travel arrangement assistance, pre-departure orientation sessions, airport pickup coordination, initial settlement guidance, bank account opening support, school enrollment assistance for children, job search guidance, visa renewal services, and family reunion applications. Premium service providers often have partnerships with settlement agencies.`
+    },
+    {
+      question: `Are consultation services in ${cityName} regulated?`,
+      answer: `Yes, visa consultation services in ${cityName} are regulated by UAE authorities and international bodies. Consultants must hold valid trade licenses, maintain professional insurance, and comply with ethical standards. Immigration consultants for specific countries require additional certifications (MARA for Australia, ICCRC for Canada). Always verify consultant credentials and report any unethical practices to relevant authorities.`
+    },
+    {
+      question: `Can I get a refund if my visa application is rejected?`,
+      answer: `Refund policies in ${cityName} vary by consultant and service type. Ethical firms typically offer: Partial refunds (50-70%) for rejections due to consultant error, full refunds if promised services aren't delivered, no refunds for government rejections due to client ineligibility, and documented refund policies in service agreements. Clarify refund terms before engaging services and get policies in writing.`
+    }
+  ];
+
+  return citySpecificFAQs.slice(0, 10); // Return 10 FAQs for city pages
+};
+
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
   const navigate = useNavigate();
