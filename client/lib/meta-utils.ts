@@ -17,7 +17,7 @@ export interface SEOLinks {
   alternate?: string[];
 }
 
-// Generate meta data for city-category pages
+// Generate meta data for city-category pages with enhanced SEO
 export function generateCityCategoryMeta(
   cityName: string,
   categoryName: string,
@@ -33,17 +33,39 @@ export function generateCityCategoryMeta(
     "Al Ain",
   ].includes(cityName);
   const country = isUAE ? "UAE" : "India";
+  const websiteName = "VisaConsult India";
 
   // Generate category-specific descriptions and keywords
   const categorySpecificInfo = getCategorySpecificContent(categoryName);
 
+  // Format: "Most Trusted + category Name + in + city name | Website Name"
+  const title = `Most Trusted ${categoryName} in ${cityName} | ${websiteName}`;
+
+  // 200-character optimized description
+  const description = `Find the most trusted ${categoryName.toLowerCase()} in ${cityName}, ${country}. ${categorySpecificInfo.shortDesc} Compare verified consultants with proven success rates.`;
+
+  // 20 relevant keywords optimized for the title and content
+  const keywordsList = [
+    `most trusted ${categoryName.toLowerCase()}`,
+    `${categoryName.toLowerCase()} ${cityName.toLowerCase()}`,
+    `best ${categoryName.toLowerCase()} ${cityName.toLowerCase()}`,
+    `top ${categoryName.toLowerCase()} ${cityName.toLowerCase()}`,
+    `verified ${categoryName.toLowerCase()} ${cityName.toLowerCase()}`,
+    `${categoryName.toLowerCase()} near me`,
+    `${categoryName.toLowerCase()} services ${cityName.toLowerCase()}`,
+    `professional ${categoryName.toLowerCase()} ${cityName.toLowerCase()}`,
+    `trusted ${categoryName.toLowerCase()} agent ${cityName.toLowerCase()}`,
+    `${categoryName.toLowerCase()} consultant ${cityName.toLowerCase()}`,
+    ...categorySpecificInfo.keywords.split(', ').slice(0, 10)
+  ];
+
   return {
-    title: `Top ${categoryName} In ${cityName} ${country} - VisaConsult India`,
-    description: `Find the best ${categoryName.toLowerCase()} in ${cityName}, ${country}. ${categorySpecificInfo.description} Compare verified consultants, read authentic reviews, and get expert guidance. Professional ${categoryName.toLowerCase()} services with proven success rates in ${cityName}.`,
-    keywords: `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categorySpecificInfo.keywords}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, best ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, top ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categoryName.toLowerCase()} near me, ${categoryName.toLowerCase()} ${country}`,
-    robots:
-      "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    title,
+    description,
+    keywords: keywordsList.join(', '),
+    canonical: `/business/${cityName.toLowerCase().replace(/\s+/g, '-')}/${categoryName.toLowerCase().replace(/\s+/g, '-')}`,
+    robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+    author: websiteName,
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
