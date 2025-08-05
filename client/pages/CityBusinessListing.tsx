@@ -105,6 +105,7 @@ export default function CityBusinessListing() {
   const [totalBusinesses, setTotalBusinesses] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
   const ITEMS_PER_PAGE = 50;
   const [debugInfo, setDebugInfo] = useState({
     categoryBusinesses: 0,
