@@ -2479,6 +2479,29 @@ export default function CityCategory() {
         </div>
       </section>
 
+      {/* City + Category Information Content */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto max-w-4xl px-4">
+          {(() => {
+            const contentData = generateCityCategoryContent(cityName, categoryName, categorySlug, country);
+            return (
+              <>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                  {contentData.title}
+                </h2>
+                <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                  {contentData.content.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className="mb-6">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto max-w-4xl px-4">
