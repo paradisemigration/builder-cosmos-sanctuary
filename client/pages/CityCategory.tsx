@@ -1788,16 +1788,6 @@ export default function CityCategory() {
             nearbyCity = sourceCities.join(", ");
           }
 
-            console.log(
-              `No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
-            );
-            console.log(
-              `Category slug: "${categorySlug}", Category name: "${categoryName}"`,
-            );
-
-            let accumulatedBusinesses = [];
-            let sourceCities = [];
-
             // Simplified approach: Just get ALL businesses from nearby cities
             console.log("=== Getting ALL businesses from nearby cities ===");
             for (const nearbyCity_temp of nearbyCities) {
