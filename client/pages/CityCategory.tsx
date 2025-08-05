@@ -1559,7 +1559,7 @@ export default function CityCategory() {
             const timeoutId2 = setTimeout(() => controller2.abort(), 15000); // 15 second timeout for large dataset
 
             const allDubaiUrl = `/api/scraped-businesses?city=Dubai&limit=500&page=1`;
-            const response = await fetch(allDubaiUrl, {
+            const response = await robustFetch(allDubaiUrl, {
               signal: controller2.signal,
             });
             clearTimeout(timeoutId2);
