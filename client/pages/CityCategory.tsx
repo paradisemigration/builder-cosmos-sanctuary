@@ -831,6 +831,63 @@ Financial planning represents a crucial aspect of study abroad consulting in ${c
 Student visa assistance forms an integral part of services offered by ${categoryName.toLowerCase()} in ${cityName}. This includes visa documentation, embassy interview preparation, and guidance on student visa regulations. Experienced consultants ensure visa applications align with university admissions for seamless processing.
 
 Consultation fees in ${cityName} typically range from ${currency}${isUAE ? '500-2,000' : '5,000-25,000'} depending on service scope and destination complexity. Comprehensive packages often include ongoing support throughout the admission and visa process, ensuring students receive continuous guidance until departure.`
+    },
+
+    "work-visa-consultants": {
+      title: `Professional ${categoryName} Services in ${cityName}`,
+      content: `${cityName} hosts specialized ${categoryName.toLowerCase()} who provide comprehensive assistance for international employment opportunities. These professionals understand the complex requirements of work visa applications across various countries and employment sectors, ensuring clients navigate the process efficiently.
+
+Work visa regulations vary significantly between countries, requiring specialized knowledge of labor market tests, employer sponsorship requirements, and skill assessment procedures. ${cityName}'s ${categoryName.toLowerCase()} maintain updated expertise on popular destinations including Canada, Australia, USA, UK, Germany, and other countries with active skilled worker programs.
+
+The work visa consultation process in ${cityName} begins with career profile assessment, evaluating educational qualifications, work experience, and language proficiency. Consultants help identify suitable visa categories and countries based on professional background and career objectives, maximizing approval chances through strategic application approaches.
+
+${categoryName} in ${cityName} assist with complex documentation including skills assessment, educational credential evaluation, and employment verification. They guide clients through professional registration requirements, occupational licensing procedures, and employer nomination processes where applicable.
+
+Employer sponsorship represents a crucial aspect of many work visa applications. ${cityName}'s consultants maintain networks with international employers and recruitment agencies, facilitating job search assistance and employer sponsorship opportunities. They provide guidance on job application strategies and interview preparation for overseas positions.
+
+Points-based systems for skilled migration require strategic optimization to achieve competitive scores. ${cityName}'s ${categoryName.toLowerCase()} help clients enhance their profiles through additional qualifications, language improvement, and work experience accumulation to maximize points allocation.
+
+Processing timeframes for work visas vary considerably, often requiring 6-18 months depending on the destination country and visa category. ${cityName}'s consultants provide realistic timeline expectations and regular updates throughout the application process, ensuring clients remain informed of progress and requirements.
+
+Service fees for work visa consultation in ${cityName} typically range from ${currency}${isUAE ? '1,000-3,000' : '10,000-40,000'} depending on destination complexity and service scope. Many consultants offer comprehensive packages including job search assistance, skills assessment, and ongoing support throughout the immigration process.`
+    },
+
+    "tourist-visa-services": {
+      title: `Reliable ${categoryName} in ${cityName}`,
+      content: `${cityName} offers comprehensive ${categoryName.toLowerCase()} for travelers seeking leisure, business, or family visit opportunities worldwide. These services cater to diverse travel needs, from short-term tourism to extended business visits, ensuring proper documentation and smooth embassy processing.
+
+Tourist visa requirements vary significantly across destinations, with each country maintaining specific documentation standards, financial proof requirements, and processing procedures. ${cityName}'s service providers specialize in popular destinations including Schengen countries, USA, UK, Canada, Australia, and Asian tourist destinations.
+
+The tourist visa application process in ${cityName} begins with destination-specific consultation, reviewing entry requirements, documentation checklists, and processing timeframes. Service providers ensure clients understand visa validity periods, entry restrictions, and permitted activities under tourist visa categories.
+
+Documentation assistance forms the core of ${categoryName.toLowerCase()} in ${cityName}. This includes passport verification, photograph specifications, application form completion, and supporting document compilation. Experienced providers ensure all documentation meets embassy standards and submission requirements.
+
+Financial documentation represents a critical component of tourist visa applications. ${cityName}'s service providers guide clients on acceptable proof of funds, bank statement requirements, and financial sponsorship procedures where applicable. They help prepare convincing financial documentation that demonstrates genuine travel intentions.
+
+Travel itinerary planning and accommodation booking assistance are additional services offered by providers in ${cityName}. This includes flight reservation guidance, hotel booking support, and comprehensive travel planning that aligns with visa application requirements and embassy expectations.
+
+Embassy interview preparation services help applicants present their cases effectively. ${cityName}'s providers offer mock interview sessions, guidance on answering common questions, and strategies for demonstrating genuine travel intentions while addressing potential concerns about overstaying.
+
+Processing fees for tourist visa services in ${cityName} typically range from ${currency}${isUAE ? '100-500' : '1,000-8,000'} excluding embassy fees, depending on destination and service complexity. Express processing options are available for urgent travel requirements, though additional charges may apply for expedited services.`
+    },
+
+    "student-visa-consultants": {
+      title: `Expert ${categoryName} in ${cityName}`,
+      content: `${cityName} provides specialized ${categoryName.toLowerCase()} services for students pursuing international education opportunities. These professionals focus exclusively on student visa applications, understanding the unique requirements and challenges associated with educational travel and long-term study abroad programs.
+
+Student visa applications require comprehensive documentation proving genuine educational intentions, financial capacity, and ties to home country. ${cityName}'s ${categoryName.toLowerCase()} specialize in assembling convincing application packages that address embassy concerns while highlighting student credentials and academic goals.
+
+The student visa process in ${cityName} begins with educational credential verification and English language proficiency assessment. Consultants guide students through standardized test requirements including IELTS, TOEFL, and other language certifications required by destination countries and educational institutions.
+
+Financial documentation for student visas requires careful preparation, demonstrating sufficient funds for tuition fees, living expenses, and additional costs. ${cityName}'s consultants assist with education loan applications, scholarship documentation, and financial sponsorship arrangements that satisfy embassy requirements.
+
+Statement of Purpose (SOP) preparation represents a crucial aspect of student visa applications. ${cityName}'s ${categoryName.toLowerCase()} help craft compelling narratives that articulate academic goals, career objectives, and reasons for choosing specific institutions and countries, addressing potential immigration concerns.
+
+Embassy interview preparation for student visas focuses on demonstrating genuine educational intentions and post-graduation plans. ${cityName}'s consultants provide comprehensive interview coaching, including mock sessions that prepare students for common questions and potential concerns about study abroad motivations.
+
+Post-visa services include pre-departure orientation, accommodation guidance, and initial settlement support. Many ${categoryName.toLowerCase()} in ${cityName} maintain ongoing relationships with students, providing assistance with visa extensions, work permit applications, and post-graduation immigration options.
+
+Student visa consultation fees in ${cityName} range from ${currency}${isUAE ? '300-1,000' : '3,000-15,000'} depending on destination and service scope. Comprehensive packages often include university selection assistance, application support, and visa guidance, providing complete educational consulting solutions for international study aspirations.`
     }
   };
 
