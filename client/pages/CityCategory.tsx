@@ -1278,6 +1278,7 @@ export default function CityCategory() {
   const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
   const [totalAvailableBusinesses, setTotalAvailableBusinesses] = useState(0);
   const [apiFailureCount, setApiFailureCount] = useState(0);
+  const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
   const [userLocation, setUserLocation] = useState<{
     city: string;
     state: string;
