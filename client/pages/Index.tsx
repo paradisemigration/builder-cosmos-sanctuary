@@ -596,8 +596,7 @@ export default function Index() {
             <Link to="/list-business" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                variant="outline"
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium text-white border-white hover:bg-white hover:text-blue-600 border-2"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium bg-white text-blue-600 hover:bg-gray-100 border-2 border-white shadow-lg"
               >
                 List Your Business
                 <Building className="ml-2 h-5 w-5" />
