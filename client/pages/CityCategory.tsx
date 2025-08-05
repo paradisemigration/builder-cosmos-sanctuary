@@ -160,6 +160,17 @@ export default function CityCategory() {
     }
 
     setLoading(true);
+    setCurrentPage(1);
+    setHasMoreData(true);
+
+    // Reset all states
+    setCategoryBusinesses([]);
+    setCityBusinesses([]);
+    setAllDubaiBusinesses([]);
+    setFilteredBusinesses([]);
+    setCategoryDataLoaded(false);
+    setCityDataLoaded(false);
+    setAllDubaiDataLoaded(false);
 
     // Validate city exists
     const cityExists = allCities.some(
@@ -182,6 +193,11 @@ export default function CityCategory() {
 
     // Fetch all city businesses as fallback
     fetchCityBusinesses();
+
+    // Fetch all Dubai businesses if this is a Dubai area
+    if (country === 'uae') {
+      fetchAllDubaiBusinesses();
+    }
 
     // Set page meta data with SEO optimization
     const metaData = generateCityCategoryMeta(cityName, categoryName);
