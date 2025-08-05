@@ -57,7 +57,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                     VisaConsult
                   </h1>
                   <p className="text-xs text-blue-600 font-medium -mt-1">
-                    INDIA
+                    {isUAEPage ? 'UAE' : 'INDIA'}
                   </p>
                 </div>
               </div>
