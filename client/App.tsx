@@ -7,6 +7,17 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
+
+// Component to handle scroll to top on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
 // Add required UI providers
@@ -174,6 +185,7 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop />
               <SimpleNavigation />
               <Routes>
                 {/* Public Routes */}
