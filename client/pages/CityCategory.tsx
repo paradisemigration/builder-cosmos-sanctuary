@@ -788,25 +788,53 @@ export default function CityCategory() {
   };
 
   const getCategoryDescription = (categorySlug: string) => {
+    const citySpecificDescriptions = {
+      "study-abroad": {
+        dubai: "Discover top-rated study abroad consultants in Dubai helping students secure admissions to world-class universities. Get expert guidance for US, UK, Canada, Australia & European education systems.",
+        "abu dhabi": "Find experienced study abroad advisors in Abu Dhabi specializing in international university placements. Expert assistance for IELTS, TOEFL preparation and scholarship applications.",
+        sharjah: "Connect with certified education consultants in Sharjah offering personalized study abroad services. Comprehensive support for visa processing and university applications.",
+        default: "Find trusted study abroad consultants for international education guidance with proven success rates"
+      },
+      "immigration-consultants": {
+        dubai: "Get professional immigration assistance in Dubai from licensed lawyers and certified consultants. Expert help with permanent residency, family reunification, and citizenship applications.",
+        "abu dhabi": "Access experienced immigration lawyers in Abu Dhabi providing comprehensive legal services for visa applications, PR processes, and immigration appeals.",
+        sharjah: "Find reliable immigration consultants in Sharjah offering affordable and efficient services for all types of immigration matters.",
+        default: "Expert immigration lawyers and consultants for legal assistance and permanent residency applications"
+      },
+      "visa-consultants": {
+        dubai: "Professional visa consultants in Dubai with high success rates for tourist, business, work, and family visas. Fast-track processing and documentation support available.",
+        "abu dhabi": "Trusted visa service providers in Abu Dhabi offering comprehensive assistance for all visa categories with transparent pricing and quick turnaround times.",
+        sharjah: "Experienced visa consultants in Sharjah specializing in visit visa, work permit, and family visa applications with excellent customer support.",
+        default: "Professional visa consultants for all types of visa applications with guaranteed processing"
+      },
+      "work-permit": {
+        dubai: "Specialized work permit consultants in Dubai helping professionals secure employment visas for UAE, Canada, Australia, and European countries with end-to-end support.",
+        "abu dhabi": "Expert work permit advisors in Abu Dhabi providing comprehensive assistance for employment visa applications and job placement services.",
+        default: "Specialized consultants for work permits and employment visas with industry expertise"
+      },
+      "visit-visa-specialists": {
+        dubai: "Leading visit visa specialists in Dubai offering fast and reliable tourist visa services for popular destinations including US, UK, Schengen, and Asian countries.",
+        "abu dhabi": "Professional visit visa consultants in Abu Dhabi providing hassle-free tourist visa processing with high approval rates and competitive pricing.",
+        default: "Expert visit visa specialists for tourist and business visa applications worldwide"
+      }
+    };
+
+    const descriptions = citySpecificDescriptions[categorySlug];
+    if (descriptions) {
+      const cityKey = cityName.toLowerCase().replace(/\s+/g, ' ');
+      return descriptions[cityKey] || descriptions.default || descriptions[Object.keys(descriptions)[0]];
+    }
+
+    // Fallback descriptions
     switch (categorySlug) {
-      case "study-abroad":
-        return "Find trusted study abroad consultants for international education guidance";
-      case "immigration-consultants":
-        return "Expert immigration lawyers and consultants for legal assistance";
-      case "visa-consultants":
-        return "Professional visa consultants for all types of visa applications";
-      case "work-permit":
-        return "Specialized consultants for work permits and employment visas";
-      case "visa-services":
-        return "Comprehensive visa documentation and processing services";
       case "immigration-services":
-        return "Complete immigration services including PR and citizenship";
+        return `Complete immigration services in ${cityName} including PR, citizenship, and family sponsorship with experienced consultants`;
       case "overseas-services":
-        return "Embassy services and overseas documentation assistance";
+        return `Embassy services and overseas documentation assistance in ${cityName} for seamless international processes`;
       case "education-services":
-        return "Educational consultancy and admission guidance services";
+        return `Educational consultancy and admission guidance services in ${cityName} for local and international institutions`;
       default:
-        return "Find trusted consultants for your needs";
+        return `Find trusted and verified consultants in ${cityName} for your specific needs with transparent pricing`;
     }
   };
 
