@@ -393,7 +393,7 @@ export default function CityBusinessListing() {
       if (apiAvailable) {
         // Step 1: Try exact city first
         try {
-          let response = await fetch(
+          let response = await robustFetch(
             `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
           );
 
