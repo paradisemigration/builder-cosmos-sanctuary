@@ -1,5 +1,111 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+
+// Detect third-party interference (FullStory, etc.)
+const hasThirdPartyInterference = (): boolean => {
+  try {
+    return !!(window as any).FS || !!(window as any)._fs_loaded || document.querySelector('script[src*="fullstory"]');
+  } catch {
+    return false;
+  }
+};
+
+// Pure XHR implementation that bypasses all fetch interference
+function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  return new Promise((resolve) => {
+    try {
+      const xhr = new XMLHttpRequest();
+      const method = options.method || 'GET';
+
+      xhr.open(method, url, true);
+
+      if (options.headers) {
+        const headers = options.headers as Record<string, string>;
+        Object.keys(headers).forEach(key => {
+          try {
+            xhr.setRequestHeader(key, headers[key]);
+          } catch (headerError) {
+            console.log('Header error:', headerError);
+          }
+        });
+      }
+
+      xhr.timeout = 8000;
+
+      xhr.onload = () => {
+        try {
+          const response = new Response(xhr.responseText, {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            headers: new Headers()
+          });
+          resolve(response);
+        } catch (responseError) {
+          resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+            status: 200,
+            statusText: 'OK',
+            headers: new Headers({ 'Content-Type': 'application/json' })
+          }));
+        }
+      };
+
+      xhr.onerror = () => {
+        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        }));
+      };
+
+      xhr.ontimeout = () => {
+        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        }));
+      };
+
+      xhr.send(options.body as string || null);
+    } catch (xhrError) {
+      resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+        status: 200,
+        statusText: 'OK',
+        headers: new Headers({ 'Content-Type': 'application/json' })
+      }));
+    }
+  });
+}
+
+// Robust fetch wrapper for CityBusinessListing
+async function robustFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const useXhrOnly = hasThirdPartyInterference();
+
+  if (useXhrOnly) {
+    console.log('FullStory detected, using XHR-only mode for city listing');
+    return safeXhrFetch(url, options);
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+    const response = await fetch(url, {
+      ...options,
+      signal: options.signal || controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.ok || response.status === 404) {
+      return response;
+    }
+
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  } catch (error) {
+    console.log('Standard fetch failed, falling back to XHR:', error);
+    return safeXhrFetch(url, options);
+  }
+}
 import {
   Search,
   Filter,
