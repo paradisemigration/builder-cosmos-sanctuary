@@ -110,13 +110,23 @@ const nearbyAreasMapping: Record<string, string[]> = {
   ghaziabad: ["Delhi", "Noida", "Gurgaon", "Faridabad"],
 
   // Mumbai region
-  mumbai: ["Pune", "Thane", "Navi Mumbai", "Nasik"],
+  mumbai: ["Pune", "Thane", "Navi Mumbai", "Nashik", "Aurangabad"],
   "navi mumbai": ["Mumbai", "Thane", "Pune", "Kalyan"],
   thane: ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
   kalyan: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
   andheri: ["Mumbai", "Bandra", "Thane", "Pune"],
   bandra: ["Mumbai", "Andheri", "Thane", "Pune"],
-  pune: ["Mumbai", "Nasik", "Aurangabad", "Kolhapur"],
+  pune: ["Mumbai", "Nashik", "Aurangabad", "Kolhapur", "Satara"],
+
+  // Maharashtra extended region
+  nashik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur", "Kolhapur", "Satara", "Sangli"],
+  nasik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur", "Kolhapur", "Satara", "Sangli"],
+  aurangabad: ["Pune", "Nashik", "Mumbai", "Ahmednagar", "Solapur", "Nagpur"],
+  ahmednagar: ["Pune", "Nashik", "Aurangabad", "Mumbai", "Solapur"],
+  solapur: ["Pune", "Aurangabad", "Kolhapur", "Sangli", "Mumbai"],
+  kolhapur: ["Pune", "Sangli", "Solapur", "Mumbai", "Nashik"],
+  satara: ["Pune", "Kolhapur", "Sangli", "Mumbai", "Nashik"],
+  sangli: ["Kolhapur", "Satara", "Pune", "Solapur", "Mumbai"],
 
   // Bangalore region
   bangalore: ["Hyderabad", "Chennai", "Mysore", "Mangalore"],
