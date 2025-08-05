@@ -172,6 +172,12 @@ export default function ListingPlans() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+      <SEOHead
+        title="Business Listing Plans - VisaConsult India | Grow Your Visa Consultancy"
+        description="Choose the perfect listing plan for your visa consultancy business. Free, Premium and Business Pro packages available. Increase visibility, get more clients and grow your immigration practice in India."
+        keywords="visa consultant listing plans, immigration business packages, visa consultancy marketing, business listing pricing, visa consultant advertising India"
+        canonical="/plans"
+      />
       <Navigation />
 
       {/* Hero Section */}
