@@ -181,23 +181,12 @@ export default function CityBusinessListing() {
 
       // Check if API is available
       let apiAvailable = false;
-
-      // For production, skip API calls and use sample data
-      const isProduction = window.location.hostname.includes('fly.dev') ||
-                         window.location.hostname.includes('netlify.app') ||
-                         !window.location.hostname.includes('localhost');
-
-      if (isProduction) {
-        console.log('Production environment detected, using sample data');
+      try {
+        const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+        apiAvailable = healthCheck.ok;
+      } catch (healthError) {
+        console.log('API health check failed, will use sample data fallback');
         apiAvailable = false;
-      } else {
-        try {
-          const healthCheck = await fetch('/api/health', { method: 'HEAD' });
-          apiAvailable = healthCheck.ok;
-        } catch (healthError) {
-          console.log('API health check failed, will use sample data fallback');
-          apiAvailable = false;
-        }
       }
 
       let result = null;
