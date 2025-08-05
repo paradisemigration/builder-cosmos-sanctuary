@@ -652,6 +652,7 @@ export default function CityCategory() {
     cityDataLoaded,
     allDubaiDataLoaded,
     currentPage,
+    searchQuery,
     city,
     category,
     cityName,
