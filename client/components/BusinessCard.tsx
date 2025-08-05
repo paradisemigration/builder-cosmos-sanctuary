@@ -293,10 +293,16 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
               </div>
 
               {/* Recent Reviewers */}
-              <div className="text-xs text-gray-500">
-                Recent reviews by: {recentReviewers.slice(0, 2).join(", ")}
-                {recentReviewers.length > 2 &&
-                  ` +${recentReviewers.length - 2} more`}
+              <div className="text-xs text-gray-600">
+                <span className="font-medium">Recent reviews:</span>{" "}
+                <span className="text-blue-600">
+                  {recentReviewers.slice(0, 2).join(", ")}
+                </span>
+                {recentReviewers.length > 2 && (
+                  <span className="text-gray-500">
+                    {" "}+{recentReviewers.length - 2} more
+                  </span>
+                )}
               </div>
             </div>
           </div>
