@@ -251,7 +251,15 @@ export function Navigation({ className = "" }: NavigationProps) {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <Link to="/list-business" className="lg:hidden">
+              <Button
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-2 text-xs whitespace-nowrap"
+              >
+                List Business
+              </Button>
+            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
