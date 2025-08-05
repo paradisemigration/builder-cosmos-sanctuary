@@ -382,22 +382,12 @@ export default function CityCategory() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            // For production, skip API calls entirely and use sample data
-            const isProduction = window.location.hostname.includes('fly.dev') ||
-                               window.location.hostname.includes('netlify.app') ||
-                               !window.location.hostname.includes('localhost');
-
-            if (isProduction) {
-              console.log('Production environment detected, using sample data');
-              apiAvailable = false;
-            } else {
-              const healthCheck = await fetch('/api/health', {
-                method: 'HEAD',
-                signal: controller.signal
-              });
-              clearTimeout(timeoutId);
-              apiAvailable = healthCheck.ok;
-            }
+            const healthCheck = await fetch('/api/health', {
+              method: 'HEAD',
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            apiAvailable = healthCheck.ok;
           } catch (healthError) {
             console.log('API health check failed, API not available:', healthError);
             setApiFailureCount(prev => prev + 1);
