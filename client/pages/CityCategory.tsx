@@ -1,5 +1,39 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+
+// Robust fetch wrapper with retry mechanism
+async function robustFetch(url: string, options: RequestInit = {}, retries = 3): Promise<Response> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(url, {
+        ...options,
+        signal: options.signal || controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok || response.status === 404) {
+        return response;
+      }
+
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    } catch (error) {
+      console.log(`Fetch attempt ${i + 1} failed for ${url}:`, error);
+
+      if (i === retries - 1) {
+        throw error;
+      }
+
+      // Wait before retrying (exponential backoff)
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+    }
+  }
+
+  throw new Error(`All ${retries} fetch attempts failed for ${url}`);
+}
 import {
   Search,
   Filter,
