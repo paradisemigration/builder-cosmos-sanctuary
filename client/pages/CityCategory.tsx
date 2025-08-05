@@ -1017,7 +1017,7 @@ export default function CityCategory() {
                 )}
 
                 {/* All Dubai/City businesses section */}
-                {(country === 'uae' && allDubaiBusinesses.length > 0) || (country !== 'uae' && cityBusinesses.length > 0) ? (
+                {((country === 'uae' && allDubaiBusinesses.length > 0) || (country !== 'uae' && cityBusinesses.length > 0)) && (
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <div>
