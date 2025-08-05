@@ -373,7 +373,18 @@ const nearbyAreasMapping: Record<string, string[]> = {
 
   // Lucknow region
   lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
-  kanpur: ["Lucknow", "Noida", "Allahabad", "Varanasi", "Agra", "Delhi", "Gurgaon", "Mumbai", "Bangalore", "Chennai"],
+  kanpur: [
+    "Lucknow",
+    "Noida",
+    "Allahabad",
+    "Varanasi",
+    "Agra",
+    "Delhi",
+    "Gurgaon",
+    "Mumbai",
+    "Bangalore",
+    "Chennai",
+  ],
   allahabad: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
   prayagraj: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
   varanasi: ["Lucknow", "Allahabad", "Kanpur", "Patna"],
@@ -453,7 +464,18 @@ const nearbyAreasMapping: Record<string, string[]> = {
 
   // Uttar Pradesh region
   lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
-  kanpur: ["Lucknow", "Noida", "Allahabad", "Varanasi", "Agra", "Delhi", "Gurgaon", "Mumbai", "Bangalore", "Chennai"],
+  kanpur: [
+    "Lucknow",
+    "Noida",
+    "Allahabad",
+    "Varanasi",
+    "Agra",
+    "Delhi",
+    "Gurgaon",
+    "Mumbai",
+    "Bangalore",
+    "Chennai",
+  ],
   agra: ["Delhi", "Gwalior", "Lucknow", "Mathura"],
   allahabad: ["Lucknow", "Varanasi", "Kanpur", "Delhi"],
   prayagraj: ["Lucknow", "Varanasi", "Kanpur", "Delhi"],
@@ -1639,7 +1661,14 @@ export default function CityCategory() {
         // Step 3: If no data from API, fallback to sample data with nearby cities logic
         console.log("API result received:", result);
         console.log("Sample businesses available:", sampleBusinesses.length);
-        console.log("Searching for city:", cityName, "category:", categoryName, "slug:", categorySlug);
+        console.log(
+          "Searching for city:",
+          cityName,
+          "category:",
+          categoryName,
+          "slug:",
+          categorySlug,
+        );
 
         if (
           !result ||
@@ -1651,11 +1680,7 @@ export default function CityCategory() {
             "No data from API for main city, trying nearby cities with real API calls",
           );
 
-          const nearbyCities = getNearByCities(
-            cityName,
-            country,
-            userLocation,
-          );
+          const nearbyCities = getNearByCities(cityName, country, userLocation);
 
           console.log(
             `Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
@@ -1665,12 +1690,19 @@ export default function CityCategory() {
           let sourceCities = [];
 
           // PHASE 1: Try exact category match from nearby cities (prioritizing same state)
-          console.log("=== PHASE 1: Trying exact category from nearby cities ===");
-          console.log(`Nearby cities priority order: ${nearbyCities.join(" -> ")}`);
+          console.log(
+            "=== PHASE 1: Trying exact category from nearby cities ===",
+          );
+          console.log(
+            `Nearby cities priority order: ${nearbyCities.join(" -> ")}`,
+          );
 
-          for (const nearbyCity of nearbyCities.slice(0, 8)) { // Check more cities for better coverage
+          for (const nearbyCity of nearbyCities.slice(0, 8)) {
+            // Check more cities for better coverage
             try {
-              console.log(`\n--- Querying ${nearbyCity} for category: ${categoryName} ---`);
+              console.log(
+                `\n--- Querying ${nearbyCity} for category: ${categoryName} ---`,
+              );
 
               const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=25&country=${encodeURIComponent(country)}`;
 
@@ -1681,39 +1713,62 @@ export default function CityCategory() {
                 headers: { "Content-Type": "application/json" },
               });
 
-              console.log(`Response status: ${nearbyResponse.status} ${nearbyResponse.statusText}`);
+              console.log(
+                `Response status: ${nearbyResponse.status} ${nearbyResponse.statusText}`,
+              );
 
               const nearbyResult = await nearbyResponse.json();
               console.log(`API Response for ${nearbyCity}:`, nearbyResult);
 
-              if (nearbyResult && nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
-                console.log(`✅ SUCCESS: Found ${nearbyResult.businesses.length} real businesses in ${nearbyCity} for ${categoryName}`);
-                console.log(`Business names:`, nearbyResult.businesses.map(b => b.name));
+              if (
+                nearbyResult &&
+                nearbyResult.success &&
+                nearbyResult.businesses &&
+                nearbyResult.businesses.length > 0
+              ) {
+                console.log(
+                  `✅ SUCCESS: Found ${nearbyResult.businesses.length} real businesses in ${nearbyCity} for ${categoryName}`,
+                );
+                console.log(
+                  `Business names:`,
+                  nearbyResult.businesses.map((b) => b.name),
+                );
 
                 // Mark as nearby data and add to accumulator
-                const nearbyCityBusinesses = nearbyResult.businesses.map(business => ({
-                  ...business,
-                  isNearbyData: true,
-                  originalRequestedCity: cityName,
-                  nearbySourceCity: nearbyCity
-                }));
+                const nearbyCityBusinesses = nearbyResult.businesses.map(
+                  (business) => ({
+                    ...business,
+                    isNearbyData: true,
+                    originalRequestedCity: cityName,
+                    nearbySourceCity: nearbyCity,
+                  }),
+                );
 
-                accumulatedBusinesses = [...accumulatedBusinesses, ...nearbyCityBusinesses];
+                accumulatedBusinesses = [
+                  ...accumulatedBusinesses,
+                  ...nearbyCityBusinesses,
+                ];
                 sourceCities.push(nearbyCity);
 
-                console.log(`Total accumulated so far: ${accumulatedBusinesses.length} businesses`);
+                console.log(
+                  `Total accumulated so far: ${accumulatedBusinesses.length} businesses`,
+                );
 
                 if (accumulatedBusinesses.length >= 50) {
-                  console.log("Found enough businesses from exact category matches");
+                  console.log(
+                    "Found enough businesses from exact category matches",
+                  );
                   break;
                 }
               } else {
-                console.log(`❌ No businesses found in ${nearbyCity} for ${categoryName}`);
+                console.log(
+                  `❌ No businesses found in ${nearbyCity} for ${categoryName}`,
+                );
                 if (nearbyResult) {
                   console.log(`Response details:`, {
                     success: nearbyResult.success,
                     total: nearbyResult.total,
-                    businessesLength: nearbyResult.businesses?.length || 0
+                    businessesLength: nearbyResult.businesses?.length || 0,
                   });
                 }
               }
@@ -1724,11 +1779,15 @@ export default function CityCategory() {
 
           // PHASE 2: If not enough, try broader searches from nearby cities
           if (accumulatedBusinesses.length < 10) {
-            console.log("\n=== PHASE 2: Trying broader searches from nearby cities ===");
+            console.log(
+              "\n=== PHASE 2: Trying broader searches from nearby cities ===",
+            );
 
             for (const nearbyCity of nearbyCities.slice(0, 5)) {
               try {
-                console.log(`\n--- Trying broader search for ${nearbyCity} ---`);
+                console.log(
+                  `\n--- Trying broader search for ${nearbyCity} ---`,
+                );
 
                 // Try 1: All businesses in that city (no category filter)
                 const cityApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=25&country=${encodeURIComponent(country)}`;
@@ -1741,55 +1800,94 @@ export default function CityCategory() {
                 });
 
                 const cityResult = await cityResponse.json();
-                console.log(`All businesses result for ${nearbyCity}:`, cityResult);
+                console.log(
+                  `All businesses result for ${nearbyCity}:`,
+                  cityResult,
+                );
 
-                if (cityResult && cityResult.success && cityResult.businesses && cityResult.businesses.length > 0) {
-                  console.log(`✅ Found ${cityResult.businesses.length} total businesses in ${nearbyCity}`);
+                if (
+                  cityResult &&
+                  cityResult.success &&
+                  cityResult.businesses &&
+                  cityResult.businesses.length > 0
+                ) {
+                  console.log(
+                    `✅ Found ${cityResult.businesses.length} total businesses in ${nearbyCity}`,
+                  );
 
                   // Filter for consultant/immigration related businesses
-                  const relevantBusinesses = cityResult.businesses.filter(business => {
-                    const name = business.name?.toLowerCase() || '';
-                    const category = business.category?.toLowerCase() || '';
-                    const description = business.description?.toLowerCase() || '';
+                  const relevantBusinesses = cityResult.businesses.filter(
+                    (business) => {
+                      const name = business.name?.toLowerCase() || "";
+                      const category = business.category?.toLowerCase() || "";
+                      const description =
+                        business.description?.toLowerCase() || "";
 
-                    return name.includes('visa') || name.includes('immigration') || name.includes('consultant') ||
-                           category.includes('visa') || category.includes('immigration') || category.includes('consultant') ||
-                           description.includes('visa') || description.includes('immigration') || description.includes('consultant');
-                  });
+                      return (
+                        name.includes("visa") ||
+                        name.includes("immigration") ||
+                        name.includes("consultant") ||
+                        category.includes("visa") ||
+                        category.includes("immigration") ||
+                        category.includes("consultant") ||
+                        description.includes("visa") ||
+                        description.includes("immigration") ||
+                        description.includes("consultant")
+                      );
+                    },
+                  );
 
                   if (relevantBusinesses.length > 0) {
-                    console.log(`Found ${relevantBusinesses.length} relevant businesses in ${nearbyCity}`);
-                    console.log('Relevant business names:', relevantBusinesses.map(b => b.name));
+                    console.log(
+                      `Found ${relevantBusinesses.length} relevant businesses in ${nearbyCity}`,
+                    );
+                    console.log(
+                      "Relevant business names:",
+                      relevantBusinesses.map((b) => b.name),
+                    );
 
-                    const nearbyCityBusinesses = relevantBusinesses.map(business => ({
-                      ...business,
-                      isNearbyData: true,
-                      originalRequestedCity: cityName,
-                      nearbySourceCity: nearbyCity
-                    }));
+                    const nearbyCityBusinesses = relevantBusinesses.map(
+                      (business) => ({
+                        ...business,
+                        isNearbyData: true,
+                        originalRequestedCity: cityName,
+                        nearbySourceCity: nearbyCity,
+                      }),
+                    );
 
-                    accumulatedBusinesses = [...accumulatedBusinesses, ...nearbyCityBusinesses];
+                    accumulatedBusinesses = [
+                      ...accumulatedBusinesses,
+                      ...nearbyCityBusinesses,
+                    ];
                     if (!sourceCities.includes(nearbyCity)) {
                       sourceCities.push(nearbyCity);
                     }
 
-                    console.log(`Total accumulated now: ${accumulatedBusinesses.length} businesses`);
+                    console.log(
+                      `Total accumulated now: ${accumulatedBusinesses.length} businesses`,
+                    );
 
                     if (accumulatedBusinesses.length >= 50) {
                       break;
                     }
                   }
                 } else {
-                  console.log(`❌ No businesses found in ${nearbyCity} (all categories)`);
+                  console.log(
+                    `❌ No businesses found in ${nearbyCity} (all categories)`,
+                  );
                 }
-
               } catch (error) {
-                console.error(`❌ Error in broader search for ${nearbyCity}:`, error);
+                console.error(
+                  `❌ Error in broader search for ${nearbyCity}:`,
+                  error,
+                );
               }
             }
           }
 
-          console.log(`Total accumulated real businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`);
+          console.log(
+            `Total accumulated real businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`,
+          );
 
           if (accumulatedBusinesses.length > 0) {
             result = {
@@ -1801,13 +1899,6 @@ export default function CityCategory() {
             isNearbyData = true;
             nearbyCity = sourceCities.join(", ");
           }
-
-
-
-
-
-
-
         }
 
         // Step 4: Process result if we have data (from API or sample data)
