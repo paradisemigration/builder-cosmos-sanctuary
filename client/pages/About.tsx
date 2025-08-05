@@ -25,16 +25,13 @@ import { generateAboutMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function About() {
   useEffect(() => {
-    document.title =
-      "About Us - VisaConsult India | India's Leading Visa Consultant Directory";
+    const aboutPageMeta = generateAboutMeta();
+    setPageMeta(aboutPageMeta);
 
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Learn about VisaConsult India - India's most trusted platform connecting visa applicants with verified immigration consultants. Our mission, values, and commitment to your visa journey.",
-      );
-    }
+    setSEOLinks({
+      canonical: "/about",
+      alternate: ["/about"],
+    });
   }, []);
 
   const stats = [
