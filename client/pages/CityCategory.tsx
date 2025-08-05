@@ -1638,6 +1638,8 @@ export default function CityCategory() {
 
         // Step 3: If no data from API, fallback to sample data with nearby cities logic
         console.log("API result received:", result);
+        console.log("Sample businesses available:", sampleBusinesses.length);
+        console.log("Searching for city:", cityName, "category:", categoryName, "slug:", categorySlug);
 
         if (
           !result ||
