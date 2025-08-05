@@ -982,16 +982,20 @@ export default function CityCategory() {
         <div className="container mx-auto max-w-6xl px-4">
           {(categoryBusinesses.length === 0 && cityBusinesses.length === 0) ||
           (searchQuery && filteredBusinesses.length === 0) ? (
-            <div className="text-center py-16">
+                <div className="text-center py-16">
               <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
                 {searchQuery
                   ? `No results found for "${searchQuery}"`
+                  : apiFailureCount >= 3
+                  ? `Service temporarily unavailable`
                   : `No businesses found`}
               </h3>
               <p className="text-gray-500 mb-6">
                 {searchQuery
                   ? `Try adjusting your search terms or browse all businesses in ${cityName}`
+                  : apiFailureCount >= 3
+                  ? `We're experiencing connectivity issues. Please try refreshing the page or check back in a few minutes.`
                   : `We're working on adding more ${categoryName.toLowerCase()} in ${cityName}. Check back soon or browse all businesses in the city.`}
               </p>
               <div className="flex gap-4 justify-center">
