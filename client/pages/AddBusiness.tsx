@@ -363,7 +363,7 @@ export default function AddBusiness() {
               on {country}'s #1 Platform
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-              �� Join Dubai's most trusted directory of immigration and visa
+              {countryFlag} Join {country}'s most trusted directory of immigration and visa
               services. Reach thousands of customers and grow your business with
               verified credibility.
             </p>
