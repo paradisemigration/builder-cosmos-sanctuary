@@ -113,7 +113,21 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   };
 
   const successRatio = generateSuccessRatio(business.name);
-  const recentReviewers = generateRecentReviewers(business.name);
+
+  // Get actual reviewer names from business reviews or generate fallback names
+  const getReviewerNames = () => {
+    if (business.reviews && business.reviews.length > 0) {
+      // Use actual reviewer names from the business data
+      return business.reviews
+        .filter(review => review.userName && review.userName !== 'Anonymous')
+        .map(review => review.userName)
+        .slice(0, 5); // Get up to 5 reviewer names
+    }
+    // Fallback to generated names if no real reviews available
+    return generateRecentReviewers(business.name);
+  };
+
+  const recentReviewers = getReviewerNames();
   const reviewCount = business.reviews?.length || business.reviewCount || generateReviewCount(business.name);
 
   // Generate SEO-friendly URL slug
