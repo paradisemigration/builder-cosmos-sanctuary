@@ -181,12 +181,16 @@ const nearbyAreasMapping: Record<string, string[]> = {
   nagpur: ["Indore", "Bhopal", "Pune", "Hyderabad"],
 
   // Kerala region
-  kochi: ["Thiruvananthapuram", "Kozhikode", "Bangalore", "Chennai"],
-  cochin: ["Thiruvananthapuram", "Kozhikode", "Bangalore", "Chennai"],
-  thiruvananthapuram: ["Kochi", "Kozhikode", "Chennai", "Bangalore"],
-  trivandrum: ["Kochi", "Kozhikode", "Chennai", "Bangalore"],
-  kozhikode: ["Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
-  calicut: ["Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
+  kochi: ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Bangalore", "Chennai", "Coimbatore"],
+  cochin: ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Bangalore", "Chennai", "Coimbatore"],
+  thiruvananthapuram: ["Kochi", "Kozhikode", "Thrissur", "Chennai", "Bangalore", "Coimbatore"],
+  trivandrum: ["Kochi", "Kozhikode", "Thrissur", "Chennai", "Bangalore", "Coimbatore"],
+  kozhikode: ["Kochi", "Thiruvananthapuram", "Thrissur", "Mangalore", "Chennai"],
+  calicut: ["Kochi", "Thiruvananthapuram", "Thrissur", "Mangalore", "Chennai"],
+  thrissur: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Chennai", "Bangalore"],
+  kollam: ["Thiruvananthapuram", "Kochi", "Kozhikode", "Chennai", "Bangalore"],
+  kannur: ["Kozhikode", "Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
+  palakkad: ["Kochi", "Coimbatore", "Thiruvananthapuram", "Chennai", "Bangalore"],
 
   // Other major cities
   chandigarh: ["Delhi", "Ludhiana", "Amritsar", "Jalandhar"],
