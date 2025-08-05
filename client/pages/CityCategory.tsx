@@ -1793,6 +1793,9 @@ export default function CityCategory() {
           setCategoryBusinesses(businesses);
           setCategoryDataLoaded(true);
 
+          // Update total available businesses count
+          setTotalAvailableBusinesses(result.total || businesses.length);
+
           // Update debug info
           const scrapedTimestamp = new Date().toLocaleTimeString();
           const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}`;
