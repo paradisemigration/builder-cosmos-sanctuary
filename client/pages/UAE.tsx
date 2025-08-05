@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   MapPin,
@@ -15,6 +15,8 @@ import {
   Globe,
   Shield,
   ChevronRight,
+  Loader2,
+  X,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -24,11 +26,22 @@ import { Badge } from "@/components/ui/badge";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SEOHead } from "@/components/SEOHead";
 import { uaeCities, allCategories } from "@/lib/all-categories";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 export default function UAE() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
   const [businesses, setBusinesses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  // Use geolocation hook for UAE (will likely not detect UAE location, but we'll handle it)
+  const { location, isLoading: locationLoading } = useGeolocation();
 
   // Popular categories in UAE
   const popularCategories = [
@@ -158,10 +171,94 @@ export default function UAE() {
     }, 1000);
   }, []);
 
+  // Handle category autocomplete
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      const filtered = allCategories.filter(category =>
+        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        category.description.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 8); // Limit to 8 suggestions
+
+      setFilteredCategories(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setShowSuggestions(false);
+      setFilteredCategories([]);
+      setSelectedCategory(null);
+    }
+  }, [searchQuery]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleSearch = () => {
-    if (searchQuery) {
-      // Navigate to search results
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}&country=uae`;
+    // If we have both city and a selected category, go to city+category page
+    if (selectedCity && selectedCategory) {
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      const categorySlug = selectedCategory.slug;
+      navigate(`/uae/business/${citySlug}/${categorySlug}`);
+    }
+    // If we have a city but search query (not a selected category), search in that city
+    else if (selectedCity && searchQuery.trim()) {
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      navigate(`/uae/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+    // If we have selected category but no city, go to category page
+    else if (selectedCategory && !selectedCity) {
+      navigate(`/uae/category/${selectedCategory.slug}`);
+    }
+    // If we have search query but no specific category/city, do general search
+    else if (searchQuery.trim()) {
+      navigate(`/uae/business?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+    // Default fallback
+    else {
+      navigate('/uae/business');
+    }
+
+    // Close suggestions after search
+    setShowSuggestions(false);
+  };
+
+  const handleCategorySelect = (category: any) => {
+    setSelectedCategory(category);
+    setSearchQuery(category.name);
+    setShowSuggestions(false);
+  };
+
+  const handleClearCategory = () => {
+    setSelectedCategory(null);
+    setSearchQuery("");
+    setShowSuggestions(false);
+    // Focus back on search input
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Clear selected category if user changes search query
+    if (selectedCategory && value !== selectedCategory.name) {
+      setSelectedCategory(null);
     }
   };
 
@@ -169,7 +266,7 @@ export default function UAE() {
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-white">
       <SEOHead
         title="Best Visa Consultants in UAE | Visa Consultants UAE"
-        description="Find top-rated visa consultants across UAE. Expert immigration services in Dubai, Abu Dhabi, Sharjah and more. Trusted professionals for work visa, study abroad, and tourist visa assistance."
+        description="UAE's #1 platform for verified visa consultants across Dubai, Abu Dhabi, Sharjah & all Emirates. Expert immigration services for work visas, study abroad, business visas & PR applications. Compare 500+ trusted professionals with proven success rates."
         keywords="visa consultants UAE, immigration services Dubai, Abu Dhabi visa agents, Sharjah immigration, UAE work visa, study abroad UAE, tourist visa UAE"
         country="uae"
         structuredData={{
@@ -236,29 +333,79 @@ export default function UAE() {
             <div className="max-w-2xl mx-auto mb-8 sm:mb-12 px-4">
               <div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="flex-1">
+                  <div className="flex-1 relative">
                     <div className="relative">
-                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
                       <Input
+                        ref={searchInputRef}
                         type="text"
-                        placeholder="Search visa consultants in UAE..."
+                        placeholder="Search visa consultants, categories..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleSearchInputChange}
                         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent"
+                        onFocus={() => {
+                          if (searchQuery.length >= 2 && filteredCategories.length > 0) {
+                            setShowSuggestions(true);
+                          }
+                        }}
+                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent w-full"
                       />
+                      {selectedCategory && (
+                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                          <Badge variant="secondary" className="text-xs flex items-center gap-1 pr-1">
+                            <span>{selectedCategory.name}</span>
+                            <button
+                              onClick={handleClearCategory}
+                              className="ml-1 hover:bg-gray-300 rounded-full p-0.5 transition-colors"
+                              title="Clear category"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Autocomplete Suggestions */}
+                    {showSuggestions && filteredCategories.length > 0 && !selectedCategory && (
+                      <div
+                        ref={suggestionsRef}
+                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                      >
+                        {filteredCategories.map((category, index) => (
+                          <div
+                            key={category.slug}
+                            className="px-4 py-3 hover:bg-red-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                            onClick={() => handleCategorySelect(category)}
+                          >
+                            <div className="font-medium text-gray-900">{category.name}</div>
+                            <div className="text-sm text-gray-600 mt-1">{category.description}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="sm:flex-initial">
-                    <select
-                      className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-red-500 text-base"
-                    >
-                      <option value="">Select City</option>
-                      <option value="Dubai">Dubai</option>
-                      <option value="Abu Dhabi">Abu Dhabi</option>
-                      <option value="Sharjah">Sharjah</option>
-                      <option value="Ajman">Ajman</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                        className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-red-500 text-base appearance-none"
+                      >
+                        <option value="">
+                          {locationLoading ? "Detecting..." : "Select City"}
+                        </option>
+                        <option value="Dubai">Dubai</option>
+                        <option value="Abu Dhabi">Abu Dhabi</option>
+                        <option value="Sharjah">Sharjah</option>
+                        <option value="Ajman">Ajman</option>
+                        <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                        <option value="Fujairah">Fujairah</option>
+                      </select>
+                      {locationLoading && (
+                        <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin text-gray-400" />
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Button
@@ -267,7 +414,7 @@ export default function UAE() {
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-green-600 hover:from-red-700 hover:to-green-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
                 >
                   <Search className="mr-2 h-5 w-5" />
-                  Search UAE Experts
+                  {selectedCity && selectedCategory ? `Search in ${selectedCity}` : "Search UAE Experts"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -279,6 +426,7 @@ export default function UAE() {
                     key={tag}
                     variant="outline"
                     className="cursor-pointer hover:bg-red-50 hover:border-red-300 transition-colors"
+                    onClick={() => setSearchQuery(tag)}
                   >
                     {tag}
                   </Badge>
