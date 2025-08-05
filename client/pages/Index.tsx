@@ -405,7 +405,7 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-green-100 text-green-800">���🇳 Across India</Badge>
+            <Badge className="mb-4 bg-green-100 text-green-800">🇮🇳 Across India</Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Top Cities We Serve
             </h2>
@@ -464,19 +464,19 @@ export default function Index() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 sm:mb-16">
             <Badge className="mb-4 bg-yellow-100 text-yellow-800">Why Choose Us</Badge>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               India's Most Trusted Platform
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Experience the difference with our verified experts and proven success rate
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {whyChooseUs.map((feature, index) => (
               <div key={index} className="text-center">
                 <div className={`inline-flex p-4 rounded-2xl bg-white shadow-lg mb-6 ${feature.color}`}>
