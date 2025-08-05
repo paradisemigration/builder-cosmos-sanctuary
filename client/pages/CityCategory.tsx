@@ -770,6 +770,108 @@ const getNearByCities = (
   }
 };
 
+// Generate unique content for city+category combinations (500 words)
+const generateCityCategoryContent = (cityName: string, categoryName: string, categorySlug: string, country: string) => {
+  const isUAE = country === "uae";
+  const countryName = isUAE ? "UAE" : "India";
+  const currency = isUAE ? "AED" : "₹";
+
+  // Base content templates for different categories
+  const contentTemplates = {
+    "visa-consultants": {
+      title: `Expert ${categoryName} Services in ${cityName}`,
+      content: `Finding reliable ${categoryName.toLowerCase()} in ${cityName} is crucial for your international travel and immigration goals. ${cityName} serves as a major hub for visa services in ${countryName}, offering comprehensive consultation services for various visa types including tourist, business, student, and work visas.
+
+Professional ${categoryName.toLowerCase()} in ${cityName} provide end-to-end visa assistance, from initial consultation to final approval. These experts specialize in handling complex documentation requirements, embassy procedures, and interview preparation. With extensive knowledge of international visa regulations and requirements, ${cityName}-based consultants maintain high success rates across different visa categories.
+
+The visa consultation process in ${cityName} typically begins with a thorough assessment of your travel purpose, destination country requirements, and documentation checklist. Experienced consultants guide clients through country-specific requirements, ensuring all necessary documents are properly prepared and submitted. This includes passport verification, financial documentation, invitation letters, and supporting certificates.
+
+${cityName}'s ${categoryName.toLowerCase()} maintain strong relationships with various embassies and consulates, enabling efficient processing and regular updates on application status. They stay updated with changing visa policies, fee structures, and processing times across different countries. This expertise proves invaluable for both first-time applicants and frequent travelers.
+
+Services offered by ${categoryName.toLowerCase()} in ${cityName} include visa category consultation, documentation guidance, application form assistance, appointment scheduling, and pre-submission review. Many consultants also provide additional services such as travel insurance guidance, flight booking assistance, and post-visa support for travel planning.
+
+Cost considerations for visa consultation services in ${cityName} vary based on visa type and complexity. Standard tourist visa consultations typically range from ${currency}${isUAE ? '200-500' : '2,000-5,000'}, while complex work or immigration visas may cost ${currency}${isUAE ? '500-2,000' : '5,000-25,000'}. Investment in professional consultation often proves cost-effective by avoiding rejection and reapplication expenses.
+
+Choose ${categoryName.toLowerCase()} in ${cityName} based on their specialization, success rates, customer reviews, and transparency in fee structure. Verify their credentials, experience with your target destination, and availability for ongoing support throughout the visa process.`
+    },
+
+    "immigration-consultants": {
+      title: `Professional ${categoryName} in ${cityName}`,
+      content: `${cityName} hosts some of ${countryName}'s most experienced ${categoryName.toLowerCase()}, specializing in permanent residency, citizenship applications, and long-term immigration solutions. These professionals provide comprehensive guidance for individuals and families seeking to establish permanent roots in international destinations.
+
+Immigration processes differ significantly from temporary visa applications, requiring specialized knowledge of immigration laws, points-based systems, and long-term settlement requirements. ${cityName}'s ${categoryName.toLowerCase()} possess in-depth understanding of various immigration programs including skilled worker categories, investor visas, family reunification, and refugee protection.
+
+The immigration consultation process in ${cityName} begins with eligibility assessment for different immigration programs. Consultants evaluate factors such as education credentials, work experience, language proficiency, and financial capacity to determine the most suitable immigration pathway. This assessment helps prioritize applications with higher success probability.
+
+Professional ${categoryName.toLowerCase()} in ${cityName} assist with complex documentation including educational credential assessment, work experience verification, language test preparation, and medical examinations. They provide guidance on points calculation for skilled migration programs and help optimize profiles for maximum scoring potential.
+
+${cityName}'s immigration experts maintain updated knowledge of changing immigration policies, quota systems, and processing timeframes across popular destinations like Canada, Australia, New Zealand, and European countries. This expertise enables accurate timeline predictions and realistic expectation setting for clients.
+
+Services include immigration program selection, documentation preparation, points optimization, application submission, and ongoing case management. Many consultants also provide settlement services guidance, including job search assistance, accommodation planning, and initial settlement support upon arrival.
+
+Immigration consultation fees in ${cityName} typically range from ${currency}${isUAE ? '1,000-5,000' : '15,000-75,000'} depending on program complexity and service scope. Comprehensive packages often include multiple application attempts and ongoing support throughout the process.
+
+Successful immigration requires careful planning, accurate documentation, and expert guidance throughout the lengthy process. ${cityName}'s ${categoryName.toLowerCase()} provide this essential support, significantly improving approval chances and reducing processing complications.`
+    },
+
+    "study-abroad-consultants": {
+      title: `Leading ${categoryName} in ${cityName}`,
+      content: `${cityName} has emerged as a premier destination for international education consulting, with experienced ${categoryName.toLowerCase()} helping students achieve their academic dreams worldwide. These educational advisors specialize in university selection, application processes, and comprehensive student support services.
+
+International education planning requires careful consideration of academic goals, financial capacity, and career objectives. ${cityName}'s ${categoryName.toLowerCase()} provide personalized guidance for undergraduate, postgraduate, and doctoral programs across popular destinations including USA, UK, Canada, Australia, Germany, and other European countries.
+
+The consultation process begins with academic profile assessment, identifying suitable universities and programs based on academic background, test scores, and career aspirations. Consultants in ${cityName} maintain extensive databases of international universities, admission requirements, and scholarship opportunities to provide tailored recommendations.
+
+${categoryName} in ${cityName} assist with standardized test preparation including IELTS, TOEFL, GRE, GMAT, and SAT. They provide guidance on achieving required scores and offer test preparation resources and coaching. Additionally, they help craft compelling statements of purpose, recommendation letters, and academic essays that strengthen application profiles.
+
+Application management services include university shortlisting, deadline tracking, document preparation, and submission coordination. ${cityName}'s consultants ensure all requirements are met for multiple university applications, maximizing admission chances while maintaining application quality.
+
+Financial planning represents a crucial aspect of study abroad consulting in ${cityName}. Consultants provide guidance on education costs, living expenses, scholarship opportunities, and education loan options. They help families understand total investment requirements and plan financing strategies accordingly.
+
+Student visa assistance forms an integral part of services offered by ${categoryName.toLowerCase()} in ${cityName}. This includes visa documentation, embassy interview preparation, and guidance on student visa regulations. Experienced consultants ensure visa applications align with university admissions for seamless processing.
+
+Consultation fees in ${cityName} typically range from ${currency}${isUAE ? '500-2,000' : '5,000-25,000'} depending on service scope and destination complexity. Comprehensive packages often include ongoing support throughout the admission and visa process, ensuring students receive continuous guidance until departure.`
+    }
+  };
+
+  // Get appropriate template or use default
+  const template = contentTemplates[categorySlug] || contentTemplates["visa-consultants"];
+
+  return {
+    title: template.title,
+    content: template.content
+  };
+};
+
+// Generate unique content for city pages (500 words)
+const generateCityContent = (cityName: string, country: string) => {
+  const isUAE = country === "uae";
+  const countryName = isUAE ? "UAE" : "India";
+
+  return {
+    title: `Comprehensive Visa & Immigration Services in ${cityName}`,
+    content: `${cityName} stands as a prominent hub for visa and immigration services in ${countryName}, offering comprehensive solutions for international travel, study abroad, work permits, and permanent residency applications. The city hosts numerous experienced consultants specializing in various aspects of visa processing and immigration guidance.
+
+The visa consultation landscape in ${cityName} encompasses diverse services including tourist visa processing, business visa assistance, student visa guidance, work permit applications, and complex immigration procedures. Professional consultants in the city maintain extensive knowledge of international visa regulations, embassy requirements, and documentation standards across multiple countries.
+
+${cityName}'s strategic location and established infrastructure make it an ideal base for visa services targeting popular destinations such as USA, Canada, UK, Australia, European Union countries, and other international locations. The city's consultants leverage strong relationships with embassies, consulates, and international institutions to facilitate efficient processing.
+
+Educational consulting represents a significant sector within ${cityName}'s visa services industry. Study abroad consultants assist students with university selection, application processes, scholarship guidance, and student visa applications. These services cover undergraduate, postgraduate, and doctoral programs across globally recognized institutions.
+
+Immigration services in ${cityName} extend beyond temporary visas to include permanent residency applications, citizenship procedures, and family reunification processes. Experienced immigration lawyers and consultants provide specialized guidance for complex cases requiring legal expertise and comprehensive documentation support.
+
+The business visa and work permit sector in ${cityName} serves corporate clients, entrepreneurs, and skilled professionals seeking international opportunities. Consultants specialize in various work visa categories, investor visas, and business establishment procedures across different countries with varying requirements and regulations.
+
+Quality assurance remains paramount among ${cityName}'s visa service providers. Reputable consultants maintain high success rates through thorough preparation, accurate documentation, and comprehensive client support. They provide realistic timeline expectations and transparent fee structures to ensure client satisfaction throughout the process.
+
+Technology integration has modernized visa services in ${cityName}, with consultants utilizing digital platforms for application tracking, document management, and client communication. This technological advancement enhances efficiency and provides real-time updates on application progress.
+
+Cost considerations for visa services in ${cityName} vary significantly based on service type, destination country, and application complexity. Clients benefit from competitive pricing and comprehensive service packages that often prove more cost-effective than independent application attempts.
+
+${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`
+  };
+};
+
 // Generate unique FAQs for each category and city combination
 const getFAQs = (categorySlug: string, cityName: string) => {
   const baseFAQs = {
