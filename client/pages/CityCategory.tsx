@@ -1037,6 +1037,36 @@ export default function CityCategory() {
               }
             }
 
+            // If still no businesses found, try with looser category matching
+            if (sampleBusinesses_filtered.length === 0) {
+              console.log("No businesses found with strict category matching, trying looser matching...");
+
+              const educationCategories = ["Education", "Student", "Study", "Visa", "Immigration"];
+              const isEducationCategory = educationCategories.some(cat =>
+                categoryName.toLowerCase().includes(cat.toLowerCase())
+              );
+
+              if (isEducationCategory) {
+                for (const nearbyCity_temp of nearbyCities) {
+                  const nearbyBusinesses = sampleBusinesses.filter(
+                    (business) =>
+                      business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
+                      educationCategories.some(cat =>
+                        business.category.toLowerCase().includes(cat.toLowerCase())
+                      )
+                  );
+
+                  if (nearbyBusinesses.length > 0) {
+                    sampleBusinesses_filtered = [...sampleBusinesses_filtered, ...nearbyBusinesses];
+                    console.log(
+                      `Emergency fallback (loose): Added ${nearbyBusinesses.length} education-related businesses from: ${nearbyCity_temp}`,
+                    );
+                    break; // Take first match to avoid too many results
+                  }
+                }
+              }
+            }
+
             if (sampleBusinesses_filtered.length > 0) {
               setIsShowingNearbyData(true);
             }
