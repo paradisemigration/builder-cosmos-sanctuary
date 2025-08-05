@@ -211,9 +211,17 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
 
       // Try to get city from coordinates using reverse geocoding
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
         const response = await fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`,
+          {
+            signal: controller.signal,
+          }
         );
+        clearTimeout(timeoutId);
+
         const data = await response.json();
 
         if (data.city && data.principalSubdivision) {
@@ -229,7 +237,14 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
 
     // Fallback: Try to detect location from IP (less accurate but works without permission)
     try {
-      const response = await fetch('https://ipapi.co/json/');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const response = await fetch('https://ipapi.co/json/', {
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
       const data = await response.json();
 
       if (data.city && data.region) {
