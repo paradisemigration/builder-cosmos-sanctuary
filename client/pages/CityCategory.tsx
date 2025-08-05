@@ -1024,27 +1024,6 @@ const getFAQs = (categorySlug: string, cityName: string) => {
         answer: `${categoryName} fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`,
       },
     ],
-      {
-        question: `What types of visas can consultants in ${cityName} help with?`,
-        answer: `Visa consultants in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`,
-      },
-      {
-        question: `How long does visa processing take through ${cityName} consultants?`,
-        answer: `Processing times vary by country and visa type, ranging from 3-30 working days. Consultants in ${cityName} can provide accurate timelines and expedited services when available.`,
-      },
-      {
-        question: `What documents are required for visa applications in ${cityName}?`,
-        answer: `Common requirements include valid passport, photographs, application forms, financial proof, travel itinerary, accommodation bookings, and invitation letters. Specific requirements vary by destination country.`,
-      },
-      {
-        question: `Can visa consultants in ${cityName} guarantee visa approval?`,
-        answer: `Reputable consultants in ${cityName} cannot guarantee approval but can significantly increase your chances through proper documentation, application preparation, and guidance based on their experience.`,
-      },
-      {
-        question: `What are the visa consultation fees in ${cityName}?`,
-        answer: `Visa consultation fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`,
-      },
-    ],
     "visit-visa-specialists": [
       {
         question: `Which countries can I get visit visas for from ${cityName}?`,
