@@ -1648,6 +1648,9 @@ export default function CityCategory() {
           );
 
           // Try to find sample businesses for exact city + category
+          console.log(`Filtering sample data: cityName="${cityName}", categoryName="${categoryName}"`);
+          console.log(`Available sample businesses total: ${sampleBusinesses.length}`);
+
           let sampleBusinesses_filtered = sampleBusinesses.filter(
             (business) =>
               business.city.toLowerCase() === cityName.toLowerCase() &&
@@ -1655,6 +1658,8 @@ export default function CityCategory() {
                 .toLowerCase()
                 .includes(categoryName.toLowerCase()),
           );
+
+          console.log(`Exact city match found: ${sampleBusinesses_filtered.length} businesses`);
 
           // If no exact match, try nearby cities with category - accumulate up to 100
           if (sampleBusinesses_filtered.length === 0) {
