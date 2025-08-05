@@ -242,7 +242,7 @@ export function generateCityMeta(cityName: string): MetaData {
     "Al Ain",
   ].includes(cityName);
   const country = isUAE ? "UAE" : "India";
-  const websiteName = "VisaConsult India";
+  const websiteName = isUAE ? "Visa Consultants UAE" : "Visa Consultants India";
 
   // Format: "Top 10 Visa & Immigration Consultants in + city Name | Website name"
   const title = `Top 10 Visa & Immigration Consultants in ${cityName} | ${websiteName}`;
@@ -287,7 +287,7 @@ export function generateCityMeta(cityName: string): MetaData {
 
 // Generate meta data for homepage
 export function generateHomeMeta(): MetaData {
-  const title = "Best Visa Consultants & Immigration Experts in India | VisaConsult India";
+  const title = "Best Visa Consultants & Immigration Experts in India | Visa Consultants India";
   const description = "Find top-rated visa consultants & immigration experts across 100+ Indian cities. Compare services, read reviews & get expert guidance for study abroad, work permits & PR applications.";
   const keywords = [
     "visa consultants india", "immigration experts", "study abroad consultants", "work permit agents",
