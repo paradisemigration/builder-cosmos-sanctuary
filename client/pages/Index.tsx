@@ -448,7 +448,7 @@ export default function Index() {
                           target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23${index % 2 === 0 ? '3B82F6' : '6366F1'};stop-opacity:1" /><stop offset="100%" style="stop-color:%23${index % 2 === 0 ? '1E40AF' : '4338CA'};stop-opacity:1" /></linearGradient></defs><rect width="600" height="300" fill="url(%23grad${index})"/><text x="300" y="150" font-family="Arial" font-size="28" font-weight="bold" fill="white" text-anchor="middle" dy="10">${city.name}</text><text x="300" y="180" font-family="Arial" font-size="16" fill="white" text-anchor="middle" opacity="0.8">${city.description}</text></svg>`;
                         }
                       }}
-                      onLoad={() => {
+                      onLoad={(e) => {
                         // Reset fallback flag on successful load
                         delete (e.target as HTMLImageElement).dataset.fallbackAttempted;
                       }}
