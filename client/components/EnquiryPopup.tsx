@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { X, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { allCategories, allIndianCities, uaeCities } from "@/lib/all-categories";
+import {
+  allCategories,
+  allIndianCities,
+  uaeCities,
+} from "@/lib/all-categories";
 
 interface EnquiryPopupProps {
   isOpen: boolean;
@@ -27,19 +31,23 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
     const { city, category } = params;
 
     // Check if it's a UAE page
-    const isUAEPage = pathname.startsWith('/uae');
+    const isUAEPage = pathname.startsWith("/uae");
     const cities = isUAEPage ? uaeCities : allIndianCities;
-    const country = isUAEPage ? 'UAE' : 'India';
+    const country = isUAEPage ? "UAE" : "India";
 
     if (city && category) {
       // City + Category page
-      const categoryObj = allCategories.find(c => c.slug === category);
-      const categoryName = categoryObj ? categoryObj.name.toLowerCase() : 'consultants';
-      const cityName = city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, ' ');
+      const categoryObj = allCategories.find((c) => c.slug === category);
+      const categoryName = categoryObj
+        ? categoryObj.name.toLowerCase()
+        : "consultants";
+      const cityName =
+        city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
       return `Apply With Trusted ${categoryName} in ${cityName}`;
     } else if (city) {
       // City only page
-      const cityName = city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, ' ');
+      const cityName =
+        city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
       return `Apply with Most Trusted Immigration Consultants in ${cityName}`;
     } else {
       // Home page or other pages
@@ -73,7 +81,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 
   if (!isOpen) return null;
 
-  const isUAEPage = location.pathname.startsWith('/uae');
+  const isUAEPage = location.pathname.startsWith("/uae");
   const cities = isUAEPage ? uaeCities : allIndianCities;
 
   return (
@@ -102,7 +110,9 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
               type="text"
               required
               value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
               placeholder="Enter your full name"
             />
@@ -116,7 +126,9 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
               type="tel"
               required
               value={formData.phone}
-              onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, phone: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
               placeholder={isUAEPage ? "+971 XX XXX XXXX" : "+91 XXXXX XXXXX"}
             />
@@ -130,7 +142,9 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
               type="email"
               required
               value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, email: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
               placeholder="Enter your email"
             />
@@ -138,17 +152,21 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {isUAEPage ? 'Emirate' : 'City'} *
+              {isUAEPage ? "Emirate" : "City"} *
             </label>
             <select
               required
               value={formData.city}
-              onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, city: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             >
-              <option value="">Select {isUAEPage ? 'Emirate' : 'City'}</option>
+              <option value="">Select {isUAEPage ? "Emirate" : "City"}</option>
               {cities.slice(0, 20).map((city) => (
-                <option key={city} value={city}>{city}</option>
+                <option key={city} value={city}>
+                  {city}
+                </option>
               ))}
             </select>
           </div>
@@ -160,12 +178,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
             <select
               required
               value={formData.category}
-              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, category: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             >
               <option value="">Select Category</option>
               {allCategories.slice(0, 15).map((category) => (
-                <option key={category.slug} value={category.slug}>{category.name}</option>
+                <option key={category.slug} value={category.slug}>
+                  {category.name}
+                </option>
               ))}
             </select>
           </div>
