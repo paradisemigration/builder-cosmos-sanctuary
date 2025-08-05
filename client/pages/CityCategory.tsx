@@ -492,10 +492,14 @@ export default function CityCategory() {
     async function fetchCityBusinesses() {
       try {
         // Fetch all businesses for the city with higher limit
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
         const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
         const response = await fetch(apiUrl, {
-          signal: AbortSignal.timeout(10000) // 10 second timeout
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         // Log API call for debugging
         const timestamp = new Date().toLocaleTimeString();
