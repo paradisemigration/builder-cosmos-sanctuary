@@ -136,8 +136,12 @@ const nearbyAreasMapping: Record<string, string[]> = {
 
   // Chennai region
   chennai: ["Bangalore", "Hyderabad", "Coimbatore", "Madurai"],
-  coimbatore: ["Chennai", "Bangalore", "Kochi", "Madurai"],
-  madurai: ["Chennai", "Coimbatore", "Bangalore", "Kochi"],
+  coimbatore: ["Kochi", "Thiruvananthapuram", "Chennai", "Bangalore", "Kozhikode", "Madurai"],
+  madurai: ["Chennai", "Coimbatore", "Kochi", "Bangalore", "Thiruvananthapuram"],
+  salem: ["Chennai", "Coimbatore", "Bangalore", "Kochi"],
+  erode: ["Coimbatore", "Chennai", "Kochi", "Bangalore"],
+  tirupur: ["Coimbatore", "Chennai", "Kochi", "Bangalore"],
+  dindigul: ["Madurai", "Coimbatore", "Chennai", "Kochi"],
 
   // Hyderabad region
   hyderabad: ["Bangalore", "Chennai", "Vijayawada", "Warangal"],
