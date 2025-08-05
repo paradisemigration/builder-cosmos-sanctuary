@@ -281,17 +281,121 @@ const nearbyAreasMapping: Record<string, string[]> = {
     "Bangalore",
   ],
 
-  // Other major cities
-  chandigarh: ["Delhi", "Ludhiana", "Amritsar", "Jalandhar"],
-  ludhiana: ["Chandigarh", "Amritsar", "Delhi", "Jalandhar"],
+  // Punjab region
+  chandigarh: ["Ludhiana", "Amritsar", "Jalandhar", "Delhi"],
+  ludhiana: ["Chandigarh", "Amritsar", "Jalandhar", "Delhi"],
   amritsar: ["Chandigarh", "Ludhiana", "Jalandhar", "Delhi"],
   jalandhar: ["Chandigarh", "Ludhiana", "Amritsar", "Delhi"],
+
+  // Uttarakhand region
   dehradun: ["Delhi", "Haridwar", "Chandigarh", "Rishikesh"],
   haridwar: ["Dehradun", "Delhi", "Rishikesh", "Chandigarh"],
-  patna: ["Gaya", "Muzaffarpur", "Kolkata", "Ranchi"],
-  ranchi: ["Patna", "Jamshedpur", "Kolkata", "Bhubaneswar"],
+
+  // Uttar Pradesh region
+  lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
+  kanpur: ["Lucknow", "Allahabad", "Delhi", "Agra"],
+  agra: ["Delhi", "Gwalior", "Lucknow", "Mathura"],
+  allahabad: ["Lucknow", "Varanasi", "Kanpur", "Delhi"],
+  prayagraj: ["Lucknow", "Varanasi", "Kanpur", "Delhi"],
+  varanasi: ["Allahabad", "Lucknow", "Patna", "Delhi"],
+  meerut: ["Delhi", "Ghaziabad", "Muzaffarnagar", "Saharanpur"],
+  bareilly: ["Delhi", "Lucknow", "Kanpur", "Moradabad"],
+  aligarh: ["Delhi", "Agra", "Mathura", "Ghaziabad"],
+  saharanpur: ["Delhi", "Meerut", "Dehradun", "Muzaffarnagar"],
+  gorakhpur: ["Lucknow", "Varanasi", "Allahabad", "Patna"],
+  firozabad: ["Agra", "Delhi", "Mathura", "Aligarh"],
+  loni: ["Delhi", "Ghaziabad", "Meerut", "Noida"],
+  jhansi: ["Gwalior", "Agra", "Lucknow", "Kanpur"],
+  gaya: ["Patna", "Varanasi", "Ranchi", "Bodh Gaya"],
+
+  // Madhya Pradesh region
+  indore: ["Bhopal", "Ujjain", "Mumbai", "Ahmedabad"],
+  bhopal: ["Indore", "Jabalpur", "Gwalior", "Delhi"],
+  jabalpur: ["Bhopal", "Nagpur", "Indore", "Raipur"],
+  gwalior: ["Agra", "Bhopal", "Jhansi", "Delhi"],
+  ujjain: ["Indore", "Bhopal", "Ahmedabad", "Kota"],
+  raipur: ["Nagpur", "Bhubaneswar", "Jabalpur", "Kolkata"],
+
+  // Maharashtra additional cities
+  nagpur: ["Mumbai", "Pune", "Raipur", "Aurangabad"],
+  nashik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur"],
+  aurangabad: ["Mumbai", "Pune", "Nashik", "Ahmednagar"],
+  solapur: ["Pune", "Mumbai", "Kolhapur", "Satara"],
+  kolhapur: ["Pune", "Mumbai", "Solapur", "Sangli"],
+  "kalyan-dombivali": ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
+  "vasai-virar": ["Mumbai", "Thane", "Pune", "Nashik"],
+  "pimpri-chinchwad": ["Pune", "Mumbai", "Nashik", "Aurangabad"],
+  bhiwandi: ["Mumbai", "Thane", "Nashik", "Kalyan"],
+  amravati: ["Nagpur", "Akola", "Mumbai", "Aurangabad"],
+  nanded: ["Aurangabad", "Hyderabad", "Mumbai", "Pune"],
+  akola: ["Nagpur", "Amravati", "Aurangabad", "Mumbai"],
+  jalgaon: ["Nashik", "Aurangabad", "Mumbai", "Pune"],
+  "sangli-miraj & kupwad": ["Kolhapur", "Pune", "Mumbai", "Satara"],
+  ahmednagar: ["Pune", "Nashik", "Aurangabad", "Mumbai"],
+  satara: ["Pune", "Kolhapur", "Mumbai", "Sangli"],
+  sangli: ["Kolhapur", "Satara", "Pune", "Mumbai"],
+
+  // Gujarat additional cities
+  surat: ["Ahmedabad", "Vadodara", "Mumbai", "Pune"],
+  rajkot: ["Ahmedabad", "Surat", "Vadodara", "Jamnagar"],
+  bhavnagar: ["Ahmedabad", "Rajkot", "Surat", "Vadodara"],
+  jamnagar: ["Rajkot", "Ahmedabad", "Dwarka", "Surat"],
+
+  // Karnataka additional cities
+  mysore: ["Bangalore", "Mangalore", "Chennai", "Hubli"],
+  "hubballi-dharwad": ["Bangalore", "Pune", "Mumbai", "Belgaum"],
+  hubli: ["Bangalore", "Pune", "Mumbai", "Belgaum"],
+  dharwad: ["Bangalore", "Pune", "Mumbai", "Belgaum"],
+  belgaum: ["Bangalore", "Pune", "Mumbai", "Hubli"],
+  gulbarga: ["Hyderabad", "Bangalore", "Pune", "Aurangabad"],
+
+  // Tamil Nadu additional cities
+  tiruchirappalli: ["Chennai", "Madurai", "Coimbatore", "Salem"],
+  trichy: ["Chennai", "Madurai", "Coimbatore", "Salem"],
+  tiruppur: ["Coimbatore", "Chennai", "Salem", "Erode"],
+  salem: ["Chennai", "Coimbatore", "Bangalore", "Kochi"],
+  erode: ["Coimbatore", "Chennai", "Salem", "Bangalore"],
+  tirunelveli: ["Madurai", "Chennai", "Coimbatore", "Kochi"],
+  ambattur: ["Chennai", "Bangalore", "Coimbatore", "Kochi"],
+
+  // Andhra Pradesh/Telangana additional cities
+  visakhapatnam: ["Hyderabad", "Vijayawada", "Bhubaneswar", "Chennai"],
+  vizag: ["Hyderabad", "Vijayawada", "Bhubaneswar", "Chennai"],
+  vijayawada: ["Hyderabad", "Visakhapatnam", "Chennai", "Guntur"],
+  guntur: ["Vijayawada", "Hyderabad", "Chennai", "Nellore"],
+  warangal: ["Hyderabad", "Vijayawada", "Secunderabad", "Nagpur"],
+  nellore: ["Chennai", "Hyderabad", "Vijayawada", "Guntur"],
+
+  // Bihar region
+  patna: ["Ranchi", "Kolkata", "Gaya", "Muzaffarpur"],
+  gaya: ["Patna", "Varanasi", "Ranchi", "Bodh Gaya"],
+
+  // Jharkhand region
+  ranchi: ["Patna", "Kolkata", "Jamshedpur", "Bhubaneswar"],
+  jamshedpur: ["Ranchi", "Kolkata", "Dhanbad", "Bhubaneswar"],
+  dhanbad: ["Ranchi", "Kolkata", "Jamshedpur", "Asansol"],
+
+  // Odisha region
   bhubaneswar: ["Kolkata", "Cuttack", "Ranchi", "Visakhapatnam"],
+  cuttack: ["Bhubaneswar", "Kolkata", "Ranchi", "Rourkela"],
+  rourkela: ["Bhubaneswar", "Ranchi", "Kolkata", "Jamshedpur"],
+
+  // Assam region
   guwahati: ["Kolkata", "Shillong", "Dibrugarh", "Silchar"],
+
+  // Chhattisgarh region
+  bhilai: ["Raipur", "Nagpur", "Bhubaneswar", "Kolkata"],
+
+  // Jammu & Kashmir region
+  srinagar: ["Jammu", "Chandigarh", "Delhi", "Pathankot"],
+  jammu: ["Srinagar", "Chandigarh", "Delhi", "Pathankot"],
+
+  // Haryana additional cities
+  meerut: ["Delhi", "Ghaziabad", "Saharanpur", "Muzaffarnagar"],
+
+  // Additional missing cities with logical regional mapping
+  malegaon: ["Nashik", "Mumbai", "Aurangabad", "Pune"],
+  ulhasnagar: ["Mumbai", "Thane", "Kalyan", "Pune"],
 };
 
 // Function to detect user location
