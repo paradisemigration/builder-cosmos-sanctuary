@@ -1016,23 +1016,25 @@ export default function CityCategory() {
                   </div>
                 )}
 
-                {/* City businesses section */}
-                {cityBusinesses.length > 0 && (
+                {/* All Dubai/City businesses section */}
+                {(country === 'uae' && allDubaiBusinesses.length > 0) || (country !== 'uae' && cityBusinesses.length > 0) ? (
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-2xl font-semibold text-gray-900">
                           {categoryBusinesses.length > 0 ? "All Other" : "All"}{" "}
-                          Businesses in {cityName}
+                          {country === 'uae' ? 'Dubai' : cityName} Businesses
                         </h2>
                         <p className="text-gray-600 mt-1">
                           {categoryBusinesses.length > 0
-                            ? `Additional businesses and services in ${cityName}`
-                            : `All available businesses in ${cityName}`}
+                            ? `Additional businesses and services in ${country === 'uae' ? 'Dubai' : cityName}`
+                            : `All available businesses in ${country === 'uae' ? 'Dubai' : cityName}`}
                         </p>
                       </div>
                       <Badge variant="secondary" className="text-sm">
-                        {cityBusinesses.length} listings
+                        {country === 'uae' && allDubaiBusinesses.length > 0
+                          ? `${allDubaiBusinesses.length} Dubai listings`
+                          : `${cityBusinesses.length} listings`}
                       </Badge>
                     </div>
 
