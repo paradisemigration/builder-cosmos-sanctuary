@@ -311,10 +311,14 @@ export default function CityCategory() {
           for (const nearbyCity_temp of nearbyCities) {
             try {
               console.log(`Trying nearby city: ${nearbyCity_temp} + ${categoryName}`);
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+
               const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=100`;
               const nearbyResponse = await fetch(nearbyUrl, {
-                signal: AbortSignal.timeout(8000) // 8 second timeout
+                signal: controller.signal
               });
+              clearTimeout(timeoutId);
 
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
