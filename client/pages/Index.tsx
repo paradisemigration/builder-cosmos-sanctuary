@@ -902,10 +902,10 @@ export default function Index() {
       </section>
 
       {/* Simple Test Button for debugging */}
-      <div className="fixed bottom-4 right-4 z-[9998]">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9998]">
         <button
           onClick={() => setShowEnquiryPopup(true)}
-          className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg"
+          className="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg text-lg font-bold"
           style={{ zIndex: 9998 }}
         >
           Test Button
