@@ -619,8 +619,16 @@ export default function CityBusinessListing() {
     setBusinesses([]);
     setFilteredBusinesses([]);
 
-    // Fetch businesses from API
-    fetchBusinesses(1, true);
+    // Fetch businesses from API with error safety
+    Promise.resolve().then(async () => {
+      try {
+        await fetchBusinesses(1, true);
+      } catch (error) {
+        console.error("Error in fetchBusinesses:", error);
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    });
 
     // Set page meta data with SEO optimization
     const metaData = generateCityMeta(cityName);
