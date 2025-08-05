@@ -952,16 +952,18 @@ export default function CityCategory() {
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-2xl font-semibold text-gray-900">
-                          {categoryBusinesses.length} {categoryName} in{" "}
-                          {cityName}
+                          {categoryBusinesses.length} {categoryName}
+                          {isShowingNearbyData ? ` from ${categoryBusinesses[0]?.nearbyCity || 'nearby cities'}` : ` in ${cityName}`}
                         </h2>
                         <p className="text-gray-600 mt-1">
-                          Google Maps API results for{" "}
-                          {categoryName.toLowerCase()}
+                          {isShowingNearbyData
+                            ? `Expanded search results from nearby areas`
+                            : `Verified ${categoryName.toLowerCase()} businesses`
+                          }
                         </p>
                       </div>
                       <Badge variant="default" className="text-sm bg-green-600">
-                        {categoryBusinesses.length} verified results
+                        {categoryBusinesses.length} category results
                       </Badge>
                     </div>
 
