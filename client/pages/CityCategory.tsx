@@ -481,9 +481,9 @@ const detectUserLocation = async (): Promise<{
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-      const response = await fetch("https://ipapi.co/json/", {
+      const response = await robustFetch("https://ipapi.co/json/", {
         signal: controller.signal,
-      });
+      }, 2); // Only 2 retries for external APIs
       clearTimeout(timeoutId);
 
       const data = await response.json();
