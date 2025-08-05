@@ -97,14 +97,62 @@ export default function Index() {
   };
 
   const majorCities = [
-    { name: "Delhi", count: "450+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Mumbai", count: "380+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Bangalore", count: "320+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Chennai", count: "290+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Hyderabad", count: "250+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Pune", count: "220+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Kolkata", count: "200+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
-    { name: "Ahmedabad", count: "180+", image: "/api/placeholder/200/120", flag: "🇮🇳" },
+    {
+      name: "Delhi",
+      count: "450+",
+      image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "India Gate & Red Fort"
+    },
+    {
+      name: "Mumbai",
+      count: "380+",
+      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Gateway of India"
+    },
+    {
+      name: "Bangalore",
+      count: "320+",
+      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Silicon Valley of India"
+    },
+    {
+      name: "Chennai",
+      count: "290+",
+      image: "https://images.unsplash.com/photo-1594473878385-95d25d4dbecf?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Marina Beach & Temples"
+    },
+    {
+      name: "Hyderabad",
+      count: "250+",
+      image: "https://images.unsplash.com/photo-1603911302913-9e632eac4475?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Charminar & Tech City"
+    },
+    {
+      name: "Pune",
+      count: "220+",
+      image: "https://images.unsplash.com/photo-1595343627009-a4d8c6b36e30?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Cultural Capital"
+    },
+    {
+      name: "Kolkata",
+      count: "200+",
+      image: "https://images.unsplash.com/photo-1618473384401-c9c7cc954e42?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "City of Joy"
+    },
+    {
+      name: "Ahmedabad",
+      count: "180+",
+      image: "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=400&h=240&fit=crop&crop=center",
+      flag: "🇮🇳",
+      description: "Heritage & Innovation"
+    },
   ];
 
   const visaServices = [
