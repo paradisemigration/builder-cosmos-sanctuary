@@ -86,8 +86,8 @@ export default function UAE() {
     {
       name: "Abu Dhabi",
       count: "180+",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2016/12/04/19/30/abu-dhabi-1882502_1280.jpg",
+      image: "https://images.unsplash.com/photo-1618607003441-43a0e5d5a5b6?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
       flag: "🇦🇪",
       description: "Capital & Cultural Center",
       color: "#16A34A"
