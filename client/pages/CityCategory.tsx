@@ -795,6 +795,18 @@ export default function CityCategory() {
                 </div>
               )}
 
+              {/* Show notification for Abu Dhabi showing only local results */}
+              {!isShowingNearbyData && categoryBusinesses.length > 0 && (cityName.toLowerCase() === 'abu dhabi' || cityName.toLowerCase() === 'abu-dhabi') && (
+                <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-3 max-w-2xl">
+                  <div className="flex items-center gap-2 text-green-800 text-sm">
+                    <Building className="h-4 w-4" />
+                    <span className="font-medium">
+                      Showing {categoryBusinesses.length} {categoryName.toLowerCase()} specifically from Abu Dhabi only
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Show comprehensive listing notification for UAE */}
               {country === 'uae' && allDubaiBusinesses.length > 0 && (
                 <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-3 max-w-2xl">
