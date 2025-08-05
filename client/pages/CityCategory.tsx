@@ -998,31 +998,6 @@ export default function CityCategory() {
         }
 
         setCategoryDataLoaded(true);
-      } catch (unexpectedError) {
-        console.error("Unexpected error in fetchCategoryBusinesses:", unexpectedError);
-        // Ensure we always set loading state to false and show fallback data
-        setLoading(false);
-        setCategoryDataLoaded(true);
-
-        // Use emergency sample data
-        try {
-          let sampleBusinesses_filtered = sampleBusinesses.filter(
-            (business) =>
-              business.city.toLowerCase() === cityName.toLowerCase() &&
-              business.category.toLowerCase().includes(categoryName.toLowerCase()),
-          );
-
-          if (sampleBusinesses_filtered.length === 0) {
-            // Take first 10 sample businesses as emergency fallback
-            sampleBusinesses_filtered = sampleBusinesses.slice(0, 10);
-          }
-
-          setCategoryBusinesses(sampleBusinesses_filtered);
-        } catch (emergencyError) {
-          console.error("Emergency fallback failed:", emergencyError);
-          setCategoryBusinesses([]);
-        }
-      }
     }
 
     async function fetchCityBusinesses() {
