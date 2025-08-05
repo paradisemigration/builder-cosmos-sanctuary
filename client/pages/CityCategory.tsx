@@ -1787,11 +1787,6 @@ export default function CityCategory() {
             isNearbyData = true;
             nearbyCity = sourceCities.join(", ");
           }
-            const nearbyCities = getNearByCities(
-              cityName,
-              country,
-              userLocation,
-            );
 
             console.log(
               `No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
