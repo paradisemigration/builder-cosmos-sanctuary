@@ -124,6 +124,7 @@ export default function CityCategory() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [categoryDataLoaded, setCategoryDataLoaded] = useState(false);
   const [cityDataLoaded, setCityDataLoaded] = useState(false);
+  const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
   const [debugInfo, setDebugInfo] = useState({
     categoryBusinesses: 0,
     cityBusinesses: 0,
