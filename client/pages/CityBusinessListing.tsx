@@ -311,6 +311,23 @@ export default function CityBusinessListing() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Global error handler for unhandled promise rejections
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      console.error('Unhandled promise rejection in CityBusinessListing:', event.reason);
+      if (event.reason?.message?.includes('Failed to fetch')) {
+        console.log('Suppressing fetch error to prevent UI crash');
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
+  }, []);
+
   // Detect if this is a UAE route
   // Detect if this is a UAE route (either by /uae/ prefix or UAE city names)
   const isUAERoute = location.pathname.startsWith("/uae/");
