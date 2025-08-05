@@ -36,6 +36,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
 import {
   businessCategories,
   sampleBusinesses,
