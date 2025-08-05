@@ -506,6 +506,9 @@ const getNearByCities = (
       "jodhpur",
       "udaipur",
       "ajmer",
+      "kota",
+      "bikaner",
+      "alwar",
     ];
 
     if (westIndianCities.includes(lowerCityName)) {
