@@ -168,28 +168,6 @@ export function Navigation({ className = "" }: NavigationProps) {
                 Pricing
               </Link>
 
-              <Link
-                to="/about"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isCurrentPage("/about")
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                About
-              </Link>
-
-              <Link
-                to="/contact"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isCurrentPage("/contact")
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                Contact
-              </Link>
-
               {/* Admin Panel Link - Only for Admin Users */}
               {isAuthenticated && user?.role === "admin" && (
                 <Link
@@ -324,30 +302,6 @@ export function Navigation({ className = "" }: NavigationProps) {
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
-            </Link>
-
-            <Link
-              to="/about"
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isCurrentPage("/about")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-
-            <Link
-              to="/contact"
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isCurrentPage("/contact")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact
             </Link>
 
             {/* Admin Panel Link - Only for Admin Users */}

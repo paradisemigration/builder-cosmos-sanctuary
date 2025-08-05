@@ -27,7 +27,14 @@ export function SiteFooter() {
               {allCities.length} cities and {categoryList.length} service
               categories.
             </p>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col space-y-3 mb-4">
+              <Link
+                to="/about"
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm">About Us</span>
+              </Link>
               <Link
                 to="/contact"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
@@ -36,11 +43,11 @@ export function SiteFooter() {
                 <span className="text-sm">Contact Us</span>
               </Link>
               <Link
-                to="/about"
+                to="/plans"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
-                <Globe className="w-4 h-4" />
-                <span className="text-sm">About</span>
+                <Building className="w-4 h-4" />
+                <span className="text-sm">Pricing Plans</span>
               </Link>
             </div>
           </div>

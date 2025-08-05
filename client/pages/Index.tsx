@@ -100,56 +100,64 @@ export default function Index() {
     {
       name: "Delhi",
       count: "450+",
-      image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1555976649-8ed1b1a8edfb?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "India Gate & Red Fort"
     },
     {
       name: "Mumbai",
       count: "380+",
-      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1595655321928-8a113942ffa9?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Gateway of India"
     },
     {
       name: "Bangalore",
       count: "320+",
-      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Silicon Valley of India"
     },
     {
       name: "Chennai",
       count: "290+",
-      image: "https://images.unsplash.com/photo-1594473878385-95d25d4dbecf?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1594473878385-95d25d4dbecf?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Marina Beach & Temples"
     },
     {
       name: "Hyderabad",
       count: "250+",
-      image: "https://images.unsplash.com/photo-1603911302913-9e632eac4475?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1603911302913-9e632eac4475?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1605640602903-f2b5e8be60d7?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Charminar & Tech City"
     },
     {
       name: "Pune",
       count: "220+",
-      image: "https://images.unsplash.com/photo-1595343627009-a4d8c6b36e30?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1595343627009-a4d8c6b36e30?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Cultural Capital"
     },
     {
       name: "Kolkata",
       count: "200+",
-      image: "https://images.unsplash.com/photo-1618473384401-c9c7cc954e42?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1618473384401-c9c7cc954e42?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1558431382-27ca3415749c?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "City of Joy"
     },
     {
       name: "Ahmedabad",
       count: "180+",
-      image: "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=400&h=240&fit=crop&crop=center",
+      image: "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1619057156262-ee96b3d78f86?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Heritage & Innovation"
     },
@@ -233,17 +241,21 @@ export default function Index() {
       <Navigation />
 
       {/* Hero Section with Indian Flag */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-20 pb-16 sm:pb-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pt-20 pb-12 sm:pb-16 overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] opacity-25"></div>
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10"></div>
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute top-20 right-1/4 w-72 h-72 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-1000"></div>
+        </div>
 
         {/* Indian Flag Element */}
-        <div className="absolute top-20 right-10 opacity-10">
-          <div className="w-32 h-20 border border-gray-200 rounded-sm overflow-hidden shadow-lg">
+        <div className="absolute top-24 right-8 opacity-20 z-10">
+          <div className="w-28 h-18 border border-gray-300 rounded-md overflow-hidden shadow-lg">
             <div className="h-1/3 bg-orange-500"></div>
             <div className="h-1/3 bg-white flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-blue-800 rounded-full relative">
-                <div className="absolute inset-1 bg-blue-800 rounded-full"></div>
+              <div className="w-5 h-5 border-2 border-blue-900 rounded-full relative">
+                <div className="absolute inset-1 bg-blue-900 rounded-full"></div>
               </div>
             </div>
             <div className="h-1/3 bg-green-600"></div>
@@ -329,19 +341,19 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 sm:py-16 bg-white relative -mt-12 sm:-mt-16 z-20">
+      <section className="py-8 sm:py-12 bg-white relative -mt-8 sm:-mt-12 z-20">
         <div className="container mx-auto px-4">
-          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 sm:p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
               {statsData.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl text-white">
+                  <div className="flex justify-center mb-3 sm:mb-4">
+                    <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl text-white">
                       {stat.icon}
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{stat.value}</div>
+                  <div className="text-gray-600 font-medium text-sm sm:text-base">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -422,13 +434,23 @@ export default function Index() {
                 className="group block"
               >
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200">
-                  <div className="relative h-32 sm:h-28 overflow-hidden">
+                  <div className="relative h-36 sm:h-32 overflow-hidden">
                     <img
                       src={city.image}
                       alt={`${city.name} - ${city.description}`}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
-                        e.currentTarget.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240"><rect width="400" height="240" fill="%23${index % 2 === 0 ? '3B82F6' : '6366F1'}"/><text x="200" y="120" font-family="Arial" font-size="20" fill="white" text-anchor="middle" dy="6">${city.name}</text></svg>`;
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackAttempted) {
+                          target.dataset.fallbackAttempted = "true";
+                          target.src = city.fallback;
+                        } else {
+                          target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23${index % 2 === 0 ? '3B82F6' : '6366F1'};stop-opacity:1" /><stop offset="100%" style="stop-color:%23${index % 2 === 0 ? '1E40AF' : '4338CA'};stop-opacity:1" /></linearGradient></defs><rect width="600" height="300" fill="url(%23grad${index})"/><text x="300" y="150" font-family="Arial" font-size="28" font-weight="bold" fill="white" text-anchor="middle" dy="10">${city.name}</text><text x="300" y="180" font-family="Arial" font-size="16" fill="white" text-anchor="middle" opacity="0.8">${city.description}</text></svg>`;
+                        }
+                      }}
+                      onLoad={() => {
+                        // Reset fallback flag on successful load
+                        delete (e.target as HTMLImageElement).dataset.fallbackAttempted;
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
