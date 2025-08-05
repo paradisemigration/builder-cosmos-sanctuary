@@ -153,6 +153,7 @@ import {
   setBreadcrumbStructuredData,
 } from "@/lib/meta-utils";
 import { DebugPopup } from "@/components/DebugPopup";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
 
 // Mapping of areas/neighborhoods to their main cities for fallback (prioritized order)
 const nearbyAreasMapping: Record<string, string[]> = {
