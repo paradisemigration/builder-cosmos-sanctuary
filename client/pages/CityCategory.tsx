@@ -1652,11 +1652,21 @@ export default function CityCategory() {
           console.log(`Available sample businesses total: ${sampleBusinesses.length}`);
 
           let sampleBusinesses_filtered = sampleBusinesses.filter(
-            (business) =>
-              business.city.toLowerCase() === cityName.toLowerCase() &&
-              business.category
-                .toLowerCase()
-                .includes(categoryName.toLowerCase()),
+            (business) => {
+              const cityMatch = business.city.toLowerCase() === cityName.toLowerCase();
+              let categoryMatch = false;
+
+              if (categorySlug === "visa-consultants") {
+                // For visa-consultants, match any business with "visa" and "consultant" in category
+                const businessCategory = business.category.toLowerCase();
+                categoryMatch = businessCategory.includes("visa") && businessCategory.includes("consultant");
+              } else {
+                // For other categories, use standard matching
+                categoryMatch = business.category.toLowerCase().includes(categoryName.toLowerCase());
+              }
+
+              return cityMatch && categoryMatch;
+            }
           );
 
           console.log(`Exact city match found: ${sampleBusinesses_filtered.length} businesses`);
