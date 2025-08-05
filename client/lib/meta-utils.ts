@@ -306,6 +306,11 @@ export function setPageMeta(metaData: MetaData): void {
 
   // Set schema.org structured data
   setWebsiteStructuredData();
+
+  // Set business directory structured data if title contains city and category
+  if (metaData.title.includes("Most Trusted") && metaData.title.includes(" in ")) {
+    setCityBusinessDirectoryStructuredData(metaData);
+  }
 }
 
 // Helper function to set meta tags
