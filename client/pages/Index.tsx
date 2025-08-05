@@ -124,40 +124,40 @@ export default function Index() {
     {
       name: "Chennai",
       count: "290+",
-      image: "https://images.unsplash.com/photo-1594473878385-95d25d4dbecf?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Marina Beach & Temples"
     },
     {
       name: "Hyderabad",
       count: "250+",
-      image: "https://images.unsplash.com/photo-1603911302913-9e632eac4475?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1605640602903-f2b5e8be60d7?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://images.unsplash.com/photo-1605640602903-f2b5e8be60d7?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1630471199234-5421fe466a7f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Charminar & Tech City"
     },
     {
       name: "Pune",
       count: "220+",
-      image: "https://images.unsplash.com/photo-1595343627009-a4d8c6b36e30?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Cultural Capital"
     },
     {
       name: "Kolkata",
       count: "200+",
-      image: "https://images.unsplash.com/photo-1618473384401-c9c7cc954e42?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1558431382-27ca3415749c?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://images.unsplash.com/photo-1558431382-27ca3415749c?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1586511925558-a4c6376fe65f?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "City of Joy"
     },
     {
       name: "Ahmedabad",
       count: "180+",
-      image: "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
-      fallback: "https://images.unsplash.com/photo-1619057156262-ee96b3d78f86?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      image: "https://images.unsplash.com/photo-1619057156262-ee96b3d78f86?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
+      fallback: "https://images.unsplash.com/photo-1611036742383-3b3805c5b42a?w=600&h=300&fit=crop&crop=center&auto=format&q=75",
       flag: "🇮🇳",
       description: "Heritage & Innovation"
     },
