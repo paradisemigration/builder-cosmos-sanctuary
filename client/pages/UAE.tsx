@@ -270,7 +270,7 @@ export default function UAE() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-white">
       <SEOHead
-        title="Best Visa Consultants in UAE | Visa Consultants UAE"
+        title="Best visa consultants in UAE | Visa consultants UAE"
         description="UAE's #1 platform for verified visa consultants across Dubai, Abu Dhabi, Sharjah & all Emirates. Expert immigration services for work visas, study abroad, business visas & PR applications. Compare 500+ trusted professionals with proven success rates."
         keywords="visa consultants UAE, immigration services Dubai, Abu Dhabi visa agents, Sharjah immigration, UAE work visa, study abroad UAE, tourist visa UAE"
         country="uae"
