@@ -220,12 +220,32 @@ export default function CityBusinessListing() {
         console.log("API response not OK:", response.status);
       }
 
-      // Fallback to sample data if API fails
-      console.log("API failed, using sample data");
-      const cityBusinesses = sampleBusinesses.filter(
+      // Enhanced fallback: first try exact city, then nearby cities
+      console.log("API failed, using enhanced fallback with nearby cities");
+
+      let cityBusinesses = sampleBusinesses.filter(
         (business) =>
-          business.city.toLowerCase() === (city?.toLowerCase() || ""),
+          business.city.toLowerCase() === (cityName?.toLowerCase() || ""),
       );
+
+      // If no exact match found, try nearby cities
+      if (cityBusinesses.length === 0) {
+        const nearbyCities = getNearByCities(cityName, country);
+        console.log(`No data for ${cityName}, checking nearby cities:`, nearbyCities);
+
+        cityBusinesses = sampleBusinesses.filter((business) =>
+          nearbyCities.some(nearbyCity =>
+            business.city.toLowerCase() === nearbyCity.toLowerCase()
+          )
+        );
+
+        // Add a flag to show this is nearby data
+        cityBusinesses = cityBusinesses.map(business => ({
+          ...business,
+          isNearbyData: true,
+          originalRequestedCity: cityName
+        }));
+      }
 
       if (resetList || page === 1) {
         setBusinesses(cityBusinesses);
