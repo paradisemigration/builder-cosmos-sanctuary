@@ -1672,12 +1672,7 @@ export default function CityCategory() {
             try {
               console.log(`\n--- Querying ${nearbyCity} for category: ${categoryName} ---`);
 
-              const nearbyApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}/category/${categorySlug}`, {
-                page: "1",
-                limit: "25",
-                sortBy: "rating",
-                country: country,
-              });
+              const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=25&country=${encodeURIComponent(country)}`;
 
               console.log(`API URL: ${nearbyApiUrl}`);
 
