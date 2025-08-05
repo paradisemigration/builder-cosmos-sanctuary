@@ -553,10 +553,13 @@ export default function CityCategory() {
         // Check if API is available
         let apiAvailable = false;
         try {
-          const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+          const healthCheck = await fetch('/api/health', {
+            method: 'HEAD',
+            signal: AbortSignal.timeout(5000) // 5 second timeout
+          });
           apiAvailable = healthCheck.ok;
         } catch (healthError) {
-          console.log('API health check failed for Dubai businesses');
+          console.log('API health check failed for Dubai businesses:', healthError);
           apiAvailable = false;
         }
 
@@ -564,7 +567,9 @@ export default function CityCategory() {
           try {
             // Fetch all Dubai businesses with a high limit to get comprehensive data
             const allDubaiUrl = `/api/scraped-businesses?city=Dubai&limit=500&page=1`;
-            const response = await fetch(allDubaiUrl);
+            const response = await fetch(allDubaiUrl, {
+              signal: AbortSignal.timeout(15000) // 15 second timeout for large dataset
+            });
 
             if (response.ok) {
               const result = await response.json();
