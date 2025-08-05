@@ -291,8 +291,6 @@ export default function UAE() {
         }}
       />
 
-      <Navigation />
-
       {/* Hero Section with Homepage Color Scheme */}
       <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pt-20 pb-12 sm:pb-16 overflow-hidden">
         {/* Background Pattern */}
