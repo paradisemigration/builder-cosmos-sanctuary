@@ -1675,6 +1675,8 @@ export default function CityCategory() {
             let sourceCities = [];
 
             for (const nearbyCity_temp of nearbyCities) {
+              console.log(`Checking nearby city: ${nearbyCity_temp}`);
+
               const nearbyBusinesses = sampleBusinesses.filter(
                 (business) =>
                   business.city.toLowerCase() ===
@@ -1683,6 +1685,12 @@ export default function CityCategory() {
                     .toLowerCase()
                     .includes(categoryName.toLowerCase()),
               );
+
+              console.log(`Found ${nearbyBusinesses.length} businesses in ${nearbyCity_temp} matching category "${categoryName}"`);
+
+              // Debug: show what categories are available in this city
+              const cityBusinesses = sampleBusinesses.filter(b => b.city.toLowerCase() === nearbyCity_temp.toLowerCase());
+              console.log(`All categories in ${nearbyCity_temp}:`, cityBusinesses.map(b => b.category));
 
               if (nearbyBusinesses.length > 0) {
                 // Add businesses from this city, but avoid duplicates
