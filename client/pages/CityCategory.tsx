@@ -992,22 +992,6 @@ export default function CityCategory() {
                       }
                     >
                       {categoryBusinesses
-                        .filter((business) => {
-                          if (!searchQuery) return true;
-                          return (
-                            business.name
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase()) ||
-                            business.description
-                              ?.toLowerCase()
-                              .includes(searchQuery.toLowerCase()) ||
-                            business.services?.some((service) =>
-                              service
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase()),
-                            )
-                          );
-                        })
                         .sort((a, b) => {
                           switch (sortBy) {
                             case "rating":
