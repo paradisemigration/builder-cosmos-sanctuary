@@ -967,20 +967,13 @@ export default function CityCategory() {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h2 className="text-2xl font-semibold text-gray-900">
-                        {categoryBusinesses.length > 0
-                          ? `${categoryBusinesses.length} ${categoryName}${isShowingNearbyData ? ` from ${categoryBusinesses[0]?.nearbyCity || 'nearby areas'}` : ` in ${cityName}`}`
-                          : `All Businesses in ${country === 'uae' ? 'Dubai' : cityName}`
-                        }
-                        {country === 'uae' && allDubaiBusinesses.length > 0 &&
-                          ` + ${allDubaiBusinesses.length - categoryBusinesses.length} Additional Dubai Businesses`
-                        }
+                        {categoryName} in {cityName}
+                        {filteredBusinesses.length > 0 && ` (${filteredBusinesses.length})`}
                       </h2>
                       <p className="text-gray-600 mt-1">
-                        {categoryBusinesses.length > 0 && isShowingNearbyData
-                          ? `Showing ${categoryName.toLowerCase()} from nearby areas plus all Dubai businesses`
-                          : categoryBusinesses.length > 0
-                          ? `Showing ${categoryName.toLowerCase()} and all other ${country === 'uae' ? 'Dubai' : cityName} businesses`
-                          : `All available businesses in ${country === 'uae' ? 'Dubai' : cityName}`
+                        {categoryBusinesses.length > 0
+                          ? `Find trusted ${categoryName.toLowerCase()} in ${cityName}`
+                          : `All available businesses in ${cityName}`
                         }
                       </p>
                     </div>
