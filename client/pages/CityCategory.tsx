@@ -356,13 +356,14 @@ export default function CityCategory() {
 
           // Update debug info
           const scrapedTimestamp = new Date().toLocaleTimeString();
+          const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}`;
           setDebugInfo((prev) => ({
             ...prev,
             apiCalls: [
               ...prev.apiCalls,
               {
-                url: scrapedUrl,
-                status: "success",
+                url: apiUrl,
+                status: result.source === 'sample_data' ? "sample_fallback" : "success",
                 count: businesses.length,
                 timestamp: scrapedTimestamp,
               },
