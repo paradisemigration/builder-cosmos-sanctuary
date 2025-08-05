@@ -747,22 +747,23 @@ export default function CityBusinessListing() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className="pt-20 pb-8 sm:pb-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="container mx-auto max-w-7xl px-4">
-          <div className="flex items-center mb-6">
+          <div className="flex items-center mb-4 sm:mb-6">
             <Button
               variant="secondary"
               size="sm"
               onClick={() => navigate("/business")}
-              className="mr-4"
+              className="mr-4 text-xs sm:text-sm"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              All Cities
+              <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">All Cities</span>
+              <span className="sm:hidden">Back</span>
             </Button>
           </div>
 
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 px-2">
               Visa Consultants in {cityName}
             </h1>
 
@@ -782,31 +783,31 @@ export default function CityBusinessListing() {
                 </div>
               )}
 
-            <p className="text-xl text-blue-100 mb-6 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-blue-100 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed px-2">
               {getCityDescription(cityName)}
             </p>
 
             {/* City Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto px-2">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">
                   {cityStats.totalConsultants}
                 </div>
-                <div className="text-sm text-blue-100">Total Consultants</div>
+                <div className="text-xs sm:text-sm text-blue-100">Total Consultants</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">
                   {cityStats.averageRating}★
                 </div>
-                <div className="text-sm text-blue-100">Average Rating</div>
+                <div className="text-xs sm:text-sm text-blue-100">Average Rating</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">{cityStats.categories}</div>
-                <div className="text-sm text-blue-100">Service Categories</div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{cityStats.categories}</div>
+                <div className="text-xs sm:text-sm text-blue-100">Service Categories</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">{cityStats.topRated}</div>
-                <div className="text-sm text-blue-100">Top Rated (4.5+)</div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{cityStats.topRated}</div>
+                <div className="text-xs sm:text-sm text-blue-100">Top Rated (4.5+)</div>
               </div>
             </div>
           </div>
@@ -814,17 +815,17 @@ export default function CityBusinessListing() {
       </section>
 
       {/* Search and Filters */}
-      <section className="py-6 bg-white shadow-sm">
+      <section className="py-4 sm:py-6 bg-white shadow-sm">
         <div className="container mx-auto max-w-7xl px-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative flex-1 max-w-full sm:max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 placeholder={`Search consultants in ${cityName}...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-10 sm:h-auto"
               />
             </div>
 
@@ -833,7 +834,7 @@ export default function CityBusinessListing() {
               value={selectedCategory}
               onValueChange={setSelectedCategory}
             >
-              <SelectTrigger className="w-full lg:w-64">
+              <SelectTrigger className="w-full sm:w-48 lg:w-64 h-10 sm:h-auto">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
