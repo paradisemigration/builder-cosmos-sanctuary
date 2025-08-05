@@ -14,6 +14,9 @@ export function Navigation({ className = "" }: NavigationProps) {
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
 
+  // Check if current page is UAE related
+  const isUAEPage = location.pathname.startsWith('/uae');
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
