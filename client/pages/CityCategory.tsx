@@ -982,27 +982,48 @@ const getFAQs = (categorySlug: string, cityName: string) => {
     ],
     "immigration-consultants": [
       {
-        question: `How to choose the best immigration consultant in ${cityName}?`,
-        answer: `Choose licensed immigration consultants in ${cityName} with MARA/ICCRC certification, positive reviews, transparent fee structure, and specialization in your visa category. Verify their credentials and success rates.`,
+        question: `How to choose the best ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `Choose licensed ${categoryName.toLowerCase()} in ${cityName} with MARA/ICCRC certification, positive reviews, transparent fee structure, and specialization in your visa category. Verify their credentials and success rates.`,
       },
       {
-        question: `What immigration services are available in ${cityName}?`,
-        answer: `Immigration consultants in ${cityName} offer services including permanent residency applications, work permits, family sponsorship, refugee claims, citizenship applications, and immigration appeals.`,
+        question: `What services do ${categoryName.toLowerCase()} offer in ${cityName}?`,
+        answer: `${categoryName} in ${cityName} offer services including permanent residency applications, work permits, family sponsorship, refugee claims, citizenship applications, and immigration appeals.`,
       },
       {
-        question: `How much do immigration consultants charge in ${cityName}?`,
-        answer: `Immigration consultation fees in ${cityName} vary from AED 2,000 to AED 15,000 depending on the complexity of your case. Most consultants offer free initial assessments and transparent pricing.`,
+        question: `How much do ${categoryName.toLowerCase()} charge in ${cityName}?`,
+        answer: `${categoryName} fees in ${cityName} vary from AED 2,000 to AED 15,000 depending on the complexity of your case. Most consultants offer free initial assessments and transparent pricing.`,
       },
       {
-        question: `Which countries offer the best immigration opportunities from ${cityName}?`,
+        question: `Which countries offer the best immigration opportunities through ${categoryName.toLowerCase()} in ${cityName}?`,
         answer: `Popular immigration destinations from ${cityName} include Canada, Australia, New Zealand, USA, and several European countries. Each has different requirements and immigration pathways.`,
       },
       {
-        question: `What is the success rate of immigration applications from ${cityName}?`,
-        answer: `Success rates vary by country and visa category, but experienced immigration consultants in ${cityName} typically achieve 80-95% success rates for well-prepared applications with eligible candidates.`,
+        question: `What is the success rate of ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `Success rates vary by country and visa category, but experienced ${categoryName.toLowerCase()} in ${cityName} typically achieve 80-95% success rates for well-prepared applications with eligible candidates.`,
       },
     ],
     "visa-consultants": [
+      {
+        question: `What types of visas can ${categoryName.toLowerCase()} in ${cityName} help with?`,
+        answer: `${categoryName} in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`,
+      },
+      {
+        question: `How long does visa processing take through ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `Processing times vary by country and visa type, ranging from 3-30 working days. ${categoryName} in ${cityName} can provide accurate timelines and expedited services when available.`,
+      },
+      {
+        question: `What documents are required for visa applications with ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `Common requirements include valid passport, photographs, application forms, financial proof, travel itinerary, accommodation bookings, and invitation letters. Specific requirements vary by destination country.`,
+      },
+      {
+        question: `Can ${categoryName.toLowerCase()} in ${cityName} guarantee visa approval?`,
+        answer: `Reputable ${categoryName.toLowerCase()} in ${cityName} cannot guarantee approval but can significantly increase your chances through proper documentation, application preparation, and guidance based on their experience.`,
+      },
+      {
+        question: `What are the ${categoryName.toLowerCase()} fees in ${cityName}?`,
+        answer: `${categoryName} fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`,
+      },
+    ],
       {
         question: `What types of visas can consultants in ${cityName} help with?`,
         answer: `Visa consultants in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`,
