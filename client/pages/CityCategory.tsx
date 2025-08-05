@@ -1470,7 +1470,7 @@ export default function CityCategory() {
     async function fetchCategoryBusinesses() {
       try {
         console.log(
-          `Fetching businesses for city: "${cityName}", category: "${categoryName}"`,
+          `Fetching businesses for city: "${cityName}", category: "${categoryName}", categorySlug: "${categorySlug}"`,
         );
 
         // Check if API is available by testing a simple endpoint first
