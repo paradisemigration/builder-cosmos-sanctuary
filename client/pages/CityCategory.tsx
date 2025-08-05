@@ -1045,7 +1045,7 @@ export default function CityCategory() {
                           : "space-y-4"
                       }
                     >
-                      {cityBusinesses
+                      {(country === 'uae' && allDubaiBusinesses.length > 0 ? allDubaiBusinesses : cityBusinesses)
                         .filter((business) => {
                           if (!searchQuery) return true;
                           return (
