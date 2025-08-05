@@ -264,7 +264,9 @@ export default function CityCategory() {
           // Step 1: Try exact city + category combination from database
           try {
             let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
-            let scrapedResponse = await fetch(scrapedUrl);
+            let scrapedResponse = await fetch(scrapedUrl, {
+              signal: AbortSignal.timeout(10000) // 10 second timeout
+            });
 
             if (scrapedResponse.ok) {
               result = await scrapedResponse.json();
@@ -274,9 +276,13 @@ export default function CityCategory() {
             }
           } catch (fetchError) {
             console.log("Failed to fetch from primary API:", fetchError);
+            // Set apiAvailable to false for subsequent calls in this session
+            apiAvailable = false;
           }
-        } else {
-          console.log("API not available, will use sample data fallback");
+        }
+
+        if (!apiAvailable) {
+          console.log("API not available, using sample data fallback");
         }
 
         // Step 2: If no data found for specific area + category, try hierarchical fallback
