@@ -714,7 +714,7 @@ export default function CityCategory() {
             `No data found for ${cityName} + ${categoryName}, trying nearby cities from database`,
           );
 
-          const nearbyCities = getNearByCities(cityName, country);
+          const nearbyCities = getNearByCities(cityName, country, userLocation);
 
           for (const nearbyCity_temp of nearbyCities) {
             try {
