@@ -2,8 +2,8 @@
 export const allCategories = [
   // Core Visa & Immigration Services (12)
   {
-    slug: "visa-consultant",
-    name: "Visa Consultant",
+    slug: "visa-consultants",
+    name: "Visa consultants",
     description: "General visa consultation and application services",
   },
   {
@@ -18,7 +18,7 @@ export const allCategories = [
   },
   {
     slug: "immigration-consultants",
-    name: "Immigration Consultants",
+    name: "Immigration consultants",
     description: "Professional immigration advisory services",
   },
   {
@@ -28,7 +28,7 @@ export const allCategories = [
   },
   {
     slug: "work-visa-consultants",
-    name: "Work Visa Consultants",
+    name: "Work visa consultants",
     description: "Employment visa specialists and work permit services",
   },
   {
@@ -52,20 +52,20 @@ export const allCategories = [
     description: "European work visa and employment permits",
   },
   {
-    slug: "study-abroad-consultant",
-    name: "Study Abroad Consultant",
+    slug: "study-abroad-consultants",
+    name: "Study abroad consultants",
     description: "International education and student visa guidance",
   },
   {
     slug: "education-consultants",
-    name: "Education Consultants",
+    name: "Education consultants",
     description: "Educational advisory and admission services",
   },
 
   // Specialized Visa Services (12)
   {
     slug: "student-visa-consultants",
-    name: "Student Visa Consultants",
+    name: "Student visa consultants",
     description: "Student visa applications and educational permits",
   },
   {
