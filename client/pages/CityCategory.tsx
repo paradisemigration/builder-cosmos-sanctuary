@@ -40,6 +40,8 @@ import {
   completeCategoryMapping,
   getCategoryBySlug,
   getCitySlug,
+  uaeCities,
+  allIndianCities,
 } from "@/lib/all-categories";
 import {
   generateCityCategoryMeta,
