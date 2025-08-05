@@ -63,7 +63,7 @@ export function generateCityCategoryMeta(
     title,
     description,
     keywords: keywordsList.join(', '),
-    canonical: `/business/${cityName.toLowerCase().replace(/\s+/g, '-')}/${categoryName.toLowerCase().replace(/\s+/g, '-')}`,
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/business/${cityName.toLowerCase().replace(/\s+/g, '-')}/${categoryName.toLowerCase().replace(/\s+/g, '-')}`,
     robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
     author: websiteName,
     viewport: "width=device-width, initial-scale=1.0",
@@ -291,7 +291,7 @@ export function setPageMeta(metaData: MetaData): void {
   setMetaTag("DC.identifier", window.location.href);
   setMetaTag("DC.language", "en");
   setMetaTag("DC.coverage", "IN");
-  setMetaTag("DC.rights", "�� 2024 VisaConsult India. All rights reserved.");
+  setMetaTag("DC.rights", "© 2024 VisaConsult India. All rights reserved.");
 
   // Additional crawling and indexing hints
   setMetaTag("googlebot", "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1");
