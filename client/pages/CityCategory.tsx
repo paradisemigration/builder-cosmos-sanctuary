@@ -277,7 +277,7 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
       "karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
       "tamil nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
       "telangana": ["Hyderabad", "Secunderabad", "Warangal", "Nizamabad"],
-      "west bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
+      "west bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri", "Malda", "Krishnanagar"],
       "gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
       "rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer"],
       "kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
