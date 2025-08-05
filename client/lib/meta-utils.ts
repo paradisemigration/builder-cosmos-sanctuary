@@ -598,6 +598,107 @@ function getCityCoordinates(cityName: string): { lat: number; lng: number } {
   return coordinates[cityName] || coordinates["default"];
 }
 
+// Set FAQ structured data for rich snippets
+function setFAQStructuredData(pageType: "city" | "category"): void {
+  const pathParts = window.location.pathname.split('/');
+  const cityName = pathParts[2]?.replace(/-/g, ' ');
+  const categoryName = pathParts[3]?.replace(/-/g, ' ');
+
+  let faqData;
+
+  if (pageType === "city") {
+    // FAQ for city-only pages
+    faqData = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": `What are the best visa consultants in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `The best visa consultants in ${cityName} are verified professionals with high success rates, positive reviews, and expertise in student, work, tourist, and immigration visas. Look for consultants with proper licensing and proven track records.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `How much do visa consultants charge in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Visa consultant fees in ${cityName} typically range from ₹5,000 to ₹50,000 depending on the visa type and complexity. Student visas and PR applications generally cost more than tourist visas. Always get detailed quotations before proceeding.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `What documents are needed for visa consultation in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Common documents include passport, educational certificates, work experience letters, bank statements, photographs, and specific forms based on visa type. Your consultant in ${cityName} will provide a detailed checklist.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `How long does visa processing take in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Visa processing times vary by country and type. Tourist visas typically take 5-15 days, student visas 4-8 weeks, and work visas 2-6 months. Consultants in ${cityName} can provide accurate timelines based on current embassy processing times.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `Are visa consultants in ${cityName} reliable?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Many visa consultants in ${cityName} are highly reliable with proper licensing and certifications. Always verify credentials, read reviews, and choose consultants with transparent pricing and good success rates.`
+          }
+        }
+      ]
+    };
+  } else {
+    // FAQ for city+category pages
+    faqData = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": `What services do ${categoryName} provide in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `${categoryName} in ${cityName} provide comprehensive visa services including application preparation, document verification, embassy appointments, interview preparation, and post-approval support. They specialize in specific visa types and destinations.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `How to choose the best ${categoryName} in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Choose ${categoryName} in ${cityName} based on their success rates, customer reviews, experience, licensing, transparency in pricing, and specialization in your visa type. Verify their credentials and ask for references.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `What is the success rate of ${categoryName} in ${cityName}?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Success rates of ${categoryName} in ${cityName} typically range from 80-95% depending on the consultant's expertise and client profile. Experienced consultants usually have higher success rates due to better application preparation.`
+          }
+        },
+        {
+          "@type": "Question",
+          "name": `Do ${categoryName} in ${cityName} provide post-visa services?`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": `Yes, many ${categoryName} in ${cityName} provide post-visa services including travel insurance, forex guidance, accommodation assistance, and pre-departure orientation to help clients settle in their destination country.`
+          }
+        }
+      ]
+    };
+  }
+
+  setStructuredData(faqData, 'faq');
+}
+
 // Generate structured data for local business
 export function generateBusinessStructuredData(
   businessName: string,
