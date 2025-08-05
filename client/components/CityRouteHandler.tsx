@@ -12,7 +12,7 @@ const categoryAliases: Record<string, string> = {
   "tourist-visa": "tourist-visa-services",
   "student-visa": "student-visa-consultants",
   "visit-visa": "visit-visa-specialists",
-  "work-permit": "work-permit-consultants",
+  "work-permit": "work-visa-consultants",
   "pr-consultants": "pr-citizenship-services",
   "education": "education-consultants",
   "education-services": "education-consultants",
