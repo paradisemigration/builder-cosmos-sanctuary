@@ -614,19 +614,22 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-blue-100 text-blue-800">
-              Our Services
-            </Badge>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive Visa Services
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
-              Expert assistance for all types of visa applications with highest
-              success rates
-            </p>
+            <div className="max-w-4xl mx-auto">
+              <Badge className="mb-4 bg-blue-100 text-blue-800">
+                Our Services
+              </Badge>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Comprehensive Visa Services
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
+                Expert assistance for all types of visa applications with highest
+                success rates
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {visaServices.map((service, index) => (
               <Card
                 key={index}
