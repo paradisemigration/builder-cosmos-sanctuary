@@ -761,7 +761,7 @@ export default function UAE() {
               <Link to="/add-business">List Your Business</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/browse?country=uae">Browse All Consultants</Link>
+              <Link to="/uae/business">Browse All Consultants</Link>
             </Button>
           </div>
         </div>
