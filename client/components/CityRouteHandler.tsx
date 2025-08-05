@@ -5,9 +5,9 @@ import BusinessProfile from "@/pages/BusinessProfile";
 
 // Category aliases for common URL variations
 const categoryAliases: Record<string, string> = {
-  "study-abroad": "study-abroad-consultant",
+  "study-abroad": "study-abroad-consultants",
   immigration: "immigration-consultants",
-  visa: "visa-consultant",
+  visa: "visa-consultants",
   "work-visa": "work-visa-consultants",
   "tourist-visa": "tourist-visa-services",
   "student-visa": "student-visa-consultants",
