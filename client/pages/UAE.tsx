@@ -54,21 +54,63 @@ export default function UAE() {
     },
   ];
 
-  // Featured UAE cities with real images
-  const cityImages = {
-    Dubai:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Abu Dhabi":
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    Sharjah:
-      "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    Ajman:
-      "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Ras Al Khaimah":
-      "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    Fujairah:
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  };
+  // UAE cities with real images
+  const uaeCityData = [
+    {
+      name: "Dubai",
+      count: "250+",
+      image: "https://cdn.pixabay.com/photo/2020/02/06/20/01/dubai-4825573_1280.jpg",
+      fallback: "https://images.pexels.com/photos/1707820/pexels-photo-1707820.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Burj Khalifa & Business Hub",
+      color: "#DC2626"
+    },
+    {
+      name: "Abu Dhabi",
+      count: "180+",
+      image: "https://cdn.pixabay.com/photo/2016/12/04/19/30/abu-dhabi-1882502_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Capital & Cultural Center",
+      color: "#16A34A"
+    },
+    {
+      name: "Sharjah",
+      count: "120+",
+      image: "https://cdn.pixabay.com/photo/2019/11/25/13/14/sharjah-4651023_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Cultural Capital",
+      color: "#2563EB"
+    },
+    {
+      name: "Ajman",
+      count: "80+",
+      image: "https://cdn.pixabay.com/photo/2019/05/20/11/18/ajman-4215285_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Coastal Beauty",
+      color: "#7C3AED"
+    },
+    {
+      name: "Ras Al Khaimah",
+      count: "60+",
+      image: "https://cdn.pixabay.com/photo/2018/11/01/11/08/ras-al-khaimah-3788669_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Mountains & Adventure",
+      color: "#DC2626"
+    },
+    {
+      name: "Fujairah",
+      count: "50+",
+      image: "https://cdn.pixabay.com/photo/2020/08/14/12/35/fujairah-5487761_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      flag: "🇦🇪",
+      description: "Eastern Coast",
+      color: "#059669"
+    },
+  ];
 
   const featuredCities = uaeCities.map((city) => ({
     name: city,
@@ -154,83 +196,142 @@ export default function UAE() {
 
       <Navigation />
 
-      {/* Hero Section with UAE Flag Theme */}
-      <section className="relative pt-20 pb-16 px-4 overflow-hidden">
-        {/* Dubai Skyline Background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
-          }}
-        ></div>
-        {/* UAE Flag Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/90 via-white/20 to-green-600/90"></div>
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="container mx-auto max-w-6xl relative z-10">
-          <div className="text-center">
-            {/* Enhanced UAE Flag */}
-            <div className="flex justify-center mb-8">
-              <div className="relative">
-                <div className="w-20 h-14 bg-gradient-to-r from-red-500 via-white to-green-500 rounded-lg shadow-2xl border-2 border-white transform hover:scale-105 transition-transform"></div>
-                <div className="absolute inset-0 rounded-lg shadow-inner bg-gradient-to-t from-black/10 to-transparent"></div>
+      {/* Hero Section with Homepage Color Scheme */}
+      <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pt-20 pb-12 sm:pb-16 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10"></div>
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute top-20 right-1/4 w-72 h-72 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-1000"></div>
+        </div>
+
+        {/* UAE Flag Element */}
+        <div className="absolute top-24 right-8 opacity-20 z-10">
+          <div className="w-28 h-18 border border-gray-300 rounded-md overflow-hidden shadow-lg">
+            <div className="h-1/3 bg-red-500"></div>
+            <div className="h-1/3 bg-white flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-black rounded-full relative">
+                <div className="absolute inset-1 bg-black rounded-full"></div>
               </div>
             </div>
+            <div className="h-1/3 bg-green-600"></div>
+          </div>
+        </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 drop-shadow-2xl leading-tight">
-              UAE's Leading Visa
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-white">
-                Consultation Platform
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 bg-red-100 text-red-800 hover:bg-red-200">
+              🇦🇪 UAE's #1 Visa Consultation Platform
+            </Badge>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
+              Find UAE's Best
+              <span className="bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent block">
+                Visa Consultants
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/95 mb-10 max-w-4xl mx-auto drop-shadow-lg leading-relaxed">
-              Connect with trusted visa consultants across Dubai, Abu Dhabi,
-              Sharjah and all Emirates. Expert immigration services for work
-              visas, study abroad, and more.
+
+            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
+              Connect with verified immigration experts across Dubai, Abu Dhabi, Sharjah and all Emirates. Get expert guidance for work visas, study abroad, and permanent residence applications.
             </p>
 
             {/* Enhanced Search Bar */}
-            <div className="max-w-3xl mx-auto mb-12">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-3 shadow-2xl border border-white/20">
-                <div className="flex">
-                  <Input
-                    type="text"
-                    placeholder="Search visa consultants in UAE..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="border-0 bg-transparent text-lg focus:ring-0 flex-1 px-4"
-                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  />
-                  <Button
-                    onClick={handleSearch}
-                    className="rounded-xl px-8 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
+            <div className="max-w-2xl mx-auto mb-8 sm:mb-12 px-4">
+              <div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex-1">
+                    <div className="relative">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                      <Input
+                        type="text"
+                        placeholder="Search visa consultants in UAE..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent"
+                      />
+                    </div>
+                  </div>
+                  <div className="sm:flex-initial">
+                    <select
+                      className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-red-500 text-base"
+                    >
+                      <option value="">Select City</option>
+                      <option value="Dubai">Dubai</option>
+                      <option value="Abu Dhabi">Abu Dhabi</option>
+                      <option value="Sharjah">Sharjah</option>
+                      <option value="Ajman">Ajman</option>
+                    </select>
+                  </div>
                 </div>
+                <Button
+                  onClick={handleSearch}
+                  size="lg"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-green-600 hover:from-red-700 hover:to-green-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
+                >
+                  <Search className="mr-2 h-5 w-5" />
+                  Search UAE Experts
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+
+              {/* Quick Search Tags */}
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
+                {["Work Visa", "Study Abroad", "Tourist Visa", "Business Visa"].map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="cursor-pointer hover:bg-red-50 hover:border-red-300 transition-colors"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Enhanced Stats */}
-            <div className="flex justify-center gap-8 lg:gap-12">
-              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="text-4xl font-bold text-yellow-300 mb-1">
-                  500+
+      {/* Stats Section */}
+      <section className="py-8 sm:py-12 bg-white relative -mt-8 sm:-mt-12 z-20">
+        <div className="container mx-auto px-4">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 sm:p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+              <div className="text-center">
+                <div className="flex justify-center mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-red-500 to-green-600 rounded-2xl text-white">
+                    <Shield className="h-8 w-8" />
+                  </div>
                 </div>
-                <div className="text-sm text-white/90">
-                  Verified Consultants
-                </div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">500+</div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">Verified Consultants</div>
               </div>
-              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="text-4xl font-bold text-yellow-300 mb-1">6</div>
-                <div className="text-sm text-white/90">Emirates Covered</div>
-              </div>
-              <div className="text-center text-white bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="text-4xl font-bold text-yellow-300 mb-1">
-                  10K+
+              <div className="text-center">
+                <div className="flex justify-center mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-red-500 to-green-600 rounded-2xl text-white">
+                    <CheckCircle className="h-8 w-8" />
+                  </div>
                 </div>
-                <div className="text-sm text-white/90">Successful Cases</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">10,000+</div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">Successful Cases</div>
+              </div>
+              <div className="text-center">
+                <div className="flex justify-center mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-red-500 to-green-600 rounded-2xl text-white">
+                    <Globe className="h-8 w-8" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">7</div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">Emirates Covered</div>
+              </div>
+              <div className="text-center">
+                <div className="flex justify-center mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-red-500 to-green-600 rounded-2xl text-white">
+                    <MapPin className="h-8 w-8" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">20+</div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">UAE Cities</div>
               </div>
             </div>
           </div>
@@ -238,7 +339,7 @@ export default function UAE() {
       </section>
 
       {/* Popular Categories Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-gray-50 to-red-50">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
