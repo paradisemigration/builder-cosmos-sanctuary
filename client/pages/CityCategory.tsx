@@ -1725,7 +1725,7 @@ export default function CityCategory() {
 
                   // Debug: show what we're matching against
                   console.log(
-                    `Checking "${business.category}" in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
+                    `Checking "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
                   );
                 } else {
                   // For other categories, use standard matching
