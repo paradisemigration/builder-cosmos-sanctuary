@@ -1664,11 +1664,13 @@ export default function CityCategory() {
           let accumulatedBusinesses = [];
           let sourceCities = [];
 
-          // PHASE 1: Try exact category match from nearby cities
+          // PHASE 1: Try exact category match from nearby cities (prioritizing same state)
           console.log("=== PHASE 1: Trying exact category from nearby cities ===");
-          for (const nearbyCity of nearbyCities.slice(0, 5)) { // Limit to first 5 cities for performance
+          console.log(`Nearby cities priority order: ${nearbyCities.join(" -> ")}`);
+
+          for (const nearbyCity of nearbyCities.slice(0, 8)) { // Check more cities for better coverage
             try {
-              console.log(`Querying ${nearbyCity} for category: ${categoryName}`);
+              console.log(`\n--- Querying ${nearbyCity} for category: ${categoryName} ---`);
 
               const nearbyApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}/category/${categorySlug}`, {
                 page: "1",
@@ -1677,15 +1679,21 @@ export default function CityCategory() {
                 country: country,
               });
 
+              console.log(`API URL: ${nearbyApiUrl}`);
+
               const nearbyResponse = await robustFetch(nearbyApiUrl, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
               });
 
+              console.log(`Response status: ${nearbyResponse.status} ${nearbyResponse.statusText}`);
+
               const nearbyResult = await nearbyResponse.json();
+              console.log(`API Response for ${nearbyCity}:`, nearbyResult);
 
               if (nearbyResult && nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
-                console.log(`Found ${nearbyResult.businesses.length} real businesses in ${nearbyCity} for ${categoryName}`);
+                console.log(`✅ SUCCESS: Found ${nearbyResult.businesses.length} real businesses in ${nearbyCity} for ${categoryName}`);
+                console.log(`Business names:`, nearbyResult.businesses.map(b => b.name));
 
                 // Mark as nearby data and add to accumulator
                 const nearbyCityBusinesses = nearbyResult.businesses.map(business => ({
@@ -1698,15 +1706,24 @@ export default function CityCategory() {
                 accumulatedBusinesses = [...accumulatedBusinesses, ...nearbyCityBusinesses];
                 sourceCities.push(nearbyCity);
 
+                console.log(`Total accumulated so far: ${accumulatedBusinesses.length} businesses`);
+
                 if (accumulatedBusinesses.length >= 50) {
                   console.log("Found enough businesses from exact category matches");
                   break;
                 }
               } else {
-                console.log(`No businesses found in ${nearbyCity} for ${categoryName}`);
+                console.log(`❌ No businesses found in ${nearbyCity} for ${categoryName}`);
+                if (nearbyResult) {
+                  console.log(`Response details:`, {
+                    success: nearbyResult.success,
+                    total: nearbyResult.total,
+                    businessesLength: nearbyResult.businesses?.length || 0
+                  });
+                }
               }
             } catch (error) {
-              console.log(`Error querying ${nearbyCity}:`, error);
+              console.error(`❌ Error querying ${nearbyCity}:`, error);
             }
           }
 
