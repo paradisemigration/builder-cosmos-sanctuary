@@ -238,8 +238,8 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
   }
 };
 
-// Helper function to get nearby cities for fallback
-const getNearByCities = (cityName: string, country: string): string[] => {
+// Enhanced helper function to get nearby cities for fallback
+const getNearByCities = (cityName: string, country: string, userLocation?: {city: string, state: string} | null): string[] => {
   const normalizedCity = cityName.toLowerCase();
 
   // Special case: Abu Dhabi should show ONLY Abu Dhabi businesses (no fallback)
@@ -252,11 +252,43 @@ const getNearByCities = (cityName: string, country: string): string[] => {
     return nearbyAreasMapping[normalizedCity];
   }
 
-  // If no specific mapping, return main cities for the country
-  if (country === "uae") {
+  // For Indian cities, try to use user location for better suggestions
+  if (country === 'india' && userLocation) {
+    const userCity = userLocation.city.toLowerCase();
+    const userState = userLocation.state.toLowerCase();
+
+    // If user is in the same state, suggest major cities in that state
+    const stateCities: Record<string, string[]> = {
+      "delhi": ["Delhi", "Gurgaon", "Noida", "Faridabad"],
+      "haryana": ["Gurgaon", "Delhi", "Noida", "Faridabad"],
+      "uttar pradesh": ["Noida", "Delhi", "Lucknow", "Kanpur"],
+      "maharashtra": ["Mumbai", "Pune", "Nasik", "Aurangabad"],
+      "karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
+      "tamil nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
+      "telangana": ["Hyderabad", "Secunderabad", "Warangal", "Nizamabad"],
+      "west bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
+      "gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+      "rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer"],
+      "kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
+      "punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar"]
+    };
+
+    if (stateCities[userState]) {
+      return stateCities[userState];
+    }
+
+    // If user city is in our mapping, use those suggestions
+    if (nearbyAreasMapping[userCity]) {
+      return nearbyAreasMapping[userCity];
+    }
+  }
+
+  // Default fallbacks by country
+  if (country === 'uae') {
     return ["Dubai", "Abu Dhabi", "Sharjah"];
   } else {
-    return ["Delhi", "Mumbai", "Bangalore", "Chennai"];
+    // For India, return major metro cities
+    return ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"];
   }
 };
 
