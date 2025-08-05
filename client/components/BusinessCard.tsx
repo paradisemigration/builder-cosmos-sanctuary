@@ -269,11 +269,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{business.rating}</span>
                   <span className="text-gray-500">
-                    (
-                    {business.reviews?.length ||
-                      business.reviewCount ||
-                      Math.floor(Math.random() * 200) + 50}{" "}
-                    reviews)
+                    ({reviewCount} reviews)
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
