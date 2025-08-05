@@ -1673,10 +1673,14 @@ export default function CityCategory() {
                 // Debug: show what we're matching against
                 if (cityMatch) {
                   console.log(
-                    `Exact city check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
+                    `Exact city check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`,
                   );
                 }
-              } else if (categorySlug.includes("consultant") || categorySlug === "canada-express-entry-consultants" || categorySlug === "immigration-consultants") {
+              } else if (
+                categorySlug.includes("consultant") ||
+                categorySlug === "canada-express-entry-consultants" ||
+                categorySlug === "immigration-consultants"
+              ) {
                 // For consultant categories, match any business with "consultant" in category
                 const businessCategory = business.category.toLowerCase();
                 categoryMatch = businessCategory.includes("consultant");
@@ -1684,7 +1688,7 @@ export default function CityCategory() {
                 // Debug: show what we're matching against
                 if (cityMatch) {
                   console.log(
-                    `Exact city consultant check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
+                    `Exact city consultant check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`,
                   );
                 }
               } else {
@@ -1714,7 +1718,7 @@ export default function CityCategory() {
               `No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
             );
             console.log(
-              `Category slug: "${categorySlug}", Category name: "${categoryName}"`
+              `Category slug: "${categorySlug}", Category name: "${categoryName}"`,
             );
 
             let accumulatedBusinesses = [];
@@ -1723,14 +1727,22 @@ export default function CityCategory() {
             // PHASE 1: Prioritize exact category matches from nearby cities
             console.log("=== PHASE 1: Looking for exact category matches ===");
             for (const nearbyCity_temp of nearbyCities) {
-              const exactCategoryBusinesses = sampleBusinesses.filter((business) => {
-                const cityMatch = business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
-                const exactCategoryMatch = business.category.toLowerCase() === categoryName.toLowerCase();
-                return cityMatch && exactCategoryMatch;
-              });
+              const exactCategoryBusinesses = sampleBusinesses.filter(
+                (business) => {
+                  const cityMatch =
+                    business.city.toLowerCase() ===
+                    nearbyCity_temp.toLowerCase();
+                  const exactCategoryMatch =
+                    business.category.toLowerCase() ===
+                    categoryName.toLowerCase();
+                  return cityMatch && exactCategoryMatch;
+                },
+              );
 
               if (exactCategoryBusinesses.length > 0) {
-                console.log(`Found ${exactCategoryBusinesses.length} exact category matches in ${nearbyCity_temp}`);
+                console.log(
+                  `Found ${exactCategoryBusinesses.length} exact category matches in ${nearbyCity_temp}`,
+                );
                 const newBusinesses = exactCategoryBusinesses.filter(
                   (newBusiness) =>
                     !accumulatedBusinesses.some(
@@ -1740,7 +1752,10 @@ export default function CityCategory() {
                     ),
                 );
 
-                accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                accumulatedBusinesses = [
+                  ...accumulatedBusinesses,
+                  ...newBusinesses,
+                ];
                 if (!sourceCities.includes(nearbyCity_temp)) {
                   sourceCities.push(nearbyCity_temp);
                 }
@@ -1749,34 +1764,46 @@ export default function CityCategory() {
 
             // PHASE 2: If not enough, look for related consultant categories
             if (accumulatedBusinesses.length < 25) {
-              console.log("=== PHASE 2: Looking for related consultant categories ===");
+              console.log(
+                "=== PHASE 2: Looking for related consultant categories ===",
+              );
               for (const nearbyCity_temp of nearbyCities) {
-                const consultantBusinesses = sampleBusinesses.filter((business) => {
-                  const cityMatch = business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
-                  let categoryMatch = false;
+                const consultantBusinesses = sampleBusinesses.filter(
+                  (business) => {
+                    const cityMatch =
+                      business.city.toLowerCase() ===
+                      nearbyCity_temp.toLowerCase();
+                    let categoryMatch = false;
 
-                  if (categorySlug === "visa-consultants") {
-                    // For visa-consultants, match any business with "visa" and "consultant" in category
-                    const businessCategory = business.category.toLowerCase();
-                    categoryMatch =
-                      businessCategory.includes("visa") &&
-                      businessCategory.includes("consultant");
-                  } else if (categorySlug.includes("consultant") || categorySlug === "canada-express-entry-consultants" || categorySlug === "immigration-consultants") {
-                    // For consultant categories, match any business with "consultant" in category
-                    const businessCategory = business.category.toLowerCase();
-                    categoryMatch = businessCategory.includes("consultant");
-                  } else {
-                    // For other categories, use partial matching
-                    categoryMatch = business.category
-                      .toLowerCase()
-                      .includes(categoryName.toLowerCase());
-                  }
+                    if (categorySlug === "visa-consultants") {
+                      // For visa-consultants, match any business with "visa" and "consultant" in category
+                      const businessCategory = business.category.toLowerCase();
+                      categoryMatch =
+                        businessCategory.includes("visa") &&
+                        businessCategory.includes("consultant");
+                    } else if (
+                      categorySlug.includes("consultant") ||
+                      categorySlug === "canada-express-entry-consultants" ||
+                      categorySlug === "immigration-consultants"
+                    ) {
+                      // For consultant categories, match any business with "consultant" in category
+                      const businessCategory = business.category.toLowerCase();
+                      categoryMatch = businessCategory.includes("consultant");
+                    } else {
+                      // For other categories, use partial matching
+                      categoryMatch = business.category
+                        .toLowerCase()
+                        .includes(categoryName.toLowerCase());
+                    }
 
-                  return cityMatch && categoryMatch;
-                });
+                    return cityMatch && categoryMatch;
+                  },
+                );
 
                 if (consultantBusinesses.length > 0) {
-                  console.log(`Found ${consultantBusinesses.length} consultant matches in ${nearbyCity_temp}`);
+                  console.log(
+                    `Found ${consultantBusinesses.length} consultant matches in ${nearbyCity_temp}`,
+                  );
                   const newBusinesses = consultantBusinesses.filter(
                     (newBusiness) =>
                       !accumulatedBusinesses.some(
@@ -1786,7 +1813,10 @@ export default function CityCategory() {
                       ),
                   );
 
-                  accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                  accumulatedBusinesses = [
+                    ...accumulatedBusinesses,
+                    ...newBusinesses,
+                  ];
                   if (!sourceCities.includes(nearbyCity_temp)) {
                     sourceCities.push(nearbyCity_temp);
                   }
@@ -1800,15 +1830,20 @@ export default function CityCategory() {
 
             // PHASE 3: If still not enough, add any businesses from nearby cities
             if (accumulatedBusinesses.length < 25) {
-              console.log("=== PHASE 3: Adding any businesses from nearby cities ===");
+              console.log(
+                "=== PHASE 3: Adding any businesses from nearby cities ===",
+              );
               for (const nearbyCity_temp of nearbyCities) {
                 const allCityBusinesses = sampleBusinesses.filter(
                   (business) =>
-                    business.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
+                    business.city.toLowerCase() ===
+                    nearbyCity_temp.toLowerCase(),
                 );
 
                 if (allCityBusinesses.length > 0) {
-                  console.log(`Found ${allCityBusinesses.length} total businesses in ${nearbyCity_temp}`);
+                  console.log(
+                    `Found ${allCityBusinesses.length} total businesses in ${nearbyCity_temp}`,
+                  );
                   const newBusinesses = allCityBusinesses.filter(
                     (newBusiness) =>
                       !accumulatedBusinesses.some(
@@ -1818,7 +1853,10 @@ export default function CityCategory() {
                       ),
                   );
 
-                  accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                  accumulatedBusinesses = [
+                    ...accumulatedBusinesses,
+                    ...newBusinesses,
+                  ];
                   if (!sourceCities.includes(nearbyCity_temp)) {
                     sourceCities.push(nearbyCity_temp);
                   }
@@ -1830,7 +1868,9 @@ export default function CityCategory() {
               }
             }
 
-            console.log(`Total accumulated businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`);
+            console.log(
+              `Total accumulated businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`,
+            );
 
             if (accumulatedBusinesses.length > 0) {
               sampleBusinesses_filtered = accumulatedBusinesses;
