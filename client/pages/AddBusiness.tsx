@@ -58,10 +58,18 @@ interface BusinessFormData {
 
 export default function AddBusiness() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Detect if this is UAE or India based on URL or referrer
+  const isUAE = location.pathname.includes('/uae') ||
+               document.referrer.includes('/uae') ||
+               location.search.includes('country=uae');
+  const country = isUAE ? 'UAE' : 'India';
+  const countryFlag = isUAE ? '🇦🇪' : '🇮🇳';
 
   // Get selected plan from URL parameters
   const selectedPlan = searchParams.get("plan") || "free";
@@ -400,7 +408,7 @@ export default function AddBusiness() {
                 variant="outline"
                 className="px-8 py-4 text-lg font-semibold rounded-2xl border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
               >
-                📞 Get Help
+                ���� Get Help
               </Button>
             </div>
           </div>
