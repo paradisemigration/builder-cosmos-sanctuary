@@ -54,6 +54,14 @@ export default function Index() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
+  const [enquiryFormData, setEnquiryFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    city: "",
+    category: "",
+  });
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
