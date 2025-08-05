@@ -258,11 +258,30 @@ export default function CityBusinessListing() {
     } catch (error) {
       console.error("Error fetching businesses:", error);
 
-      // Fallback to sample data on error
-      const cityBusinesses = sampleBusinesses.filter(
+      // Enhanced fallback on error: try exact city, then nearby cities
+      let cityBusinesses = sampleBusinesses.filter(
         (business) =>
-          business.city.toLowerCase() === (city?.toLowerCase() || ""),
+          business.city.toLowerCase() === (cityName?.toLowerCase() || ""),
       );
+
+      // If no exact match found, try nearby cities
+      if (cityBusinesses.length === 0) {
+        const nearbyCities = getNearByCities(cityName, country);
+        console.log(`Error occurred and no data for ${cityName}, checking nearby cities:`, nearbyCities);
+
+        cityBusinesses = sampleBusinesses.filter((business) =>
+          nearbyCities.some(nearbyCity =>
+            business.city.toLowerCase() === nearbyCity.toLowerCase()
+          )
+        );
+
+        // Add a flag to show this is nearby data
+        cityBusinesses = cityBusinesses.map(business => ({
+          ...business,
+          isNearbyData: true,
+          originalRequestedCity: cityName
+        }));
+      }
 
       if (resetList || page === 1) {
         setBusinesses(cityBusinesses);
