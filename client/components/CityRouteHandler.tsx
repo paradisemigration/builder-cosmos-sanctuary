@@ -15,7 +15,10 @@ const categoryAliases: Record<string, string> = {
   "work-permit": "work-permit-consultants",
   "pr-consultants": "pr-citizenship-services",
   "education": "education-consultants",
-  "business-visa": "business-visa-services"
+  "education-services": "education-consultants",
+  "business-visa": "business-visa-services",
+  "overseas-education": "overseas-education",
+  "student-services": "student-visa-services"
 };
 
 export default function CityRouteHandler() {
