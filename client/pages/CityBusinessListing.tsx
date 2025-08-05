@@ -450,6 +450,20 @@ export default function CityBusinessListing() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Visa Consultants in {cityName}
             </h1>
+
+            {/* Show notification if displaying nearby cities data */}
+            {businesses.length > 0 && businesses[0]?.isNearbyData && (
+              <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-6 max-w-3xl mx-auto">
+                <div className="flex items-center justify-center gap-2 text-yellow-800">
+                  <MapPin className="h-5 w-5" />
+                  <span className="font-medium">
+                    No consultants found specifically in {cityName}.
+                    Showing results from nearby areas: {getNearByCities(cityName, country).join(", ")}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <p className="text-xl text-blue-100 mb-6 max-w-3xl mx-auto">
               Find trusted and verified visa consultants in {cityName}. Compare
               services, read reviews, and choose the best expert for your visa
