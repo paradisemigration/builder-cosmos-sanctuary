@@ -807,7 +807,7 @@ export default function CityCategory() {
 
           // If still no category-specific data, try just city match (broader fallback)
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(cityName, country);
+            const nearbyCities = getNearByCities(cityName, country, userLocation);
 
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
