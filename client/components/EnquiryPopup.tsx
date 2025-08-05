@@ -1,8 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { X, MessageSquare, MapPin, Search, ChevronDown, User, Phone, Mail, Briefcase } from "lucide-react";
+import {
+  X,
+  MessageSquare,
+  MapPin,
+  Search,
+  ChevronDown,
+  User,
+  Phone,
+  Mail,
+  Briefcase,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { allIndianCities, uaeCities, allCategories } from "@/lib/all-categories";
+import {
+  allIndianCities,
+  uaeCities,
+  allCategories,
+} from "@/lib/all-categories";
 
 interface EnquiryPopupProps {
   isOpen: boolean;
@@ -38,7 +52,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   const citySuggestionsRef = useRef<HTMLDivElement>(null);
 
   // Form validation
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Generate dynamic title based on current page
   const getPopupTitle = () => {
@@ -52,12 +66,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
     if (city && category) {
       // City + Category page
       const categoryObj = allCategories.find((c) => c.slug === category);
-      const categoryName = categoryObj ? categoryObj.name.toLowerCase() : "consultants";
-      const cityName = city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
+      const categoryName = categoryObj
+        ? categoryObj.name.toLowerCase()
+        : "consultants";
+      const cityName =
+        city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
       return `Apply With Trusted ${categoryName} in ${cityName}`;
     } else if (city) {
       // City only page
-      const cityName = city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
+      const cityName =
+        city.charAt(0).toUpperCase() + city.slice(1).replace(/-/g, " ");
       return `Apply with Most Trusted Immigration Consultants in ${cityName}`;
     } else {
       // Home page or other pages
@@ -69,16 +87,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   const handleCityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCityQuery(value);
-    setFormData(prev => ({ ...prev, city: value }));
+    setFormData((prev) => ({ ...prev, city: value }));
 
     if (value.length >= 2) {
       const isUAEPage = location.pathname.startsWith("/uae");
       const cities = isUAEPage ? uaeCities : allIndianCities;
-      
-      const filtered = cities.filter(city =>
-        city.toLowerCase().includes(value.toLowerCase())
-      ).slice(0, 8);
-      
+
+      const filtered = cities
+        .filter((city) => city.toLowerCase().includes(value.toLowerCase()))
+        .slice(0, 8);
+
       setFilteredCities(filtered);
       setShowCitySuggestions(true);
     } else {
@@ -89,19 +107,20 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   // Handle city selection from suggestions
   const handleCitySelect = (city: string) => {
     setCityQuery(city);
-    setFormData(prev => ({ ...prev, city }));
+    setFormData((prev) => ({ ...prev, city }));
     setShowCitySuggestions(false);
-    setErrors(prev => ({ ...prev, city: "" }));
+    setErrors((prev) => ({ ...prev, city: "" }));
   };
 
   // Form validation
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Email is invalid";
     if (!formData.city.trim()) newErrors.city = "City is required";
     if (!formData.category) newErrors.category = "Category is required";
 
@@ -111,16 +130,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     // Handle form submission
     console.log("Enquiry submitted:", formData);
-    
+
     if (onSubmit) {
       onSubmit(formData);
     }
-    
+
     // Reset form and close popup
     setFormData({
       name: "",
@@ -147,8 +166,8 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   if (!isOpen) return null;
@@ -171,7 +190,8 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
               {getPopupTitle()}
             </h2>
             <p className="text-blue-100 text-sm mt-1">
-              Fill the form below and we'll connect you with verified consultants
+              Fill the form below and we'll connect you with verified
+              consultants
             </p>
           </div>
         </div>
@@ -191,14 +211,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                 value={formData.name}
                 onChange={(e) => {
                   setFormData((prev) => ({ ...prev, name: e.target.value }));
-                  setErrors(prev => ({ ...prev, name: "" }));
+                  setErrors((prev) => ({ ...prev, name: "" }));
                 }}
                 className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                  errors.name ? 'border-red-500' : 'border-gray-200'
+                  errors.name ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Enter your full name"
               />
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+              )}
             </div>
 
             {/* Phone Field */}
@@ -213,14 +235,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                 value={formData.phone}
                 onChange={(e) => {
                   setFormData((prev) => ({ ...prev, phone: e.target.value }));
-                  setErrors(prev => ({ ...prev, phone: "" }));
+                  setErrors((prev) => ({ ...prev, phone: "" }));
                 }}
                 className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                  errors.phone ? 'border-red-500' : 'border-gray-200'
+                  errors.phone ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder={isUAEPage ? "+971 XX XXX XXXX" : "+91 XXXXX XXXXX"}
               />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              )}
             </div>
 
             {/* Email Field */}
@@ -235,14 +259,16 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                 value={formData.email}
                 onChange={(e) => {
                   setFormData((prev) => ({ ...prev, email: e.target.value }));
-                  setErrors(prev => ({ ...prev, email: "" }));
+                  setErrors((prev) => ({ ...prev, email: "" }));
                 }}
                 className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                  errors.email ? 'border-red-500' : 'border-gray-200'
+                  errors.email ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Enter your email address"
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* City Field with Autocomplete */}
@@ -264,12 +290,12 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                     }
                   }}
                   className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-10 ${
-                    errors.city ? 'border-red-500' : 'border-gray-200'
+                    errors.city ? "border-red-500" : "border-gray-200"
                   }`}
                   placeholder={`Type ${isUAEPage ? "emirate" : "city"} name (min 2 letters)`}
                 />
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                
+
                 {/* City Suggestions */}
                 {showCitySuggestions && filteredCities.length > 0 && (
                   <div
@@ -284,14 +310,18 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                       >
                         <div className="flex items-center">
                           <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                          <span className="font-medium text-gray-900">{city}</span>
+                          <span className="font-medium text-gray-900">
+                            {city}
+                          </span>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
-              {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+              {errors.city && (
+                <p className="text-red-500 text-xs mt-1">{errors.city}</p>
+              )}
             </div>
 
             {/* Category Field */}
@@ -305,11 +335,14 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                   required
                   value={formData.category}
                   onChange={(e) => {
-                    setFormData((prev) => ({ ...prev, category: e.target.value }));
-                    setErrors(prev => ({ ...prev, category: "" }));
+                    setFormData((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }));
+                    setErrors((prev) => ({ ...prev, category: "" }));
                   }}
                   className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none bg-white pr-10 ${
-                    errors.category ? 'border-red-500' : 'border-gray-200'
+                    errors.category ? "border-red-500" : "border-gray-200"
                   }`}
                 >
                   <option value="">Select visa category</option>
@@ -321,7 +354,9 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
               </div>
-              {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+              {errors.category && (
+                <p className="text-red-500 text-xs mt-1">{errors.category}</p>
+              )}
             </div>
 
             {/* Action Buttons */}
@@ -346,7 +381,8 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
           {/* Footer Note */}
           <div className="mt-4 text-center">
             <p className="text-xs text-gray-500">
-              🔒 Your information is secure and will only be shared with verified consultants
+              🔒 Your information is secure and will only be shared with
+              verified consultants
             </p>
           </div>
         </div>
