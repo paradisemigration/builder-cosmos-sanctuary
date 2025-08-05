@@ -284,7 +284,8 @@ export default function CityCategory() {
             }
           } catch (fetchError) {
             console.log("Failed to fetch from primary API:", fetchError);
-            // Set apiAvailable to false for subsequent calls in this session
+            // Increment failure count and set apiAvailable to false for subsequent calls
+            setApiFailureCount(prev => prev + 1);
             apiAvailable = false;
           }
         }
