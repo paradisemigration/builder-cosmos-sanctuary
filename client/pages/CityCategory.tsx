@@ -2703,6 +2703,19 @@ export default function CityCategory() {
         </div>
       </section>
 
+      {/* Floating Call-to-Action Button */}
+      <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
+
+      {/* Enquiry Form Popup */}
+      <EnquiryPopup
+        isOpen={showEnquiryPopup}
+        onClose={() => setShowEnquiryPopup(false)}
+        onSubmit={(data) => {
+          console.log("City Category Enquiry submitted:", data);
+          // Add your submission logic here
+        }}
+      />
+
       {/* Debug Popup */}
       <DebugPopup debugInfo={debugInfo} />
     </div>
