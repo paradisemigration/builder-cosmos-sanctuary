@@ -1740,6 +1740,15 @@ export default function CityCategory() {
                   console.log(
                     `Checking "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
                   );
+                } else if (categorySlug.includes("consultant") || categorySlug === "canada-express-entry-consultants" || categorySlug === "immigration-consultants") {
+                  // For consultant categories, match any business with "consultant" in category
+                  const businessCategory = business.category.toLowerCase();
+                  categoryMatch = businessCategory.includes("consultant");
+
+                  // Debug: show what we're matching against
+                  console.log(
+                    `Checking consultant category "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
+                  );
                 } else {
                   // For other categories, use standard matching
                   categoryMatch = business.category
