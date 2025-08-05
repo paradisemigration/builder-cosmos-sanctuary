@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { SEOHead } from "@/components/SEOHead";
 import {
   generateContactMeta,
   setPageMeta,
