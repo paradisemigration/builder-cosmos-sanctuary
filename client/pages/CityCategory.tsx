@@ -1677,13 +1677,23 @@ export default function CityCategory() {
             for (const nearbyCity_temp of nearbyCities) {
               console.log(`Checking nearby city: ${nearbyCity_temp}`);
 
+              // Special handling for "visa-consultants" to match all visa consultant types
               const nearbyBusinesses = sampleBusinesses.filter(
-                (business) =>
-                  business.city.toLowerCase() ===
-                    nearbyCity_temp.toLowerCase() &&
-                  business.category
-                    .toLowerCase()
-                    .includes(categoryName.toLowerCase()),
+                (business) => {
+                  const cityMatch = business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
+                  let categoryMatch = false;
+
+                  if (categorySlug === "visa-consultants") {
+                    // For visa-consultants, match any business with "visa" and "consultant" in category
+                    const businessCategory = business.category.toLowerCase();
+                    categoryMatch = businessCategory.includes("visa") && businessCategory.includes("consultant");
+                  } else {
+                    // For other categories, use standard matching
+                    categoryMatch = business.category.toLowerCase().includes(categoryName.toLowerCase());
+                  }
+
+                  return cityMatch && categoryMatch;
+                }
               );
 
               console.log(`Found ${nearbyBusinesses.length} businesses in ${nearbyCity_temp} matching category "${categoryName}"`);
