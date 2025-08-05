@@ -1746,6 +1746,10 @@ export default function CityCategory() {
                 (b) => b.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
               );
               console.log(
+                `All businesses in ${nearbyCity_temp}:`,
+                cityBusinesses.map((b) => `${b.name} (${b.category})`),
+              );
+              console.log(
                 `All categories in ${nearbyCity_temp}:`,
                 cityBusinesses.map((b) => b.category),
               );
