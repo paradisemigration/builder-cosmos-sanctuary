@@ -25,6 +25,7 @@ import {
   FileCheck,
   HeadphonesIcon,
   Loader2,
+  X,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { BusinessCard } from "@/components/BusinessCard";
@@ -185,6 +186,16 @@ export default function Index() {
     setSelectedCategory(category);
     setSearchQuery(category.name);
     setShowSuggestions(false);
+  };
+
+  const handleClearCategory = () => {
+    setSelectedCategory(null);
+    setSearchQuery("");
+    setShowSuggestions(false);
+    // Focus back on search input
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -411,15 +422,22 @@ export default function Index() {
                       />
                       {selectedCategory && (
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <Badge variant="secondary" className="text-xs">
-                            {selectedCategory.name}
+                          <Badge variant="secondary" className="text-xs flex items-center gap-1 pr-1">
+                            <span>{selectedCategory.name}</span>
+                            <button
+                              onClick={handleClearCategory}
+                              className="ml-1 hover:bg-gray-300 rounded-full p-0.5 transition-colors"
+                              title="Clear category"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
                           </Badge>
                         </div>
                       )}
                     </div>
 
                     {/* Autocomplete Suggestions */}
-                    {showSuggestions && filteredCategories.length > 0 && (
+                    {showSuggestions && filteredCategories.length > 0 && !selectedCategory && (
                       <div
                         ref={suggestionsRef}
                         className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
