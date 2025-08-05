@@ -262,13 +262,44 @@ export function setPageMeta(metaData: MetaData): void {
     setMetaTag("viewport", metaData.viewport);
   }
 
-  // Set additional SEO meta tags
+  // Set additional SEO meta tags for faster Google crawling
   setMetaTag("language", "English");
-  setMetaTag("revisit-after", "7 days");
+  setMetaTag("revisit-after", "3 days");
   setMetaTag("distribution", "global");
   setMetaTag("rating", "general");
   setMetaTag("HandheldFriendly", "True");
   setMetaTag("MobileOptimized", "320");
+  setMetaTag("apple-mobile-web-app-capable", "yes");
+  setMetaTag("apple-mobile-web-app-status-bar-style", "black-translucent");
+  setMetaTag("format-detection", "telephone=no");
+  setMetaTag("theme-color", "#ffffff");
+  setMetaTag("msapplication-TileColor", "#ffffff");
+  setMetaTag("application-name", "VisaConsult India");
+  setMetaTag("msapplication-tooltip", metaData.description);
+  setMetaTag("geo.region", "IN");
+  setMetaTag("geo.placename", "India");
+  setMetaTag("ICBM", "20.5937, 78.9629");
+  setMetaTag("DC.title", metaData.title);
+  setMetaTag("DC.creator", "VisaConsult India");
+  setMetaTag("DC.subject", metaData.keywords);
+  setMetaTag("DC.description", metaData.description);
+  setMetaTag("DC.publisher", "VisaConsult India");
+  setMetaTag("DC.contributor", "VisaConsult India");
+  setMetaTag("DC.date", new Date().toISOString().split('T')[0]);
+  setMetaTag("DC.type", "Text");
+  setMetaTag("DC.format", "text/html");
+  setMetaTag("DC.identifier", window.location.href);
+  setMetaTag("DC.language", "en");
+  setMetaTag("DC.coverage", "IN");
+  setMetaTag("DC.rights", "© 2024 VisaConsult India. All rights reserved.");
+
+  // Additional crawling and indexing hints
+  setMetaTag("googlebot", "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1");
+  setMetaTag("bingbot", "index, follow");
+  setMetaTag("slurp", "index, follow");
+  setMetaTag("duckduckbot", "index, follow");
+  setMetaTag("facebookexternalhit", "index, follow");
+  setMetaTag("twitterbot", "index, follow");
 
   // Set Open Graph meta tags
   setOpenGraphMeta(metaData);
