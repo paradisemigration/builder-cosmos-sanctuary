@@ -1879,57 +1879,7 @@ export default function CityCategory() {
             }
           }
 
-          // If still no category-specific data, try just city match (broader fallback)
-          if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(
-              cityName,
-              country,
-              userLocation,
-            );
 
-            let accumulatedBusinesses = [];
-            let sourceCities = [];
-
-            for (const nearbyCity_temp of nearbyCities) {
-              const nearbyBusinesses = sampleBusinesses.filter(
-                (business) =>
-                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
-              );
-
-              if (nearbyBusinesses.length > 0) {
-                // Add businesses from this city, but avoid duplicates
-                const newBusinesses = nearbyBusinesses.filter(
-                  (newBusiness) =>
-                    !accumulatedBusinesses.some(
-                      (existing) =>
-                        existing.name === newBusiness.name &&
-                        existing.address === newBusiness.address,
-                    ),
-                );
-
-                accumulatedBusinesses = [
-                  ...accumulatedBusinesses,
-                  ...newBusinesses,
-                ];
-                sourceCities.push(nearbyCity_temp);
-
-                console.log(
-                  `Added ${newBusinesses.length} sample businesses (any category) from nearby city: ${nearbyCity_temp}. Total: ${accumulatedBusinesses.length}`,
-                );
-
-                // Stop if we have enough businesses
-                if (accumulatedBusinesses.length >= 100) {
-                  break;
-                }
-              }
-            }
-
-            if (accumulatedBusinesses.length > 0) {
-              sampleBusinesses_filtered = accumulatedBusinesses;
-              isNearbyData = true;
-              nearbyCity = sourceCities.join(", ");
-            }
-          }
 
           if (sampleBusinesses_filtered.length > 0) {
             result = {
