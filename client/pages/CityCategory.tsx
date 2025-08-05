@@ -373,7 +373,7 @@ const nearbyAreasMapping: Record<string, string[]> = {
 
   // Lucknow region
   lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
-  kanpur: ["Lucknow", "Allahabad", "Delhi", "Agra"],
+  kanpur: ["Delhi", "Noida", "Gurgaon", "Lucknow", "Mumbai", "Bangalore", "Chennai", "Jaipur", "Kolkata"],
   allahabad: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
   prayagraj: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
   varanasi: ["Lucknow", "Allahabad", "Kanpur", "Patna"],
