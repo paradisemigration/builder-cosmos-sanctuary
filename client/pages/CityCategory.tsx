@@ -812,9 +812,13 @@ export default function CityCategory() {
                   <MapPin className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">
-                      All {cityName} Businesses
+                      {country === 'uae' ? 'All Dubai' : `All ${cityName}`} Businesses
                     </p>
-                    <p className="text-xl font-bold">{cityBusinesses.length}</p>
+                    <p className="text-xl font-bold">
+                      {country === 'uae' && allDubaiBusinesses.length > 0
+                        ? allDubaiBusinesses.length
+                        : cityBusinesses.length}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -822,25 +826,29 @@ export default function CityCategory() {
             <Card className="bg-white/10 border-white/20 text-white">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Star className="w-5 h-5" />
+                  <TrendingUp className="w-5 h-5" />
                   <div>
-                    <p className="text-sm text-blue-100">Average Rating</p>
+                    <p className="text-sm text-blue-100">
+                      {country === 'uae' ? 'Total Results' : 'Average Rating'}
+                    </p>
                     <p className="text-xl font-bold">
-                      {categoryBusinesses.length > 0
-                        ? (
-                            categoryBusinesses.reduce(
-                              (sum, b) => sum + (b.rating || 0),
-                              0,
-                            ) / categoryBusinesses.length
-                          ).toFixed(1)
-                        : cityBusinesses.length > 0
+                      {country === 'uae'
+                        ? `${categoryBusinesses.length + (allDubaiBusinesses.length > 0 ? allDubaiBusinesses.length : cityBusinesses.length)}+`
+                        : categoryBusinesses.length > 0
                           ? (
-                              cityBusinesses.reduce(
+                              categoryBusinesses.reduce(
                                 (sum, b) => sum + (b.rating || 0),
                                 0,
-                              ) / cityBusinesses.length
+                              ) / categoryBusinesses.length
                             ).toFixed(1)
-                          : "N/A"}
+                          : cityBusinesses.length > 0
+                            ? (
+                                cityBusinesses.reduce(
+                                  (sum, b) => sum + (b.rating || 0),
+                                  0,
+                                ) / cityBusinesses.length
+                              ).toFixed(1)
+                            : "N/A"}
                     </p>
                   </div>
                 </div>
