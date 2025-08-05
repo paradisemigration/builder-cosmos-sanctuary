@@ -112,12 +112,7 @@ export default function UAE() {
     },
   ];
 
-  const featuredCities = uaeCities.map((city) => ({
-    name: city,
-    businesses: Math.floor(Math.random() * 50) + 20,
-    image: cityImages[city] || cityImages["Dubai"],
-    description: `Find trusted visa consultants in ${city}`,
-  }));
+  const featuredCities = uaeCityData;
 
   // Load sample UAE businesses
   useEffect(() => {
@@ -391,62 +386,83 @@ export default function UAE() {
       </section>
 
       {/* UAE Cities Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-red-50 via-white to-green-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Visa Consultants by Emirate
+      <section className="py-16 sm:py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <Badge className="mb-4 bg-green-100 text-green-800">🇦🇪 Across UAE</Badge>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              Top Emirates We Serve
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find trusted professionals in your city across all seven Emirates
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
+              Find trusted visa consultants in major UAE cities
             </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-green-500 mx-auto mt-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredCities.map((city) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {featuredCities.map((city, index) => (
               <Link
-                key={city.name}
+                key={index}
                 to={`/business/${city.name.toLowerCase().replace(/\s+/g, "-")}`}
-                className="group"
+                className="group block"
               >
-                <Card className="h-full hover:shadow-2xl transition-all duration-300 overflow-hidden border-0 shadow-lg group-hover:scale-105">
-                  <div className="h-48 relative overflow-hidden">
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200">
+                  <div className="relative h-36 sm:h-32 overflow-hidden">
                     <img
                       src={city.image}
-                      alt={`${city.name} skyline`}
+                      alt={`${city.name} - ${city.description}`}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackAttempted) {
+                          target.dataset.fallbackAttempted = "true";
+                          target.src = city.fallback;
+                        } else {
+                          target.src = `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+                            <defs>
+                              <linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:${city.color};stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:${city.color};stop-opacity:0.8" />
+                              </linearGradient>
+                            </defs>
+                            <rect width="600" height="300" fill="url(#grad${index})"/>
+                            <text x="300" y="140" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">${city.name}</text>
+                            <text x="300" y="170" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" opacity="0.9">${city.description}</text>
+                            <text x="300" y="195" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.8">${city.count} Consultants</text>
+                          </svg>`)}`;
+                        }
+                      }}
+                      onLoad={(e) => {
+                        delete (e.target as HTMLImageElement).dataset.fallbackAttempted;
+                      }}
                     />
-                    {/* UAE flag gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 via-transparent to-green-600/30"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center text-white">
-                        <MapPin className="h-8 w-8 mx-auto mb-2 drop-shadow-lg" />
-                        <h3 className="text-xl font-bold drop-shadow-lg">
-                          {city.name}
-                        </h3>
-                      </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div className="absolute top-2 right-2 text-lg sm:text-xl">{city.flag}</div>
+                    <div className="absolute bottom-2 left-3 text-white">
+                      <div className="text-base sm:text-lg font-bold">{city.name}</div>
+                      <div className="text-xs sm:text-sm opacity-90">{city.count} Consultants</div>
                     </div>
                   </div>
-                  <CardContent className="p-6 bg-white">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
-                      {city.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{city.description}</p>
+                  <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500 flex items-center gap-1">
-                        <Building className="h-4 w-4" />
-                        {city.businesses} consultants
+                      <div className="flex-1">
+                        <span className="font-medium text-gray-800 text-sm sm:text-base">Explore {city.name}</span>
+                        <div className="text-xs text-gray-500 mt-1">{city.description}</div>
                       </div>
-                      <div className="flex items-center text-red-600 group-hover:text-red-700">
-                        <span className="text-sm font-medium">Explore</span>
-                        <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-red-600 transition-colors flex-shrink-0 ml-2" />
                     </div>
                   </CardContent>
                 </Card>
               </Link>
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link to="/uae">
+              <Button variant="outline" size="lg" className="px-8">
+                View All UAE Cities
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
