@@ -43,6 +43,47 @@ import {
 } from "@/lib/meta-utils";
 import { DebugPopup } from "@/components/DebugPopup";
 
+// Mapping of areas/neighborhoods to their main cities for fallback
+const nearbyAreasMapping: Record<string, string[]> = {
+  // UAE areas and neighborhoods
+  "al barsha": ["Dubai", "Business Bay", "Dubai Marina"],
+  "al ain": ["Abu Dhabi", "Dubai"],
+  "business bay": ["Dubai", "Downtown Dubai", "DIFC"],
+  "downtown dubai": ["Dubai", "Business Bay", "DIFC"],
+  "dubai marina": ["Dubai", "Business Bay", "JLT"],
+  "jlt": ["Dubai", "Dubai Marina", "Business Bay"],
+  "difc": ["Dubai", "Business Bay", "Downtown Dubai"],
+  "deira": ["Dubai", "Bur Dubai"],
+  "bur dubai": ["Dubai", "Deira"],
+  "jumeirah": ["Dubai", "Dubai Marina"],
+  "mirdif": ["Dubai", "International City"],
+  "international city": ["Dubai", "Mirdif"],
+
+  // India areas (examples)
+  "gurgaon": ["Delhi", "Noida", "Faridabad"],
+  "noida": ["Delhi", "Gurgaon", "Greater Noida"],
+  "faridabad": ["Delhi", "Gurgaon"],
+  "navi mumbai": ["Mumbai", "Thane", "Pune"],
+  "thane": ["Mumbai", "Navi Mumbai"],
+};
+
+// Helper function to get nearby cities for fallback
+const getNearByCities = (cityName: string, country: string): string[] => {
+  const normalizedCity = cityName.toLowerCase();
+
+  // Check if we have nearby areas mapping
+  if (nearbyAreasMapping[normalizedCity]) {
+    return nearbyAreasMapping[normalizedCity];
+  }
+
+  // If no specific mapping, return main cities for the country
+  if (country === 'uae') {
+    return ["Dubai", "Abu Dhabi", "Sharjah"];
+  } else {
+    return ["Delhi", "Mumbai", "Bangalore", "Chennai"];
+  }
+};
+
 export default function CityBusinessListing() {
   const { city } = useParams<{ city: string }>();
   const navigate = useNavigate();
