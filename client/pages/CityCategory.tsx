@@ -782,7 +782,7 @@ export default function CityCategory() {
 
           // If no exact match, try nearby cities with category
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(cityName, country);
+            const nearbyCities = getNearByCities(cityName, country, userLocation);
 
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
