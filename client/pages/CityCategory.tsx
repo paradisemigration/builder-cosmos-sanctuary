@@ -569,11 +569,29 @@ export default function CityCategory() {
 
   // Update filtered businesses when data loads
   useEffect(() => {
-    if (categoryDataLoaded && cityDataLoaded) {
-      // Combine category businesses (priority) with city businesses
-      const combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
+    if (categoryDataLoaded && cityDataLoaded && (country !== 'uae' || allDubaiDataLoaded)) {
+      // Step 1: Start with category-specific businesses (highest priority)
+      let combinedBusinesses = [...categoryBusinesses];
 
-      // Remove duplicates
+      // Step 2: Add city businesses that aren't already included
+      const cityBusinessesToAdd = cityBusinesses.filter(
+        (cityBusiness) => !combinedBusinesses.some(
+          (existing) => existing.name === cityBusiness.name && existing.address === cityBusiness.address
+        )
+      );
+      combinedBusinesses = [...combinedBusinesses, ...cityBusinessesToAdd];
+
+      // Step 3: For UAE, add all Dubai businesses to ensure comprehensive listing
+      if (country === 'uae' && allDubaiBusinesses.length > 0) {
+        const dubaiBusinessesToAdd = allDubaiBusinesses.filter(
+          (dubaiBusiness) => !combinedBusinesses.some(
+            (existing) => existing.name === dubaiBusiness.name && existing.address === dubaiBusiness.address
+          )
+        );
+        combinedBusinesses = [...combinedBusinesses, ...dubaiBusinessesToAdd];
+      }
+
+      // Remove duplicates by name and address
       const uniqueBusinesses = combinedBusinesses.filter(
         (business, index, arr) =>
           index ===
@@ -582,7 +600,12 @@ export default function CityCategory() {
           ),
       );
 
-      setFilteredBusinesses(uniqueBusinesses);
+      // Apply pagination - show first 25 results initially
+      const itemsPerPage = 25;
+      const paginatedBusinesses = uniqueBusinesses.slice(0, itemsPerPage * currentPage);
+
+      setFilteredBusinesses(paginatedBusinesses);
+      setHasMoreData(uniqueBusinesses.length > paginatedBusinesses.length);
       setLoading(false);
 
       // Update debug info
@@ -608,12 +631,16 @@ export default function CityCategory() {
   }, [
     categoryBusinesses,
     cityBusinesses,
+    allDubaiBusinesses,
     categoryDataLoaded,
     cityDataLoaded,
+    allDubaiDataLoaded,
+    currentPage,
     city,
     category,
     cityName,
     categoryName,
+    country,
   ]);
 
   const getCategoryIcon = (categorySlug: string) => {
