@@ -665,6 +665,17 @@ export default function CityCategory() {
           `Fetching businesses for city: "${cityName}", category: "${categoryName}"`,
         );
 
+        // Global error handler for any uncaught fetch errors
+        const originalFetch = window.fetch;
+        window.fetch = async (...args) => {
+          try {
+            return await originalFetch(...args);
+          } catch (error) {
+            console.error('Fetch error caught by global handler:', error);
+            throw error;
+          }
+        };
+
         // Check if API is available by testing a simple endpoint first
         // Skip API check if we've had too many failures
         let apiAvailable = false;
