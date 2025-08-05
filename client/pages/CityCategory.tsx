@@ -119,9 +119,10 @@ export default function CityCategory() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Detect if this is a UAE route
+  // Detect if this is a UAE route (either by /uae/ prefix or UAE city names)
   const isUAERoute = location.pathname.startsWith("/uae/");
-  const country = isUAERoute ? "uae" : "india";
+  const isUAECity = city && ["dubai", "abu-dhabi", "sharjah", "ajman", "ras-al-khaimah", "fujairah", "umm-al-quwain"].includes(city.toLowerCase());
+  const country = (isUAERoute || isUAECity) ? "uae" : "india";
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
   const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
