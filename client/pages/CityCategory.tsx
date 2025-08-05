@@ -54,6 +54,9 @@ import { DebugPopup } from "@/components/DebugPopup";
 
 // Mapping of areas/neighborhoods to their main cities for fallback (same as CityBusinessListing)
 const nearbyAreasMapping: Record<string, string[]> = {
+  // Dubai main city - fallback to other UAE cities
+  "dubai": ["Abu Dhabi", "Sharjah"],
+
   // Dubai sub-areas (all should fallback to Dubai first, then other Dubai areas)
   "al barsha": ["Dubai", "Business Bay", "Downtown Dubai", "Dubai Marina", "JLT", "DIFC"],
   "business bay": ["Dubai", "Downtown Dubai", "DIFC", "Al Barsha", "Dubai Marina"],
