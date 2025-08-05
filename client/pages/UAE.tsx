@@ -13,6 +13,8 @@ import {
   Phone,
   Mail,
   Globe,
+  Shield,
+  ChevronRight,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -166,7 +168,7 @@ export default function UAE() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-white">
       <SEOHead
-        title="Best Visa Consultants in UAE - VisaConsult UAE"
+        title="Best Visa Consultants in UAE | Visa Consultants UAE"
         description="Find top-rated visa consultants across UAE. Expert immigration services in Dubai, Abu Dhabi, Sharjah and more. Trusted professionals for work visa, study abroad, and tourist visa assistance."
         keywords="visa consultants UAE, immigration services Dubai, Abu Dhabi visa agents, Sharjah immigration, UAE work visa, study abroad UAE, tourist visa UAE"
         country="uae"
