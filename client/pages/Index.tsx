@@ -256,52 +256,55 @@ export default function Index() {
               🇮🇳 India's #1 Visa Consultation Platform
             </Badge>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
               Find India's Best
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block">
                 Visa Consultants
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
               Connect with verified immigration experts across 100+ Indian cities. Get expert guidance for study abroad, work visas, tourism, and permanent residence applications.
             </p>
 
             {/* Enhanced Search Bar */}
-            <div className="max-w-2xl mx-auto mb-12">
-              <div className="flex flex-col md:flex-row gap-4 p-3 bg-white rounded-2xl shadow-xl border border-gray-100">
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                    <Input
-                      type="text"
-                      placeholder="Search visa consultants, services, or destinations..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                      className="pl-12 pr-4 py-4 border-0 focus:ring-0 text-lg bg-transparent"
-                    />
+            <div className="max-w-2xl mx-auto mb-8 sm:mb-12 px-4">
+              <div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex-1">
+                    <div className="relative">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                      <Input
+                        type="text"
+                        placeholder="Search visa consultants..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="flex-1 md:flex-initial">
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full md:w-40 px-4 py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select City</option>
-                    {majorCities.map((city) => (
-                      <option key={city.name} value={city.name}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="sm:flex-initial">
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => setSelectedCity(e.target.value)}
+                      className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-blue-500 text-base"
+                    >
+                      <option value="">Select City</option>
+                      {majorCities.map((city) => (
+                        <option key={city.name} value={city.name}>
+                          {city.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <Button
                   onClick={handleSearch}
                   size="lg"
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
                 >
+                  <Search className="mr-2 h-5 w-5" />
                   Search Experts
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
