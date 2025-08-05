@@ -199,8 +199,8 @@ export function generateCityMeta(cityName: string): MetaData {
   const country = isUAE ? "UAE" : "India";
   const websiteName = isUAE ? "Visa Consultants UAE" : "Visa Consultants India";
 
-  // Format: "Top 10 Visa & Immigration Consultants in + city Name | Website name"
-  const title = `Top 10 Visa & Immigration Consultants in ${cityName} | ${websiteName}`;
+  // Format: "Top 10 visa & immigration consultants in + city Name | Website name"
+  const title = `Top 10 visa & immigration consultants in ${cityName} | ${websiteName}`;
 
   // 200-character optimized description
   const description = `Find top 10 visa & immigration consultants in ${cityName}, ${country}. Compare verified experts for student, work, tourist & PR visas. Best immigration services guaranteed.`;
@@ -242,7 +242,7 @@ export function generateCityMeta(cityName: string): MetaData {
 
 // Generate meta data for homepage
 export function generateHomeMeta(): MetaData {
-  const title = "Best Visa Consultants & Immigration Experts in India | Visa Consultants India";
+  const title = "Best visa consultants & immigration experts in India | Visa consultants India";
   const description = "Find top-rated visa consultants & immigration experts across 100+ Indian cities. Compare services, read reviews & get expert guidance for study abroad, work permits & PR applications.";
   const keywords = [
     "visa consultants india", "immigration experts", "study abroad consultants", "work permit agents",
@@ -327,7 +327,7 @@ export function generateAllCategoriesMeta(): MetaData {
 
 // Generate meta data for business directory page
 export function generateBusinessDirectoryMeta(): MetaData {
-  const title = "Business Directory - Find Visa Consultants by City & Category | VisaConsult India";
+  const title = "Business Directory - Find visa consultants by City & Category | VisaConsult India";
   const description = "Browse our comprehensive business directory of visa consultants & immigration experts. Search by city, category & services across 100+ Indian cities.";
   const keywords = [
     "business directory", "visa consultants directory", "immigration experts", "find visa agents",
