@@ -130,48 +130,39 @@ function getCategorySpecificContent(categoryName: string): {
   } else if (categoryLower.includes("norway")) {
     return {
       shortDesc: "Norway work permit specialists for skilled worker visas.",
-      keywords:
-        "norway work permit, norway visa, norwegian immigration, skilled worker visa norway",
+      keywords: "norway work permit, norway visa, norwegian immigration, skilled worker visa norway, norway job visa, oslo visa, norway pr, scandinavia visa, nordic visa, norway student visa",
     };
   } else if (categoryLower.includes("family visa")) {
     return {
-      description:
-        "Family visa consultants for spouse visa, dependent visa, and family reunion immigration services.",
-      keywords:
-        "family visa, spouse visa, dependent visa, family reunion, family immigration",
+      shortDesc: "Family visa consultants for spouse, dependent & family reunion visas.",
+      keywords: "family visa, spouse visa, dependent visa, family reunion, family immigration, partner visa, marriage visa, child visa, parent visa, family permit",
     };
-  } else if (
-    categoryLower.includes("tourist") ||
-    categoryLower.includes("visit")
-  ) {
+  } else if (categoryLower.includes("tourist") || categoryLower.includes("visit")) {
     return {
-      description:
-        "Tourist and visit visa services for leisure travel, family visits, and short-term stay visas.",
-      keywords:
-        "tourist visa, visit visa, travel visa, holiday visa, short term visa",
+      shortDesc: "Tourist & visit visa services for leisure travel & family visits.",
+      keywords: "tourist visa, visit visa, travel visa, holiday visa, short term visa, vacation visa, leisure visa, family visit visa, tourist permit, travel permit",
     };
   } else if (categoryLower.includes("business visa")) {
     return {
-      description:
-        "Business visa consultants for investor visas, business travel, and commercial visit permits.",
-      keywords:
-        "business visa, investor visa, commercial visa, business travel visa, entrepreneur visa",
+      shortDesc: "Business visa consultants for investor & commercial travel visas.",
+      keywords: "business visa, investor visa, commercial visa, business travel visa, entrepreneur visa, business permit, investor permit, commercial travel, business trip visa, corporate visa",
     };
   } else if (categoryLower.includes("golden visa")) {
     return {
-      description:
-        "Golden visa and investor visa consultants for long-term residence through investment programs.",
-      keywords:
-        "golden visa, investor visa, investment visa, residence by investment, citizenship by investment",
+      shortDesc: "Golden visa consultants for long-term residence through investment.",
+      keywords: "golden visa, investor visa, investment visa, residence by investment, citizenship by investment, long term visa, investment immigration, investor residence, golden passport, wealth visa",
+    };
+  } else if (categoryLower.includes("student") || categoryLower.includes("education")) {
+    return {
+      shortDesc: "Student visa & education consultants for international studies.",
+      keywords: "student visa, education consultant, study visa, academic visa, university admission, college admission, international education, student permit, education advisor, academic counselor",
     };
   }
 
   // Default fallback
   return {
-    description:
-      "Professional visa and immigration consultation services with expert guidance and documentation support.",
-    keywords:
-      "visa services, immigration services, documentation support, visa guidance, immigration consultant",
+    shortDesc: "Professional visa & immigration consultation services with expert guidance.",
+    keywords: "visa services, immigration services, documentation support, visa guidance, immigration consultant, visa advisor, immigration expert, visa agent, visa processing, immigration assistance",
   };
 }
 
