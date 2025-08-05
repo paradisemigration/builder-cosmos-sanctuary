@@ -278,7 +278,7 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white relative -mt-16 z-20">
+      <section className="py-12 sm:py-16 bg-white relative -mt-12 sm:-mt-16 z-20">
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
