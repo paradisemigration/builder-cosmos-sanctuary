@@ -140,6 +140,7 @@ export default function CityCategory() {
   const [allDubaiDataLoaded, setAllDubaiDataLoaded] = useState(false);
   const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
   const [totalAvailableBusinesses, setTotalAvailableBusinesses] = useState(0);
+  const [apiFailureCount, setApiFailureCount] = useState(0);
   const [debugInfo, setDebugInfo] = useState({
     categoryBusinesses: 0,
     cityBusinesses: 0,
