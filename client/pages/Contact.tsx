@@ -42,15 +42,13 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    document.title = "Contact Us - VisaConsult India | Get Help & Support";
+    const contactPageMeta = generateContactMeta();
+    setPageMeta(contactPageMeta);
 
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Contact VisaConsult India for support, inquiries, or business partnerships. Get help finding visa consultants or listing your business. 24/7 customer support available.",
-      );
-    }
+    setSEOLinks({
+      canonical: "/contact",
+      alternate: ["/contact"],
+    });
   }, []);
 
   const handleInputChange = (field: string, value: string) => {
