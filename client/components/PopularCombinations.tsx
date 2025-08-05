@@ -25,7 +25,7 @@ export function PopularCombinations() {
       name: "Immigration Lawyers",
       searches: "2.5k",
     },
-    { slug: "visa-consultants", name: "Visa Consultants", searches: "1.8k" },
+    { slug: "visa-consultants", name: "Visa consultants", searches: "1.8k" },
     { slug: "study-abroad", name: "Study Abroad", searches: "1.5k" },
     { slug: "work-permit", name: "Work Permit", searches: "1.2k" },
   ];

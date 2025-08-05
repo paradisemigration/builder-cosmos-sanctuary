@@ -115,7 +115,7 @@ export function SiteFooter() {
                   {[
                     "immigration-consultants",
                     "visa-consultants",
-                    "study-abroad-consultant",
+                    "study-abroad-consultants",
                   ].map((categorySlug) => {
                     const category = categoryList.find(
                       (c) => c.slug === categorySlug,
