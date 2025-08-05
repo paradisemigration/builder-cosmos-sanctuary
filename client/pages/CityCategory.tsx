@@ -643,6 +643,19 @@ export default function CityCategory() {
     country,
   ]);
 
+  // Load more function for pagination
+  const loadMore = () => {
+    if (!hasMoreData || loadingMore) return;
+
+    setLoadingMore(true);
+    setCurrentPage(prev => prev + 1);
+
+    // Simulate loading delay for better UX
+    setTimeout(() => {
+      setLoadingMore(false);
+    }, 500);
+  };
+
   const getCategoryIcon = (categorySlug: string) => {
     switch (categorySlug) {
       case "study-abroad":
