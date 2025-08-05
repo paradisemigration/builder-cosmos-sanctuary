@@ -512,6 +512,9 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Debug Page Info */}
+      <DebugPageInfo />
     </div>
   );
 }
