@@ -845,6 +845,30 @@ export default function CityBusinessListing() {
         </section>
       )}
 
+      {/* FAQ Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto max-w-4xl px-4">
+          <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Frequently Asked Questions
+          </h3>
+          <div className="space-y-6">
+            {getCityFAQs(cityName).map((faq, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg">
+                <details className="group">
+                  <summary className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50">
+                    <h4 className="font-semibold text-gray-900 pr-4">{faq.question}</h4>
+                    <ChevronDown className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                  </div>
+                </details>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Debug Popup */}
       <DebugPopup debugInfo={debugInfo} />
     </div>
