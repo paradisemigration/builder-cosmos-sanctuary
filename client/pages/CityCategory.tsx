@@ -146,10 +146,11 @@ const nearbyAreasMapping: Record<string, string[]> = {
   visakhapatnam: ["Hyderabad", "Chennai", "Vijayawada", "Bangalore"],
 
   // Kolkata region
-  kolkata: ["Bhubaneswar", "Guwahati", "Siliguri", "Durgapur"],
-  howrah: ["Kolkata", "Bhubaneswar", "Durgapur", "Asansol"],
-  durgapur: ["Kolkata", "Asansol", "Bhubaneswar", "Siliguri"],
-  asansol: ["Kolkata", "Durgapur", "Bhubaneswar", "Howrah"],
+  kolkata: ["Howrah", "Durgapur", "Asansol", "Siliguri", "Bhubaneswar", "Guwahati", "Delhi", "Mumbai"],
+  howrah: ["Kolkata", "Durgapur", "Asansol", "Bhubaneswar"],
+  durgapur: ["Kolkata", "Asansol", "Howrah", "Bhubaneswar", "Siliguri"],
+  asansol: ["Kolkata", "Durgapur", "Howrah", "Bhubaneswar"],
+  siliguri: ["Kolkata", "Guwahati", "Durgapur", "Howrah"],
 
   // Ahmedabad region
   ahmedabad: ["Surat", "Vadodara", "Rajkot", "Pune"],
