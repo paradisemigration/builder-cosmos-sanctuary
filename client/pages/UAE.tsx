@@ -104,8 +104,8 @@ export default function UAE() {
     {
       name: "Ajman",
       count: "80+",
-      image: "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2019/05/20/11/18/ajman-4215285_1280.jpg",
+      image: "https://images.unsplash.com/photo-1580712337318-a7143b8b2ac5?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://images.unsplash.com/photo-1586717791821-3b92f8b93be8?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
       flag: "🇦🇪",
       description: "Coastal Beauty",
       color: "#7C3AED"
