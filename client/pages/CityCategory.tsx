@@ -532,6 +532,21 @@ export default function CityCategory() {
               <h1 className="text-3xl md:text-4xl font-bold mb-2">
                 {categoryName} in {cityName}
               </h1>
+
+              {/* Show notification if displaying nearby cities data */}
+              {isShowingNearbyData && categoryBusinesses.length > 0 && (
+                <div className="bg-blue-100 border border-blue-300 rounded-lg p-3 mb-3 max-w-2xl">
+                  <div className="flex items-center gap-2 text-blue-800 text-sm">
+                    <MapPin className="h-4 w-4" />
+                    <span className="font-medium">
+                      No {categoryName.toLowerCase()} found specifically in {cityName}.
+                      Showing {categoryBusinesses.length} results from nearby city: {" "}
+                      <strong>{categoryBusinesses[0]?.nearbyCity || getNearByCities(cityName, country)[0]}</strong>
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <p className="text-blue-100 text-lg">
                 {getCategoryDescription(categorySlug)}
               </p>
