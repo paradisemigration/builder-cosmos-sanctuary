@@ -245,15 +245,22 @@ export default function CityCategory() {
         console.log(`Fetching businesses for city: "${cityName}", category: "${categoryName}"`);
 
         // Check if API is available by testing a simple endpoint first
+        // Skip API check if we've had too many failures
         let apiAvailable = false;
-        try {
-          const healthCheck = await fetch('/api/health', {
-            method: 'HEAD',
-            signal: AbortSignal.timeout(5000) // 5 second timeout
-          });
-          apiAvailable = healthCheck.ok;
-        } catch (healthError) {
-          console.log('API health check failed, API not available:', healthError);
+        if (apiFailureCount < 3) {
+          try {
+            const healthCheck = await fetch('/api/health', {
+              method: 'HEAD',
+              signal: AbortSignal.timeout(5000) // 5 second timeout
+            });
+            apiAvailable = healthCheck.ok;
+          } catch (healthError) {
+            console.log('API health check failed, API not available:', healthError);
+            setApiFailureCount(prev => prev + 1);
+            apiAvailable = false;
+          }
+        } else {
+          console.log('Skipping API calls due to repeated failures, using sample data');
           apiAvailable = false;
         }
 
