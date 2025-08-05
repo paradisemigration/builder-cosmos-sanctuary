@@ -52,6 +52,60 @@ import {
 } from "@/lib/meta-utils";
 import { DebugPopup } from "@/components/DebugPopup";
 
+// Mapping of areas/neighborhoods to their main cities for fallback (same as CityBusinessListing)
+const nearbyAreasMapping: Record<string, string[]> = {
+  // Dubai sub-areas (all should fallback to Dubai first, then other Dubai areas)
+  "al barsha": ["Dubai", "Business Bay", "Downtown Dubai", "Dubai Marina", "JLT", "DIFC"],
+  "business bay": ["Dubai", "Downtown Dubai", "DIFC", "Al Barsha", "Dubai Marina"],
+  "downtown dubai": ["Dubai", "Business Bay", "DIFC", "Dubai Marina", "JLT"],
+  "dubai marina": ["Dubai", "JLT", "Business Bay", "Downtown Dubai", "Jumeirah"],
+  "jlt": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai", "DIFC"],
+  "difc": ["Dubai", "Business Bay", "Downtown Dubai", "JLT", "Dubai Marina"],
+  "deira": ["Dubai", "Bur Dubai", "Downtown Dubai", "Business Bay"],
+  "bur dubai": ["Dubai", "Deira", "Downtown Dubai", "Business Bay"],
+  "jumeirah": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai"],
+  "mirdif": ["Dubai", "International City", "Business Bay", "Downtown Dubai"],
+  "international city": ["Dubai", "Mirdif", "Business Bay", "Downtown Dubai"],
+
+  // Abu Dhabi areas
+  "al ain": ["Abu Dhabi", "Dubai", "Sharjah"],
+
+  // Other UAE cities fallback to main emirates
+  "ajman": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "ras al khaimah": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "fujairah": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "umm al quwain": ["Dubai", "Sharjah", "Abu Dhabi"],
+
+  // India areas (metro fallbacks)
+  "gurgaon": ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
+  "noida": ["Delhi", "Gurgaon", "Greater Noida", "Faridabad"],
+  "faridabad": ["Delhi", "Gurgaon", "Noida"],
+  "greater noida": ["Delhi", "Noida", "Gurgaon"],
+  "ghaziabad": ["Delhi", "Noida", "Gurgaon"],
+  "navi mumbai": ["Mumbai", "Thane", "Pune", "Kalyan"],
+  "thane": ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
+  "kalyan": ["Mumbai", "Thane", "Navi Mumbai"],
+  "andheri": ["Mumbai", "Bandra", "Thane"],
+  "bandra": ["Mumbai", "Andheri", "Thane"],
+};
+
+// Helper function to get nearby cities for fallback
+const getNearByCities = (cityName: string, country: string): string[] => {
+  const normalizedCity = cityName.toLowerCase();
+
+  // Check if we have nearby areas mapping
+  if (nearbyAreasMapping[normalizedCity]) {
+    return nearbyAreasMapping[normalizedCity];
+  }
+
+  // If no specific mapping, return main cities for the country
+  if (country === 'uae') {
+    return ["Dubai", "Abu Dhabi", "Sharjah"];
+  } else {
+    return ["Delhi", "Mumbai", "Bangalore", "Chennai"];
+  }
+};
+
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
   const navigate = useNavigate();
