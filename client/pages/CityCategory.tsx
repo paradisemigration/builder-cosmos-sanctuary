@@ -1370,7 +1370,7 @@ export default function CityCategory() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            const healthCheck = await fetch("/api/health", {
+            const healthCheck = await robustFetch("/api/health", {
               method: "HEAD",
               signal: controller.signal,
             });
