@@ -435,12 +435,13 @@ export default function CityBusinessListing() {
 
             {/* Show notification if displaying nearby cities data */}
             {isShowingNearbyData && businesses.length > 0 && (
-              <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-6 max-w-3xl mx-auto">
-                <div className="flex items-center justify-center gap-2 text-yellow-800">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 max-w-3xl mx-auto">
+                <div className="flex items-center justify-center gap-2 text-blue-800">
                   <MapPin className="h-5 w-5" />
                   <span className="font-medium">
                     No consultants found specifically in {cityName}.
-                    Showing results from nearby areas: {getNearByCities(cityName, country).join(", ")}
+                    Showing {businesses.length} consultants from nearby city: {" "}
+                    <strong>{businesses[0]?.nearbyCity || getNearByCities(cityName, country)[0]}</strong>
                   </span>
                 </div>
               </div>
