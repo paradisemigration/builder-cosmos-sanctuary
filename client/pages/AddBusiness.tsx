@@ -291,6 +291,13 @@ export default function AddBusiness() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
+      <SEOHead
+        title={`List Your Business - ${country}'s #1 Immigration Platform | Get More Clients`}
+        description={`Join ${country}'s leading immigration and visa consultancy directory. Get more clients, increase visibility, and grow your business with verified listings.`}
+        keywords={`list business ${country.toLowerCase()}, immigration consultancy directory, visa consultant listing, business advertising ${country.toLowerCase()}`}
+        canonical="/add-business"
+      />
+
       {/* Navigation */}
       <Navigation />
 
