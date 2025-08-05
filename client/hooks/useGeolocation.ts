@@ -1,5 +1,72 @@
 import { useState, useEffect } from "react";
 
+// FullStory-resistant fetch wrapper
+async function robustFetch(url: string, options?: RequestInit): Promise<Response> {
+  // Detect if we're dealing with FullStory interference
+  const isFullStoryActive = typeof window !== 'undefined' &&
+    (window as any).FS &&
+    typeof (window as any).fetch === 'function' &&
+    (window as any).fetch.toString().includes('FullStory');
+
+  if (isFullStoryActive) {
+    console.log('FullStory detected, using XHR fallback for geolocation');
+
+    // Use XMLHttpRequest as fallback
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(options?.method || 'GET', url);
+
+      // Set headers if provided
+      if (options?.headers) {
+        Object.entries(options.headers).forEach(([key, value]) => {
+          xhr.setRequestHeader(key, String(value));
+        });
+      }
+
+      xhr.onload = () => {
+        const response = new Response(xhr.responseText, {
+          status: xhr.status,
+          statusText: xhr.statusText,
+        });
+        resolve(response);
+      };
+
+      xhr.onerror = () => reject(new Error(`XHR Error: ${xhr.status}`));
+      xhr.ontimeout = () => reject(new Error('XHR Timeout'));
+
+      xhr.timeout = 10000; // 10 second timeout
+      xhr.send(options?.body);
+    });
+  }
+
+  // Use native fetch if FullStory is not interfering
+  try {
+    return await fetch(url, options);
+  } catch (error) {
+    console.error('Native fetch failed, trying XHR fallback:', error);
+
+    // Fallback to XHR even if FullStory wasn't detected
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(options?.method || 'GET', url);
+
+      xhr.onload = () => {
+        const response = new Response(xhr.responseText, {
+          status: xhr.status,
+          statusText: xhr.statusText,
+        });
+        resolve(response);
+      };
+
+      xhr.onerror = () => reject(new Error(`XHR Fallback Error: ${xhr.status}`));
+      xhr.ontimeout = () => reject(new Error('XHR Fallback Timeout'));
+
+      xhr.timeout = 10000;
+      xhr.send(options?.body);
+    });
+  }
+}
+
 interface LocationData {
   city: string;
   country: string;
@@ -28,7 +95,7 @@ export function useGeolocation(): GeolocationResult {
   ): Promise<LocationData | null> => {
     try {
       // Using OpenStreetMap Nominatim API for reverse geocoding (free and no API key required)
-      const response = await fetch(
+      const response = await robustFetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`,
       );
 
@@ -59,7 +126,7 @@ export function useGeolocation(): GeolocationResult {
   const getLocationFromIP = async (): Promise<LocationData | null> => {
     try {
       // Fallback to IP-based location (free service)
-      const response = await fetch("https://ipapi.co/json/");
+      const response = await robustFetch("https://ipapi.co/json/");
 
       if (!response.ok) {
         throw new Error("Failed to fetch IP location");
