@@ -192,7 +192,8 @@ export default function Login() {
                   </span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-md mx-auto">
-                  Connect with India's most trusted visa consultants and immigration experts.
+                  Connect with India's most trusted visa consultants and
+                  immigration experts.
                 </p>
               </div>
 
@@ -621,17 +622,25 @@ export default function Login() {
               <div className="mt-8 grid grid-cols-3 gap-4 text-center">
                 <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
                   <Building className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                  <div className="text-sm font-semibold text-gray-900">8,500+</div>
-                  <div className="text-xs text-gray-600">Verified Consultants</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    8,500+
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Verified Consultants
+                  </div>
                 </div>
                 <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
                   <Users className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                  <div className="text-sm font-semibold text-gray-900">125K+</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    125K+
+                  </div>
                   <div className="text-xs text-gray-600">Happy Customers</div>
                 </div>
                 <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
                   <Star className="w-6 h-6 text-yellow-600 mx-auto mb-2" />
-                  <div className="text-sm font-semibold text-gray-900">4.8/5</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    4.8/5
+                  </div>
                   <div className="text-xs text-gray-600">Average Rating</div>
                 </div>
               </div>
