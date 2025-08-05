@@ -43,28 +43,41 @@ import {
 } from "@/lib/meta-utils";
 import { DebugPopup } from "@/components/DebugPopup";
 
-// Mapping of areas/neighborhoods to their main cities for fallback
+// Mapping of areas/neighborhoods to their main cities for fallback (prioritized order)
 const nearbyAreasMapping: Record<string, string[]> = {
-  // UAE areas and neighborhoods
-  "al barsha": ["Dubai", "Business Bay", "Dubai Marina"],
-  "al ain": ["Abu Dhabi", "Dubai"],
-  "business bay": ["Dubai", "Downtown Dubai", "DIFC"],
-  "downtown dubai": ["Dubai", "Business Bay", "DIFC"],
-  "dubai marina": ["Dubai", "Business Bay", "JLT"],
-  "jlt": ["Dubai", "Dubai Marina", "Business Bay"],
-  "difc": ["Dubai", "Business Bay", "Downtown Dubai"],
-  "deira": ["Dubai", "Bur Dubai"],
-  "bur dubai": ["Dubai", "Deira"],
-  "jumeirah": ["Dubai", "Dubai Marina"],
-  "mirdif": ["Dubai", "International City"],
-  "international city": ["Dubai", "Mirdif"],
+  // Dubai sub-areas (all should fallback to Dubai first, then other Dubai areas)
+  "al barsha": ["Dubai", "Business Bay", "Downtown Dubai", "Dubai Marina", "JLT", "DIFC"],
+  "business bay": ["Dubai", "Downtown Dubai", "DIFC", "Al Barsha", "Dubai Marina"],
+  "downtown dubai": ["Dubai", "Business Bay", "DIFC", "Dubai Marina", "JLT"],
+  "dubai marina": ["Dubai", "JLT", "Business Bay", "Downtown Dubai", "Jumeirah"],
+  "jlt": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai", "DIFC"],
+  "difc": ["Dubai", "Business Bay", "Downtown Dubai", "JLT", "Dubai Marina"],
+  "deira": ["Dubai", "Bur Dubai", "Downtown Dubai", "Business Bay"],
+  "bur dubai": ["Dubai", "Deira", "Downtown Dubai", "Business Bay"],
+  "jumeirah": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai"],
+  "mirdif": ["Dubai", "International City", "Business Bay", "Downtown Dubai"],
+  "international city": ["Dubai", "Mirdif", "Business Bay", "Downtown Dubai"],
 
-  // India areas (examples)
-  "gurgaon": ["Delhi", "Noida", "Faridabad"],
-  "noida": ["Delhi", "Gurgaon", "Greater Noida"],
-  "faridabad": ["Delhi", "Gurgaon"],
-  "navi mumbai": ["Mumbai", "Thane", "Pune"],
-  "thane": ["Mumbai", "Navi Mumbai"],
+  // Abu Dhabi areas
+  "al ain": ["Abu Dhabi", "Dubai", "Sharjah"],
+
+  // Other UAE cities fallback to main emirates
+  "ajman": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "ras al khaimah": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "fujairah": ["Dubai", "Sharjah", "Abu Dhabi"],
+  "umm al quwain": ["Dubai", "Sharjah", "Abu Dhabi"],
+
+  // India areas (metro fallbacks)
+  "gurgaon": ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
+  "noida": ["Delhi", "Gurgaon", "Greater Noida", "Faridabad"],
+  "faridabad": ["Delhi", "Gurgaon", "Noida"],
+  "greater noida": ["Delhi", "Noida", "Gurgaon"],
+  "ghaziabad": ["Delhi", "Noida", "Gurgaon"],
+  "navi mumbai": ["Mumbai", "Thane", "Pune", "Kalyan"],
+  "thane": ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
+  "kalyan": ["Mumbai", "Thane", "Navi Mumbai"],
+  "andheri": ["Mumbai", "Bandra", "Thane"],
+  "bandra": ["Mumbai", "Andheri", "Thane"],
 };
 
 // Helper function to get nearby cities for fallback
