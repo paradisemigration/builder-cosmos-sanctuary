@@ -126,7 +126,7 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <ScrollToTop />
-              <SimpleNavigation />
+              <Navigation />
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
