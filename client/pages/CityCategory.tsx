@@ -974,12 +974,13 @@ export default function CityCategory() {
                 .includes(categoryName.toLowerCase()),
           );
 
-          // If no exact match, try nearby cities
+          // If no exact match, try nearby cities with accumulation
           if (sampleBusinesses_filtered.length === 0) {
             const nearbyCities = getNearByCities(cityName, country, userLocation);
 
+            // Accumulate businesses from all nearby cities to get better coverage
             for (const nearbyCity_temp of nearbyCities) {
-              sampleBusinesses_filtered = sampleBusinesses.filter(
+              const nearbyBusinesses = sampleBusinesses.filter(
                 (business) =>
                   business.city.toLowerCase() ===
                     nearbyCity_temp.toLowerCase() &&
@@ -988,13 +989,16 @@ export default function CityCategory() {
                     .includes(categoryName.toLowerCase()),
               );
 
-              if (sampleBusinesses_filtered.length > 0) {
+              if (nearbyBusinesses.length > 0) {
+                sampleBusinesses_filtered = [...sampleBusinesses_filtered, ...nearbyBusinesses];
                 console.log(
-                  `Emergency fallback: Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`,
+                  `Emergency fallback: Added ${nearbyBusinesses.length} sample businesses from nearby city: ${nearbyCity_temp}`,
                 );
-                setIsShowingNearbyData(true);
-                break;
               }
+            }
+
+            if (sampleBusinesses_filtered.length > 0) {
+              setIsShowingNearbyData(true);
             }
           } else {
             setIsShowingNearbyData(false);
