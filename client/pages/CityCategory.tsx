@@ -1036,16 +1036,23 @@ export default function CityCategory() {
 
     // Detect user location for better nearby city suggestions (for Indian cities)
     if (country === "india") {
-      detectUserLocation()
-        .then((location) => {
-          if (location) {
-            console.log("User location detected:", location);
-            setUserLocation(location);
-          }
-        })
-        .catch((error) => {
-          console.log("Could not detect user location:", error);
-        });
+      // Make location detection completely optional and safe
+      try {
+        detectUserLocation()
+          .then((location) => {
+            if (location) {
+              console.log("User location detected:", location);
+              setUserLocation(location);
+            }
+          })
+          .catch((error) => {
+            console.log("Could not detect user location (non-critical):", error);
+            // Silently continue without location - this is not critical for app functionality
+          });
+      } catch (syncError) {
+        console.log("Location detection setup failed (non-critical):", syncError);
+        // Continue without location detection
+      }
     }
 
     // Validate city exists
