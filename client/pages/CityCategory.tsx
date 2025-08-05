@@ -1857,14 +1857,6 @@ export default function CityCategory() {
 
 
 
-          if (sampleBusinesses_filtered.length > 0) {
-            result = {
-              success: true,
-              businesses: sampleBusinesses_filtered,
-              total: sampleBusinesses_filtered.length,
-              source: "sample_data",
-            };
-          }
         }
 
         // Step 4: Process result if we have data (from API or sample data)
