@@ -1616,7 +1616,9 @@ export default function CityCategory() {
                           ` (${filteredBusinesses.length})`}
                       </h2>
                       <p className="text-gray-600 mt-1">
-                        {categoryBusinesses.length > 0
+                        {categoryBusinesses.length > 0 && isShowingNearbyData && categoryBusinesses.length >= 30
+                          ? `Comprehensive listing of ${categoryName.toLowerCase()} from ${cityName} and nearby Maharashtra cities`
+                          : categoryBusinesses.length > 0
                           ? `Find trusted ${categoryName.toLowerCase()} in ${cityName}`
                           : `All available businesses in ${cityName}`}
                       </p>
