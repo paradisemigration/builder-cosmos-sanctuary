@@ -773,6 +773,18 @@ export default function CityCategory() {
                 </div>
               )}
 
+              {/* Show comprehensive listing notification for UAE */}
+              {country === 'uae' && allDubaiBusinesses.length > 0 && (
+                <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-3 max-w-2xl">
+                  <div className="flex items-center gap-2 text-green-800 text-sm">
+                    <Building className="h-4 w-4" />
+                    <span className="font-medium">
+                      Showing comprehensive Dubai business listings. Found {categoryBusinesses.length} {categoryName.toLowerCase()} + {allDubaiBusinesses.length} total Dubai businesses.
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <p className="text-blue-100 text-lg">
                 {getCategoryDescription(categorySlug)}
               </p>
