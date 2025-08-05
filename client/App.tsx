@@ -74,68 +74,7 @@ function ProtectedRoute({
 }
 // All original functionality restored
 
-// Simple Navigation Component
-function SimpleNavigation() {
-  const location = useLocation();
 
-  const isCurrentPage = (path: string) => location.pathname === path;
-
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-xl font-bold text-gray-900">VisaConsult</div>
-            <div className="text-xs text-blue-600 font-medium">INDIA</div>
-          </Link>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/about")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/contact")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Contact
-            </Link>
-            <Link
-              to="/admin"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/admin")
-                  ? "bg-purple-100 text-purple-700"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              Admin Panel
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 // Import the original auth but with proper error handling
 import { AuthProvider as OriginalAuthProvider } from "@/lib/auth";
