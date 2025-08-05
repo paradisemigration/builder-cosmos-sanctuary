@@ -382,6 +382,45 @@ export default function CityCategory() {
 
       } catch (error) {
         console.error("Error fetching category businesses:", error);
+
+        // Emergency fallback to sample data
+        try {
+          console.log("Emergency fallback: using sample data for category businesses");
+
+          let sampleBusinesses_filtered = sampleBusinesses.filter(
+            (business) =>
+              business.city.toLowerCase() === cityName.toLowerCase() &&
+              business.category.toLowerCase().includes(categoryName.toLowerCase())
+          );
+
+          // If no exact match, try nearby cities
+          if (sampleBusinesses_filtered.length === 0) {
+            const nearbyCities = getNearByCities(cityName, country);
+
+            for (const nearbyCity_temp of nearbyCities) {
+              sampleBusinesses_filtered = sampleBusinesses.filter(
+                (business) =>
+                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
+                  business.category.toLowerCase().includes(categoryName.toLowerCase())
+              );
+
+              if (sampleBusinesses_filtered.length > 0) {
+                console.log(`Emergency fallback: Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`);
+                setIsShowingNearbyData(true);
+                break;
+              }
+            }
+          } else {
+            setIsShowingNearbyData(false);
+          }
+
+          if (sampleBusinesses_filtered.length > 0) {
+            setCategoryBusinesses(sampleBusinesses_filtered);
+          }
+        } catch (fallbackError) {
+          console.error("Even sample data fallback failed:", fallbackError);
+        }
+
         setCategoryDataLoaded(true);
       }
     }
