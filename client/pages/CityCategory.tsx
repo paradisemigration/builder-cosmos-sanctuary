@@ -420,7 +420,7 @@ const getNearByCities = (
         "Krishnanagar",
       ],
       gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-      rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer"],
+      rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota", "Bikaner", "Alwar"],
       kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
       punjab: ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar"],
     };
