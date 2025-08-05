@@ -207,6 +207,8 @@ const App = () => {
                 />
 
                 <Route path="/business" element={<Browse />} />
+                {/* Redirect /browse to /business for backward compatibility */}
+                <Route path="/browse" element={<Browse />} />
                 <Route path="/list-business" element={<ListBusiness />} />
                 <Route path="/plans" element={<ListingPlans />} />
                 <Route path="/add-business" element={<AddBusiness />} />
