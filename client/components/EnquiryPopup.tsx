@@ -398,14 +398,13 @@ interface FloatingCTAProps {
 
 export function FloatingCTA({ onClick }: FloatingCTAProps) {
   return (
-    <div className="fixed bottom-4 right-4 z-[9998]">
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[9998]">
       <Button
         onClick={onClick}
-        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-2xl rounded-full px-4 sm:px-6 py-3 flex items-center gap-2 transform transition-all duration-300 hover:scale-105 animate-pulse hover:animate-none"
+        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-2xl rounded-full px-6 py-3 flex items-center gap-2 transform transition-all duration-300 hover:scale-105"
       >
-        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
-        <span className="hidden sm:inline font-medium">List Your Business</span>
-        <span className="sm:hidden font-medium text-sm">List Business</span>
+        <MessageSquare className="w-5 h-5" />
+        <span className="font-medium">List Your Business</span>
       </Button>
     </div>
   );
