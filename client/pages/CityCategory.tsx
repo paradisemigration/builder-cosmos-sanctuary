@@ -563,6 +563,18 @@ export default function CityCategory() {
     setCityDataLoaded(false);
     setAllDubaiDataLoaded(false);
 
+    // Detect user location for better nearby city suggestions (for Indian cities)
+    if (country === 'india') {
+      detectUserLocation().then(location => {
+        if (location) {
+          console.log("User location detected:", location);
+          setUserLocation(location);
+        }
+      }).catch(error => {
+        console.log("Could not detect user location:", error);
+      });
+    }
+
     // Validate city exists
     const cityExists = allCities.some(
       (c) => getCitySlug(c) === city.toLowerCase(),
