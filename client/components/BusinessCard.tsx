@@ -95,6 +95,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
 
   const successRatio = generateSuccessRatio(business.name);
   const recentReviewers = generateRecentReviewers(business.name);
+  const reviewCount = business.reviews?.length || business.reviewCount || generateReviewCount(business.name);
 
   // Generate SEO-friendly URL slug
   const generateSlug = (text: string) => {
