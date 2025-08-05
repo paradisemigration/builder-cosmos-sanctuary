@@ -360,7 +360,7 @@ export default function AddBusiness() {
                 Business
               </span>
               <br />
-              on Dubai's #1 Platform
+              on {country}'s #1 Platform
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
               �� Join Dubai's most trusted directory of immigration and visa
