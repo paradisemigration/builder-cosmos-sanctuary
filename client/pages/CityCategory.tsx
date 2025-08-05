@@ -1667,6 +1667,13 @@ export default function CityCategory() {
                 categoryMatch =
                   businessCategory.includes("visa") &&
                   businessCategory.includes("consultant");
+
+                // Debug: show what we're matching against
+                if (cityMatch) {
+                  console.log(
+                    `Exact city check - "${business.category}" in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`
+                  );
+                }
               } else {
                 // For other categories, use standard matching
                 categoryMatch = business.category
