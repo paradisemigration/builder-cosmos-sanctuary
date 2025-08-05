@@ -155,14 +155,48 @@ export default function CityBusinessListing() {
 
       console.log(`Fetching businesses for city: "${cityName}", page: ${page}`);
 
-      // First try to fetch from database/API
-      const response = await fetch(
+      // First try to fetch from database/API for exact city
+      let response = await fetch(
         `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
       );
 
+      let result = null;
+      let isNearbyData = false;
+      let nearbyCity = "";
+
       if (response.ok) {
-        const result = await response.json();
-        console.log("API Response:", result);
+        result = await response.json();
+        console.log("Primary API Response:", result);
+
+        // If no data found for specific area, try hierarchical fallback to database
+        if (!result.success || !result.businesses || result.businesses.length === 0) {
+          console.log(`No data found for ${cityName}, trying nearby cities from database`);
+
+          const nearbyCities = getNearByCities(cityName, country);
+
+          for (const nearbyCity_temp of nearbyCities) {
+            try {
+              console.log(`Trying nearby city: ${nearbyCity_temp}`);
+              const nearbyResponse = await fetch(
+                `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
+              );
+
+              if (nearbyResponse.ok) {
+                const nearbyResult = await nearbyResponse.json();
+                if (nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                  console.log(`Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`);
+                  result = nearbyResult;
+                  isNearbyData = true;
+                  nearbyCity = nearbyCity_temp;
+                  break; // Found data, stop searching
+                }
+              }
+            } catch (nearbyError) {
+              console.log(`Failed to fetch data for nearby city ${nearbyCity_temp}:`, nearbyError);
+            }
+          }
+        }
+      }
 
         // Update debug info
         const timestamp = new Date().toLocaleTimeString();
