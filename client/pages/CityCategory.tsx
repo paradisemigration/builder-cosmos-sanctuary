@@ -212,16 +212,37 @@ export default function CityCategory() {
       try {
         console.log(`Fetching businesses for city: "${cityName}", category: "${categoryName}"`);
 
-        // Step 1: Try exact city + category combination from database
-        let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
-        let scrapedResponse = await fetch(scrapedUrl);
+        // Check if API is available by testing a simple endpoint first
+        let apiAvailable = false;
+        try {
+          const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+          apiAvailable = healthCheck.ok;
+        } catch (healthError) {
+          console.log('API health check failed, API not available');
+          apiAvailable = false;
+        }
+
         let result = null;
         let isNearbyData = false;
         let nearbyCity = "";
 
-        if (scrapedResponse.ok) {
-          result = await scrapedResponse.json();
-          console.log("Primary database response:", result);
+        if (apiAvailable) {
+          // Step 1: Try exact city + category combination from database
+          try {
+            let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
+            let scrapedResponse = await fetch(scrapedUrl);
+
+            if (scrapedResponse.ok) {
+              result = await scrapedResponse.json();
+              console.log("Primary database response:", result);
+            } else {
+              console.log(`API response not OK: ${scrapedResponse.status}`);
+            }
+          } catch (fetchError) {
+            console.log("Failed to fetch from primary API:", fetchError);
+          }
+        } else {
+          console.log("API not available, will use sample data fallback");
         }
 
         // Step 2: If no data found for specific area + category, try hierarchical fallback
