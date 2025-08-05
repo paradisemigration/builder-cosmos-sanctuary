@@ -338,9 +338,13 @@ export function setPageMeta(metaData: MetaData): void {
   // Set schema.org structured data
   setWebsiteStructuredData();
 
-  // Set business directory structured data if title contains city and category
+  // Set appropriate structured data based on page type
   if (metaData.title.includes("Most Trusted") && metaData.title.includes(" in ")) {
+    // City + Category page schema
     setCityBusinessDirectoryStructuredData(metaData);
+  } else if (metaData.title.includes("Top 10 Visa & Immigration Consultants in")) {
+    // City-only page schema
+    setCityPageStructuredData(metaData);
   }
 }
 
