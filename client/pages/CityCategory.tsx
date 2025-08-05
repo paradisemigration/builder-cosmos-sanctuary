@@ -1064,26 +1064,49 @@ export default function CityCategory() {
       return;
     }
 
-    // Fetch category-specific businesses from Google Maps API
-    fetchCategoryBusinesses().catch((error) => {
-      console.error("Unhandled error in fetchCategoryBusinesses:", error);
-      setCategoryDataLoaded(true);
-      setLoading(false);
-    });
+    // Comprehensive error boundary for all fetch operations
+    const executeWithErrorBoundary = async () => {
+      try {
+        // Execute all fetch operations with individual error handling
+        const fetchPromises = [
+          fetchCategoryBusinesses().catch((error) => {
+            console.error("Error in fetchCategoryBusinesses:", error);
+            setCategoryDataLoaded(true);
+            setLoading(false);
+            return null;
+          }),
+          fetchCityBusinesses().catch((error) => {
+            console.error("Error in fetchCityBusinesses:", error);
+            setCityDataLoaded(true);
+            return null;
+          })
+        ];
 
-    // Fetch all city businesses as fallback
-    fetchCityBusinesses().catch((error) => {
-      console.error("Unhandled error in fetchCityBusinesses:", error);
-      setCityDataLoaded(true);
-    });
+        // Add Dubai fetch for UAE
+        if (country === "uae") {
+          fetchPromises.push(
+            fetchAllDubaiBusinesses().catch((error) => {
+              console.error("Error in fetchAllDubaiBusinesses:", error);
+              setAllDubaiDataLoaded(true);
+              return null;
+            })
+          );
+        }
 
-    // Fetch all Dubai businesses if this is a Dubai area
-    if (country === "uae") {
-      fetchAllDubaiBusinesses().catch((error) => {
-        console.error("Unhandled error in fetchAllDubaiBusinesses:", error);
+        // Wait for all operations to complete (they have individual error handling)
+        await Promise.allSettled(fetchPromises);
+
+      } catch (globalError) {
+        console.error("Global error in fetch operations:", globalError);
+        // Ensure all loading states are set
+        setCategoryDataLoaded(true);
+        setCityDataLoaded(true);
         setAllDubaiDataLoaded(true);
-      });
-    }
+        setLoading(false);
+      }
+    };
+
+    executeWithErrorBoundary();
 
     // Set page meta data with SEO optimization
     const metaData = generateCityCategoryMeta(cityName, categoryName);
