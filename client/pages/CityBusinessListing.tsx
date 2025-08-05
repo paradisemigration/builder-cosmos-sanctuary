@@ -271,12 +271,6 @@ export default function CityBusinessListing() {
           setLoading(false);
           setLoadingMore(false);
           return;
-        } else {
-          console.log("No businesses found in API response");
-        }
-      } else {
-        console.log("API response not OK:", response.status);
-      }
 
       // Enhanced fallback with real database data: specific area → main city → nearby cities
       console.log("API failed, using database fallback with real data");
