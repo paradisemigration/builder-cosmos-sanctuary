@@ -238,6 +238,133 @@ export function generateCityMeta(cityName: string): MetaData {
   };
 }
 
+// Generate meta data for homepage
+export function generateHomeMeta(): MetaData {
+  const title = "Best Visa Consultants & Immigration Experts in India | VisaConsult India";
+  const description = "Find top-rated visa consultants & immigration experts across 100+ Indian cities. Compare services, read reviews & get expert guidance for study abroad, work permits & PR applications.";
+  const keywords = [
+    "visa consultants india", "immigration experts", "study abroad consultants", "work permit agents",
+    "tourist visa services", "immigration lawyers", "pr consultants", "visa agents", "visa processing",
+    "visa services", "immigration services", "best visa consultants", "top immigration experts",
+    "visa consultation", "visa guidance", "student visa", "work visa", "family visa", "business visa"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}`,
+    robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
+// Generate meta data for about page
+export function generateAboutMeta(): MetaData {
+  const title = "About VisaConsult India - Leading Visa & Immigration Directory | VisaConsult India";
+  const description = "Learn about VisaConsult India - India's most trusted platform for finding verified visa consultants & immigration experts. Our mission, vision & commitment to excellence.";
+  const keywords = [
+    "about visaconsult india", "visa consultant directory", "immigration platform", "trusted visa services",
+    "visa consultation platform", "immigration directory", "verified consultants", "visa experts platform",
+    "about us", "company information", "visa services india", "immigration services", "consultant verification"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/about`,
+    robots: "index, follow",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
+// Generate meta data for contact page
+export function generateContactMeta(): MetaData {
+  const title = "Contact VisaConsult India - Get Help & Support | VisaConsult India";
+  const description = "Contact VisaConsult India for help, support & inquiries. Reach our team for visa consultation guidance, platform assistance & business listings support.";
+  const keywords = [
+    "contact visaconsult", "visa consultation help", "customer support", "contact information",
+    "get help", "visa guidance", "platform support", "business listing help", "immigration assistance",
+    "contact details", "customer service", "visa consultant support", "immigration help", "contact us"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/contact`,
+    robots: "index, follow",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
+// Generate meta data for all categories page
+export function generateAllCategoriesMeta(): MetaData {
+  const title = "All Visa & Immigration Services Categories | VisaConsult India";
+  const description = "Explore all visa & immigration service categories. Find specialists for student visas, work permits, tourist visas, PR services, business visas & more across India.";
+  const keywords = [
+    "visa categories", "immigration services", "student visa consultants", "work permit agents",
+    "tourist visa services", "business visa", "family visa", "pr consultants", "visa types",
+    "immigration categories", "visa services list", "all visa services", "visa consultant types"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/all-categories`,
+    robots: "index, follow",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
+// Generate meta data for business directory page
+export function generateBusinessDirectoryMeta(): MetaData {
+  const title = "Business Directory - Find Visa Consultants by City & Category | VisaConsult India";
+  const description = "Browse our comprehensive business directory of visa consultants & immigration experts. Search by city, category & services across 100+ Indian cities.";
+  const keywords = [
+    "business directory", "visa consultants directory", "immigration experts", "find visa agents",
+    "city wise consultants", "category wise services", "browse consultants", "visa services directory",
+    "immigration directory", "consultant listing", "find nearby consultants", "local visa agents"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/business`,
+    robots: "index, follow",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
+// Generate meta data for list business page
+export function generateListBusinessMeta(): MetaData {
+  const title = "List Your Visa Consultation Business - Free & Premium Listings | VisaConsult India";
+  const description = "List your visa consultation business on India's leading platform. Get more clients with free & premium listings. Boost visibility & grow your immigration practice.";
+  const keywords = [
+    "list business", "visa consultant listing", "business registration", "free listing",
+    "premium listing", "grow business", "get more clients", "visa business promotion",
+    "immigration business", "consultant registration", "business visibility", "online presence"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/list-business`,
+    robots: "index, follow",
+    author: "VisaConsult India",
+    viewport: "width=device-width, initial-scale=1.0",
+  };
+}
+
 // Generate meta data for business profile pages
 export function generateBusinessMeta(
   businessName: string,
