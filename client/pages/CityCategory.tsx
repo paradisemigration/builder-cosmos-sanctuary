@@ -1640,6 +1640,22 @@ export default function CityCategory() {
                   >
                     {filteredBusinesses
                       .sort((a, b) => {
+                        // First, prioritize education and study abroad related businesses
+                        const educationCategories = [
+                          "Student Visa Consultants",
+                          "Study Abroad Consultants",
+                          "Education Consultants",
+                          "Language Training Centers",
+                          "Visa Interview Preparation"
+                        ];
+
+                        const aIsEducation = educationCategories.includes(a.category);
+                        const bIsEducation = educationCategories.includes(b.category);
+
+                        if (aIsEducation && !bIsEducation) return -1;
+                        if (!aIsEducation && bIsEducation) return 1;
+
+                        // Then apply the selected sorting method
                         switch (sortBy) {
                           case "rating":
                             return (b.rating || 0) - (a.rating || 0);
