@@ -1788,50 +1788,7 @@ export default function CityCategory() {
             nearbyCity = sourceCities.join(", ");
           }
 
-            // Simplified approach: Just get ALL businesses from nearby cities
-            console.log("=== Getting ALL businesses from nearby cities ===");
-            for (const nearbyCity_temp of nearbyCities) {
-              console.log(`Checking nearby city: ${nearbyCity_temp}`);
 
-              const allCityBusinesses = sampleBusinesses.filter(
-                (business) =>
-                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
-              );
-
-              console.log(`Found ${allCityBusinesses.length} total businesses in ${nearbyCity_temp}:`,
-                allCityBusinesses.map(b => `${b.name} (${b.category})`));
-
-              if (allCityBusinesses.length > 0) {
-                const newBusinesses = allCityBusinesses.filter(
-                  (newBusiness) =>
-                    !accumulatedBusinesses.some(
-                      (existing) =>
-                        existing.name === newBusiness.name &&
-                        existing.address === newBusiness.address,
-                    ),
-                );
-
-                accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
-                if (!sourceCities.includes(nearbyCity_temp)) {
-                  sourceCities.push(nearbyCity_temp);
-                }
-
-                console.log(`Added ${newBusinesses.length} businesses from ${nearbyCity_temp}. Total now: ${accumulatedBusinesses.length}`);
-
-                if (accumulatedBusinesses.length >= 100) {
-                  console.log("Reached 100 businesses limit, stopping");
-                  break;
-                }
-              } else {
-                console.log(`No businesses found in ${nearbyCity_temp}`);
-              }
-            }
-
-
-
-            console.log(
-              `Total accumulated businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`,
-            );
 
 
 
