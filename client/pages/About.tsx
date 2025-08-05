@@ -386,6 +386,9 @@ export default function About() {
           <p>&copy; 2024 VisaConsult India. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Debug Page Info */}
+      <DebugPageInfo />
     </div>
   );
 }
