@@ -221,34 +221,52 @@ export default function CityBusinessListing() {
         console.log("API response not OK:", response.status);
       }
 
-      // Enhanced fallback: first try exact city, then nearby cities
-      console.log("API failed, using enhanced fallback with nearby cities");
+      // Enhanced fallback with real database data: specific area → main city → nearby cities
+      console.log("API failed, using database fallback with real data");
 
-      let cityBusinesses = sampleBusinesses.filter(
-        (business) =>
-          business.city.toLowerCase() === (cityName?.toLowerCase() || ""),
-      );
+      let cityBusinesses = [];
 
-      // If no exact match found, try nearby cities
-      if (cityBusinesses.length === 0) {
+      // Step 1: Try to get data from database for nearby/main city
+      try {
         const nearbyCities = getNearByCities(cityName, country);
-        console.log(`No data for ${cityName}, checking nearby cities:`, nearbyCities);
+        console.log(`No data for ${cityName}, checking database for nearby cities:`, nearbyCities);
 
-        cityBusinesses = sampleBusinesses.filter((business) =>
-          nearbyCities.some(nearbyCity =>
-            business.city.toLowerCase() === nearbyCity.toLowerCase()
-          )
-        );
+        for (const nearbyCity of nearbyCities) {
+          try {
+            const nearbyResponse = await fetch(
+              `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=100`
+            );
 
-        // Add a flag to show this is nearby data
-        cityBusinesses = cityBusinesses.map(business => ({
-          ...business,
-          isNearbyData: true,
-          originalRequestedCity: cityName
-        }));
+            if (nearbyResponse.ok) {
+              const nearbyResult = await nearbyResponse.json();
+              if (nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                cityBusinesses = nearbyResult.businesses;
+                console.log(`Found ${cityBusinesses.length} businesses in nearby city: ${nearbyCity}`);
 
-        setIsShowingNearbyData(true);
-      } else {
+                // Add flag to indicate this is nearby data
+                cityBusinesses = cityBusinesses.map(business => ({
+                  ...business,
+                  isNearbyData: true,
+                  originalRequestedCity: cityName,
+                  nearbyCity: nearbyCity
+                }));
+
+                setIsShowingNearbyData(true);
+                break; // Found data, stop searching
+              }
+            }
+          } catch (nearbyError) {
+            console.log(`Failed to fetch data for nearby city ${nearbyCity}:`, nearbyError);
+          }
+        }
+
+        // If no nearby data found, reset flag
+        if (cityBusinesses.length === 0) {
+          setIsShowingNearbyData(false);
+        }
+
+      } catch (fallbackError) {
+        console.error("Database fallback failed:", fallbackError);
         setIsShowingNearbyData(false);
       }
 
