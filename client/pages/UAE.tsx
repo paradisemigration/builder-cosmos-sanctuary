@@ -762,8 +762,6 @@ export default function UAE() {
           </div>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   );
 }
