@@ -1700,6 +1700,9 @@ export default function CityCategory() {
             console.log(
               `No exact match. Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
             );
+            console.log(
+              `Category slug: "${categorySlug}", Category name: "${categoryName}"`
+            );
 
             let accumulatedBusinesses = [];
             let sourceCities = [];
