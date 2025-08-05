@@ -326,7 +326,7 @@ export default function UAE() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
               Find UAE's Best
               <span className="bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent block">
-                Visa Consultants
+                Visa consultants
               </span>
             </h1>
 

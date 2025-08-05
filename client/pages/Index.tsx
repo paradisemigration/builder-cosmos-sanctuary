@@ -391,7 +391,7 @@ export default function Index() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
               Find India's Best
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block">
-                Visa Consultants
+                Visa consultants
               </span>
             </h1>
 
@@ -700,7 +700,7 @@ export default function Index() {
           <div className="text-center mb-12 sm:mb-16">
             <Badge className="mb-4 bg-purple-100 text-purple-800">Featured Experts</Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Top Rated Consultants
+              Top rated consultants
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Connect with our most experienced and successful visa consultants
