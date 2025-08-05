@@ -1143,7 +1143,31 @@ const getFAQs = (categorySlug: string, cityName: string) => {
     },
   ];
 
-  const categoryFAQs = baseFAQs[categorySlug] || [];
+  // Default FAQ template for categories not specifically covered
+  const defaultCategoryFAQs = [
+    {
+      question: `How to choose the best ${categoryName.toLowerCase()} in ${cityName}?`,
+      answer: `Choose licensed ${categoryName.toLowerCase()} in ${cityName} with proper credentials, positive reviews, transparent fee structure, and specialization in your specific needs. Verify their experience and success rates.`,
+    },
+    {
+      question: `What services do ${categoryName.toLowerCase()} provide in ${cityName}?`,
+      answer: `${categoryName} in ${cityName} offer comprehensive consultation services including initial assessment, documentation assistance, application processing, and ongoing support throughout your visa or immigration process.`,
+    },
+    {
+      question: `How much do ${categoryName.toLowerCase()} charge in ${cityName}?`,
+      answer: `${categoryName} fees in ${cityName} vary depending on service complexity and requirements. Most consultants offer transparent pricing with detailed cost breakdowns and flexible payment options.`,
+    },
+    {
+      question: `What is the success rate of ${categoryName.toLowerCase()} in ${cityName}?`,
+      answer: `Experienced ${categoryName.toLowerCase()} in ${cityName} typically achieve high success rates for eligible applications. Success depends on proper documentation, client eligibility, and adherence to requirements.`,
+    },
+    {
+      question: `How long does the process take with ${categoryName.toLowerCase()} in ${cityName}?`,
+      answer: `Processing times vary by service type and destination country. ${categoryName} in ${cityName} provide realistic timelines and regular updates throughout the process to keep clients informed.`,
+    },
+  ];
+
+  const categoryFAQs = baseFAQs[categorySlug] || defaultCategoryFAQs;
   return [...categoryFAQs, ...generalFAQs].slice(0, 12); // Increased to 12 FAQs per page
 };
 
