@@ -116,15 +116,25 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
 
   // Get actual reviewer names from business reviews or generate fallback names
   const getReviewerNames = () => {
+    // Debug: Log review data to console
     if (business.reviews && business.reviews.length > 0) {
+      console.log(`${business.name} has ${business.reviews.length} reviews:`, business.reviews.map(r => r.userName));
       // Use actual reviewer names from the business data
-      return business.reviews
-        .filter(review => review.userName && review.userName !== 'Anonymous')
+      const realReviewers = business.reviews
+        .filter(review => review.userName && review.userName !== 'Anonymous' && review.userName.trim() !== '')
         .map(review => review.userName)
         .slice(0, 5); // Get up to 5 reviewer names
+
+      if (realReviewers.length > 0) {
+        console.log(`Using real reviewers for ${business.name}:`, realReviewers);
+        return realReviewers;
+      }
     }
-    // Fallback to generated names if no real reviews available
-    return generateRecentReviewers(business.name);
+
+    // Debug: Log when using generated names
+    const generatedNames = generateRecentReviewers(business.name);
+    console.log(`Using generated reviewers for ${business.name}:`, generatedNames);
+    return generatedNames;
   };
 
   const recentReviewers = getReviewerNames();
