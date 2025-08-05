@@ -20,6 +20,8 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { generateAboutMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function About() {
   useEffect(() => {
