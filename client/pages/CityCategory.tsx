@@ -1428,6 +1428,18 @@ export default function CityCategory() {
                   </div>
                 )}
 
+              {/* Show notification for multiple nearby cities results */}
+              {isShowingNearbyData && categoryBusinesses.length >= 30 && (
+                <div className="bg-blue-100 border border-blue-300 rounded-lg p-3 mb-3 max-w-3xl">
+                  <div className="flex items-center gap-2 text-blue-800 text-sm">
+                    <MapPin className="h-4 w-4" />
+                    <span className="font-medium">
+                      Comprehensive Search: Found {categoryBusinesses.length} {categoryName.toLowerCase()} from {cityName} and nearby Maharashtra cities for better choice and comparison.
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <p className="text-blue-100 text-lg">
                 {getCategoryDescription(categorySlug)}
               </p>
