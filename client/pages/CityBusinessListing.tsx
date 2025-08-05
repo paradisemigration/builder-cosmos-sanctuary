@@ -34,7 +34,7 @@ import {
   categoryMapping,
   type Business,
 } from "@/lib/data";
-import { allCities, getCitySlug } from "@/lib/all-categories";
+import { allCities, getCitySlug, uaeCities, allIndianCities } from "@/lib/all-categories";
 import {
   generateCityMeta,
   setPageMeta,
