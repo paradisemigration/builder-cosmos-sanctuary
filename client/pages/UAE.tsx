@@ -43,6 +43,11 @@ export default function UAE() {
   // Use geolocation hook for UAE (will likely not detect UAE location, but we'll handle it)
   const { location, isLoading: locationLoading } = useGeolocation();
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Popular categories in UAE
   const popularCategories = [
     { slug: "visa-consultant", name: "Visa Consultant", count: "200+" },
@@ -69,13 +74,13 @@ export default function UAE() {
     },
   ];
 
-  // UAE cities with real images
+  // UAE cities with high-quality real images
   const uaeCityData = [
     {
       name: "Dubai",
       count: "250+",
-      image: "https://cdn.pixabay.com/photo/2020/02/06/20/01/dubai-4825573_1280.jpg",
-      fallback: "https://images.pexels.com/photos/1707820/pexels-photo-1707820.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2020/02/06/20/01/dubai-4825573_1280.jpg",
       flag: "🇦🇪",
       description: "Burj Khalifa & Business Hub",
       color: "#DC2626"
@@ -83,8 +88,8 @@ export default function UAE() {
     {
       name: "Abu Dhabi",
       count: "180+",
-      image: "https://cdn.pixabay.com/photo/2016/12/04/19/30/abu-dhabi-1882502_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2016/12/04/19/30/abu-dhabi-1882502_1280.jpg",
       flag: "🇦🇪",
       description: "Capital & Cultural Center",
       color: "#16A34A"
@@ -92,8 +97,8 @@ export default function UAE() {
     {
       name: "Sharjah",
       count: "120+",
-      image: "https://cdn.pixabay.com/photo/2019/11/25/13/14/sharjah-4651023_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2019/11/25/13/14/sharjah-4651023_1280.jpg",
       flag: "🇦🇪",
       description: "Cultural Capital",
       color: "#2563EB"
@@ -101,8 +106,8 @@ export default function UAE() {
     {
       name: "Ajman",
       count: "80+",
-      image: "https://cdn.pixabay.com/photo/2019/05/20/11/18/ajman-4215285_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1544966503-7cc531c3a35c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2019/05/20/11/18/ajman-4215285_1280.jpg",
       flag: "🇦🇪",
       description: "Coastal Beauty",
       color: "#7C3AED"
@@ -110,8 +115,8 @@ export default function UAE() {
     {
       name: "Ras Al Khaimah",
       count: "60+",
-      image: "https://cdn.pixabay.com/photo/2018/11/01/11/08/ras-al-khaimah-3788669_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2018/11/01/11/08/ras-al-khaimah-3788669_1280.jpg",
       flag: "🇦🇪",
       description: "Mountains & Adventure",
       color: "#DC2626"
@@ -119,8 +124,8 @@ export default function UAE() {
     {
       name: "Fujairah",
       count: "50+",
-      image: "https://cdn.pixabay.com/photo/2020/08/14/12/35/fujairah-5487761_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3811082/pexels-photo-3811082.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback: "https://cdn.pixabay.com/photo/2020/08/14/12/35/fujairah-5487761_1280.jpg",
       flag: "🇦🇪",
       description: "Eastern Coast",
       color: "#059669"
