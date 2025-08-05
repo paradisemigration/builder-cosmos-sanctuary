@@ -1131,6 +1131,9 @@ export default function CityBusinessListing() {
 
       {/* Debug Popup */}
       <DebugPopup debugInfo={debugInfo} />
+
+      {/* Debug Page Info - Shows SEO meta information */}
+      <DebugPageInfo />
     </div>
   );
 }
