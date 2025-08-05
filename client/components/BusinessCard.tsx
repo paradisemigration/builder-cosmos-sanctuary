@@ -39,6 +39,18 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
     return 50 + (Math.abs(hash) % 41);
   };
 
+  // Generate consistent review count based on business name (deterministic)
+  const generateReviewCount = (businessName: string) => {
+    let hash = 0;
+    for (let i = 0; i < businessName.length; i++) {
+      const char = businessName.charCodeAt(i);
+      hash = ((hash << 7) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    // Map hash to range 45-350 for realistic review counts
+    return 45 + (Math.abs(hash) % 306);
+  };
+
   // Generate recent reviewer names
   const generateRecentReviewers = (businessName: string) => {
     const commonNames = [
