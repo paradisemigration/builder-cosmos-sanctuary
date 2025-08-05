@@ -210,39 +210,71 @@ export default function CityCategory() {
 
     async function fetchCategoryBusinesses() {
       try {
-        // First try to fetch from Google Maps API via our backend
-        const response = await fetch(
-          `/api/google-maps-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=20`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
+        console.log(`Fetching businesses for city: "${cityName}", category: "${categoryName}"`);
 
-        if (response.ok) {
-          const result = await response.json();
-          if (
-            result.success &&
-            result.businesses &&
-            result.businesses.length > 0
-          ) {
-            setCategoryBusinesses(result.businesses);
-            setCategoryDataLoaded(true);
-            return;
+        // Step 1: Try exact city + category combination from database
+        let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
+        let scrapedResponse = await fetch(scrapedUrl);
+        let result = null;
+        let isNearbyData = false;
+        let nearbyCity = "";
+
+        if (scrapedResponse.ok) {
+          result = await scrapedResponse.json();
+          console.log("Primary database response:", result);
+        }
+
+        // Step 2: If no data found for specific area + category, try hierarchical fallback
+        if (!result || !result.success || !result.businesses || result.businesses.length === 0) {
+          console.log(`No data found for ${cityName} + ${categoryName}, trying nearby cities from database`);
+
+          const nearbyCities = getNearByCities(cityName, country);
+
+          for (const nearbyCity_temp of nearbyCities) {
+            try {
+              console.log(`Trying nearby city: ${nearbyCity_temp} + ${categoryName}`);
+              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=100`;
+              const nearbyResponse = await fetch(nearbyUrl);
+
+              if (nearbyResponse.ok) {
+                const nearbyResult = await nearbyResponse.json();
+                if (nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                  console.log(`Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`);
+                  result = nearbyResult;
+                  isNearbyData = true;
+                  nearbyCity = nearbyCity_temp;
+                  scrapedUrl = nearbyUrl; // Update URL for debug info
+                  break; // Found data, stop searching
+                }
+              }
+            } catch (nearbyError) {
+              console.log(`Failed to fetch data for nearby city ${nearbyCity_temp}:`, nearbyError);
+            }
           }
         }
 
-        // If Google Maps API fails, try scraped data with higher limit
-        const scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=500`;
-        const scrapedResponse = await fetch(scrapedUrl);
-        const scrapedTimestamp = new Date().toLocaleTimeString();
+        // Step 3: Process result if we have data
+        if (result && result.success && result.businesses && result.businesses.length > 0) {
+          let businesses = result.businesses;
 
-        if (scrapedResponse.ok) {
-          const scrapedResult = await scrapedResponse.json();
+          // Add nearby data flag if this is from a nearby city
+          if (isNearbyData) {
+            businesses = businesses.map(business => ({
+              ...business,
+              isNearbyData: true,
+              originalRequestedCity: cityName,
+              nearbyCity: nearbyCity
+            }));
+            setIsShowingNearbyData(true);
+          } else {
+            setIsShowingNearbyData(false);
+          }
+
+          setCategoryBusinesses(businesses);
+          setCategoryDataLoaded(true);
 
           // Update debug info
+          const scrapedTimestamp = new Date().toLocaleTimeString();
           setDebugInfo((prev) => ({
             ...prev,
             apiCalls: [
