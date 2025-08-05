@@ -70,55 +70,41 @@ export function generateCityCategoryMeta(
   };
 }
 
-// Get category-specific content for better SEO
+// Get category-specific content for better SEO with short descriptions
 function getCategorySpecificContent(categoryName: string): {
-  description: string;
+  shortDesc: string;
   keywords: string;
 } {
   const categoryLower = categoryName.toLowerCase();
 
   if (categoryLower.includes("immigration consultant")) {
     return {
-      description:
-        "Expert immigration lawyers and consultants for legal assistance, permanent residence applications, and citizenship guidance.",
-      keywords:
-        "immigration lawyer, pr application, citizenship consultant, legal immigration services, immigration documentation",
+      shortDesc: "Expert immigration lawyers for PR applications & citizenship guidance.",
+      keywords: "immigration lawyer, pr application, citizenship consultant, legal immigration services, immigration documentation, immigration attorney, permanent residence, immigration advisor, immigration expert, visa lawyer",
     };
   } else if (categoryLower.includes("visa consultant")) {
     return {
-      description:
-        "Professional visa consultants for all types of visa applications including tourist, business, student, and work visas.",
-      keywords:
-        "visa agent, visa processing, tourist visa, business visa, visa documentation, visa application services",
+      shortDesc: "Professional visa consultants for tourist, business, student & work visas.",
+      keywords: "visa agent, visa processing, tourist visa, business visa, visa documentation, visa application services, visa advisor, visa expert, visa agency, visa assistance",
     };
   } else if (categoryLower.includes("study abroad")) {
     return {
-      description:
-        "Trusted study abroad consultants for international education guidance, university admissions, and student visa assistance.",
-      keywords:
-        "overseas education, university admission, student visa, education consultant, international studies, abroad admission",
+      shortDesc: "Trusted study abroad consultants for international education & admissions.",
+      keywords: "overseas education, university admission, student visa, education consultant, international studies, abroad admission, study overseas, foreign education, university counselor, academic advisor",
     };
-  } else if (
-    categoryLower.includes("work permit") ||
-    categoryLower.includes("work visa")
-  ) {
+  } else if (categoryLower.includes("work permit") || categoryLower.includes("work visa")) {
     return {
-      description:
-        "Specialized consultants for work permits, employment visas, and job visa processing for international employment.",
-      keywords:
-        "work permit, employment visa, job visa, work authorization, employment permit, international job visa",
+      shortDesc: "Specialized consultants for work permits & employment visas worldwide.",
+      keywords: "work permit, employment visa, job visa, work authorization, employment permit, international job visa, work visa consultant, employment authorization, skilled worker visa, temporary work permit",
     };
   } else if (categoryLower.includes("canada")) {
     return {
-      description:
-        "Canada immigration specialists for Express Entry, Provincial Nominee Program, and Canadian permanent residence applications.",
-      keywords:
-        "canada pr, express entry, pnp program, canada immigration, canadian visa, maple leaf card",
+      shortDesc: "Canada immigration specialists for Express Entry & PR applications.",
+      keywords: "canada pr, express entry, pnp program, canada immigration, canadian visa, maple leaf card, canada permanent residence, canadian work permit, canada student visa, quebec immigration",
     };
   } else if (categoryLower.includes("australia")) {
     return {
-      description:
-        "Australia immigration consultants for skilled migration, PR visas, and Australian work visa applications.",
+      shortDesc: "Australia immigration consultants for skilled migration & PR visas.",
       keywords:
         "australia pr, skilled migration, australian visa, 189 visa, 190 visa, australia immigration",
     };
