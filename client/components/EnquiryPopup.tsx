@@ -205,7 +205,7 @@ interface FloatingCTAProps {
 
 export function FloatingCTA({ onClick }: FloatingCTAProps) {
   return (
-    <div className="fixed bottom-4 right-4 z-40">
+    <div className="fixed bottom-4 right-4 z-[9998]">
       <Button
         onClick={onClick}
         className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-2xl rounded-full px-4 sm:px-6 py-3 flex items-center gap-2 transform transition-all duration-300 hover:scale-105 animate-pulse hover:animate-none"
