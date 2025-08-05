@@ -216,12 +216,20 @@ export default function CityBusinessListing() {
           ],
         }));
 
-        if (
-          result.success &&
-          result.businesses &&
-          result.businesses.length > 0
-        ) {
-          const newBusinesses = result.businesses;
+          let newBusinesses = result.businesses;
+
+          // Add nearby data flag if this is from a nearby city
+          if (isNearbyData) {
+            newBusinesses = newBusinesses.map(business => ({
+              ...business,
+              isNearbyData: true,
+              originalRequestedCity: cityName,
+              nearbyCity: nearbyCity
+            }));
+            setIsShowingNearbyData(true);
+          } else {
+            setIsShowingNearbyData(false);
+          }
 
           if (resetList || page === 1) {
             setBusinesses(newBusinesses);
