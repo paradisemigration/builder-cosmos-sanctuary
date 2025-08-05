@@ -262,28 +262,48 @@ const getFAQs = (categorySlug: string, cityName: string) => {
   const generalFAQs = [
     {
       question: `Are consultation services in ${cityName} reliable?`,
-      answer: `Yes, ${cityName} has many licensed and experienced consultants. Always verify credentials, read reviews, and choose consultants with proper certifications and proven track records.`
+      answer: `Yes, ${cityName} hosts numerous licensed and experienced immigration consultants with proven track records. The city is a major hub for visa services in the region. Always verify credentials including MARA/ICCRC certification for immigration matters, check online reviews on Google and specialized platforms, verify office addresses and contact details, ask for references from previous clients, and ensure transparency in fee structures. Reputable consultants will provide detailed service agreements and realistic timelines.`
     },
     {
       question: `Do consultants in ${cityName} provide after-service support?`,
-      answer: `Most reputable consultants in ${cityName} offer comprehensive after-service support including visa tracking, pre-departure guidance, and assistance with any issues that may arise.`
+      answer: `Most reputable consultants in ${cityName} offer comprehensive after-service support including: Real-time application tracking and status updates, pre-departure orientation and guidance, airport assistance and pickup services, initial settlement support in destination countries, assistance with any visa-related issues or delays, document courier services, and ongoing consultation for visa renewals or family applications. Premium service providers often have partnerships with settlement agencies in destination countries.`
     },
     {
       question: `Can I get a refund if my application is rejected?`,
-      answer: `Refund policies vary by consultant in ${cityName}. Reputable firms often offer partial refunds for rejected applications or money-back guarantees under specific conditions. Always clarify this upfront.`
+      answer: `Refund policies vary significantly among consultants in ${cityName}. Ethical firms typically offer: Partial refunds (50-70%) if applications are rejected due to consultant error, full refunds if services are not provided as promised, no refunds for government rejection due to client ineligibility, money-back guarantees under specific conditions (rare), and transparent refund policies outlined in service agreements. Always clarify refund terms before engaging services and get policies in writing.`
     },
     {
       question: `How do I verify the credentials of consultants in ${cityName}?`,
-      answer: `Check for proper licensing, certifications from relevant authorities, membership in professional associations, client testimonials, and online reviews to verify consultant credentials in ${cityName}.`
+      answer: `To verify consultant credentials in ${cityName}: Check for proper licensing with relevant authorities (MARA for Australia, ICCRC for Canada), verify membership in professional associations, review educational qualifications and certifications, check business registration and trade license validity, read client testimonials and online reviews, visit their physical office to confirm legitimacy, ask for references from recent successful clients, and verify their track record with specific visa categories. Legitimate consultants will readily provide credential verification.`
     },
     {
       question: `What should I avoid when choosing a consultant in ${cityName}?`,
-      answer: `Avoid consultants who guarantee success, ask for full payment upfront, lack proper credentials, have poor reviews, or make unrealistic promises about processing times or outcomes.`
+      answer: `Red flags to avoid when selecting consultants in ${cityName}: Guarantees of 100% success (no one can guarantee visa approval), demands for full payment before starting work, lack of physical office or proper credentials, poor online reviews or no verifiable testimonials, unrealistic processing time promises, pressure tactics or limited-time offers, unwillingness to provide detailed service breakdowns, no written service agreement or unclear terms, and consultants operating without proper licensing. Take time to research and compare multiple options before deciding.`
+    },
+    {
+      question: `What are the typical consultation fees in ${cityName}?`,
+      answer: `Consultation fees in ${cityName} vary by service type and complexity: Initial assessment consultations (AED 200-800), basic visa applications (AED 1,500-5,000), complex immigration cases (AED 8,000-25,000), study abroad packages (AED 3,000-12,000), and premium end-to-end services (AED 15,000-40,000). Government fees, medical exams, document attestation, and translation services are typically additional. Most consultants offer transparent pricing with detailed cost breakdowns.`
+    },
+    {
+      question: `How long does the consultation process take in ${cityName}?`,
+      answer: `The consultation process timeline in ${cityName} varies by service: Initial assessment and eligibility review (1-2 days), document preparation and verification (1-2 weeks), application compilation and review (1-2 weeks), government processing (varies by country: 2 weeks to 12 months), and post-approval procedures (1-4 weeks). Experienced consultants provide detailed timelines and regular progress updates throughout the process.`
+    },
+    {
+      question: `What languages do consultants in ${cityName} speak?`,
+      answer: `Consultants in ${cityName} typically offer services in multiple languages including: English (universal), Arabic (widely spoken), Hindi/Urdu (for Indian subcontinent clients), Filipino/Tagalog (for Philippines nationals), Farsi (for Iranian clients), French (for francophone countries), and other regional languages. Many consultancy firms employ multilingual staff to better serve the diverse expatriate population in the region.`
+    },
+    {
+      question: `Do consultants in ${cityName} help with document attestation?`,
+      answer: `Yes, most full-service consultants in ${cityName} provide comprehensive document attestation services including: Educational certificate attestation from home country and UAE authorities, marriage certificate attestation, birth certificate attestation for children, police clearance certificate attestation, medical certificate attestation, commercial document attestation for business visas, apostille services for Hague Convention countries, and document translation by certified translators. This saves clients significant time and ensures proper authentication.`
+    },
+    {
+      question: `Can consultants in ${cityName} help with urgent visa applications?`,
+      answer: `Many consultants in ${cityName} offer expedited services for urgent visa applications including: Express processing for visit visas (where available), emergency family reunion visas, urgent business visa applications, rush student visa processing before academic deadlines, and priority handling for medical emergency travel. Expedited services typically cost 25-50% more than standard processing and are subject to destination country policies. Not all visa types offer express processing options.`
     }
   ];
 
   const categoryFAQs = baseFAQs[categorySlug] || [];
-  return [...categoryFAQs, ...generalFAQs].slice(0, 8); // Limit to 8 FAQs per page
+  return [...categoryFAQs, ...generalFAQs].slice(0, 12); // Increased to 12 FAQs per page
 };
 
 export default function CityCategory() {
