@@ -63,13 +63,13 @@ export default function Index() {
     const fetchFeaturedBusinesses = async () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 100));
-        
+
         // Use sample data for demonstration
         const featured = sampleBusinesses.slice(0, 6).map(business => ({
           ...business,
           isFeatured: true
         }));
-        
+
         setFeaturedBusinesses(featured);
       } catch (error) {
         console.error("Error fetching featured businesses:", error);
@@ -119,7 +119,7 @@ export default function Index() {
     },
     {
       type: "Work Visa",
-      description: "Professional assistance for global employment opportunities", 
+      description: "Professional assistance for global employment opportunities",
       icon: <Briefcase className="h-12 w-12" />,
       count: "1,800+",
       color: "from-green-500 to-emerald-600",
@@ -183,12 +183,12 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      
+
       {/* Hero Section with Indian Flag */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-20 pb-32 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-20 pb-16 sm:pb-20 overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] opacity-25"></div>
-        
+
         {/* Indian Flag Element */}
         <div className="absolute top-20 right-10 opacity-10">
           <div className="w-32 h-20 border border-gray-200 rounded-sm overflow-hidden shadow-lg">
@@ -207,14 +207,14 @@ export default function Index() {
             <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-200">
               🇮🇳 India's #1 Visa Consultation Platform
             </Badge>
-            
+
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Find India's Best
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent block">
                 Visa Consultants
               </span>
             </h1>
-            
+
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
               Connect with verified immigration experts across 100+ Indian cities. Get expert guidance for study abroad, work visas, tourism, and permanent residence applications.
             </p>
@@ -258,7 +258,7 @@ export default function Index() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
-              
+
               {/* Quick Search Tags */}
               <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {["Study Abroad", "Work Visa", "Tourist Visa", "PR Services"].map((tag) => (
