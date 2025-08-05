@@ -275,10 +275,14 @@ export default function CityCategory() {
         if (apiAvailable) {
           // Step 1: Try exact city + category combination from database
           try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
             let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
             let scrapedResponse = await fetch(scrapedUrl, {
-              signal: AbortSignal.timeout(10000) // 10 second timeout
+              signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             if (scrapedResponse.ok) {
               result = await scrapedResponse.json();
