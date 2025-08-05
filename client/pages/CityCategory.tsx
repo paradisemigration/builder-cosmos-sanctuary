@@ -246,10 +246,13 @@ export default function CityCategory() {
         // Check if API is available by testing a simple endpoint first
         let apiAvailable = false;
         try {
-          const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+          const healthCheck = await fetch('/api/health', {
+            method: 'HEAD',
+            signal: AbortSignal.timeout(5000) // 5 second timeout
+          });
           apiAvailable = healthCheck.ok;
         } catch (healthError) {
-          console.log('API health check failed, API not available');
+          console.log('API health check failed, API not available:', healthError);
           apiAvailable = false;
         }
 
