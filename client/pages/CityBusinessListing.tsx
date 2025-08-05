@@ -524,9 +524,8 @@ export default function CityBusinessListing() {
             )}
 
             <p className="text-xl text-blue-100 mb-6 max-w-3xl mx-auto">
-              Find trusted and verified visa consultants in {cityName}. Compare
-              services, read reviews, and choose the best expert for your visa
-              needs.
+              {getCityDescription(cityName)}
+            </p>
             </p>
 
             {/* City Stats */}
