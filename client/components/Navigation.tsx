@@ -210,34 +210,39 @@ export function Navigation({ className = "" }: NavigationProps) {
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               {isAuthenticated ? (
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-700">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <span className="text-sm text-gray-700 hidden lg:block">
                     Welcome, {user?.name}
                   </span>
                   {user?.role === "business_owner" && (
                     <Link to="/dashboard">
                       <Button variant="outline" size="sm">
                         <Settings className="h-4 w-4 mr-1" />
-                        Dashboard
+                        <span className="hidden lg:inline">Dashboard</span>
                       </Button>
                     </Link>
                   )}
                   <Button variant="outline" size="sm" onClick={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-1" />
-                    Sign Out
+                    <span className="hidden lg:inline">Sign Out</span>
                   </Button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-3">
-                  <Link to="/login">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <Link to="/login" className="hidden lg:block">
                     <Button variant="outline" size="sm">
                       <User className="h-4 w-4 mr-1" />
                       Sign In
                     </Button>
                   </Link>
                   <Link to="/list-business">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                      List Your Business
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 lg:px-4 py-2 text-sm whitespace-nowrap shadow-md"
+                    >
+                      <span className="md:hidden lg:inline">List Business</span>
+                      <span className="hidden md:inline lg:hidden">List</span>
+                      <span className="hidden lg:inline"> Your Business</span>
                     </Button>
                   </Link>
                 </div>
