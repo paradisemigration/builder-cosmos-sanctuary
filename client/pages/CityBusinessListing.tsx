@@ -155,18 +155,36 @@ export default function CityBusinessListing() {
 
       console.log(`Fetching businesses for city: "${cityName}", page: ${page}`);
 
-      // Step 1: Try exact city first
-      let response = await fetch(
-        `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
-      );
+      // Check if API is available
+      let apiAvailable = false;
+      try {
+        const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+        apiAvailable = healthCheck.ok;
+      } catch (healthError) {
+        console.log('API health check failed, will use sample data fallback');
+        apiAvailable = false;
+      }
 
       let result = null;
       let isNearbyData = false;
       let nearbyCity = "";
 
-      if (response.ok) {
-        result = await response.json();
-        console.log("Primary API Response:", result);
+      if (apiAvailable) {
+        // Step 1: Try exact city first
+        try {
+          let response = await fetch(
+            `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
+          );
+
+          if (response.ok) {
+            result = await response.json();
+            console.log("Primary API Response:", result);
+          } else {
+            console.log(`API response not OK: ${response.status}`);
+          }
+        } catch (fetchError) {
+          console.log("Failed to fetch from primary API:", fetchError);
+        }
       }
 
       // Step 2: If no data found for specific area, try hierarchical fallback to database
