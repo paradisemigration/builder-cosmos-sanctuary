@@ -349,7 +349,7 @@ export default function AddBusiness() {
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
               <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
               <span className="text-white/90 font-medium">
-                Join 50+ Trusted Businesses
+                {countryFlag} Join {isUAE ? '50+' : '500+'} Trusted Businesses
               </span>
               <Award className="w-5 h-5 text-green-400" />
             </div>
