@@ -202,11 +202,14 @@ const nearbyAreasMapping: Record<string, string[]> = {
   vadodara: ["Ahmedabad", "Surat", "Pune", "Indore"],
   rajkot: ["Ahmedabad", "Surat", "Vadodara", "Jamnagar"],
 
-  // Jaipur region
-  jaipur: ["Delhi", "Jodhpur", "Udaipur", "Ajmer"],
-  jodhpur: ["Jaipur", "Udaipur", "Ajmer", "Delhi"],
-  udaipur: ["Jaipur", "Jodhpur", "Ajmer", "Ahmedabad"],
-  ajmer: ["Jaipur", "Jodhpur", "Udaipur", "Delhi"],
+  // Rajasthan region
+  jaipur: ["Jodhpur", "Udaipur", "Ajmer", "Kota", "Delhi"],
+  jodhpur: ["Jaipur", "Udaipur", "Ajmer", "Kota", "Delhi"],
+  udaipur: ["Jaipur", "Jodhpur", "Ajmer", "Kota", "Ahmedabad"],
+  ajmer: ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Delhi"],
+  kota: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Delhi"],
+  bikaner: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Delhi"],
+  alwar: ["Jaipur", "Delhi", "Jodhpur", "Udaipur", "Ajmer"],
 
   // Lucknow region
   lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
