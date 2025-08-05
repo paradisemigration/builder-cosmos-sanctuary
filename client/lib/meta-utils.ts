@@ -399,7 +399,7 @@ function setOpenGraphMeta(metaData: MetaData): void {
   });
 }
 
-// Set city business directory structured data
+// Set city business directory structured data (city+category pages)
 function setCityBusinessDirectoryStructuredData(metaData: MetaData): void {
   const currentUrl = window.location.href;
   const pathParts = window.location.pathname.split('/');
@@ -408,22 +408,31 @@ function setCityBusinessDirectoryStructuredData(metaData: MetaData): void {
 
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": ["WebPage", "CollectionPage"],
     "name": metaData.title,
     "description": metaData.description,
     "url": currentUrl,
     "isPartOf": {
       "@type": "WebSite",
       "name": "VisaConsult India",
-      "url": window.location.origin
+      "url": window.location.origin,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${window.location.origin}/search?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
     },
     "about": {
-      "@type": "LocalBusiness",
+      "@type": "Service",
       "serviceType": categoryName,
-      "areaServed": {
-        "@type": "City",
-        "name": cityName,
-        "addressCountry": "IN"
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "VisaConsult India",
+        "areaServed": {
+          "@type": "City",
+          "name": cityName,
+          "addressCountry": cityName.includes("Dubai") || cityName.includes("Abu Dhabi") ? "AE" : "IN"
+        }
       }
     },
     "breadcrumb": {
@@ -458,19 +467,133 @@ function setCityBusinessDirectoryStructuredData(metaData: MetaData): void {
     "mainEntity": {
       "@type": "ItemList",
       "name": `${categoryName} in ${cityName}`,
-      "description": `Directory of ${categoryName} in ${cityName}`,
-      "numberOfItems": "10+"
+      "description": `Directory of verified ${categoryName} in ${cityName}`,
+      "numberOfItems": "10+",
+      "itemListOrder": "https://schema.org/ItemListOrderDescending"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": getCityCoordinates(cityName).lat,
+      "longitude": getCityCoordinates(cityName).lng
     }
   };
 
-  let script = document.querySelector('script[type="application/ld+json"][data-type="directory"]');
+  setStructuredData(structuredData, 'directory');
+}
+
+// Set city-only page structured data
+function setCityPageStructuredData(metaData: MetaData): void {
+  const currentUrl = window.location.href;
+  const pathParts = window.location.pathname.split('/');
+  const cityName = pathParts[2]?.replace(/-/g, ' ');
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": ["WebPage", "CollectionPage"],
+    "name": metaData.title,
+    "description": metaData.description,
+    "url": currentUrl,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "VisaConsult India",
+      "url": window.location.origin,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${window.location.origin}/search?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    },
+    "about": {
+      "@type": "LocalBusiness",
+      "name": "Visa & Immigration Consultants",
+      "areaServed": {
+        "@type": "City",
+        "name": cityName,
+        "addressCountry": cityName.includes("Dubai") || cityName.includes("Abu Dhabi") ? "AE" : "IN"
+      },
+      "serviceType": "Immigration Consultation Services"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": window.location.origin
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Business Directory",
+          "item": `${window.location.origin}/business`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": `Visa Consultants in ${cityName}`,
+          "item": currentUrl
+        }
+      ]
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": `Top Visa & Immigration Consultants in ${cityName}`,
+      "description": `Comprehensive directory of visa and immigration consultants in ${cityName}`,
+      "numberOfItems": "50+",
+      "itemListOrder": "https://schema.org/ItemListOrderDescending"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": getCityCoordinates(cityName).lat,
+      "longitude": getCityCoordinates(cityName).lng
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "500+",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+
+  setStructuredData(structuredData, 'city-directory');
+}
+
+// Helper function to set structured data
+function setStructuredData(data: any, type: string): void {
+  let script = document.querySelector(`script[type="application/ld+json"][data-type="${type}"]`);
   if (!script) {
     script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-type', 'directory');
+    script.setAttribute('data-type', type);
     document.head.appendChild(script);
   }
-  script.textContent = JSON.stringify(structuredData);
+  script.textContent = JSON.stringify(data);
+}
+
+// Get city coordinates for schema markup
+function getCityCoordinates(cityName: string): { lat: number; lng: number } {
+  const coordinates: Record<string, { lat: number; lng: number }> = {
+    "Delhi": { lat: 28.6139, lng: 77.2090 },
+    "Mumbai": { lat: 19.0760, lng: 72.8777 },
+    "Bangalore": { lat: 12.9716, lng: 77.5946 },
+    "Chennai": { lat: 13.0827, lng: 80.2707 },
+    "Hyderabad": { lat: 17.3850, lng: 78.4867 },
+    "Kolkata": { lat: 22.5726, lng: 88.3639 },
+    "Pune": { lat: 18.5204, lng: 73.8567 },
+    "Ahmedabad": { lat: 23.0225, lng: 72.5714 },
+    "Jaipur": { lat: 26.9124, lng: 75.7873 },
+    "Lucknow": { lat: 26.8467, lng: 80.9462 },
+    "Kochi": { lat: 9.9312, lng: 76.2673 },
+    "Dubai": { lat: 25.2048, lng: 55.2708 },
+    "Abu Dhabi": { lat: 24.4539, lng: 54.3773 },
+    "Sharjah": { lat: 25.3463, lng: 55.4209 },
+    // Default fallback for other cities
+    "default": { lat: 20.5937, lng: 78.9629 }
+  };
+
+  return coordinates[cityName] || coordinates["default"];
 }
 
 // Generate structured data for local business
