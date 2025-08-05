@@ -275,7 +275,66 @@ export default function CityCategory() {
           }
         }
 
-        // Step 3: Process result if we have data
+        // Step 3: If no data from API, fallback to sample data with nearby cities logic
+        if (!result || !result.success || !result.businesses || result.businesses.length === 0) {
+          console.log("No data from API, using sample data with nearby cities fallback");
+
+          // Try to find sample businesses for exact city + category
+          let sampleBusinesses_filtered = sampleBusinesses.filter(
+            (business) =>
+              business.city.toLowerCase() === cityName.toLowerCase() &&
+              business.category.toLowerCase().includes(categoryName.toLowerCase())
+          );
+
+          // If no exact match, try nearby cities with category
+          if (sampleBusinesses_filtered.length === 0) {
+            const nearbyCities = getNearByCities(cityName, country);
+
+            for (const nearbyCity_temp of nearbyCities) {
+              sampleBusinesses_filtered = sampleBusinesses.filter(
+                (business) =>
+                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
+                  business.category.toLowerCase().includes(categoryName.toLowerCase())
+              );
+
+              if (sampleBusinesses_filtered.length > 0) {
+                console.log(`Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`);
+                isNearbyData = true;
+                nearbyCity = nearbyCity_temp;
+                break;
+              }
+            }
+          }
+
+          // If still no category-specific data, try just city match (broader fallback)
+          if (sampleBusinesses_filtered.length === 0) {
+            const nearbyCities = getNearByCities(cityName, country);
+
+            for (const nearbyCity_temp of nearbyCities) {
+              sampleBusinesses_filtered = sampleBusinesses.filter(
+                (business) => business.city.toLowerCase() === nearbyCity_temp.toLowerCase()
+              );
+
+              if (sampleBusinesses_filtered.length > 0) {
+                console.log(`Found ${sampleBusinesses_filtered.length} sample businesses (any category) in nearby city: ${nearbyCity_temp}`);
+                isNearbyData = true;
+                nearbyCity = nearbyCity_temp;
+                break;
+              }
+            }
+          }
+
+          if (sampleBusinesses_filtered.length > 0) {
+            result = {
+              success: true,
+              businesses: sampleBusinesses_filtered,
+              total: sampleBusinesses_filtered.length,
+              source: 'sample_data'
+            };
+          }
+        }
+
+        // Step 4: Process result if we have data (from API or sample data)
         if (result && result.success && result.businesses && result.businesses.length > 0) {
           let businesses = result.businesses;
 
