@@ -1083,6 +1083,33 @@ export default function CityCategory() {
                   </div>
                 )}
               </div>
+
+              {/* Load More Button */}
+              {hasMoreData && !loading && (
+                <div className="text-center mt-8">
+                  <Button
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                    size="lg"
+                    className="px-8"
+                  >
+                    {loadingMore ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Loading More...
+                      </>
+                    ) : (
+                      <>
+                        Load More Businesses
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-gray-500 text-sm mt-2">
+                    Showing {filteredBusinesses.length} of {debugInfo.totalBusinesses} businesses
+                  </p>
+                </div>
+              )}
             </>
           )}
         </div>
