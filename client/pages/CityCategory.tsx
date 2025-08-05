@@ -186,6 +186,58 @@ const nearbyAreasMapping: Record<string, string[]> = {
   guwahati: ["Kolkata", "Shillong", "Dibrugarh", "Silchar"],
 };
 
+// Function to detect user location
+const detectUserLocation = async (): Promise<{city: string, state: string} | null> => {
+  try {
+    // First try geolocation API
+    if (navigator.geolocation) {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          timeout: 5000,
+          enableHighAccuracy: false
+        });
+      });
+
+      // Try to get city from coordinates using reverse geocoding
+      try {
+        const response = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
+        );
+        const data = await response.json();
+
+        if (data.city && data.principalSubdivision) {
+          return {
+            city: data.city,
+            state: data.principalSubdivision
+          };
+        }
+      } catch (geoError) {
+        console.log("Reverse geocoding failed:", geoError);
+      }
+    }
+
+    // Fallback: Try to detect location from IP (less accurate but works without permission)
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+
+      if (data.city && data.region) {
+        return {
+          city: data.city,
+          state: data.region
+        };
+      }
+    } catch (ipError) {
+      console.log("IP-based location detection failed:", ipError);
+    }
+
+    return null;
+  } catch (error) {
+    console.log("Location detection failed:", error);
+    return null;
+  }
+};
+
 // Helper function to get nearby cities for fallback
 const getNearByCities = (cityName: string, country: string): string[] => {
   const normalizedCity = cityName.toLowerCase();
