@@ -411,7 +411,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {majorCities.map((city, index) => (
               <Link
                 key={index}
@@ -419,18 +419,29 @@ export default function Index() {
                 className="group block"
               >
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200">
-                  <div className="relative h-24 bg-gradient-to-br from-blue-500 to-indigo-600">
-                    <div className="absolute inset-0 bg-black/20"></div>
-                    <div className="absolute top-2 right-2 text-2xl">{city.flag}</div>
+                  <div className="relative h-32 sm:h-28 overflow-hidden">
+                    <img
+                      src={city.image}
+                      alt={`${city.name} - ${city.description}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      onError={(e) => {
+                        e.currentTarget.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240"><rect width="400" height="240" fill="%23${index % 2 === 0 ? '3B82F6' : '6366F1'}"/><text x="200" y="120" font-family="Arial" font-size="20" fill="white" text-anchor="middle" dy="6">${city.name}</text></svg>`;
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div className="absolute top-2 right-2 text-lg sm:text-xl">{city.flag}</div>
                     <div className="absolute bottom-2 left-3 text-white">
-                      <div className="text-lg font-bold">{city.name}</div>
-                      <div className="text-sm opacity-90">{city.count} Consultants</div>
+                      <div className="text-base sm:text-lg font-bold">{city.name}</div>
+                      <div className="text-xs sm:text-sm opacity-90">{city.count} Consultants</div>
                     </div>
                   </div>
-                  <CardContent className="p-4">
+                  <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-gray-800">Explore {city.name}</span>
-                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                      <div className="flex-1">
+                        <span className="font-medium text-gray-800 text-sm sm:text-base">Explore {city.name}</span>
+                        <div className="text-xs text-gray-500 mt-1">{city.description}</div>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2" />
                     </div>
                   </CardContent>
                 </Card>
