@@ -1727,45 +1727,51 @@ export default function CityCategory() {
             }
           }
 
-          // PHASE 2: If not enough, try related categories from nearby cities
-          if (accumulatedBusinesses.length < 25) {
-            console.log("=== PHASE 2: Trying related categories from nearby cities ===");
+          // PHASE 2: If not enough, try broader searches from nearby cities
+          if (accumulatedBusinesses.length < 10) {
+            console.log("\n=== PHASE 2: Trying broader searches from nearby cities ===");
 
-            // Define related category slugs based on current category
-            let relatedCategories = [];
-            if (categorySlug.includes("consultant") || categorySlug.includes("immigration")) {
-              relatedCategories = ["visa-consultants", "immigration-consultants", "study-abroad-consultants", "work-visa-consultants"];
-            } else if (categorySlug.includes("visa")) {
-              relatedCategories = ["visa-consultants", "student-visa-consultants", "work-visa-consultants"];
-            } else {
-              relatedCategories = [categorySlug]; // Just try the same category
-            }
+            for (const nearbyCity of nearbyCities.slice(0, 5)) {
+              try {
+                console.log(`\n--- Trying broader search for ${nearbyCity} ---`);
 
-            for (const nearbyCity of nearbyCities.slice(0, 3)) {
-              for (const relatedCategory of relatedCategories) {
-                if (relatedCategory === categorySlug) continue; // Skip if same as original
+                // Try 1: All businesses in that city (no category filter)
+                const cityApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}`, {
+                  page: "1",
+                  limit: "25",
+                  sortBy: "rating",
+                  country: country,
+                });
 
-                try {
-                  console.log(`Querying ${nearbyCity} for related category: ${relatedCategory}`);
+                console.log(`Trying all businesses API: ${cityApiUrl}`);
 
-                  const nearbyApiUrl = buildApiUrl(`/api/businesses/city/${nearbyCity}/category/${relatedCategory}`, {
-                    page: "1",
-                    limit: "10",
-                    sortBy: "rating",
-                    country: country,
+                const cityResponse = await robustFetch(cityApiUrl, {
+                  method: "GET",
+                  headers: { "Content-Type": "application/json" },
+                });
+
+                const cityResult = await cityResponse.json();
+                console.log(`All businesses result for ${nearbyCity}:`, cityResult);
+
+                if (cityResult && cityResult.success && cityResult.businesses && cityResult.businesses.length > 0) {
+                  console.log(`✅ Found ${cityResult.businesses.length} total businesses in ${nearbyCity}`);
+
+                  // Filter for consultant/immigration related businesses
+                  const relevantBusinesses = cityResult.businesses.filter(business => {
+                    const name = business.name?.toLowerCase() || '';
+                    const category = business.category?.toLowerCase() || '';
+                    const description = business.description?.toLowerCase() || '';
+
+                    return name.includes('visa') || name.includes('immigration') || name.includes('consultant') ||
+                           category.includes('visa') || category.includes('immigration') || category.includes('consultant') ||
+                           description.includes('visa') || description.includes('immigration') || description.includes('consultant');
                   });
 
-                  const nearbyResponse = await robustFetch(nearbyApiUrl, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                  });
+                  if (relevantBusinesses.length > 0) {
+                    console.log(`Found ${relevantBusinesses.length} relevant businesses in ${nearbyCity}`);
+                    console.log('Relevant business names:', relevantBusinesses.map(b => b.name));
 
-                  const nearbyResult = await nearbyResponse.json();
-
-                  if (nearbyResult && nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
-                    console.log(`Found ${nearbyResult.businesses.length} related businesses in ${nearbyCity} for ${relatedCategory}`);
-
-                    const nearbyCityBusinesses = nearbyResult.businesses.map(business => ({
+                    const nearbyCityBusinesses = relevantBusinesses.map(business => ({
                       ...business,
                       isNearbyData: true,
                       originalRequestedCity: cityName,
@@ -1777,17 +1783,18 @@ export default function CityCategory() {
                       sourceCities.push(nearbyCity);
                     }
 
-                    if (accumulatedBusinesses.length >= 100) {
+                    console.log(`Total accumulated now: ${accumulatedBusinesses.length} businesses`);
+
+                    if (accumulatedBusinesses.length >= 50) {
                       break;
                     }
                   }
-                } catch (error) {
-                  console.log(`Error querying ${nearbyCity} for ${relatedCategory}:`, error);
+                } else {
+                  console.log(`❌ No businesses found in ${nearbyCity} (all categories)`);
                 }
-              }
 
-              if (accumulatedBusinesses.length >= 100) {
-                break;
+              } catch (error) {
+                console.error(`❌ Error in broader search for ${nearbyCity}:`, error);
               }
             }
           }
