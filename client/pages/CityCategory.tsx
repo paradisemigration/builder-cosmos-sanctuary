@@ -501,6 +501,21 @@ export default function CityCategory() {
 
     async function fetchCityBusinesses() {
       try {
+        // For production, skip API calls and use sample data
+        const isProduction = window.location.hostname.includes('fly.dev') ||
+                           window.location.hostname.includes('netlify.app') ||
+                           !window.location.hostname.includes('localhost');
+
+        if (isProduction) {
+          console.log('Production environment: using sample data for city businesses');
+          const sampleCityBusinesses = sampleBusinesses.filter(
+            (business) => business.city.toLowerCase() === cityName.toLowerCase(),
+          );
+          setCityBusinesses(sampleCityBusinesses);
+          setCityDataLoaded(true);
+          return;
+        }
+
         // Fetch all businesses for the city with higher limit
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
