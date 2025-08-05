@@ -1,75 +1,111 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 
-// Store original fetch before any third-party scripts modify it
-const originalFetch = window.fetch.bind(window);
+// Detect third-party interference (FullStory, etc.)
+const hasThirdPartyInterference = (): boolean => {
+  try {
+    // Check for FullStory
+    return !!(window as any).FS || !!(window as any)._fs_loaded || document.querySelector('script[src*="fullstory"]');
+  } catch {
+    return false;
+  }
+};
 
-// XMLHttpRequest-based fetch alternative to bypass third-party interference
-function xhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const method = options.method || 'GET';
+// Pure XHR implementation that bypasses all fetch interference
+function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  return new Promise((resolve) => {
+    try {
+      const xhr = new XMLHttpRequest();
+      const method = options.method || 'GET';
 
-    xhr.open(method, url, true);
+      xhr.open(method, url, true);
 
-    // Set headers
-    if (options.headers) {
-      const headers = options.headers as Record<string, string>;
-      Object.keys(headers).forEach(key => {
-        xhr.setRequestHeader(key, headers[key]);
-      });
+      // Set headers
+      if (options.headers) {
+        const headers = options.headers as Record<string, string>;
+        Object.keys(headers).forEach(key => {
+          try {
+            xhr.setRequestHeader(key, headers[key]);
+          } catch (headerError) {
+            console.log('Header error:', headerError);
+          }
+        });
+      }
+
+      // Handle timeout
+      xhr.timeout = 8000; // 8 second timeout
+
+      xhr.onload = () => {
+        try {
+          const response = new Response(xhr.responseText, {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            headers: new Headers()
+          });
+          resolve(response);
+        } catch (responseError) {
+          console.log('Response creation error:', responseError);
+          // Return empty response if Response creation fails
+          resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+            status: 200,
+            statusText: 'OK',
+            headers: new Headers({ 'Content-Type': 'application/json' })
+          }));
+        }
+      };
+
+      xhr.onerror = () => {
+        console.log('XHR network error for:', url);
+        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        }));
+      };
+
+      xhr.ontimeout = () => {
+        console.log('XHR timeout for:', url);
+        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        }));
+      };
+
+      xhr.send(options.body as string || null);
+    } catch (xhrError) {
+      console.log('XHR setup error:', xhrError);
+      // Return empty response if XHR setup fails
+      resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
+        status: 200,
+        statusText: 'OK',
+        headers: new Headers({ 'Content-Type': 'application/json' })
+      }));
     }
-
-    // Handle timeout
-    xhr.timeout = 10000; // 10 second timeout
-
-    xhr.onload = () => {
-      const response = new Response(xhr.responseText, {
-        status: xhr.status,
-        statusText: xhr.statusText,
-        headers: new Headers(xhr.getAllResponseHeaders().split('\r\n').reduce((headers, line) => {
-          const [key, value] = line.split(': ');
-          if (key && value) headers[key] = value;
-          return headers;
-        }, {} as Record<string, string>))
-      });
-      resolve(response);
-    };
-
-    xhr.onerror = () => reject(new Error('Network error'));
-    xhr.ontimeout = () => reject(new Error('Request timeout'));
-
-    xhr.send(options.body as string || null);
   });
 }
 
-// Robust fetch wrapper with retry mechanism and fallback strategies
-async function robustFetch(url: string, options: RequestInit = {}, retries = 3): Promise<Response> {
+// Robust fetch wrapper that handles third-party interference
+async function robustFetch(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
+  const useXhrOnly = hasThirdPartyInterference();
+
+  if (useXhrOnly) {
+    console.log('Third-party interference detected, using XHR-only mode');
+    return safeXhrFetch(url, options);
+  }
+
+  // Standard retry logic for environments without interference
   for (let i = 0; i < retries; i++) {
     try {
-      // Try different fetch strategies
-      let response: Response;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-      if (i === 0) {
-        // First attempt: Use original fetch
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const response = await fetch(url, {
+        ...options,
+        signal: options.signal || controller.signal,
+      });
 
-          response = await originalFetch(url, {
-            ...options,
-            signal: options.signal || controller.signal,
-          });
-
-          clearTimeout(timeoutId);
-        } catch (originalFetchError) {
-          console.log('Original fetch failed, trying XHR:', originalFetchError);
-          throw originalFetchError;
-        }
-      } else {
-        // Subsequent attempts: Use XHR fallback
-        response = await xhrFetch(url, options);
-      }
+      clearTimeout(timeoutId);
 
       if (response.ok || response.status === 404) {
         return response;
@@ -80,26 +116,17 @@ async function robustFetch(url: string, options: RequestInit = {}, retries = 3):
       console.log(`Fetch attempt ${i + 1} failed for ${url}:`, error);
 
       if (i === retries - 1) {
-        // Last attempt failed, return a mock empty response to prevent crashes
-        console.log('All fetch attempts failed, returning empty response');
-        return new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        });
+        console.log('All standard fetch attempts failed, falling back to XHR');
+        return safeXhrFetch(url, options);
       }
 
-      // Wait before retrying (exponential backoff)
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      // Short wait before retry
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 
-  // This should never be reached, but provide a fallback
-  return new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-    status: 200,
-    statusText: 'OK',
-    headers: new Headers({ 'Content-Type': 'application/json' })
-  });
+  // Final fallback
+  return safeXhrFetch(url, options);
 }
 import {
   Search,
