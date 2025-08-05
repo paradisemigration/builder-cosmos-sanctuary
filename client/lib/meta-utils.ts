@@ -342,9 +342,11 @@ export function setPageMeta(metaData: MetaData): void {
   if (metaData.title.includes("Most Trusted") && metaData.title.includes(" in ")) {
     // City + Category page schema
     setCityBusinessDirectoryStructuredData(metaData);
+    setFAQStructuredData("category");
   } else if (metaData.title.includes("Top 10 Visa & Immigration Consultants in")) {
     // City-only page schema
     setCityPageStructuredData(metaData);
+    setFAQStructuredData("city");
   }
 }
 
