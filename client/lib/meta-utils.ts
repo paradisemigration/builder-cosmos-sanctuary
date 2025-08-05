@@ -562,8 +562,8 @@ function setCityPageStructuredData(metaData: MetaData): void {
   setStructuredData(structuredData, 'city-directory');
 }
 
-// Helper function to set structured data
-function setStructuredData(data: any, type: string): void {
+// Helper function to set typed structured data
+function setTypedStructuredData(data: any, type: string): void {
   let script = document.querySelector(`script[type="application/ld+json"][data-type="${type}"]`);
   if (!script) {
     script = document.createElement('script');
