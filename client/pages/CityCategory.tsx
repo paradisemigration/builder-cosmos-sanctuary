@@ -119,8 +119,26 @@ const nearbyAreasMapping: Record<string, string[]> = {
   pune: ["Mumbai", "Nashik", "Aurangabad", "Kolhapur", "Satara"],
 
   // Maharashtra extended region
-  nashik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur", "Kolhapur", "Satara", "Sangli"],
-  nasik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur", "Kolhapur", "Satara", "Sangli"],
+  nashik: [
+    "Mumbai",
+    "Pune",
+    "Aurangabad",
+    "Ahmednagar",
+    "Solapur",
+    "Kolhapur",
+    "Satara",
+    "Sangli",
+  ],
+  nasik: [
+    "Mumbai",
+    "Pune",
+    "Aurangabad",
+    "Ahmednagar",
+    "Solapur",
+    "Kolhapur",
+    "Satara",
+    "Sangli",
+  ],
   aurangabad: ["Pune", "Nashik", "Mumbai", "Ahmednagar", "Solapur", "Nagpur"],
   ahmednagar: ["Pune", "Nashik", "Aurangabad", "Mumbai", "Solapur"],
   solapur: ["Pune", "Aurangabad", "Kolhapur", "Sangli", "Mumbai"],
@@ -136,8 +154,21 @@ const nearbyAreasMapping: Record<string, string[]> = {
 
   // Chennai region
   chennai: ["Bangalore", "Hyderabad", "Coimbatore", "Madurai"],
-  coimbatore: ["Kochi", "Thiruvananthapuram", "Chennai", "Bangalore", "Kozhikode", "Madurai"],
-  madurai: ["Chennai", "Coimbatore", "Kochi", "Bangalore", "Thiruvananthapuram"],
+  coimbatore: [
+    "Kochi",
+    "Thiruvananthapuram",
+    "Chennai",
+    "Bangalore",
+    "Kozhikode",
+    "Madurai",
+  ],
+  madurai: [
+    "Chennai",
+    "Coimbatore",
+    "Kochi",
+    "Bangalore",
+    "Thiruvananthapuram",
+  ],
   salem: ["Chennai", "Coimbatore", "Bangalore", "Kochi"],
   erode: ["Coimbatore", "Chennai", "Kochi", "Bangalore"],
   tirupur: ["Coimbatore", "Chennai", "Kochi", "Bangalore"],
@@ -150,7 +181,16 @@ const nearbyAreasMapping: Record<string, string[]> = {
   visakhapatnam: ["Hyderabad", "Chennai", "Vijayawada", "Bangalore"],
 
   // Kolkata region
-  kolkata: ["Howrah", "Durgapur", "Asansol", "Siliguri", "Bhubaneswar", "Guwahati", "Delhi", "Mumbai"],
+  kolkata: [
+    "Howrah",
+    "Durgapur",
+    "Asansol",
+    "Siliguri",
+    "Bhubaneswar",
+    "Guwahati",
+    "Delhi",
+    "Mumbai",
+  ],
   howrah: ["Kolkata", "Durgapur", "Asansol", "Bhubaneswar"],
   durgapur: ["Kolkata", "Asansol", "Howrah", "Bhubaneswar", "Siliguri"],
   asansol: ["Kolkata", "Durgapur", "Howrah", "Bhubaneswar"],
@@ -181,16 +221,62 @@ const nearbyAreasMapping: Record<string, string[]> = {
   nagpur: ["Indore", "Bhopal", "Pune", "Hyderabad"],
 
   // Kerala region
-  kochi: ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Bangalore", "Chennai", "Coimbatore"],
-  cochin: ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Bangalore", "Chennai", "Coimbatore"],
-  thiruvananthapuram: ["Kochi", "Kozhikode", "Thrissur", "Chennai", "Bangalore", "Coimbatore"],
-  trivandrum: ["Kochi", "Kozhikode", "Thrissur", "Chennai", "Bangalore", "Coimbatore"],
-  kozhikode: ["Kochi", "Thiruvananthapuram", "Thrissur", "Mangalore", "Chennai"],
+  kochi: [
+    "Thiruvananthapuram",
+    "Kozhikode",
+    "Thrissur",
+    "Bangalore",
+    "Chennai",
+    "Coimbatore",
+  ],
+  cochin: [
+    "Thiruvananthapuram",
+    "Kozhikode",
+    "Thrissur",
+    "Bangalore",
+    "Chennai",
+    "Coimbatore",
+  ],
+  thiruvananthapuram: [
+    "Kochi",
+    "Kozhikode",
+    "Thrissur",
+    "Chennai",
+    "Bangalore",
+    "Coimbatore",
+  ],
+  trivandrum: [
+    "Kochi",
+    "Kozhikode",
+    "Thrissur",
+    "Chennai",
+    "Bangalore",
+    "Coimbatore",
+  ],
+  kozhikode: [
+    "Kochi",
+    "Thiruvananthapuram",
+    "Thrissur",
+    "Mangalore",
+    "Chennai",
+  ],
   calicut: ["Kochi", "Thiruvananthapuram", "Thrissur", "Mangalore", "Chennai"],
-  thrissur: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Chennai", "Bangalore"],
+  thrissur: [
+    "Kochi",
+    "Thiruvananthapuram",
+    "Kozhikode",
+    "Chennai",
+    "Bangalore",
+  ],
   kollam: ["Thiruvananthapuram", "Kochi", "Kozhikode", "Chennai", "Bangalore"],
   kannur: ["Kozhikode", "Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
-  palakkad: ["Kochi", "Coimbatore", "Thiruvananthapuram", "Chennai", "Bangalore"],
+  palakkad: [
+    "Kochi",
+    "Coimbatore",
+    "Thiruvananthapuram",
+    "Chennai",
+    "Bangalore",
+  ],
 
   // Other major cities
   chandigarh: ["Delhi", "Ludhiana", "Amritsar", "Jalandhar"],
@@ -206,16 +292,21 @@ const nearbyAreasMapping: Record<string, string[]> = {
 };
 
 // Function to detect user location
-const detectUserLocation = async (): Promise<{city: string, state: string} | null> => {
+const detectUserLocation = async (): Promise<{
+  city: string;
+  state: string;
+} | null> => {
   try {
     // First try geolocation API
     if (navigator.geolocation) {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          timeout: 5000,
-          enableHighAccuracy: false
-        });
-      });
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 5000,
+            enableHighAccuracy: false,
+          });
+        },
+      );
 
       // Try to get city from coordinates using reverse geocoding
       try {
@@ -226,7 +317,7 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`,
           {
             signal: controller.signal,
-          }
+          },
         );
         clearTimeout(timeoutId);
 
@@ -235,7 +326,7 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
         if (data.city && data.principalSubdivision) {
           return {
             city: data.city,
-            state: data.principalSubdivision
+            state: data.principalSubdivision,
           };
         }
       } catch (geoError) {
@@ -248,7 +339,7 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-      const response = await fetch('https://ipapi.co/json/', {
+      const response = await fetch("https://ipapi.co/json/", {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
@@ -258,7 +349,7 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
       if (data.city && data.region) {
         return {
           city: data.city,
-          state: data.region
+          state: data.region,
         };
       }
     } catch (ipError) {
@@ -273,7 +364,11 @@ const detectUserLocation = async (): Promise<{city: string, state: string} | nul
 };
 
 // Enhanced helper function to get nearby cities for fallback
-const getNearByCities = (cityName: string, country: string, userLocation?: {city: string, state: string} | null): string[] => {
+const getNearByCities = (
+  cityName: string,
+  country: string,
+  userLocation?: { city: string; state: string } | null,
+): string[] => {
   const normalizedCity = cityName.toLowerCase();
 
   // Special case: Abu Dhabi should show ONLY Abu Dhabi businesses (no fallback)
@@ -287,24 +382,44 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
   }
 
   // For Indian cities, try to use user location for better suggestions
-  if (country === 'india' && userLocation) {
+  if (country === "india" && userLocation) {
     const userCity = userLocation.city.toLowerCase();
     const userState = userLocation.state.toLowerCase();
 
     // If user is in the same state, suggest major cities in that state
     const stateCities: Record<string, string[]> = {
-      "delhi": ["Delhi", "Gurgaon", "Noida", "Faridabad"],
-      "haryana": ["Gurgaon", "Delhi", "Noida", "Faridabad"],
+      delhi: ["Delhi", "Gurgaon", "Noida", "Faridabad"],
+      haryana: ["Gurgaon", "Delhi", "Noida", "Faridabad"],
       "uttar pradesh": ["Noida", "Delhi", "Lucknow", "Kanpur"],
-      "maharashtra": ["Mumbai", "Pune", "Nashik", "Aurangabad", "Solapur", "Kolhapur", "Ahmednagar", "Satara", "Sangli", "Thane", "Nagpur"],
-      "karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
+      maharashtra: [
+        "Mumbai",
+        "Pune",
+        "Nashik",
+        "Aurangabad",
+        "Solapur",
+        "Kolhapur",
+        "Ahmednagar",
+        "Satara",
+        "Sangli",
+        "Thane",
+        "Nagpur",
+      ],
+      karnataka: ["Bangalore", "Mysore", "Mangalore", "Hubli"],
       "tamil nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
-      "telangana": ["Hyderabad", "Secunderabad", "Warangal", "Nizamabad"],
-      "west bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri", "Malda", "Krishnanagar"],
-      "gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-      "rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer"],
-      "kerala": ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
-      "punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar"]
+      telangana: ["Hyderabad", "Secunderabad", "Warangal", "Nizamabad"],
+      "west bengal": [
+        "Kolkata",
+        "Howrah",
+        "Durgapur",
+        "Asansol",
+        "Siliguri",
+        "Malda",
+        "Krishnanagar",
+      ],
+      gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+      rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer"],
+      kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
+      punjab: ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar"],
     };
 
     if (stateCities[userState]) {
@@ -318,7 +433,7 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
   }
 
   // Default fallbacks by country and region
-  if (country === 'uae') {
+  if (country === "uae") {
     return ["Dubai", "Abu Dhabi", "Sharjah"];
   } else {
     // For India, prioritize regional cities based on the requesting city
@@ -326,35 +441,93 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
 
     // South India cities should prioritize southern metros
     const southIndianCities = [
-      'coimbatore', 'madurai', 'salem', 'erode', 'tirupur', 'dindigul',
-      'kochi', 'thiruvananthapuram', 'kozhikode', 'thrissur', 'kollam',
-      'mysore', 'mangalore', 'hubli', 'belgaum', 'shimoga'
+      "coimbatore",
+      "madurai",
+      "salem",
+      "erode",
+      "tirupur",
+      "dindigul",
+      "kochi",
+      "thiruvananthapuram",
+      "kozhikode",
+      "thrissur",
+      "kollam",
+      "mysore",
+      "mangalore",
+      "hubli",
+      "belgaum",
+      "shimoga",
     ];
 
     if (southIndianCities.includes(lowerCityName)) {
-      return ["Chennai", "Bangalore", "Kochi", "Thiruvananthapuram", "Kozhikode", "Hyderabad", "Mysore", "Mangalore"];
+      return [
+        "Chennai",
+        "Bangalore",
+        "Kochi",
+        "Thiruvananthapuram",
+        "Kozhikode",
+        "Hyderabad",
+        "Mysore",
+        "Mangalore",
+      ];
     }
 
     // East India cities should prioritize eastern metros
     const eastIndianCities = [
-      'bhubaneswar', 'cuttack', 'guwahati', 'siliguri', 'durgapur', 'asansol'
+      "bhubaneswar",
+      "cuttack",
+      "guwahati",
+      "siliguri",
+      "durgapur",
+      "asansol",
     ];
 
     if (eastIndianCities.includes(lowerCityName)) {
-      return ["Kolkata", "Howrah", "Durgapur", "Bhubaneswar", "Guwahati", "Delhi", "Mumbai"];
+      return [
+        "Kolkata",
+        "Howrah",
+        "Durgapur",
+        "Bhubaneswar",
+        "Guwahati",
+        "Delhi",
+        "Mumbai",
+      ];
     }
 
     // West India cities should prioritize western metros
     const westIndianCities = [
-      'surat', 'vadodara', 'rajkot', 'gandhinagar', 'jodhpur', 'udaipur', 'ajmer'
+      "surat",
+      "vadodara",
+      "rajkot",
+      "gandhinagar",
+      "jodhpur",
+      "udaipur",
+      "ajmer",
     ];
 
     if (westIndianCities.includes(lowerCityName)) {
-      return ["Mumbai", "Pune", "Ahmedabad", "Surat", "Vadodara", "Jaipur", "Delhi"];
+      return [
+        "Mumbai",
+        "Pune",
+        "Ahmedabad",
+        "Surat",
+        "Vadodara",
+        "Jaipur",
+        "Delhi",
+      ];
     }
 
     // North India cities get current metros priority
-    return ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"];
+    return [
+      "Delhi",
+      "Mumbai",
+      "Bangalore",
+      "Chennai",
+      "Hyderabad",
+      "Pune",
+      "Kolkata",
+      "Ahmedabad",
+    ];
   }
 };
 
@@ -587,7 +760,10 @@ export default function CityCategory() {
   const [isShowingNearbyData, setIsShowingNearbyData] = useState(false);
   const [totalAvailableBusinesses, setTotalAvailableBusinesses] = useState(0);
   const [apiFailureCount, setApiFailureCount] = useState(0);
-  const [userLocation, setUserLocation] = useState<{city: string, state: string} | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    city: string;
+    state: string;
+  } | null>(null);
   const [debugInfo, setDebugInfo] = useState({
     categoryBusinesses: 0,
     cityBusinesses: 0,
@@ -630,15 +806,17 @@ export default function CityCategory() {
     setAllDubaiDataLoaded(false);
 
     // Detect user location for better nearby city suggestions (for Indian cities)
-    if (country === 'india') {
-      detectUserLocation().then(location => {
-        if (location) {
-          console.log("User location detected:", location);
-          setUserLocation(location);
-        }
-      }).catch(error => {
-        console.log("Could not detect user location:", error);
-      });
+    if (country === "india") {
+      detectUserLocation()
+        .then((location) => {
+          if (location) {
+            console.log("User location detected:", location);
+            setUserLocation(location);
+          }
+        })
+        .catch((error) => {
+          console.log("Could not detect user location:", error);
+        });
     }
 
     // Validate city exists
@@ -658,21 +836,21 @@ export default function CityCategory() {
     }
 
     // Fetch category-specific businesses from Google Maps API
-    fetchCategoryBusinesses().catch(error => {
+    fetchCategoryBusinesses().catch((error) => {
       console.error("Unhandled error in fetchCategoryBusinesses:", error);
       setCategoryDataLoaded(true);
       setLoading(false);
     });
 
     // Fetch all city businesses as fallback
-    fetchCityBusinesses().catch(error => {
+    fetchCityBusinesses().catch((error) => {
       console.error("Unhandled error in fetchCityBusinesses:", error);
       setCityDataLoaded(true);
     });
 
     // Fetch all Dubai businesses if this is a Dubai area
     if (country === "uae") {
-      fetchAllDubaiBusinesses().catch(error => {
+      fetchAllDubaiBusinesses().catch((error) => {
         console.error("Unhandled error in fetchAllDubaiBusinesses:", error);
         setAllDubaiDataLoaded(true);
       });
@@ -825,17 +1003,25 @@ export default function CityCategory() {
 
                   // Add nearby city businesses, avoiding duplicates
                   const newBusinesses = nearbyResult.businesses.filter(
-                    (nearbyBusiness: any) => !accumulatedBusinesses.some(
-                      (existing: any) => existing.name === nearbyBusiness.name && existing.address === nearbyBusiness.address
-                    )
+                    (nearbyBusiness: any) =>
+                      !accumulatedBusinesses.some(
+                        (existing: any) =>
+                          existing.name === nearbyBusiness.name &&
+                          existing.address === nearbyBusiness.address,
+                      ),
                   );
 
                   if (newBusinesses.length > 0) {
-                    accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                    accumulatedBusinesses = [
+                      ...accumulatedBusinesses,
+                      ...newBusinesses,
+                    ];
                     nearbyDataSources.push(nearbyCity_temp);
                     isNearbyData = true;
 
-                    console.log(`Added ${newBusinesses.length} new businesses from ${nearbyCity_temp}. Total: ${accumulatedBusinesses.length}`);
+                    console.log(
+                      `Added ${newBusinesses.length} new businesses from ${nearbyCity_temp}. Total: ${accumulatedBusinesses.length}`,
+                    );
                   }
                 }
               } else {
@@ -858,12 +1044,14 @@ export default function CityCategory() {
               success: true,
               businesses: accumulatedBusinesses,
               total: accumulatedBusinesses.length,
-              source: nearbyDataSources.length > 0 ? 'nearby_cities' : 'local'
+              source: nearbyDataSources.length > 0 ? "nearby_cities" : "local",
             };
 
             if (nearbyDataSources.length > 0) {
-              nearbyCity = nearbyDataSources.join(', ');
-              console.log(`Final result: ${accumulatedBusinesses.length} businesses from ${nearbyCity}`);
+              nearbyCity = nearbyDataSources.join(", ");
+              console.log(
+                `Final result: ${accumulatedBusinesses.length} businesses from ${nearbyCity}`,
+              );
             }
           }
         }
@@ -890,7 +1078,11 @@ export default function CityCategory() {
 
           // If no exact match, try nearby cities with category
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(cityName, country, userLocation);
+            const nearbyCities = getNearByCities(
+              cityName,
+              country,
+              userLocation,
+            );
 
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
@@ -915,7 +1107,11 @@ export default function CityCategory() {
 
           // If still no category-specific data, try just city match (broader fallback)
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(cityName, country, userLocation);
+            const nearbyCities = getNearByCities(
+              cityName,
+              country,
+              userLocation,
+            );
 
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
@@ -1016,7 +1212,11 @@ export default function CityCategory() {
 
           // If no exact match, try nearby cities with accumulation
           if (sampleBusinesses_filtered.length === 0) {
-            const nearbyCities = getNearByCities(cityName, country, userLocation);
+            const nearbyCities = getNearByCities(
+              cityName,
+              country,
+              userLocation,
+            );
 
             // Accumulate businesses from all nearby cities to get better coverage
             for (const nearbyCity_temp of nearbyCities) {
@@ -1030,7 +1230,10 @@ export default function CityCategory() {
               );
 
               if (nearbyBusinesses.length > 0) {
-                sampleBusinesses_filtered = [...sampleBusinesses_filtered, ...nearbyBusinesses];
+                sampleBusinesses_filtered = [
+                  ...sampleBusinesses_filtered,
+                  ...nearbyBusinesses,
+                ];
                 console.log(
                   `Emergency fallback: Added ${nearbyBusinesses.length} sample businesses from nearby city: ${nearbyCity_temp}`,
                 );
@@ -1039,25 +1242,39 @@ export default function CityCategory() {
 
             // If still no businesses found, try with looser category matching
             if (sampleBusinesses_filtered.length === 0) {
-              console.log("No businesses found with strict category matching, trying looser matching...");
+              console.log(
+                "No businesses found with strict category matching, trying looser matching...",
+              );
 
-              const educationCategories = ["Education", "Student", "Study", "Visa", "Immigration"];
-              const isEducationCategory = educationCategories.some(cat =>
-                categoryName.toLowerCase().includes(cat.toLowerCase())
+              const educationCategories = [
+                "Education",
+                "Student",
+                "Study",
+                "Visa",
+                "Immigration",
+              ];
+              const isEducationCategory = educationCategories.some((cat) =>
+                categoryName.toLowerCase().includes(cat.toLowerCase()),
               );
 
               if (isEducationCategory) {
                 for (const nearbyCity_temp of nearbyCities) {
                   const nearbyBusinesses = sampleBusinesses.filter(
                     (business) =>
-                      business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
-                      educationCategories.some(cat =>
-                        business.category.toLowerCase().includes(cat.toLowerCase())
-                      )
+                      business.city.toLowerCase() ===
+                        nearbyCity_temp.toLowerCase() &&
+                      educationCategories.some((cat) =>
+                        business.category
+                          .toLowerCase()
+                          .includes(cat.toLowerCase()),
+                      ),
                   );
 
                   if (nearbyBusinesses.length > 0) {
-                    sampleBusinesses_filtered = [...sampleBusinesses_filtered, ...nearbyBusinesses];
+                    sampleBusinesses_filtered = [
+                      ...sampleBusinesses_filtered,
+                      ...nearbyBusinesses,
+                    ];
                     console.log(
                       `Emergency fallback (loose): Added ${nearbyBusinesses.length} education-related businesses from: ${nearbyCity_temp}`,
                     );
@@ -1534,7 +1751,9 @@ export default function CityCategory() {
                   <div className="flex items-center gap-2 text-blue-800 text-sm">
                     <MapPin className="h-4 w-4" />
                     <span className="font-medium">
-                      Comprehensive Search: Found {categoryBusinesses.length} {categoryName.toLowerCase()} from {cityName} and nearby Maharashtra cities for better choice and comparison.
+                      Comprehensive Search: Found {categoryBusinesses.length}{" "}
+                      {categoryName.toLowerCase()} from {cityName} and nearby
+                      Maharashtra cities for better choice and comparison.
                     </span>
                   </div>
                 </div>
@@ -1716,11 +1935,13 @@ export default function CityCategory() {
                           ` (${filteredBusinesses.length})`}
                       </h2>
                       <p className="text-gray-600 mt-1">
-                        {categoryBusinesses.length > 0 && isShowingNearbyData && categoryBusinesses.length >= 30
+                        {categoryBusinesses.length > 0 &&
+                        isShowingNearbyData &&
+                        categoryBusinesses.length >= 30
                           ? `Comprehensive listing of ${categoryName.toLowerCase()} from ${cityName} and nearby Maharashtra cities`
                           : categoryBusinesses.length > 0
-                          ? `Find trusted ${categoryName.toLowerCase()} in ${cityName}`
-                          : `All available businesses in ${cityName}`}
+                            ? `Find trusted ${categoryName.toLowerCase()} in ${cityName}`
+                            : `All available businesses in ${cityName}`}
                       </p>
                     </div>
                     <Badge variant="default" className="text-sm bg-blue-600">
@@ -1745,11 +1966,15 @@ export default function CityCategory() {
                           "Study Abroad Consultants",
                           "Education Consultants",
                           "Language Training Centers",
-                          "Visa Interview Preparation"
+                          "Visa Interview Preparation",
                         ];
 
-                        const aIsEducation = educationCategories.includes(a.category);
-                        const bIsEducation = educationCategories.includes(b.category);
+                        const aIsEducation = educationCategories.includes(
+                          a.category,
+                        );
+                        const bIsEducation = educationCategories.includes(
+                          b.category,
+                        );
 
                         if (aIsEducation && !bIsEducation) return -1;
                         if (!aIsEducation && bIsEducation) return 1;

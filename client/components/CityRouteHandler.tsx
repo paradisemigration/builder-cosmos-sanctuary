@@ -6,19 +6,19 @@ import BusinessProfile from "@/pages/BusinessProfile";
 // Category aliases for common URL variations
 const categoryAliases: Record<string, string> = {
   "study-abroad": "study-abroad-consultant",
-  "immigration": "immigration-consultants",
-  "visa": "visa-consultant",
+  immigration: "immigration-consultants",
+  visa: "visa-consultant",
   "work-visa": "work-visa-consultants",
   "tourist-visa": "tourist-visa-services",
   "student-visa": "student-visa-consultants",
   "visit-visa": "visit-visa-specialists",
   "work-permit": "work-visa-consultants",
   "pr-consultants": "pr-citizenship-services",
-  "education": "education-consultants",
+  education: "education-consultants",
   "education-services": "education-consultants",
   "business-visa": "business-visa-services",
   "overseas-education": "overseas-education",
-  "student-services": "student-visa-services"
+  "student-services": "student-visa-services",
 };
 
 export default function CityRouteHandler() {

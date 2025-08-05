@@ -622,7 +622,8 @@ export const sampleBusinesses: Business[] = [
     category: "Student Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Leading education consultancy in Kerala for international studies and student visa services.",
+    description:
+      "Leading education consultancy in Kerala for international studies and student visa services.",
     services: [
       "Student Visa for USA",
       "Student Visa for Canada",
@@ -653,7 +654,8 @@ export const sampleBusinesses: Business[] = [
     category: "Study Abroad Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Premier study abroad consultancy in Kochi helping students achieve their international education dreams.",
+    description:
+      "Premier study abroad consultancy in Kochi helping students achieve their international education dreams.",
     services: [
       "Study Abroad Counseling",
       "University Applications",
@@ -684,7 +686,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Comprehensive education consultancy serving Kerala and Tamil Nadu with expert guidance for students.",
+    description:
+      "Comprehensive education consultancy serving Kerala and Tamil Nadu with expert guidance for students.",
     services: [
       "Career Counseling",
       "Course Selection",
@@ -717,7 +720,8 @@ export const sampleBusinesses: Business[] = [
     category: "Study Abroad Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Leading study abroad consultancy in Coimbatore specializing in US, UK, and Canadian universities.",
+    description:
+      "Leading study abroad consultancy in Coimbatore specializing in US, UK, and Canadian universities.",
     services: [
       "University Selection",
       "Application Assistance",
@@ -748,7 +752,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Comprehensive education consultancy in Chennai providing guidance for domestic and international education.",
+    description:
+      "Comprehensive education consultancy in Chennai providing guidance for domestic and international education.",
     services: [
       "Career Counseling",
       "Course Selection",
@@ -779,7 +784,8 @@ export const sampleBusinesses: Business[] = [
     category: "Student Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Trusted student visa consultancy in Madurai helping students secure visas for international education.",
+    description:
+      "Trusted student visa consultancy in Madurai helping students secure visas for international education.",
     services: [
       "Student Visa Processing",
       "Document Preparation",
@@ -812,7 +818,8 @@ export const sampleBusinesses: Business[] = [
     category: "Work Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Leading work visa consultancy in Chennai specializing in employment visas for USA, Canada, Europe, and Gulf countries.",
+    description:
+      "Leading work visa consultancy in Chennai specializing in employment visas for USA, Canada, Europe, and Gulf countries.",
     services: [
       "H1B Visa Processing",
       "Work Permit Canada",
@@ -843,7 +850,8 @@ export const sampleBusinesses: Business[] = [
     category: "Work Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Trusted employment visa consultancy in Bangalore helping IT professionals secure work permits worldwide.",
+    description:
+      "Trusted employment visa consultancy in Bangalore helping IT professionals secure work permits worldwide.",
     services: [
       "Tech Worker Visas",
       "Skilled Worker Immigration",
@@ -863,7 +871,14 @@ export const sampleBusinesses: Business[] = [
     plan: "premium",
     languages: ["English", "Hindi", "Kannada", "Tamil"],
     specializations: ["IT Work Visas", "Tech Immigration"],
-    countriesServed: ["USA", "Canada", "UK", "Australia", "Germany", "Netherlands"],
+    countriesServed: [
+      "USA",
+      "Canada",
+      "UK",
+      "Australia",
+      "Germany",
+      "Netherlands",
+    ],
     coordinates: { lat: 12.9716, lng: 77.5946 },
     paymentMethods: ["Cash", "Card", "UPI", "Net Banking"],
     reviews: [],
@@ -874,7 +889,8 @@ export const sampleBusinesses: Business[] = [
     category: "Work Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Premier work visa consultancy in Mumbai providing comprehensive employment immigration services.",
+    description:
+      "Premier work visa consultancy in Mumbai providing comprehensive employment immigration services.",
     services: [
       "Work Visa Processing",
       "Job Search Assistance",
@@ -895,7 +911,7 @@ export const sampleBusinesses: Business[] = [
     languages: ["Hindi", "English", "Marathi", "Gujarati"],
     specializations: ["Work Immigration", "Employment Services"],
     countriesServed: ["USA", "Canada", "UK", "Australia", "New Zealand", "UAE"],
-    coordinates: { lat: 19.0760, lng: 72.8777 },
+    coordinates: { lat: 19.076, lng: 72.8777 },
     paymentMethods: ["Cash", "Card", "UPI", "Net Banking"],
     reviews: [],
   },
@@ -1086,7 +1102,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Premier education consultancy in Kolkata providing comprehensive academic guidance and career counseling services.",
+    description:
+      "Premier education consultancy in Kolkata providing comprehensive academic guidance and career counseling services.",
     services: [
       "Academic Counseling",
       "Career Guidance",
@@ -1108,7 +1125,11 @@ export const sampleBusinesses: Business[] = [
     plan: "premium",
     establishedYear: 2010,
     languages: ["Bengali", "English", "Hindi"],
-    specializations: ["Higher Education", "Professional Courses", "Career Counseling"],
+    specializations: [
+      "Higher Education",
+      "Professional Courses",
+      "Career Counseling",
+    ],
     countriesServed: ["India"],
     coordinates: { lat: 22.5414, lng: 88.3513 },
     paymentMethods: ["Cash", "Card", "UPI", "Net Banking"],
@@ -1118,7 +1139,8 @@ export const sampleBusinesses: Business[] = [
         userId: "user-edu-1",
         userName: "Priya Chatterjee",
         rating: 5,
-        comment: "Excellent guidance for my engineering admissions. Very professional and knowledgeable staff.",
+        comment:
+          "Excellent guidance for my engineering admissions. Very professional and knowledgeable staff.",
         isVerified: true,
         date: "2024-01-15",
       },
@@ -1131,7 +1153,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Trusted education advisory services in Kolkata specializing in professional course guidance and admission assistance.",
+    description:
+      "Trusted education advisory services in Kolkata specializing in professional course guidance and admission assistance.",
     services: [
       "Professional Course Guidance",
       "MBA Admissions",
@@ -1165,7 +1188,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Educational consultancy in Howrah providing comprehensive academic guidance and university admission support.",
+    description:
+      "Educational consultancy in Howrah providing comprehensive academic guidance and university admission support.",
     services: [
       "University Admissions",
       "Academic Planning",
@@ -1199,7 +1223,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Leading education consultancy in Durgapur offering expert guidance for higher education and career development.",
+    description:
+      "Leading education consultancy in Durgapur offering expert guidance for higher education and career development.",
     services: [
       "Higher Education Guidance",
       "Career Development",

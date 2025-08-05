@@ -44,7 +44,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
     let hash = 0;
     for (let i = 0; i < businessName.length; i++) {
       const char = businessName.charCodeAt(i);
-      hash = ((hash << 7) - hash) + char;
+      hash = (hash << 7) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     // Map hash to range 45-350 for realistic review counts
@@ -78,12 +78,12 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
       "John Miller",
       "Zara Ahmed",
       "Carlos Rodriguez",
-      "Priya Sharma"
+      "Priya Sharma",
     ];
 
     let hash = 0;
     for (let i = 0; i < businessName.length; i++) {
-      hash = ((hash << 5) - hash) + businessName.charCodeAt(i);
+      hash = (hash << 5) - hash + businessName.charCodeAt(i);
       hash = hash & hash; // Convert to 32-bit integer
     }
 
@@ -102,7 +102,8 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
 
     // Ensure we have at least 3 reviewers
     while (selectedReviewers.length < 3) {
-      const randomIndex = Math.abs(hash + selectedReviewers.length * 17) % commonNames.length;
+      const randomIndex =
+        Math.abs(hash + selectedReviewers.length * 17) % commonNames.length;
       const reviewer = commonNames[randomIndex];
       if (!selectedReviewers.includes(reviewer)) {
         selectedReviewers.push(reviewer);
@@ -118,27 +119,44 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   const getReviewerNames = () => {
     // Debug: Log review data to console
     if (business.reviews && business.reviews.length > 0) {
-      console.log(`${business.name} has ${business.reviews.length} reviews:`, business.reviews.map(r => r.userName));
+      console.log(
+        `${business.name} has ${business.reviews.length} reviews:`,
+        business.reviews.map((r) => r.userName),
+      );
       // Use actual reviewer names from the business data
       const realReviewers = business.reviews
-        .filter(review => review.userName && review.userName !== 'Anonymous' && review.userName.trim() !== '')
-        .map(review => review.userName)
+        .filter(
+          (review) =>
+            review.userName &&
+            review.userName !== "Anonymous" &&
+            review.userName.trim() !== "",
+        )
+        .map((review) => review.userName)
         .slice(0, 5); // Get up to 5 reviewer names
 
       if (realReviewers.length > 0) {
-        console.log(`Using real reviewers for ${business.name}:`, realReviewers);
+        console.log(
+          `Using real reviewers for ${business.name}:`,
+          realReviewers,
+        );
         return realReviewers;
       }
     }
 
     // Debug: Log when using generated names
     const generatedNames = generateRecentReviewers(business.name);
-    console.log(`Using generated reviewers for ${business.name}:`, generatedNames);
+    console.log(
+      `Using generated reviewers for ${business.name}:`,
+      generatedNames,
+    );
     return generatedNames;
   };
 
   const recentReviewers = getReviewerNames();
-  const reviewCount = business.reviews?.length || business.reviewCount || generateReviewCount(business.name);
+  const reviewCount =
+    business.reviews?.length ||
+    business.reviewCount ||
+    generateReviewCount(business.name);
 
   // Generate SEO-friendly URL slug
   const generateSlug = (text: string) => {
@@ -311,9 +329,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{business.rating}</span>
-                  <span className="text-gray-500">
-                    ({reviewCount} reviews)
-                  </span>
+                  <span className="text-gray-500">({reviewCount} reviews)</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" />
@@ -344,7 +360,8 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
                   </span>
                   {recentReviewers.length > 2 && (
                     <span className="text-gray-500">
-                      {" "}+{recentReviewers.length - 2} more
+                      {" "}
+                      +{recentReviewers.length - 2} more
                     </span>
                   )}
                   {business.reviews && business.reviews.length > 0 && (
