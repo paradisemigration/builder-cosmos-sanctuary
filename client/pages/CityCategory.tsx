@@ -1098,41 +1098,65 @@ export default function CityCategory() {
       return;
     }
 
-    // Comprehensive error boundary for all fetch operations
-    const executeWithErrorBoundary = async () => {
+    // Ultimate error-safe execution
+    const executeAllOperations = () => {
       try {
-        // Execute all fetch operations with individual error handling
-        const fetchPromises = [
-          fetchCategoryBusinesses().catch((error) => {
-            console.error("Error in fetchCategoryBusinesses:", error);
+        // Set a safety timeout to ensure loading states are updated
+        const safetyTimeout = setTimeout(() => {
+          console.log('Safety timeout triggered, ensuring all loading states are set');
+          setCategoryDataLoaded(true);
+          setCityDataLoaded(true);
+          setAllDubaiDataLoaded(true);
+          setLoading(false);
+        }, 15000); // 15 second safety timeout
+
+        // Execute each operation independently with maximum safety
+        Promise.resolve().then(async () => {
+          try {
+            await fetchCategoryBusinesses();
+          } catch (error) {
+            console.error("Final catch for fetchCategoryBusinesses:", error);
+          } finally {
             setCategoryDataLoaded(true);
             setLoading(false);
-            return null;
-          }),
-          fetchCityBusinesses().catch((error) => {
-            console.error("Error in fetchCityBusinesses:", error);
-            setCityDataLoaded(true);
-            return null;
-          })
-        ];
+          }
+        });
 
-        // Add Dubai fetch for UAE
+        Promise.resolve().then(async () => {
+          try {
+            await fetchCityBusinesses();
+          } catch (error) {
+            console.error("Final catch for fetchCityBusinesses:", error);
+          } finally {
+            setCityDataLoaded(true);
+          }
+        });
+
         if (country === "uae") {
-          fetchPromises.push(
-            fetchAllDubaiBusinesses().catch((error) => {
-              console.error("Error in fetchAllDubaiBusinesses:", error);
+          Promise.resolve().then(async () => {
+            try {
+              await fetchAllDubaiBusinesses();
+            } catch (error) {
+              console.error("Final catch for fetchAllDubaiBusinesses:", error);
+            } finally {
               setAllDubaiDataLoaded(true);
-              return null;
-            })
-          );
+            }
+          });
+        } else {
+          setAllDubaiDataLoaded(true);
         }
 
-        // Wait for all operations to complete (they have individual error handling)
-        await Promise.allSettled(fetchPromises);
+        // Clear safety timeout if everything completes normally
+        const checkCompletion = setInterval(() => {
+          if (categoryDataLoaded && cityDataLoaded && allDubaiDataLoaded) {
+            clearTimeout(safetyTimeout);
+            clearInterval(checkCompletion);
+          }
+        }, 1000);
 
-      } catch (globalError) {
-        console.error("Global error in fetch operations:", globalError);
-        // Ensure all loading states are set
+      } catch (setupError) {
+        console.error("Setup error in executeAllOperations:", setupError);
+        // Ensure all states are set even if setup fails
         setCategoryDataLoaded(true);
         setCityDataLoaded(true);
         setAllDubaiDataLoaded(true);
@@ -1140,7 +1164,7 @@ export default function CityCategory() {
       }
     };
 
-    executeWithErrorBoundary();
+    executeAllOperations();
 
     // Set page meta data with SEO optimization
     const metaData = generateCityCategoryMeta(cityName, categoryName);
