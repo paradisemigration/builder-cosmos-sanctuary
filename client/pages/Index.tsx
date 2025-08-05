@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
@@ -24,6 +24,7 @@ import {
   Target,
   FileCheck,
   HeadphonesIcon,
+  Loader2,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { BusinessCard } from "@/components/BusinessCard";
@@ -37,6 +38,8 @@ import {
   sampleBusinesses,
   type Business,
 } from "@/lib/data";
+import { allCategories, allIndianCities } from "@/lib/all-categories";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { generateHomeMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function Index() {
@@ -45,7 +48,15 @@ export default function Index() {
   const [featuredBusinesses, setFeaturedBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeService, setActiveService] = useState(0);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Use geolocation hook
+  const { location, isLoading: locationLoading, error: locationError } = useGeolocation();
 
   // Set homepage SEO meta data
   useEffect(() => {
@@ -56,6 +67,57 @@ export default function Index() {
       canonical: "/",
       alternate: ["/", "/business", "/all-categories"],
     });
+  }, []);
+
+  // Auto-detect city from geolocation
+  useEffect(() => {
+    if (location && location.city && !selectedCity) {
+      // Find matching city in our cities list
+      const matchingCity = allIndianCities.find(city =>
+        city.toLowerCase().includes(location.city.toLowerCase()) ||
+        location.city.toLowerCase().includes(city.toLowerCase())
+      );
+
+      if (matchingCity) {
+        setSelectedCity(matchingCity);
+      }
+    }
+  }, [location, selectedCity]);
+
+  // Handle category autocomplete
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      const filtered = allCategories.filter(category =>
+        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        category.description.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 8); // Limit to 8 suggestions
+
+      setFilteredCategories(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setShowSuggestions(false);
+      setFilteredCategories([]);
+      setSelectedCategory(null);
+    }
+  }, [searchQuery]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Fetch featured businesses
@@ -91,10 +153,47 @@ export default function Index() {
   }, []);
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
+    // If we have both city and a selected category, go to city+category page
+    if (selectedCity && selectedCategory) {
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      const categorySlug = selectedCategory.slug;
+      navigate(`/business/${citySlug}/${categorySlug}`);
+    }
+    // If we have a city but search query (not a selected category), search in that city
+    else if (selectedCity && searchQuery.trim()) {
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      navigate(`/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+    // If we have selected category but no city, go to category page
+    else if (selectedCategory && !selectedCity) {
+      navigate(`/category/${selectedCategory.slug}`);
+    }
+    // If we have search query but no specific category/city, do general search
+    else if (searchQuery.trim()) {
       navigate(`/business?q=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
+    }
+    // Default fallback
+    else {
       navigate('/business');
+    }
+
+    // Close suggestions after search
+    setShowSuggestions(false);
+  };
+
+  const handleCategorySelect = (category: any) => {
+    setSelectedCategory(category);
+    setSearchQuery(category.name);
+    setShowSuggestions(false);
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Clear selected category if user changes search query
+    if (selectedCategory && value !== selectedCategory.name) {
+      setSelectedCategory(null);
     }
   };
 
@@ -293,32 +392,74 @@ export default function Index() {
             <div className="max-w-2xl mx-auto mb-8 sm:mb-12 px-4">
               <div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="flex-1">
+                  <div className="flex-1 relative">
                     <div className="relative">
-                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
                       <Input
+                        ref={searchInputRef}
                         type="text"
-                        placeholder="Search visa consultants..."
+                        placeholder="Search visa consultants, categories..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleSearchInputChange}
                         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent"
+                        onFocus={() => {
+                          if (searchQuery.length >= 2 && filteredCategories.length > 0) {
+                            setShowSuggestions(true);
+                          }
+                        }}
+                        className="pl-12 pr-4 py-3 sm:py-4 border-0 focus:ring-0 text-base sm:text-lg bg-transparent w-full"
                       />
+                      {selectedCategory && (
+                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                          <Badge variant="secondary" className="text-xs">
+                            {selectedCategory.name}
+                          </Badge>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Autocomplete Suggestions */}
+                    {showSuggestions && filteredCategories.length > 0 && (
+                      <div
+                        ref={suggestionsRef}
+                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                      >
+                        {filteredCategories.map((category, index) => (
+                          <div
+                            key={category.slug}
+                            className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                            onClick={() => handleCategorySelect(category)}
+                          >
+                            <div className="font-medium text-gray-900">{category.name}</div>
+                            <div className="text-sm text-gray-600 mt-1">{category.description}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="sm:flex-initial">
-                    <select
-                      value={selectedCity}
-                      onChange={(e) => setSelectedCity(e.target.value)}
-                      className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-blue-500 text-base"
-                    >
-                      <option value="">Select City</option>
-                      {majorCities.map((city) => (
-                        <option key={city.name} value={city.name}>
-                          {city.name}
+                    <div className="relative">
+                      <select
+                        value={selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                        className="w-full sm:w-40 px-4 py-3 sm:py-4 border-0 rounded-lg bg-gray-50 text-gray-700 focus:ring-2 focus:ring-blue-500 text-base appearance-none"
+                      >
+                        <option value="">
+                          {locationLoading ? "Detecting..." : "Select City"}
                         </option>
-                      ))}
-                    </select>
+                        {allIndianCities.slice(0, 20).map((city) => (
+                          <option key={city} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
+                      {locationLoading && (
+                        <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin text-gray-400" />
+                      )}
+                      {location && !locationLoading && (
+                        <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Button
@@ -327,7 +468,7 @@ export default function Index() {
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
                 >
                   <Search className="mr-2 h-5 w-5" />
-                  Search Experts
+                  {selectedCity && selectedCategory ? `Search in ${selectedCity}` : "Search Experts"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
