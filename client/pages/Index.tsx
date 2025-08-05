@@ -26,6 +26,8 @@ import {
   HeadphonesIcon,
   Loader2,
   X,
+  MessageSquare,
+  PhoneCall,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { BusinessCard } from "@/components/BusinessCard";
