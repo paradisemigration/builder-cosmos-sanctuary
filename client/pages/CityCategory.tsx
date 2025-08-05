@@ -1453,7 +1453,7 @@ export default function CityCategory() {
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
         const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
-        const response = await fetch(apiUrl, {
+        const response = await robustFetch(apiUrl, {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
