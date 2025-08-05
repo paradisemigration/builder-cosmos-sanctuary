@@ -295,7 +295,9 @@ export default function CityCategory() {
             try {
               console.log(`Trying nearby city: ${nearbyCity_temp} + ${categoryName}`);
               const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=100`;
-              const nearbyResponse = await fetch(nearbyUrl);
+              const nearbyResponse = await fetch(nearbyUrl, {
+                signal: AbortSignal.timeout(8000) // 8 second timeout
+              });
 
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
@@ -311,6 +313,7 @@ export default function CityCategory() {
               }
             } catch (nearbyError) {
               console.log(`Failed to fetch data for nearby city ${nearbyCity_temp}:`, nearbyError);
+              // Continue to next nearby city instead of stopping
             }
           }
         }
