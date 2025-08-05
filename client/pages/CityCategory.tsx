@@ -1651,62 +1651,18 @@ export default function CityCategory() {
             "No data from API for main city, trying nearby cities with real API calls",
           );
 
-          // Try to find sample businesses for exact city + category
-          console.log(
-            `Filtering sample data: cityName="${cityName}", categoryName="${categoryName}"`,
-          );
-          console.log(
-            `Available sample businesses total: ${sampleBusinesses.length}`,
-          );
-
-          let sampleBusinesses_filtered = sampleBusinesses.filter(
-            (business) => {
-              const cityMatch =
-                business.city.toLowerCase() === cityName.toLowerCase();
-              let categoryMatch = false;
-
-              if (categorySlug === "visa-consultants") {
-                // For visa-consultants, match any business with "visa" and "consultant" in category
-                const businessCategory = business.category.toLowerCase();
-                categoryMatch =
-                  businessCategory.includes("visa") &&
-                  businessCategory.includes("consultant");
-
-                // Debug: show what we're matching against
-                if (cityMatch) {
-                  console.log(
-                    `Exact city check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "visa": ${businessCategory.includes("visa")}, contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`,
-                  );
-                }
-              } else if (
-                categorySlug.includes("consultant") ||
-                categorySlug === "canada-express-entry-consultants" ||
-                categorySlug === "immigration-consultants"
-              ) {
-                // For consultant categories, match any business with "consultant" in category
-                const businessCategory = business.category.toLowerCase();
-                categoryMatch = businessCategory.includes("consultant");
-
-                // Debug: show what we're matching against
-                if (cityMatch) {
-                  console.log(
-                    `Exact city consultant check - "${business.category}" (lowercase: "${businessCategory}") in ${business.city} - contains "consultant": ${businessCategory.includes("consultant")}, match: ${categoryMatch}`,
-                  );
-                }
-              } else {
-                // For other categories, use standard matching
-                categoryMatch = business.category
-                  .toLowerCase()
-                  .includes(categoryName.toLowerCase());
-              }
-
-              return cityMatch && categoryMatch;
-            },
+          const nearbyCities = getNearByCities(
+            cityName,
+            country,
+            userLocation,
           );
 
           console.log(
-            `Exact city match found: ${sampleBusinesses_filtered.length} businesses`,
+            `Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
           );
+
+          let accumulatedBusinesses = [];
+          let sourceCities = [];
 
           // If no exact match, try nearby cities with prioritized matching
           if (sampleBusinesses_filtered.length === 0) {
