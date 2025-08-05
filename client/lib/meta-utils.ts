@@ -182,7 +182,7 @@ export function generateCategoryMeta(
   };
 }
 
-// Generate meta data for city-only pages
+// Generate meta data for city-only pages with comprehensive SEO
 export function generateCityMeta(cityName: string): MetaData {
   const isUAE = [
     "Dubai",
@@ -195,14 +195,45 @@ export function generateCityMeta(cityName: string): MetaData {
     "Al Ain",
   ].includes(cityName);
   const country = isUAE ? "UAE" : "India";
+  const websiteName = "VisaConsult India";
+
+  // Format: "Top 10 Visa & Immigration Consultants in + city Name | Website name"
+  const title = `Top 10 Visa & Immigration Consultants in ${cityName} | ${websiteName}`;
+
+  // 200-character optimized description
+  const description = `Find top 10 visa & immigration consultants in ${cityName}, ${country}. Compare verified experts for student, work, tourist & PR visas. Best immigration services guaranteed.`;
+
+  // 20 relevant keywords for city-only pages
+  const keywordsList = [
+    `top 10 visa consultants ${cityName.toLowerCase()}`,
+    `best immigration consultants ${cityName.toLowerCase()}`,
+    `visa & immigration consultants ${cityName.toLowerCase()}`,
+    `visa agents ${cityName.toLowerCase()}`,
+    `immigration services ${cityName.toLowerCase()}`,
+    `study abroad consultants ${cityName.toLowerCase()}`,
+    `work visa consultants ${cityName.toLowerCase()}`,
+    `tourist visa services ${cityName.toLowerCase()}`,
+    `pr consultants ${cityName.toLowerCase()}`,
+    `immigration lawyers ${cityName.toLowerCase()}`,
+    `visa processing ${cityName.toLowerCase()}`,
+    `student visa ${cityName.toLowerCase()}`,
+    `work permit ${cityName.toLowerCase()}`,
+    `family visa ${cityName.toLowerCase()}`,
+    `business visa ${cityName.toLowerCase()}`,
+    `document attestation ${cityName.toLowerCase()}`,
+    `embassy services ${cityName.toLowerCase()}`,
+    `visa consultation ${cityName.toLowerCase()}`,
+    `immigration guidance ${cityName.toLowerCase()}`,
+    `visa documentation ${cityName.toLowerCase()}`
+  ];
 
   return {
-    title: `Top 10 Visa Consultants In ${cityName} - VisaConsult India`,
-    description: `Find the top 10 visa consultants in ${cityName}, ${country}. Compare ratings, reviews, and services of verified immigration experts. Professional guidance for student visa, work visa, tourist visa, business visa, family visa, and permanent residence applications. Trusted consultants with proven success rates.`,
-    keywords: `visa consultants ${cityName.toLowerCase()}, immigration consultants ${cityName.toLowerCase()}, best visa agents ${cityName.toLowerCase()}, visa services ${cityName.toLowerCase()}, study abroad consultants ${cityName.toLowerCase()}, work visa agents ${cityName.toLowerCase()}, tourist visa services ${cityName.toLowerCase()}, immigration lawyers ${cityName.toLowerCase()}, pr consultants ${cityName.toLowerCase()}, visa processing ${cityName.toLowerCase()}, document services ${cityName.toLowerCase()}, embassy services ${cityName.toLowerCase()}`,
-    robots:
-      "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    title,
+    description,
+    keywords: keywordsList.join(', '),
+    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/business/${cityName.toLowerCase().replace(/\s+/g, '-')}`,
+    robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+    author: websiteName,
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
