@@ -507,6 +507,18 @@ export default function CityBusinessListing() {
               </div>
             )}
 
+            {/* Show notification for Abu Dhabi showing only local results */}
+            {!isShowingNearbyData && businesses.length > 0 && (cityName.toLowerCase() === 'abu dhabi' || cityName.toLowerCase() === 'abu-dhabi') && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 max-w-3xl mx-auto">
+                <div className="flex items-center justify-center gap-2 text-green-800">
+                  <Building className="h-5 w-5" />
+                  <span className="font-medium">
+                    Showing {businesses.length} verified consultants specifically from Abu Dhabi only
+                  </span>
+                </div>
+              </div>
+            )}
+
             <p className="text-xl text-blue-100 mb-6 max-w-3xl mx-auto">
               Find trusted and verified visa consultants in {cityName}. Compare
               services, read reviews, and choose the best expert for your visa
