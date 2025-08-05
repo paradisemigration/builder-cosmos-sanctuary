@@ -309,11 +309,43 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
     }
   }
 
-  // Default fallbacks by country
+  // Default fallbacks by country and region
   if (country === 'uae') {
     return ["Dubai", "Abu Dhabi", "Sharjah"];
   } else {
-    // For India, return major metro cities
+    // For India, prioritize regional cities based on the requesting city
+    const lowerCityName = cityName.toLowerCase();
+
+    // South India cities should prioritize southern metros
+    const southIndianCities = [
+      'coimbatore', 'madurai', 'salem', 'erode', 'tirupur', 'dindigul',
+      'kochi', 'thiruvananthapuram', 'kozhikode', 'thrissur', 'kollam',
+      'mysore', 'mangalore', 'hubli', 'belgaum', 'shimoga'
+    ];
+
+    if (southIndianCities.includes(lowerCityName)) {
+      return ["Chennai", "Bangalore", "Kochi", "Thiruvananthapuram", "Kozhikode", "Hyderabad", "Mysore", "Mangalore"];
+    }
+
+    // East India cities should prioritize eastern metros
+    const eastIndianCities = [
+      'bhubaneswar', 'cuttack', 'guwahati', 'siliguri', 'durgapur', 'asansol'
+    ];
+
+    if (eastIndianCities.includes(lowerCityName)) {
+      return ["Kolkata", "Howrah", "Durgapur", "Bhubaneswar", "Guwahati", "Delhi", "Mumbai"];
+    }
+
+    // West India cities should prioritize western metros
+    const westIndianCities = [
+      'surat', 'vadodara', 'rajkot', 'gandhinagar', 'jodhpur', 'udaipur', 'ajmer'
+    ];
+
+    if (westIndianCities.includes(lowerCityName)) {
+      return ["Mumbai", "Pune", "Ahmedabad", "Surat", "Vadodara", "Jaipur", "Delhi"];
+    }
+
+    // North India cities get current metros priority
     return ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"];
   }
 };
