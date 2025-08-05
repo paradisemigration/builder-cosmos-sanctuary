@@ -833,6 +833,19 @@ export default function UAE() {
           </div>
         </div>
       </section>
+
+      {/* Floating Call-to-Action Button */}
+      <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
+
+      {/* Enquiry Form Popup */}
+      <EnquiryPopup
+        isOpen={showEnquiryPopup}
+        onClose={() => setShowEnquiryPopup(false)}
+        onSubmit={(data) => {
+          console.log("UAE Enquiry submitted:", data);
+          // Add your submission logic here
+        }}
+      />
     </div>
   );
 }
