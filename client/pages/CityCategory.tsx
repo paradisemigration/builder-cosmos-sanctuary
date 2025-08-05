@@ -1726,26 +1726,40 @@ export default function CityCategory() {
             let accumulatedBusinesses = [];
             let sourceCities = [];
 
-            // PHASE 1: Prioritize exact category matches from nearby cities
-            console.log("=== PHASE 1: Looking for exact category matches ===");
+            // PHASE 1: Prioritize exact and close category matches from nearby cities
+            console.log("=== PHASE 1: Looking for exact and close category matches ===");
             for (const nearbyCity_temp of nearbyCities) {
-              const exactCategoryBusinesses = sampleBusinesses.filter(
-                (business) => {
-                  const cityMatch =
-                    business.city.toLowerCase() ===
-                    nearbyCity_temp.toLowerCase();
-                  const exactCategoryMatch =
-                    business.category.toLowerCase() ===
-                    categoryName.toLowerCase();
-                  return cityMatch && exactCategoryMatch;
-                },
-              );
+              const categoryBusinesses = sampleBusinesses.filter((business) => {
+                const cityMatch = business.city.toLowerCase() === nearbyCity_temp.toLowerCase();
+                if (!cityMatch) return false;
 
-              if (exactCategoryBusinesses.length > 0) {
-                console.log(
-                  `Found ${exactCategoryBusinesses.length} exact category matches in ${nearbyCity_temp}`,
-                );
-                const newBusinesses = exactCategoryBusinesses.filter(
+                const businessCategory = business.category.toLowerCase();
+                const searchCategory = categoryName.toLowerCase();
+
+                // Check for exact match first
+                if (businessCategory === searchCategory) {
+                  return true;
+                }
+
+                // Check for close matches (contains key terms)
+                if (categorySlug.includes("canada") && categorySlug.includes("consultant")) {
+                  return businessCategory.includes("immigration") ||
+                         businessCategory.includes("consultant") ||
+                         (businessCategory.includes("work") && businessCategory.includes("visa"));
+                }
+
+                if (categorySlug.includes("consultant") || categorySlug.includes("immigration")) {
+                  return businessCategory.includes("consultant") || businessCategory.includes("immigration");
+                }
+
+                // Partial match for other categories
+                return businessCategory.includes(searchCategory) || searchCategory.includes(businessCategory);
+              });
+
+              if (categoryBusinesses.length > 0) {
+                console.log(`Found ${categoryBusinesses.length} category matches in ${nearbyCity_temp}:`,
+                  categoryBusinesses.map(b => `${b.name} (${b.category})`));
+                const newBusinesses = categoryBusinesses.filter(
                   (newBusiness) =>
                     !accumulatedBusinesses.some(
                       (existing) =>
@@ -1754,13 +1768,12 @@ export default function CityCategory() {
                     ),
                 );
 
-                accumulatedBusinesses = [
-                  ...accumulatedBusinesses,
-                  ...newBusinesses,
-                ];
+                accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
                 if (!sourceCities.includes(nearbyCity_temp)) {
                   sourceCities.push(nearbyCity_temp);
                 }
+              } else {
+                console.log(`No category matches found in ${nearbyCity_temp}`);
               }
             }
 
