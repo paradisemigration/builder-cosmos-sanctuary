@@ -291,7 +291,7 @@ export function setPageMeta(metaData: MetaData): void {
   setMetaTag("DC.identifier", window.location.href);
   setMetaTag("DC.language", "en");
   setMetaTag("DC.coverage", "IN");
-  setMetaTag("DC.rights", "© 2024 VisaConsult India. All rights reserved.");
+  setMetaTag("DC.rights", "�� 2024 VisaConsult India. All rights reserved.");
 
   // Additional crawling and indexing hints
   setMetaTag("googlebot", "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1");
@@ -362,6 +362,80 @@ function setOpenGraphMeta(metaData: MetaData): void {
     }
     metaTag.setAttribute("content", tag.content);
   });
+}
+
+// Set city business directory structured data
+function setCityBusinessDirectoryStructuredData(metaData: MetaData): void {
+  const currentUrl = window.location.href;
+  const pathParts = window.location.pathname.split('/');
+  const cityName = pathParts[2]?.replace(/-/g, ' ');
+  const categoryName = pathParts[3]?.replace(/-/g, ' ');
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": metaData.title,
+    "description": metaData.description,
+    "url": currentUrl,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "VisaConsult India",
+      "url": window.location.origin
+    },
+    "about": {
+      "@type": "LocalBusiness",
+      "serviceType": categoryName,
+      "areaServed": {
+        "@type": "City",
+        "name": cityName,
+        "addressCountry": "IN"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": window.location.origin
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Business Directory",
+          "item": `${window.location.origin}/business`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": cityName,
+          "item": `${window.location.origin}/business/${pathParts[2]}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": categoryName,
+          "item": currentUrl
+        }
+      ]
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": `${categoryName} in ${cityName}`,
+      "description": `Directory of ${categoryName} in ${cityName}`,
+      "numberOfItems": "10+"
+    }
+  };
+
+  let script = document.querySelector('script[type="application/ld+json"][data-type="directory"]');
+  if (!script) {
+    script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.setAttribute('data-type', 'directory');
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(structuredData);
 }
 
 // Generate structured data for local business
