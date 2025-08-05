@@ -931,7 +931,33 @@ ${cityName}'s visa and immigration industry continues evolving with changing glo
 
 // Generate unique FAQs for each category and city combination
 const getFAQs = (categorySlug: string, cityName: string) => {
+  // Get category name for better FAQ content
+  const category = allCategories.find(c => c.slug === categorySlug);
+  const categoryName = category ? category.name : 'Consultants';
+
   const baseFAQs = {
+    "study-abroad-consultants": [
+      {
+        question: `What are the best ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `The top ${categoryName.toLowerCase()} in ${cityName} are those with proven track records, certified credentials, and high success rates. Look for consultants who specialize in your target country and have partnerships with international universities.`,
+      },
+      {
+        question: `How much do ${categoryName.toLowerCase()} charge in ${cityName}?`,
+        answer: `${categoryName} fees in ${cityName} typically range from AED 1,500 to AED 8,000 depending on the services included. Most consultants offer package deals that include university selection, application assistance, and visa guidance.`,
+      },
+      {
+        question: `Which countries are most popular for studying abroad from ${cityName}?`,
+        answer: `Students working with ${categoryName.toLowerCase()} in ${cityName} commonly choose USA, UK, Canada, Australia, Germany, and Ireland for higher education. The choice depends on factors like course availability, budget, and immigration policies.`,
+      },
+      {
+        question: `What documents do I need when working with ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `Essential documents include academic transcripts, standardized test scores (IELTS/TOEFL/GRE/GMAT), passport, statement of purpose, recommendation letters, and financial proof. Requirements vary by country and university.`,
+      },
+      {
+        question: `How long does the study abroad application process take with ${categoryName.toLowerCase()} in ${cityName}?`,
+        answer: `The complete process typically takes 6-12 months from university application to visa approval. Starting early and working with experienced ${categoryName.toLowerCase()} in ${cityName} can help streamline the timeline.`,
+      },
+    ],
     "study-abroad": [
       {
         question: `What are the best study abroad consultants in ${cityName}?`,
