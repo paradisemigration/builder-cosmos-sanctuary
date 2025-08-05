@@ -901,37 +901,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Simple Test Button for debugging */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9998]">
-        <button
-          onClick={() => setShowEnquiryPopup(true)}
-          className="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg text-lg font-bold"
-          style={{ zIndex: 9998 }}
-        >
-          Test Button
-        </button>
-      </div>
-
       {/* Floating Call-to-Action Button */}
       <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
-
-      {/* Simple Test Popup */}
-      {showEnquiryPopup && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-          style={{ zIndex: 9999 }}
-        >
-          <div className="bg-white p-8 rounded-lg">
-            <h3>Test Popup</h3>
-            <button
-              onClick={() => setShowEnquiryPopup(false)}
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Enquiry Form Popup */}
       <EnquiryPopup
