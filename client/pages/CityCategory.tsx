@@ -998,6 +998,7 @@ export default function CityCategory() {
         }
 
         setCategoryDataLoaded(true);
+      }
     }
 
     async function fetchCityBusinesses() {
