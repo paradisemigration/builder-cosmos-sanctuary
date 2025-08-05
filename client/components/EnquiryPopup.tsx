@@ -49,14 +49,14 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Handle form submission
     console.log("Enquiry submitted:", formData);
-    
+
     if (onSubmit) {
       onSubmit(formData);
     }
-    
+
     // Reset form and close popup
     setFormData({
       name: "",
@@ -66,7 +66,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
       category: "",
     });
     onClose();
-    
+
     // You can add actual API call here
     // toast.success("Enquiry submitted successfully!");
   };
@@ -77,7 +77,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   const cities = isUAEPage ? uaeCities : allIndianCities;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-md mx-4 shadow-2xl transform transition-all duration-300 scale-100 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-start mb-6">
           <h3 className="text-lg sm:text-xl font-bold text-gray-900 pr-4 leading-tight">
