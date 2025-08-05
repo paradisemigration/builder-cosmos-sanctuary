@@ -696,7 +696,7 @@ function setFAQStructuredData(pageType: "city" | "category"): void {
     };
   }
 
-  setStructuredData(faqData, 'faq');
+  setTypedStructuredData(faqData, 'faq');
 }
 
 // Generate structured data for local business
