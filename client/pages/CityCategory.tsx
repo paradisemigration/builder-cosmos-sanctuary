@@ -98,17 +98,92 @@ const nearbyAreasMapping: Record<string, string[]> = {
   fujairah: ["Dubai", "Sharjah", "Abu Dhabi"],
   "umm al quwain": ["Dubai", "Sharjah", "Abu Dhabi"],
 
-  // India areas (metro fallbacks)
+  // India major cities and their fallbacks (metro and regional hierarchies)
+
+  // Delhi NCR region
+  delhi: ["Gurgaon", "Noida", "Faridabad", "Ghaziabad"],
   gurgaon: ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
+  gurugram: ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
   noida: ["Delhi", "Gurgaon", "Greater Noida", "Faridabad"],
-  faridabad: ["Delhi", "Gurgaon", "Noida"],
-  "greater noida": ["Delhi", "Noida", "Gurgaon"],
-  ghaziabad: ["Delhi", "Noida", "Gurgaon"],
+  faridabad: ["Delhi", "Gurgaon", "Noida", "Ghaziabad"],
+  "greater noida": ["Delhi", "Noida", "Gurgaon", "Faridabad"],
+  ghaziabad: ["Delhi", "Noida", "Gurgaon", "Faridabad"],
+
+  // Mumbai region
+  mumbai: ["Pune", "Thane", "Navi Mumbai", "Nasik"],
   "navi mumbai": ["Mumbai", "Thane", "Pune", "Kalyan"],
   thane: ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
-  kalyan: ["Mumbai", "Thane", "Navi Mumbai"],
-  andheri: ["Mumbai", "Bandra", "Thane"],
-  bandra: ["Mumbai", "Andheri", "Thane"],
+  kalyan: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
+  andheri: ["Mumbai", "Bandra", "Thane", "Pune"],
+  bandra: ["Mumbai", "Andheri", "Thane", "Pune"],
+  pune: ["Mumbai", "Nasik", "Aurangabad", "Kolhapur"],
+
+  // Bangalore region
+  bangalore: ["Hyderabad", "Chennai", "Mysore", "Mangalore"],
+  bengaluru: ["Hyderabad", "Chennai", "Mysore", "Mangalore"],
+  mysore: ["Bangalore", "Mangalore", "Chennai", "Hyderabad"],
+  mangalore: ["Bangalore", "Mysore", "Chennai", "Kochi"],
+
+  // Chennai region
+  chennai: ["Bangalore", "Hyderabad", "Coimbatore", "Madurai"],
+  coimbatore: ["Chennai", "Bangalore", "Kochi", "Madurai"],
+  madurai: ["Chennai", "Coimbatore", "Bangalore", "Kochi"],
+
+  // Hyderabad region
+  hyderabad: ["Bangalore", "Chennai", "Vijayawada", "Warangal"],
+  secunderabad: ["Hyderabad", "Bangalore", "Chennai", "Vijayawada"],
+  vijayawada: ["Hyderabad", "Chennai", "Bangalore", "Visakhapatnam"],
+  visakhapatnam: ["Hyderabad", "Chennai", "Vijayawada", "Bangalore"],
+
+  // Kolkata region
+  kolkata: ["Bhubaneswar", "Guwahati", "Siliguri", "Durgapur"],
+  howrah: ["Kolkata", "Bhubaneswar", "Durgapur", "Asansol"],
+  durgapur: ["Kolkata", "Asansol", "Bhubaneswar", "Siliguri"],
+  asansol: ["Kolkata", "Durgapur", "Bhubaneswar", "Howrah"],
+
+  // Ahmedabad region
+  ahmedabad: ["Surat", "Vadodara", "Rajkot", "Pune"],
+  surat: ["Ahmedabad", "Vadodara", "Mumbai", "Pune"],
+  vadodara: ["Ahmedabad", "Surat", "Pune", "Indore"],
+  rajkot: ["Ahmedabad", "Surat", "Vadodara", "Jamnagar"],
+
+  // Jaipur region
+  jaipur: ["Delhi", "Jodhpur", "Udaipur", "Ajmer"],
+  jodhpur: ["Jaipur", "Udaipur", "Ajmer", "Delhi"],
+  udaipur: ["Jaipur", "Jodhpur", "Ajmer", "Ahmedabad"],
+  ajmer: ["Jaipur", "Jodhpur", "Udaipur", "Delhi"],
+
+  // Lucknow region
+  lucknow: ["Kanpur", "Allahabad", "Varanasi", "Delhi"],
+  kanpur: ["Lucknow", "Allahabad", "Delhi", "Agra"],
+  allahabad: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
+  prayagraj: ["Lucknow", "Kanpur", "Varanasi", "Delhi"],
+  varanasi: ["Lucknow", "Allahabad", "Kanpur", "Patna"],
+
+  // Indore region
+  indore: ["Bhopal", "Pune", "Ahmedabad", "Nagpur"],
+  bhopal: ["Indore", "Nagpur", "Delhi", "Pune"],
+  nagpur: ["Indore", "Bhopal", "Pune", "Hyderabad"],
+
+  // Kerala region
+  kochi: ["Thiruvananthapuram", "Kozhikode", "Bangalore", "Chennai"],
+  cochin: ["Thiruvananthapuram", "Kozhikode", "Bangalore", "Chennai"],
+  thiruvananthapuram: ["Kochi", "Kozhikode", "Chennai", "Bangalore"],
+  trivandrum: ["Kochi", "Kozhikode", "Chennai", "Bangalore"],
+  kozhikode: ["Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
+  calicut: ["Kochi", "Thiruvananthapuram", "Mangalore", "Chennai"],
+
+  // Other major cities
+  chandigarh: ["Delhi", "Ludhiana", "Amritsar", "Jalandhar"],
+  ludhiana: ["Chandigarh", "Amritsar", "Delhi", "Jalandhar"],
+  amritsar: ["Chandigarh", "Ludhiana", "Jalandhar", "Delhi"],
+  jalandhar: ["Chandigarh", "Ludhiana", "Amritsar", "Delhi"],
+  dehradun: ["Delhi", "Haridwar", "Chandigarh", "Rishikesh"],
+  haridwar: ["Dehradun", "Delhi", "Rishikesh", "Chandigarh"],
+  patna: ["Gaya", "Muzaffarpur", "Kolkata", "Ranchi"],
+  ranchi: ["Patna", "Jamshedpur", "Kolkata", "Bhubaneswar"],
+  bhubaneswar: ["Kolkata", "Cuttack", "Ranchi", "Visakhapatnam"],
+  guwahati: ["Kolkata", "Shillong", "Dibrugarh", "Silchar"],
 };
 
 // Helper function to get nearby cities for fallback
