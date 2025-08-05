@@ -55,41 +55,60 @@ import { DebugPopup } from "@/components/DebugPopup";
 // Mapping of areas/neighborhoods to their main cities for fallback (same as CityBusinessListing)
 const nearbyAreasMapping: Record<string, string[]> = {
   // Dubai main city - fallback to other UAE cities
-  "dubai": ["Abu Dhabi", "Sharjah"],
+  dubai: ["Abu Dhabi", "Sharjah"],
 
   // Dubai sub-areas (all should fallback to Dubai first, then other Dubai areas)
-  "al barsha": ["Dubai", "Business Bay", "Downtown Dubai", "Dubai Marina", "JLT", "DIFC"],
-  "business bay": ["Dubai", "Downtown Dubai", "DIFC", "Al Barsha", "Dubai Marina"],
+  "al barsha": [
+    "Dubai",
+    "Business Bay",
+    "Downtown Dubai",
+    "Dubai Marina",
+    "JLT",
+    "DIFC",
+  ],
+  "business bay": [
+    "Dubai",
+    "Downtown Dubai",
+    "DIFC",
+    "Al Barsha",
+    "Dubai Marina",
+  ],
   "downtown dubai": ["Dubai", "Business Bay", "DIFC", "Dubai Marina", "JLT"],
-  "dubai marina": ["Dubai", "JLT", "Business Bay", "Downtown Dubai", "Jumeirah"],
-  "jlt": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai", "DIFC"],
-  "difc": ["Dubai", "Business Bay", "Downtown Dubai", "JLT", "Dubai Marina"],
-  "deira": ["Dubai", "Bur Dubai", "Downtown Dubai", "Business Bay"],
+  "dubai marina": [
+    "Dubai",
+    "JLT",
+    "Business Bay",
+    "Downtown Dubai",
+    "Jumeirah",
+  ],
+  jlt: ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai", "DIFC"],
+  difc: ["Dubai", "Business Bay", "Downtown Dubai", "JLT", "Dubai Marina"],
+  deira: ["Dubai", "Bur Dubai", "Downtown Dubai", "Business Bay"],
   "bur dubai": ["Dubai", "Deira", "Downtown Dubai", "Business Bay"],
-  "jumeirah": ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai"],
-  "mirdif": ["Dubai", "International City", "Business Bay", "Downtown Dubai"],
+  jumeirah: ["Dubai", "Dubai Marina", "Business Bay", "Downtown Dubai"],
+  mirdif: ["Dubai", "International City", "Business Bay", "Downtown Dubai"],
   "international city": ["Dubai", "Mirdif", "Business Bay", "Downtown Dubai"],
 
   // Abu Dhabi areas - NO fallback for main Abu Dhabi city to show only Abu Dhabi businesses
   "al ain": ["Abu Dhabi", "Dubai", "Sharjah"],
 
   // Other UAE cities fallback to main emirates
-  "ajman": ["Sharjah", "Dubai"],  // Updated: Ajman should show Sharjah and Dubai businesses
+  ajman: ["Sharjah", "Dubai"], // Updated: Ajman should show Sharjah and Dubai businesses
   "ras al khaimah": ["Dubai", "Sharjah", "Abu Dhabi"],
-  "fujairah": ["Dubai", "Sharjah", "Abu Dhabi"],
+  fujairah: ["Dubai", "Sharjah", "Abu Dhabi"],
   "umm al quwain": ["Dubai", "Sharjah", "Abu Dhabi"],
 
   // India areas (metro fallbacks)
-  "gurgaon": ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
-  "noida": ["Delhi", "Gurgaon", "Greater Noida", "Faridabad"],
-  "faridabad": ["Delhi", "Gurgaon", "Noida"],
+  gurgaon: ["Delhi", "Noida", "Faridabad", "Ghaziabad"],
+  noida: ["Delhi", "Gurgaon", "Greater Noida", "Faridabad"],
+  faridabad: ["Delhi", "Gurgaon", "Noida"],
   "greater noida": ["Delhi", "Noida", "Gurgaon"],
-  "ghaziabad": ["Delhi", "Noida", "Gurgaon"],
+  ghaziabad: ["Delhi", "Noida", "Gurgaon"],
   "navi mumbai": ["Mumbai", "Thane", "Pune", "Kalyan"],
-  "thane": ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
-  "kalyan": ["Mumbai", "Thane", "Navi Mumbai"],
-  "andheri": ["Mumbai", "Bandra", "Thane"],
-  "bandra": ["Mumbai", "Andheri", "Thane"],
+  thane: ["Mumbai", "Navi Mumbai", "Kalyan", "Pune"],
+  kalyan: ["Mumbai", "Thane", "Navi Mumbai"],
+  andheri: ["Mumbai", "Bandra", "Thane"],
+  bandra: ["Mumbai", "Andheri", "Thane"],
 };
 
 // Helper function to get nearby cities for fallback
@@ -107,11 +126,11 @@ const getNearByCities = (cityName: string, country: string): string[] => {
   }
 
   // If no specific mapping, return main cities for the country
-  if (country === 'uae') {
+  if (country === "uae") {
     return ["Dubai", "Abu Dhabi", "Sharjah"];
   } else {
     return ["Delhi", "Mumbai", "Bangalore", "Chennai"];
-  };
+  }
 };
 
 // Generate unique FAQs for each category and city combination
@@ -120,186 +139,186 @@ const getFAQs = (categorySlug: string, cityName: string) => {
     "study-abroad": [
       {
         question: `What are the best study abroad consultants in ${cityName}?`,
-        answer: `The top study abroad consultants in ${cityName} are those with proven track records, certified credentials, and high success rates. Look for consultants who specialize in your target country and have partnerships with international universities.`
+        answer: `The top study abroad consultants in ${cityName} are those with proven track records, certified credentials, and high success rates. Look for consultants who specialize in your target country and have partnerships with international universities.`,
       },
       {
         question: `How much do study abroad consultants charge in ${cityName}?`,
-        answer: `Study abroad consultation fees in ${cityName} typically range from AED 1,500 to AED 8,000 depending on the services included. Most consultants offer package deals that include university selection, application assistance, and visa guidance.`
+        answer: `Study abroad consultation fees in ${cityName} typically range from AED 1,500 to AED 8,000 depending on the services included. Most consultants offer package deals that include university selection, application assistance, and visa guidance.`,
       },
       {
         question: `Which countries are most popular for studying abroad from ${cityName}?`,
-        answer: `Students from ${cityName} commonly choose USA, UK, Canada, Australia, Germany, and Ireland for higher education. The choice depends on factors like course availability, budget, and immigration policies.`
+        answer: `Students from ${cityName} commonly choose USA, UK, Canada, Australia, Germany, and Ireland for higher education. The choice depends on factors like course availability, budget, and immigration policies.`,
       },
       {
         question: `What documents do I need for studying abroad from ${cityName}?`,
-        answer: `Essential documents include academic transcripts, standardized test scores (IELTS/TOEFL/GRE/GMAT), passport, statement of purpose, recommendation letters, and financial proof. Requirements vary by country and university.`
+        answer: `Essential documents include academic transcripts, standardized test scores (IELTS/TOEFL/GRE/GMAT), passport, statement of purpose, recommendation letters, and financial proof. Requirements vary by country and university.`,
       },
       {
         question: `How long does the study abroad application process take in ${cityName}?`,
-        answer: `The complete process typically takes 6-12 months from university application to visa approval. Starting early and working with experienced consultants in ${cityName} can help streamline the timeline.`
-      }
+        answer: `The complete process typically takes 6-12 months from university application to visa approval. Starting early and working with experienced consultants in ${cityName} can help streamline the timeline.`,
+      },
     ],
     "immigration-consultants": [
       {
         question: `How to choose the best immigration consultant in ${cityName}?`,
-        answer: `Choose licensed immigration consultants in ${cityName} with MARA/ICCRC certification, positive reviews, transparent fee structure, and specialization in your visa category. Verify their credentials and success rates.`
+        answer: `Choose licensed immigration consultants in ${cityName} with MARA/ICCRC certification, positive reviews, transparent fee structure, and specialization in your visa category. Verify their credentials and success rates.`,
       },
       {
         question: `What immigration services are available in ${cityName}?`,
-        answer: `Immigration consultants in ${cityName} offer services including permanent residency applications, work permits, family sponsorship, refugee claims, citizenship applications, and immigration appeals.`
+        answer: `Immigration consultants in ${cityName} offer services including permanent residency applications, work permits, family sponsorship, refugee claims, citizenship applications, and immigration appeals.`,
       },
       {
         question: `How much do immigration consultants charge in ${cityName}?`,
-        answer: `Immigration consultation fees in ${cityName} vary from AED 2,000 to AED 15,000 depending on the complexity of your case. Most consultants offer free initial assessments and transparent pricing.`
+        answer: `Immigration consultation fees in ${cityName} vary from AED 2,000 to AED 15,000 depending on the complexity of your case. Most consultants offer free initial assessments and transparent pricing.`,
       },
       {
         question: `Which countries offer the best immigration opportunities from ${cityName}?`,
-        answer: `Popular immigration destinations from ${cityName} include Canada, Australia, New Zealand, USA, and several European countries. Each has different requirements and immigration pathways.`
+        answer: `Popular immigration destinations from ${cityName} include Canada, Australia, New Zealand, USA, and several European countries. Each has different requirements and immigration pathways.`,
       },
       {
         question: `What is the success rate of immigration applications from ${cityName}?`,
-        answer: `Success rates vary by country and visa category, but experienced immigration consultants in ${cityName} typically achieve 80-95% success rates for well-prepared applications with eligible candidates.`
-      }
+        answer: `Success rates vary by country and visa category, but experienced immigration consultants in ${cityName} typically achieve 80-95% success rates for well-prepared applications with eligible candidates.`,
+      },
     ],
     "visa-consultants": [
       {
         question: `What types of visas can consultants in ${cityName} help with?`,
-        answer: `Visa consultants in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`
+        answer: `Visa consultants in ${cityName} assist with tourist visas, business visas, work permits, family visas, student visas, and transit visas for various countries worldwide with specialized expertise.`,
       },
       {
         question: `How long does visa processing take through ${cityName} consultants?`,
-        answer: `Processing times vary by country and visa type, ranging from 3-30 working days. Consultants in ${cityName} can provide accurate timelines and expedited services when available.`
+        answer: `Processing times vary by country and visa type, ranging from 3-30 working days. Consultants in ${cityName} can provide accurate timelines and expedited services when available.`,
       },
       {
         question: `What documents are required for visa applications in ${cityName}?`,
-        answer: `Common requirements include valid passport, photographs, application forms, financial proof, travel itinerary, accommodation bookings, and invitation letters. Specific requirements vary by destination country.`
+        answer: `Common requirements include valid passport, photographs, application forms, financial proof, travel itinerary, accommodation bookings, and invitation letters. Specific requirements vary by destination country.`,
       },
       {
         question: `Can visa consultants in ${cityName} guarantee visa approval?`,
-        answer: `Reputable consultants in ${cityName} cannot guarantee approval but can significantly increase your chances through proper documentation, application preparation, and guidance based on their experience.`
+        answer: `Reputable consultants in ${cityName} cannot guarantee approval but can significantly increase your chances through proper documentation, application preparation, and guidance based on their experience.`,
       },
       {
         question: `What are the visa consultation fees in ${cityName}?`,
-        answer: `Visa consultation fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`
-      }
+        answer: `Visa consultation fees in ${cityName} typically range from AED 300 to AED 2,000 depending on the visa type and complexity. Many consultants offer package deals including documentation support.`,
+      },
     ],
     "visit-visa-specialists": [
       {
         question: `Which countries can I get visit visas for from ${cityName}?`,
-        answer: `Visit visa specialists in ${cityName} can help you obtain tourist visas for USA, UK, Schengen countries, Canada, Australia, Japan, South Korea, and many other popular destinations.`
+        answer: `Visit visa specialists in ${cityName} can help you obtain tourist visas for USA, UK, Schengen countries, Canada, Australia, Japan, South Korea, and many other popular destinations.`,
       },
       {
         question: `What is the success rate for visit visas from ${cityName}?`,
-        answer: `Success rates for visit visas from ${cityName} vary by destination but experienced specialists typically achieve 85-95% approval rates for properly documented applications with eligible applicants.`
+        answer: `Success rates for visit visas from ${cityName} vary by destination but experienced specialists typically achieve 85-95% approval rates for properly documented applications with eligible applicants.`,
       },
       {
         question: `How much does a visit visa consultation cost in ${cityName}?`,
-        answer: `Visit visa consultation fees in ${cityName} range from AED 200 to AED 1,500 depending on the destination country and services included. Many specialists offer comprehensive packages.`
+        answer: `Visit visa consultation fees in ${cityName} range from AED 200 to AED 1,500 depending on the destination country and services included. Many specialists offer comprehensive packages.`,
       },
       {
         question: `What documents do I need for a visit visa application in ${cityName}?`,
-        answer: `Required documents typically include passport, photographs, bank statements, employment letter, travel insurance, hotel bookings, flight itinerary, and invitation letters if applicable.`
-      }
+        answer: `Required documents typically include passport, photographs, bank statements, employment letter, travel insurance, hotel bookings, flight itinerary, and invitation letters if applicable.`,
+      },
     ],
     "work-permit": [
       {
         question: `Which countries offer work permits through ${cityName} consultants?`,
-        answer: `Work permit specialists in ${cityName} can assist with applications for Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Skilled Migrant Category), Germany (EU Blue Card), UAE (Employment Visa), USA (H1B, L1), UK (Skilled Worker Visa), and other countries with various skilled worker programs. Each country has specific requirements and quotas.`
+        answer: `Work permit specialists in ${cityName} can assist with applications for Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Skilled Migrant Category), Germany (EU Blue Card), UAE (Employment Visa), USA (H1B, L1), UK (Skilled Worker Visa), and other countries with various skilled worker programs. Each country has specific requirements and quotas.`,
       },
       {
         question: `What is the process for obtaining a work permit through ${cityName}?`,
-        answer: `The comprehensive process includes: 1) Initial consultation and eligibility assessment, 2) Skills assessment and qualification verification, 3) Language proficiency testing (IELTS/TOEFL), 4) Job search assistance and employer matching, 5) Employer nomination or sponsorship, 6) Application preparation and documentation, 7) Submission to immigration authorities, 8) Biometrics and medical examinations, 9) Visa approval and pre-departure briefing. Consultants in ${cityName} provide end-to-end support throughout this 6-18 month process.`
+        answer: `The comprehensive process includes: 1) Initial consultation and eligibility assessment, 2) Skills assessment and qualification verification, 3) Language proficiency testing (IELTS/TOEFL), 4) Job search assistance and employer matching, 5) Employer nomination or sponsorship, 6) Application preparation and documentation, 7) Submission to immigration authorities, 8) Biometrics and medical examinations, 9) Visa approval and pre-departure briefing. Consultants in ${cityName} provide end-to-end support throughout this 6-18 month process.`,
       },
       {
         question: `How long does work permit processing take from ${cityName}?`,
-        answer: `Processing times vary significantly by country and program: Canada Express Entry (6-8 months), Australia Skilled Independent (8-12 months), New Zealand Skilled Migrant (12-24 months), Germany EU Blue Card (2-3 months), UAE Employment Visa (1-2 months), USA H1B (3-8 months), UK Skilled Worker (3-8 weeks). Consultants in ${cityName} provide realistic timelines and regular updates throughout the process.`
+        answer: `Processing times vary significantly by country and program: Canada Express Entry (6-8 months), Australia Skilled Independent (8-12 months), New Zealand Skilled Migrant (12-24 months), Germany EU Blue Card (2-3 months), UAE Employment Visa (1-2 months), USA H1B (3-8 months), UK Skilled Worker (3-8 weeks). Consultants in ${cityName} provide realistic timelines and regular updates throughout the process.`,
       },
       {
         question: `What are the eligibility requirements for work permits from ${cityName}?`,
-        answer: `General eligibility criteria include: Education qualification assessment, minimum work experience (usually 1-3 years), language proficiency (IELTS 6.5+ or equivalent), clean criminal background check, medical examination clearance, proof of funds for settlement, and age requirements (typically 18-45 years). Specific requirements vary by country and skilled occupation categories.`
+        answer: `General eligibility criteria include: Education qualification assessment, minimum work experience (usually 1-3 years), language proficiency (IELTS 6.5+ or equivalent), clean criminal background check, medical examination clearance, proof of funds for settlement, and age requirements (typically 18-45 years). Specific requirements vary by country and skilled occupation categories.`,
       },
       {
         question: `How much do work permit consultants charge in ${cityName}?`,
-        answer: `Work permit consultation fees in ${cityName} typically range from AED 8,000 to AED 25,000 depending on the destination country and complexity. This includes skills assessment, documentation, application filing, and follow-up services. Most consultants offer transparent pricing with no hidden costs and payment plans available.`
+        answer: `Work permit consultation fees in ${cityName} typically range from AED 8,000 to AED 25,000 depending on the destination country and complexity. This includes skills assessment, documentation, application filing, and follow-up services. Most consultants offer transparent pricing with no hidden costs and payment plans available.`,
       },
       {
         question: `What documents are required for work permit applications from ${cityName}?`,
-        answer: `Essential documents include: Educational certificates and transcripts, work experience letters, updated resume/CV, passport copies, IELTS/TOEFL scores, medical examination reports, police clearance certificates, bank statements, photographs, marriage certificate (if applicable), and birth certificates for dependents. All documents must be attested and translated if required.`
+        answer: `Essential documents include: Educational certificates and transcripts, work experience letters, updated resume/CV, passport copies, IELTS/TOEFL scores, medical examination reports, police clearance certificates, bank statements, photographs, marriage certificate (if applicable), and birth certificates for dependents. All documents must be attested and translated if required.`,
       },
       {
         question: `Can family members accompany me on a work permit from ${cityName}?`,
-        answer: `Yes, most work permit programs allow accompanying family members including spouse and dependent children under 18-22 years. Family members can typically work and study in the destination country. Additional documentation and fees apply for dependents, and some countries have specific income requirements for family sponsorship.`
+        answer: `Yes, most work permit programs allow accompanying family members including spouse and dependent children under 18-22 years. Family members can typically work and study in the destination country. Additional documentation and fees apply for dependents, and some countries have specific income requirements for family sponsorship.`,
       },
       {
         question: `What is the success rate for work permit applications from ${cityName}?`,
-        answer: `Success rates vary by country and applicant profile: Canada Express Entry (70-85%), Australia Skilled Programs (65-80%), New Zealand (60-75%), Germany EU Blue Card (85-95%), UAE Employment Visa (90-95%). Experienced consultants in ${cityName} typically achieve higher success rates through proper case assessment and application preparation.`
-      }
+        answer: `Success rates vary by country and applicant profile: Canada Express Entry (70-85%), Australia Skilled Programs (65-80%), New Zealand (60-75%), Germany EU Blue Card (85-95%), UAE Employment Visa (90-95%). Experienced consultants in ${cityName} typically achieve higher success rates through proper case assessment and application preparation.`,
+      },
     ],
     "work-visa-consultants": [
       {
         question: `What types of work visas can consultants in ${cityName} help with?`,
-        answer: `Work visa consultants in ${cityName} specialize in various categories including: Skilled Worker Visas (Canada Express Entry, Australia SkillSelect), Employer-Sponsored Visas (H1B, L1, UK Tier 2), Temporary Work Permits (UAE Employment, Germany Job Seeker), Intra-Company Transfer Visas, Self-Employment/Investor Visas, and Working Holiday Visas for eligible countries. Each visa type has specific requirements and processing procedures.`
+        answer: `Work visa consultants in ${cityName} specialize in various categories including: Skilled Worker Visas (Canada Express Entry, Australia SkillSelect), Employer-Sponsored Visas (H1B, L1, UK Tier 2), Temporary Work Permits (UAE Employment, Germany Job Seeker), Intra-Company Transfer Visas, Self-Employment/Investor Visas, and Working Holiday Visas for eligible countries. Each visa type has specific requirements and processing procedures.`,
       },
       {
         question: `How do work visa consultants in ${cityName} help with job placement?`,
-        answer: `Leading consultants in ${cityName} offer comprehensive job placement services including: Resume optimization for international standards, LinkedIn profile enhancement, job search strategy development, direct employer connections through their network, interview preparation and coaching, salary negotiation guidance, and post-landing job search support. Some have partnerships with recruitment agencies in destination countries.`
+        answer: `Leading consultants in ${cityName} offer comprehensive job placement services including: Resume optimization for international standards, LinkedIn profile enhancement, job search strategy development, direct employer connections through their network, interview preparation and coaching, salary negotiation guidance, and post-landing job search support. Some have partnerships with recruitment agencies in destination countries.`,
       },
       {
         question: `What is the difference between work permits and work visas?`,
-        answer: `Work permits are typically temporary authorizations allowing foreign nationals to work in a country for a specific employer and duration (1-3 years, renewable). Work visas are broader immigration categories that may lead to permanent residency, often with more flexibility to change employers. Consultants in ${cityName} help you choose the right pathway based on your long-term goals and qualifications.`
+        answer: `Work permits are typically temporary authorizations allowing foreign nationals to work in a country for a specific employer and duration (1-3 years, renewable). Work visas are broader immigration categories that may lead to permanent residency, often with more flexibility to change employers. Consultants in ${cityName} help you choose the right pathway based on your long-term goals and qualifications.`,
       },
       {
         question: `How much do work visa services cost in ${cityName}?`,
-        answer: `Work visa consultation fees in ${cityName} vary by destination and service level: Basic consultation (AED 500-1,500), Complete application processing (AED 8,000-20,000), Premium services with job placement (AED 15,000-35,000). Government fees, medical exams, and document attestation are additional. Most consultants offer package deals and payment plans.`
+        answer: `Work visa consultation fees in ${cityName} vary by destination and service level: Basic consultation (AED 500-1,500), Complete application processing (AED 8,000-20,000), Premium services with job placement (AED 15,000-35,000). Government fees, medical exams, and document attestation are additional. Most consultants offer package deals and payment plans.`,
       },
       {
         question: `What are the most popular work visa destinations from ${cityName}?`,
-        answer: `Top destinations include: Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Essential Skills, Skilled Migrant), Germany (EU Blue Card, Job Seeker Visa), UK (Skilled Worker Visa), USA (H1B, L1, O1), Singapore (Employment Pass), and European countries through various skilled worker programs. Choice depends on your profession, qualifications, and personal preferences.`
-      }
-    ]
+        answer: `Top destinations include: Canada (Express Entry, Provincial Nominee Programs), Australia (Skilled Independent, Employer Nomination), New Zealand (Essential Skills, Skilled Migrant), Germany (EU Blue Card, Job Seeker Visa), UK (Skilled Worker Visa), USA (H1B, L1, O1), Singapore (Employment Pass), and European countries through various skilled worker programs. Choice depends on your profession, qualifications, and personal preferences.`,
+      },
+    ],
   };
 
   const generalFAQs = [
     {
       question: `Are consultation services in ${cityName} reliable?`,
-      answer: `Yes, ${cityName} hosts numerous licensed and experienced immigration consultants with proven track records. The city is a major hub for visa services in the region. Always verify credentials including MARA/ICCRC certification for immigration matters, check online reviews on Google and specialized platforms, verify office addresses and contact details, ask for references from previous clients, and ensure transparency in fee structures. Reputable consultants will provide detailed service agreements and realistic timelines.`
+      answer: `Yes, ${cityName} hosts numerous licensed and experienced immigration consultants with proven track records. The city is a major hub for visa services in the region. Always verify credentials including MARA/ICCRC certification for immigration matters, check online reviews on Google and specialized platforms, verify office addresses and contact details, ask for references from previous clients, and ensure transparency in fee structures. Reputable consultants will provide detailed service agreements and realistic timelines.`,
     },
     {
       question: `Do consultants in ${cityName} provide after-service support?`,
-      answer: `Most reputable consultants in ${cityName} offer comprehensive after-service support including: Real-time application tracking and status updates, pre-departure orientation and guidance, airport assistance and pickup services, initial settlement support in destination countries, assistance with any visa-related issues or delays, document courier services, and ongoing consultation for visa renewals or family applications. Premium service providers often have partnerships with settlement agencies in destination countries.`
+      answer: `Most reputable consultants in ${cityName} offer comprehensive after-service support including: Real-time application tracking and status updates, pre-departure orientation and guidance, airport assistance and pickup services, initial settlement support in destination countries, assistance with any visa-related issues or delays, document courier services, and ongoing consultation for visa renewals or family applications. Premium service providers often have partnerships with settlement agencies in destination countries.`,
     },
     {
       question: `Can I get a refund if my application is rejected?`,
-      answer: `Refund policies vary significantly among consultants in ${cityName}. Ethical firms typically offer: Partial refunds (50-70%) if applications are rejected due to consultant error, full refunds if services are not provided as promised, no refunds for government rejection due to client ineligibility, money-back guarantees under specific conditions (rare), and transparent refund policies outlined in service agreements. Always clarify refund terms before engaging services and get policies in writing.`
+      answer: `Refund policies vary significantly among consultants in ${cityName}. Ethical firms typically offer: Partial refunds (50-70%) if applications are rejected due to consultant error, full refunds if services are not provided as promised, no refunds for government rejection due to client ineligibility, money-back guarantees under specific conditions (rare), and transparent refund policies outlined in service agreements. Always clarify refund terms before engaging services and get policies in writing.`,
     },
     {
       question: `How do I verify the credentials of consultants in ${cityName}?`,
-      answer: `To verify consultant credentials in ${cityName}: Check for proper licensing with relevant authorities (MARA for Australia, ICCRC for Canada), verify membership in professional associations, review educational qualifications and certifications, check business registration and trade license validity, read client testimonials and online reviews, visit their physical office to confirm legitimacy, ask for references from recent successful clients, and verify their track record with specific visa categories. Legitimate consultants will readily provide credential verification.`
+      answer: `To verify consultant credentials in ${cityName}: Check for proper licensing with relevant authorities (MARA for Australia, ICCRC for Canada), verify membership in professional associations, review educational qualifications and certifications, check business registration and trade license validity, read client testimonials and online reviews, visit their physical office to confirm legitimacy, ask for references from recent successful clients, and verify their track record with specific visa categories. Legitimate consultants will readily provide credential verification.`,
     },
     {
       question: `What should I avoid when choosing a consultant in ${cityName}?`,
-      answer: `Red flags to avoid when selecting consultants in ${cityName}: Guarantees of 100% success (no one can guarantee visa approval), demands for full payment before starting work, lack of physical office or proper credentials, poor online reviews or no verifiable testimonials, unrealistic processing time promises, pressure tactics or limited-time offers, unwillingness to provide detailed service breakdowns, no written service agreement or unclear terms, and consultants operating without proper licensing. Take time to research and compare multiple options before deciding.`
+      answer: `Red flags to avoid when selecting consultants in ${cityName}: Guarantees of 100% success (no one can guarantee visa approval), demands for full payment before starting work, lack of physical office or proper credentials, poor online reviews or no verifiable testimonials, unrealistic processing time promises, pressure tactics or limited-time offers, unwillingness to provide detailed service breakdowns, no written service agreement or unclear terms, and consultants operating without proper licensing. Take time to research and compare multiple options before deciding.`,
     },
     {
       question: `What are the typical consultation fees in ${cityName}?`,
-      answer: `Consultation fees in ${cityName} vary by service type and complexity: Initial assessment consultations (AED 200-800), basic visa applications (AED 1,500-5,000), complex immigration cases (AED 8,000-25,000), study abroad packages (AED 3,000-12,000), and premium end-to-end services (AED 15,000-40,000). Government fees, medical exams, document attestation, and translation services are typically additional. Most consultants offer transparent pricing with detailed cost breakdowns.`
+      answer: `Consultation fees in ${cityName} vary by service type and complexity: Initial assessment consultations (AED 200-800), basic visa applications (AED 1,500-5,000), complex immigration cases (AED 8,000-25,000), study abroad packages (AED 3,000-12,000), and premium end-to-end services (AED 15,000-40,000). Government fees, medical exams, document attestation, and translation services are typically additional. Most consultants offer transparent pricing with detailed cost breakdowns.`,
     },
     {
       question: `How long does the consultation process take in ${cityName}?`,
-      answer: `The consultation process timeline in ${cityName} varies by service: Initial assessment and eligibility review (1-2 days), document preparation and verification (1-2 weeks), application compilation and review (1-2 weeks), government processing (varies by country: 2 weeks to 12 months), and post-approval procedures (1-4 weeks). Experienced consultants provide detailed timelines and regular progress updates throughout the process.`
+      answer: `The consultation process timeline in ${cityName} varies by service: Initial assessment and eligibility review (1-2 days), document preparation and verification (1-2 weeks), application compilation and review (1-2 weeks), government processing (varies by country: 2 weeks to 12 months), and post-approval procedures (1-4 weeks). Experienced consultants provide detailed timelines and regular progress updates throughout the process.`,
     },
     {
       question: `What languages do consultants in ${cityName} speak?`,
-      answer: `Consultants in ${cityName} typically offer services in multiple languages including: English (universal), Arabic (widely spoken), Hindi/Urdu (for Indian subcontinent clients), Filipino/Tagalog (for Philippines nationals), Farsi (for Iranian clients), French (for francophone countries), and other regional languages. Many consultancy firms employ multilingual staff to better serve the diverse expatriate population in the region.`
+      answer: `Consultants in ${cityName} typically offer services in multiple languages including: English (universal), Arabic (widely spoken), Hindi/Urdu (for Indian subcontinent clients), Filipino/Tagalog (for Philippines nationals), Farsi (for Iranian clients), French (for francophone countries), and other regional languages. Many consultancy firms employ multilingual staff to better serve the diverse expatriate population in the region.`,
     },
     {
       question: `Do consultants in ${cityName} help with document attestation?`,
-      answer: `Yes, most full-service consultants in ${cityName} provide comprehensive document attestation services including: Educational certificate attestation from home country and UAE authorities, marriage certificate attestation, birth certificate attestation for children, police clearance certificate attestation, medical certificate attestation, commercial document attestation for business visas, apostille services for Hague Convention countries, and document translation by certified translators. This saves clients significant time and ensures proper authentication.`
+      answer: `Yes, most full-service consultants in ${cityName} provide comprehensive document attestation services including: Educational certificate attestation from home country and UAE authorities, marriage certificate attestation, birth certificate attestation for children, police clearance certificate attestation, medical certificate attestation, commercial document attestation for business visas, apostille services for Hague Convention countries, and document translation by certified translators. This saves clients significant time and ensures proper authentication.`,
     },
     {
       question: `Can consultants in ${cityName} help with urgent visa applications?`,
-      answer: `Many consultants in ${cityName} offer expedited services for urgent visa applications including: Express processing for visit visas (where available), emergency family reunion visas, urgent business visa applications, rush student visa processing before academic deadlines, and priority handling for medical emergency travel. Expedited services typically cost 25-50% more than standard processing and are subject to destination country policies. Not all visa types offer express processing options.`
-    }
+      answer: `Many consultants in ${cityName} offer expedited services for urgent visa applications including: Express processing for visit visas (where available), emergency family reunion visas, urgent business visa applications, rush student visa processing before academic deadlines, and priority handling for medical emergency travel. Expedited services typically cost 25-50% more than standard processing and are subject to destination country policies. Not all visa types offer express processing options.`,
+    },
   ];
 
   const categoryFAQs = baseFAQs[categorySlug] || [];
@@ -313,8 +332,18 @@ export default function CityCategory() {
 
   // Detect if this is a UAE route (either by /uae/ prefix or UAE city names)
   const isUAERoute = location.pathname.startsWith("/uae/");
-  const isUAECity = city && ["dubai", "abu-dhabi", "sharjah", "ajman", "ras-al-khaimah", "fujairah", "umm-al-quwain"].includes(city.toLowerCase());
-  const country = (isUAERoute || isUAECity) ? "uae" : "india";
+  const isUAECity =
+    city &&
+    [
+      "dubai",
+      "abu-dhabi",
+      "sharjah",
+      "ajman",
+      "ras-al-khaimah",
+      "fujairah",
+      "umm-al-quwain",
+    ].includes(city.toLowerCase());
+  const country = isUAERoute || isUAECity ? "uae" : "india";
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
   const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
@@ -397,7 +426,7 @@ export default function CityCategory() {
     fetchCityBusinesses();
 
     // Fetch all Dubai businesses if this is a Dubai area
-    if (country === 'uae') {
+    if (country === "uae") {
       fetchAllDubaiBusinesses();
     }
 
@@ -434,7 +463,9 @@ export default function CityCategory() {
 
     async function fetchCategoryBusinesses() {
       try {
-        console.log(`Fetching businesses for city: "${cityName}", category: "${categoryName}"`);
+        console.log(
+          `Fetching businesses for city: "${cityName}", category: "${categoryName}"`,
+        );
 
         // Check if API is available by testing a simple endpoint first
         // Skip API check if we've had too many failures
@@ -444,19 +475,24 @@ export default function CityCategory() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-            const healthCheck = await fetch('/api/health', {
-              method: 'HEAD',
-              signal: controller.signal
+            const healthCheck = await fetch("/api/health", {
+              method: "HEAD",
+              signal: controller.signal,
             });
             clearTimeout(timeoutId);
             apiAvailable = healthCheck.ok;
           } catch (healthError) {
-            console.log('API health check failed, API not available:', healthError);
-            setApiFailureCount(prev => prev + 1);
+            console.log(
+              "API health check failed, API not available:",
+              healthError,
+            );
+            setApiFailureCount((prev) => prev + 1);
             apiAvailable = false;
           }
         } else {
-          console.log('Skipping API calls due to repeated failures, using sample data');
+          console.log(
+            "Skipping API calls due to repeated failures, using sample data",
+          );
           apiAvailable = false;
         }
 
@@ -472,7 +508,7 @@ export default function CityCategory() {
 
             let scrapedUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=100`;
             let scrapedResponse = await fetch(scrapedUrl, {
-              signal: controller.signal
+              signal: controller.signal,
             });
             clearTimeout(timeoutId);
 
@@ -485,7 +521,7 @@ export default function CityCategory() {
           } catch (fetchError) {
             console.log("Failed to fetch from primary API:", fetchError);
             // Increment failure count and set apiAvailable to false for subsequent calls
-            setApiFailureCount(prev => prev + 1);
+            setApiFailureCount((prev) => prev + 1);
             apiAvailable = false;
           }
         }
@@ -495,51 +531,81 @@ export default function CityCategory() {
         }
 
         // Step 2: If no data found for specific area + category, try hierarchical fallback
-        if (apiAvailable && (!result || !result.success || !result.businesses || result.businesses.length === 0)) {
-          console.log(`No data found for ${cityName} + ${categoryName}, trying nearby cities from database`);
+        if (
+          apiAvailable &&
+          (!result ||
+            !result.success ||
+            !result.businesses ||
+            result.businesses.length === 0)
+        ) {
+          console.log(
+            `No data found for ${cityName} + ${categoryName}, trying nearby cities from database`,
+          );
 
           const nearbyCities = getNearByCities(cityName, country);
 
           for (const nearbyCity_temp of nearbyCities) {
             try {
-              console.log(`Trying nearby city: ${nearbyCity_temp} + ${categoryName}`);
+              console.log(
+                `Trying nearby city: ${nearbyCity_temp} + ${categoryName}`,
+              );
               const controller = new AbortController();
               const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
               const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=100`;
               const nearbyResponse = await fetch(nearbyUrl, {
-                signal: controller.signal
+                signal: controller.signal,
               });
               clearTimeout(timeoutId);
 
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
-                if (nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
-                  console.log(`Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`);
+                if (
+                  nearbyResult.success &&
+                  nearbyResult.businesses &&
+                  nearbyResult.businesses.length > 0
+                ) {
+                  console.log(
+                    `Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`,
+                  );
                   result = nearbyResult;
                   isNearbyData = true;
                   nearbyCity = nearbyCity_temp;
                   break; // Found data, stop searching
                 }
               } else {
-                console.log(`Nearby API response not OK for ${nearbyCity_temp}: ${nearbyResponse.status}`);
+                console.log(
+                  `Nearby API response not OK for ${nearbyCity_temp}: ${nearbyResponse.status}`,
+                );
               }
             } catch (nearbyError) {
-              console.log(`Failed to fetch data for nearby city ${nearbyCity_temp}:`, nearbyError);
+              console.log(
+                `Failed to fetch data for nearby city ${nearbyCity_temp}:`,
+                nearbyError,
+              );
               // Continue to next nearby city instead of stopping
             }
           }
         }
 
         // Step 3: If no data from API, fallback to sample data with nearby cities logic
-        if (!result || !result.success || !result.businesses || result.businesses.length === 0) {
-          console.log("No data from API, using sample data with nearby cities fallback");
+        if (
+          !result ||
+          !result.success ||
+          !result.businesses ||
+          result.businesses.length === 0
+        ) {
+          console.log(
+            "No data from API, using sample data with nearby cities fallback",
+          );
 
           // Try to find sample businesses for exact city + category
           let sampleBusinesses_filtered = sampleBusinesses.filter(
             (business) =>
               business.city.toLowerCase() === cityName.toLowerCase() &&
-              business.category.toLowerCase().includes(categoryName.toLowerCase())
+              business.category
+                .toLowerCase()
+                .includes(categoryName.toLowerCase()),
           );
 
           // If no exact match, try nearby cities with category
@@ -549,12 +615,17 @@ export default function CityCategory() {
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
                 (business) =>
-                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
-                  business.category.toLowerCase().includes(categoryName.toLowerCase())
+                  business.city.toLowerCase() ===
+                    nearbyCity_temp.toLowerCase() &&
+                  business.category
+                    .toLowerCase()
+                    .includes(categoryName.toLowerCase()),
               );
 
               if (sampleBusinesses_filtered.length > 0) {
-                console.log(`Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`);
+                console.log(
+                  `Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`,
+                );
                 isNearbyData = true;
                 nearbyCity = nearbyCity_temp;
                 break;
@@ -568,11 +639,14 @@ export default function CityCategory() {
 
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
-                (business) => business.city.toLowerCase() === nearbyCity_temp.toLowerCase()
+                (business) =>
+                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase(),
               );
 
               if (sampleBusinesses_filtered.length > 0) {
-                console.log(`Found ${sampleBusinesses_filtered.length} sample businesses (any category) in nearby city: ${nearbyCity_temp}`);
+                console.log(
+                  `Found ${sampleBusinesses_filtered.length} sample businesses (any category) in nearby city: ${nearbyCity_temp}`,
+                );
                 isNearbyData = true;
                 nearbyCity = nearbyCity_temp;
                 break;
@@ -585,22 +659,27 @@ export default function CityCategory() {
               success: true,
               businesses: sampleBusinesses_filtered,
               total: sampleBusinesses_filtered.length,
-              source: 'sample_data'
+              source: "sample_data",
             };
           }
         }
 
         // Step 4: Process result if we have data (from API or sample data)
-        if (result && result.success && result.businesses && result.businesses.length > 0) {
+        if (
+          result &&
+          result.success &&
+          result.businesses &&
+          result.businesses.length > 0
+        ) {
           let businesses = result.businesses;
 
           // Add nearby data flag if this is from a nearby city
           if (isNearbyData) {
-            businesses = businesses.map(business => ({
+            businesses = businesses.map((business) => ({
               ...business,
               isNearbyData: true,
               originalRequestedCity: cityName,
-              nearbyCity: nearbyCity
+              nearbyCity: nearbyCity,
             }));
             setIsShowingNearbyData(true);
           } else {
@@ -619,7 +698,10 @@ export default function CityCategory() {
               ...prev.apiCalls,
               {
                 url: apiUrl,
-                status: result.source === 'sample_data' ? "sample_fallback" : "success",
+                status:
+                  result.source === "sample_data"
+                    ? "sample_fallback"
+                    : "success",
                 count: businesses.length,
                 timestamp: scrapedTimestamp,
               },
@@ -635,18 +717,21 @@ export default function CityCategory() {
         setCategoryBusinesses([]);
         setIsShowingNearbyData(false);
         setCategoryDataLoaded(true);
-
       } catch (error) {
         console.error("Error fetching category businesses:", error);
 
         // Emergency fallback to sample data
         try {
-          console.log("Emergency fallback: using sample data for category businesses");
+          console.log(
+            "Emergency fallback: using sample data for category businesses",
+          );
 
           let sampleBusinesses_filtered = sampleBusinesses.filter(
             (business) =>
               business.city.toLowerCase() === cityName.toLowerCase() &&
-              business.category.toLowerCase().includes(categoryName.toLowerCase())
+              business.category
+                .toLowerCase()
+                .includes(categoryName.toLowerCase()),
           );
 
           // If no exact match, try nearby cities
@@ -656,12 +741,17 @@ export default function CityCategory() {
             for (const nearbyCity_temp of nearbyCities) {
               sampleBusinesses_filtered = sampleBusinesses.filter(
                 (business) =>
-                  business.city.toLowerCase() === nearbyCity_temp.toLowerCase() &&
-                  business.category.toLowerCase().includes(categoryName.toLowerCase())
+                  business.city.toLowerCase() ===
+                    nearbyCity_temp.toLowerCase() &&
+                  business.category
+                    .toLowerCase()
+                    .includes(categoryName.toLowerCase()),
               );
 
               if (sampleBusinesses_filtered.length > 0) {
-                console.log(`Emergency fallback: Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`);
+                console.log(
+                  `Emergency fallback: Found ${sampleBusinesses_filtered.length} sample businesses in nearby city: ${nearbyCity_temp}`,
+                );
                 setIsShowingNearbyData(true);
                 break;
               }
@@ -683,15 +773,13 @@ export default function CityCategory() {
 
     async function fetchCityBusinesses() {
       try {
-
-
         // Fetch all businesses for the city with higher limit
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
         const apiUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
         const response = await fetch(apiUrl, {
-          signal: controller.signal
+          signal: controller.signal,
         });
         clearTimeout(timeoutId);
 
@@ -769,22 +857,23 @@ export default function CityCategory() {
       try {
         console.log("Fetching all Dubai businesses for comprehensive listing");
 
-
-
         // Check if API is available
         let apiAvailable = false;
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-          const healthCheck = await fetch('/api/health', {
-            method: 'HEAD',
-            signal: controller.signal
+          const healthCheck = await fetch("/api/health", {
+            method: "HEAD",
+            signal: controller.signal,
           });
           clearTimeout(timeoutId);
           apiAvailable = healthCheck.ok;
         } catch (healthError) {
-          console.log('API health check failed for Dubai businesses:', healthError);
+          console.log(
+            "API health check failed for Dubai businesses:",
+            healthError,
+          );
           apiAvailable = false;
         }
 
@@ -796,17 +885,21 @@ export default function CityCategory() {
 
             const allDubaiUrl = `/api/scraped-businesses?city=Dubai&limit=500&page=1`;
             const response = await fetch(allDubaiUrl, {
-              signal: controller2.signal
+              signal: controller2.signal,
             });
             clearTimeout(timeoutId2);
 
             if (response.ok) {
               const result = await response.json();
-              console.log(`Found ${result.businesses?.length || 0} total Dubai businesses`);
+              console.log(
+                `Found ${result.businesses?.length || 0} total Dubai businesses`,
+              );
 
               if (result.success && result.businesses) {
                 setAllDubaiBusinesses(result.businesses);
-                setTotalAvailableBusinesses(result.total || result.businesses.length);
+                setTotalAvailableBusinesses(
+                  result.total || result.businesses.length,
+                );
               }
             } else {
               console.log(`All Dubai API response not OK: ${response.status}`);
@@ -826,24 +919,34 @@ export default function CityCategory() {
 
   // Update filtered businesses when data loads
   useEffect(() => {
-    if (categoryDataLoaded && cityDataLoaded && (country !== 'uae' || allDubaiDataLoaded)) {
+    if (
+      categoryDataLoaded &&
+      cityDataLoaded &&
+      (country !== "uae" || allDubaiDataLoaded)
+    ) {
       // Step 1: Start with category-specific businesses (highest priority)
       let combinedBusinesses = [...categoryBusinesses];
 
       // Step 2: Add city businesses that aren't already included
       const cityBusinessesToAdd = cityBusinesses.filter(
-        (cityBusiness) => !combinedBusinesses.some(
-          (existing) => existing.name === cityBusiness.name && existing.address === cityBusiness.address
-        )
+        (cityBusiness) =>
+          !combinedBusinesses.some(
+            (existing) =>
+              existing.name === cityBusiness.name &&
+              existing.address === cityBusiness.address,
+          ),
       );
       combinedBusinesses = [...combinedBusinesses, ...cityBusinessesToAdd];
 
       // Step 3: For UAE, add all Dubai businesses to ensure comprehensive listing
-      if (country === 'uae' && allDubaiBusinesses.length > 0) {
+      if (country === "uae" && allDubaiBusinesses.length > 0) {
         const dubaiBusinessesToAdd = allDubaiBusinesses.filter(
-          (dubaiBusiness) => !combinedBusinesses.some(
-            (existing) => existing.name === dubaiBusiness.name && existing.address === dubaiBusiness.address
-          )
+          (dubaiBusiness) =>
+            !combinedBusinesses.some(
+              (existing) =>
+                existing.name === dubaiBusiness.name &&
+                existing.address === dubaiBusiness.address,
+            ),
         );
         combinedBusinesses = [...combinedBusinesses, ...dubaiBusinessesToAdd];
       }
@@ -863,11 +966,17 @@ export default function CityCategory() {
         searchFilteredBusinesses = uniqueBusinesses.filter((business) => {
           return (
             business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            business.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            business.scrapedCategory?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            business.description
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            business.category
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            business.scrapedCategory
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
             business.services?.some((service) =>
-              service.toLowerCase().includes(searchQuery.toLowerCase())
+              service.toLowerCase().includes(searchQuery.toLowerCase()),
             )
           );
         });
@@ -875,10 +984,15 @@ export default function CityCategory() {
 
       // Apply pagination - show first 25 results initially
       const itemsPerPage = 25;
-      const paginatedBusinesses = searchFilteredBusinesses.slice(0, itemsPerPage * currentPage);
+      const paginatedBusinesses = searchFilteredBusinesses.slice(
+        0,
+        itemsPerPage * currentPage,
+      );
 
       setFilteredBusinesses(paginatedBusinesses);
-      setHasMoreData(searchFilteredBusinesses.length > paginatedBusinesses.length);
+      setHasMoreData(
+        searchFilteredBusinesses.length > paginatedBusinesses.length,
+      );
       setLoading(false);
 
       // Update debug info
@@ -922,7 +1036,7 @@ export default function CityCategory() {
     if (!hasMoreData || loadingMore) return;
 
     setLoadingMore(true);
-    setCurrentPage(prev => prev + 1);
+    setCurrentPage((prev) => prev + 1);
 
     // Simulate loading delay for better UX
     setTimeout(() => {
@@ -945,39 +1059,61 @@ export default function CityCategory() {
   const getCategoryDescription = (categorySlug: string) => {
     const citySpecificDescriptions = {
       "study-abroad": {
-        dubai: "Discover top-rated study abroad consultants in Dubai helping students secure admissions to world-class universities. Get expert guidance for US, UK, Canada, Australia & European education systems.",
-        "abu dhabi": "Find experienced study abroad advisors in Abu Dhabi specializing in international university placements. Expert assistance for IELTS, TOEFL preparation and scholarship applications.",
-        sharjah: "Connect with certified education consultants in Sharjah offering personalized study abroad services. Comprehensive support for visa processing and university applications.",
-        default: "Find trusted study abroad consultants for international education guidance with proven success rates"
+        dubai:
+          "Discover top-rated study abroad consultants in Dubai helping students secure admissions to world-class universities. Get expert guidance for US, UK, Canada, Australia & European education systems.",
+        "abu dhabi":
+          "Find experienced study abroad advisors in Abu Dhabi specializing in international university placements. Expert assistance for IELTS, TOEFL preparation and scholarship applications.",
+        sharjah:
+          "Connect with certified education consultants in Sharjah offering personalized study abroad services. Comprehensive support for visa processing and university applications.",
+        default:
+          "Find trusted study abroad consultants for international education guidance with proven success rates",
       },
       "immigration-consultants": {
-        dubai: "Get professional immigration assistance in Dubai from licensed lawyers and certified consultants. Expert help with permanent residency, family reunification, and citizenship applications.",
-        "abu dhabi": "Access experienced immigration lawyers in Abu Dhabi providing comprehensive legal services for visa applications, PR processes, and immigration appeals.",
-        sharjah: "Find reliable immigration consultants in Sharjah offering affordable and efficient services for all types of immigration matters.",
-        default: "Expert immigration lawyers and consultants for legal assistance and permanent residency applications"
+        dubai:
+          "Get professional immigration assistance in Dubai from licensed lawyers and certified consultants. Expert help with permanent residency, family reunification, and citizenship applications.",
+        "abu dhabi":
+          "Access experienced immigration lawyers in Abu Dhabi providing comprehensive legal services for visa applications, PR processes, and immigration appeals.",
+        sharjah:
+          "Find reliable immigration consultants in Sharjah offering affordable and efficient services for all types of immigration matters.",
+        default:
+          "Expert immigration lawyers and consultants for legal assistance and permanent residency applications",
       },
       "visa-consultants": {
-        dubai: "Professional visa consultants in Dubai with high success rates for tourist, business, work, and family visas. Fast-track processing and documentation support available.",
-        "abu dhabi": "Trusted visa service providers in Abu Dhabi offering comprehensive assistance for all visa categories with transparent pricing and quick turnaround times.",
-        sharjah: "Experienced visa consultants in Sharjah specializing in visit visa, work permit, and family visa applications with excellent customer support.",
-        default: "Professional visa consultants for all types of visa applications with guaranteed processing"
+        dubai:
+          "Professional visa consultants in Dubai with high success rates for tourist, business, work, and family visas. Fast-track processing and documentation support available.",
+        "abu dhabi":
+          "Trusted visa service providers in Abu Dhabi offering comprehensive assistance for all visa categories with transparent pricing and quick turnaround times.",
+        sharjah:
+          "Experienced visa consultants in Sharjah specializing in visit visa, work permit, and family visa applications with excellent customer support.",
+        default:
+          "Professional visa consultants for all types of visa applications with guaranteed processing",
       },
       "work-permit": {
-        dubai: "Specialized work permit consultants in Dubai helping professionals secure employment visas for UAE, Canada, Australia, and European countries with end-to-end support.",
-        "abu dhabi": "Expert work permit advisors in Abu Dhabi providing comprehensive assistance for employment visa applications and job placement services.",
-        default: "Specialized consultants for work permits and employment visas with industry expertise"
+        dubai:
+          "Specialized work permit consultants in Dubai helping professionals secure employment visas for UAE, Canada, Australia, and European countries with end-to-end support.",
+        "abu dhabi":
+          "Expert work permit advisors in Abu Dhabi providing comprehensive assistance for employment visa applications and job placement services.",
+        default:
+          "Specialized consultants for work permits and employment visas with industry expertise",
       },
       "visit-visa-specialists": {
-        dubai: "Leading visit visa specialists in Dubai offering fast and reliable tourist visa services for popular destinations including US, UK, Schengen, and Asian countries.",
-        "abu dhabi": "Professional visit visa consultants in Abu Dhabi providing hassle-free tourist visa processing with high approval rates and competitive pricing.",
-        default: "Expert visit visa specialists for tourist and business visa applications worldwide"
-      }
+        dubai:
+          "Leading visit visa specialists in Dubai offering fast and reliable tourist visa services for popular destinations including US, UK, Schengen, and Asian countries.",
+        "abu dhabi":
+          "Professional visit visa consultants in Abu Dhabi providing hassle-free tourist visa processing with high approval rates and competitive pricing.",
+        default:
+          "Expert visit visa specialists for tourist and business visa applications worldwide",
+      },
     };
 
     const descriptions = citySpecificDescriptions[categorySlug];
     if (descriptions) {
-      const cityKey = cityName.toLowerCase().replace(/\s+/g, ' ');
-      return descriptions[cityKey] || descriptions.default || descriptions[Object.keys(descriptions)[0]];
+      const cityKey = cityName.toLowerCase().replace(/\s+/g, " ");
+      return (
+        descriptions[cityKey] ||
+        descriptions.default ||
+        descriptions[Object.keys(descriptions)[0]]
+      );
     }
 
     // Fallback descriptions
@@ -1061,21 +1197,22 @@ export default function CityCategory() {
                 {categoryName} in {cityName}
               </h1>
 
-
-
               {/* Show notification for Abu Dhabi showing only local results */}
-              {!isShowingNearbyData && categoryBusinesses.length > 0 && (cityName.toLowerCase() === 'abu dhabi' || cityName.toLowerCase() === 'abu-dhabi') && (
-                <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-3 max-w-2xl">
-                  <div className="flex items-center gap-2 text-green-800 text-sm">
-                    <Building className="h-4 w-4" />
-                    <span className="font-medium">
-                      Showing {categoryBusinesses.length} {categoryName.toLowerCase()} specifically from Abu Dhabi only
-                    </span>
+              {!isShowingNearbyData &&
+                categoryBusinesses.length > 0 &&
+                (cityName.toLowerCase() === "abu dhabi" ||
+                  cityName.toLowerCase() === "abu-dhabi") && (
+                  <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-3 max-w-2xl">
+                    <div className="flex items-center gap-2 text-green-800 text-sm">
+                      <Building className="h-4 w-4" />
+                      <span className="font-medium">
+                        Showing {categoryBusinesses.length}{" "}
+                        {categoryName.toLowerCase()} specifically from Abu Dhabi
+                        only
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
-
-
+                )}
 
               <p className="text-blue-100 text-lg">
                 {getCategoryDescription(categorySlug)}
@@ -1104,10 +1241,11 @@ export default function CityCategory() {
                   <MapPin className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">
-                      {country === 'uae' ? 'All Dubai' : `All ${cityName}`} Businesses
+                      {country === "uae" ? "All Dubai" : `All ${cityName}`}{" "}
+                      Businesses
                     </p>
                     <p className="text-xl font-bold">
-                      {country === 'uae' && allDubaiBusinesses.length > 0
+                      {country === "uae" && allDubaiBusinesses.length > 0
                         ? allDubaiBusinesses.length
                         : cityBusinesses.length}
                     </p>
@@ -1121,10 +1259,10 @@ export default function CityCategory() {
                   <TrendingUp className="w-5 h-5" />
                   <div>
                     <p className="text-sm text-blue-100">
-                      {country === 'uae' ? 'Total Results' : 'Average Rating'}
+                      {country === "uae" ? "Total Results" : "Average Rating"}
                     </p>
                     <p className="text-xl font-bold">
-                      {country === 'uae'
+                      {country === "uae"
                         ? `${categoryBusinesses.length + (allDubaiBusinesses.length > 0 ? allDubaiBusinesses.length : cityBusinesses.length)}+`
                         : categoryBusinesses.length > 0
                           ? (
@@ -1206,21 +1344,21 @@ export default function CityCategory() {
         <div className="container mx-auto max-w-6xl px-4">
           {(categoryBusinesses.length === 0 && cityBusinesses.length === 0) ||
           (searchQuery && filteredBusinesses.length === 0) ? (
-                <div className="text-center py-16">
+            <div className="text-center py-16">
               <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
                 {searchQuery
                   ? `No results found for "${searchQuery}"`
                   : apiFailureCount >= 3
-                  ? `Service temporarily unavailable`
-                  : `No businesses found`}
+                    ? `Service temporarily unavailable`
+                    : `No businesses found`}
               </h3>
               <p className="text-gray-500 mb-6">
                 {searchQuery
                   ? `Try adjusting your search terms or browse all businesses in ${cityName}`
                   : apiFailureCount >= 3
-                  ? `We're experiencing connectivity issues. Please try refreshing the page or check back in a few minutes.`
-                  : `We're working on adding more ${categoryName.toLowerCase()} in ${cityName}. Check back soon or browse all businesses in the city.`}
+                    ? `We're experiencing connectivity issues. Please try refreshing the page or check back in a few minutes.`
+                    : `We're working on adding more ${categoryName.toLowerCase()} in ${cityName}. Check back soon or browse all businesses in the city.`}
               </p>
               <div className="flex gap-4 justify-center">
                 {searchQuery && (
@@ -1248,18 +1386,19 @@ export default function CityCategory() {
                     <div>
                       <h2 className="text-2xl font-semibold text-gray-900">
                         {categoryName} in {cityName}
-                        {filteredBusinesses.length > 0 && ` (${filteredBusinesses.length})`}
+                        {filteredBusinesses.length > 0 &&
+                          ` (${filteredBusinesses.length})`}
                       </h2>
                       <p className="text-gray-600 mt-1">
                         {categoryBusinesses.length > 0
                           ? `Find trusted ${categoryName.toLowerCase()} in ${cityName}`
-                          : `All available businesses in ${cityName}`
-                        }
+                          : `All available businesses in ${cityName}`}
                       </p>
                     </div>
                     <Badge variant="default" className="text-sm bg-blue-600">
                       {filteredBusinesses.length} results
-                      {hasMoreData && ` (${debugInfo.totalBusinesses - filteredBusinesses.length} more)`}
+                      {hasMoreData &&
+                        ` (${debugInfo.totalBusinesses - filteredBusinesses.length} more)`}
                     </Badge>
                   </div>
 
@@ -1276,9 +1415,7 @@ export default function CityCategory() {
                           case "rating":
                             return (b.rating || 0) - (a.rating || 0);
                           case "reviews":
-                            return (
-                              (b.reviewCount || 0) - (a.reviewCount || 0)
-                            );
+                            return (b.reviewCount || 0) - (a.reviewCount || 0);
                           case "name":
                             return a.name.localeCompare(b.name);
                           default:
@@ -1318,7 +1455,8 @@ export default function CityCategory() {
                     )}
                   </Button>
                   <p className="text-gray-500 text-sm mt-2">
-                    Showing {filteredBusinesses.length} of {debugInfo.totalBusinesses} businesses
+                    Showing {filteredBusinesses.length} of{" "}
+                    {debugInfo.totalBusinesses} businesses
                   </p>
                 </div>
               )}
@@ -1371,11 +1509,15 @@ export default function CityCategory() {
               <div key={index} className="border border-gray-200 rounded-lg">
                 <details className="group">
                   <summary className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50">
-                    <h4 className="font-semibold text-gray-900 pr-4">{faq.question}</h4>
+                    <h4 className="font-semibold text-gray-900 pr-4">
+                      {faq.question}
+                    </h4>
                     <ChevronDown className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" />
                   </summary>
                   <div className="px-6 pb-6">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </details>
               </div>
