@@ -1046,8 +1046,13 @@ export default function CityCategory() {
                           : "space-y-4"
                       }
                     >
-                      {(country === 'uae' && allDubaiBusinesses.length > 0 ? allDubaiBusinesses : cityBusinesses)
-                        .slice(0, 0) // Hide this section since we're showing everything in filteredBusinesses now
+                      {filteredBusinesses
+                        .filter((business) =>
+                          // Only show businesses that are not already shown in category section
+                          !categoryBusinesses.some(catBusiness =>
+                            catBusiness.name === business.name && catBusiness.address === business.address
+                          )
+                        )
                         .sort((a, b) => {
                           switch (sortBy) {
                             case "rating":
