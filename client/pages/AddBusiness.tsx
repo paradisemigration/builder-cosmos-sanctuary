@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { SEOHead } from "@/components/SEOHead";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
