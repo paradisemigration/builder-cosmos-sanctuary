@@ -77,56 +77,68 @@ export default function UAE() {
     {
       name: "Dubai",
       count: "250+",
-      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2020/02/06/20/01/dubai-4825573_1280.jpg",
+      image:
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://cdn.pixabay.com/photo/2020/02/06/20/01/dubai-4825573_1280.jpg",
       flag: "🇦🇪",
       description: "Burj Khalifa & Business Hub",
-      color: "#DC2626"
+      color: "#DC2626",
     },
     {
       name: "Abu Dhabi",
       count: "180+",
-      image: "https://images.unsplash.com/photo-1618607003441-43a0e5d5a5b6?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      image:
+        "https://images.unsplash.com/photo-1618607003441-43a0e5d5a5b6?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
       flag: "🇦🇪",
       description: "Capital & Cultural Center",
-      color: "#16A34A"
+      color: "#16A34A",
     },
     {
       name: "Sharjah",
       count: "120+",
-      image: "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2019/11/25/13/14/sharjah-4651023_1280.jpg",
+      image:
+        "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://cdn.pixabay.com/photo/2019/11/25/13/14/sharjah-4651023_1280.jpg",
       flag: "🇦🇪",
       description: "Cultural Capital",
-      color: "#2563EB"
+      color: "#2563EB",
     },
     {
       name: "Ajman",
       count: "80+",
-      image: "https://images.unsplash.com/photo-1580712337318-a7143b8b2ac5?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://images.unsplash.com/photo-1586717791821-3b92f8b93be8?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      image:
+        "https://images.unsplash.com/photo-1580712337318-a7143b8b2ac5?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://images.unsplash.com/photo-1586717791821-3b92f8b93be8?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
       flag: "🇦🇪",
       description: "Coastal Beauty",
-      color: "#7C3AED"
+      color: "#7C3AED",
     },
     {
       name: "Ras Al Khaimah",
       count: "60+",
-      image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2018/11/01/11/08/ras-al-khaimah-3788669_1280.jpg",
+      image:
+        "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://cdn.pixabay.com/photo/2018/11/01/11/08/ras-al-khaimah-3788669_1280.jpg",
       flag: "🇦🇪",
       description: "Mountains & Adventure",
-      color: "#DC2626"
+      color: "#DC2626",
     },
     {
       name: "Fujairah",
       count: "50+",
-      image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
-      fallback: "https://cdn.pixabay.com/photo/2020/08/14/12/35/fujairah-5487761_1280.jpg",
+      image:
+        "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&h=300&fit=crop&crop=center&auto=format&q=80",
+      fallback:
+        "https://cdn.pixabay.com/photo/2020/08/14/12/35/fujairah-5487761_1280.jpg",
       flag: "🇦🇪",
       description: "Eastern Coast",
-      color: "#059669"
+      color: "#059669",
     },
   ];
 
@@ -177,10 +189,15 @@ export default function UAE() {
   // Handle category autocomplete
   useEffect(() => {
     if (searchQuery.length >= 2) {
-      const filtered = allCategories.filter(category =>
-        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        category.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 8); // Limit to 8 suggestions
+      const filtered = allCategories
+        .filter(
+          (category) =>
+            category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            category.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()),
+        )
+        .slice(0, 8); // Limit to 8 suggestions
 
       setFilteredCategories(filtered);
       setShowSuggestions(filtered.length > 0);
@@ -204,23 +221,25 @@ export default function UAE() {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const handleSearch = () => {
     // If we have both city and a selected category, go to city+category page
     if (selectedCity && selectedCategory) {
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
       const categorySlug = selectedCategory.slug;
       navigate(`/uae/business/${citySlug}/${categorySlug}`);
     }
     // If we have a city but search query (not a selected category), search in that city
     else if (selectedCity && searchQuery.trim()) {
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/uae/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`);
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
+      navigate(
+        `/uae/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`,
+      );
     }
     // If we have selected category but no city, go to category page
     else if (selectedCategory && !selectedCity) {
@@ -232,7 +251,7 @@ export default function UAE() {
     }
     // Default fallback
     else {
-      navigate('/uae/business');
+      navigate("/uae/business");
     }
 
     // Close suggestions after search
@@ -327,7 +346,9 @@ export default function UAE() {
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
-              Connect with verified immigration experts across Dubai, Abu Dhabi, Sharjah and all Emirates. Get expert guidance for work visas, study abroad, and permanent residence applications.
+              Connect with verified immigration experts across Dubai, Abu Dhabi,
+              Sharjah and all Emirates. Get expert guidance for work visas,
+              study abroad, and permanent residence applications.
             </p>
 
             {/* Enhanced Search Bar */}
@@ -345,7 +366,10 @@ export default function UAE() {
                         onChange={handleSearchInputChange}
                         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                         onFocus={() => {
-                          if (searchQuery.length >= 2 && filteredCategories.length > 0) {
+                          if (
+                            searchQuery.length >= 2 &&
+                            filteredCategories.length > 0
+                          ) {
                             setShowSuggestions(true);
                           }
                         }}
@@ -353,7 +377,10 @@ export default function UAE() {
                       />
                       {selectedCategory && (
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <Badge variant="secondary" className="text-xs flex items-center gap-1 pr-1">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs flex items-center gap-1 pr-1"
+                          >
                             <span>{selectedCategory.name}</span>
                             <button
                               onClick={handleClearCategory}
@@ -368,23 +395,29 @@ export default function UAE() {
                     </div>
 
                     {/* Autocomplete Suggestions */}
-                    {showSuggestions && filteredCategories.length > 0 && !selectedCategory && (
-                      <div
-                        ref={suggestionsRef}
-                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
-                      >
-                        {filteredCategories.map((category, index) => (
-                          <div
-                            key={category.slug}
-                            className="px-4 py-3 hover:bg-red-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                            onClick={() => handleCategorySelect(category)}
-                          >
-                            <div className="font-medium text-gray-900">{category.name}</div>
-                            <div className="text-sm text-gray-600 mt-1">{category.description}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {showSuggestions &&
+                      filteredCategories.length > 0 &&
+                      !selectedCategory && (
+                        <div
+                          ref={suggestionsRef}
+                          className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                        >
+                          {filteredCategories.map((category, index) => (
+                            <div
+                              key={category.slug}
+                              className="px-4 py-3 hover:bg-red-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                              onClick={() => handleCategorySelect(category)}
+                            >
+                              <div className="font-medium text-gray-900">
+                                {category.name}
+                              </div>
+                              <div className="text-sm text-gray-600 mt-1">
+                                {category.description}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                   </div>
                   <div className="sm:flex-initial">
                     <div className="relative">
@@ -415,14 +448,21 @@ export default function UAE() {
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-green-600 hover:from-red-700 hover:to-green-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
                 >
                   <Search className="mr-2 h-5 w-5" />
-                  {selectedCity && selectedCategory ? `Search in ${selectedCity}` : "Search UAE Experts"}
+                  {selectedCity && selectedCategory
+                    ? `Search in ${selectedCity}`
+                    : "Search UAE Experts"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
 
               {/* Quick Search Tags */}
               <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {["Work Visa", "Study Abroad", "Tourist Visa", "Business Visa"].map((tag) => (
+                {[
+                  "Work Visa",
+                  "Study Abroad",
+                  "Tourist Visa",
+                  "Business Visa",
+                ].map((tag) => (
                   <Badge
                     key={tag}
                     variant="outline"
@@ -449,8 +489,12 @@ export default function UAE() {
                     <Shield className="h-8 w-8" />
                   </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">500+</div>
-                <div className="text-gray-600 font-medium text-sm sm:text-base">Verified Consultants</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                  500+
+                </div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">
+                  Verified Consultants
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
@@ -458,8 +502,12 @@ export default function UAE() {
                     <CheckCircle className="h-8 w-8" />
                   </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">10,000+</div>
-                <div className="text-gray-600 font-medium text-sm sm:text-base">Successful Cases</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                  10,000+
+                </div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">
+                  Successful Cases
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
@@ -467,8 +515,12 @@ export default function UAE() {
                     <Globe className="h-8 w-8" />
                   </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">7</div>
-                <div className="text-gray-600 font-medium text-sm sm:text-base">Emirates Covered</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                  7
+                </div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">
+                  Emirates Covered
+                </div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
@@ -476,8 +528,12 @@ export default function UAE() {
                     <MapPin className="h-8 w-8" />
                   </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">20+</div>
-                <div className="text-gray-600 font-medium text-sm sm:text-base">UAE Cities</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                  20+
+                </div>
+                <div className="text-gray-600 font-medium text-sm sm:text-base">
+                  UAE Cities
+                </div>
               </div>
             </div>
           </div>
@@ -540,7 +596,9 @@ export default function UAE() {
       <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-green-100 text-green-800">🇦🇪 Across UAE</Badge>
+            <Badge className="mb-4 bg-green-100 text-green-800">
+              🇦🇪 Across UAE
+            </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Top Emirates We Serve
             </h2>
@@ -583,21 +641,32 @@ export default function UAE() {
                         }
                       }}
                       onLoad={(e) => {
-                        delete (e.target as HTMLImageElement).dataset.fallbackAttempted;
+                        delete (e.target as HTMLImageElement).dataset
+                          .fallbackAttempted;
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div className="absolute top-2 right-2 text-lg sm:text-xl">{city.flag}</div>
+                    <div className="absolute top-2 right-2 text-lg sm:text-xl">
+                      {city.flag}
+                    </div>
                     <div className="absolute bottom-2 left-3 text-white">
-                      <div className="text-base sm:text-lg font-bold">{city.name}</div>
-                      <div className="text-xs sm:text-sm opacity-90">{city.count} Consultants</div>
+                      <div className="text-base sm:text-lg font-bold">
+                        {city.name}
+                      </div>
+                      <div className="text-xs sm:text-sm opacity-90">
+                        {city.count} Consultants
+                      </div>
                     </div>
                   </div>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <span className="font-medium text-gray-800 text-sm sm:text-base">Explore {city.name}</span>
-                        <div className="text-xs text-gray-500 mt-1">{city.description}</div>
+                        <span className="font-medium text-gray-800 text-sm sm:text-base">
+                          Explore {city.name}
+                        </span>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {city.description}
+                        </div>
                       </div>
                       <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-red-600 transition-colors flex-shrink-0 ml-2" />
                     </div>

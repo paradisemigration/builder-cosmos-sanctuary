@@ -9,10 +9,12 @@ import {
 
 export function SiteFooter() {
   const location = useLocation();
-  const isUAEPage = location.pathname.startsWith('/uae');
+  const isUAEPage = location.pathname.startsWith("/uae");
 
   // Get top cities for the footer based on current page
-  const topCities = isUAEPage ? uaeCities.slice(0, 12) : allIndianCities.slice(0, 24);
+  const topCities = isUAEPage
+    ? uaeCities.slice(0, 12)
+    : allIndianCities.slice(0, 24);
   const categoryList = allCategories;
   const websiteName = isUAEPage ? "VisaConsult UAE" : "VisaConsult India";
   const country = isUAEPage ? "UAE" : "India";
@@ -26,13 +28,14 @@ export function SiteFooter() {
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <div className="text-2xl font-bold text-white">VisaConsult</div>
-              <div className="text-xs text-blue-400 font-medium">{country.toUpperCase()}</div>
+              <div className="text-xs text-blue-400 font-medium">
+                {country.toUpperCase()}
+              </div>
             </div>
             <p className="text-gray-400 mb-4 text-sm">
-              {country}'s trusted platform for finding verified visa and immigration
-              consultants. Connect with expert consultants across{" "}
-              {totalCities} cities and {categoryList.length} service
-              categories.
+              {country}'s trusted platform for finding verified visa and
+              immigration consultants. Connect with expert consultants across{" "}
+              {totalCities} cities and {categoryList.length} service categories.
             </p>
             <div className="flex flex-col space-y-3 mb-4">
               <Link
@@ -63,13 +66,17 @@ export function SiteFooter() {
           <div className="lg:col-span-1">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-blue-400" />
-              Top {isUAEPage ? 'Emirates' : 'Cities'}
+              Top {isUAEPage ? "Emirates" : "Cities"}
             </h3>
             <div className="grid grid-cols-2 gap-1">
               {topCities.map((city) => (
                 <Link
                   key={city}
-                  to={isUAEPage ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}` : `/business/${city.toLowerCase().replace(/\s+/g, "-")}`}
+                  to={
+                    isUAEPage
+                      ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}`
+                      : `/business/${city.toLowerCase().replace(/\s+/g, "-")}`
+                  }
                   className="text-sm text-gray-400 hover:text-white transition-colors py-1"
                 >
                   {city}
@@ -80,7 +87,7 @@ export function SiteFooter() {
               to={isUAEPage ? "/uae" : "/all-cities-categories"}
               className="inline-block mt-3 text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
-              View all {totalCities} {isUAEPage ? 'Emirates' : 'cities'} →
+              View all {totalCities} {isUAEPage ? "Emirates" : "cities"} →
             </Link>
           </div>
 
@@ -110,7 +117,10 @@ export function SiteFooter() {
             </h3>
             <div className="space-y-1">
               {/* Generate popular combinations based on current page */}
-              {(isUAEPage ? ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"] : ["Delhi", "Mumbai", "Bangalore", "Chennai"]).map((city) => (
+              {(isUAEPage
+                ? ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"]
+                : ["Delhi", "Mumbai", "Bangalore", "Chennai"]
+              ).map((city) => (
                 <div key={city}>
                   {[
                     "immigration-consultants",
@@ -123,9 +133,10 @@ export function SiteFooter() {
                     return category ? (
                       <Link
                         key={`${city}-${categorySlug}`}
-                        to={isUAEPage
-                          ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}/${categorySlug}`
-                          : `/business/${city.toLowerCase()}/${categorySlug}`
+                        to={
+                          isUAEPage
+                            ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}/${categorySlug}`
+                            : `/business/${city.toLowerCase()}/${categorySlug}`
                         }
                         className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
                       >
@@ -182,16 +193,16 @@ export function SiteFooter() {
           {/* SEO Text Block */}
           <div className="mt-6 text-xs text-gray-500 leading-relaxed">
             <p>
-              {websiteName} is the leading platform connecting individuals
-              with verified visa and immigration consultants across{" "}
-              {totalCities} major {isUAEPage ? 'Emirates in UAE' : 'cities in India'}. Our
+              {websiteName} is the leading platform connecting individuals with
+              verified visa and immigration consultants across {totalCities}{" "}
+              major {isUAEPage ? "Emirates in UAE" : "cities in India"}. Our
               comprehensive directory includes specialists in{" "}
               {categoryList.length} service categories including immigration
               consulting, student visa services, work permit assistance, and
-              study abroad guidance. {isUAEPage
+              study abroad guidance.{" "}
+              {isUAEPage
                 ? "Whether you're looking for consultants in Dubai, Abu Dhabi, Sharjah, or any other Emirates, our platform helps you find trusted professionals for all your visa and immigration needs."
-                : "Whether you're looking for consultants in metros like Delhi, Mumbai, Bangalore, and Chennai, or smaller cities across India, our platform helps you find trusted professionals for all your visa and immigration needs."
-              }
+                : "Whether you're looking for consultants in metros like Delhi, Mumbai, Bangalore, and Chennai, or smaller cities across India, our platform helps you find trusted professionals for all your visa and immigration needs."}
             </p>
           </div>
         </div>

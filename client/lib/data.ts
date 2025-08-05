@@ -818,7 +818,8 @@ export const sampleBusinesses: Business[] = [
     category: "Study Abroad Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Leading study abroad consultancy in Jaipur serving students across Rajasthan for international education.",
+    description:
+      "Leading study abroad consultancy in Jaipur serving students across Rajasthan for international education.",
     services: [
       "University Selection",
       "Application Assistance",
@@ -849,7 +850,8 @@ export const sampleBusinesses: Business[] = [
     category: "Education Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Comprehensive education consultancy in Jaipur providing guidance for both domestic and international education opportunities.",
+    description:
+      "Comprehensive education consultancy in Jaipur providing guidance for both domestic and international education opportunities.",
     services: [
       "Career Counseling",
       "Course Selection",
@@ -880,7 +882,8 @@ export const sampleBusinesses: Business[] = [
     category: "Student Visa Consultants",
     logo: "/api/placeholder/80/80",
     coverImage: "/api/placeholder/800/400",
-    description: "Trusted student visa consultancy in Jaipur helping students from Rajasthan secure international education visas.",
+    description:
+      "Trusted student visa consultancy in Jaipur helping students from Rajasthan secure international education visas.",
     services: [
       "Student Visa Processing",
       "Document Preparation",

@@ -57,7 +57,11 @@ export default function Index() {
   const navigate = useNavigate();
 
   // Use geolocation hook
-  const { location, isLoading: locationLoading, error: locationError } = useGeolocation();
+  const {
+    location,
+    isLoading: locationLoading,
+    error: locationError,
+  } = useGeolocation();
 
   // Set homepage SEO meta data
   useEffect(() => {
@@ -74,9 +78,10 @@ export default function Index() {
   useEffect(() => {
     if (location && location.city && !selectedCity) {
       // Find matching city in our cities list
-      const matchingCity = allIndianCities.find(city =>
-        city.toLowerCase().includes(location.city.toLowerCase()) ||
-        location.city.toLowerCase().includes(city.toLowerCase())
+      const matchingCity = allIndianCities.find(
+        (city) =>
+          city.toLowerCase().includes(location.city.toLowerCase()) ||
+          location.city.toLowerCase().includes(city.toLowerCase()),
       );
 
       if (matchingCity) {
@@ -88,10 +93,15 @@ export default function Index() {
   // Handle category autocomplete
   useEffect(() => {
     if (searchQuery.length >= 2) {
-      const filtered = allCategories.filter(category =>
-        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        category.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 8); // Limit to 8 suggestions
+      const filtered = allCategories
+        .filter(
+          (category) =>
+            category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            category.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()),
+        )
+        .slice(0, 8); // Limit to 8 suggestions
 
       setFilteredCategories(filtered);
       setShowSuggestions(filtered.length > 0);
@@ -115,9 +125,9 @@ export default function Index() {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -128,9 +138,9 @@ export default function Index() {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // Use sample data for demonstration
-        const featured = sampleBusinesses.slice(0, 6).map(business => ({
+        const featured = sampleBusinesses.slice(0, 6).map((business) => ({
           ...business,
-          isFeatured: true
+          isFeatured: true,
         }));
 
         setFeaturedBusinesses(featured);
@@ -156,14 +166,16 @@ export default function Index() {
   const handleSearch = () => {
     // If we have both city and a selected category, go to city+category page
     if (selectedCity && selectedCategory) {
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
       const categorySlug = selectedCategory.slug;
       navigate(`/business/${citySlug}/${categorySlug}`);
     }
     // If we have a city but search query (not a selected category), search in that city
     else if (selectedCity && searchQuery.trim()) {
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`);
+      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
+      navigate(
+        `/business/${citySlug}?q=${encodeURIComponent(searchQuery.trim())}`,
+      );
     }
     // If we have selected category but no city, go to category page
     else if (selectedCategory && !selectedCity) {
@@ -175,7 +187,7 @@ export default function Index() {
     }
     // Default fallback
     else {
-      navigate('/business');
+      navigate("/business");
     }
 
     // Close suggestions after search
@@ -212,95 +224,121 @@ export default function Index() {
     {
       name: "Delhi",
       count: "450+",
-      image: "https://cdn.pixabay.com/photo/2020/02/02/17/24/delhi-4813618_1280.jpg",
-      fallback: "https://images.pexels.com/photos/789750/pexels-photo-789750.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2020/02/02/17/24/delhi-4813618_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/789750/pexels-photo-789750.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "India Gate & Red Fort",
-      color: "#3B82F6"
+      color: "#3B82F6",
     },
     {
       name: "Mumbai",
       count: "380+",
-      image: "https://cdn.pixabay.com/photo/2017/01/20/00/30/malabar-hill-1995213_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2017/01/20/00/30/malabar-hill-1995213_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Gateway of India",
-      color: "#6366F1"
+      color: "#6366F1",
     },
     {
       name: "Bangalore",
       count: "320+",
-      image: "https://cdn.pixabay.com/photo/2017/07/15/13/45/bangalore-2505571_1280.jpg",
-      fallback: "https://images.pexels.com/photos/962464/pexels-photo-962464.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2017/07/15/13/45/bangalore-2505571_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/962464/pexels-photo-962464.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Silicon Valley of India",
-      color: "#10B981"
+      color: "#10B981",
     },
     {
       name: "Chennai",
       count: "290+",
-      image: "https://cdn.pixabay.com/photo/2019/02/07/04/23/chennai-3979988_1280.jpg",
-      fallback: "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2019/02/07/04/23/chennai-3979988_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Marina Beach & Temples",
-      color: "#F59E0B"
+      color: "#F59E0B",
     },
     {
       name: "Hyderabad",
       count: "250+",
-      image: "https://cdn.pixabay.com/photo/2020/01/13/17/42/charminar-4762588_1280.jpg",
-      fallback: "https://images.pexels.com/photos/4321802/pexels-photo-4321802.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2020/01/13/17/42/charminar-4762588_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/4321802/pexels-photo-4321802.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Charminar & Tech City",
-      color: "#8B5CF6"
+      color: "#8B5CF6",
     },
     {
       name: "Pune",
       count: "220+",
-      image: "https://cdn.pixabay.com/photo/2020/02/06/06/09/architecture-4823769_1280.jpg",
-      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2020/02/06/06/09/architecture-4823769_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Cultural Capital",
-      color: "#EF4444"
+      color: "#EF4444",
     },
     {
       name: "Kolkata",
       count: "200+",
-      image: "https://cdn.pixabay.com/photo/2020/03/02/16/19/howrah-bridge-4896110_1280.jpg",
-      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2020/03/02/16/19/howrah-bridge-4896110_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "City of Joy",
-      color: "#06B6D4"
+      color: "#06B6D4",
     },
     {
       name: "Ahmedabad",
       count: "180+",
-      image: "https://cdn.pixabay.com/photo/2019/11/16/12/26/ahmedabad-4630555_1280.jpg",
-      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
+      image:
+        "https://cdn.pixabay.com/photo/2019/11/16/12/26/ahmedabad-4630555_1280.jpg",
+      fallback:
+        "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Heritage & Innovation",
-      color: "#F97316"
+      color: "#F97316",
     },
   ];
 
   const visaServices = [
     {
       type: "Student Visa",
-      description: "Expert guidance for studying abroad at top universities worldwide",
+      description:
+        "Expert guidance for studying abroad at top universities worldwide",
       icon: <GraduationCap className="h-12 w-12" />,
       count: "2,500+",
       color: "from-blue-500 to-indigo-600",
       countries: ["USA", "Canada", "UK", "Australia", "Germany"],
-      features: ["University Selection", "Application Support", "Scholarship Guidance"]
+      features: [
+        "University Selection",
+        "Application Support",
+        "Scholarship Guidance",
+      ],
     },
     {
       type: "Work Visa",
-      description: "Professional assistance for global employment opportunities",
+      description:
+        "Professional assistance for global employment opportunities",
       icon: <Briefcase className="h-12 w-12" />,
       count: "1,800+",
       color: "from-green-500 to-emerald-600",
       countries: ["Canada", "Australia", "Germany", "UAE", "Singapore"],
-      features: ["Job Search Support", "Work Permit Processing", "Corporate Transfers"]
+      features: [
+        "Job Search Support",
+        "Work Permit Processing",
+        "Corporate Transfers",
+      ],
     },
     {
       type: "Tourist Visa",
@@ -309,7 +347,7 @@ export default function Index() {
       count: "3,200+",
       color: "from-purple-500 to-violet-600",
       countries: ["USA", "Schengen", "UK", "Japan", "Thailand"],
-      features: ["Fast Processing", "Document Support", "Travel Insurance"]
+      features: ["Fast Processing", "Document Support", "Travel Insurance"],
     },
     {
       type: "Business Visa",
@@ -318,41 +356,58 @@ export default function Index() {
       count: "1,200+",
       color: "from-orange-500 to-red-500",
       countries: ["USA", "UK", "Singapore", "UAE", "Hong Kong"],
-      features: ["Investment Visas", "Entrepreneur Support", "Business Setup"]
+      features: ["Investment Visas", "Entrepreneur Support", "Business Setup"],
     },
   ];
 
   const statsData = [
-    { label: "Verified Consultants", value: "8,500+", icon: <Shield className="h-8 w-8" /> },
-    { label: "Successful Applications", value: "75,000+", icon: <CheckCircle className="h-8 w-8" /> },
-    { label: "Countries Covered", value: "50+", icon: <Globe className="h-8 w-8" /> },
-    { label: "Cities in India", value: "100+", icon: <MapPin className="h-8 w-8" /> },
+    {
+      label: "Verified Consultants",
+      value: "8,500+",
+      icon: <Shield className="h-8 w-8" />,
+    },
+    {
+      label: "Successful Applications",
+      value: "75,000+",
+      icon: <CheckCircle className="h-8 w-8" />,
+    },
+    {
+      label: "Countries Covered",
+      value: "50+",
+      icon: <Globe className="h-8 w-8" />,
+    },
+    {
+      label: "Cities in India",
+      value: "100+",
+      icon: <MapPin className="h-8 w-8" />,
+    },
   ];
 
   const whyChooseUs = [
     {
       title: "Verified Experts",
-      description: "All consultants are thoroughly verified with proven track records",
+      description:
+        "All consultants are thoroughly verified with proven track records",
       icon: <Shield className="h-6 w-6" />,
-      color: "text-blue-600"
+      color: "text-blue-600",
     },
     {
       title: "Best Success Rate",
       description: "95% success rate with transparent and reliable service",
       icon: <Target className="h-6 w-6" />,
-      color: "text-green-600"
+      color: "text-green-600",
     },
     {
       title: "Quick Processing",
       description: "Fast-track your applications with expert guidance",
       icon: <Zap className="h-6 w-6" />,
-      color: "text-yellow-600"
+      color: "text-yellow-600",
     },
     {
       title: "24/7 Support",
       description: "Round-the-clock assistance for all your visa needs",
       icon: <HeadphonesIcon className="h-6 w-6" />,
-      color: "text-purple-600"
+      color: "text-purple-600",
     },
   ];
 
@@ -396,7 +451,9 @@ export default function Index() {
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
-              Connect with verified immigration experts across 100+ Indian cities. Get expert guidance for study abroad, work visas, tourism, and permanent residence applications.
+              Connect with verified immigration experts across 100+ Indian
+              cities. Get expert guidance for study abroad, work visas, tourism,
+              and permanent residence applications.
             </p>
 
             {/* Enhanced Search Bar */}
@@ -414,7 +471,10 @@ export default function Index() {
                         onChange={handleSearchInputChange}
                         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                         onFocus={() => {
-                          if (searchQuery.length >= 2 && filteredCategories.length > 0) {
+                          if (
+                            searchQuery.length >= 2 &&
+                            filteredCategories.length > 0
+                          ) {
                             setShowSuggestions(true);
                           }
                         }}
@@ -422,7 +482,10 @@ export default function Index() {
                       />
                       {selectedCategory && (
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <Badge variant="secondary" className="text-xs flex items-center gap-1 pr-1">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs flex items-center gap-1 pr-1"
+                          >
                             <span>{selectedCategory.name}</span>
                             <button
                               onClick={handleClearCategory}
@@ -437,23 +500,29 @@ export default function Index() {
                     </div>
 
                     {/* Autocomplete Suggestions */}
-                    {showSuggestions && filteredCategories.length > 0 && !selectedCategory && (
-                      <div
-                        ref={suggestionsRef}
-                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
-                      >
-                        {filteredCategories.map((category, index) => (
-                          <div
-                            key={category.slug}
-                            className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                            onClick={() => handleCategorySelect(category)}
-                          >
-                            <div className="font-medium text-gray-900">{category.name}</div>
-                            <div className="text-sm text-gray-600 mt-1">{category.description}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {showSuggestions &&
+                      filteredCategories.length > 0 &&
+                      !selectedCategory && (
+                        <div
+                          ref={suggestionsRef}
+                          className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                        >
+                          {filteredCategories.map((category, index) => (
+                            <div
+                              key={category.slug}
+                              className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                              onClick={() => handleCategorySelect(category)}
+                            >
+                              <div className="font-medium text-gray-900">
+                                {category.name}
+                              </div>
+                              <div className="text-sm text-gray-600 mt-1">
+                                {category.description}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                   </div>
                   <div className="sm:flex-initial">
                     <div className="relative">
@@ -486,14 +555,21 @@ export default function Index() {
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-200 text-base sm:text-lg"
                 >
                   <Search className="mr-2 h-5 w-5" />
-                  {selectedCity && selectedCategory ? `Search in ${selectedCity}` : "Search Experts"}
+                  {selectedCity && selectedCategory
+                    ? `Search in ${selectedCity}`
+                    : "Search Experts"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
 
               {/* Quick Search Tags */}
               <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {["Study Abroad", "Work Visa", "Tourist Visa", "PR Services"].map((tag) => (
+                {[
+                  "Study Abroad",
+                  "Work Visa",
+                  "Tourist Visa",
+                  "PR Services",
+                ].map((tag) => (
                   <Badge
                     key={tag}
                     variant="outline"
@@ -521,8 +597,12 @@ export default function Index() {
                       {stat.icon}
                     </div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{stat.value}</div>
-                  <div className="text-gray-600 font-medium text-sm sm:text-base">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-600 font-medium text-sm sm:text-base">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -534,12 +614,15 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-blue-100 text-blue-800">Our Services</Badge>
+            <Badge className="mb-4 bg-blue-100 text-blue-800">
+              Our Services
+            </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Comprehensive Visa Services
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
-              Expert assistance for all types of visa applications with highest success rates
+              Expert assistance for all types of visa applications with highest
+              success rates
             </p>
           </div>
 
@@ -548,21 +631,32 @@ export default function Index() {
               <Card
                 key={index}
                 className={`group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white ${
-                  activeService === index ? "ring-2 ring-blue-500 shadow-xl" : ""
+                  activeService === index
+                    ? "ring-2 ring-blue-500 shadow-xl"
+                    : ""
                 }`}
               >
                 <CardHeader className="pb-4">
-                  <div className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div
+                    className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  >
                     {service.icon}
                   </div>
-                  <CardTitle className="text-xl font-bold mb-2">{service.type}</CardTitle>
-                  <Badge variant="outline" className="w-fit">{service.count} Experts</Badge>
+                  <CardTitle className="text-xl font-bold mb-2">
+                    {service.type}
+                  </CardTitle>
+                  <Badge variant="outline" className="w-fit">
+                    {service.count} Experts
+                  </Badge>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">{service.description}</p>
                   <div className="space-y-2 mb-4">
                     {service.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center text-sm text-gray-600">
+                      <div
+                        key={idx}
+                        className="flex items-center text-sm text-gray-600"
+                      >
                         <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
                         {feature}
                       </div>
@@ -570,7 +664,11 @@ export default function Index() {
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {service.countries.map((country) => (
-                      <Badge key={country} variant="secondary" className="text-xs">
+                      <Badge
+                        key={country}
+                        variant="secondary"
+                        className="text-xs"
+                      >
                         {country}
                       </Badge>
                     ))}
@@ -586,7 +684,9 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-green-100 text-green-800">🇮🇳 Across India</Badge>
+            <Badge className="mb-4 bg-green-100 text-green-800">
+              🇮🇳 Across India
+            </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Top Cities We Serve
             </h2>
@@ -618,8 +718,8 @@ export default function Index() {
                           const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
                             <defs>
                               <linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:${city.color || '#3B82F6'};stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:${city.color || '#1E40AF'};stop-opacity:0.8" />
+                                <stop offset="0%" style="stop-color:${city.color || "#3B82F6"};stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:${city.color || "#1E40AF"};stop-opacity:0.8" />
                               </linearGradient>
                             </defs>
                             <rect width="600" height="300" fill="url(#grad${index})"/>
@@ -632,21 +732,32 @@ export default function Index() {
                       }}
                       onLoad={(e) => {
                         // Reset fallback flag on successful load
-                        delete (e.target as HTMLImageElement).dataset.fallbackAttempted;
+                        delete (e.target as HTMLImageElement).dataset
+                          .fallbackAttempted;
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div className="absolute top-2 right-2 text-lg sm:text-xl">{city.flag}</div>
+                    <div className="absolute top-2 right-2 text-lg sm:text-xl">
+                      {city.flag}
+                    </div>
                     <div className="absolute bottom-2 left-3 text-white">
-                      <div className="text-base sm:text-lg font-bold">{city.name}</div>
-                      <div className="text-xs sm:text-sm opacity-90">{city.count} Consultants</div>
+                      <div className="text-base sm:text-lg font-bold">
+                        {city.name}
+                      </div>
+                      <div className="text-xs sm:text-sm opacity-90">
+                        {city.count} Consultants
+                      </div>
                     </div>
                   </div>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <span className="font-medium text-gray-800 text-sm sm:text-base">Explore {city.name}</span>
-                        <div className="text-xs text-gray-500 mt-1">{city.description}</div>
+                        <span className="font-medium text-gray-800 text-sm sm:text-base">
+                          Explore {city.name}
+                        </span>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {city.description}
+                        </div>
                       </div>
                       <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2" />
                     </div>
@@ -671,22 +782,29 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-yellow-100 text-yellow-800">Why Choose Us</Badge>
+            <Badge className="mb-4 bg-yellow-100 text-yellow-800">
+              Why Choose Us
+            </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               India's Most Trusted Platform
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
-              Experience the difference with our verified experts and proven success rate
+              Experience the difference with our verified experts and proven
+              success rate
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {whyChooseUs.map((feature, index) => (
               <div key={index} className="text-center">
-                <div className={`inline-flex p-4 rounded-2xl bg-white shadow-lg mb-6 ${feature.color}`}>
+                <div
+                  className={`inline-flex p-4 rounded-2xl bg-white shadow-lg mb-6 ${feature.color}`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
                 <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
@@ -698,7 +816,9 @@ export default function Index() {
       <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 sm:mb-16">
-            <Badge className="mb-4 bg-purple-100 text-purple-800">Featured Experts</Badge>
+            <Badge className="mb-4 bg-purple-100 text-purple-800">
+              Featured Experts
+            </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Top rated consultants
             </h2>
@@ -729,7 +849,10 @@ export default function Index() {
 
           <div className="text-center mt-12">
             <Link to="/business">
-              <Button size="lg" className="px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+              <Button
+                size="lg"
+                className="px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+              >
                 View All Consultants
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -745,11 +868,16 @@ export default function Index() {
             Ready to Start Your Visa Journey?
           </h2>
           <p className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto px-4">
-            Join thousands of satisfied customers who have successfully achieved their visa goals with our expert consultants.
+            Join thousands of satisfied customers who have successfully achieved
+            their visa goals with our expert consultants.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
             <Link to="/business" className="w-full sm:w-auto">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium"
+              >
                 Find Consultants
                 <Search className="ml-2 h-5 w-5" />
               </Button>

@@ -15,7 +15,7 @@ export function Navigation({ className = "" }: NavigationProps) {
   const { isAuthenticated, user, logout } = useAuth();
 
   // Check if current page is UAE related
-  const isUAEPage = location.pathname.startsWith('/uae');
+  const isUAEPage = location.pathname.startsWith("/uae");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +57,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                     VisaConsult
                   </h1>
                   <p className="text-xs text-blue-600 font-medium -mt-1">
-                    {isUAEPage ? 'UAE' : 'INDIA'}
+                    {isUAEPage ? "UAE" : "INDIA"}
                   </p>
                 </div>
               </div>

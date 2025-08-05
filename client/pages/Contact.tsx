@@ -27,7 +27,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
-import { generateContactMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
+import {
+  generateContactMeta,
+  setPageMeta,
+  setSEOLinks,
+} from "@/lib/meta-utils";
 
 export default function Contact() {
   const [formData, setFormData] = useState({

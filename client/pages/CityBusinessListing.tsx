@@ -4,28 +4,35 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 // Detect third-party interference (FullStory, etc.)
 const hasThirdPartyInterference = (): boolean => {
   try {
-    return !!(window as any).FS || !!(window as any)._fs_loaded || document.querySelector('script[src*="fullstory"]');
+    return (
+      !!(window as any).FS ||
+      !!(window as any)._fs_loaded ||
+      document.querySelector('script[src*="fullstory"]')
+    );
   } catch {
     return false;
   }
 };
 
 // Pure XHR implementation that bypasses all fetch interference
-function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
+function safeXhrFetch(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
   return new Promise((resolve) => {
     try {
       const xhr = new XMLHttpRequest();
-      const method = options.method || 'GET';
+      const method = options.method || "GET";
 
       xhr.open(method, url, true);
 
       if (options.headers) {
         const headers = options.headers as Record<string, string>;
-        Object.keys(headers).forEach(key => {
+        Object.keys(headers).forEach((key) => {
           try {
             xhr.setRequestHeader(key, headers[key]);
           } catch (headerError) {
-            console.log('Header error:', headerError);
+            console.log("Header error:", headerError);
           }
         });
       }
@@ -37,51 +44,74 @@ function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response>
           const response = new Response(xhr.responseText, {
             status: xhr.status,
             statusText: xhr.statusText,
-            headers: new Headers()
+            headers: new Headers(),
           });
           resolve(response);
         } catch (responseError) {
-          resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-            status: 200,
-            statusText: 'OK',
-            headers: new Headers({ 'Content-Type': 'application/json' })
-          }));
+          resolve(
+            new Response(
+              JSON.stringify({ success: false, businesses: [], total: 0 }),
+              {
+                status: 200,
+                statusText: "OK",
+                headers: new Headers({ "Content-Type": "application/json" }),
+              },
+            ),
+          );
         }
       };
 
       xhr.onerror = () => {
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
       xhr.ontimeout = () => {
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
-      xhr.send(options.body as string || null);
+      xhr.send((options.body as string) || null);
     } catch (xhrError) {
-      resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-        status: 200,
-        statusText: 'OK',
-        headers: new Headers({ 'Content-Type': 'application/json' })
-      }));
+      resolve(
+        new Response(
+          JSON.stringify({ success: false, businesses: [], total: 0 }),
+          {
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "Content-Type": "application/json" }),
+          },
+        ),
+      );
     }
   });
 }
 
 // Robust fetch wrapper for CityBusinessListing
-async function robustFetch(url: string, options: RequestInit = {}): Promise<Response> {
+async function robustFetch(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
   const useXhrOnly = hasThirdPartyInterference();
 
   if (useXhrOnly) {
-    console.log('FullStory detected, using XHR-only mode for city listing');
+    console.log("FullStory detected, using XHR-only mode for city listing");
     return safeXhrFetch(url, options);
   }
 
@@ -102,7 +132,7 @@ async function robustFetch(url: string, options: RequestInit = {}): Promise<Resp
 
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   } catch (error) {
-    console.log('Standard fetch failed, falling back to XHR:', error);
+    console.log("Standard fetch failed, falling back to XHR:", error);
     return safeXhrFetch(url, options);
   }
 }
@@ -261,7 +291,7 @@ Technology integration has modernized visa services in ${cityName}, with consult
 
 Cost considerations for visa services in ${cityName} vary significantly based on service type, destination country, and application complexity. Clients benefit from competitive pricing and comprehensive service packages that often prove more cost-effective than independent application attempts.
 
-${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`
+${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`,
   };
 };
 
@@ -344,17 +374,23 @@ export default function CityBusinessListing() {
   // Global error handler for unhandled promise rejections
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      console.error('Unhandled promise rejection in CityBusinessListing:', event.reason);
-      if (event.reason?.message?.includes('Failed to fetch')) {
-        console.log('Suppressing fetch error to prevent UI crash');
+      console.error(
+        "Unhandled promise rejection in CityBusinessListing:",
+        event.reason,
+      );
+      if (event.reason?.message?.includes("Failed to fetch")) {
+        console.log("Suppressing fetch error to prevent UI crash");
         event.preventDefault();
       }
     };
 
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection,
+      );
     };
   }, []);
 
@@ -426,7 +462,9 @@ export default function CityBusinessListing() {
       // Check if API is available
       let apiAvailable = false;
       try {
-        const healthCheck = await robustFetch("/api/health", { method: "HEAD" });
+        const healthCheck = await robustFetch("/api/health", {
+          method: "HEAD",
+        });
         apiAvailable = healthCheck.ok;
       } catch (healthError) {
         console.log("API health check failed, will use sample data fallback");
@@ -822,21 +860,33 @@ export default function CityBusinessListing() {
                 <div className="text-lg sm:text-xl lg:text-2xl font-bold">
                   {cityStats.totalConsultants}
                 </div>
-                <div className="text-xs sm:text-sm text-blue-100">Total Consultants</div>
+                <div className="text-xs sm:text-sm text-blue-100">
+                  Total Consultants
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
                 <div className="text-lg sm:text-xl lg:text-2xl font-bold">
                   {cityStats.averageRating}★
                 </div>
-                <div className="text-xs sm:text-sm text-blue-100">Average Rating</div>
+                <div className="text-xs sm:text-sm text-blue-100">
+                  Average Rating
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
-                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{cityStats.categories}</div>
-                <div className="text-xs sm:text-sm text-blue-100">Service Categories</div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">
+                  {cityStats.categories}
+                </div>
+                <div className="text-xs sm:text-sm text-blue-100">
+                  Service Categories
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
-                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{cityStats.topRated}</div>
-                <div className="text-xs sm:text-sm text-blue-100">Top Rated (4.5+)</div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">
+                  {cityStats.topRated}
+                </div>
+                <div className="text-xs sm:text-sm text-blue-100">
+                  Top Rated (4.5+)
+                </div>
               </div>
             </div>
           </div>
@@ -1142,7 +1192,7 @@ export default function CityBusinessListing() {
                   {contentData.title}
                 </h2>
                 <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                  {contentData.content.split('\n\n').map((paragraph, index) => (
+                  {contentData.content.split("\n\n").map((paragraph, index) => (
                     <p key={index} className="mb-6">
                       {paragraph}
                     </p>

@@ -5,29 +5,36 @@ import { Link, useSearchParams, useNavigate } from "react-router-dom";
 const hasThirdPartyInterference = (): boolean => {
   try {
     // Check for FullStory
-    return !!(window as any).FS || !!(window as any)._fs_loaded || document.querySelector('script[src*="fullstory"]');
+    return (
+      !!(window as any).FS ||
+      !!(window as any)._fs_loaded ||
+      document.querySelector('script[src*="fullstory"]')
+    );
   } catch {
     return false;
   }
 };
 
 // Pure XHR implementation that bypasses all fetch interference
-function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
+function safeXhrFetch(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
   return new Promise((resolve) => {
     try {
       const xhr = new XMLHttpRequest();
-      const method = options.method || 'GET';
+      const method = options.method || "GET";
 
       xhr.open(method, url, true);
 
       // Set headers
       if (options.headers) {
         const headers = options.headers as Record<string, string>;
-        Object.keys(headers).forEach(key => {
+        Object.keys(headers).forEach((key) => {
           try {
             xhr.setRequestHeader(key, headers[key]);
           } catch (headerError) {
-            console.log('Header error:', headerError);
+            console.log("Header error:", headerError);
           }
         });
       }
@@ -40,57 +47,83 @@ function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response>
           const response = new Response(xhr.responseText, {
             status: xhr.status,
             statusText: xhr.statusText,
-            headers: new Headers()
+            headers: new Headers(),
           });
           resolve(response);
         } catch (responseError) {
-          console.log('Response creation error:', responseError);
+          console.log("Response creation error:", responseError);
           // Return empty response if Response creation fails
-          resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-            status: 200,
-            statusText: 'OK',
-            headers: new Headers({ 'Content-Type': 'application/json' })
-          }));
+          resolve(
+            new Response(
+              JSON.stringify({ success: false, businesses: [], total: 0 }),
+              {
+                status: 200,
+                statusText: "OK",
+                headers: new Headers({ "Content-Type": "application/json" }),
+              },
+            ),
+          );
         }
       };
 
       xhr.onerror = () => {
-        console.log('XHR network error for:', url);
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        console.log("XHR network error for:", url);
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
       xhr.ontimeout = () => {
-        console.log('XHR timeout for:', url);
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        console.log("XHR timeout for:", url);
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
-      xhr.send(options.body as string || null);
+      xhr.send((options.body as string) || null);
     } catch (xhrError) {
-      console.log('XHR setup error:', xhrError);
+      console.log("XHR setup error:", xhrError);
       // Return empty response if XHR setup fails
-      resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-        status: 200,
-        statusText: 'OK',
-        headers: new Headers({ 'Content-Type': 'application/json' })
-      }));
+      resolve(
+        new Response(
+          JSON.stringify({ success: false, businesses: [], total: 0 }),
+          {
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "Content-Type": "application/json" }),
+          },
+        ),
+      );
     }
   });
 }
 
 // Robust fetch wrapper that handles third-party interference
-async function robustFetch(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
+async function robustFetch(
+  url: string,
+  options: RequestInit = {},
+  retries = 2,
+): Promise<Response> {
   const useXhrOnly = hasThirdPartyInterference();
 
   if (useXhrOnly) {
-    console.log('Third-party interference detected, using XHR-only mode for Browse page');
+    console.log(
+      "Third-party interference detected, using XHR-only mode for Browse page",
+    );
     return safeXhrFetch(url, options);
   }
 
@@ -112,19 +145,21 @@ async function robustFetch(url: string, options: RequestInit = {}, retries = 2):
       }
 
       if (i === retries - 1) {
-        console.log(`Fetch failed after ${retries} retries, using XHR fallback`);
+        console.log(
+          `Fetch failed after ${retries} retries, using XHR fallback`,
+        );
         return safeXhrFetch(url, options);
       }
     } catch (error) {
       console.error(`Fetch attempt ${i + 1} failed:`, error);
 
       if (i === retries - 1) {
-        console.log('All fetch attempts failed, using XHR fallback');
+        console.log("All fetch attempts failed, using XHR fallback");
         return safeXhrFetch(url, options);
       }
 
       // Wait before retry (exponential backoff)
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 500));
+      await new Promise((resolve) => setTimeout(resolve, Math.pow(2, i) * 500));
     }
   }
 

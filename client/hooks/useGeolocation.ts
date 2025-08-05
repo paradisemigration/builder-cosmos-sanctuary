@@ -1,32 +1,41 @@
 import { useState, useEffect } from "react";
 
 // FullStory-resistant fetch wrapper
-async function robustFetch(url: string, options?: RequestInit): Promise<Response> {
+async function robustFetch(
+  url: string,
+  options?: RequestInit,
+): Promise<Response> {
   // More comprehensive FullStory detection
-  const isFullStoryActive = typeof window !== 'undefined' && (
-    (window as any).FS ||
-    (window as any)._fs_namespace ||
-    document.querySelector('script[src*="fullstory"]') ||
-    typeof (window as any).fetch === 'function' && (window as any).fetch.toString().includes('FullStory') ||
-    document.documentElement.innerHTML.includes('fullstory')
-  );
+  const isFullStoryActive =
+    typeof window !== "undefined" &&
+    ((window as any).FS ||
+      (window as any)._fs_namespace ||
+      document.querySelector('script[src*="fullstory"]') ||
+      (typeof (window as any).fetch === "function" &&
+        (window as any).fetch.toString().includes("FullStory")) ||
+      document.documentElement.innerHTML.includes("fullstory"));
 
   // Always prefer XHR for external API calls when any tracking script is detected
-  const useXHR = isFullStoryActive || typeof (window as any).gtag === 'function' || typeof (window as any).ga === 'function';
+  const useXHR =
+    isFullStoryActive ||
+    typeof (window as any).gtag === "function" ||
+    typeof (window as any).ga === "function";
 
   if (useXHR) {
-    console.log('Third-party script detected, using XHR for geolocation API calls');
+    console.log(
+      "Third-party script detected, using XHR for geolocation API calls",
+    );
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
       try {
-        xhr.open(options?.method || 'GET', url, true);
+        xhr.open(options?.method || "GET", url, true);
 
         // Set proper headers for CORS
-        xhr.setRequestHeader('Accept', 'application/json');
-        if (url.includes('nominatim.openstreetmap.org')) {
-          xhr.setRequestHeader('User-Agent', 'VisaConsult-India/1.0');
+        xhr.setRequestHeader("Accept", "application/json");
+        if (url.includes("nominatim.openstreetmap.org")) {
+          xhr.setRequestHeader("User-Agent", "VisaConsult-India/1.0");
         }
 
         // Set custom headers if provided
@@ -44,8 +53,9 @@ async function robustFetch(url: string, options?: RequestInit): Promise<Response
               status: xhr.status,
               statusText: xhr.statusText,
               headers: new Headers({
-                'Content-Type': xhr.getResponseHeader('Content-Type') || 'application/json'
-              })
+                "Content-Type":
+                  xhr.getResponseHeader("Content-Type") || "application/json",
+              }),
             });
             resolve(response);
           } else {
@@ -54,19 +64,18 @@ async function robustFetch(url: string, options?: RequestInit): Promise<Response
         };
 
         xhr.onerror = () => {
-          console.error('XHR network error for:', url);
+          console.error("XHR network error for:", url);
           reject(new Error(`XHR Network Error`));
         };
 
         xhr.ontimeout = () => {
-          console.error('XHR timeout for:', url);
+          console.error("XHR timeout for:", url);
           reject(new Error(`XHR Timeout after 15s`));
         };
 
         xhr.send(options?.body);
-
       } catch (error) {
-        console.error('XHR setup error:', error);
+        console.error("XHR setup error:", error);
         reject(new Error(`XHR Setup Error: ${error}`));
       }
     });
@@ -79,19 +88,21 @@ async function robustFetch(url: string, options?: RequestInit): Promise<Response
 
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
     return response;
-
   } catch (error) {
-    console.error('Native fetch failed completely, using final XHR fallback:', error);
+    console.error(
+      "Native fetch failed completely, using final XHR fallback:",
+      error,
+    );
 
     // Final XHR fallback
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open(options?.method || 'GET', url, true);
+      xhr.open(options?.method || "GET", url, true);
       xhr.timeout = 10000;
 
       xhr.onload = () => {
@@ -102,8 +113,8 @@ async function robustFetch(url: string, options?: RequestInit): Promise<Response
         }
       };
 
-      xhr.onerror = () => reject(new Error('Final XHR Network Error'));
-      xhr.ontimeout = () => reject(new Error('Final XHR Timeout'));
+      xhr.onerror = () => reject(new Error("Final XHR Network Error"));
+      xhr.ontimeout = () => reject(new Error("Final XHR Timeout"));
       xhr.send(options?.body);
     });
   }

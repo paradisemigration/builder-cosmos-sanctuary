@@ -5,29 +5,36 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 const hasThirdPartyInterference = (): boolean => {
   try {
     // Check for FullStory
-    return !!(window as any).FS || !!(window as any)._fs_loaded || document.querySelector('script[src*="fullstory"]');
+    return (
+      !!(window as any).FS ||
+      !!(window as any)._fs_loaded ||
+      document.querySelector('script[src*="fullstory"]')
+    );
   } catch {
     return false;
   }
 };
 
 // Pure XHR implementation that bypasses all fetch interference
-function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response> {
+function safeXhrFetch(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
   return new Promise((resolve) => {
     try {
       const xhr = new XMLHttpRequest();
-      const method = options.method || 'GET';
+      const method = options.method || "GET";
 
       xhr.open(method, url, true);
 
       // Set headers
       if (options.headers) {
         const headers = options.headers as Record<string, string>;
-        Object.keys(headers).forEach(key => {
+        Object.keys(headers).forEach((key) => {
           try {
             xhr.setRequestHeader(key, headers[key]);
           } catch (headerError) {
-            console.log('Header error:', headerError);
+            console.log("Header error:", headerError);
           }
         });
       }
@@ -40,57 +47,81 @@ function safeXhrFetch(url: string, options: RequestInit = {}): Promise<Response>
           const response = new Response(xhr.responseText, {
             status: xhr.status,
             statusText: xhr.statusText,
-            headers: new Headers()
+            headers: new Headers(),
           });
           resolve(response);
         } catch (responseError) {
-          console.log('Response creation error:', responseError);
+          console.log("Response creation error:", responseError);
           // Return empty response if Response creation fails
-          resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-            status: 200,
-            statusText: 'OK',
-            headers: new Headers({ 'Content-Type': 'application/json' })
-          }));
+          resolve(
+            new Response(
+              JSON.stringify({ success: false, businesses: [], total: 0 }),
+              {
+                status: 200,
+                statusText: "OK",
+                headers: new Headers({ "Content-Type": "application/json" }),
+              },
+            ),
+          );
         }
       };
 
       xhr.onerror = () => {
-        console.log('XHR network error for:', url);
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        console.log("XHR network error for:", url);
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
       xhr.ontimeout = () => {
-        console.log('XHR timeout for:', url);
-        resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-          status: 200,
-          statusText: 'OK',
-          headers: new Headers({ 'Content-Type': 'application/json' })
-        }));
+        console.log("XHR timeout for:", url);
+        resolve(
+          new Response(
+            JSON.stringify({ success: false, businesses: [], total: 0 }),
+            {
+              status: 200,
+              statusText: "OK",
+              headers: new Headers({ "Content-Type": "application/json" }),
+            },
+          ),
+        );
       };
 
-      xhr.send(options.body as string || null);
+      xhr.send((options.body as string) || null);
     } catch (xhrError) {
-      console.log('XHR setup error:', xhrError);
+      console.log("XHR setup error:", xhrError);
       // Return empty response if XHR setup fails
-      resolve(new Response(JSON.stringify({ success: false, businesses: [], total: 0 }), {
-        status: 200,
-        statusText: 'OK',
-        headers: new Headers({ 'Content-Type': 'application/json' })
-      }));
+      resolve(
+        new Response(
+          JSON.stringify({ success: false, businesses: [], total: 0 }),
+          {
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "Content-Type": "application/json" }),
+          },
+        ),
+      );
     }
   });
 }
 
 // Robust fetch wrapper that handles third-party interference
-async function robustFetch(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
+async function robustFetch(
+  url: string,
+  options: RequestInit = {},
+  retries = 2,
+): Promise<Response> {
   const useXhrOnly = hasThirdPartyInterference();
 
   if (useXhrOnly) {
-    console.log('Third-party interference detected, using XHR-only mode');
+    console.log("Third-party interference detected, using XHR-only mode");
     return safeXhrFetch(url, options);
   }
 
@@ -116,12 +147,12 @@ async function robustFetch(url: string, options: RequestInit = {}, retries = 2):
       console.log(`Fetch attempt ${i + 1} failed for ${url}:`, error);
 
       if (i === retries - 1) {
-        console.log('All standard fetch attempts failed, falling back to XHR');
+        console.log("All standard fetch attempts failed, falling back to XHR");
         return safeXhrFetch(url, options);
       }
 
       // Short wait before retry
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   }
 
@@ -553,7 +584,7 @@ const detectUserLocation = async (): Promise<{
           {
             signal: controller.signal,
           },
-          2 // Only 2 retries for external APIs
+          2, // Only 2 retries for external APIs
         );
         clearTimeout(timeoutId);
 
@@ -575,9 +606,13 @@ const detectUserLocation = async (): Promise<{
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-      const response = await robustFetch("https://ipapi.co/json/", {
-        signal: controller.signal,
-      }, 2); // Only 2 retries for external APIs
+      const response = await robustFetch(
+        "https://ipapi.co/json/",
+        {
+          signal: controller.signal,
+        },
+        2,
+      ); // Only 2 retries for external APIs
       clearTimeout(timeoutId);
 
       const data = await response.json();
@@ -653,7 +688,15 @@ const getNearByCities = (
         "Krishnanagar",
       ],
       gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-      rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota", "Bikaner", "Alwar"],
+      rajasthan: [
+        "Jaipur",
+        "Jodhpur",
+        "Udaipur",
+        "Ajmer",
+        "Kota",
+        "Bikaner",
+        "Alwar",
+      ],
       kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
       punjab: ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar"],
     };
@@ -771,7 +814,12 @@ const getNearByCities = (
 };
 
 // Generate unique content for city+category combinations (500 words)
-const generateCityCategoryContent = (cityName: string, categoryName: string, categorySlug: string, country: string) => {
+const generateCityCategoryContent = (
+  cityName: string,
+  categoryName: string,
+  categorySlug: string,
+  country: string,
+) => {
   const isUAE = country === "uae";
   const countryName = isUAE ? "UAE" : "India";
   const currency = isUAE ? "AED" : "₹";
@@ -790,9 +838,9 @@ ${cityName}'s ${categoryName.toLowerCase()} maintain strong relationships with v
 
 Services offered by ${categoryName.toLowerCase()} in ${cityName} include visa category consultation, documentation guidance, application form assistance, appointment scheduling, and pre-submission review. Many consultants also provide additional services such as travel insurance guidance, flight booking assistance, and post-visa support for travel planning.
 
-Cost considerations for visa consultation services in ${cityName} vary based on visa type and complexity. Standard tourist visa consultations typically range from ${currency}${isUAE ? '200-500' : '2,000-5,000'}, while complex work or immigration visas may cost ${currency}${isUAE ? '500-2,000' : '5,000-25,000'}. Investment in professional consultation often proves cost-effective by avoiding rejection and reapplication expenses.
+Cost considerations for visa consultation services in ${cityName} vary based on visa type and complexity. Standard tourist visa consultations typically range from ${currency}${isUAE ? "200-500" : "2,000-5,000"}, while complex work or immigration visas may cost ${currency}${isUAE ? "500-2,000" : "5,000-25,000"}. Investment in professional consultation often proves cost-effective by avoiding rejection and reapplication expenses.
 
-Choose ${categoryName.toLowerCase()} in ${cityName} based on their specialization, success rates, customer reviews, and transparency in fee structure. Verify their credentials, experience with your target destination, and availability for ongoing support throughout the visa process.`
+Choose ${categoryName.toLowerCase()} in ${cityName} based on their specialization, success rates, customer reviews, and transparency in fee structure. Verify their credentials, experience with your target destination, and availability for ongoing support throughout the visa process.`,
     },
 
     "immigration-consultants": {
@@ -809,9 +857,9 @@ ${cityName}'s immigration experts maintain updated knowledge of changing immigra
 
 Services include immigration program selection, documentation preparation, points optimization, application submission, and ongoing case management. Many consultants also provide settlement services guidance, including job search assistance, accommodation planning, and initial settlement support upon arrival.
 
-Immigration consultation fees in ${cityName} typically range from ${currency}${isUAE ? '1,000-5,000' : '15,000-75,000'} depending on program complexity and service scope. Comprehensive packages often include multiple application attempts and ongoing support throughout the process.
+Immigration consultation fees in ${cityName} typically range from ${currency}${isUAE ? "1,000-5,000" : "15,000-75,000"} depending on program complexity and service scope. Comprehensive packages often include multiple application attempts and ongoing support throughout the process.
 
-Successful immigration requires careful planning, accurate documentation, and expert guidance throughout the lengthy process. ${cityName}'s ${categoryName.toLowerCase()} provide this essential support, significantly improving approval chances and reducing processing complications.`
+Successful immigration requires careful planning, accurate documentation, and expert guidance throughout the lengthy process. ${cityName}'s ${categoryName.toLowerCase()} provide this essential support, significantly improving approval chances and reducing processing complications.`,
     },
 
     "study-abroad-consultants": {
@@ -830,7 +878,7 @@ Financial planning represents a crucial aspect of study abroad consulting in ${c
 
 Student visa assistance forms an integral part of services offered by ${categoryName.toLowerCase()} in ${cityName}. This includes visa documentation, embassy interview preparation, and guidance on student visa regulations. Experienced consultants ensure visa applications align with university admissions for seamless processing.
 
-Consultation fees in ${cityName} typically range from ${currency}${isUAE ? '500-2,000' : '5,000-25,000'} depending on service scope and destination complexity. Comprehensive packages often include ongoing support throughout the admission and visa process, ensuring students receive continuous guidance until departure.`
+Consultation fees in ${cityName} typically range from ${currency}${isUAE ? "500-2,000" : "5,000-25,000"} depending on service scope and destination complexity. Comprehensive packages often include ongoing support throughout the admission and visa process, ensuring students receive continuous guidance until departure.`,
     },
 
     "work-visa-consultants": {
@@ -849,7 +897,7 @@ Points-based systems for skilled migration require strategic optimization to ach
 
 Processing timeframes for work visas vary considerably, often requiring 6-18 months depending on the destination country and visa category. ${cityName}'s consultants provide realistic timeline expectations and regular updates throughout the application process, ensuring clients remain informed of progress and requirements.
 
-Service fees for work visa consultation in ${cityName} typically range from ${currency}${isUAE ? '1,000-3,000' : '10,000-40,000'} depending on destination complexity and service scope. Many consultants offer comprehensive packages including job search assistance, skills assessment, and ongoing support throughout the immigration process.`
+Service fees for work visa consultation in ${cityName} typically range from ${currency}${isUAE ? "1,000-3,000" : "10,000-40,000"} depending on destination complexity and service scope. Many consultants offer comprehensive packages including job search assistance, skills assessment, and ongoing support throughout the immigration process.`,
     },
 
     "tourist-visa-services": {
@@ -868,7 +916,7 @@ Travel itinerary planning and accommodation booking assistance are additional se
 
 Embassy interview preparation services help applicants present their cases effectively. ${cityName}'s providers offer mock interview sessions, guidance on answering common questions, and strategies for demonstrating genuine travel intentions while addressing potential concerns about overstaying.
 
-Processing fees for tourist visa services in ${cityName} typically range from ${currency}${isUAE ? '100-500' : '1,000-8,000'} excluding embassy fees, depending on destination and service complexity. Express processing options are available for urgent travel requirements, though additional charges may apply for expedited services.`
+Processing fees for tourist visa services in ${cityName} typically range from ${currency}${isUAE ? "100-500" : "1,000-8,000"} excluding embassy fees, depending on destination and service complexity. Express processing options are available for urgent travel requirements, though additional charges may apply for expedited services.`,
     },
 
     "student-visa-consultants": {
@@ -887,16 +935,17 @@ Embassy interview preparation for student visas focuses on demonstrating genuine
 
 Post-visa services include pre-departure orientation, accommodation guidance, and initial settlement support. Many ${categoryName.toLowerCase()} in ${cityName} maintain ongoing relationships with students, providing assistance with visa extensions, work permit applications, and post-graduation immigration options.
 
-Student visa consultation fees in ${cityName} range from ${currency}${isUAE ? '300-1,000' : '3,000-15,000'} depending on destination and service scope. Comprehensive packages often include university selection assistance, application support, and visa guidance, providing complete educational consulting solutions for international study aspirations.`
-    }
+Student visa consultation fees in ${cityName} range from ${currency}${isUAE ? "300-1,000" : "3,000-15,000"} depending on destination and service scope. Comprehensive packages often include university selection assistance, application support, and visa guidance, providing complete educational consulting solutions for international study aspirations.`,
+    },
   };
 
   // Get appropriate template or use default
-  const template = contentTemplates[categorySlug] || contentTemplates["visa-consultants"];
+  const template =
+    contentTemplates[categorySlug] || contentTemplates["visa-consultants"];
 
   return {
     title: template.title,
-    content: template.content
+    content: template.content,
   };
 };
 
@@ -925,15 +974,15 @@ Technology integration has modernized visa services in ${cityName}, with consult
 
 Cost considerations for visa services in ${cityName} vary significantly based on service type, destination country, and application complexity. Clients benefit from competitive pricing and comprehensive service packages that often prove more cost-effective than independent application attempts.
 
-${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`
+${cityName}'s visa and immigration industry continues evolving with changing global requirements and emerging opportunities. Consultants regularly update their expertise through training programs, embassy interactions, and industry developments to maintain service quality and success rates. This commitment to excellence positions ${cityName} as a trusted destination for comprehensive visa and immigration solutions.`,
   };
 };
 
 // Generate unique FAQs for each category and city combination
 const getFAQs = (categorySlug: string, cityName: string) => {
   // Get category name for better FAQ content
-  const category = allCategories.find(c => c.slug === categorySlug);
-  const categoryName = category ? category.name : 'Consultants';
+  const category = allCategories.find((c) => c.slug === categorySlug);
+  const categoryName = category ? category.name : "Consultants";
 
   const baseFAQs = {
     "study-abroad-consultants": [
@@ -1179,17 +1228,20 @@ export default function CityCategory() {
   // Global error handler for unhandled promise rejections
   useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      console.error('Unhandled promise rejection:', event.reason);
-      if (event.reason?.message?.includes('Failed to fetch')) {
-        console.log('Suppressing fetch error to prevent UI crash');
+      console.error("Unhandled promise rejection:", event.reason);
+      if (event.reason?.message?.includes("Failed to fetch")) {
+        console.log("Suppressing fetch error to prevent UI crash");
         event.preventDefault();
       }
     };
 
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection,
+      );
     };
   }, []);
 
@@ -1282,11 +1334,17 @@ export default function CityCategory() {
             }
           })
           .catch((error) => {
-            console.log("Could not detect user location (non-critical):", error);
+            console.log(
+              "Could not detect user location (non-critical):",
+              error,
+            );
             // Silently continue without location - this is not critical for app functionality
           });
       } catch (syncError) {
-        console.log("Location detection setup failed (non-critical):", syncError);
+        console.log(
+          "Location detection setup failed (non-critical):",
+          syncError,
+        );
         // Continue without location detection
       }
     }
@@ -1312,7 +1370,9 @@ export default function CityCategory() {
       try {
         // Set a safety timeout to ensure loading states are updated
         const safetyTimeout = setTimeout(() => {
-          console.log('Safety timeout triggered, ensuring all loading states are set');
+          console.log(
+            "Safety timeout triggered, ensuring all loading states are set",
+          );
           setCategoryDataLoaded(true);
           setCityDataLoaded(true);
           setAllDubaiDataLoaded(true);
@@ -1362,7 +1422,6 @@ export default function CityCategory() {
             clearInterval(checkCompletion);
           }
         }, 1000);
-
       } catch (setupError) {
         console.error("Setup error in executeAllOperations:", setupError);
         // Ensure all states are set even if setup fails
@@ -2590,14 +2649,19 @@ export default function CityCategory() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto max-w-4xl px-4">
           {(() => {
-            const contentData = generateCityCategoryContent(cityName, categoryName, categorySlug, country);
+            const contentData = generateCityCategoryContent(
+              cityName,
+              categoryName,
+              categorySlug,
+              country,
+            );
             return (
               <>
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                   {contentData.title}
                 </h2>
                 <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                  {contentData.content.split('\n\n').map((paragraph, index) => (
+                  {contentData.content.split("\n\n").map((paragraph, index) => (
                     <p key={index} className="mb-6">
                       {paragraph}
                     </p>

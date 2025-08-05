@@ -74,8 +74,6 @@ function ProtectedRoute({
 }
 // All original functionality restored
 
-
-
 // Import the original auth but with proper error handling
 import { AuthProvider as OriginalAuthProvider } from "@/lib/auth";
 
