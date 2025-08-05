@@ -282,39 +282,22 @@ export default function CityCategory() {
               {
                 url: scrapedUrl,
                 status: "success",
-                count: scrapedResult.businesses?.length || 0,
+                count: businesses.length,
                 timestamp: scrapedTimestamp,
               },
             ],
+            categoryBusinesses: businesses.length,
           }));
 
-          if (
-            scrapedResult.success &&
-            scrapedResult.businesses &&
-            scrapedResult.businesses.length > 0
-          ) {
-            setCategoryBusinesses(scrapedResult.businesses);
-            setCategoryDataLoaded(true);
-            return;
-          }
-        } else {
-          // Update debug info for failed call
-          setDebugInfo((prev) => ({
-            ...prev,
-            apiCalls: [
-              ...prev.apiCalls,
-              {
-                url: scrapedUrl,
-                status: "failed",
-                count: 0,
-                timestamp: scrapedTimestamp,
-              },
-            ],
-          }));
+          return;
         }
 
-        // No category-specific data found
+        // No category-specific data found anywhere
+        console.log("No businesses found for category in any nearby cities");
+        setCategoryBusinesses([]);
+        setIsShowingNearbyData(false);
         setCategoryDataLoaded(true);
+
       } catch (error) {
         console.error("Error fetching category businesses:", error);
         setCategoryDataLoaded(true);
