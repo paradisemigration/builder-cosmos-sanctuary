@@ -109,8 +109,8 @@ export function SiteFooter() {
               Popular Searches
             </h3>
             <div className="space-y-1">
-              {/* Generate popular combinations */}
-              {["Delhi", "Mumbai", "Bangalore", "Chennai"].map((city) => (
+              {/* Generate popular combinations based on current page */}
+              {(isUAEPage ? ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"] : ["Delhi", "Mumbai", "Bangalore", "Chennai"]).map((city) => (
                 <div key={city}>
                   {[
                     "immigration-consultants",
@@ -123,7 +123,10 @@ export function SiteFooter() {
                     return category ? (
                       <Link
                         key={`${city}-${categorySlug}`}
-                        to={`/business/${city.toLowerCase()}/${categorySlug}`}
+                        to={isUAEPage
+                          ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}/${categorySlug}`
+                          : `/business/${city.toLowerCase()}/${categorySlug}`
+                        }
                         className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
                       >
                         {category.name} in {city}
