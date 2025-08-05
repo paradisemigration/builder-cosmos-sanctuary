@@ -3,6 +3,21 @@ import { allCategorySlugs } from "@/lib/all-categories";
 import CityCategory from "@/pages/CityCategory";
 import BusinessProfile from "@/pages/BusinessProfile";
 
+// Category aliases for common URL variations
+const categoryAliases: Record<string, string> = {
+  "study-abroad": "study-abroad-consultant",
+  "immigration": "immigration-consultants",
+  "visa": "visa-consultant",
+  "work-visa": "work-visa-consultants",
+  "tourist-visa": "tourist-visa-services",
+  "student-visa": "student-visa-consultants",
+  "visit-visa": "visit-visa-specialists",
+  "work-permit": "work-permit-consultants",
+  "pr-consultants": "pr-citizenship-services",
+  "education": "education-consultants",
+  "business-visa": "business-visa-services"
+};
+
 export default function CityRouteHandler() {
   const { city, category } = useParams<{ city: string; category: string }>();
 
@@ -11,10 +26,19 @@ export default function CityRouteHandler() {
     return <Navigate to="/business" replace />;
   }
 
-  // Check if the second parameter is a known category slug
-  const isCategory = allCategorySlugs.includes(category);
+  // Check if the parameter is a known category slug or has an alias
+  let actualCategory = category;
+  if (categoryAliases[category]) {
+    actualCategory = categoryAliases[category];
+  }
+
+  const isCategory = allCategorySlugs.includes(actualCategory);
 
   if (isCategory) {
+    // Redirect to the correct category slug if we used an alias
+    if (actualCategory !== category) {
+      return <Navigate to={`/business/${city}/${actualCategory}`} replace />;
+    }
     // Show category page
     return <CityCategory />;
   } else {
