@@ -246,7 +246,7 @@ export default function CityCategory() {
         }
 
         // Step 2: If no data found for specific area + category, try hierarchical fallback
-        if (!result || !result.success || !result.businesses || result.businesses.length === 0) {
+        if (apiAvailable && (!result || !result.success || !result.businesses || result.businesses.length === 0)) {
           console.log(`No data found for ${cityName} + ${categoryName}, trying nearby cities from database`);
 
           const nearbyCities = getNearByCities(cityName, country);
@@ -264,9 +264,10 @@ export default function CityCategory() {
                   result = nearbyResult;
                   isNearbyData = true;
                   nearbyCity = nearbyCity_temp;
-                  scrapedUrl = nearbyUrl; // Update URL for debug info
                   break; // Found data, stop searching
                 }
+              } else {
+                console.log(`Nearby API response not OK for ${nearbyCity_temp}: ${nearbyResponse.status}`);
               }
             } catch (nearbyError) {
               console.log(`Failed to fetch data for nearby city ${nearbyCity_temp}:`, nearbyError);
