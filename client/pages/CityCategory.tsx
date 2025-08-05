@@ -713,28 +713,34 @@ export default function CityCategory() {
         }
 
         // Step 2: If no data found for specific area + category, try hierarchical fallback
+        // For better results, accumulate data from multiple nearby cities
         if (
           apiAvailable &&
           (!result ||
             !result.success ||
             !result.businesses ||
-            result.businesses.length === 0)
+            result.businesses.length < 50) // Try to get at least 50 results
         ) {
           console.log(
-            `No data found for ${cityName} + ${categoryName}, trying nearby cities from database`,
+            `${result?.businesses?.length || 0} businesses found for ${cityName} + ${categoryName}, trying nearby cities for more results`,
           );
 
           const nearbyCities = getNearByCities(cityName, country, userLocation);
+          let accumulatedBusinesses = result?.businesses || [];
+          let nearbyDataSources: string[] = [];
 
           for (const nearbyCity_temp of nearbyCities) {
+            // Skip if we already have enough results
+            if (accumulatedBusinesses.length >= 80) break;
+
             try {
               console.log(
-                `Trying nearby city: ${nearbyCity_temp} + ${categoryName}`,
+                `Trying nearby city: ${nearbyCity_temp} + ${categoryName} (current total: ${accumulatedBusinesses.length})`,
               );
               const controller = new AbortController();
               const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
-              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=100`;
+              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&category=${encodeURIComponent(categoryName)}&limit=150`;
               const nearbyResponse = await fetch(nearbyUrl, {
                 signal: controller.signal,
               });
@@ -750,10 +756,21 @@ export default function CityCategory() {
                   console.log(
                     `Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`,
                   );
-                  result = nearbyResult;
-                  isNearbyData = true;
-                  nearbyCity = nearbyCity_temp;
-                  break; // Found data, stop searching
+
+                  // Add nearby city businesses, avoiding duplicates
+                  const newBusinesses = nearbyResult.businesses.filter(
+                    (nearbyBusiness: any) => !accumulatedBusinesses.some(
+                      (existing: any) => existing.name === nearbyBusiness.name && existing.address === nearbyBusiness.address
+                    )
+                  );
+
+                  if (newBusinesses.length > 0) {
+                    accumulatedBusinesses = [...accumulatedBusinesses, ...newBusinesses];
+                    nearbyDataSources.push(nearbyCity_temp);
+                    isNearbyData = true;
+
+                    console.log(`Added ${newBusinesses.length} new businesses from ${nearbyCity_temp}. Total: ${accumulatedBusinesses.length}`);
+                  }
                 }
               } else {
                 console.log(
@@ -766,6 +783,21 @@ export default function CityCategory() {
                 nearbyError,
               );
               // Continue to next nearby city instead of stopping
+            }
+          }
+
+          // If we accumulated businesses from nearby cities, update the result
+          if (accumulatedBusinesses.length > 0) {
+            result = {
+              success: true,
+              businesses: accumulatedBusinesses,
+              total: accumulatedBusinesses.length,
+              source: nearbyDataSources.length > 0 ? 'nearby_cities' : 'local'
+            };
+
+            if (nearbyDataSources.length > 0) {
+              nearbyCity = nearbyDataSources.join(', ');
+              console.log(`Final result: ${accumulatedBusinesses.length} businesses from ${nearbyCity}`);
             }
           }
         }
