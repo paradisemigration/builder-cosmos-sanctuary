@@ -559,7 +559,7 @@ function setCityPageStructuredData(metaData: MetaData): void {
     }
   };
 
-  setStructuredData(structuredData, 'city-directory');
+  setTypedStructuredData(structuredData, 'city-directory');
 }
 
 // Helper function to set typed structured data
