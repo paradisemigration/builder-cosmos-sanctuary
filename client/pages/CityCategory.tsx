@@ -272,7 +272,7 @@ const getNearByCities = (cityName: string, country: string, userLocation?: {city
       "delhi": ["Delhi", "Gurgaon", "Noida", "Faridabad"],
       "haryana": ["Gurgaon", "Delhi", "Noida", "Faridabad"],
       "uttar pradesh": ["Noida", "Delhi", "Lucknow", "Kanpur"],
-      "maharashtra": ["Mumbai", "Pune", "Nasik", "Aurangabad"],
+      "maharashtra": ["Mumbai", "Pune", "Nashik", "Aurangabad", "Solapur", "Kolhapur", "Ahmednagar", "Satara", "Sangli", "Thane", "Nagpur"],
       "karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
       "tamil nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
       "telangana": ["Hyderabad", "Secunderabad", "Warangal", "Nizamabad"],
