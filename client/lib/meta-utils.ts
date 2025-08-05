@@ -70,52 +70,7 @@ export function generateCityCategoryMeta(
   };
 }
 
-// Generate meta data for city pages
-export function generateCityMeta(cityName: string): MetaData {
-  const isUAE = [
-    "Dubai",
-    "Abu Dhabi",
-    "Sharjah",
-    "Ajman",
-    "Ras Al Khaimah",
-    "Fujairah",
-    "Umm Al Quwain",
-    "Al Ain",
-  ].includes(cityName);
-  const country = isUAE ? "UAE" : "India";
-  const websiteName = isUAE ? "Visa Consultants UAE" : "Visa Consultants India";
 
-  const title = `Best Visa Consultants in ${cityName} | ${websiteName}`;
-  const description = `Find top-rated visa consultants in ${cityName}, ${country}. Expert immigration services for work visa, study abroad, tourist visa, and permanent residence applications. Compare verified professionals with proven success rates.`;
-
-  const keywordsList = [
-    `visa consultants ${cityName.toLowerCase()}`,
-    `best visa consultants ${cityName.toLowerCase()}`,
-    `immigration services ${cityName.toLowerCase()}`,
-    `visa agents ${cityName.toLowerCase()}`,
-    `study abroad consultants ${cityName.toLowerCase()}`,
-    `work visa consultants ${cityName.toLowerCase()}`,
-    `tourist visa services ${cityName.toLowerCase()}`,
-    `pr consultants ${cityName.toLowerCase()}`,
-    `visa documentation ${cityName.toLowerCase()}`,
-    `immigration lawyers ${cityName.toLowerCase()}`,
-    `visa interview preparation ${cityName.toLowerCase()}`,
-    `embassy services ${cityName.toLowerCase()}`,
-    `visa processing ${cityName.toLowerCase()}`,
-    `immigration advice ${cityName.toLowerCase()}`,
-    `visa application help ${cityName.toLowerCase()}`
-  ];
-
-  return {
-    title,
-    description,
-    keywords: keywordsList.join(', '),
-    canonical: `${typeof window !== 'undefined' ? window.location.origin : ''}/business/${cityName.toLowerCase().replace(/\s+/g, '-')}`,
-    robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: websiteName,
-    viewport: "width=device-width, initial-scale=1.0",
-  };
-}
 
 // Get category-specific content for better SEO with short descriptions
 function getCategorySpecificContent(categoryName: string): {
