@@ -903,6 +903,17 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Simple Test Button for debugging */}
+      <div className="fixed bottom-4 right-4 z-[9998]">
+        <button
+          onClick={() => setShowEnquiryPopup(true)}
+          className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg"
+          style={{ zIndex: 9998 }}
+        >
+          Test Button
+        </button>
+      </div>
+
       {/* Floating Call-to-Action Button */}
       <FloatingCTA onClick={() => setShowEnquiryPopup(true)} />
 
