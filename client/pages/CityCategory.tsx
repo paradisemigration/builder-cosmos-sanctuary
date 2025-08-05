@@ -618,14 +618,24 @@ export default function CityCategory() {
     }
 
     // Fetch category-specific businesses from Google Maps API
-    fetchCategoryBusinesses();
+    fetchCategoryBusinesses().catch(error => {
+      console.error("Unhandled error in fetchCategoryBusinesses:", error);
+      setCategoryDataLoaded(true);
+      setLoading(false);
+    });
 
     // Fetch all city businesses as fallback
-    fetchCityBusinesses();
+    fetchCityBusinesses().catch(error => {
+      console.error("Unhandled error in fetchCityBusinesses:", error);
+      setCityDataLoaded(true);
+    });
 
     // Fetch all Dubai businesses if this is a Dubai area
     if (country === "uae") {
-      fetchAllDubaiBusinesses();
+      fetchAllDubaiBusinesses().catch(error => {
+        console.error("Unhandled error in fetchAllDubaiBusinesses:", error);
+        setAllDubaiDataLoaded(true);
+      });
     }
 
     // Set page meta data with SEO optimization
