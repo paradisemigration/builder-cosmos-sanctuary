@@ -100,8 +100,8 @@ export default function Index() {
     {
       name: "Delhi",
       count: "450+",
-      image: "https://picsum.photos/600/300?random=1",
-      fallback: "https://via.placeholder.com/600x300/3B82F6/ffffff?text=Delhi",
+      image: "https://cdn.pixabay.com/photo/2020/02/02/17/24/delhi-4813618_1280.jpg",
+      fallback: "https://images.pexels.com/photos/789750/pexels-photo-789750.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "India Gate & Red Fort",
       color: "#3B82F6"
@@ -109,8 +109,8 @@ export default function Index() {
     {
       name: "Mumbai",
       count: "380+",
-      image: "https://picsum.photos/600/300?random=2",
-      fallback: "https://via.placeholder.com/600x300/6366F1/ffffff?text=Mumbai",
+      image: "https://cdn.pixabay.com/photo/2017/01/20/00/30/malabar-hill-1995213_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Gateway of India",
       color: "#6366F1"
@@ -118,8 +118,8 @@ export default function Index() {
     {
       name: "Bangalore",
       count: "320+",
-      image: "https://picsum.photos/600/300?random=3",
-      fallback: "https://via.placeholder.com/600x300/10B981/ffffff?text=Bangalore",
+      image: "https://cdn.pixabay.com/photo/2017/07/15/13/45/bangalore-2505571_1280.jpg",
+      fallback: "https://images.pexels.com/photos/962464/pexels-photo-962464.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Silicon Valley of India",
       color: "#10B981"
@@ -127,8 +127,8 @@ export default function Index() {
     {
       name: "Chennai",
       count: "290+",
-      image: "https://picsum.photos/600/300?random=4",
-      fallback: "https://via.placeholder.com/600x300/F59E0B/ffffff?text=Chennai",
+      image: "https://cdn.pixabay.com/photo/2019/02/07/04/23/chennai-3979988_1280.jpg",
+      fallback: "https://images.pexels.com/photos/3581368/pexels-photo-3581368.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Marina Beach & Temples",
       color: "#F59E0B"
@@ -136,8 +136,8 @@ export default function Index() {
     {
       name: "Hyderabad",
       count: "250+",
-      image: "https://picsum.photos/600/300?random=5",
-      fallback: "https://via.placeholder.com/600x300/8B5CF6/ffffff?text=Hyderabad",
+      image: "https://cdn.pixabay.com/photo/2020/01/13/17/42/charminar-4762588_1280.jpg",
+      fallback: "https://images.pexels.com/photos/4321802/pexels-photo-4321802.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Charminar & Tech City",
       color: "#8B5CF6"
@@ -145,8 +145,8 @@ export default function Index() {
     {
       name: "Pune",
       count: "220+",
-      image: "https://picsum.photos/600/300?random=6",
-      fallback: "https://via.placeholder.com/600x300/EF4444/ffffff?text=Pune",
+      image: "https://cdn.pixabay.com/photo/2020/02/06/06/09/architecture-4823769_1280.jpg",
+      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Cultural Capital",
       color: "#EF4444"
@@ -154,8 +154,8 @@ export default function Index() {
     {
       name: "Kolkata",
       count: "200+",
-      image: "https://picsum.photos/600/300?random=7",
-      fallback: "https://via.placeholder.com/600x300/06B6D4/ffffff?text=Kolkata",
+      image: "https://cdn.pixabay.com/photo/2020/03/02/16/19/howrah-bridge-4896110_1280.jpg",
+      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "City of Joy",
       color: "#06B6D4"
@@ -163,8 +163,8 @@ export default function Index() {
     {
       name: "Ahmedabad",
       count: "180+",
-      image: "https://picsum.photos/600/300?random=8",
-      fallback: "https://via.placeholder.com/600x300/F97316/ffffff?text=Ahmedabad",
+      image: "https://cdn.pixabay.com/photo/2019/11/16/12/26/ahmedabad-4630555_1280.jpg",
+      fallback: "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
       flag: "🇮🇳",
       description: "Heritage & Innovation",
       color: "#F97316"

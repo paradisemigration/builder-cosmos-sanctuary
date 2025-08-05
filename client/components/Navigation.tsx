@@ -218,9 +218,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                       size="sm"
                       className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 lg:px-4 py-2 text-sm whitespace-nowrap shadow-md"
                     >
-                      <span className="md:hidden lg:inline">List Business</span>
-                      <span className="hidden md:inline lg:hidden">List</span>
-                      <span className="hidden lg:inline"> Your Business</span>
+                      List Your Business
                     </Button>
                   </Link>
                 </div>
