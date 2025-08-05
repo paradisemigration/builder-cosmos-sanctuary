@@ -320,12 +320,12 @@ export default function UAE() {
         </div>
 
         {/* UAE Flag Element */}
-        <div className="absolute top-24 right-8 opacity-20 z-10">
-          <div className="w-28 h-18 border border-gray-300 rounded-md overflow-hidden shadow-lg">
+        <div className="absolute top-24 right-4 sm:right-8 opacity-60 z-10">
+          <div className="w-16 h-10 sm:w-20 sm:h-12 border border-gray-200 rounded-md overflow-hidden shadow-lg">
             <div className="h-1/3 bg-red-500"></div>
             <div className="h-1/3 bg-white flex items-center justify-center">
-              <div className="w-5 h-5 border-2 border-black rounded-full relative">
-                <div className="absolute inset-1 bg-black rounded-full"></div>
+              <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-black rounded-full relative">
+                <div className="absolute inset-0.5 bg-black rounded-full"></div>
               </div>
             </div>
             <div className="h-1/3 bg-green-600"></div>
