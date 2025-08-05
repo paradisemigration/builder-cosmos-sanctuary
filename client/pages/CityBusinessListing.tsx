@@ -286,6 +286,10 @@ export default function CityBusinessListing() {
           isNearbyData: true,
           originalRequestedCity: cityName
         }));
+
+        setIsShowingNearbyData(true);
+      } else {
+        setIsShowingNearbyData(false);
       }
 
       if (resetList || page === 1) {
