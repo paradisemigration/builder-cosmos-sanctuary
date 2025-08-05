@@ -281,32 +281,48 @@ export default function CityBusinessListing() {
     } catch (error) {
       console.error("Error fetching businesses:", error);
 
-      // Enhanced fallback on error: try exact city, then nearby cities
-      let cityBusinesses = sampleBusinesses.filter(
-        (business) =>
-          business.city.toLowerCase() === (cityName?.toLowerCase() || ""),
-      );
+      // Enhanced fallback on error: use real database data from nearby cities
+      let cityBusinesses = [];
 
-      // If no exact match found, try nearby cities
-      if (cityBusinesses.length === 0) {
+      try {
         const nearbyCities = getNearByCities(cityName, country);
-        console.log(`Error occurred and no data for ${cityName}, checking nearby cities:`, nearbyCities);
+        console.log(`Error occurred, no data for ${cityName}, checking database for nearby cities:`, nearbyCities);
 
-        cityBusinesses = sampleBusinesses.filter((business) =>
-          nearbyCities.some(nearbyCity =>
-            business.city.toLowerCase() === nearbyCity.toLowerCase()
-          )
-        );
+        for (const nearbyCity of nearbyCities) {
+          try {
+            const nearbyResponse = await fetch(
+              `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=100`
+            );
 
-        // Add a flag to show this is nearby data
-        cityBusinesses = cityBusinesses.map(business => ({
-          ...business,
-          isNearbyData: true,
-          originalRequestedCity: cityName
-        }));
+            if (nearbyResponse.ok) {
+              const nearbyResult = await nearbyResponse.json();
+              if (nearbyResult.success && nearbyResult.businesses && nearbyResult.businesses.length > 0) {
+                cityBusinesses = nearbyResult.businesses;
+                console.log(`Found ${cityBusinesses.length} businesses in nearby city: ${nearbyCity}`);
 
-        setIsShowingNearbyData(true);
-      } else {
+                // Add flag to indicate this is nearby data
+                cityBusinesses = cityBusinesses.map(business => ({
+                  ...business,
+                  isNearbyData: true,
+                  originalRequestedCity: cityName,
+                  nearbyCity: nearbyCity
+                }));
+
+                setIsShowingNearbyData(true);
+                break; // Found data, stop searching
+              }
+            }
+          } catch (nearbyError) {
+            console.log(`Failed to fetch data for nearby city ${nearbyCity}:`, nearbyError);
+          }
+        }
+
+        if (cityBusinesses.length === 0) {
+          setIsShowingNearbyData(false);
+        }
+
+      } catch (fallbackError) {
+        console.error("Error fallback failed:", fallbackError);
         setIsShowingNearbyData(false);
       }
 
