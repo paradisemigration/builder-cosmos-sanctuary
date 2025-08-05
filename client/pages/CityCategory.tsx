@@ -522,6 +522,49 @@ export default function CityCategory() {
         setCityDataLoaded(true);
       }
     }
+
+    async function fetchAllDubaiBusinesses() {
+      try {
+        console.log("Fetching all Dubai businesses for comprehensive listing");
+
+        // Check if API is available
+        let apiAvailable = false;
+        try {
+          const healthCheck = await fetch('/api/health', { method: 'HEAD' });
+          apiAvailable = healthCheck.ok;
+        } catch (healthError) {
+          console.log('API health check failed for Dubai businesses');
+          apiAvailable = false;
+        }
+
+        if (apiAvailable) {
+          try {
+            // Fetch all Dubai businesses with a high limit to get comprehensive data
+            const allDubaiUrl = `/api/scraped-businesses?city=Dubai&limit=500&page=1`;
+            const response = await fetch(allDubaiUrl);
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log(`Found ${result.businesses?.length || 0} total Dubai businesses`);
+
+              if (result.success && result.businesses) {
+                setAllDubaiBusinesses(result.businesses);
+                setTotalAvailableBusinesses(result.total || result.businesses.length);
+              }
+            } else {
+              console.log(`All Dubai API response not OK: ${response.status}`);
+            }
+          } catch (fetchError) {
+            console.log("Failed to fetch all Dubai businesses:", fetchError);
+          }
+        }
+
+        setAllDubaiDataLoaded(true);
+      } catch (error) {
+        console.error("Error fetching all Dubai businesses:", error);
+        setAllDubaiDataLoaded(true);
+      }
+    }
   }, [city, category, cityName, categoryName, navigate]);
 
   // Update filtered businesses when data loads
