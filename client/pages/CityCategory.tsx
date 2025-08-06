@@ -1902,7 +1902,88 @@ export default function CityCategory() {
             `Total accumulated: ${accumulatedBusinesses.length}, After deduplication: ${uniqueBusinesses.length} from cities: ${sourceCities.join(", ")}`,
           );
 
-          if (uniqueBusinesses.length > 0) {
+          // PHASE 3: Emergency fallback if no results found
+          if (uniqueBusinesses.length === 0) {
+            console.log("\n=== PHASE 3: Emergency fallback with broader categories ===");
+
+            const emergencyCategories = ["Immigration Consultants", "Visa Consultants", "Canada Immigration", "Immigration Services"];
+            const emergencyCities = nearbyCities.slice(0, 3);
+
+            for (const emergencyCity of emergencyCities) {
+              for (const emergencyCategory of emergencyCategories) {
+                try {
+                  const emergencyUrl = `/api/scraped-businesses?city=${encodeURIComponent(emergencyCity)}&category=${encodeURIComponent(emergencyCategory)}&limit=8&country=${encodeURIComponent(country)}`;
+
+                  const emergencyResponse = await Promise.race([
+                    robustFetch(emergencyUrl, {
+                      method: "GET",
+                      headers: { "Content-Type": "application/json" },
+                    }),
+                    new Promise((_, reject) =>
+                      setTimeout(() => reject(new Error('Timeout')), 1500)
+                    )
+                  ]);
+
+                  const emergencyResult = await emergencyResponse.json();
+
+                  if (emergencyResult && emergencyResult.success && emergencyResult.businesses && emergencyResult.businesses.length > 0) {
+                    console.log(`🆘 Emergency: Found ${emergencyResult.businesses.length} in ${emergencyCity} for ${emergencyCategory}`);
+
+                    emergencyResult.businesses.forEach(business => {
+                      const businessId = business.id || `${business.name}-${business.address}`;
+                      const isDuplicate = accumulatedBusinesses.some(existing => {
+                        const existingId = existing.id || `${existing.name}-${existing.address}`;
+                        return existingId === businessId;
+                      });
+
+                      if (!isDuplicate) {
+                        accumulatedBusinesses.push({
+                          ...business,
+                          isNearbyData: true,
+                          originalRequestedCity: cityName,
+                          nearbySourceCity: emergencyCity,
+                        });
+                      }
+                    });
+
+                    if (!sourceCities.includes(emergencyCity)) {
+                      sourceCities.push(emergencyCity);
+                    }
+
+                    if (accumulatedBusinesses.length >= 10) break;
+                  }
+                } catch (error) {
+                  // Silent fail for emergency search
+                }
+              }
+              if (accumulatedBusinesses.length >= 10) break;
+            }
+
+            // Re-deduplicate after emergency search
+            const finalUniqueBusinesses = [];
+            const finalSeenIds = new Set();
+
+            accumulatedBusinesses.forEach((business) => {
+              const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+              if (!finalSeenIds.has(businessId)) {
+                finalSeenIds.add(businessId);
+                finalUniqueBusinesses.push(business);
+              }
+            });
+
+            console.log(`Emergency completed: ${finalUniqueBusinesses.length} businesses total`);
+
+            if (finalUniqueBusinesses.length > 0) {
+              result = {
+                success: true,
+                businesses: finalUniqueBusinesses,
+                total: finalUniqueBusinesses.length,
+                source: "emergency_fallback",
+              };
+              isNearbyData = true;
+              nearbyCity = sourceCities.join(", ");
+            }
+          } else {
             result = {
               success: true,
               businesses: uniqueBusinesses,
