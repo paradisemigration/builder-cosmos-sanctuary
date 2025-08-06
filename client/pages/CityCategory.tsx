@@ -1689,143 +1689,94 @@ export default function CityCategory() {
           let accumulatedBusinesses = [];
           let sourceCities = [];
 
-          // PHASE 1: Try exact and related category matches from nearby cities (prioritizing same state)
+          // PHASE 1: Fast parallel search for category matches from nearby cities
           console.log(
-            "=== PHASE 1: Trying exact and related category matches from nearby cities ===",
+            "=== PHASE 1: Fast parallel search from nearby cities ===",
           );
           console.log(
             `Nearby cities priority order: ${nearbyCities.join(" -> ")}`,
           );
 
-          // Define related categories based on current category for better matching
-          const getRelatedCategories = (categorySlug: string, categoryName: string) => {
-            const related = [categoryName]; // Always include exact match first
-
-            if (categorySlug.includes("europe") && categorySlug.includes("work")) {
-              related.push("Europe Work Permit", "Work Visa Europe", "Europe Employment Visa", "European Work Permit Consultants");
-            } else if (categorySlug.includes("canada") && categorySlug.includes("express")) {
-              related.push("Canada Immigration", "Express Entry Canada", "Canada PR", "Canada Immigration Consultants");
-            } else if (categorySlug.includes("visa") && categorySlug.includes("consultant")) {
-              related.push("Visa Consultants", "Immigration Consultants", "Work Visa Consultants", "Student Visa Consultants");
-            } else if (categorySlug.includes("immigration")) {
-              related.push("Immigration Consultants", "Visa Consultants", "Immigration Services", "PR Consultants");
-            } else if (categorySlug.includes("work") && categorySlug.includes("visa")) {
-              related.push("Work Visa Consultants", "Employment Visa", "Work Permit Consultants");
-            } else if (categorySlug.includes("study") || categorySlug.includes("student")) {
-              related.push("Student Visa Consultants", "Study Abroad Consultants", "Education Consultants");
-            }
-
-            return related;
-          };
-
-          const relatedCategories = getRelatedCategories(categorySlug, categoryName);
-          console.log(`Related categories to search: ${relatedCategories.join(", ")}`);
-
-          for (const nearbyCity of nearbyCities.slice(0, 8)) {
-            // Check more cities for better coverage
+          // Parallel API calls for faster loading - limit to top 4 cities for speed
+          const topCities = nearbyCities.slice(0, 4);
+          const apiPromises = topCities.map(async (nearbyCity) => {
             try {
-              console.log(
-                `\n--- Querying ${nearbyCity} for categories: ${relatedCategories.join(", ")} ---`,
-              );
+              // Quick search with exact category name first
+              const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=20&country=${encodeURIComponent(country)}`;
 
-              let cityBusinessesFound = [];
+              console.log(`🔍 Parallel search: ${nearbyCity} for ${categoryName}`);
 
-              // Try each related category for this city
-              for (const searchCategory of relatedCategories) {
-                const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(searchCategory)}&limit=15&country=${encodeURIComponent(country)}`;
-
-                console.log(`Trying category "${searchCategory}": ${nearbyApiUrl}`);
-
-                const nearbyResponse = await robustFetch(nearbyApiUrl, {
+              const nearbyResponse = await Promise.race([
+                robustFetch(nearbyApiUrl, {
                   method: "GET",
                   headers: { "Content-Type": "application/json" },
-                });
+                }),
+                new Promise((_, reject) =>
+                  setTimeout(() => reject(new Error('Timeout')), 3000) // 3 second timeout per city
+                )
+              ]);
 
-                const nearbyResult = await nearbyResponse.json();
+              const nearbyResult = await nearbyResponse.json();
 
-                if (
-                  nearbyResult &&
-                  nearbyResult.success &&
-                  nearbyResult.businesses &&
-                  nearbyResult.businesses.length > 0
-                ) {
-                  console.log(
-                    `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity} for "${searchCategory}"`,
-                  );
-
-                  // Add to city businesses, avoiding duplicates within same city
-                  nearbyResult.businesses.forEach(business => {
-                    const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
-                    const businessKey = `${business.name?.toLowerCase().trim()}-${business.city?.toLowerCase().trim()}`;
-
-                    // Check for duplicates using multiple criteria
-                    const isDuplicate = cityBusinessesFound.some(existing => {
-                      const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
-                      const existingKey = `${existing.name?.toLowerCase().trim()}-${existing.city?.toLowerCase().trim()}`;
-
-                      return existingId === businessId ||
-                             existingKey === businessKey ||
-                             (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
-                              existing.address?.toLowerCase().trim() === business.address?.toLowerCase().trim());
-                    });
-
-                    if (!isDuplicate) {
-                      cityBusinessesFound.push(business);
-                      console.log(`  Added: ${business.name} from ${nearbyCity}`);
-                    } else {
-                      console.log(`  Skipped duplicate: ${business.name} from ${nearbyCity}`);
-                    }
-                  });
-
-                  // Stop if we have enough from this city
-                  if (cityBusinessesFound.length >= 20) break;
-                }
-              }
-
-              if (cityBusinessesFound.length > 0) {
+              if (
+                nearbyResult &&
+                nearbyResult.success &&
+                nearbyResult.businesses &&
+                nearbyResult.businesses.length > 0
+              ) {
                 console.log(
-                  `✅ SUCCESS: Found total ${cityBusinessesFound.length} category-related businesses in ${nearbyCity}`,
-                );
-                console.log(
-                  `Business names:`,
-                  cityBusinessesFound.map((b) => b.name),
+                  `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
                 );
 
-                // Mark as nearby data and add to accumulator
-                const nearbyCityBusinesses = cityBusinessesFound.map(
-                  (business) => ({
+                return {
+                  city: nearbyCity,
+                  businesses: nearbyResult.businesses.map((business) => ({
                     ...business,
                     isNearbyData: true,
                     originalRequestedCity: cityName,
                     nearbySourceCity: nearbyCity,
-                  }),
-                );
-
-                accumulatedBusinesses = [
-                  ...accumulatedBusinesses,
-                  ...nearbyCityBusinesses,
-                ];
-                sourceCities.push(nearbyCity);
-
-                console.log(
-                  `Total accumulated so far: ${accumulatedBusinesses.length} businesses`,
-                );
-
-                if (accumulatedBusinesses.length >= 50) {
-                  console.log(
-                    "Found enough businesses from category matches",
-                  );
-                  break;
-                }
+                  })),
+                };
               } else {
-                console.log(
-                  `❌ No related category businesses found in ${nearbyCity}`,
-                );
+                console.log(`❌ No businesses in ${nearbyCity}`);
+                return { city: nearbyCity, businesses: [] };
               }
             } catch (error) {
-              console.error(`❌ Error querying ${nearbyCity}:`, error);
+              console.log(`❌ Error/timeout for ${nearbyCity}`);
+              return { city: nearbyCity, businesses: [] };
             }
-          }
+          });
+
+          // Wait for all parallel searches (max 3 seconds each)
+          const cityResults = await Promise.allSettled(apiPromises);
+
+          cityResults.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value.businesses.length > 0) {
+              const { city, businesses } = result.value;
+
+              // Add unique businesses only
+              businesses.forEach(business => {
+                const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+                const isDuplicate = accumulatedBusinesses.some(existing => {
+                  const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
+                  return existingId === businessId ||
+                         (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                          existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim());
+                });
+
+                if (!isDuplicate) {
+                  accumulatedBusinesses.push(business);
+                }
+              });
+
+              sourceCities.push(city);
+              console.log(`✅ Added ${businesses.length} businesses from ${city}`);
+            }
+          });
+
+          console.log(
+            `Phase 1 completed: ${accumulatedBusinesses.length} businesses from ${sourceCities.length} cities`,
+          );
 
           // PHASE 2: If not enough, try broader searches from nearby cities
           if (accumulatedBusinesses.length < 10) {
