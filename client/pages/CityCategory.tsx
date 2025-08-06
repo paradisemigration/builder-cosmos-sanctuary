@@ -499,7 +499,6 @@ const nearbyAreasMapping: Record<string, string[]> = {
   raipur: ["Nagpur", "Bhubaneswar", "Jabalpur", "Kolkata"],
 
   // Maharashtra additional cities
-  nagpur: ["Mumbai", "Pune", "Raipur", "Aurangabad"],
   nashik: ["Mumbai", "Pune", "Aurangabad", "Ahmednagar", "Solapur"],
   aurangabad: ["Mumbai", "Pune", "Nashik", "Ahmednagar"],
   solapur: ["Pune", "Mumbai", "Kolhapur", "Satara"],
