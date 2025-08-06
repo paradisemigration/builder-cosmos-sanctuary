@@ -1778,10 +1778,10 @@ export default function CityCategory() {
             `Phase 1 completed: ${accumulatedBusinesses.length} businesses from ${sourceCities.length} cities`,
           );
 
-          // PHASE 2: If not enough, try broader searches from nearby cities
-          if (accumulatedBusinesses.length < 10) {
+          // PHASE 2: Quick broader search if still not enough results
+          if (accumulatedBusinesses.length < 15) {
             console.log(
-              "\n=== PHASE 2: Trying broader searches from nearby cities ===",
+              "\n=== PHASE 2: Quick broader search from remaining cities ===",
             );
 
             for (const nearbyCity of nearbyCities.slice(0, 5)) {
