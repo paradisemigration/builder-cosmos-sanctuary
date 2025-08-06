@@ -1888,10 +1888,20 @@ export default function CityCategory() {
                       }),
                     );
 
-                    accumulatedBusinesses = [
-                      ...accumulatedBusinesses,
-                      ...nearbyCityBusinesses,
-                    ];
+                    // Add only unique businesses to prevent duplicates
+                    nearbyCityBusinesses.forEach(newBusiness => {
+                      const businessId = newBusiness.id || newBusiness.googlePlaceId || `${newBusiness.name}-${newBusiness.address}`;
+                      const exists = accumulatedBusinesses.some(existing => {
+                        const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
+                        return existingId === businessId ||
+                               (existing.name?.toLowerCase().trim() === newBusiness.name?.toLowerCase().trim() &&
+                                existing.city?.toLowerCase().trim() === newBusiness.city?.toLowerCase().trim());
+                      });
+
+                      if (!exists) {
+                        accumulatedBusinesses.push(newBusiness);
+                      }
+                    });
                     if (!sourceCities.includes(nearbyCity)) {
                       sourceCities.push(nearbyCity);
                     }
