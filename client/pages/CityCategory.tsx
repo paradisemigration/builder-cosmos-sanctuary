@@ -1753,10 +1753,27 @@ export default function CityCategory() {
                     `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity} for "${searchCategory}"`,
                   );
 
-                  // Add to city businesses, avoiding duplicates
+                  // Add to city businesses, avoiding duplicates within same city
                   nearbyResult.businesses.forEach(business => {
-                    if (!cityBusinessesFound.some(existing => existing.id === business.id)) {
+                    const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+                    const businessKey = `${business.name?.toLowerCase().trim()}-${business.city?.toLowerCase().trim()}`;
+
+                    // Check for duplicates using multiple criteria
+                    const isDuplicate = cityBusinessesFound.some(existing => {
+                      const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
+                      const existingKey = `${existing.name?.toLowerCase().trim()}-${existing.city?.toLowerCase().trim()}`;
+
+                      return existingId === businessId ||
+                             existingKey === businessKey ||
+                             (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                              existing.address?.toLowerCase().trim() === business.address?.toLowerCase().trim());
+                    });
+
+                    if (!isDuplicate) {
                       cityBusinessesFound.push(business);
+                      console.log(`  Added: ${business.name} from ${nearbyCity}`);
+                    } else {
+                      console.log(`  Skipped duplicate: ${business.name} from ${nearbyCity}`);
                     }
                   });
 
