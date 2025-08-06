@@ -1945,19 +1945,41 @@ export default function CityCategory() {
             }
           }
 
-          // Remove duplicates based on business ID and name to prevent Vercel deployment issues
+          // Remove duplicates with comprehensive deduplication to prevent any duplicate listings
           const uniqueBusinesses = [];
           const seenIds = new Set();
           const seenNames = new Set();
+          const seenAddresses = new Set();
 
-          accumulatedBusinesses.forEach(business => {
+          accumulatedBusinesses.forEach((business, index) => {
             const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
             const businessKey = `${business.name?.toLowerCase().trim()}-${business.city?.toLowerCase().trim()}`;
+            const addressKey = `${business.name?.toLowerCase().trim()}-${business.address?.toLowerCase().trim()}`;
 
-            if (!seenIds.has(businessId) && !seenNames.has(businessKey)) {
-              seenIds.add(businessId);
-              seenNames.add(businessKey);
-              uniqueBusinesses.push(business);
+            // Multiple layers of duplicate detection
+            const isDuplicate = seenIds.has(businessId) ||
+                               seenNames.has(businessKey) ||
+                               seenAddresses.has(addressKey);
+
+            if (!isDuplicate) {
+              // Additional check for very similar names (fuzzy matching)
+              const hasSimilar = uniqueBusinesses.some(existing => {
+                const similarity = existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                                  existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim();
+                return similarity;
+              });
+
+              if (!hasSimilar) {
+                seenIds.add(businessId);
+                seenNames.add(businessKey);
+                seenAddresses.add(addressKey);
+                uniqueBusinesses.push(business);
+                console.log(`✅ Added unique business: ${business.name} from ${business.nearbySourceCity || business.city}`);
+              } else {
+                console.log(`❌ Skipped similar business: ${business.name} from ${business.nearbySourceCity || business.city}`);
+              }
+            } else {
+              console.log(`❌ Skipped duplicate business: ${business.name} from ${business.nearbySourceCity || business.city}`);
             }
           });
 
