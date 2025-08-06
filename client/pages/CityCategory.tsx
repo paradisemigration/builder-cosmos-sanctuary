@@ -392,7 +392,7 @@ const nearbyAreasMapping: Record<string, string[]> = {
   // Indore region
   indore: ["Bhopal", "Pune", "Ahmedabad", "Nagpur"],
   bhopal: ["Indore", "Nagpur", "Delhi", "Pune"],
-  nagpur: ["Indore", "Bhopal", "Pune", "Hyderabad"],
+  nagpur: ["Mumbai", "Pune", "Indore", "Bhopal", "Hyderabad", "Raipur", "Aurangabad"],
 
   // Kerala region
   kochi: [
