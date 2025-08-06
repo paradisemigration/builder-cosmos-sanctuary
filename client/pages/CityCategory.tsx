@@ -1918,15 +1918,31 @@ export default function CityCategory() {
             }
           }
 
+          // Remove duplicates based on business ID and name to prevent Vercel deployment issues
+          const uniqueBusinesses = [];
+          const seenIds = new Set();
+          const seenNames = new Set();
+
+          accumulatedBusinesses.forEach(business => {
+            const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+            const businessKey = `${business.name?.toLowerCase().trim()}-${business.city?.toLowerCase().trim()}`;
+
+            if (!seenIds.has(businessId) && !seenNames.has(businessKey)) {
+              seenIds.add(businessId);
+              seenNames.add(businessKey);
+              uniqueBusinesses.push(business);
+            }
+          });
+
           console.log(
-            `Total accumulated real businesses: ${accumulatedBusinesses.length} from cities: ${sourceCities.join(", ")}`,
+            `Total accumulated: ${accumulatedBusinesses.length}, After deduplication: ${uniqueBusinesses.length} from cities: ${sourceCities.join(", ")}`,
           );
 
-          if (accumulatedBusinesses.length > 0) {
+          if (uniqueBusinesses.length > 0) {
             result = {
               success: true,
-              businesses: accumulatedBusinesses,
-              total: accumulatedBusinesses.length,
+              businesses: uniqueBusinesses,
+              total: uniqueBusinesses.length,
               source: "nearby_cities_api",
             };
             isNearbyData = true;
