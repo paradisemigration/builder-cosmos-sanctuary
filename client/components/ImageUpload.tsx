@@ -21,8 +21,8 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [images, setImages] = useState<string[]>(existingImages);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [images, setImages] = useState(existingImages);
+  const fileInputRef = useRef(null);
 
   const handleFiles = async (files: FileList) => {
     if (files.length === 0) return;
