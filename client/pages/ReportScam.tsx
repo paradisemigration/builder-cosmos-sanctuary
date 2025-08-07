@@ -45,7 +45,7 @@ export default function ReportScam() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     companyName: "",
     location: "",
     contactNumber: "",
@@ -55,12 +55,12 @@ export default function ReportScam() {
     agreement: null,
     companyPicture: null,
   });
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState({});
   const [wordCount, setWordCount] = useState(0);
 
-  const paymentReceiptRef = useRef<HTMLInputElement>(null);
-  const agreementRef = useRef<HTMLInputElement>(null);
-  const companyPictureRef = useRef<HTMLInputElement>(null);
+  const paymentReceiptRef = useRef(null);
+  const agreementRef = useRef(null);
+  const companyPictureRef = useRef(null);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
