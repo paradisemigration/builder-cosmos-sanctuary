@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { getApiUrl, isFrontendOnlyDeployment } from "@/utils/api-config";
 
 // Detect third-party interference (FullStory, etc.)
 const hasThirdPartyInterference = (): boolean => {
