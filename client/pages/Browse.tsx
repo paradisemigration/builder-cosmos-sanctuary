@@ -342,16 +342,26 @@ export default function Browse() {
         fullResult: result
       });
 
+      console.log("📊 Full API response:", result);
+
       if (result.success) {
-        console.log("📊 API returned success:", {
-          businessCount: result.businesses?.length || 0,
+        console.log("📊 API returned success - processing data...");
+
+        // Handle the response data directly
+        const apiBusinesses = result.businesses || [];
+        console.log("📊 Extracted businesses:", {
+          count: apiBusinesses.length,
           total: result.total,
-          hasBusinesses: !!result.businesses,
-          isArray: Array.isArray(result.businesses),
-          firstBusiness: result.businesses?.[0]?.name || "None"
+          isArray: Array.isArray(apiBusinesses),
+          firstBusiness: apiBusinesses[0] ? {
+            id: apiBusinesses[0].id,
+            name: apiBusinesses[0].name,
+            city: apiBusinesses[0].city || apiBusinesses[0].scrapedCity
+          } : "None"
         });
 
-        if (result.businesses && result.businesses.length > 0) {
+        // Always use API data if available, even if it's empty (don't fall back to sample)
+        if (apiBusinesses.length >= 0) { // Changed from > 0 to >= 0
         // Map the businesses to ensure proper ID field and data structure
         const mappedBusinesses = result.businesses.map((business: any) => {
           const finalReviewCount =
