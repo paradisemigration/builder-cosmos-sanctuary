@@ -170,65 +170,67 @@ class APIClient {
 
     // ALWAYS try the real API first - user has 1500+ businesses
     const hostname = window.location.hostname;
-    console.log(`🎯 ATTEMPTING TO CONNECT TO REAL DATABASE (hostname: ${hostname})`);
+    console.log(
+      `🎯 ATTEMPTING TO CONNECT TO REAL DATABASE (hostname: ${hostname})`,
+    );
     console.log("🚀 Looking for your 1500+ business listings...");
 
     try {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.set("page", params.page.toString());
-        if (params.limit) queryParams.set("limit", params.limit.toString());
-        if (params.city) queryParams.set("city", params.city);
-        if (params.category) queryParams.set("category", params.category);
-        if (params.search) queryParams.set("search", params.search);
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.set("page", params.page.toString());
+      if (params.limit) queryParams.set("limit", params.limit.toString());
+      if (params.city) queryParams.set("city", params.city);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.search) queryParams.set("search", params.search);
 
-        const apiUrl = `/api/businesses?${queryParams}`;
-        console.log("🚀 Trying real API:", apiUrl);
+      const apiUrl = `/api/businesses?${queryParams}`;
+      console.log("🚀 Trying real API:", apiUrl);
 
-        const response = await this.request<{
-          success: boolean;
-          data: Business[];
-          pagination: any;
-          total: number;
-          businesses: Business[];
-          totalRecords: number;
-          source?: string;
-        }>(apiUrl);
+      const response = await this.request<{
+        success: boolean;
+        data: Business[];
+        pagination: any;
+        total: number;
+        businesses: Business[];
+        totalRecords: number;
+        source?: string;
+      }>(apiUrl);
 
-        const businesses = response.businesses || response.data || [];
-        const total =
-          response.totalRecords || response.total || businesses.length;
+      const businesses = response.businesses || response.data || [];
+      const total =
+        response.totalRecords || response.total || businesses.length;
 
-        console.log("✅ REAL API SUCCESS:", {
-          success: response.success,
-          businessCount: businesses.length,
-          totalInDB: total,
-          hostname: window.location.hostname,
-          firstBusiness: businesses[0]?.name,
-        });
+      console.log("✅ REAL API SUCCESS:", {
+        success: response.success,
+        businessCount: businesses.length,
+        totalInDB: total,
+        hostname: window.location.hostname,
+        firstBusiness: businesses[0]?.name,
+      });
 
-        // If we get substantial real data, return it
-        if (response.success && total > 50) {
-          return {
-            success: true,
-            data: businesses,
-            pagination: response.pagination || {
-              page: params.page || 1,
-              totalPages: Math.ceil(total / (params.limit || 20)),
-              totalRecords: total,
-              hasNext: businesses.length === (params.limit || 20),
-              hasPrev: (params.page || 1) > 1,
-            },
-          };
-        }
-      } catch (error) {
-        console.error(
-          "❌ Backend not deployed - your 1500+ businesses are on local server only:",
-          error,
-        );
-        console.log(
-          "📋 Using sample data until backend with real database is deployed",
-        );
+      // If we get substantial real data, return it
+      if (response.success && total > 50) {
+        return {
+          success: true,
+          data: businesses,
+          pagination: response.pagination || {
+            page: params.page || 1,
+            totalPages: Math.ceil(total / (params.limit || 20)),
+            totalRecords: total,
+            hasNext: businesses.length === (params.limit || 20),
+            hasPrev: (params.page || 1) > 1,
+          },
+        };
       }
+    } catch (error) {
+      console.error(
+        "❌ Backend not deployed - your 1500+ businesses are on local server only:",
+        error,
+      );
+      console.log(
+        "📋 Using sample data until backend with real database is deployed",
+      );
+    }
 
     // Temporary fallback while backend with 1500+ businesses is not deployed
     console.log(
