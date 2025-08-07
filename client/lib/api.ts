@@ -137,21 +137,8 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // Check for known issues that prevent API calls
-    const hostname = window.location.hostname;
-    const isDeploymentWithIssues = hostname.includes("fly.dev") ||
-                                  hostname.includes("vercel.app") ||
-                                  hostname.includes("netlify.app");
-
-    // Check for FullStory interference (common cause of fetch failures)
-    const hasFullStory = typeof window !== 'undefined' &&
-                        (window as any).FS ||
-                        document.querySelector('script[src*="fullstory"]');
-
-    if (isDeploymentWithIssues || hasFullStory) {
-      console.log("🚫 Skipping API call due to deployment type or FullStory interference");
-    } else {
-      // Try the real API first only on localhost/development
+    // ALWAYS try the real API first - user has 1500+ businesses in database
+    console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
       try {
         const queryParams = new URLSearchParams();
         if (params.page) queryParams.set("page", params.page.toString());
