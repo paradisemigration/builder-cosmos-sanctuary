@@ -168,14 +168,26 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // ALWAYS try the real API first - user has 1500+ businesses
+    // Check deployment type to avoid API calls on frontend-only deployments
     const hostname = window.location.hostname;
-    console.log(
-      `🎯 ATTEMPTING TO CONNECT TO REAL DATABASE (hostname: ${hostname})`,
-    );
-    console.log("🚀 Looking for your 1500+ business listings...");
+    console.log(`🔍 Checking deployment type (hostname: ${hostname})`);
 
-    try {
+    // Frontend-only deployments (no backend server)
+    const isFrontendOnly = hostname.includes('fly.dev') ||
+                          hostname.includes('netlify.app') ||
+                          hostname === 'localhost' ||
+                          hostname === '127.0.0.1';
+
+    if (isFrontendOnly && !hostname.includes('vercel.app')) {
+      console.log("🚫 Frontend-only deployment detected - using sample data");
+      console.log("📝 Your 1500+ businesses are on your local development server");
+      console.log("🚀 Deploy backend to access real business database");
+    } else {
+      // Try real API for deployments with backend (like Vercel with API functions)
+      console.log("🎯 ATTEMPTING TO CONNECT TO REAL DATABASE");
+      console.log("🚀 Looking for your 1500+ business listings...");
+
+      try {
       const queryParams = new URLSearchParams();
       if (params.page) queryParams.set("page", params.page.toString());
       if (params.limit) queryParams.set("limit", params.limit.toString());
