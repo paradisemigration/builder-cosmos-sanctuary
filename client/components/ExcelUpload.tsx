@@ -19,10 +19,7 @@ import {
   type ExcelBusinessRow,
 } from "@/lib/excel-template";
 
-interface ExcelUploadProps {
-  onDataProcessed: (businesses: ExcelBusinessRow[]) => void;
-  maxFileSize?: number; // in MB
-}
+
 
 export function ExcelUpload({
   onDataProcessed,
@@ -86,7 +83,7 @@ export function ExcelUpload({
   };
 
   // Drag and drop handlers
-  const handleDrag = useCallback((e: React.DragEvent) => {
+  const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -96,7 +93,7 @@ export function ExcelUpload({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
