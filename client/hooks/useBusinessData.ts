@@ -1,35 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { BusinessAPI, BusinessFilters } from "@/lib/api";
+import { BusinessAPI } from "@/lib/api";
 import { Business } from "@/lib/data";
 
-interface UseBusinessDataResult {
-  businesses: Business[];
-  loading: boolean;
-  error: string | null;
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  } | null;
-  refetch: () => Promise<void>;
-  loadMore: () => Promise<void>;
-  hasMore: boolean;
-}
-
 export function useBusinessData(
-  filters: BusinessFilters = {},
-  autoFetch: boolean = true,
-): UseBusinessDataResult {
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+  filters = {},
+  autoFetch = true,
+) {
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<{
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  } | null>(null);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState(null);
 
   const fetchBusinesses = useCallback(
     async (resetData: boolean = true) => {
