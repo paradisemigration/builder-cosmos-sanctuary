@@ -1703,11 +1703,13 @@ export default function CityCategory() {
             console.log(`📦 Response keys:`, Object.keys(allCityResult || {}));
 
             if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
-              console.log(`✅ Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
+              console.log(`✅ SUCCESS: Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
+              console.log(`📋 First few business names:`, allCityResult.businesses.slice(0, 5).map(b => b.name));
+              console.log(`📋 Sample business structure:`, allCityResult.businesses[0]);
 
               // Sort businesses by category relevance
               const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
-              console.log(`Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
+              console.log(`🎯 Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
 
               const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
                 const aCategory = (a.category || '').toLowerCase();
@@ -1826,7 +1828,7 @@ export default function CityCategory() {
                 nearbyResult.businesses.length > 0
               ) {
                 console.log(
-                  `��� Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
+                  `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
                 );
 
                 return {
