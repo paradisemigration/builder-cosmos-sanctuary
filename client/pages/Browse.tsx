@@ -247,17 +247,19 @@ export default function Browse() {
     sortOrder: "desc",
   };
 
-  // State for real scraped businesses
-  const [scrapedBusinesses, setScrapedBusinesses] = useState<Business[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [totalCount, setTotalCount] = useState(0);
+  // Use the proper API hook instead of manual state management
+  const {
+    businesses: scrapedBusinesses,
+    loading,
+    error,
+    pagination,
+    refetch,
+    loadMore,
+    hasMore
+  } = useBusinessData(apiFilters);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const pageSize = 25;
+  // Get total count from pagination or businesses length
+  const totalCount = pagination?.totalRecords || scrapedBusinesses.length;
 
   // Load real scraped businesses from database
   const loadScrapedBusinesses = async (
