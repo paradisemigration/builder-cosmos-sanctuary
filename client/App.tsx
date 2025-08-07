@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import "./global.css";
 
-// Use require to avoid compilation issues with Routes
-const ReactRouterDOM = require("react-router-dom");
-const BrowserRouter = ReactRouterDOM.BrowserRouter;
-const Routes = ReactRouterDOM.Routes;
-const Route = ReactRouterDOM.Route;
-const Navigate = ReactRouterDOM.Navigate;
-const useLocation = ReactRouterDOM.useLocation;
+// Simple React Router imports
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
