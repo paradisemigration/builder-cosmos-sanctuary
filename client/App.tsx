@@ -76,79 +76,79 @@ const App = () => {
             <Navigation />
             {Routes ? (
               <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/browse" element={<Browse />} />
-              <Route
-                path="/business"
-                element={<Navigate to="/browse" replace />}
-              />
-              <Route path="/business/:id" element={<BusinessProfile />} />
-              <Route path="/add-business" element={<AddBusiness />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminPanel />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/status"
-                element={
-                  <ProtectedRoute>
-                    <AdminStatus />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/bulk-upload"
-                element={
-                  <ProtectedRoute>
-                    <AdminBulkUpload />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/business/:id/edit" element={<EditBusiness />} />
-              <Route path="/dashboard" element={<BusinessDashboard />} />
-              <Route path="/plans" element={<ListingPlans />} />
-              <Route path="/list-business" element={<ListBusiness />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route
-                path="/cant-find-business"
-                element={<CantFindBusiness />}
-              />
-              <Route path="/all-categories" element={<AllCategories />} />
-              <Route
-                path="/all-cities-categories"
-                element={<AllCitiesCategories />}
-              />
-              <Route path="/main-pages" element={<MainPages />} />
-              <Route path="/sitemap" element={<Sitemap />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/uae" element={<UAE />} />
-              <Route
-                path="/uae/:city"
-                element={<CityRouteHandler country="uae" />}
-              />
-              <Route
-                path="/uae/:city/:category"
-                element={<CityRouteHandler country="uae" />}
-              />
-              <Route
-                path="/business/:city"
-                element={<CityRouteHandler country="india" />}
-              />
-              <Route
-                path="/business/:city/:category"
-                element={<CityRouteHandler country="india" />}
-              />
-              <Route
-                path="/category/:category"
-                element={<CategoryLocationPage />}
-              />
+                <Route path="/" element={<Index />} />
+                <Route path="/browse" element={<Browse />} />
+                <Route
+                  path="/business"
+                  element={<Navigate to="/browse" replace />}
+                />
+                <Route path="/business/:id" element={<BusinessProfile />} />
+                <Route path="/add-business" element={<AddBusiness />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPanel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/status"
+                  element={
+                    <ProtectedRoute>
+                      <AdminStatus />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/bulk-upload"
+                  element={
+                    <ProtectedRoute>
+                      <AdminBulkUpload />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/business/:id/edit" element={<EditBusiness />} />
+                <Route path="/dashboard" element={<BusinessDashboard />} />
+                <Route path="/plans" element={<ListingPlans />} />
+                <Route path="/list-business" element={<ListBusiness />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route
+                  path="/cant-find-business"
+                  element={<CantFindBusiness />}
+                />
+                <Route path="/all-categories" element={<AllCategories />} />
+                <Route
+                  path="/all-cities-categories"
+                  element={<AllCitiesCategories />}
+                />
+                <Route path="/main-pages" element={<MainPages />} />
+                <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/uae" element={<UAE />} />
+                <Route
+                  path="/uae/:city"
+                  element={<CityRouteHandler country="uae" />}
+                />
+                <Route
+                  path="/uae/:city/:category"
+                  element={<CityRouteHandler country="uae" />}
+                />
+                <Route
+                  path="/business/:city"
+                  element={<CityRouteHandler country="india" />}
+                />
+                <Route
+                  path="/business/:city/:category"
+                  element={<CityRouteHandler country="india" />}
+                />
+                <Route
+                  path="/category/:category"
+                  element={<CategoryLocationPage />}
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             ) : (
