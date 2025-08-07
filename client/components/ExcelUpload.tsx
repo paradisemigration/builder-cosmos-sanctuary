@@ -16,7 +16,7 @@ import {
   excelTemplate,
   validateExcelRow,
   sampleExcelData,
-  type ExcelBusinessRow,
+  ExcelBusinessRow,
 } from "@/lib/excel-template";
 
 

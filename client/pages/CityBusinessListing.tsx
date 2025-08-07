@@ -170,7 +170,7 @@ import {
   businessCategories,
   indianCities,
   categoryMapping,
-  type Business,
+  Business,
 } from "@/lib/data";
 import {
   allCities,
