@@ -58,6 +58,19 @@ export default function Index() {
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  // Use API hooks
+  const {
+    businesses: featuredBusinesses,
+    loading: featuredLoading,
+    error: featuredError,
+  } = useFeaturedBusinesses();
+
+  const {
+    stats,
+    loading: statsLoading,
+    error: statsError,
+  } = useBusinessStats();
+
   // Use geolocation hook
   const {
     location,
