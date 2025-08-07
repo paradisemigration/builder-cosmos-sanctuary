@@ -8,6 +8,11 @@ import {
   Navigate,
 } from "react-router-dom";
 
+// Add required imports
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { HelmetProvider } from "react-helmet-async";
+
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -18,15 +23,6 @@ function ScrollToTop() {
 
   return null;
 }
-
-// Add required UI providers
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
-
-const queryClient = new QueryClient();
 
 // Import all original pages
 import Index from "./pages/Index";
