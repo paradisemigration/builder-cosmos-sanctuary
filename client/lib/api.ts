@@ -229,7 +229,6 @@ class APIClient {
           "📋 Using sample data until backend with real database is deployed",
         );
       }
-    }
 
     // Temporary fallback while backend with 1500+ businesses is not deployed
     console.log(
