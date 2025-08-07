@@ -33,15 +33,25 @@ if (missingEnvVars.length > 0) {
   // Continue without throwing error to allow development
 }
 
-// Export createServer function for Vercel deployment
-export const createServer = async () => {
-  const api = await import("./api.js");
-  return api.default || api.app;
+// Import and export the API app for Vercel deployment
+let apiApp;
+const initializeAPI = async () => {
+  if (!apiApp) {
+    const api = await import("./api.js");
+    apiApp = api.default || api.app;
+  }
+  return apiApp;
 };
 
-// Start the API server for local development
+// Named export for Vercel
+export const createServer = initializeAPI;
+
+// Default export for compatibility
+export default initializeAPI;
+
+// Start the API server for local development only
 if (process.env.NODE_ENV !== "production") {
-  createServer().then((app) => {
+  initializeAPI().then((app) => {
     const port = process.env.PORT || 3001;
     app.listen(port, () => {
       console.log("✅ API server started");
