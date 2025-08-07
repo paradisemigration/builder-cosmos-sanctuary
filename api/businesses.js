@@ -5,32 +5,105 @@ import { sampleBusinesses } from "../client/lib/data.js";
 function generateRealBusinessData(count = 1500) {
   const businesses = [];
   const indianCities = [
-    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune",
-    "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Patna",
-    "Indore", "Thane", "Bhopal", "Visakhapatnam", "Vadodara", "Firozabad",
-    "Ludhiana", "Rajkot", "Agra", "Siliguri", "Nashik", "Faridabad", "Patiala",
-    "Ghaziabad", "Kalyan", "Dombivli", "Howrah", "Ranchi", "Barrackpore",
-    "Kharagpur", "Durgapur", "Asansol", "Rourkela", "Nanded", "Kolhapur",
-    "Ajmer", "Akola", "Gulbarga", "Jamnagar", "Ujjain", "Loni", "Sikar"
+    "Mumbai",
+    "Delhi",
+    "Bangalore",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+    "Pune",
+    "Ahmedabad",
+    "Jaipur",
+    "Surat",
+    "Lucknow",
+    "Kanpur",
+    "Nagpur",
+    "Patna",
+    "Indore",
+    "Thane",
+    "Bhopal",
+    "Visakhapatnam",
+    "Vadodara",
+    "Firozabad",
+    "Ludhiana",
+    "Rajkot",
+    "Agra",
+    "Siliguri",
+    "Nashik",
+    "Faridabad",
+    "Patiala",
+    "Ghaziabad",
+    "Kalyan",
+    "Dombivli",
+    "Howrah",
+    "Ranchi",
+    "Barrackpore",
+    "Kharagpur",
+    "Durgapur",
+    "Asansol",
+    "Rourkela",
+    "Nanded",
+    "Kolhapur",
+    "Ajmer",
+    "Akola",
+    "Gulbarga",
+    "Jamnagar",
+    "Ujjain",
+    "Loni",
+    "Sikar",
   ];
 
   const categories = [
-    "immigration-consultants", "study-abroad-consultants", "visa-consultants",
-    "work-visa-consultants", "tourist-visa-services", "student-visa-consultants",
-    "visit-visa-specialists", "business-visa-services", "express-visa-services"
+    "immigration-consultants",
+    "study-abroad-consultants",
+    "visa-consultants",
+    "work-visa-consultants",
+    "tourist-visa-services",
+    "student-visa-consultants",
+    "visit-visa-specialists",
+    "business-visa-services",
+    "express-visa-services",
   ];
 
   const companyPrefixes = [
-    "Global", "Prime", "Elite", "Expert", "Professional", "Trusted", "Reliable",
-    "Premium", "Superior", "Excellence", "Success", "Secure", "Swift", "Smart",
-    "Royal", "Imperial", "International", "Universal", "Platinum", "Diamond"
+    "Global",
+    "Prime",
+    "Elite",
+    "Expert",
+    "Professional",
+    "Trusted",
+    "Reliable",
+    "Premium",
+    "Superior",
+    "Excellence",
+    "Success",
+    "Secure",
+    "Swift",
+    "Smart",
+    "Royal",
+    "Imperial",
+    "International",
+    "Universal",
+    "Platinum",
+    "Diamond",
   ];
 
   const companySuffixes = [
-    "Immigration Services", "Visa Consultancy", "Global Solutions", "Consulting",
-    "Immigration Experts", "Visa Services", "International Consultants",
-    "Migration Services", "Overseas Consultancy", "Visa Solutions", "Immigration Hub",
-    "Global Consultants", "Visa Experts", "International Services", "Migration Experts"
+    "Immigration Services",
+    "Visa Consultancy",
+    "Global Solutions",
+    "Consulting",
+    "Immigration Experts",
+    "Visa Services",
+    "International Consultants",
+    "Migration Services",
+    "Overseas Consultancy",
+    "Visa Solutions",
+    "Immigration Hub",
+    "Global Consultants",
+    "Visa Experts",
+    "International Services",
+    "Migration Experts",
   ];
 
   for (let i = 0; i < count; i++) {
@@ -44,20 +117,20 @@ function generateRealBusinessData(count = 1500) {
       googlePlaceId: `real-place-${i + 1}`,
       name: `${prefix} ${suffix}`,
       category,
-      description: `Professional immigration and visa consultancy services in ${city}. Specialized in ${category.replace('-', ' ')} with proven track record.`,
+      description: `Professional immigration and visa consultancy services in ${city}. Specialized in ${category.replace("-", " ")} with proven track record.`,
       services: [
-        category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        category.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase()),
         "Documentation Support",
         "Application Processing",
-        "Interview Preparation"
+        "Interview Preparation",
       ],
       address: `${Math.floor(Math.random() * 999) + 1}, Business District, ${city}`,
       city,
       zone: `${city} Central`,
       phone: `+91-${Math.floor(Math.random() * 90000) + 10000}-${Math.floor(Math.random() * 90000) + 10000}`,
       whatsapp: `+91-${Math.floor(Math.random() * 9000000000) + 1000000000}`,
-      email: `info@${prefix.toLowerCase()}${suffix.toLowerCase().replace(/\s+/g, '')}.com`,
-      website: `https://www.${prefix.toLowerCase()}${suffix.toLowerCase().replace(/\s+/g, '')}.com`,
+      email: `info@${prefix.toLowerCase()}${suffix.toLowerCase().replace(/\s+/g, "")}.com`,
+      website: `https://www.${prefix.toLowerCase()}${suffix.toLowerCase().replace(/\s+/g, "")}.com`,
       rating: Math.round((Math.random() * 2 + 3) * 10) / 10, // 3.0 - 5.0
       reviewCount: Math.floor(Math.random() * 100) + 10, // 10-110 reviews
       isVerified: Math.random() > 0.1, // 90% verified
@@ -65,16 +138,24 @@ function generateRealBusinessData(count = 1500) {
       coverImage: `https://picsum.photos/800/400?random=${i + 1000}`,
       gallery: [
         `https://picsum.photos/400/300?random=${i + 2000}`,
-        `https://picsum.photos/400/300?random=${i + 3000}`
+        `https://picsum.photos/400/300?random=${i + 3000}`,
       ],
-      licenseNo: `LIC${String(i + 1).padStart(6, '0')}`,
-      ownerName: `${['Rajesh', 'Priya', 'Amit', 'Sunita', 'Vikash', 'Meera'][i % 6]} ${['Sharma', 'Patel', 'Kumar', 'Singh', 'Gupta', 'Agarwal'][i % 6]}`,
+      licenseNo: `LIC${String(i + 1).padStart(6, "0")}`,
+      ownerName: `${["Rajesh", "Priya", "Amit", "Sunita", "Vikash", "Meera"][i % 6]} ${["Sharma", "Patel", "Kumar", "Singh", "Gupta", "Agarwal"][i % 6]}`,
       successRate: Math.floor(Math.random() * 30) + 70, // 70-100%
       experience: Math.floor(Math.random() * 15) + 2, // 2-17 years
-      languages: ['Hindi', 'English', ['Gujarati', 'Marathi', 'Tamil', 'Telugu', 'Bengali'][i % 5]],
+      languages: [
+        "Hindi",
+        "English",
+        ["Gujarati", "Marathi", "Tamil", "Telugu", "Bengali"][i % 5],
+      ],
       establishedYear: 2024 - Math.floor(Math.random() * 20), // 2004-2024
-      specializations: [category.replace('-', ' '), 'Family Visa', 'Student Visa'],
-      clientsServed: Math.floor(Math.random() * 5000) + 500 // 500-5500 clients
+      specializations: [
+        category.replace("-", " "),
+        "Family Visa",
+        "Student Visa",
+      ],
+      clientsServed: Math.floor(Math.random() * 5000) + 500, // 500-5500 clients
     });
   }
 
@@ -141,7 +222,9 @@ export default function handler(req, res) {
     const totalBusinesses = businesses.length;
     const totalInDatabase = realBusinessDatabase.length;
 
-    console.log(`✅ Returning ${paginatedBusinesses.length} businesses from ${totalBusinesses} filtered results (${totalInDatabase} total in database)`);
+    console.log(
+      `✅ Returning ${paginatedBusinesses.length} businesses from ${totalBusinesses} filtered results (${totalInDatabase} total in database)`,
+    );
 
     // Return real database structure
     const response = {
@@ -158,7 +241,7 @@ export default function handler(req, res) {
       total: totalBusinesses,
       totalRecords: totalBusinesses,
       databaseSize: totalInDatabase,
-      source: "real-database"
+      source: "real-database",
     };
 
     res.status(200).json(response);

@@ -166,7 +166,9 @@ class APIClient {
       search?: string;
     } = {},
   ) {
-    console.log("🎯 CONNECTING TO REAL DATABASE - Looking for 1500+ businesses");
+    console.log(
+      "🎯 CONNECTING TO REAL DATABASE - Looking for 1500+ businesses",
+    );
 
     try {
       const queryParams = new URLSearchParams();
@@ -190,7 +192,8 @@ class APIClient {
       }>(apiUrl);
 
       const businesses = response.businesses || response.data || [];
-      const total = response.totalRecords || response.total || businesses.length;
+      const total =
+        response.totalRecords || response.total || businesses.length;
 
       console.log("✅ REAL DATABASE CONNECTION SUCCESS:", {
         success: response.success,
@@ -214,7 +217,6 @@ class APIClient {
       console.error("❌ Failed to connect to real database:", error);
       throw error;
     }
-
   }
 
   // Get single business
@@ -315,9 +317,9 @@ class APIClient {
     const response = await this.getBusinesses({ limit: 6 });
     return {
       success: true,
-      data: response.data.map(business => ({
+      data: response.data.map((business) => ({
         ...business,
-        isFeatured: true
+        isFeatured: true,
       })),
     };
   }
