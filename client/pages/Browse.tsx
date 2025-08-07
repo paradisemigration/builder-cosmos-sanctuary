@@ -331,7 +331,15 @@ export default function Browse() {
       console.log("✅ API Response received:", {
         success: result.success,
         totalBusinesses: result.businesses?.length || 0,
-        total: result.total
+        total: result.total,
+        hasBusinesses: !!result.businesses,
+        isArray: Array.isArray(result.businesses),
+        sampleBusiness: result.businesses?.[0] ? {
+          id: result.businesses[0].id,
+          name: result.businesses[0].name,
+          city: result.businesses[0].city || result.businesses[0].scrapedCity
+        } : null,
+        fullResult: result
       });
 
       if (result.success) {
