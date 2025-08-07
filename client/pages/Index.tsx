@@ -204,7 +204,7 @@ export default function Index() {
     }
   };
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
 
