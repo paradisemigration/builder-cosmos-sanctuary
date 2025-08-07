@@ -281,7 +281,8 @@ export default function Browse() {
         ...filters,
       });
 
-      const response = await robustFetch(`/api/scraped-businesses?${params}`);
+      const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
+      const response = await robustFetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
