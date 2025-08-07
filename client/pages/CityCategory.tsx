@@ -49,8 +49,8 @@ export default function CityCategory() {
     ].includes(city.toLowerCase());
   const country = isUAERoute || isUAECity ? "uae" : "india";
 
-  const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
-  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+  const [categoryBusinesses, setCategoryBusinesses] = useState([]);
+  const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
