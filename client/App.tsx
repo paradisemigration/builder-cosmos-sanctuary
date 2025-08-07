@@ -61,11 +61,7 @@ import { Navigation } from "./components/Navigation";
 import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
 // Simple components to avoid complex dependencies
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRoute({ children }) {
   return <>{children}</>;
 }
 
