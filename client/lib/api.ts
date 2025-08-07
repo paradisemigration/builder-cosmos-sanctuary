@@ -274,6 +274,79 @@ class APIClient {
       timestamp: string;
     }>("/api/health");
   }
+
+  // Get featured businesses
+  async getFeaturedBusinesses() {
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning featured sample data");
+      const featuredBusinesses = sampleBusinesses.slice(0, 6).map((business, index) => ({
+        ...business,
+        id: business.id || `featured-${index}`,
+        isVerified: true,
+        isFeatured: true,
+        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 10,
+        rating: business.rating || Math.random() * 1.5 + 3.5, // 3.5-5 star rating for featured
+      }));
+
+      return {
+        success: true,
+        data: featuredBusinesses,
+      };
+    }
+
+    return this.request<{
+      success: boolean;
+      data: any[];
+    }>("/api/businesses/featured");
+  }
+
+  // Get business by ID
+  async getBusinessById(id: string) {
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning sample business by ID");
+      const business = sampleBusinesses.find(b => b.id === id) || sampleBusinesses[0];
+
+      return {
+        success: true,
+        data: {
+          ...business,
+          id: business.id || id,
+          isVerified: true,
+          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3,
+        },
+      };
+    }
+
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>(`/api/businesses/${id}`);
+  }
+
+  // Get business statistics
+  async getBusinessStats() {
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning sample stats");
+
+      return {
+        success: true,
+        data: {
+          totalBusinesses: sampleBusinesses.length,
+          totalCities: 50,
+          totalCategories: 25,
+          verifiedBusinesses: Math.floor(sampleBusinesses.length * 0.8),
+          avgRating: 4.2,
+          totalReviews: sampleBusinesses.length * 15,
+        },
+      };
+    }
+
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>("/api/businesses/stats");
+  }
 }
 
 // Export singleton instance
