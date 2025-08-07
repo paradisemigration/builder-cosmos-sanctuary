@@ -767,7 +767,7 @@ export default function Index() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/business">
+            <Link to="/browse">
               <Button variant="outline" size="lg" className="px-8">
                 View All Cities
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -847,7 +847,7 @@ export default function Index() {
           )}
 
           <div className="text-center mt-12">
-            <Link to="/business">
+            <Link to="/browse">
               <Button
                 size="lg"
                 className="px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
@@ -871,7 +871,7 @@ export default function Index() {
             their visa goals with our expert consultants.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
-            <Link to="/business" className="w-full sm:w-auto">
+            <Link to="/browse" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="secondary"
