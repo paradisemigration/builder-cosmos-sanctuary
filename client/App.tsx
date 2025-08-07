@@ -68,7 +68,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 const App = () => {
   return (
     <HelmetProvider>
-      <SimpleAuthProvider>
+      <AuthProvider>
         <TooltipProvider>
           <Toaster />
           <BrowserRouter>
