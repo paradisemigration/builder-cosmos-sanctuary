@@ -40,6 +40,9 @@ class APIClient {
             } catch (error) {
               reject(new Error('Invalid JSON response'));
             }
+          } else if (xhr.status === 0) {
+            // HTTP 0 means no backend server - this is expected on frontend-only deployments
+            reject(new Error('No backend server available'));
           } else {
             reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
           }
@@ -47,7 +50,7 @@ class APIClient {
       };
 
       xhr.onerror = function() {
-        reject(new Error('Network error'));
+        reject(new Error('Network error - no backend server'));
       };
 
       xhr.ontimeout = function() {
