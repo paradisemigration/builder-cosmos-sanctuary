@@ -47,6 +47,21 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
     console.log("🚨 IMMEDIATE INTERCEPTOR: Installed successfully");
   }
+
+  // Add global error listener to catch ALL 404 errors
+  window.addEventListener('error', (event) => {
+    console.error('🚨 GLOBAL ERROR DETECTED:', event);
+    if (event.target && event.target.tagName) {
+      console.error(`🚨 ERROR SOURCE: ${event.target.tagName} - ${event.target.src || event.target.href || 'unknown'}`);
+    }
+  });
+
+  // Listen for failed resource loads
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('🚨 UNHANDLED REJECTION:', event.reason);
+  });
+
+  console.log("🚨 Global error listeners installed");
 })();
 
 // Component to handle scroll to top on route changes
