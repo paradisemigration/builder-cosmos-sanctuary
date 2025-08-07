@@ -144,18 +144,7 @@ const App = () => {
                 element={<CategoryLocationPage />}
               />
                     <Route path="*" element={<NotFound />} />
-                  </Routes>
-                );
-              } catch (error) {
-                console.error("Routes error:", error);
-                return (
-                  <div style={{ padding: "20px", textAlign: "center" }}>
-                    <h1>App Loading...</h1>
-                    <p>Please refresh if this persists.</p>
-                  </div>
-                );
-              }
-            })()}
+            </Routes>
             <SiteFooter />
             <GlobalDebugPopup />
           </BrowserRouter>
