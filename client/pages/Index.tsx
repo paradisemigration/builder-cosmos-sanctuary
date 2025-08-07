@@ -39,7 +39,6 @@ import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
 import {
   businessCategories,
-  sampleBusinesses,
   type Business,
 } from "@/lib/data";
 import { allCategories, allIndianCities } from "@/lib/all-categories";
