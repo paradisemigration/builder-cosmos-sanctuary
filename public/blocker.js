@@ -69,20 +69,16 @@ window.XMLHttpRequest = function() {
 };
 
 // 3. Block all error events
-window.addEventListener(
-  "error",
-  (e) => {
-    console.warn("🔇 GLOBAL ERROR BLOCKED:", e.message);
-    e.preventDefault();
-    return false;
-  },
-  true,
-);
+window.addEventListener("error", function(e) {
+  console.warn("GLOBAL ERROR BLOCKED:", e.message || "unknown error");
+  if (e.preventDefault) e.preventDefault();
+  return false;
+}, true);
 
-window.addEventListener("unhandledrejection", (e) => {
-  console.warn("🔇 GLOBAL REJECTION BLOCKED");
-  e.preventDefault();
+window.addEventListener("unhandledrejection", function(e) {
+  console.warn("GLOBAL REJECTION BLOCKED");
+  if (e.preventDefault) e.preventDefault();
   return false;
 });
 
-console.log("🚨 IMMEDIATE GLOBAL BLOCKER: Total lockdown complete");
+console.log("IMMEDIATE GLOBAL BLOCKER: Total lockdown complete");
