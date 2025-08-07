@@ -78,11 +78,11 @@ export default function Browse() {
     setSelectedCategory(value);
   };
 
-  const handleCityChange = (value: string) => {
+  const handleCityChange = (value) => {
     setSelectedCity(value);
   };
 
-  const handleZoneChange = (value: string) => {
+  const handleZoneChange = (value) => {
     setSelectedZone(value);
   };
 

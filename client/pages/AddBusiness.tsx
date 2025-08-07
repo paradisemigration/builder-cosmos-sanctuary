@@ -124,12 +124,12 @@ export default function AddBusiness() {
     };
   }, []);
 
-  const updateFormData = (field: keyof BusinessFormData, value: string) => {
+  const updateFormData = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   // Business name search handlers
-  const handleBusinessSearchChange = (value: string) => {
+  const handleBusinessSearchChange = (value) => {
     setBusinessSearchQuery(value);
     setBusinessNameVerified(false);
     setExistingBusiness(null);
