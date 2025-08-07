@@ -386,8 +386,272 @@
         );
       }
 
+      // Mock Business Data
+      const mockBusinesses = [
+        {
+          id: 1,
+          name: "Global Visa Solutions",
+          location: "Mumbai, India",
+          rating: 4.8,
+          specialties: ["Work Visa", "Student Visa", "Tourist Visa"],
+          experience: "15+ years",
+          contact: "+91-9876543210",
+          description: "Expert immigration consultants specializing in Canada, Australia, and UK visas."
+        },
+        {
+          id: 2,
+          name: "Emirates Immigration Hub",
+          location: "Dubai, UAE",
+          rating: 4.9,
+          specialties: ["Employment Visa", "Family Visa", "Business Setup"],
+          experience: "10+ years",
+          contact: "+971-50-1234567",
+          description: "Premier UAE immigration services for residents and businesses."
+        },
+        {
+          id: 3,
+          name: "Study Abroad Experts",
+          location: "Delhi, India",
+          rating: 4.7,
+          specialties: ["Student Visa", "Education Loans", "University Guidance"],
+          experience: "12+ years",
+          contact: "+91-8765432109",
+          description: "Specialized in student visa applications for top universities worldwide."
+        },
+        {
+          id: 4,
+          name: "Business Visa Consultants",
+          location: "Abu Dhabi, UAE",
+          rating: 4.6,
+          specialties: ["Investor Visa", "Business Setup", "Trade License"],
+          experience: "8+ years",
+          contact: "+971-55-9876543",
+          description: "Complete business immigration and setup services in UAE."
+        },
+        {
+          id: 5,
+          name: "Family Reunification Services",
+          location: "Bangalore, India",
+          rating: 4.8,
+          specialties: ["Family Visa", "Spouse Visa", "Dependent Visa"],
+          experience: "20+ years",
+          contact: "+91-7654321098",
+          description: "Helping families reunite through expert visa consultation services."
+        },
+        {
+          id: 6,
+          name: "Gulf Immigration Partners",
+          location: "Sharjah, UAE",
+          rating: 4.5,
+          specialties: ["Work Permit", "Residence Visa", "Document Attestation"],
+          experience: "7+ years",
+          contact: "+971-52-1357924",
+          description: "Complete immigration support for Gulf region employment opportunities."
+        }
+      ];
+
+      // Business Card Component
+      function BusinessCard({ business }) {
+        return React.createElement(
+          "div",
+          {
+            style: {
+              background: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "12px",
+              padding: "20px",
+              marginBottom: "20px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              transition: "transform 0.2s, box-shadow 0.2s"
+            }
+          },
+          [
+            // Header with name and rating
+            React.createElement(
+              "div",
+              {
+                key: "header",
+                style: {
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  marginBottom: "15px"
+                }
+              },
+              [
+                React.createElement(
+                  "div",
+                  { key: "name-location" },
+                  [
+                    React.createElement(
+                      "h3",
+                      {
+                        key: "name",
+                        style: {
+                          margin: "0 0 5px 0",
+                          color: "#1f2937",
+                          fontSize: "1.25rem",
+                          fontWeight: "600"
+                        }
+                      },
+                      business.name
+                    ),
+                    React.createElement(
+                      "p",
+                      {
+                        key: "location",
+                        style: {
+                          margin: "0",
+                          color: "#6b7280",
+                          fontSize: "0.9rem"
+                        }
+                      },
+                      `📍 ${business.location}`
+                    )
+                  ]
+                ),
+                React.createElement(
+                  "div",
+                  {
+                    key: "rating",
+                    style: {
+                      background: "#fef3c7",
+                      padding: "4px 8px",
+                      borderRadius: "6px",
+                      fontSize: "0.85rem",
+                      fontWeight: "500",
+                      color: "#92400e"
+                    }
+                  },
+                  `⭐ ${business.rating}`
+                )
+              ]
+            ),
+
+            // Description
+            React.createElement(
+              "p",
+              {
+                key: "description",
+                style: {
+                  margin: "0 0 15px 0",
+                  color: "#4b5563",
+                  lineHeight: "1.5"
+                }
+              },
+              business.description
+            ),
+
+            // Specialties
+            React.createElement(
+              "div",
+              {
+                key: "specialties",
+                style: { marginBottom: "15px" }
+              },
+              [
+                React.createElement(
+                  "h4",
+                  {
+                    key: "spec-title",
+                    style: {
+                      margin: "0 0 8px 0",
+                      fontSize: "0.9rem",
+                      color: "#374151",
+                      fontWeight: "500"
+                    }
+                  },
+                  "Specialties:"
+                ),
+                React.createElement(
+                  "div",
+                  {
+                    key: "spec-tags",
+                    style: { display: "flex", flexWrap: "wrap", gap: "6px" }
+                  },
+                  business.specialties.map((specialty, index) =>
+                    React.createElement(
+                      "span",
+                      {
+                        key: index,
+                        style: {
+                          background: "#dbeafe",
+                          color: "#1e40af",
+                          padding: "2px 8px",
+                          borderRadius: "12px",
+                          fontSize: "0.8rem",
+                          fontWeight: "500"
+                        }
+                      },
+                      specialty
+                    )
+                  )
+                )
+              ]
+            ),
+
+            // Footer with experience and contact
+            React.createElement(
+              "div",
+              {
+                key: "footer",
+                style: {
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "15px 0 0 0",
+                  borderTop: "1px solid #f3f4f6"
+                }
+              },
+              [
+                React.createElement(
+                  "span",
+                  {
+                    key: "experience",
+                    style: {
+                      color: "#059669",
+                      fontSize: "0.85rem",
+                      fontWeight: "500"
+                    }
+                  },
+                  `👨‍💼 ${business.experience} experience`
+                ),
+                React.createElement(
+                  "a",
+                  {
+                    key: "contact",
+                    href: `tel:${business.contact}`,
+                    style: {
+                      background: "#3b82f6",
+                      color: "white",
+                      padding: "6px 12px",
+                      borderRadius: "6px",
+                      textDecoration: "none",
+                      fontSize: "0.85rem",
+                      fontWeight: "500"
+                    }
+                  },
+                  `📞 ${business.contact}`
+                )
+              ]
+            )
+          ]
+        );
+      }
+
       // Browse Page Component
       function BrowsePage() {
+        const [searchTerm, setSearchTerm] = React.useState("");
+        const [filterLocation, setFilterLocation] = React.useState("all");
+
+        const filteredBusinesses = mockBusinesses.filter(business => {
+          const matchesSearch = business.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               business.specialties.some(spec => spec.toLowerCase().includes(searchTerm.toLowerCase()));
+          const matchesLocation = filterLocation === "all" ||
+                                 business.location.toLowerCase().includes(filterLocation.toLowerCase());
+          return matchesSearch && matchesLocation;
+        });
+
         return React.createElement(
           "div",
           {
@@ -408,51 +672,127 @@
               "🔍 Browse Immigration Consultants",
             ),
 
+            // Search and Filter Section
             React.createElement(
               "div",
               {
-                key: "content",
+                key: "search-filter",
                 style: {
                   background: "white",
                   border: "1px solid #e5e7eb",
                   borderRadius: "12px",
-                  padding: "30px",
-                },
+                  padding: "20px",
+                  marginBottom: "20px"
+                }
               },
               [
                 React.createElement(
-                  "h3",
-                  { key: "subtitle" },
-                  "Find Trusted Visa Consultants",
-                ),
-                React.createElement(
-                  "p",
-                  { key: "desc" },
-                  "Browse our directory of verified immigration consultants across India and UAE.",
-                ),
-                React.createElement(
                   "div",
                   {
-                    key: "placeholder",
+                    key: "controls",
                     style: {
-                      background: "#f9fafb",
-                      border: "2px dashed #d1d5db",
-                      borderRadius: "8px",
-                      padding: "40px",
-                      textAlign: "center",
-                      margin: "20px 0",
-                    },
+                      display: "flex",
+                      gap: "15px",
+                      flexWrap: "wrap",
+                      alignItems: "center"
+                    }
                   },
                   [
                     React.createElement(
-                      "p",
-                      { key: "coming-soon" },
-                      "📋 Business listings coming in Step 3...",
+                      "input",
+                      {
+                        key: "search",
+                        type: "text",
+                        placeholder: "Search by name or specialty...",
+                        value: searchTerm,
+                        onChange: (e) => setSearchTerm(e.target.value),
+                        style: {
+                          flex: "1",
+                          minWidth: "200px",
+                          padding: "10px",
+                          border: "1px solid #d1d5db",
+                          borderRadius: "6px",
+                          fontSize: "14px"
+                        }
+                      }
                     ),
-                  ],
+                    React.createElement(
+                      "select",
+                      {
+                        key: "filter",
+                        value: filterLocation,
+                        onChange: (e) => setFilterLocation(e.target.value),
+                        style: {
+                          padding: "10px",
+                          border: "1px solid #d1d5db",
+                          borderRadius: "6px",
+                          fontSize: "14px",
+                          background: "white"
+                        }
+                      },
+                      [
+                        React.createElement("option", { key: "all", value: "all" }, "All Locations"),
+                        React.createElement("option", { key: "india", value: "india" }, "India"),
+                        React.createElement("option", { key: "uae", value: "uae" }, "UAE")
+                      ]
+                    )
+                  ]
                 ),
-              ],
+                React.createElement(
+                  "p",
+                  {
+                    key: "results-count",
+                    style: {
+                      margin: "15px 0 0 0",
+                      color: "#6b7280",
+                      fontSize: "0.9rem"
+                    }
+                  },
+                  `Showing ${filteredBusinesses.length} consultant${filteredBusinesses.length !== 1 ? 's' : ''}`
+                )
+              ]
             ),
+
+            // Business Listings
+            React.createElement(
+              "div",
+              {
+                key: "listings",
+                style: { marginTop: "20px" }
+              },
+              filteredBusinesses.length > 0
+                ? filteredBusinesses.map(business =>
+                    React.createElement(BusinessCard, {
+                      key: business.id,
+                      business: business
+                    })
+                  )
+                : [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "no-results",
+                        style: {
+                          background: "#f9fafb",
+                          border: "1px solid #e5e7eb",
+                          borderRadius: "12px",
+                          padding: "40px",
+                          textAlign: "center"
+                        }
+                      },
+                      [
+                        React.createElement(
+                          "p",
+                          {
+                            key: "no-results-text",
+                            style: { margin: "0", color: "#6b7280" }
+                          },
+                          "No consultants found matching your criteria. Try adjusting your search or filters."
+                        )
+                      ]
+                    )
+                  ]
+            )
           ],
         );
       }
