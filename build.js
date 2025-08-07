@@ -19,10 +19,10 @@ if (!fs.existsSync(distDir)) {
 
 // Find index.html - try multiple possible locations
 const possibleSources = [
-  path.join(__dirname, "..", "index.html"),  // One level up from code directory
-  path.join(process.cwd(), "index.html"),    // In current working directory
-  path.join(__dirname, "index.html"),        // In same directory as build script
-  "/vercel/index.html"                       // Direct path in Vercel
+  path.join(__dirname, "..", "index.html"), // One level up from code directory
+  path.join(process.cwd(), "index.html"), // In current working directory
+  path.join(__dirname, "index.html"), // In same directory as build script
+  "/vercel/index.html", // Direct path in Vercel
 ];
 
 let sourceFile = null;
