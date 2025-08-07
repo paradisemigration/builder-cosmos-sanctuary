@@ -1698,7 +1698,7 @@ export default function CityCategory() {
             try {
               console.log(`🚀 PHASE 0: Trying city variation: "${cityVariation}"`);
 
-              const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=1000`;
+              const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=50`;
               console.log(`📡 API URL: ${allCityUrl}`);
 
               const allCityResponse = await robustFetch(allCityUrl, {
