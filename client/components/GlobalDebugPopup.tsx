@@ -1,32 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-interface GlobalDebugInfo {
-  currentPage: string;
-  timestamp: string;
-  userAgent: string;
-  screenSize: {
-    width: number;
-    height: number;
-  };
-  metaData: {
-    title: string;
-    description: string;
-    keywords: string;
-    ogTitle: string;
-    ogDescription: string;
-    allMetaTags: Array<{
-      name: string;
-      content: string;
-      property?: string;
-    }>;
-  };
-  apiCalls: Array<{
-    url: string;
-    method: string;
-    timestamp: string;
-  }>;
-}
+
 
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
