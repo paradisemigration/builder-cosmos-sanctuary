@@ -311,20 +311,40 @@ app.get("/api/businesses", async (req, res) => {
 });
 
 // Get single business
-app.get("/api/businesses/:id", (req, res) => {
-  const business = businesses.find((b) => b.id === parseInt(req.params.id));
+app.get("/api/businesses/:id", async (req, res) => {
+  try {
+    const business = await sqliteDatabase.getBusinessById(req.params.id);
 
-  if (!business) {
-    return res.status(404).json({
+    if (!business) {
+      // Fallback to sample businesses
+      const sampleBusiness = sampleBusinesses.find((b) => b.id === req.params.id);
+
+      if (!sampleBusiness) {
+        return res.status(404).json({
+          success: false,
+          error: "Business not found",
+        });
+      }
+
+      return res.json({
+        success: true,
+        data: sampleBusiness,
+        source: "sample_data",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: business,
+      source: "database",
+    });
+  } catch (error) {
+    console.error("Error fetching business:", error);
+    res.status(500).json({
       success: false,
-      error: "Business not found",
+      error: "Internal server error",
     });
   }
-
-  res.json({
-    success: true,
-    data: business,
-  });
 });
 
 // Update business
