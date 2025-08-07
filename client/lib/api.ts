@@ -309,21 +309,17 @@ class APIClient {
 
   // Get featured businesses
   async getFeaturedBusinesses() {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: Business[];
-      }>("/api/businesses/featured");
-    } catch (error) {
-      console.warn("Featured businesses API failed, using sample data");
-      const featuredBusinesses = sampleBusinesses
-        .filter((b) => b.isFeatured)
-        .slice(0, 6);
-      return {
-        success: true,
-        data: featuredBusinesses,
-      };
-    }
+    console.log("⭐ Fetching featured businesses from real database");
+
+    // Get regular businesses and mark top ones as featured
+    const response = await this.getBusinesses({ limit: 6 });
+    return {
+      success: true,
+      data: response.data.map(business => ({
+        ...business,
+        isFeatured: true
+      })),
+    };
   }
 
   // Get business statistics
