@@ -6,10 +6,12 @@ async function robustFetch(
   options?: RequestInit,
 ): Promise<Response> {
   console.log("🚨 GEOLOCATION BLOCKED: External API call prevented");
-  return Promise.resolve(new Response('{"blocked":true}', {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' }
-  }));
+  return Promise.resolve(
+    new Response('{"blocked":true}', {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
   // More comprehensive FullStory detection
   const isFullStoryActive =
     typeof window !== "undefined" &&
@@ -149,7 +151,7 @@ export function useGeolocation(): GeolocationResult {
     countryCode: "AE",
     region: "Dubai",
     latitude: 25.2048,
-    longitude: 55.2708
+    longitude: 55.2708,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

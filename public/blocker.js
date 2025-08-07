@@ -45,10 +45,22 @@ window.XMLHttpRequest = class extends OriginalXHR {
 
       // Set up mock response
       setTimeout(() => {
-        Object.defineProperty(this, "status", { value: 200, configurable: true });
-        Object.defineProperty(this, "statusText", { value: "OK", configurable: true });
-        Object.defineProperty(this, "responseText", { value: "{}", configurable: true });
-        Object.defineProperty(this, "readyState", { value: 4, configurable: true });
+        Object.defineProperty(this, "status", {
+          value: 200,
+          configurable: true,
+        });
+        Object.defineProperty(this, "statusText", {
+          value: "OK",
+          configurable: true,
+        });
+        Object.defineProperty(this, "responseText", {
+          value: "{}",
+          configurable: true,
+        });
+        Object.defineProperty(this, "readyState", {
+          value: 4,
+          configurable: true,
+        });
         if (this.onreadystatechange) this.onreadystatechange();
         if (this.onload) this.onload(new Event("load"));
       }, 0);
