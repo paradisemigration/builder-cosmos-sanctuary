@@ -37,7 +37,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
-import { businessCategories, type Business } from "@/lib/data";
+import { businessCategories, Business } from "@/lib/data";
 import { allCategories, allIndianCities } from "@/lib/all-categories";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
@@ -222,7 +222,7 @@ export default function Index() {
         "https://cdn.pixabay.com/photo/2020/02/02/17/24/delhi-4813618_1280.jpg",
       fallback:
         "https://images.pexels.com/photos/789750/pexels-photo-789750.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
-      flag: "🇮🇳",
+      flag: "🇮����",
       description: "India Gate & Red Fort",
       color: "#3B82F6",
     },
