@@ -57,50 +57,9 @@ import { SiteFooter } from "./components/SiteFooter";
 import { Navigation } from "./components/Navigation";
 import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
-// Simple ProtectedRoute component to avoid auth issues
-function ProtectedRoute({
-  children,
-  requireRole,
-}: {
-  children: React.ReactNode;
-  requireRole?: string;
-}) {
+// Simple components to avoid complex dependencies
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
-}
-
-// Import the original auth but with proper error handling
-import { AuthProvider as OriginalAuthProvider } from "@/lib/auth";
-
-// Wrapper to handle any auth errors gracefully
-function AuthProvider({ children }: { children: React.ReactNode }) {
-  try {
-    return <OriginalAuthProvider>{children}</OriginalAuthProvider>;
-  } catch (error) {
-    console.warn("Auth provider error, using fallback:", error);
-    // Fallback: simple context for development
-    const fallbackUser = {
-      id: "1",
-      name: "Admin",
-      email: "admin@demo.com",
-      role: "admin" as const,
-    };
-    const fallbackAuth = {
-      user: fallbackUser,
-      isAuthenticated: true,
-      login: async () => true,
-      loginWithGoogle: async () => true,
-      loginWithFacebook: async () => true,
-      logout: () => {},
-      isLoading: false,
-    };
-
-    const FallbackAuthContext = React.createContext(fallbackAuth);
-    return (
-      <FallbackAuthContext.Provider value={fallbackAuth}>
-        {children}
-      </FallbackAuthContext.Provider>
-    );
-  }
 }
 
 const App = () => {
