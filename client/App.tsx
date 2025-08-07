@@ -146,14 +146,11 @@ const App = () => {
                   />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-                <SiteFooter />
-                <GlobalDebugPopup />
-              </BrowserRouter>
-            </TooltipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
+          <SiteFooter />
+          <GlobalDebugPopup />
+        </BrowserRouter>
+      </TooltipProvider>
+    </HelmetProvider>
   );
 };
 
