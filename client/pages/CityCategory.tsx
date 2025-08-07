@@ -2054,15 +2054,21 @@ export default function CityCategory() {
               isNearbyData = true;
               nearbyCity = sourceCities.join(", ");
             }
-          } else {
+          } else if (uniqueBusinesses.length > 0) {
+            // We have nearby city results - merge with main city businesses if any
+            const allBusinesses = [...accumulatedBusinesses];
+
             result = {
               success: true,
-              businesses: uniqueBusinesses,
-              total: uniqueBusinesses.length,
-              source: "nearby_cities_api",
+              businesses: allBusinesses,
+              total: allBusinesses.length,
+              source: accumulatedBusinesses.length > uniqueBusinesses.length ? "main_city_plus_nearby" : "nearby_cities_api",
             };
-            isNearbyData = true;
-            nearbyCity = sourceCities.join(", ");
+
+            if (sourceCities.length > 0) {
+              isNearbyData = true;
+              nearbyCity = sourceCities.join(", ");
+            }
           }
         }
 
