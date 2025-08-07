@@ -273,7 +273,7 @@ export default function Browse() {
         id: business.id || `sample-${index}`,
         isVerified: true,
         reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-        rating: business.rating || (Math.random() * 2 + 3), // 3-5 star rating
+        rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
       }));
 
       setScrapedBusinesses(fallbackBusinesses);
@@ -372,8 +372,9 @@ export default function Browse() {
           ...business,
           id: business.id || `fallback-${index}`,
           isVerified: true,
-          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-          rating: business.rating || (Math.random() * 2 + 3), // 3-5 star rating
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
         }));
 
         setScrapedBusinesses(fallbackBusinesses);
