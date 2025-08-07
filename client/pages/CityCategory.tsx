@@ -1904,7 +1904,7 @@ export default function CityCategory() {
 
             const phase2Promises = remainingCities.map(async (nearbyCity) => {
               try {
-                const cityApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=20&country=${encodeURIComponent(country)}`;
+                const cityApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=500&country=${encodeURIComponent(country)}`;
 
                 const cityResponse = await Promise.race([
                   robustFetch(cityApiUrl, {
