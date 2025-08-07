@@ -22,7 +22,7 @@ window.fetch = async (...args) => {
 const OriginalXHR = window.XMLHttpRequest;
 window.XMLHttpRequest = class extends OriginalXHR {
   open(...args) {
-    const url = args[1]?.toString() || '';
+    const url = (args[1] && args[1].toString) ? args[1].toString() : '';
     if (url.includes('/api/') || (url.includes('://') && !url.includes(hostname))) {
       console.error('🚨 XHR BLOCKED:', url);
       setTimeout(() => {
