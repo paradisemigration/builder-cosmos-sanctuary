@@ -19,42 +19,42 @@ class APIClient {
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      const method = options.method || 'GET';
+      const method = options.method || "GET";
 
       xhr.open(method, url);
 
       // Set headers
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("Content-Type", "application/json");
       if (options.headers) {
         Object.entries(options.headers).forEach(([key, value]) => {
           xhr.setRequestHeader(key, value as string);
         });
       }
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
             try {
               const response = JSON.parse(xhr.responseText);
               resolve(response);
             } catch (error) {
-              reject(new Error('Invalid JSON response'));
+              reject(new Error("Invalid JSON response"));
             }
           } else if (xhr.status === 0) {
             // HTTP 0 means no backend server - this is expected on frontend-only deployments
-            reject(new Error('No backend server available'));
+            reject(new Error("No backend server available"));
           } else {
             reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
           }
         }
       };
 
-      xhr.onerror = function() {
-        reject(new Error('Network error - no backend server'));
+      xhr.onerror = function () {
+        reject(new Error("Network error - no backend server"));
       };
 
-      xhr.ontimeout = function() {
-        reject(new Error('Request timeout'));
+      xhr.ontimeout = function () {
+        reject(new Error("Request timeout"));
       };
 
       xhr.timeout = 10000; // 10 second timeout
@@ -74,7 +74,9 @@ class APIClient {
     formData.append("image", file);
     if (folder) formData.append("folder", folder);
 
-    const url = this.baseURL ? `${this.baseURL}/api/upload/single` : `/api/upload/single`;
+    const url = this.baseURL
+      ? `${this.baseURL}/api/upload/single`
+      : `/api/upload/single`;
     const response = await fetch(url, {
       method: "POST",
       body: formData,
@@ -96,7 +98,9 @@ class APIClient {
     files.forEach((file) => formData.append("images", file));
     if (folder) formData.append("folder", folder);
 
-    const url = this.baseURL ? `${this.baseURL}/api/upload/multiple` : `/api/upload/multiple`;
+    const url = this.baseURL
+      ? `${this.baseURL}/api/upload/multiple`
+      : `/api/upload/multiple`;
     const response = await fetch(url, {
       method: "POST",
       body: formData,
@@ -134,7 +138,9 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const url = this.baseURL ? `${this.baseURL}/api/businesses` : `/api/businesses`;
+    const url = this.baseURL
+      ? `${this.baseURL}/api/businesses`
+      : `/api/businesses`;
     const response = await fetch(url, {
       method: "POST",
       body: formData,
@@ -165,58 +171,66 @@ class APIClient {
     // ALWAYS try the real API first - user has 1500+ businesses in database
     console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
     try {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.set("page", params.page.toString());
-        if (params.limit) queryParams.set("limit", params.limit.toString());
-        if (params.city) queryParams.set("city", params.city);
-        if (params.category) queryParams.set("category", params.category);
-        if (params.search) queryParams.set("search", params.search);
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.set("page", params.page.toString());
+      if (params.limit) queryParams.set("limit", params.limit.toString());
+      if (params.city) queryParams.set("city", params.city);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.search) queryParams.set("search", params.search);
 
-        const apiUrl = `/api/businesses?${queryParams}`;
-        console.log("🚀 Trying real API:", apiUrl);
+      const apiUrl = `/api/businesses?${queryParams}`;
+      console.log("🚀 Trying real API:", apiUrl);
 
-        const response = await this.request<{
-          success: boolean;
-          data: Business[];
-          pagination: any;
-          total: number;
-          businesses: Business[];
-          totalRecords: number;
-          source?: string;
-        }>(apiUrl);
+      const response = await this.request<{
+        success: boolean;
+        data: Business[];
+        pagination: any;
+        total: number;
+        businesses: Business[];
+        totalRecords: number;
+        source?: string;
+      }>(apiUrl);
 
-        const businesses = response.businesses || response.data || [];
-        const total = response.totalRecords || response.total || businesses.length;
+      const businesses = response.businesses || response.data || [];
+      const total =
+        response.totalRecords || response.total || businesses.length;
 
-        console.log("✅ REAL API SUCCESS:", {
-          success: response.success,
-          businessCount: businesses.length,
-          totalInDB: total,
-          hostname: window.location.hostname,
-          firstBusiness: businesses[0]?.name
-        });
+      console.log("✅ REAL API SUCCESS:", {
+        success: response.success,
+        businessCount: businesses.length,
+        totalInDB: total,
+        hostname: window.location.hostname,
+        firstBusiness: businesses[0]?.name,
+      });
 
-        // If we get substantial real data, return it
-        if (response.success && total > 50) {
-          return {
-            success: true,
-            data: businesses,
-            pagination: response.pagination || {
-              page: params.page || 1,
-              totalPages: Math.ceil(total / (params.limit || 20)),
-              totalRecords: total,
-              hasNext: businesses.length === (params.limit || 20),
-              hasPrev: (params.page || 1) > 1,
-            }
-          };
-        }
+      // If we get substantial real data, return it
+      if (response.success && total > 50) {
+        return {
+          success: true,
+          data: businesses,
+          pagination: response.pagination || {
+            page: params.page || 1,
+            totalPages: Math.ceil(total / (params.limit || 20)),
+            totalRecords: total,
+            hasNext: businesses.length === (params.limit || 20),
+            hasPrev: (params.page || 1) > 1,
+          },
+        };
+      }
     } catch (error) {
-      console.error("❌ Backend not deployed - your 1500+ businesses are on local server only:", error);
-      console.log("📋 Using sample data until backend with real database is deployed");
+      console.error(
+        "❌ Backend not deployed - your 1500+ businesses are on local server only:",
+        error,
+      );
+      console.log(
+        "📋 Using sample data until backend with real database is deployed",
+      );
     }
 
     // Temporary fallback while backend with 1500+ businesses is not deployed
-    console.log("⚠️ SHOWING SAMPLE DATA - Deploy backend to access your real 1500+ businesses");
+    console.log(
+      "⚠️ SHOWING SAMPLE DATA - Deploy backend to access your real 1500+ businesses",
+    );
 
     // Apply filtering to sample data
     let filteredBusinesses = [...sampleBusinesses];
@@ -227,21 +241,23 @@ class APIClient {
         (business) =>
           business.name?.toLowerCase().includes(searchTerm) ||
           business.description?.toLowerCase().includes(searchTerm) ||
-          business.services?.some(service =>
-            service.toLowerCase().includes(searchTerm)
-          )
+          business.services?.some((service) =>
+            service.toLowerCase().includes(searchTerm),
+          ),
       );
     }
 
     if (params.category && params.category !== "all") {
       filteredBusinesses = filteredBusinesses.filter((business) =>
-        business.category?.toLowerCase().includes(params.category!.toLowerCase())
+        business.category
+          ?.toLowerCase()
+          .includes(params.category!.toLowerCase()),
       );
     }
 
     if (params.city && params.city !== "all") {
       filteredBusinesses = filteredBusinesses.filter((business) =>
-        business.city?.toLowerCase().includes(params.city!.toLowerCase())
+        business.city?.toLowerCase().includes(params.city!.toLowerCase()),
       );
     }
 
@@ -267,7 +283,7 @@ class APIClient {
         totalRecords: filteredBusinesses.length,
         hasNext: endIndex < filteredBusinesses.length,
         hasPrev: page > 1,
-      }
+      },
     };
   }
 
@@ -280,11 +296,11 @@ class APIClient {
       }>(`/api/businesses/${id}`);
     } catch (error) {
       // Fallback to sample business
-      const sampleBusiness = sampleBusinesses.find(b => b.id === id);
+      const sampleBusiness = sampleBusinesses.find((b) => b.id === id);
       if (sampleBusiness) {
         return {
           success: true,
-          data: sampleBusiness
+          data: sampleBusiness,
         };
       }
       throw error;
@@ -314,7 +330,9 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const url = this.baseURL ? `${this.baseURL}/api/businesses/${id}` : `/api/businesses/${id}`;
+    const url = this.baseURL
+      ? `${this.baseURL}/api/businesses/${id}`
+      : `/api/businesses/${id}`;
     const response = await fetch(url, {
       method: "PUT",
       body: formData,
@@ -368,7 +386,9 @@ class APIClient {
       }>("/api/businesses/featured");
     } catch (error) {
       console.warn("Featured businesses API failed, using sample data");
-      const featuredBusinesses = sampleBusinesses.filter(b => b.isFeatured).slice(0, 6);
+      const featuredBusinesses = sampleBusinesses
+        .filter((b) => b.isFeatured)
+        .slice(0, 6);
       return {
         success: true,
         data: featuredBusinesses,
@@ -390,8 +410,8 @@ class APIClient {
         data: {
           totalBusinesses: sampleBusinesses.length,
           totalReviews: sampleBusinesses.length * 15,
-          citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
-          averageRating: 4.5
+          citiesCount: new Set(sampleBusinesses.map((b) => b.city)).size,
+          averageRating: 4.5,
         },
       };
     }

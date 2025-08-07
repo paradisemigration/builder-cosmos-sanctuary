@@ -6,20 +6,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Search, Filter, MapPin, Building, Users, Loader2, ChevronDown, X } from "lucide-react";
+import {
+  Search,
+  Filter,
+  MapPin,
+  Building,
+  Users,
+  Loader2,
+  ChevronDown,
+  X,
+} from "lucide-react";
 import { type Business, businessCategories } from "@/lib/data";
 import { allIndianCities } from "@/lib/all-categories";
 
 export default function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   // Search and filter states
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "all");
-  const [selectedCity, setSelectedCity] = useState(searchParams.get("city") || "all");
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || "",
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "all",
+  );
+  const [selectedCity, setSelectedCity] = useState(
+    searchParams.get("city") || "all",
+  );
   const [selectedZone, setSelectedZone] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
 
@@ -35,15 +56,8 @@ export default function Browse() {
   };
 
   // Use the proper API hook to get real business data
-  const {
-    businesses,
-    loading,
-    error,
-    pagination,
-    refetch,
-    loadMore,
-    hasMore
-  } = useBusinessData(apiFilters);
+  const { businesses, loading, error, pagination, refetch, loadMore, hasMore } =
+    useBusinessData(apiFilters);
 
   // Update URL params when filters change
   useEffect(() => {
@@ -94,7 +108,7 @@ export default function Browse() {
     totalRecords: pagination?.totalRecords,
     loading,
     error,
-    filters: apiFilters
+    filters: apiFilters,
   });
 
   return (
@@ -113,7 +127,7 @@ export default function Browse() {
                   : "Search trusted immigration and visa consultants"}
               </p>
             </div>
-            
+
             {/* Quick stats */}
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-1">
@@ -123,7 +137,7 @@ export default function Browse() {
               {activeFilters > 0 && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Filter className="h-3 w-3" />
-                  {activeFilters} filter{activeFilters !== 1 ? 's' : ''} active
+                  {activeFilters} filter{activeFilters !== 1 ? "s" : ""} active
                 </Badge>
               )}
             </div>
@@ -146,7 +160,10 @@ export default function Browse() {
             {/* Filter Row */}
             <div className="flex flex-col sm:flex-row gap-3">
               {/* Category Filter */}
-              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <Select
+                value={selectedCategory}
+                onValueChange={handleCategoryChange}
+              >
                 <SelectTrigger className="sm:w-[200px]">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
@@ -270,7 +287,8 @@ export default function Browse() {
                 No businesses found
               </h3>
               <p className="text-gray-600 mb-4">
-                Try adjusting your search criteria or filters to find more results.
+                Try adjusting your search criteria or filters to find more
+                results.
               </p>
               <Button onClick={clearFilters} variant="outline">
                 Clear All Filters
@@ -282,7 +300,8 @@ export default function Browse() {
         {/* Results Summary */}
         {businesses.length > 0 && (
           <div className="mt-8 text-center text-sm text-gray-600">
-            Showing {businesses.length} of {pagination?.totalRecords || businesses.length} businesses
+            Showing {businesses.length} of{" "}
+            {pagination?.totalRecords || businesses.length} businesses
             {pagination?.total && pagination.total > businesses.length && (
               <span> (Load more to see all results)</span>
             )}

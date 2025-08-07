@@ -192,27 +192,25 @@ export default function CityCategory() {
                 const categoryKeywords = categoryName
                   .toLowerCase()
                   .split(/[\s-]+/);
-                const sortedByRelevance = businesses.sort(
-                  (a: any, b: any) => {
-                    const aScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((a.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((a.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                const sortedByRelevance = businesses.sort((a: any, b: any) => {
+                  const aScore = categoryKeywords.reduce((score, keyword) => {
+                    if ((a.category || "").toLowerCase().includes(keyword))
+                      score += 10;
+                    if ((a.name || "").toLowerCase().includes(keyword))
+                      score += 5;
+                    return score;
+                  }, 0);
 
-                    const bScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((b.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((b.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                  const bScore = categoryKeywords.reduce((score, keyword) => {
+                    if ((b.category || "").toLowerCase().includes(keyword))
+                      score += 10;
+                    if ((b.name || "").toLowerCase().includes(keyword))
+                      score += 5;
+                    return score;
+                  }, 0);
 
-                    return bScore - aScore;
-                  },
-                );
+                  return bScore - aScore;
+                });
 
                 // Add businesses that aren't already included
                 sortedByRelevance.forEach((business: any) => {
@@ -384,17 +382,14 @@ export default function CityCategory() {
               business.category
                 ?.toLowerCase()
                 .includes(categoryName.toLowerCase()) ||
-              business.name
-                ?.toLowerCase()
-                .includes(categoryName.toLowerCase()),
+              business.name?.toLowerCase().includes(categoryName.toLowerCase()),
           )
           .slice(0, 20);
 
         // If not enough relevant samples, add more from general sample data
         const additionalSamples = sampleBusinesses
           .filter(
-            (business) =>
-              !filteredSamples.some((fs) => fs.id === business.id),
+            (business) => !filteredSamples.some((fs) => fs.id === business.id),
           )
           .slice(0, 75 - filteredSamples.length);
 

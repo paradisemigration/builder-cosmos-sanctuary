@@ -44,7 +44,7 @@ export function useBusinessData(
           dataCount: response.data?.length,
           totalRecords: response.pagination?.totalRecords,
           hostname: window.location.hostname,
-          filters: filters
+          filters: filters,
         });
 
         if (response.success) {
