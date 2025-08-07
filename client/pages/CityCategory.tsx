@@ -1698,30 +1698,70 @@ export default function CityCategory() {
             try {
               console.log(`🚀 PHASE 0: Trying city variation: "${cityVariation}"`);
 
-              const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=50`;
-              console.log(`📡 API URL: ${allCityUrl}`);
+              // First try to get just one page to check if this city variation works
+              const testUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=50`;
+              console.log(`📡 Test API URL: ${testUrl}`);
 
-              const allCityResponse = await robustFetch(allCityUrl, {
+              const testResponse = await robustFetch(testUrl, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
               });
 
-              console.log(`📊 Response status: ${allCityResponse.status} ${allCityResponse.statusText}`);
+              console.log(`📊 Test response status: ${testResponse.status} ${testResponse.statusText}`);
 
-              if (allCityResponse.ok) {
-                const tempResult = await allCityResponse.json();
-                console.log(`📦 Response for "${cityVariation}":`, tempResult);
+              if (testResponse.ok) {
+                const testResult = await testResponse.json();
+                console.log(`📦 Test response for "${cityVariation}":`, testResult);
 
-                if (tempResult && tempResult.businesses && tempResult.businesses.length > 0) {
-                  console.log(`✅ SUCCESS: Found ${tempResult.businesses.length} businesses for "${cityVariation}"`);
-                  allCityResult = tempResult;
+                if (testResult && testResult.businesses && testResult.businesses.length > 0) {
+                  console.log(`✅ SUCCESS: Found ${testResult.businesses.length} businesses (total: ${testResult.total}) for "${cityVariation}"`);
+
+                  // If we found businesses, fetch ALL of them using pagination
+                  let allBusinesses = [...testResult.businesses];
+                  const totalBusinesses = testResult.total;
+                  const pageSize = 50;
+
+                  // Calculate how many more pages we need
+                  const totalPages = Math.ceil(totalBusinesses / pageSize);
+                  console.log(`📄 Need to fetch ${totalPages} pages to get all ${totalBusinesses} businesses`);
+
+                  // Fetch remaining pages if needed
+                  for (let page = 2; page <= totalPages && page <= 10; page++) {
+                    try {
+                      const pageUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=${pageSize}&page=${page}`;
+                      console.log(`📡 Fetching page ${page}: ${pageUrl}`);
+
+                      const pageResponse = await robustFetch(pageUrl, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                      });
+
+                      if (pageResponse.ok) {
+                        const pageResult = await pageResponse.json();
+                        if (pageResult && pageResult.businesses && pageResult.businesses.length > 0) {
+                          allBusinesses.push(...pageResult.businesses);
+                          console.log(`📄 Added ${pageResult.businesses.length} businesses from page ${page}. Total: ${allBusinesses.length}`);
+                        }
+                      }
+                    } catch (pageError) {
+                      console.error(`❌ Error fetching page ${page}:`, pageError);
+                    }
+                  }
+
+                  // Create combined result
+                  allCityResult = {
+                    success: true,
+                    businesses: allBusinesses,
+                    total: allBusinesses.length
+                  };
                   successfulCityName = cityVariation;
+                  console.log(`✅ FINAL: Collected ${allBusinesses.length} total businesses for "${cityVariation}"`);
                   break; // Found data, stop trying variations
                 } else {
                   console.log(`❌ No businesses found for "${cityVariation}"`);
                 }
               } else {
-                console.log(`❌ HTTP error ${allCityResponse.status} for "${cityVariation}"`);
+                console.log(`❌ HTTP error ${testResponse.status} for "${cityVariation}"`);
               }
             } catch (variationError) {
               console.error(`❌ Error trying "${cityVariation}":`, variationError);
