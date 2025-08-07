@@ -264,9 +264,71 @@ export default function Browse() {
     append = false,
     filters = {},
   ) => {
-    // Check if this is a frontend-only deployment
-    if (isFrontendOnlyDeployment() && page === 1 && !append) {
-      console.log("Frontend-only deployment detected, using sample data");
+    try {
+      // First try to hit the API directly
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: pageSize.toString(),
+        ...filters,
+      });
+
+      const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
+      console.log("🚀 Attempting to fetch from API:", apiUrl);
+
+      const response = await robustFetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("✅ API Response received:", {
+        success: result.success,
+        totalBusinesses: result.businesses?.length || 0,
+        total: result.total
+      });
+
+      if (result.success && result.businesses && result.businesses.length > 0) {
+        // Map the businesses to ensure proper ID field and data structure
+        const mappedBusinesses = result.businesses.map((business: any) => {
+          const finalReviewCount =
+            business.reviews?.length || business.reviewCount || 0;
+          console.log(
+            `DEBUG: ${business.name} - reviewCount: ${business.reviewCount}, reviews.length: ${business.reviews?.length}, final: ${finalReviewCount}`,
+          );
+          return {
+            ...business,
+            id:
+              business.googlePlaceId ||
+              business.id ||
+              Date.now() + Math.random(),
+            city: business.scrapedCity || business.city || "Unknown",
+            reviewCount: finalReviewCount,
+            rating: business.rating || 0,
+            services: business.services || [],
+            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
+          };
+        });
+
+        if (append) {
+          setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
+        } else {
+          setScrapedBusinesses(mappedBusinesses);
+        }
+
+        setTotalCount(result.total || mappedBusinesses.length);
+        setHasMore(mappedBusinesses.length === pageSize);
+        setCurrentPage(page);
+        setError(null);
+        return;
+      }
+    } catch (apiError) {
+      console.warn("⚠️ API fetch failed, falling back to sample data:", apiError);
+    }
+
+    // Fallback to sample data only if API fails
+    if (page === 1 && !append) {
+      console.log("📋 Using sample data as fallback");
       const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
         ...business,
         id: business.id || `sample-${index}`,
