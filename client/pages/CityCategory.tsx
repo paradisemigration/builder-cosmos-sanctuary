@@ -1753,6 +1753,19 @@ export default function CityCategory() {
           console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
         }
 
+        // If we got businesses from main city, skip the original failed result check
+        if (accumulatedBusinesses.length > 0) {
+          console.log(`✅ Using ${accumulatedBusinesses.length} businesses from main city (Phase 0)`);
+
+          // Create a successful result from main city businesses
+          result = {
+            success: true,
+            businesses: accumulatedBusinesses,
+            total: accumulatedBusinesses.length,
+            source: "main_city_all",
+          };
+        }
+
         // Continue with nearby cities only if we have less than 100 businesses OR no businesses at all
         if (accumulatedBusinesses.length < 100) {
           console.log(
