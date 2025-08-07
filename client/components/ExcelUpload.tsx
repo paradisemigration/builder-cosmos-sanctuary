@@ -44,7 +44,7 @@ export function ExcelUpload({
     const sampleRow = sampleExcelData[0];
     const sampleValues = excelTemplate.headers
       .map((h) => {
-        const value = sampleRow[h.key as keyof ExcelBusinessRow];
+        const value = sampleRow[h.key];
         return value !== undefined ? String(value) : "";
       })
       .join("\t");
@@ -150,7 +150,7 @@ export function ExcelUpload({
 
         const validation = validateExcelRow(rowData, i - 1);
         if (validation.valid) {
-          validRows.push(rowData as ExcelBusinessRow);
+          validRows.push(rowData);
         } else {
           errorRows.push({ row: i, errors: validation.errors });
         }
