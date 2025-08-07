@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import "./global.css";
 
-// Direct import from react-router-dom
-import * as ReactRouter from "react-router-dom";
-const { BrowserRouter, Routes, Route, useLocation, Navigate } = ReactRouter;
+// Traditional React Router imports
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
