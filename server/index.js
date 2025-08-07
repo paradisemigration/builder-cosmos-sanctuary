@@ -33,9 +33,20 @@ if (missingEnvVars.length > 0) {
   // Continue without throwing error to allow development
 }
 
-// Start the API server
-import("./api.js").then(() => {
-  console.log("✅ API server started");
-  console.log(`🌐 API Base URL: http://localhost:${process.env.PORT || 3001}`);
-  console.log("📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions");
-});
+// Export createServer function for Vercel deployment
+export const createServer = async () => {
+  const api = await import("./api.js");
+  return api.default || api.app;
+};
+
+// Start the API server for local development
+if (process.env.NODE_ENV !== "production") {
+  createServer().then((app) => {
+    const port = process.env.PORT || 3001;
+    app.listen(port, () => {
+      console.log("✅ API server started");
+      console.log(`🌐 API Base URL: http://localhost:${port}`);
+      console.log("📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions");
+    });
+  });
+}
