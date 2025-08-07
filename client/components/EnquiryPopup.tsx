@@ -388,9 +388,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 }
 
 // Floating Call-to-Action Button Component
-interface FloatingCTAProps {
-  onClick: () => void;
-}
+
 
 export function FloatingCTA({ onClick }: FloatingCTAProps) {
   return (
