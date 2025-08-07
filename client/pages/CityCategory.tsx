@@ -1682,121 +1682,107 @@ export default function CityCategory() {
         console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
 
         try {
-          // First, let's see what cities are actually in the database
-          console.log(`🔍 DEBUGGING: Checking what cities exist in database...`);
-          try {
-            const debugResponse = await robustFetch('/api/scraped-businesses?limit=20', {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-            });
-            if (debugResponse.ok) {
-              const debugResult = await debugResponse.json();
-              if (debugResult.businesses && debugResult.businesses.length > 0) {
-                const uniqueCities = [...new Set(debugResult.businesses.map(b => b.city || b.scrapedCity).filter(Boolean))];
-                console.log(`🔍 Cities found in database:`, uniqueCities);
-                console.log(`🔍 Looking for: "${cityName}" (from URL: "${city}")`);
+          // Since city name matching is failing, let's get ALL businesses and filter on frontend
+          console.log(`🚀 PHASE 0: Getting ALL businesses from database to filter for ${cityName}`);
 
-                // Check if any of these cities match our target
-                const possibleMatches = uniqueCities.filter(dbCity =>
-                  dbCity.toLowerCase().includes(cityName.toLowerCase()) ||
-                  cityName.toLowerCase().includes(dbCity.toLowerCase()) ||
-                  dbCity.toLowerCase().includes(city.toLowerCase()) ||
-                  city.toLowerCase().includes(dbCity.toLowerCase())
+          const allBusinessesUrl = `/api/scraped-businesses?limit=200`;
+          console.log(`📡 API URL: ${allBusinessesUrl}`);
+
+          const allBusinessesResponse = await robustFetch(allBusinessesUrl, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          console.log(`📊 Response status: ${allBusinessesResponse.status} ${allBusinessesResponse.statusText}`);
+
+          if (allBusinessesResponse.ok) {
+            const allBusinessesResult = await allBusinessesResponse.json();
+            console.log(`📦 Raw API response:`, allBusinessesResult);
+
+            if (allBusinessesResult && allBusinessesResult.businesses && allBusinessesResult.businesses.length > 0) {
+              console.log(`📋 Total businesses fetched: ${allBusinessesResult.businesses.length}`);
+
+              // Log all unique cities to see what's in the database
+              const uniqueCities = [...new Set(allBusinessesResult.businesses.map(b => {
+                const city = b.city || b.scrapedCity || '';
+                return city.trim();
+              }).filter(Boolean))];
+              console.log(`🔍 All cities in database:`, uniqueCities);
+
+              // Filter businesses for our target city using multiple matching strategies
+              const targetCityVariations = [
+                cityName.toLowerCase(),           // "vadodara"
+                city.toLowerCase(),              // "vadodara"
+                "baroda",                        // Alternative name
+                "vadodara",
+                "vadodra"                        // Common misspelling
+              ];
+
+              const matchingBusinesses = allBusinessesResult.businesses.filter(business => {
+                const businessCity = (business.city || business.scrapedCity || '').toLowerCase().trim();
+
+                return targetCityVariations.some(targetCity =>
+                  businessCity.includes(targetCity) || targetCity.includes(businessCity)
                 );
-                console.log(`🔍 Possible city matches:`, possibleMatches);
-              }
-            }
-          } catch (debugError) {
-            console.log(`🔍 Debug query failed:`, debugError);
-          }
-
-          // Try multiple city name variations since database might store them differently
-          const cityVariations = [
-            cityName,                    // "Vadodara"
-            cityName.toLowerCase(),      // "vadodara"
-            cityName.toUpperCase(),      // "VADODARA"
-            city,                        // URL param as-is ("vadodara")
-            city.charAt(0).toUpperCase() + city.slice(1), // "Vadodara"
-            "Baroda",                    // Alternative name for Vadodara
-            "baroda",                    // Alternative name lowercase
-            "BARODA"                     // Alternative name uppercase
-          ];
-
-          let allCityResult = null;
-          let successfulCityName = "";
-
-          for (const cityVariation of cityVariations) {
-            try {
-              console.log(`🚀 PHASE 0: Trying city variation: "${cityVariation}"`);
-
-              // First try to get just one page to check if this city variation works
-              const testUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=50`;
-              console.log(`📡 Test API URL: ${testUrl}`);
-
-              const testResponse = await robustFetch(testUrl, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
               });
 
-              console.log(`📊 Test response status: ${testResponse.status} ${testResponse.statusText}`);
+              console.log(`✅ Found ${matchingBusinesses.length} businesses matching city variations for ${cityName}`);
+              console.log(`📋 Matching business cities:`, [...new Set(matchingBusinesses.map(b => b.city || b.scrapedCity))]);
 
-              if (testResponse.ok) {
-                const testResult = await testResponse.json();
-                console.log(`📦 Test response for "${cityVariation}":`, testResult);
+              if (matchingBusinesses.length > 0) {
+                // Sort businesses by category relevance
+                const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+                console.log(`🎯 Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
 
-                if (testResult && testResult.businesses && testResult.businesses.length > 0) {
-                  console.log(`✅ SUCCESS: Found ${testResult.businesses.length} businesses (total: ${testResult.total}) for "${cityVariation}"`);
+                const sortedBusinesses = matchingBusinesses.sort((a, b) => {
+                  const aCategory = (a.category || '').toLowerCase();
+                  const aName = (a.name || '').toLowerCase();
+                  const aDesc = (a.description || '').toLowerCase();
 
-                  // If we found businesses, fetch ALL of them using pagination
-                  let allBusinesses = [...testResult.businesses];
-                  const totalBusinesses = testResult.total;
-                  const pageSize = 50;
+                  const bCategory = (b.category || '').toLowerCase();
+                  const bName = (b.name || '').toLowerCase();
+                  const bDesc = (b.description || '').toLowerCase();
 
-                  // Calculate how many more pages we need
-                  const totalPages = Math.ceil(totalBusinesses / pageSize);
-                  console.log(`📄 Need to fetch ${totalPages} pages to get all ${totalBusinesses} businesses`);
+                  // Calculate relevance score
+                  const aScore = categoryKeywords.reduce((score, keyword) => {
+                    if (aCategory.includes(keyword)) score += 10;
+                    if (aName.includes(keyword)) score += 5;
+                    if (aDesc.includes(keyword)) score += 2;
+                    return score;
+                  }, 0);
 
-                  // Fetch remaining pages if needed
-                  for (let page = 2; page <= totalPages && page <= 10; page++) {
-                    try {
-                      const pageUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=${pageSize}&page=${page}`;
-                      console.log(`📡 Fetching page ${page}: ${pageUrl}`);
+                  const bScore = categoryKeywords.reduce((score, keyword) => {
+                    if (bCategory.includes(keyword)) score += 10;
+                    if (bName.includes(keyword)) score += 5;
+                    if (bDesc.includes(keyword)) score += 2;
+                    return score;
+                  }, 0);
 
-                      const pageResponse = await robustFetch(pageUrl, {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                      });
+                  return bScore - aScore; // Higher score first
+                });
 
-                      if (pageResponse.ok) {
-                        const pageResult = await pageResponse.json();
-                        if (pageResult && pageResult.businesses && pageResult.businesses.length > 0) {
-                          allBusinesses.push(...pageResult.businesses);
-                          console.log(`📄 Added ${pageResult.businesses.length} businesses from page ${page}. Total: ${allBusinesses.length}`);
-                        }
-                      }
-                    } catch (pageError) {
-                      console.error(`❌ Error fetching page ${page}:`, pageError);
-                    }
-                  }
+                console.log(`✅ Ordered ${sortedBusinesses.length} businesses by relevance to "${categoryName}"`);
 
-                  // Create combined result
-                  allCityResult = {
-                    success: true,
-                    businesses: allBusinesses,
-                    total: allBusinesses.length
-                  };
-                  successfulCityName = cityVariation;
-                  console.log(`✅ FINAL: Collected ${allBusinesses.length} total businesses for "${cityVariation}"`);
-                  break; // Found data, stop trying variations
-                } else {
-                  console.log(`❌ No businesses found for "${cityVariation}"`);
-                }
+                accumulatedBusinesses = sortedBusinesses.map(business => ({
+                  ...business,
+                  isNearbyData: false, // These are from main city
+                  originalRequestedCity: cityName,
+                }));
+
+                console.log(`✅ Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
+
+                // Immediately set the city businesses state so the counter shows correctly
+                setCityBusinesses(accumulatedBusinesses);
+                setCityDataLoaded(true);
+                console.log(`✅ Set city businesses count to ${accumulatedBusinesses.length}`);
               } else {
-                console.log(`❌ HTTP error ${testResponse.status} for "${cityVariation}"`);
+                console.log(`❌ No businesses found matching any city variation for ${cityName}`);
               }
-            } catch (variationError) {
-              console.error(`❌ Error trying "${cityVariation}":`, variationError);
+            } else {
+              console.log(`❌ API returned empty or invalid data`);
             }
+          } else {
+            console.log(`❌ HTTP error ${allBusinessesResponse.status} ${allBusinessesResponse.statusText}`);
           }
 
           // Process the successful result
