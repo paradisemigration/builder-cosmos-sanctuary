@@ -214,66 +214,10 @@ export function useGeolocation(): GeolocationResult {
     }
   };
 
+  // DISABLED: All geolocation detection to prevent external API calls
   useEffect(() => {
-    const detectLocation = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      // Check if geolocation is supported
-      if (!navigator.geolocation) {
-        setError("Geolocation is not supported by this browser");
-        setHasPermission(false);
-
-        // Try IP-based location as fallback
-        try {
-          const ipLocation = await getLocationFromIP();
-          setLocation(ipLocation);
-        } catch (err) {
-          setError("Unable to detect location");
-        }
-
-        setIsLoading(false);
-        return;
-      }
-
-      // Try to get precise location using GPS
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          setHasPermission(true);
-          try {
-            const locationData = await getLocationFromCoords(
-              position.coords.latitude,
-              position.coords.longitude,
-            );
-            setLocation(locationData);
-          } catch (err) {
-            setError("Failed to get location details");
-          }
-          setIsLoading(false);
-        },
-        async (error) => {
-          setHasPermission(false);
-          console.log("Geolocation error:", error.message);
-
-          // If GPS fails, try IP-based location
-          try {
-            const ipLocation = await getLocationFromIP();
-            setLocation(ipLocation);
-          } catch (err) {
-            setError("Unable to detect location");
-          }
-
-          setIsLoading(false);
-        },
-        {
-          enableHighAccuracy: false, // Use network location for faster response
-          timeout: 10000, // 10 second timeout
-          maximumAge: 300000, // Cache for 5 minutes
-        },
-      );
-    };
-
-    detectLocation();
+    console.log("🔇 GEOLOCATION: Using mock location data - no external calls");
+    // Location is already set in useState with mock data
   }, []);
 
   return {
