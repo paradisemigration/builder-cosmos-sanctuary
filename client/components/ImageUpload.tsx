@@ -4,13 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 
-interface ImageUploadProps {
-  onUpload: (urls: string[]) => void;
-  multiple?: boolean;
-  maxFiles?: number;
-  existingImages?: string[];
-  folder?: string;
-}
+
 
 export function ImageUpload({
   onUpload,
