@@ -149,8 +149,13 @@ const App = () => {
                 path="/category/:category"
                 element={<CategoryLocationPage />}
               />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            ) : (
+              <div style={{ padding: "20px", textAlign: "center" }}>
+                <h1>Loading...</h1>
+              </div>
+            )}
             <SiteFooter />
             <GlobalDebugPopup />
           </BrowserRouter>
