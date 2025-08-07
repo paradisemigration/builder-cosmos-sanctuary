@@ -149,7 +149,7 @@ export default function AddBusiness() {
     }
   };
 
-  const handleBusinessSelection = (business: any) => {
+  const handleBusinessSelection = (business) => {
     setBusinessSearchQuery(business.name);
     setExistingBusiness(business);
     setShowBusinessSuggestions(false);
@@ -185,14 +185,14 @@ export default function AddBusiness() {
     }
   };
 
-  const removeService = (service: string) => {
+  const removeService = (service) => {
     setFormData((prev) => ({
       ...prev,
       services: prev.services.filter((s) => s !== service),
     }));
   };
 
-  const handleFileUpload = (file: File, type: "logo" | "cover" | "gallery") => {
+  const handleFileUpload = (file, type) => {
     if (type === "logo") {
       setLogo(file);
     } else if (type === "cover") {
@@ -202,7 +202,7 @@ export default function AddBusiness() {
     }
   };
 
-  const removeGalleryImage = (index: number) => {
+  const removeGalleryImage = (index) => {
     setGalleryImages((prev) => prev.filter((_, i) => i !== index));
   };
 
