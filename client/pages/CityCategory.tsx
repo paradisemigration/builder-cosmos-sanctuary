@@ -163,7 +163,7 @@ export default function CityCategory() {
 
           const combinedSamples = [...filteredSamples, ...additionalSamples];
 
-          setBusinesses(
+          setCategoryBusinesses(
             combinedSamples.map((business, index) => ({
               ...business,
               id: business.id || `sample-${index}`,
