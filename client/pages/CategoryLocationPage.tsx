@@ -21,7 +21,7 @@ import {
   businessCategories,
   indianCities,
   sampleBusinesses,
-  type Business,
+  Business,
 } from "@/lib/data";
 import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
