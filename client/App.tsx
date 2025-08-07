@@ -168,9 +168,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => {
-  // Initialize SEO crawling setup
+  // Initialize SEO crawling setup - DISABLED for debugging 404s
   useEffect(() => {
-    setupSEOCrawling();
+    console.log("🔍 SEO crawling setup disabled for 404 debugging");
+    // setupSEOCrawling();
   }, []);
 
   // Global fetch interceptor to prevent 404 errors - immediate setup
