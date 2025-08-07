@@ -22,8 +22,8 @@ type FormFieldContextValue<
   name: TName;
 };
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+const FormFieldContext = React.createContext(
+  {},
 );
 
 const FormField = <
@@ -66,8 +66,8 @@ type FormItemContextValue = {
   id: string;
 };
 
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+const FormItemContext = React.createContext(
+  {},
 );
 
 const FormItem = React.forwardRef<
