@@ -90,11 +90,12 @@ function SimpleAuthProvider({ children }: { children: React.ReactNode }) {
 const App = () => {
   return (
     <HelmetProvider>
-      <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Navigation />
+      <SimpleAuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Navigation />
           <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/browse" element={<Browse />} />
