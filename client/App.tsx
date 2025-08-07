@@ -1,27 +1,13 @@
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { useEffect } from "react";
 import "./global.css";
 
-// Use React.lazy to avoid compilation issues
-const RouterComponents = lazy(() =>
-  import("react-router-dom").then(module => ({
-    default: {
-      BrowserRouter: module.BrowserRouter,
-      Routes: module.Routes,
-      Route: module.Route,
-      useLocation: module.useLocation,
-      Navigate: module.Navigate,
-    }
-  }))
-);
-
-// Also import directly as fallback
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+// Use require to avoid compilation issues with Routes
+const ReactRouterDOM = require("react-router-dom");
+const BrowserRouter = ReactRouterDOM.BrowserRouter;
+const Routes = ReactRouterDOM.Routes;
+const Route = ReactRouterDOM.Route;
+const Navigate = ReactRouterDOM.Navigate;
+const useLocation = ReactRouterDOM.useLocation;
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
