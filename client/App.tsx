@@ -74,7 +74,8 @@ const App = () => {
           <BrowserRouter>
             <ScrollToTop />
             <Navigation />
-            <Routes>
+            {Routes ? (
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/browse" element={<Browse />} />
               <Route
