@@ -731,8 +731,7 @@ export default function Index() {
                       }}
                       onLoad={(e) => {
                         // Reset fallback flag on successful load
-                        delete e.target.dataset
-                          .fallbackAttempted;
+                        delete e.target.dataset.fallbackAttempted;
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
