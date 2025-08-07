@@ -1817,37 +1817,27 @@ export default function CityCategory() {
           // SYSTEMATIC SEARCH: Process cities in batches until we reach 75 minimum
           let currentBatch = 0;
           const batchSize = 3;
-          const apiPromises = topCities.map(async (nearbyCity) => {
-            try {
-              // Quick search with exact category name first
-              const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=500&country=${encodeURIComponent(country)}`;
+          while (accumulatedBusinesses.length < MINIMUM_RESULTS && currentBatch * batchSize < nearbyCities.length) {
+            const batchCities = nearbyCities.slice(currentBatch * batchSize, (currentBatch + 1) * batchSize);
+            console.log(`🎯 Batch ${currentBatch + 1}: Searching ${batchCities.join(', ')} (Current: ${accumulatedBusinesses.length}/${MINIMUM_RESULTS})`);
 
-              console.log(`🔍 Parallel search: ${nearbyCity} for ${categoryName}`);
+            const batchPromises = batchCities.map(async (nearbyCity) => {
+              try {
+                // STEP 1: Try exact category match first
+                console.log(`🎯 PRIORITY: ${nearbyCity} + ${categoryName}`);
+                const categoryUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=500`;
 
-              const nearbyResponse = await Promise.race([
-                robustFetch(nearbyApiUrl, {
-                  method: "GET",
-                  headers: { "Content-Type": "application/json" },
-                }),
-                new Promise((_, reject) =>
-                  setTimeout(() => reject(new Error('Timeout')), 3000) // 3 second timeout per city
-                )
-              ]);
+                const categoryResponse = await Promise.race([
+                  robustFetch(categoryUrl),
+                  new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000))
+                ]);
 
-              const nearbyResult = await nearbyResponse.json();
-
-              if (
-                nearbyResult &&
-                nearbyResult.success &&
-                nearbyResult.businesses &&
-                nearbyResult.businesses.length > 0
-              ) {
-                console.log(
-                  `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
-                );
-
-                return {
-                  city: nearbyCity,
+                if (categoryResponse.ok) {
+                  const categoryResult = await categoryResponse.json();
+                  if (categoryResult.success && categoryResult.businesses && categoryResult.businesses.length > 0) {
+                    console.log(`✅ EXACT MATCH: ${categoryResult.businesses.length} businesses in ${nearbyCity}`);
+                    return {
+                      city: nearbyCity,
                   businesses: nearbyResult.businesses.map((business) => ({
                     ...business,
                     isNearbyData: true,
