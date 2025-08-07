@@ -74,8 +74,8 @@ const App = () => {
           <BrowserRouter>
             <ScrollToTop />
             <Navigation />
-            {Routes ?
-              React.createElement(Routes, null,
+            {typeof Routes !== 'undefined' ? (
+              <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/browse" element={<Browse />} />
                 <Route
