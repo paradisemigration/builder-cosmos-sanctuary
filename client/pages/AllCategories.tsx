@@ -35,7 +35,7 @@ import {
 export default function AllCategories() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState("grid");
   const [activeTab, setActiveTab] = useState("all");
 
   // Filter categories based on search and filters
@@ -80,7 +80,7 @@ export default function AllCategories() {
     } else if (slug.includes("work") || slug.includes("business")) {
       return "💼";
     } else if (slug.includes("family") || slug.includes("visit")) {
-      return "👨‍👩‍👧‍👦";
+      return "👨‍����‍👧‍👦";
     } else if (
       slug.includes("golden") ||
       slug.includes("pr") ||

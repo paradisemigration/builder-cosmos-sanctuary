@@ -61,8 +61,8 @@ export default function CategoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [viewMode, setViewMode] = useState("grid");
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Get category info

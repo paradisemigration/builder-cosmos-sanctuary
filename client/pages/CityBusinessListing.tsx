@@ -531,14 +531,14 @@ export default function CityBusinessListing() {
     ].includes(city.toLowerCase());
   const country = isUAERoute || isUAECity ? "uae" : "india";
 
-  const [businesses, setBusinesses] = useState<Business[]>([]);
-  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
+  const [businesses, setBusinesses] = useState([]);
+  const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalBusinesses, setTotalBusinesses] = useState(0);
   const [totalPages, setTotalPages] = useState(0);

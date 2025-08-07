@@ -152,8 +152,8 @@ const successStories = [
 
 export default function ListingPlans() {
   const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [billingCycle, setBillingCycle] = useState(
     "monthly",
   );
 
