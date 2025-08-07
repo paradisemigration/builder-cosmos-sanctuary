@@ -68,12 +68,24 @@ export function isLocalDevelopment(): boolean {
  */
 export function isFrontendOnlyDeployment(): boolean {
   const hostname = window.location.hostname;
-  return (
+
+  // Known frontend-only platforms
+  if (
     hostname.includes("fly.dev") ||
     hostname.includes("vercel.app") ||
     hostname.includes("netlify.app") ||
     hostname.includes("github.io")
-  );
+  ) {
+    return true;
+  }
+
+  // Custom domains - assume frontend-only if not localhost and no API URL configured
+  if (!isLocalDevelopment() && !getApiBaseUrl()) {
+    console.log(`Detected custom domain (${hostname}) with no backend API configured - treating as frontend-only`);
+    return true;
+  }
+
+  return false;
 }
 
 /**
