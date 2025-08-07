@@ -245,10 +245,19 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => {
-  // Initialize SEO crawling setup - DISABLED for debugging 404s
+  // DISABLED: All SEO and external validations to prevent 404s
   useEffect(() => {
-    console.log("🔍 SEO crawling setup disabled for 404 debugging");
-    // setupSEOCrawling();
+    console.log("🔇 ALL EXTERNAL REQUESTS DISABLED - NO SEO SETUP");
+
+    // Remove any existing meta tags that might trigger external requests
+    const metaTags = document.querySelectorAll('meta[content*="verification"], meta[name*="google"], meta[name*="bing"], meta[name*="msvalidate"]');
+    metaTags.forEach(tag => tag.remove());
+
+    // Remove any canonical links that might trigger requests
+    const canonicalLinks = document.querySelectorAll('link[rel="canonical"]');
+    canonicalLinks.forEach(link => link.remove());
+
+    console.log("🔇 REMOVED ALL EXTERNAL META TAGS AND LINKS");
   }, []);
 
   // Global fetch interceptor to prevent 404 errors - immediate setup
