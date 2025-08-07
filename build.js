@@ -17,11 +17,25 @@ if (!fs.existsSync(distDir)) {
   console.log("✅ Created dist directory");
 }
 
-// Copy index.html to dist (index.html is in project root, one level up from code directory)
-const sourceFile = path.join(__dirname, "..", "index.html");
-const destFile = path.join(distDir, "index.html");
+// Find index.html - try multiple possible locations
+const possibleSources = [
+  path.join(__dirname, "..", "index.html"),  // One level up from code directory
+  path.join(process.cwd(), "index.html"),    // In current working directory
+  path.join(__dirname, "index.html"),        // In same directory as build script
+  "/vercel/index.html"                       // Direct path in Vercel
+];
 
-console.log("Looking for index.html at:", sourceFile);
+let sourceFile = null;
+for (const possibleSource of possibleSources) {
+  console.log("Checking for index.html at:", possibleSource);
+  if (fs.existsSync(possibleSource)) {
+    sourceFile = possibleSource;
+    console.log("✅ Found index.html at:", sourceFile);
+    break;
+  }
+}
+
+const destFile = path.join(distDir, "index.html");
 console.log("Will copy to:", destFile);
 
 if (fs.existsSync(sourceFile)) {
