@@ -50,8 +50,8 @@ export default function Browse() {
     category: selectedCategory !== "all" ? selectedCategory : undefined,
     city: selectedCity !== "all" ? selectedCity : undefined,
     location: selectedZone !== "all" ? selectedZone : undefined,
-    sortBy: sortBy as "rating" | "name" | "date" | "reviews",
-    sortOrder: "desc" as const,
+    sortBy: sortBy,
+    sortOrder: "desc",
     limit: 25,
   };
 
