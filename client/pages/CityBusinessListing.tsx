@@ -4,7 +4,7 @@ import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
 import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
 // Detect third-party interference (FullStory, etc.)
-const hasThirdPartyInterference = (): boolean => {
+const hasThirdPartyInterference = () => {
   try {
     return (
       !!(window as any).FS ||
