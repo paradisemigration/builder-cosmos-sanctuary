@@ -344,7 +344,14 @@ export default function Browse() {
         setHasMore(mappedBusinesses.length === pageSize);
         setCurrentPage(page);
         setError(null);
+        setLoading(false);
+        setLoadingMore(false);
         return;
+        } else {
+          console.warn("⚠️ API returned success but no businesses:", result);
+        }
+      } else {
+        console.warn("⚠️ API returned failure:", result);
       }
     } catch (apiError) {
       console.warn("⚠️ API fetch failed, falling back to sample data:", apiError);
