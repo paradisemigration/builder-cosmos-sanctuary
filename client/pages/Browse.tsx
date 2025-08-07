@@ -319,6 +319,7 @@ export default function Browse() {
 
       const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
       console.log("🚀 Fetching businesses from API:", apiUrl);
+      console.log("📋 Request params:", Object.fromEntries(params));
 
       const response = await robustFetch(apiUrl);
 
