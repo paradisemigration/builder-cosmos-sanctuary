@@ -1,255 +1,42 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useBusinessData } from "@/hooks/useBusinessData";
-import { getApiUrl, isFrontendOnlyDeployment } from "@/utils/api-config";
-
-// Detect third-party interference (FullStory, etc.)
-const hasThirdPartyInterference = (): boolean => {
-  try {
-    // Check for FullStory
-    return (
-      !!(window as any).FS ||
-      !!(window as any)._fs_loaded ||
-      document.querySelector('script[src*="fullstory"]')
-    );
-  } catch {
-    return false;
-  }
-};
-
-// Pure XHR implementation that bypasses all fetch interference
-function safeXhrFetch(
-  url: string,
-  options: RequestInit = {},
-): Promise<Response> {
-  return new Promise((resolve) => {
-    try {
-      const xhr = new XMLHttpRequest();
-      const method = options.method || "GET";
-
-      xhr.open(method, url, true);
-
-      // Set headers
-      if (options.headers) {
-        const headers = options.headers as Record<string, string>;
-        Object.keys(headers).forEach((key) => {
-          try {
-            xhr.setRequestHeader(key, headers[key]);
-          } catch (headerError) {
-            console.log("Header error:", headerError);
-          }
-        });
-      }
-
-      // Handle timeout
-      xhr.timeout = 8000; // 8 second timeout
-
-      xhr.onload = () => {
-        try {
-          const response = new Response(xhr.responseText, {
-            status: xhr.status,
-            statusText: xhr.statusText,
-            headers: new Headers(),
-          });
-          resolve(response);
-        } catch (responseError) {
-          console.log("Response creation error:", responseError);
-          // Return empty response if Response creation fails
-          resolve(
-            new Response(
-              JSON.stringify({ success: false, businesses: [], total: 0 }),
-              {
-                status: 200,
-                statusText: "OK",
-                headers: new Headers({ "Content-Type": "application/json" }),
-              },
-            ),
-          );
-        }
-      };
-
-      xhr.onerror = () => {
-        console.log("XHR network error for:", url);
-        resolve(
-          new Response(
-            JSON.stringify({ success: false, businesses: [], total: 0 }),
-            {
-              status: 200,
-              statusText: "OK",
-              headers: new Headers({ "Content-Type": "application/json" }),
-            },
-          ),
-        );
-      };
-
-      xhr.ontimeout = () => {
-        console.log("XHR timeout for:", url);
-        resolve(
-          new Response(
-            JSON.stringify({ success: false, businesses: [], total: 0 }),
-            {
-              status: 200,
-              statusText: "OK",
-              headers: new Headers({ "Content-Type": "application/json" }),
-            },
-          ),
-        );
-      };
-
-      xhr.send((options.body as string) || null);
-    } catch (xhrError) {
-      console.log("XHR setup error:", xhrError);
-      // Return empty response if XHR setup fails
-      resolve(
-        new Response(
-          JSON.stringify({ success: false, businesses: [], total: 0 }),
-          {
-            status: 200,
-            statusText: "OK",
-            headers: new Headers({ "Content-Type": "application/json" }),
-          },
-        ),
-      );
-    }
-  });
-}
-
-// Robust fetch wrapper that handles third-party interference
-async function robustFetch(
-  url: string,
-  options: RequestInit = {},
-  retries = 2,
-): Promise<Response> {
-  const useXhrOnly = hasThirdPartyInterference();
-
-  if (useXhrOnly) {
-    console.log(
-      "Third-party interference detected, using XHR-only mode for Browse page",
-    );
-    return safeXhrFetch(url, options);
-  }
-
-  // Standard retry logic for environments without interference
-  for (let i = 0; i < retries; i++) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-      const response = await fetch(url, {
-        ...options,
-        signal: options.signal || controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok || response.status === 404) {
-        return response;
-      }
-
-      if (i === retries - 1) {
-        console.log(
-          `Fetch failed after ${retries} retries, using XHR fallback`,
-        );
-        return safeXhrFetch(url, options);
-      }
-    } catch (error) {
-      console.error(`Fetch attempt ${i + 1} failed:`, error);
-
-      if (i === retries - 1) {
-        console.log("All fetch attempts failed, using XHR fallback");
-        return safeXhrFetch(url, options);
-      }
-
-      // Wait before retry (exponential backoff)
-      await new Promise((resolve) => setTimeout(resolve, Math.pow(2, i) * 500));
-    }
-  }
-
-  // Final fallback (should not reach here, but just in case)
-  return safeXhrFetch(url, options);
-}
-import {
-  Search,
-  MapPin,
-  Filter,
-  TrendingUp,
-  Users,
-  Star,
-  ChevronDown,
-  SlidersHorizontal,
-} from "lucide-react";
-import { CategoryFilter } from "@/components/CategoryFilter";
 import { BusinessCard } from "@/components/BusinessCard";
-import { Navigation } from "@/components/Navigation";
-import {
-  LoadingState,
-  ErrorState,
-  EmptyState,
-} from "@/components/LoadingError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  businessCategories,
-  indianCities,
-  sampleBusinesses,
-  type Business,
-} from "@/lib/data";
-import { BusinessFilters } from "@/lib/api";
-
-interface FilterState {
-  categories: string[];
-  zones: string[];
-  rating: string;
-  verified: boolean;
-  hasReviews: boolean;
-  sortBy: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Search, Filter, MapPin, Building, Users, Loader2, ChevronDown, X } from "lucide-react";
+import { type Business, businessCategories } from "@/lib/data";
+import { allIndianCities } from "@/lib/all-categories";
 
 export default function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || "all",
-  );
-  const [selectedZone, setSelectedZone] = useState(
-    searchParams.get("zone") || "all",
-  );
-  const [showFilters, setShowFilters] = useState(false);
+  
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "all");
+  const [selectedCity, setSelectedCity] = useState(searchParams.get("city") || "all");
+  const [selectedZone, setSelectedZone] = useState("all");
+  const [sortBy, setSortBy] = useState("rating");
 
-  const [filters, setFilters] = useState<FilterState>({
-    categories: searchParams.get("category")
-      ? [searchParams.get("category")!]
-      : [],
-    zones: searchParams.get("zone") ? [searchParams.get("zone")!] : [],
-    rating: "",
-    verified: false,
-    hasReviews: false,
-    sortBy: "rating",
-  });
-
-  // API filters for hook
-  const apiFilters: BusinessFilters = {
+  // API filters for the useBusinessData hook
+  const apiFilters = {
     search: searchQuery || undefined,
     category: selectedCategory !== "all" ? selectedCategory : undefined,
+    city: selectedCity !== "all" ? selectedCity : undefined,
     location: selectedZone !== "all" ? selectedZone : undefined,
-    verified: filters.verified || undefined,
-    sortBy: filters.sortBy as "rating" | "name" | "date" | "reviews",
-    sortOrder: "desc",
+    sortBy: sortBy as "rating" | "name" | "date" | "reviews",
+    sortOrder: "desc" as const,
+    limit: 25,
   };
 
-  // Use the proper API hook instead of manual state management
+  // Use the proper API hook to get real business data
   const {
-    businesses: scrapedBusinesses,
+    businesses,
     loading,
     error,
     pagination,
@@ -258,704 +45,250 @@ export default function Browse() {
     hasMore
   } = useBusinessData(apiFilters);
 
-  // Get total count from pagination or businesses length
-  const totalCount = pagination?.totalRecords || scrapedBusinesses.length;
-
-  // Load real scraped businesses from database
-  const loadScrapedBusinesses = async (
-    page = 1,
-    append = false,
-    filters = {},
-  ) => {
-    // Set loading states
-    if (page === 1) {
-      setLoading(true);
-      setCurrentPage(1);
-    } else {
-      setLoadingMore(true);
-    }
-    setError(null);
-
-    // Test if backend is actually available instead of just checking domain
-    let backendAvailable = true;
-    try {
-      // Quick health check first - if this fails, then use sample data
-      const healthResponse = await fetch('/api/health', {
-        method: 'HEAD',
-        signal: AbortSignal.timeout(3000) // 3 second timeout
-      });
-      backendAvailable = healthResponse.ok;
-      console.log("🩺 Backend health check:", healthResponse.ok ? "✅ Available" : "❌ Unavailable");
-    } catch (healthError) {
-      console.log("🩺 Backend health check failed:", healthError.message);
-      backendAvailable = false;
-    }
-
-    // Only use sample data if backend is actually unavailable
-    if (!backendAvailable && page === 1 && !append) {
-      console.log("📱 Backend unavailable, using sample data");
-      const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
-        ...business,
-        id: business.id || `sample-${index}`,
-        isVerified: true,
-        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-        rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
-      }));
-
-      setScrapedBusinesses(fallbackBusinesses);
-      setTotalCount(fallbackBusinesses.length);
-      setHasMore(false);
-      setCurrentPage(page);
-      setError(null);
-      setLoading(false);
-      setLoadingMore(false);
-      return;
-    }
-
-    try {
-      // Build API request for deployments with backend
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: pageSize.toString(),
-        ...filters,
-      });
-
-      const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
-      console.log("🚀 Fetching businesses from API:", apiUrl);
-      console.log("📋 Request params:", Object.fromEntries(params));
-
-      const response = await robustFetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log("✅ API Response received:", {
-        success: result.success,
-        totalBusinesses: result.businesses?.length || 0,
-        total: result.total,
-        hasBusinesses: !!result.businesses,
-        isArray: Array.isArray(result.businesses),
-        sampleBusiness: result.businesses?.[0] ? {
-          id: result.businesses[0].id,
-          name: result.businesses[0].name,
-          city: result.businesses[0].city || result.businesses[0].scrapedCity
-        } : null,
-        fullResult: result
-      });
-
-      console.log("📊 Full API response:", result);
-
-      if (result.success) {
-        console.log("📊 API returned success - processing data...");
-
-        // Handle the response data directly
-        const apiBusinesses = result.businesses || [];
-        console.log("📊 Extracted businesses:", {
-          count: apiBusinesses.length,
-          total: result.total,
-          isArray: Array.isArray(apiBusinesses),
-          firstBusiness: apiBusinesses[0] ? {
-            id: apiBusinesses[0].id,
-            name: apiBusinesses[0].name,
-            city: apiBusinesses[0].city || apiBusinesses[0].scrapedCity
-          } : "None"
-        });
-
-        // Always use API data if available, even if it's empty (don't fall back to sample)
-        if (apiBusinesses.length >= 0) { // Changed from > 0 to >= 0
-        // Map the businesses to ensure proper ID field and data structure
-        const mappedBusinesses = apiBusinesses.map((business: any) => {
-          console.log("🔄 Mapping business:", business.name, "from city:", business.city || business.scrapedCity);
-          const finalReviewCount =
-            business.reviews?.length || business.reviewCount || 0;
-          console.log(
-            `DEBUG: ${business.name} - reviewCount: ${business.reviewCount}, reviews.length: ${business.reviews?.length}, final: ${finalReviewCount}`,
-          );
-          return {
-            ...business,
-            id:
-              business.googlePlaceId ||
-              business.id ||
-              Date.now() + Math.random(),
-            city: business.scrapedCity || business.city || "Unknown",
-            reviewCount: finalReviewCount,
-            rating: business.rating || 0,
-            services: business.services || [],
-            isVerified: business.isVerified || true, // Most scraped businesses are verified by default
-          };
-        });
-
-        console.log("✅ Final mapped businesses:", {
-          count: mappedBusinesses.length,
-          totalCount: result.total || mappedBusinesses.length,
-          firstMapped: mappedBusinesses[0] ? {
-            id: mappedBusinesses[0].id,
-            name: mappedBusinesses[0].name,
-            city: mappedBusinesses[0].city
-          } : "None"
-        });
-
-        if (append) {
-          setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
-        } else {
-          setScrapedBusinesses(mappedBusinesses);
-        }
-
-        setTotalCount(result.total || mappedBusinesses.length);
-        setHasMore(mappedBusinesses.length === pageSize);
-        setCurrentPage(page);
-        setError(null);
-        setLoading(false);
-        setLoadingMore(false);
-        console.log("🎉 Successfully loaded businesses from API!");
-        return;
-        } else {
-          console.warn("⚠️ API returned success but no businesses:", result);
-        }
-      } else {
-        console.warn("⚠️ API returned failure:", result);
-      }
-    } catch (apiError) {
-      console.warn("⚠️ API fetch failed, falling back to sample data:", apiError);
-    }
-
-    // Fallback to sample data only if API fails
-    if (page === 1 && !append) {
-      console.log("📋 Using sample data as fallback");
-      const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
-        ...business,
-        id: business.id || `sample-${index}`,
-        isVerified: true,
-        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-        rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
-      }));
-
-      setScrapedBusinesses(fallbackBusinesses);
-      setTotalCount(fallbackBusinesses.length);
-      setHasMore(false);
-      setCurrentPage(page);
-      setError(null);
-    }
-
-    // Always clean up loading states
-    setLoading(false);
-    setLoadingMore(false);
-
-    try {
-      if (page === 1) {
-        setLoading(true);
-        setCurrentPage(1);
-      } else {
-        setLoadingMore(true);
-      }
-      setError(null);
-
-      // Build query parameters
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: pageSize.toString(),
-        ...filters,
-      });
-
-      const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
-      const response = await robustFetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Map the businesses to ensure proper ID field and data structure
-        const mappedBusinesses = (result.businesses || []).map(
-          (business: any) => {
-            const finalReviewCount =
-              business.reviews?.length || business.reviewCount || 0;
-            console.log(
-              `DEBUG: ${business.name} - reviewCount: ${business.reviewCount}, reviews.length: ${business.reviews?.length}, final: ${finalReviewCount}`,
-            );
-            return {
-              ...business,
-              id:
-                business.googlePlaceId ||
-                business.id ||
-                Date.now() + Math.random(),
-              city: business.scrapedCity || business.city || "Unknown",
-              reviewCount: finalReviewCount,
-              rating: business.rating || 0,
-              services: business.services || [],
-              isVerified: business.isVerified || true, // Most scraped businesses are verified by default
-            };
-          },
-        );
-
-        console.log(
-          `Loaded page ${page}:`,
-          mappedBusinesses.length,
-          "businesses",
-        );
-        console.log(
-          `Total available:`,
-          result.total,
-          "| Current loaded:",
-          append
-            ? scrapedBusinesses.length + mappedBusinesses.length
-            : mappedBusinesses.length,
-        );
-
-        if (append) {
-          setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
-        } else {
-          setScrapedBusinesses(mappedBusinesses);
-        }
-
-        // Track total count from API response
-        setTotalCount(result.total || 0);
-
-        // Check if there are more pages
-        setHasMore(mappedBusinesses.length === pageSize);
-        setCurrentPage(page);
-      } else {
-        setError("Failed to load businesses");
-      }
-    } catch (error) {
-      console.error("Failed to load scraped businesses:", error);
-
-      // Provide fallback data when API is not available
-      if (page === 1 && !append) {
-        console.log("API not available, using fallback sample data");
-        const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
-          ...business,
-          id: business.id || `fallback-${index}`,
-          isVerified: true,
-          reviewCount:
-            business.reviewCount || Math.floor(Math.random() * 50) + 1,
-          rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
-        }));
-
-        setScrapedBusinesses(fallbackBusinesses);
-        setTotalCount(fallbackBusinesses.length);
-        setHasMore(false); // No more pages for fallback data
-        setError(null); // Clear error since we have fallback data
-      } else {
-        setError("Unable to connect to server. Showing sample data.");
-      }
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  };
-
-  // Load more businesses
-  const loadMore = () => {
-    if (!loadingMore && hasMore) {
-      const filters = {};
-      if (searchQuery) filters.q = searchQuery;
-      if (selectedCategory && selectedCategory !== "all")
-        filters.category = selectedCategory;
-      if (selectedZone && selectedZone !== "all") filters.city = selectedZone;
-
-      loadScrapedBusinesses(currentPage + 1, true, filters);
-    }
-  };
-
-  // Load data on component mount
+  // Update URL params when filters change
   useEffect(() => {
-    loadScrapedBusinesses();
-  }, []);
-
-  // Apply server-side filtering by reloading data when filters change
-  useEffect(() => {
-    const filters = {};
-    if (searchQuery) filters.q = searchQuery;
-    if (selectedCategory && selectedCategory !== "all")
-      filters.category = selectedCategory;
-    if (selectedZone && selectedZone !== "all") filters.city = selectedZone;
-
-    // Reset to first page and reload with new filters
-    setCurrentPage(1);
-    setHasMore(true);
-    loadScrapedBusinesses(1, false, filters);
-  }, [searchQuery, selectedCategory, selectedZone]);
-
-  // Use scraped businesses directly since filtering is done server-side
-  const filteredBusinesses = scrapedBusinesses;
-
-  // Initialize page title on mount
-  useEffect(() => {
-    document.title = "Browse Visa Consultants - VisaConsult India";
-  }, []);
-
-  const handleSearch = () => {
     const params = new URLSearchParams();
-    if (searchQuery) params.set("q", searchQuery);
-    if (selectedCategory && selectedCategory !== "all")
-      params.set("category", selectedCategory);
-    if (selectedZone && selectedZone !== "all")
-      params.set("zone", selectedZone);
+    if (searchQuery) params.set("search", searchQuery);
+    if (selectedCategory !== "all") params.set("category", selectedCategory);
+    if (selectedCity !== "all") params.set("city", selectedCity);
     setSearchParams(params);
+  }, [searchQuery, selectedCategory, selectedCity, setSearchParams]);
+
+  // Handle search
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
   };
 
+  // Handle filter changes
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
+  const handleCityChange = (value: string) => {
+    setSelectedCity(value);
+  };
+
+  const handleZoneChange = (value: string) => {
+    setSelectedZone(value);
+  };
+
+  // Clear all filters
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
+    setSelectedCity("all");
     setSelectedZone("all");
-    setFilters({
-      categories: [],
-      zones: [],
-      rating: "",
-      verified: false,
-      hasReviews: false,
-      sortBy: "rating",
-    });
-    setSearchParams(new URLSearchParams());
+    setSearchParams({});
   };
+
+  // Get active filter count
+  const activeFilters = [
+    searchQuery,
+    selectedCategory !== "all" ? selectedCategory : null,
+    selectedCity !== "all" ? selectedCity : null,
+    selectedZone !== "all" ? selectedZone : null,
+  ].filter(Boolean).length;
+
+  console.log("🔍 Browse page - Real data loaded:", {
+    businessCount: businesses.length,
+    totalRecords: pagination?.totalRecords,
+    loading,
+    error,
+    filters: apiFilters
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-
-      {/* Header Section */}
-      <section className="pt-24 pb-8 px-4 bg-white border-b">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Find Trusted Visa Consultants
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Browse through India's largest directory of verified immigration
-              experts
-            </p>
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                Find Immigration Consultants
+              </h1>
+              <p className="mt-2 text-gray-600">
+                {pagination?.totalRecords
+                  ? `Search from ${pagination.totalRecords.toLocaleString()}+ real consultants in database...`
+                  : "Search trusted immigration and visa consultants"}
+              </p>
+            </div>
+            
+            {/* Quick stats */}
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <Building className="h-4 w-4" />
+                <span>{businesses.length} businesses found</span>
+              </div>
+              {activeFilters > 0 && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <Filter className="h-3 w-3" />
+                  {activeFilters} filter{activeFilters !== 1 ? 's' : ''} active
+                </Badge>
+              )}
+            </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg border shadow-sm p-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {/* Search Input */}
-                <div className="md:col-span-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="text"
-                      placeholder="Search from 310+ real consultants in database..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 h-12 border-gray-200"
-                    />
-                  </div>
-                </div>
+          {/* Search and Filters */}
+          <div className="mt-6 space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                type="text"
+                placeholder="Search by business name, service, or location..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="pl-10 h-12 text-base"
+              />
+            </div>
 
-                {/* Category Filter */}
-                <div>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger className="h-12 border-gray-200">
-                      <div className="flex items-center">
-                        <Filter className="w-4 h-4 mr-2 text-gray-400" />
-                        <SelectValue placeholder="Category" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {businessCategories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Filter Row */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* Category Filter */}
+              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+                <SelectTrigger className="sm:w-[200px]">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {businessCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-                {/* Location Filter */}
-                <div>
-                  <Select value={selectedZone} onValueChange={setSelectedZone}>
-                    <SelectTrigger className="h-12 border-gray-200">
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-                        <SelectValue placeholder="City" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Cities</SelectItem>
-                      {indianCities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              {/* City Filter */}
+              <Select value={selectedCity} onValueChange={handleCityChange}>
+                <SelectTrigger className="sm:w-[200px]">
+                  <SelectValue placeholder="All Cities" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Cities</SelectItem>
+                  {allIndianCities.slice(0, 20).map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <Button onClick={handleSearch} className="flex-1 sm:flex-none">
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
+              {/* Sort Filter */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="sm:w-[150px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rating">Rating</SelectItem>
+                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="reviews">Reviews</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Clear Filters */}
+              {activeFilters > 0 && (
                 <Button
                   variant="outline"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex-1 sm:flex-none"
+                  onClick={clearFilters}
+                  className="flex items-center gap-2"
                 >
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
-                  <ChevronDown
-                    className={`w-4 h-4 ml-2 transition-transform ${
-                      showFilters ? "rotate-180" : ""
-                    }`}
-                  />
+                  <X className="h-4 w-4" />
+                  Clear All
                 </Button>
-                {(searchQuery ||
-                  selectedCategory !== "all" ||
-                  selectedZone !== "all") && (
-                  <Button variant="ghost" onClick={clearFilters}>
-                    Clear All
-                  </Button>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Main Content */}
-      <section className="py-8 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar Filters */}
-            <div className={`lg:block ${showFilters ? "block" : "hidden"}`}>
-              <Card className="sticky top-24">
-                <CategoryFilter
-                  filters={filters}
-                  onFiltersChange={setFilters}
-                  resultCount={filteredBusinesses.length}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error State */}
+        {error && (
+          <Alert className="mb-6">
+            <AlertDescription>
+              {error} - Showing available data.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Loading State */}
+        {loading && businesses.length === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-64 rounded-lg" />
+            ))}
+          </div>
+        )}
+
+        {/* Business Grid */}
+        {businesses.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {businesses.map((business) => (
+                <BusinessCard
+                  key={business.id}
+                  business={business}
+                  className="h-full"
                 />
-              </Card>
+              ))}
             </div>
 
-            {/* Results Section */}
-            <div className="lg:col-span-3">
-              {/* Real Data Status */}
-              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-sm">
-                <h4 className="font-semibold text-green-800 mb-2">
-                  ✅ Live Database Content:
-                </h4>
-                <div className="grid grid-cols-3 gap-2 text-green-700">
-                  <div>📊 Total Businesses: {scrapedBusinesses.length}</div>
-                  <div>🔍 Filtered Results: {filteredBusinesses.length}</div>
-                  <div>⚡ Status: {loading ? "Loading..." : "Ready"}</div>
-                </div>
-                {scrapedBusinesses.length >= 300 && (
-                  <div className="mt-2 text-green-600 font-medium">
-                    🎉 All {scrapedBusinesses.length} real consultants loaded
-                    successfully!
-                  </div>
-                )}
-                {scrapedBusinesses.length < 50 && !loading && (
-                  <div className="mt-2 text-orange-600 font-medium">
-                    ⚠️ Limited data - Visit Admin Panel → Data Scraper to
-                    collect more businesses
-                  </div>
-                )}
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="mt-8 text-center">
+                <Button
+                  onClick={loadMore}
+                  disabled={loading}
+                  size="lg"
+                  className="px-8"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    "Load More Businesses"
+                  )}
+                </Button>
               </div>
+            )}
+          </>
+        )}
 
-              {/* Loading State */}
-              {loading && (
-                <div className="min-h-[400px] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">
-                      Loading real business data from database...
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Error State */}
-              {error && (
-                <div className="min-h-[400px] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-red-500 text-4xl mb-4">⚠️</div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Error Loading Data
-                    </h3>
-                    <p className="text-gray-600 mb-4">{error}</p>
-                    <button
-                      onClick={loadScrapedBusinesses}
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    >
-                      Try Again
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Results Header */}
-              {!loading && !error && (
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-900">
-                      {filteredBusinesses.length} Consultant
-                      {filteredBusinesses.length !== 1 ? "s" : ""} Found
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Showing verified immigration experts from database
-                    </p>
-                  </div>
-
-                  {/* Sort Options */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Sort by:</span>
-                    <Select
-                      value={filters.sortBy}
-                      onValueChange={(value) =>
-                        setFilters({ ...filters, sortBy: value })
-                      }
-                    >
-                      <SelectTrigger className="w-40">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="rating">Highest Rated</SelectItem>
-                        <SelectItem value="reviews">Most Reviews</SelectItem>
-                        <SelectItem value="name">Name A-Z</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              )}
-
-              {/* Results Grid */}
-              {!loading &&
-                !error &&
-                (filteredBusinesses.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                      <Search className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      No consultants found
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      Try adjusting your search criteria or filters
-                    </p>
-                    <Button onClick={clearFilters} variant="outline">
-                      Clear Filters
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Business Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {filteredBusinesses.map((business) => (
-                        <BusinessCard key={business.id} business={business} />
-                      ))}
-                    </div>
-
-                    {/* Load More Button */}
-                    {hasMore &&
-                      !searchQuery &&
-                      (!selectedCategory || selectedCategory === "all") &&
-                      (!selectedZone || selectedZone === "all") && (
-                        <div className="text-center mt-8">
-                          <Button
-                            onClick={loadMore}
-                            disabled={loadingMore}
-                            className="px-8 py-3"
-                            variant="outline"
-                          >
-                            {loadingMore ? (
-                              <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                                Loading...
-                              </>
-                            ) : (
-                              "Load More Consultants"
-                            )}
-                          </Button>
-                          <p className="text-xs text-gray-500 mt-2">
-                            {totalCount - filteredBusinesses.length} more
-                            consultants available
-                          </p>
-                        </div>
-                      )}
-
-                    {/* Results Summary */}
-                    <div className="text-center mt-8">
-                      <p className="text-sm text-gray-600">
-                        Showing {filteredBusinesses.length} of {totalCount}{" "}
-                        consultants
-                        {!searchQuery &&
-                          (!selectedCategory || selectedCategory === "all") &&
-                          (!selectedZone || selectedZone === "all") && (
-                            <span> • Page {currentPage}</span>
-                          )}
-                      </p>
-                      {hasMore &&
-                        !searchQuery &&
-                        (!selectedCategory || selectedCategory === "all") &&
-                        (!selectedZone || selectedZone === "all") && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            {totalCount - filteredBusinesses.length} more
-                            available
-                          </p>
-                        )}
-                    </div>
-
-                    {/* Results Summary */}
-                    <div className="mt-8 pt-6 border-t border-gray-200">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            <span>
-                              {filteredBusinesses.length} consultants loaded
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 text-yellow-500" />
-                            <span>All verified & rated</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ))}
+        {/* No Results */}
+        {!loading && businesses.length === 0 && (
+          <div className="text-center py-12">
+            <div className="max-w-md mx-auto">
+              <div className="mb-4">
+                <Building className="h-12 w-12 text-gray-400 mx-auto" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No businesses found
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Try adjusting your search criteria or filters to find more results.
+              </p>
+              <Button onClick={clearFilters} variant="outline">
+                Clear All Filters
+              </Button>
             </div>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* CTA Section */}
-      <section className="py-12 px-4 bg-blue-600 text-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Can't Find What You're Looking For?
-          </h2>
-          <p className="text-lg opacity-90 mb-6">
-            Contact our support team for personalized consultant recommendations
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
-              Contact Support
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600"
-            >
-              List Your Business
-            </Button>
+        {/* Results Summary */}
+        {businesses.length > 0 && (
+          <div className="mt-8 text-center text-sm text-gray-600">
+            Showing {businesses.length} of {pagination?.totalRecords || businesses.length} businesses
+            {pagination?.total && pagination.total > businesses.length && (
+              <span> (Load more to see all results)</span>
+            )}
           </div>
-        </div>
-      </section>
+        )}
+      </div>
     </div>
   );
 }
