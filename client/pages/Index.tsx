@@ -49,8 +49,6 @@ import { generateHomeMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [featuredBusinesses, setFeaturedBusinesses] = useState<Business[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeService, setActiveService] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
