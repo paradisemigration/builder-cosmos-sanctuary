@@ -62,6 +62,31 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Simple auth context for components that need it
+const AuthContext = React.createContext({
+  user: null,
+  isAuthenticated: false,
+  login: async () => true,
+  logout: () => {},
+  isLoading: false,
+});
+
+function SimpleAuthProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthContext.Provider
+      value={{
+        user: null,
+        isAuthenticated: false,
+        login: async () => true,
+        logout: () => {},
+        isLoading: false,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
 const App = () => {
   return (
     <HelmetProvider>
