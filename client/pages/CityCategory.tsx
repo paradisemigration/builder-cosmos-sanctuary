@@ -359,7 +359,7 @@ const nearbyAreasMapping: Record<string, string[]> = {
   // Ahmedabad region
   ahmedabad: ["Surat", "Vadodara", "Rajkot", "Pune"],
   surat: ["Ahmedabad", "Vadodara", "Mumbai", "Pune"],
-  vadodara: ["Ahmedabad", "Surat", "Pune", "Indore"],
+  vadodara: ["Ahmedabad", "Surat", "Mumbai", "Pune", "Indore", "Rajkot"],
   rajkot: ["Ahmedabad", "Surat", "Vadodara", "Jamnagar"],
 
   // Rajasthan region
