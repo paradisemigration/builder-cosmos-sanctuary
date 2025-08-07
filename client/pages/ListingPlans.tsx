@@ -162,7 +162,7 @@ export default function ListingPlans() {
     return `₹${price.toLocaleString()}`;
   };
 
-  const handleSelectPlan = (planId: string) => {
+  const handleSelectPlan = (planId) => {
     setSelectedPlan(planId);
     // Redirect to add-business page with selected plan
     navigate(`/add-business?plan=${planId}&billing=${billingCycle}`);

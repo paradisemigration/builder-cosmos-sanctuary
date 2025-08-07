@@ -33,7 +33,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   const [suggestions, setSuggestions] = useState([]);
 
   // Handle search input changes and filter suggestions
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = (value) => {
     setSearchQuery(value);
 
     if (value.length >= 2) {
@@ -77,7 +77,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
   };
 
   // Handle enter key press
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearch();
     }
