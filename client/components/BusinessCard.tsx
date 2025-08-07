@@ -198,7 +198,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
     }
   };
 
-  const handleFavorite = (e: React.MouseEvent) => {
+  const handleFavorite = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsFavorited(!isFavorited);
@@ -213,7 +213,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
       .toUpperCase();
   };
 
-  const handleCardClick = (e: React.MouseEvent) => {
+  const handleCardClick = (e) => {
     if (process.env.NODE_ENV === "development") {
       console.log("Business card clicked:", {
         business: business.name,
