@@ -168,14 +168,20 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // Check if we're in local development with port issues
-    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // Check for environments without backend server
+    const hostname = window.location.hostname;
+    const hasNoBackend = hostname === 'localhost' ||
+                        hostname === '127.0.0.1' ||
+                        hostname.includes('fly.dev') ||
+                        hostname.includes('vercel.app') ||
+                        hostname.includes('netlify.app');
 
-    if (isLocalDev) {
-      console.log("🔧 Local development mode - using sample data due to port conflicts");
+    if (hasNoBackend) {
+      console.log("🔧 Frontend-only deployment detected - using sample data");
       console.log("⚠️ Deploy backend to access your real 1500+ businesses");
+      console.log(`📡 Current hostname: ${hostname}`);
     } else {
-      // Try the real API on production/deployment
+      // Try the real API only on deployments with backend
       console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
       try {
       const queryParams = new URLSearchParams();
