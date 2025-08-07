@@ -26,6 +26,6 @@ export default defineConfig({
     },
   },
   esbuild: {
-    legalComments: 'none',
+    legalComments: "none",
   },
 });
