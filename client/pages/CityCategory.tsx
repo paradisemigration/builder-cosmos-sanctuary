@@ -392,15 +392,7 @@ const nearbyAreasMapping: Record<string, string[]> = {
   // Indore region
   indore: ["Bhopal", "Pune", "Ahmedabad", "Nagpur"],
   bhopal: ["Indore", "Nagpur", "Delhi", "Pune"],
-  nagpur: [
-    "Mumbai",
-    "Pune",
-    "Indore",
-    "Bhopal",
-    "Hyderabad",
-    "Raipur",
-    "Aurangabad",
-  ],
+  nagpur: ["Mumbai", "Pune", "Indore", "Bhopal", "Hyderabad", "Raipur", "Aurangabad"],
 
   // Kerala region
   kochi: [
@@ -1691,15 +1683,13 @@ export default function CityCategory() {
 
         try {
           // Since city name matching is failing, let's get ALL businesses and filter on frontend
-          console.log(
-            `🚀 PHASE 0: Getting ALL businesses from database to filter for ${cityName}`,
-          );
+          console.log(`🚀 PHASE 0: Getting ALL businesses from database to filter for ${cityName}`);
 
           // FORCE: Get maximum businesses with multiple requests
           const requests = [
             `/api/scraped-businesses?limit=500`,
             `/api/scraped-businesses?limit=200&page=1`,
-            `/api/scraped-businesses?limit=200&page=2`,
+            `/api/scraped-businesses?limit=200&page=2`
           ];
 
           let allBusinesses = [];
@@ -1712,16 +1702,11 @@ export default function CityCategory() {
               if (response.ok) {
                 const result = await response.json();
                 if (result?.businesses?.length > 0) {
-                  const newBusinesses = result.businesses.filter(
-                    (newBiz) =>
-                      !allBusinesses.some(
-                        (existingBiz) => existingBiz.id === newBiz.id,
-                      ),
+                  const newBusinesses = result.businesses.filter(newBiz =>
+                    !allBusinesses.some(existingBiz => existingBiz.id === newBiz.id)
                   );
                   allBusinesses.push(...newBusinesses);
-                  console.log(
-                    `✅ Added ${newBusinesses.length} businesses. Total: ${allBusinesses.length}`,
-                  );
+                  console.log(`✅ Added ${newBusinesses.length} businesses. Total: ${allBusinesses.length}`);
                 }
               }
             } catch (err) {
@@ -1733,54 +1718,42 @@ export default function CityCategory() {
 
           if (allBusinesses.length > 0) {
             // Find Vadodara businesses
-            const vadodaraBusinesses = allBusinesses.filter((business) => {
-              const businessCity = (business.city || business.scrapedCity || "")
-                .toLowerCase()
-                .trim();
-              return (
-                businessCity.includes("vadodara") ||
-                businessCity.includes("baroda") ||
-                businessCity.includes("vadodra")
-              );
+            const vadodaraBusinesses = allBusinesses.filter(business => {
+              const businessCity = (business.city || business.scrapedCity || '').toLowerCase().trim();
+              return businessCity.includes('vadodara') ||
+                     businessCity.includes('baroda') ||
+                     businessCity.includes('vadodra');
             });
 
             console.log(`🎯 VADODARA BUSINESSES: ${vadodaraBusinesses.length}`);
 
             if (vadodaraBusinesses.length > 0) {
               // Sort by category relevance
-              const categoryKeywords = categoryName
-                .toLowerCase()
-                .split(/[\s-]+/);
+              const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
 
               const sortedBusinesses = vadodaraBusinesses.sort((a, b) => {
                 const aScore = categoryKeywords.reduce((score, keyword) => {
-                  if ((a.category || "").toLowerCase().includes(keyword))
-                    score += 10;
-                  if ((a.name || "").toLowerCase().includes(keyword))
-                    score += 5;
+                  if ((a.category || '').toLowerCase().includes(keyword)) score += 10;
+                  if ((a.name || '').toLowerCase().includes(keyword)) score += 5;
                   return score;
                 }, 0);
 
                 const bScore = categoryKeywords.reduce((score, keyword) => {
-                  if ((b.category || "").toLowerCase().includes(keyword))
-                    score += 10;
-                  if ((b.name || "").toLowerCase().includes(keyword))
-                    score += 5;
+                  if ((b.category || '').toLowerCase().includes(keyword)) score += 10;
+                  if ((b.name || '').toLowerCase().includes(keyword)) score += 5;
                   return score;
                 }, 0);
 
                 return bScore - aScore;
               });
 
-              accumulatedBusinesses = sortedBusinesses.map((business) => ({
+              accumulatedBusinesses = sortedBusinesses.map(business => ({
                 ...business,
                 isNearbyData: false,
                 originalRequestedCity: cityName,
               }));
 
-              console.log(
-                `🎉 FINAL: ${accumulatedBusinesses.length} VADODARA BUSINESSES READY`,
-              );
+              console.log(`🎉 FINAL: ${accumulatedBusinesses.length} VADODARA BUSINESSES READY`);
 
               // FORCE SET ALL STATES
               setCityBusinesses(accumulatedBusinesses);
@@ -1790,9 +1763,7 @@ export default function CityCategory() {
               setCategoryDataLoaded(true);
               setLoading(false);
 
-              console.log(
-                `🚀 FORCED ${accumulatedBusinesses.length} businesses into display`,
-              );
+              console.log(`🚀 FORCED ${accumulatedBusinesses.length} businesses into display`);
             } else {
               console.log(`❌ No Vadodara businesses found`);
             }
@@ -1800,18 +1771,13 @@ export default function CityCategory() {
             console.log(`❌ No businesses fetched from database`);
           }
         } catch (error) {
-          console.error(
-            `❌ Error fetching all businesses from ${cityName}:`,
-            error,
-          );
+          console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
           console.error(`🔍 Error details:`, error.message, error.stack);
         }
 
         // If we got businesses from main city, skip the original failed result check
         if (accumulatedBusinesses.length > 0) {
-          console.log(
-            `✅ Using ${accumulatedBusinesses.length} businesses from main city (Phase 0)`,
-          );
+          console.log(`✅ Using ${accumulatedBusinesses.length} businesses from main city (Phase 0)`);
 
           // Create a successful result from main city businesses
           result = {
@@ -1825,9 +1791,7 @@ export default function CityCategory() {
           setCategoryBusinesses(accumulatedBusinesses);
           setCategoryDataLoaded(true);
           setLoading(false);
-          console.log(
-            `✅ Immediately displaying ${accumulatedBusinesses.length} businesses from ${cityName}`,
-          );
+          console.log(`✅ Immediately displaying ${accumulatedBusinesses.length} businesses from ${cityName}`);
         }
 
         // Continue with nearby cities only if we have less than 100 businesses OR no businesses at all
@@ -1853,21 +1817,18 @@ export default function CityCategory() {
           const apiPromises = topCities.map(async (nearbyCity) => {
             try {
               // Quick search with exact category name first
-              const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=20&country=${encodeURIComponent(country)}`;
+              const nearbyApiUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&category=${encodeURIComponent(categoryName)}&limit=500&country=${encodeURIComponent(country)}`;
 
-              console.log(
-                `🔍 Parallel search: ${nearbyCity} for ${categoryName}`,
-              );
+              console.log(`🔍 Parallel search: ${nearbyCity} for ${categoryName}`);
 
               const nearbyResponse = await Promise.race([
                 robustFetch(nearbyApiUrl, {
                   method: "GET",
                   headers: { "Content-Type": "application/json" },
                 }),
-                new Promise(
-                  (_, reject) =>
-                    setTimeout(() => reject(new Error("Timeout")), 3000), // 3 second timeout per city
-                ),
+                new Promise((_, reject) =>
+                  setTimeout(() => reject(new Error('Timeout')), 3000) // 3 second timeout per city
+                )
               ]);
 
               const nearbyResult = await nearbyResponse.json();
@@ -1905,30 +1866,17 @@ export default function CityCategory() {
           const cityResults = await Promise.allSettled(apiPromises);
 
           cityResults.forEach((result, index) => {
-            if (
-              result.status === "fulfilled" &&
-              result.value.businesses.length > 0
-            ) {
+            if (result.status === 'fulfilled' && result.value.businesses.length > 0) {
               const { city, businesses } = result.value;
 
               // Add unique businesses only
-              businesses.forEach((business) => {
-                const businessId =
-                  business.id ||
-                  business.googlePlaceId ||
-                  `${business.name}-${business.address}`;
-                const isDuplicate = accumulatedBusinesses.some((existing) => {
-                  const existingId =
-                    existing.id ||
-                    existing.googlePlaceId ||
-                    `${existing.name}-${existing.address}`;
-                  return (
-                    existingId === businessId ||
-                    (existing.name?.toLowerCase().trim() ===
-                      business.name?.toLowerCase().trim() &&
-                      existing.city?.toLowerCase().trim() ===
-                        business.city?.toLowerCase().trim())
-                  );
+              businesses.forEach(business => {
+                const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+                const isDuplicate = accumulatedBusinesses.some(existing => {
+                  const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
+                  return existingId === businessId ||
+                         (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                          existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim());
                 });
 
                 if (!isDuplicate) {
@@ -1937,9 +1885,7 @@ export default function CityCategory() {
               });
 
               sourceCities.push(city);
-              console.log(
-                `✅ Added ${businesses.length} businesses from ${city}`,
-              );
+              console.log(`✅ Added ${businesses.length} businesses from ${city}`);
             }
           });
 
@@ -1965,10 +1911,9 @@ export default function CityCategory() {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                   }),
-                  new Promise(
-                    (_, reject) =>
-                      setTimeout(() => reject(new Error("Timeout")), 2000), // 2 second timeout
-                  ),
+                  new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Timeout')), 2000) // 2 second timeout
+                  )
                 ]);
 
                 const cityResult = await cityResponse.json();
@@ -1982,13 +1927,8 @@ export default function CityCategory() {
                   // Quick filter for relevant businesses
                   const relevantBusinesses = cityResult.businesses.filter(
                     (business) => {
-                      const text =
-                        `${business.name} ${business.category} ${business.description}`.toLowerCase();
-                      return (
-                        text.includes("visa") ||
-                        text.includes("immigration") ||
-                        text.includes("consultant")
-                      );
+                      const text = `${business.name} ${business.category} ${business.description}`.toLowerCase();
+                      return text.includes("visa") || text.includes("immigration") || text.includes("consultant");
                     },
                   ); // Show all businesses, no limit
 
@@ -2011,18 +1951,13 @@ export default function CityCategory() {
             const phase2Results = await Promise.allSettled(phase2Promises);
 
             phase2Results.forEach((result) => {
-              if (
-                result.status === "fulfilled" &&
-                result.value.businesses.length > 0
-              ) {
+              if (result.status === 'fulfilled' && result.value.businesses.length > 0) {
                 const { city, businesses } = result.value;
 
-                businesses.forEach((business) => {
-                  const businessId =
-                    business.id || `${business.name}-${business.address}`;
-                  const isDuplicate = accumulatedBusinesses.some((existing) => {
-                    const existingId =
-                      existing.id || `${existing.name}-${existing.address}`;
+                businesses.forEach(business => {
+                  const businessId = business.id || `${business.name}-${business.address}`;
+                  const isDuplicate = accumulatedBusinesses.some(existing => {
+                    const existingId = existing.id || `${existing.name}-${existing.address}`;
                     return existingId === businessId;
                   });
 
@@ -2038,9 +1973,7 @@ export default function CityCategory() {
               }
             });
 
-            console.log(
-              `Phase 2 completed: ${accumulatedBusinesses.length} total businesses`,
-            );
+            console.log(`Phase 2 completed: ${accumulatedBusinesses.length} total businesses`);
           }
 
           // Remove duplicates with comprehensive deduplication to prevent any duplicate listings
@@ -2050,27 +1983,20 @@ export default function CityCategory() {
           const seenAddresses = new Set();
 
           accumulatedBusinesses.forEach((business, index) => {
-            const businessId =
-              business.id ||
-              business.googlePlaceId ||
-              `${business.name}-${business.address}`;
+            const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
             const businessKey = `${business.name?.toLowerCase().trim()}-${business.city?.toLowerCase().trim()}`;
             const addressKey = `${business.name?.toLowerCase().trim()}-${business.address?.toLowerCase().trim()}`;
 
             // Multiple layers of duplicate detection
-            const isDuplicate =
-              seenIds.has(businessId) ||
-              seenNames.has(businessKey) ||
-              seenAddresses.has(addressKey);
+            const isDuplicate = seenIds.has(businessId) ||
+                               seenNames.has(businessKey) ||
+                               seenAddresses.has(addressKey);
 
             if (!isDuplicate) {
               // Additional check for very similar names (fuzzy matching)
-              const hasSimilar = uniqueBusinesses.some((existing) => {
-                const similarity =
-                  existing.name?.toLowerCase().trim() ===
-                    business.name?.toLowerCase().trim() &&
-                  existing.city?.toLowerCase().trim() ===
-                    business.city?.toLowerCase().trim();
+              const hasSimilar = uniqueBusinesses.some(existing => {
+                const similarity = existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                                  existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim();
                 return similarity;
               });
 
@@ -2079,18 +2005,12 @@ export default function CityCategory() {
                 seenNames.add(businessKey);
                 seenAddresses.add(addressKey);
                 uniqueBusinesses.push(business);
-                console.log(
-                  `✅ Added unique business: ${business.name} from ${business.nearbySourceCity || business.city}`,
-                );
+                console.log(`✅ Added unique business: ${business.name} from ${business.nearbySourceCity || business.city}`);
               } else {
-                console.log(
-                  `❌ Skipped similar business: ${business.name} from ${business.nearbySourceCity || business.city}`,
-                );
+                console.log(`❌ Skipped similar business: ${business.name} from ${business.nearbySourceCity || business.city}`);
               }
             } else {
-              console.log(
-                `❌ Skipped duplicate business: ${business.name} from ${business.nearbySourceCity || business.city}`,
-              );
+              console.log(`❌ Skipped duplicate business: ${business.name} from ${business.nearbySourceCity || business.city}`);
             }
           });
 
@@ -2100,16 +2020,9 @@ export default function CityCategory() {
 
           // PHASE 3: Emergency fallback if no results found
           if (uniqueBusinesses.length === 0) {
-            console.log(
-              "\n=== PHASE 3: Emergency fallback with broader categories ===",
-            );
+            console.log("\n=== PHASE 3: Emergency fallback with broader categories ===");
 
-            const emergencyCategories = [
-              "Immigration Consultants",
-              "Visa Consultants",
-              "Canada Immigration",
-              "Immigration Services",
-            ];
+            const emergencyCategories = ["Immigration Consultants", "Visa Consultants", "Canada Immigration", "Immigration Services"];
             const emergencyCities = nearbyCities.slice(0, 3);
 
             for (const emergencyCity of emergencyCities) {
@@ -2123,33 +2036,21 @@ export default function CityCategory() {
                       headers: { "Content-Type": "application/json" },
                     }),
                     new Promise((_, reject) =>
-                      setTimeout(() => reject(new Error("Timeout")), 1500),
-                    ),
+                      setTimeout(() => reject(new Error('Timeout')), 1500)
+                    )
                   ]);
 
                   const emergencyResult = await emergencyResponse.json();
 
-                  if (
-                    emergencyResult &&
-                    emergencyResult.success &&
-                    emergencyResult.businesses &&
-                    emergencyResult.businesses.length > 0
-                  ) {
-                    console.log(
-                      `🆘 Emergency: Found ${emergencyResult.businesses.length} in ${emergencyCity} for ${emergencyCategory}`,
-                    );
+                  if (emergencyResult && emergencyResult.success && emergencyResult.businesses && emergencyResult.businesses.length > 0) {
+                    console.log(`🆘 Emergency: Found ${emergencyResult.businesses.length} in ${emergencyCity} for ${emergencyCategory}`);
 
-                    emergencyResult.businesses.forEach((business) => {
-                      const businessId =
-                        business.id || `${business.name}-${business.address}`;
-                      const isDuplicate = accumulatedBusinesses.some(
-                        (existing) => {
-                          const existingId =
-                            existing.id ||
-                            `${existing.name}-${existing.address}`;
-                          return existingId === businessId;
-                        },
-                      );
+                    emergencyResult.businesses.forEach(business => {
+                      const businessId = business.id || `${business.name}-${business.address}`;
+                      const isDuplicate = accumulatedBusinesses.some(existing => {
+                        const existingId = existing.id || `${existing.name}-${existing.address}`;
+                        return existingId === businessId;
+                      });
 
                       if (!isDuplicate) {
                         accumulatedBusinesses.push({
@@ -2179,19 +2080,14 @@ export default function CityCategory() {
             const finalSeenIds = new Set();
 
             accumulatedBusinesses.forEach((business) => {
-              const businessId =
-                business.id ||
-                business.googlePlaceId ||
-                `${business.name}-${business.address}`;
+              const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
               if (!finalSeenIds.has(businessId)) {
                 finalSeenIds.add(businessId);
                 finalUniqueBusinesses.push(business);
               }
             });
 
-            console.log(
-              `Emergency completed: ${finalUniqueBusinesses.length} businesses total`,
-            );
+            console.log(`Emergency completed: ${finalUniqueBusinesses.length} businesses total`);
 
             if (finalUniqueBusinesses.length > 0) {
               result = {
@@ -2210,10 +2106,7 @@ export default function CityCategory() {
             const finalSeenIds = new Set();
 
             accumulatedBusinesses.forEach((business) => {
-              const businessId =
-                business.id ||
-                business.googlePlaceId ||
-                `${business.name}-${business.address}`;
+              const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
               if (!finalSeenIds.has(businessId)) {
                 finalSeenIds.add(businessId);
                 finalBusinesses.push(business);
@@ -2224,9 +2117,7 @@ export default function CityCategory() {
               success: true,
               businesses: finalBusinesses,
               total: finalBusinesses.length,
-              source: finalBusinesses.some((b) => !b.isNearbyData)
-                ? "main_city_plus_nearby"
-                : "nearby_cities_only",
+              source: finalBusinesses.some(b => !b.isNearbyData) ? "main_city_plus_nearby" : "nearby_cities_only",
             };
 
             if (sourceCities.length > 0) {
@@ -2234,9 +2125,7 @@ export default function CityCategory() {
               nearbyCity = sourceCities.join(", ");
             }
 
-            console.log(
-              `✅ Final result: ${finalBusinesses.length} businesses total`,
-            );
+            console.log(`✅ Final result: ${finalBusinesses.length} businesses total`);
           }
         }
 
@@ -2405,13 +2294,9 @@ export default function CityCategory() {
       try {
         // Check if we already have city businesses from Phase 0 in fetchCategoryBusinesses
         if (categoryBusinesses && categoryBusinesses.length > 0) {
-          const cityBusinessesFromCategory = categoryBusinesses.filter(
-            (b) => !b.isNearbyData,
-          );
+          const cityBusinessesFromCategory = categoryBusinesses.filter(b => !b.isNearbyData);
           if (cityBusinessesFromCategory.length > 0) {
-            console.log(
-              `✅ Using ${cityBusinessesFromCategory.length} city businesses already fetched in category search`,
-            );
+            console.log(`✅ Using ${cityBusinessesFromCategory.length} city businesses already fetched in category search`);
 
             // Set the city businesses state
             setCityBusinesses(cityBusinessesFromCategory);
@@ -2813,20 +2698,13 @@ export default function CityCategory() {
                     ⚡ Fast Parallel Search
                   </div>
                   <div className="text-xs text-blue-600 mt-2">
-                    Checking multiple locations simultaneously for faster
-                    results
+                    Checking multiple locations simultaneously for faster results
                   </div>
                 </div>
                 <div className="mt-4 flex justify-center space-x-1">
                   <div className="animate-pulse bg-blue-300 rounded-full h-2 w-2"></div>
-                  <div
-                    className="animate-pulse bg-blue-300 rounded-full h-2 w-2"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="animate-pulse bg-blue-300 rounded-full h-2 w-2"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
+                  <div className="animate-pulse bg-blue-300 rounded-full h-2 w-2" style={{animationDelay: '0.2s'}}></div>
+                  <div className="animate-pulse bg-blue-300 rounded-full h-2 w-2" style={{animationDelay: '0.4s'}}></div>
                 </div>
               </div>
             </div>
