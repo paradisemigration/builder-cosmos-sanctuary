@@ -161,7 +161,9 @@ export default function CityCategory() {
 
     async function fetchBusinesses() {
       try {
-        console.log(`🎯 FETCHING MINIMUM 75 BUSINESSES for ${cityName} + ${categoryName}`);
+        console.log(
+          `🎯 FETCHING MINIMUM 75 BUSINESSES for ${cityName} + ${categoryName}`,
+        );
 
         let allBusinesses: Business[] = [];
         const MINIMUM_RESULTS = 75;
@@ -174,13 +176,19 @@ export default function CityCategory() {
           const exactResponse = await fetch(exactUrl);
           if (exactResponse.ok) {
             const exactResult = await exactResponse.json();
-            if (exactResult.success && exactResult.businesses && exactResult.businesses.length > 0) {
+            if (
+              exactResult.success &&
+              exactResult.businesses &&
+              exactResult.businesses.length > 0
+            ) {
               allBusinesses = exactResult.businesses.map((business: any) => ({
                 ...business,
                 sourceType: "exact_match",
-                relevanceScore: 100
+                relevanceScore: 100,
               }));
-              console.log(`✅ EXACT MATCH: Found ${allBusinesses.length} businesses`);
+              console.log(
+                `✅ EXACT MATCH: Found ${allBusinesses.length} businesses`,
+              );
             }
           }
         } catch (error) {
@@ -189,7 +197,9 @@ export default function CityCategory() {
 
         // Step 2: If not enough, get all city businesses and sort by relevance
         if (allBusinesses.length < MINIMUM_RESULTS) {
-          console.log(`📊 Need more businesses. Getting all from ${cityName}...`);
+          console.log(
+            `📊 Need more businesses. Getting all from ${cityName}...`,
+          );
 
           try {
             const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500`;
@@ -199,40 +209,52 @@ export default function CityCategory() {
               const allCityResult = await allCityResponse.json();
               if (allCityResult.success && allCityResult.businesses) {
                 // Sort by category relevance
-                const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
-                const sortedByRelevance = allCityResult.businesses.sort((a: any, b: any) => {
-                  const aScore = categoryKeywords.reduce((score, keyword) => {
-                    if ((a.category || '').toLowerCase().includes(keyword)) score += 10;
-                    if ((a.name || '').toLowerCase().includes(keyword)) score += 5;
-                    return score;
-                  }, 0);
+                const categoryKeywords = categoryName
+                  .toLowerCase()
+                  .split(/[\s-]+/);
+                const sortedByRelevance = allCityResult.businesses.sort(
+                  (a: any, b: any) => {
+                    const aScore = categoryKeywords.reduce((score, keyword) => {
+                      if ((a.category || "").toLowerCase().includes(keyword))
+                        score += 10;
+                      if ((a.name || "").toLowerCase().includes(keyword))
+                        score += 5;
+                      return score;
+                    }, 0);
 
-                  const bScore = categoryKeywords.reduce((score, keyword) => {
-                    if ((b.category || '').toLowerCase().includes(keyword)) score += 10;
-                    if ((b.name || '').toLowerCase().includes(keyword)) score += 5;
-                    return score;
-                  }, 0);
+                    const bScore = categoryKeywords.reduce((score, keyword) => {
+                      if ((b.category || "").toLowerCase().includes(keyword))
+                        score += 10;
+                      if ((b.name || "").toLowerCase().includes(keyword))
+                        score += 5;
+                      return score;
+                    }, 0);
 
-                  return bScore - aScore;
-                });
+                    return bScore - aScore;
+                  },
+                );
 
                 // Add businesses that aren't already included
                 sortedByRelevance.forEach((business: any) => {
-                  const exists = allBusinesses.some(existing =>
-                    existing.id === business.id ||
-                    (existing.name === business.name && existing.address === business.address)
+                  const exists = allBusinesses.some(
+                    (existing) =>
+                      existing.id === business.id ||
+                      (existing.name === business.name &&
+                        existing.address === business.address),
                   );
 
                   if (!exists && allBusinesses.length < MINIMUM_RESULTS) {
                     allBusinesses.push({
                       ...business,
                       sourceType: "city_sorted",
-                      relevanceScore: 50
+                      relevanceScore: 50,
                     });
                   }
                 });
 
-                console.log(`📊 CITY SORTED: Now have ${allBusinesses.length} businesses`);
+                console.log(
+                  `📊 CITY SORTED: Now have ${allBusinesses.length} businesses`,
+                );
               }
             }
           } catch (error) {
@@ -242,11 +264,27 @@ export default function CityCategory() {
 
         // Step 3: If still not enough, get from nearby cities
         if (allBusinesses.length < MINIMUM_RESULTS) {
-          console.log(`🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`);
+          console.log(
+            `🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`,
+          );
 
           const nearbyCities = [
-            "Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad",
-            "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal", "Visakhapatnam"
+            "Mumbai",
+            "Delhi",
+            "Bangalore",
+            "Chennai",
+            "Hyderabad",
+            "Pune",
+            "Kolkata",
+            "Ahmedabad",
+            "Jaipur",
+            "Surat",
+            "Lucknow",
+            "Kanpur",
+            "Nagpur",
+            "Indore",
+            "Bhopal",
+            "Visakhapatnam",
           ];
 
           for (const nearbyCity of nearbyCities) {
@@ -262,16 +300,20 @@ export default function CityCategory() {
                 const nearbyResult = await nearbyResponse.json();
                 if (nearbyResult.success && nearbyResult.businesses) {
                   const needed = MINIMUM_RESULTS - allBusinesses.length;
-                  const toAdd = nearbyResult.businesses.slice(0, needed).map((business: any) => ({
-                    ...business,
-                    sourceType: "nearby_city",
-                    relevanceScore: 25,
-                    originalRequestedCity: cityName,
-                    nearbySourceCity: nearbyCity
-                  }));
+                  const toAdd = nearbyResult.businesses
+                    .slice(0, needed)
+                    .map((business: any) => ({
+                      ...business,
+                      sourceType: "nearby_city",
+                      relevanceScore: 25,
+                      originalRequestedCity: cityName,
+                      nearbySourceCity: nearbyCity,
+                    }));
 
                   allBusinesses.push(...toAdd);
-                  console.log(`➕ Added ${toAdd.length} from ${nearbyCity}. Total: ${allBusinesses.length}`);
+                  console.log(
+                    `➕ Added ${toAdd.length} from ${nearbyCity}. Total: ${allBusinesses.length}`,
+                  );
                 }
               }
             } catch (error) {
@@ -283,33 +325,44 @@ export default function CityCategory() {
         // Ensure we always have at least some businesses to show
         if (allBusinesses.length === 0) {
           console.log(`🚨 EMERGENCY: Using sample data`);
-          allBusinesses = sampleBusinesses.slice(0, MINIMUM_RESULTS).map((business, index) => ({
-            ...business,
-            sourceType: "sample_emergency",
-            relevanceScore: 10,
-            id: `emergency-${index}`
-          }));
+          allBusinesses = sampleBusinesses
+            .slice(0, MINIMUM_RESULTS)
+            .map((business, index) => ({
+              ...business,
+              sourceType: "sample_emergency",
+              relevanceScore: 10,
+              id: `emergency-${index}`,
+            }));
         }
 
         // If still under minimum, duplicate businesses to reach target
-        while (allBusinesses.length < MINIMUM_RESULTS && allBusinesses.length > 0) {
+        while (
+          allBusinesses.length < MINIMUM_RESULTS &&
+          allBusinesses.length > 0
+        ) {
           const originalLength = allBusinesses.length;
           const needed = MINIMUM_RESULTS - allBusinesses.length;
           const toDuplicate = Math.min(needed, originalLength);
 
-          const duplicates = allBusinesses.slice(0, toDuplicate).map((business, index) => ({
-            ...business,
-            id: `${business.id}-dup-${index}`,
-            name: `${business.name} (Branch ${index + 2})`,
-            isDuplicate: true,
-            sourceType: "duplicate_fill"
-          }));
+          const duplicates = allBusinesses
+            .slice(0, toDuplicate)
+            .map((business, index) => ({
+              ...business,
+              id: `${business.id}-dup-${index}`,
+              name: `${business.name} (Branch ${index + 2})`,
+              isDuplicate: true,
+              sourceType: "duplicate_fill",
+            }));
 
           allBusinesses.push(...duplicates);
-          console.log(`🔄 Added ${duplicates.length} duplicates. Total: ${allBusinesses.length}`);
+          console.log(
+            `🔄 Added ${duplicates.length} duplicates. Total: ${allBusinesses.length}`,
+          );
         }
 
-        console.log(`🎉 FINAL RESULT: ${allBusinesses.length} businesses ready`);
+        console.log(
+          `🎉 FINAL RESULT: ${allBusinesses.length} businesses ready`,
+        );
 
         // Set all the states
         setCategoryBusinesses(allBusinesses);
@@ -317,9 +370,8 @@ export default function CityCategory() {
         setFilteredBusinesses(allBusinesses);
         setTotalAvailableBusinesses(allBusinesses.length);
         setLoading(false);
-
       } catch (error) {
-        console.error('❌ FETCH ERROR:', error);
+        console.error("❌ FETCH ERROR:", error);
         setLoading(false);
       }
     }
@@ -332,23 +384,31 @@ export default function CityCategory() {
     let combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
 
     // Remove duplicates
-    const uniqueBusinesses = combinedBusinesses.filter((business, index, self) =>
-      index === self.findIndex((b) =>
-        b.id === business.id ||
-        (b.name === business.name && b.address === business.address)
-      )
+    const uniqueBusinesses = combinedBusinesses.filter(
+      (business, index, self) =>
+        index ===
+        self.findIndex(
+          (b) =>
+            b.id === business.id ||
+            (b.name === business.name && b.address === business.address),
+        ),
     );
 
     // Apply search filter
     let searchFilteredBusinesses = uniqueBusinesses;
     if (searchQuery) {
-      searchFilteredBusinesses = uniqueBusinesses.filter((business) =>
-        business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        business.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        business.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        business.services?.some((service) =>
-          service.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+      searchFilteredBusinesses = uniqueBusinesses.filter(
+        (business) =>
+          business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          business.description
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          business.category
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          business.services?.some((service) =>
+            service.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
       );
     }
 
@@ -366,10 +426,15 @@ export default function CityCategory() {
 
     // Apply pagination
     const itemsPerPage = 500;
-    const paginatedBusinesses = searchFilteredBusinesses.slice(0, itemsPerPage * currentPage);
+    const paginatedBusinesses = searchFilteredBusinesses.slice(
+      0,
+      itemsPerPage * currentPage,
+    );
 
     setFilteredBusinesses(paginatedBusinesses);
-    setHasMoreData(searchFilteredBusinesses.length > paginatedBusinesses.length);
+    setHasMoreData(
+      searchFilteredBusinesses.length > paginatedBusinesses.length,
+    );
   }, [categoryBusinesses, cityBusinesses, searchQuery, sortBy, currentPage]);
 
   const loadMoreBusinesses = () => {
@@ -402,11 +467,17 @@ export default function CityCategory() {
         {/* Header */}
         <div className="mb-8">
           <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
+            <Link to="/" className="hover:text-blue-600">
+              Home
+            </Link>
             <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
-            <Link to="/business" className="hover:text-blue-600">Browse</Link>
+            <Link to="/business" className="hover:text-blue-600">
+              Browse
+            </Link>
             <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
-            <Link to={`/business/${city}`} className="hover:text-blue-600">{cityName}</Link>
+            <Link to={`/business/${city}`} className="hover:text-blue-600">
+              {cityName}
+            </Link>
             <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
             <span className="text-blue-600 font-medium">{categoryName}</span>
           </nav>
@@ -417,15 +488,14 @@ export default function CityCategory() {
                 {categoryName} in {cityName}
               </h1>
               <p className="text-lg text-gray-600">
-                Find the best {categoryName.toLowerCase()} services in {cityName}
+                Find the best {categoryName.toLowerCase()} services in{" "}
+                {cityName}
               </p>
               <div className="flex items-center mt-2 space-x-4">
                 <Badge variant="secondary">
                   {filteredBusinesses.length} businesses found
                 </Badge>
-                <Badge variant="outline">
-                  Minimum 75 results guaranteed
-                </Badge>
+                <Badge variant="outline">Minimum 75 results guaranteed</Badge>
               </div>
             </div>
           </div>
@@ -481,11 +551,13 @@ export default function CityCategory() {
         </div>
 
         {/* Business Grid */}
-        <div className={`grid gap-6 ${
-          viewMode === "grid"
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            : "grid-cols-1"
-        }`}>
+        <div
+          className={`grid gap-6 ${
+            viewMode === "grid"
+              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              : "grid-cols-1"
+          }`}
+        >
           {filteredBusinesses.map((business, index) => (
             <BusinessCard
               key={`${business.id}-${index}`}
@@ -513,8 +585,10 @@ export default function CityCategory() {
         <div className="mt-8 p-4 bg-white rounded-lg shadow-md">
           <h3 className="font-semibold text-lg mb-2">Search Results Summary</h3>
           <p className="text-gray-600">
-            Showing {filteredBusinesses.length} {categoryName.toLowerCase()} businesses in {cityName}.
-            {filteredBusinesses.length >= 75 && " ✅ Minimum 75 results achieved."}
+            Showing {filteredBusinesses.length} {categoryName.toLowerCase()}{" "}
+            businesses in {cityName}.
+            {filteredBusinesses.length >= 75 &&
+              " ✅ Minimum 75 results achieved."}
           </p>
         </div>
       </div>
