@@ -1742,6 +1742,11 @@ export default function CityCategory() {
               }));
 
               console.log(`✅ Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
+
+              // Immediately set the city businesses state so the counter shows correctly
+              setCityBusinesses(accumulatedBusinesses);
+              setCityDataLoaded(true);
+              console.log(`✅ Set city businesses count to ${accumulatedBusinesses.length}`);
             } else {
               console.log(`❌ API returned empty or invalid data for ${cityName}`);
               console.log(`Response structure:`, Object.keys(allCityResult || {}));
