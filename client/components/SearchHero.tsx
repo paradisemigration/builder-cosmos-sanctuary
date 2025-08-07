@@ -29,10 +29,10 @@ interface SearchHeroProps {
 
 export function SearchHero({ onSearch }: SearchHeroProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedLocation, setSelectedLocation] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedLocation, setSelectedLocation] = useState("all");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions, setSuggestions] = useState<typeof sampleBusinesses>([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   // Handle search input changes and filter suggestions
   const handleSearchChange = (value: string) => {
@@ -129,7 +129,7 @@ export function SearchHero({ onSearch }: SearchHeroProps) {
                         alt={business.name}
                         className="w-8 h-8 rounded object-cover"
                         onError={(e) => {
-                          const target = e.target as HTMLImageElement;
+                          const target = e.target;
                           target.style.display = "none";
                           target.parentElement!.innerHTML = business.name
                             .split(" ")
