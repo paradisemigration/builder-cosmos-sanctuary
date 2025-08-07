@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import "./global.css";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+
+// Import React Router components individually to avoid undefined issues
+import { BrowserRouter } from "react-router-dom";
+import { Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
