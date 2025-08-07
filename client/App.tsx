@@ -13,35 +13,45 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
 (() => {
   const hostname = window.location.hostname;
   console.log(`🚨 NUCLEAR INTERCEPTOR: hostname = ${hostname}`);
-  console.log(`🚨 NUCLEAR INTERCEPTOR: Blocking ALL external requests to prevent 404s`);
+  console.log(
+    `🚨 NUCLEAR INTERCEPTOR: Blocking ALL external requests to prevent 404s`,
+  );
 
   // ALWAYS install on production (any non-localhost domain)
   if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
-
     // 1. OVERRIDE FETCH COMPLETELY
     const originalFetch = window.fetch;
-    window.fetch = async (url: string | URL | Request, options?: RequestInit) => {
+    window.fetch = async (
+      url: string | URL | Request,
+      options?: RequestInit,
+    ) => {
       const urlString = typeof url === "string" ? url : url.toString();
-      const fullUrl = urlString.startsWith('http') ? urlString : `${window.location.origin}${urlString}`;
+      const fullUrl = urlString.startsWith("http")
+        ? urlString
+        : `${window.location.origin}${urlString}`;
 
       console.log(`🌍 FETCH ATTEMPT: ${fullUrl}`);
 
       // Block ALL external domains completely
-      if (fullUrl.includes('://') && !fullUrl.includes(hostname)) {
+      if (fullUrl.includes("://") && !fullUrl.includes(hostname)) {
         console.error(`🚨 BLOCKED EXTERNAL: ${fullUrl}`);
-        return Promise.resolve(new Response('{"blocked":true}', {
-          status: 200,
-          headers: { "Content-Type": "application/json" }
-        }));
+        return Promise.resolve(
+          new Response('{"blocked":true}', {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }),
+        );
       }
 
       // Block ALL API calls on this domain too
       if (urlString.includes("/api/") || urlString.includes("api.")) {
         console.error(`🚨 BLOCKED API: ${fullUrl}`);
-        return Promise.resolve(new Response(
-          JSON.stringify({ success: false, data: [], businesses: [] }),
-          { status: 200, headers: { "Content-Type": "application/json" }}
-        ));
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({ success: false, data: [], businesses: [] }),
+            { status: 200, headers: { "Content-Type": "application/json" } },
+          ),
+        );
       }
 
       console.log(`✅ ALLOWING: ${fullUrl}`);
@@ -53,18 +63,29 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
     window.XMLHttpRequest = class extends OriginalXHR {
       open(method: string, url: string | URL, ...args: any[]) {
         const urlString = typeof url === "string" ? url : url.toString();
-        const fullUrl = urlString.startsWith('http') ? urlString : `${window.location.origin}${urlString}`;
+        const fullUrl = urlString.startsWith("http")
+          ? urlString
+          : `${window.location.origin}${urlString}`;
 
         console.log(`🌍 XHR ATTEMPT: ${method} ${fullUrl}`);
 
         // Block external domains and APIs
-        if ((fullUrl.includes('://') && !fullUrl.includes(hostname)) || fullUrl.includes('/api/')) {
+        if (
+          (fullUrl.includes("://") && !fullUrl.includes(hostname)) ||
+          fullUrl.includes("/api/")
+        ) {
           console.error(`🚨 BLOCKED XHR: ${method} ${fullUrl}`);
           // Mock successful response
           setTimeout(() => {
-            Object.defineProperty(this, 'status', { value: 200, configurable: true });
-            Object.defineProperty(this, 'responseText', { value: '{"blocked":true}', configurable: true });
-            if (this.onload) this.onload(new Event('load'));
+            Object.defineProperty(this, "status", {
+              value: 200,
+              configurable: true,
+            });
+            Object.defineProperty(this, "responseText", {
+              value: '{"blocked":true}',
+              configurable: true,
+            });
+            if (this.onload) this.onload(new Event("load"));
           }, 0);
           return;
         }
@@ -80,55 +101,66 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
         super(width, height);
 
         const originalSetSrc = (value: string) => {
-          const fullUrl = value.startsWith('http') ? value : `${window.location.origin}${value}`;
+          const fullUrl = value.startsWith("http")
+            ? value
+            : `${window.location.origin}${value}`;
 
-          if (fullUrl.includes('://') && !fullUrl.includes(hostname)) {
+          if (fullUrl.includes("://") && !fullUrl.includes(hostname)) {
             console.error(`🚨 BLOCKED IMAGE: ${fullUrl}`);
             // Set to a data URL to prevent 404
-            Object.defineProperty(this, 'src', {
-              value: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4=',
-              configurable: true
+            Object.defineProperty(this, "src", {
+              value:
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4=",
+              configurable: true,
             });
             return;
           }
 
-          Object.defineProperty(this, 'src', { value, configurable: true });
+          Object.defineProperty(this, "src", { value, configurable: true });
         };
 
-        Object.defineProperty(this, 'src', {
+        Object.defineProperty(this, "src", {
           set: originalSetSrc,
-          get: () => this.getAttribute('src') || '',
-          configurable: true
+          get: () => this.getAttribute("src") || "",
+          configurable: true,
         });
       }
     };
 
     // 4. INTERCEPT LINK CLICKS TO PREVENT EXTERNAL NAVIGATION
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      const link = target.closest('a');
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target as HTMLElement;
+        const link = target.closest("a");
 
-      if (link && link.href) {
-        const url = link.href;
-        if (url.includes('://') && !url.includes(hostname)) {
-          console.error(`🚨 BLOCKED LINK CLICK: ${url}`);
-          event.preventDefault();
-          event.stopPropagation();
-          return false;
+        if (link && link.href) {
+          const url = link.href;
+          if (url.includes("://") && !url.includes(hostname)) {
+            console.error(`🚨 BLOCKED LINK CLICK: ${url}`);
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
         }
-      }
-    }, true);
+      },
+      true,
+    );
 
     console.log("🚨 NUCLEAR INTERCEPTOR: ALL BLOCKS INSTALLED");
   }
 
   // 5. SUPPRESS ALL ERROR EVENTS
-  window.addEventListener("error", (event) => {
-    console.warn("🔇 SUPPRESSED ERROR:", event.message);
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-  }, true);
+  window.addEventListener(
+    "error",
+    (event) => {
+      console.warn("🔇 SUPPRESSED ERROR:", event.message);
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    },
+    true,
+  );
 
   window.addEventListener("unhandledrejection", (event) => {
     console.warn("🔇 SUPPRESSED REJECTION:", event.reason);
@@ -246,12 +278,14 @@ const App = () => {
     console.log("🔇 ALL EXTERNAL REQUESTS DISABLED - NO SEO SETUP");
 
     // Remove any existing meta tags that might trigger external requests
-    const metaTags = document.querySelectorAll('meta[content*="verification"], meta[name*="google"], meta[name*="bing"], meta[name*="msvalidate"]');
-    metaTags.forEach(tag => tag.remove());
+    const metaTags = document.querySelectorAll(
+      'meta[content*="verification"], meta[name*="google"], meta[name*="bing"], meta[name*="msvalidate"]',
+    );
+    metaTags.forEach((tag) => tag.remove());
 
     // Remove any canonical links that might trigger requests
     const canonicalLinks = document.querySelectorAll('link[rel="canonical"]');
-    canonicalLinks.forEach(link => link.remove());
+    canonicalLinks.forEach((link) => link.remove());
 
     console.log("🔇 REMOVED ALL EXTERNAL META TAGS AND LINKS");
   }, []);
