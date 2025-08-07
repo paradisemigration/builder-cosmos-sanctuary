@@ -208,69 +208,12 @@ class APIClient {
           };
         }
     } catch (error) {
-      console.warn("⚠️ Real API failed, using sample data fallback:", error);
+      console.error("❌ CRITICAL: Cannot connect to real database with 1500+ businesses:", error);
+      throw new Error(`Database connection failed: ${error.message}. Your 1500+ businesses are not accessible.`);
     }
 
-    // Fallback to sample data when API fails or returns insufficient data
-    console.log("📋 Using sample data fallback");
-
-    // Apply filtering to sample data
-    let filteredBusinesses = [...sampleBusinesses];
-
-    if (params.search) {
-      const searchTerm = params.search.toLowerCase();
-      filteredBusinesses = filteredBusinesses.filter(
-        (business) =>
-          business.name?.toLowerCase().includes(searchTerm) ||
-          business.description?.toLowerCase().includes(searchTerm) ||
-          business.services?.some(service =>
-            service.toLowerCase().includes(searchTerm)
-          )
-      );
-    }
-
-    if (params.category && params.category !== "all") {
-      filteredBusinesses = filteredBusinesses.filter((business) =>
-        business.category?.toLowerCase().includes(params.category!.toLowerCase())
-      );
-    }
-
-    if (params.city && params.city !== "all") {
-      filteredBusinesses = filteredBusinesses.filter((business) =>
-        business.city?.toLowerCase().includes(params.city!.toLowerCase())
-      );
-    }
-
-    // Pagination for sample data
-    const page = params.page || 1;
-    const limit = params.limit || 20;
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
-
-    console.log("📊 Sample data prepared:", {
-      totalFiltered: filteredBusinesses.length,
-      pageSize: paginatedBusinesses.length,
-      page: page
-    });
-
-    return {
-      success: true,
-      data: paginatedBusinesses.map((business, index) => ({
-        ...business,
-        id: business.id || `sample-${startIndex + index}`,
-        isVerified: true,
-        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-        rating: business.rating || Math.random() * 2 + 3,
-      })),
-      pagination: {
-        page: page,
-        totalPages: Math.ceil(filteredBusinesses.length / limit),
-        totalRecords: filteredBusinesses.length,
-        hasNext: endIndex < filteredBusinesses.length,
-        hasPrev: page > 1,
-      }
-    };
+    // NO SAMPLE DATA FALLBACK - user has real 1500+ business database
+    throw new Error("Real database should have returned substantial data. Check backend connection.");
   }
 
   // Get single business
