@@ -19,6 +19,11 @@ export default defineConfig({
     minify: false,
   },
   plugins: [react()],
+  esbuild: {
+    target: 'es2020',
+    format: 'esm',
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
@@ -26,6 +31,6 @@ export default defineConfig({
     },
   },
   esbuild: {
-    legalComments: "none",
+    legalComments: 'none',
   },
 });
