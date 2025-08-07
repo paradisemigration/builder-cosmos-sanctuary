@@ -2264,7 +2264,37 @@ export default function CityCategory() {
 
     async function fetchCityBusinesses() {
       try {
-        // Fetch all businesses for the city with higher limit
+        // Check if we already have city businesses from Phase 0 in fetchCategoryBusinesses
+        if (categoryBusinesses && categoryBusinesses.length > 0) {
+          const cityBusinessesFromCategory = categoryBusinesses.filter(b => !b.isNearbyData);
+          if (cityBusinessesFromCategory.length > 0) {
+            console.log(`✅ Using ${cityBusinessesFromCategory.length} city businesses already fetched in category search`);
+
+            // Set the city businesses state
+            setCityBusinesses(cityBusinessesFromCategory);
+            setCityDataLoaded(true);
+
+            // Update debug info
+            const timestamp = new Date().toLocaleTimeString();
+            setDebugInfo((prev) => ({
+              ...prev,
+              apiCalls: [
+                ...prev.apiCalls,
+                {
+                  url: "Already fetched in Phase 0",
+                  status: "reused",
+                  count: cityBusinessesFromCategory.length,
+                  timestamp,
+                },
+              ],
+            }));
+
+            return; // Skip duplicate API call
+          }
+        }
+
+        // If no city businesses available, fetch them separately
+        console.log(`Fetching all city businesses separately for ${cityName}`);
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
