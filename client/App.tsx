@@ -9,6 +9,40 @@ import {
 } from "react-router-dom";
 import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
+// IMMEDIATE FETCH INTERCEPTOR - Applied before any React components load
+(() => {
+  const hostname = window.location.hostname;
+  console.log(`🚨 IMMEDIATE INTERCEPTOR: hostname = ${hostname}`);
+
+  if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
+    console.log("🚨 IMMEDIATE INTERCEPTOR: Installing immediate API blocker");
+
+    const originalFetch = window.fetch;
+    window.fetch = async (url: string | URL | Request, options?: RequestInit) => {
+      const urlString = typeof url === "string" ? url : url.toString();
+
+      if (urlString.includes("/api/")) {
+        console.log(`🚨 IMMEDIATE BLOCK: ${urlString}`);
+        return Promise.resolve(new Response(
+          JSON.stringify({
+            success: false,
+            message: "API blocked - immediate interceptor",
+            data: [],
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }
+        ));
+      }
+
+      return originalFetch(url, options);
+    };
+
+    console.log("🚨 IMMEDIATE INTERCEPTOR: Installed successfully");
+  }
+})();
+
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
   const { pathname } = useLocation();
