@@ -371,10 +371,13 @@ export default function Browse() {
       setScrapedBusinesses(fallbackBusinesses);
       setTotalCount(fallbackBusinesses.length);
       setHasMore(false);
-      setLoading(false);
+      setCurrentPage(page);
       setError(null);
-      return;
     }
+
+    // Always clean up loading states
+    setLoading(false);
+    setLoadingMore(false);
 
     try {
       if (page === 1) {
