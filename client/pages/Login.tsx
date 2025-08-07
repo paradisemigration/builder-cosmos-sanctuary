@@ -568,10 +568,10 @@ export default function Login() {
                             id="terms"
                             checked={registerData.agreeToTerms}
                             onCheckedChange={(checked) =>
-                                setRegisterData((prev) => ({
-                                  ...prev,
-                                  agreeToTerms: checked,
-                                }))
+                              setRegisterData((prev) => ({
+                                ...prev,
+                                agreeToTerms: checked,
+                              }))
                             }
                             className="mt-1"
                           />
