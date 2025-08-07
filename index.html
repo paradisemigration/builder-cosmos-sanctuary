@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VisaConsult India</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
   </head>
@@ -26,13 +29,15 @@
         console.log("✅ Arrow function syntax working:", testArrow());
 
         // Clear any cached service workers
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) {
-              registration.unregister();
-              console.log("🧹 Unregistered service worker");
-            }
-          });
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker
+            .getRegistrations()
+            .then(function (registrations) {
+              for (let registration of registrations) {
+                registration.unregister();
+                console.log("🧹 Unregistered service worker");
+              }
+            });
         }
 
         // Clear localStorage that might contain cached code
@@ -40,27 +45,28 @@
           localStorage.clear();
           sessionStorage.clear();
           console.log("🧹 Cleared storage");
-        } catch(e) {
+        } catch (e) {
           console.log("Storage clear failed:", e);
         }
 
         // Update UI
-        document.getElementById('root').innerHTML =
+        document.getElementById("root").innerHTML =
           '<div style="padding: 20px; font-family: Arial;">' +
           '<h1 style="color: green;">✅ All Syntax Tests Passed</h1>' +
           '<p>No "Unexpected token :" errors detected</p>' +
-          '<p>JavaScript parsing working correctly</p>' +
-          '</div>';
+          "<p>JavaScript parsing working correctly</p>" +
+          "</div>";
 
         console.log("✅ App loaded successfully - No syntax errors");
-
       } catch (error) {
         console.error("❌ JavaScript error caught:", error);
-        document.getElementById('root').innerHTML =
+        document.getElementById("root").innerHTML =
           '<div style="padding: 20px; color: red;">' +
-          '<h1>Error Detected</h1>' +
-          '<p>Error: ' + error.message + '</p>' +
-          '</div>';
+          "<h1>Error Detected</h1>" +
+          "<p>Error: " +
+          error.message +
+          "</p>" +
+          "</div>";
       }
     </script>
   </body>

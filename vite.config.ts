@@ -30,6 +30,6 @@ export default defineConfig({
     legalComments: "none",
     logOverride: { "this-is-undefined-in-esm": "silent" },
     loader: "jsx",
-    jsx: "automatic"
+    jsx: "automatic",
   },
 });
