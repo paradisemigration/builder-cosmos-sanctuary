@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 
-// FullStory-resistant fetch wrapper
+// DISABLED: External API calls blocked in production
 async function robustFetch(
   url: string,
   options?: RequestInit,
 ): Promise<Response> {
+  console.log("🚨 GEOLOCATION BLOCKED: External API call prevented");
+  return Promise.resolve(new Response('{"blocked":true}', {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  }));
   // More comprehensive FullStory detection
   const isFullStoryActive =
     typeof window !== "undefined" &&
