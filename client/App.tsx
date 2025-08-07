@@ -176,6 +176,7 @@ const App = () => {
           <GlobalDebugPopup />
         </BrowserRouter>
       </TooltipProvider>
+      </SimpleAuthProvider>
     </HelmetProvider>
   );
 };
