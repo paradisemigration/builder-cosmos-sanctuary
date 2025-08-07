@@ -137,55 +137,70 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // Try the real API first
-    try {
-      const queryParams = new URLSearchParams();
-      if (params.page) queryParams.set("page", params.page.toString());
-      if (params.limit) queryParams.set("limit", params.limit.toString());
-      if (params.city) queryParams.set("city", params.city);
-      if (params.category) queryParams.set("category", params.category);
-      if (params.search) queryParams.set("search", params.search);
+    // Check for known issues that prevent API calls
+    const hostname = window.location.hostname;
+    const isDeploymentWithIssues = hostname.includes("fly.dev") ||
+                                  hostname.includes("vercel.app") ||
+                                  hostname.includes("netlify.app");
 
-      const apiUrl = `/api/businesses?${queryParams}`;
-      console.log("🚀 Trying real API:", apiUrl);
+    // Check for FullStory interference (common cause of fetch failures)
+    const hasFullStory = typeof window !== 'undefined' &&
+                        (window as any).FS ||
+                        document.querySelector('script[src*="fullstory"]');
 
-      const response = await this.request<{
-        success: boolean;
-        data: Business[];
-        pagination: any;
-        total: number;
-        businesses: Business[];
-        totalRecords: number;
-        source?: string;
-      }>(apiUrl);
+    if (isDeploymentWithIssues || hasFullStory) {
+      console.log("🚫 Skipping API call due to deployment type or FullStory interference");
+    } else {
+      // Try the real API first only on localhost/development
+      try {
+        const queryParams = new URLSearchParams();
+        if (params.page) queryParams.set("page", params.page.toString());
+        if (params.limit) queryParams.set("limit", params.limit.toString());
+        if (params.city) queryParams.set("city", params.city);
+        if (params.category) queryParams.set("category", params.category);
+        if (params.search) queryParams.set("search", params.search);
 
-      const businesses = response.businesses || response.data || [];
-      const total = response.totalRecords || response.total || businesses.length;
+        const apiUrl = `/api/businesses?${queryParams}`;
+        console.log("🚀 Trying real API:", apiUrl);
 
-      console.log("✅ REAL API SUCCESS:", {
-        success: response.success,
-        businessCount: businesses.length,
-        totalInDB: total,
-        hostname: window.location.hostname,
-        firstBusiness: businesses[0]?.name
-      });
+        const response = await this.request<{
+          success: boolean;
+          data: Business[];
+          pagination: any;
+          total: number;
+          businesses: Business[];
+          totalRecords: number;
+          source?: string;
+        }>(apiUrl);
 
-      // If we get substantial real data, return it
-      if (response.success && total > 50) {
-        return {
-          success: true,
-          data: businesses,
-          pagination: response.pagination || {
-            page: params.page || 1,
-            totalPages: Math.ceil(total / (params.limit || 20)),
-            totalRecords: total,
-            hasNext: businesses.length === (params.limit || 20),
-            hasPrev: (params.page || 1) > 1,
-          }
-        };
+        const businesses = response.businesses || response.data || [];
+        const total = response.totalRecords || response.total || businesses.length;
+
+        console.log("✅ REAL API SUCCESS:", {
+          success: response.success,
+          businessCount: businesses.length,
+          totalInDB: total,
+          hostname: window.location.hostname,
+          firstBusiness: businesses[0]?.name
+        });
+
+        // If we get substantial real data, return it
+        if (response.success && total > 50) {
+          return {
+            success: true,
+            data: businesses,
+            pagination: response.pagination || {
+              page: params.page || 1,
+              totalPages: Math.ceil(total / (params.limit || 20)),
+              totalRecords: total,
+              hasNext: businesses.length === (params.limit || 20),
+              hasPrev: (params.page || 1) > 1,
+            }
+          };
+        }
+      } catch (error) {
+        console.warn("⚠️ Real API failed, using sample data fallback:", error);
       }
-    } catch (error) {
-      console.warn("⚠️ Real API failed, using sample data fallback:", error);
     }
 
     // Fallback to sample data when API fails or returns insufficient data
