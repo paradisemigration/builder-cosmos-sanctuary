@@ -146,29 +146,8 @@ export default function Index() {
     };
   }, []);
 
-  // Fetch featured businesses
-  useEffect(() => {
-    const fetchFeaturedBusinesses = async () => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        // Use sample data for demonstration
-        const featured = sampleBusinesses.slice(0, 6).map((business) => ({
-          ...business,
-          isFeatured: true,
-        }));
-
-        setFeaturedBusinesses(featured);
-      } catch (error) {
-        console.error("Error fetching featured businesses:", error);
-        setFeaturedBusinesses(sampleBusinesses.slice(0, 6));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedBusinesses();
-  }, []);
+  // Combined loading state
+  const loading = featuredLoading || statsLoading;
 
   // Auto-rotate service highlights
   useEffect(() => {
