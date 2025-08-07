@@ -10,37 +10,59 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  // Generic request method
+  // Generic request method using XMLHttpRequest to bypass FullStory interference
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
 
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
-        ...options,
-      });
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const method = options.method || 'GET';
 
-      if (!response.ok) {
-        const error = await response.json().catch(() => ({
-          message: "Request failed",
-        }));
-        throw new Error(error.message || `HTTP ${response.status}`);
+      xhr.open(method, url);
+
+      // Set headers
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      if (options.headers) {
+        Object.entries(options.headers).forEach(([key, value]) => {
+          xhr.setRequestHeader(key, value as string);
+        });
       }
 
-      return response.json();
-    } catch (error) {
-      // Handle fetch errors (network issues, CORS, etc.)
-      if (error instanceof TypeError && error.message.includes("fetch")) {
-        throw new Error("Network error: Unable to connect to server");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const response = JSON.parse(xhr.responseText);
+              resolve(response);
+            } catch (error) {
+              reject(new Error('Invalid JSON response'));
+            }
+          } else {
+            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+          }
+        }
+      };
+
+      xhr.onerror = function() {
+        reject(new Error('Network error'));
+      };
+
+      xhr.ontimeout = function() {
+        reject(new Error('Request timeout'));
+      };
+
+      xhr.timeout = 10000; // 10 second timeout
+
+      // Send request
+      if (options.body) {
+        xhr.send(options.body as string);
+      } else {
+        xhr.send();
       }
-      throw error;
-    }
+    });
   }
 
   // Upload single image
