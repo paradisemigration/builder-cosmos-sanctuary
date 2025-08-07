@@ -495,7 +495,7 @@ export default function CityBusinessListing() {
         }
       }
 
-      // Step 2: If no data found for specific area, try hierarchical fallback to database
+      // Step 2: If no data found for specific city, implement proper hierarchical search
       if (
         apiAvailable &&
         (!result ||
@@ -504,39 +504,82 @@ export default function CityBusinessListing() {
           result.businesses.length === 0)
       ) {
         console.log(
-          `No data found for ${cityName}, trying nearby cities from database`,
+          `🔍 No data found for ${cityName}, implementing hierarchical search...`,
         );
 
-        const nearbyCities = getNearByCities(cityName, country);
+        // PHASE 1: Check same region/state cities first
+        const regionCities = getRegionCities(cityName, country);
+        if (regionCities.length > 0) {
+          console.log(`📍 PHASE 1: Checking same region cities: ${regionCities.join(', ')}`);
 
-        for (const nearbyCity_temp of nearbyCities) {
-          try {
-            console.log(`Trying nearby city: ${nearbyCity_temp}`);
-            const nearbyResponse = await robustFetch(
-              `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
-            );
+          for (const regionCity of regionCities) {
+            try {
+              console.log(`🎯 Trying region city: ${regionCity}`);
+              const regionResponse = await robustFetch(
+                `/api/scraped-businesses?city=${encodeURIComponent(regionCity)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
+              );
 
-            if (nearbyResponse.ok) {
-              const nearbyResult = await nearbyResponse.json();
-              if (
-                nearbyResult.success &&
-                nearbyResult.businesses &&
-                nearbyResult.businesses.length > 0
-              ) {
-                console.log(
-                  `Found ${nearbyResult.businesses.length} businesses in nearby city: ${nearbyCity_temp}`,
-                );
-                result = nearbyResult;
-                isNearbyData = true;
-                nearbyCity = nearbyCity_temp;
-                break; // Found data, stop searching
+              if (regionResponse.ok) {
+                const regionResult = await regionResponse.json();
+                if (
+                  regionResult.success &&
+                  regionResult.businesses &&
+                  regionResult.businesses.length > 0
+                ) {
+                  console.log(
+                    `✅ REGION MATCH: Found ${regionResult.businesses.length} businesses in ${regionCity}`,
+                  );
+                  result = regionResult;
+                  isNearbyData = true;
+                  nearbyCity = regionCity;
+                  break; // Found data in same region, stop searching
+                }
               }
+            } catch (regionError) {
+              console.log(`❌ Failed to fetch from region city ${regionCity}:`, regionError);
             }
-          } catch (nearbyError) {
-            console.log(
-              `Failed to fetch data for nearby city ${nearbyCity_temp}:`,
-              nearbyError,
-            );
+          }
+        }
+
+        // PHASE 2: If still no data, try broader nearby cities
+        if (
+          !result ||
+          !result.success ||
+          !result.businesses ||
+          result.businesses.length === 0
+        ) {
+          console.log(`🌍 PHASE 2: Checking broader nearby cities...`);
+          const nearbyCities = getNearByCities(cityName, country);
+
+          for (const nearbyCity_temp of nearbyCities) {
+            try {
+              console.log(`🔄 Trying nearby city: ${nearbyCity_temp}`);
+              const nearbyResponse = await robustFetch(
+                `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity_temp)}&page=${page}&limit=${ITEMS_PER_PAGE}`,
+              );
+
+              if (nearbyResponse.ok) {
+                const nearbyResult = await nearbyResponse.json();
+                if (
+                  nearbyResult.success &&
+                  nearbyResult.businesses &&
+                  nearbyResult.businesses.length > 0
+                ) {
+                  console.log(
+                    `✅ NEARBY MATCH: Found ${nearbyResult.businesses.length} businesses in ${nearbyCity_temp}`,
+                  );
+                  result = nearbyResult;
+                  isNearbyData = true;
+                  nearbyCity = nearbyCity_temp;
+                  break; // Found data, stop searching
+                }
+              }
+            } catch (nearbyError) {
+              console.log(
+                `❌ Failed to fetch from nearby city ${nearbyCity_temp}:`,
+                nearbyError,
+              );
+            }
           }
         }
       }
