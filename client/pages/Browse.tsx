@@ -273,9 +273,24 @@ export default function Browse() {
     }
     setError(null);
 
-    // Check if this is a frontend-only deployment first
-    if (isFrontendOnlyDeployment() && page === 1 && !append) {
-      console.log("📱 Frontend-only deployment detected, using sample data");
+    // Test if backend is actually available instead of just checking domain
+    let backendAvailable = true;
+    try {
+      // Quick health check first - if this fails, then use sample data
+      const healthResponse = await fetch('/api/health', {
+        method: 'HEAD',
+        signal: AbortSignal.timeout(3000) // 3 second timeout
+      });
+      backendAvailable = healthResponse.ok;
+      console.log("🩺 Backend health check:", healthResponse.ok ? "✅ Available" : "❌ Unavailable");
+    } catch (healthError) {
+      console.log("🩺 Backend health check failed:", healthError.message);
+      backendAvailable = false;
+    }
+
+    // Only use sample data if backend is actually unavailable
+    if (!backendAvailable && page === 1 && !append) {
+      console.log("📱 Backend unavailable, using sample data");
       const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
         ...business,
         id: business.id || `sample-${index}`,
