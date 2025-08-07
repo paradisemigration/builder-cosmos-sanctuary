@@ -3,15 +3,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "server/api.js": {
+    "api/businesses.js": {
       "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/businesses"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
