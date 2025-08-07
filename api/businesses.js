@@ -187,7 +187,7 @@ export default function handler(req, res) {
     // Use your real 1500+ business database
     let businesses = [...realBusinessDatabase];
 
-    // Apply filters
+    // Apply filters with improved matching
     if (search) {
       const searchTerm = search.toLowerCase();
       businesses = businesses.filter(
@@ -196,20 +196,30 @@ export default function handler(req, res) {
           business.description?.toLowerCase().includes(searchTerm) ||
           business.services?.some((service) =>
             service.toLowerCase().includes(searchTerm),
+          ) ||
+          business.specializations?.some((spec) =>
+            spec.toLowerCase().includes(searchTerm),
           ),
       );
     }
 
     if (category && category !== "all") {
-      businesses = businesses.filter((business) =>
-        business.category?.toLowerCase().includes(category.toLowerCase()),
-      );
+      businesses = businesses.filter((business) => {
+        const businessCategory = business.category?.toLowerCase();
+        const searchCategory = category.toLowerCase();
+        return businessCategory?.includes(searchCategory) ||
+               businessCategory === searchCategory;
+      });
     }
 
     if (city && city !== "all") {
-      businesses = businesses.filter((business) =>
-        business.city?.toLowerCase().includes(city.toLowerCase()),
-      );
+      businesses = businesses.filter((business) => {
+        const businessCity = business.city?.toLowerCase();
+        const searchCity = city.toLowerCase().replace(/-/g, " ");
+        return businessCity?.includes(searchCity) ||
+               businessCity === searchCity ||
+               businessCity?.replace(/\s+/g, "") === searchCity.replace(/\s+/g, "");
+      });
     }
 
     // Pagination
