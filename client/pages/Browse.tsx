@@ -25,7 +25,7 @@ import {
   ChevronDown,
   X,
 } from "lucide-react";
-import { type Business, businessCategories } from "@/lib/data";
+import { Business, businessCategories } from "@/lib/data";
 import { allIndianCities } from "@/lib/all-categories";
 
 export default function Browse() {
