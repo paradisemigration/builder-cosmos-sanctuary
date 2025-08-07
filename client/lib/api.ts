@@ -1,4 +1,6 @@
 // API client for backend communication
+import { sampleBusinesses, type Business } from "@/lib/data";
+import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
