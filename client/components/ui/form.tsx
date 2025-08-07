@@ -22,9 +22,7 @@ type FormFieldContextValue<
   name: TName;
 };
 
-const FormFieldContext = React.createContext(
-  {},
-);
+const FormFieldContext = React.createContext({});
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -66,9 +64,7 @@ type FormItemContextValue = {
   id: string;
 };
 
-const FormItemContext = React.createContext(
-  {},
-);
+const FormItemContext = React.createContext({});
 
 const FormItem = React.forwardRef<
   HTMLDivElement,

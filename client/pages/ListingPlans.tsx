@@ -153,9 +153,7 @@ const successStories = [
 export default function ListingPlans() {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [billingCycle, setBillingCycle] = useState(
-    "monthly",
-  );
+  const [billingCycle, setBillingCycle] = useState("monthly");
 
   const getPrice = (plan: (typeof plans)[0]) => {
     if (plan.price === 0) return "Free";
