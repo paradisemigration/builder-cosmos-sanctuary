@@ -144,18 +144,20 @@ interface GeolocationResult {
 }
 
 export function useGeolocation(): GeolocationResult {
-  // DISABLED: Return mock location data to prevent external API calls
-  const [location, setLocation] = useState<LocationData | null>({
-    city: "Dubai",
-    country: "United Arab Emirates",
-    countryCode: "AE",
-    region: "Dubai",
-    latitude: 25.2048,
-    longitude: 55.2708
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasPermission, setHasPermission] = useState(true);
+  // COMPLETELY DISABLED - RETURN STATIC DATA
+  return {
+    location: {
+      city: "Dubai",
+      country: "United Arab Emirates",
+      countryCode: "AE",
+      region: "Dubai",
+      latitude: 25.2048,
+      longitude: 55.2708
+    },
+    isLoading: false,
+    error: null,
+    hasPermission: true
+  };
 
   const getLocationFromCoords = async (
     latitude: number,
