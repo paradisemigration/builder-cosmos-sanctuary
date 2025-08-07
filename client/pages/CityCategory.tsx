@@ -144,7 +144,7 @@ export default function CityCategory() {
 
         // Step 1: Try to get exact city + category match
         try {
-          const exactUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+          const exactUrl = `/api/businesses?city=${encodeURIComponent(
             cityName,
           )}&category=${encodeURIComponent(categoryName)}&limit=500`;
           console.log(`📡 Exact search: ${exactUrl}`);
@@ -154,10 +154,11 @@ export default function CityCategory() {
             const exactResult = await exactResponse.json();
             if (
               exactResult.success &&
-              exactResult.businesses &&
-              exactResult.businesses.length > 0
+              (exactResult.businesses || exactResult.data) &&
+              (exactResult.businesses || exactResult.data).length > 0
             ) {
-              allBusinesses = exactResult.businesses.map((business: any) => ({
+              const businesses = exactResult.businesses || exactResult.data;
+              allBusinesses = businesses.map((business: any) => ({
                 ...business,
                 sourceType: "exact_match",
                 relevanceScore: 100,
@@ -358,7 +359,7 @@ export default function CityCategory() {
 
           allBusinesses.push(...duplicates);
           console.log(
-            `🔄 Added ${duplicates.length} synthetic businesses. Total: ${allBusinesses.length}`,
+            `��� Added ${duplicates.length} synthetic businesses. Total: ${allBusinesses.length}`,
           );
         }
 
