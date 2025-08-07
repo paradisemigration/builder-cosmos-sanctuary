@@ -125,7 +125,7 @@ const App = () => {
             </div>
             <SiteFooter />
             <GlobalDebugPopup />
-          </BrowserRouter>
+          </SimpleRouter>
         </TooltipProvider>
       </AuthProvider>
     </HelmetProvider>
