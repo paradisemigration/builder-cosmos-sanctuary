@@ -8,11 +8,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import { isFrontendOnlyDeployment } from "@/utils/api-config";
+import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
 // SIMPLIFIED APPROACH - NO COMPLEX INTERCEPTORS
 console.log("App starting with simplified configuration");
-
-// All complex interceptors removed to prevent syntax errors
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
@@ -24,7 +23,6 @@ function ScrollToTop() {
 
   return null;
 }
-import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
 // Add required UI providers
 import { Toaster } from "@/components/ui/toaster";
