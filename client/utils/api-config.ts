@@ -81,7 +81,9 @@ export function isFrontendOnlyDeployment(): boolean {
 
   // Custom domains - assume frontend-only if not localhost and no API URL configured
   if (!isLocalDevelopment() && !getApiBaseUrl()) {
-    console.log(`Detected custom domain (${hostname}) with no backend API configured - treating as frontend-only`);
+    console.log(
+      `Detected custom domain (${hostname}) with no backend API configured - treating as frontend-only`,
+    );
     return true;
   }
 

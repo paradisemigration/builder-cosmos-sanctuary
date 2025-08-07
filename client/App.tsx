@@ -134,7 +134,10 @@ const App = () => {
         );
 
         // Always intercept API calls if we detect it's frontend-only OR if it's not localhost
-        if (isFrontendOnlyDeployment() || (!window.location.hostname.includes("localhost"))) {
+        if (
+          isFrontendOnlyDeployment() ||
+          !window.location.hostname.includes("localhost")
+        ) {
           console.log(`Returning mock response for: ${urlString}`);
 
           // Return a mock response to prevent 404 errors
