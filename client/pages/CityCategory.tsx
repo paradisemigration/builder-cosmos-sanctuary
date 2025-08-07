@@ -399,15 +399,24 @@ export default function CityCategory() {
 
     let combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
 
-    // Remove duplicates
+    // Remove duplicates (but keep synthetic businesses as they are intentionally created)
     const uniqueBusinesses = combinedBusinesses.filter(
-      (business, index, self) =>
-        index ===
-        self.findIndex(
-          (b) =>
-            b.id === business.id ||
-            (b.name === business.name && b.address === business.address),
-        ),
+      (business, index, self) => {
+        // Always keep synthetic/emergency businesses as they have unique IDs
+        if (business.isSynthetic || business.isEmergencySample) {
+          return true;
+        }
+
+        // For real businesses, check for duplicates
+        return index ===
+          self.findIndex(
+            (b) =>
+              !b.isSynthetic &&
+              !b.isEmergencySample &&
+              (b.id === business.id ||
+                (b.name === business.name && b.address === business.address)),
+          );
+      },
     );
 
     // Apply search filter
