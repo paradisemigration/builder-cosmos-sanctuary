@@ -1,26 +1,24 @@
-// IMMEDIATE GLOBAL BLOCKER - RUNS BEFORE EVERYTHING ELSE
-console.log("🚨 IMMEDIATE GLOBAL BLOCKER: Starting total lockdown");
+// IMMEDIATE GLOBAL BLOCKER - ES5 COMPATIBLE
+console.log("IMMEDIATE GLOBAL BLOCKER: Starting total lockdown");
 
 // Block all possible request sources immediately
-const hostname = window.location.hostname;
+var hostname = window.location.hostname;
 
 // 1. Override fetch globally
-const originalFetch = window.fetch;
-window.fetch = async (...args) => {
-  const url = args[0] && args[0].toString ? args[0].toString() : "";
-  if (
-    url.includes("/api/") ||
-    (url.includes("://") && !url.includes(hostname))
-  ) {
-    console.error("🚨 GLOBAL BLOCKED:", url);
-    return Promise.resolve(
-      new Response('{"blocked":true}', {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
+var originalFetch = window.fetch;
+window.fetch = function() {
+  var args = Array.prototype.slice.call(arguments);
+  var url = args[0] && args[0].toString ? args[0].toString() : "";
+
+  if (url.indexOf("/api/") !== -1 || (url.indexOf("://") !== -1 && url.indexOf(hostname) === -1)) {
+    console.error("GLOBAL BLOCKED:", url);
+    return Promise.resolve(new Response('{"blocked":true}', {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    }));
   }
-  return originalFetch(...args);
+
+  return originalFetch.apply(window, args);
 };
 
 // 2. Override XMLHttpRequest with proper state handling
