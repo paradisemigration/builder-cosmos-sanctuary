@@ -18,18 +18,19 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
   );
 
   // REGISTER SERVICE WORKER IMMEDIATELY FOR MAXIMUM BLOCKING
-  if ('serviceWorker' in navigator && !hostname.includes('localhost')) {
-    console.log('🚨 REGISTERING AGGRESSIVE SERVICE WORKER');
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('🚨 SW: Registered successfully');
+  if ("serviceWorker" in navigator && !hostname.includes("localhost")) {
+    console.log("🚨 REGISTERING AGGRESSIVE SERVICE WORKER");
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        console.log("🚨 SW: Registered successfully");
         // Force immediate activation
         if (registration.waiting) {
-          registration.waiting.postMessage({type: 'SKIP_WAITING'});
+          registration.waiting.postMessage({ type: "SKIP_WAITING" });
         }
       })
-      .catch(error => {
-        console.error('🚨 SW: Registration failed:', error);
+      .catch((error) => {
+        console.error("🚨 SW: Registration failed:", error);
       });
   }
 
