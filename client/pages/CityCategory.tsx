@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
-import {
-  Search,
-  Grid,
-  List,
-  ChevronDown,
-} from "lucide-react";
+import { Search, Grid, List, ChevronDown } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Button } from "@/components/ui/button";
@@ -19,10 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import {
-  sampleBusinesses,
-  type Business,
-} from "@/lib/data";
+import { sampleBusinesses, type Business } from "@/lib/data";
 import {
   allCities,
   getCategoryBySlug,
@@ -47,7 +39,7 @@ export default function CityCategory() {
     city &&
     [
       "dubai",
-      "abu-dhabi", 
+      "abu-dhabi",
       "sharjah",
       "ajman",
       "ras-al-khaimah",
@@ -198,31 +190,21 @@ export default function CityCategory() {
                   .split(/[\s-]+/);
                 const sortedByRelevance = allCityResult.businesses.sort(
                   (a: any, b: any) => {
-                    const aScore = categoryKeywords.reduce(
-                      (score, keyword) => {
-                        if (
-                          (a.category || "").toLowerCase().includes(keyword)
-                        )
-                          score += 10;
-                        if ((a.name || "").toLowerCase().includes(keyword))
-                          score += 5;
-                        return score;
-                      },
-                      0,
-                    );
+                    const aScore = categoryKeywords.reduce((score, keyword) => {
+                      if ((a.category || "").toLowerCase().includes(keyword))
+                        score += 10;
+                      if ((a.name || "").toLowerCase().includes(keyword))
+                        score += 5;
+                      return score;
+                    }, 0);
 
-                    const bScore = categoryKeywords.reduce(
-                      (score, keyword) => {
-                        if (
-                          (b.category || "").toLowerCase().includes(keyword)
-                        )
-                          score += 10;
-                        if ((b.name || "").toLowerCase().includes(keyword))
-                          score += 5;
-                        return score;
-                      },
-                      0,
-                    );
+                    const bScore = categoryKeywords.reduce((score, keyword) => {
+                      if ((b.category || "").toLowerCase().includes(keyword))
+                        score += 10;
+                      if ((b.name || "").toLowerCase().includes(keyword))
+                        score += 5;
+                      return score;
+                    }, 0);
 
                     return bScore - aScore;
                   },
