@@ -46,7 +46,9 @@ if (process.env.NODE_ENV !== "production") {
     app.listen(port, () => {
       console.log("✅ API server started");
       console.log(`🌐 API Base URL: http://localhost:${port}`);
-      console.log("📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions");
+      console.log(
+        "📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions",
+      );
     });
   });
 }
