@@ -159,7 +159,7 @@ export default function About() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg">
-                  <Link to="/business">Find Consultants</Link>
+                  <Link to="/browse">Find Consultants</Link>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
                   <Link to="/plans">List Your Business</Link>
@@ -366,7 +366,7 @@ export default function About() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700" asChild>
-              <Link to="/business">Find Consultants</Link>
+              <Link to="/browse">Find Consultants</Link>
             </Button>
             <Button
               variant="outline"

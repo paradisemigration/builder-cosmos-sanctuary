@@ -265,7 +265,7 @@ export default function Contact() {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link to="/business">
+                    <Link to="/browse">
                       <User className="h-4 w-4 mr-2" />
                       Find Consultants
                     </Link>

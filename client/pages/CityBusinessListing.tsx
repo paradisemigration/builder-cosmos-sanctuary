@@ -1241,7 +1241,7 @@ export default function CityBusinessListing() {
                       </Button>
                     )}
                     <Button asChild>
-                      <Link to="/business">Browse All Cities</Link>
+                      <Link to="/browse">Browse All Cities</Link>
                     </Button>
                   </div>
                 </div>

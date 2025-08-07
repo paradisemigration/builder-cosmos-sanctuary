@@ -198,7 +198,7 @@ export default function BusinessProfile() {
               The business you're looking for doesn't exist or has been moved.
             </p>
             <Button asChild>
-              <Link to="/business">Browse All Consultants</Link>
+              <Link to="/browse">Browse All Consultants</Link>
             </Button>
           </div>
         </div>

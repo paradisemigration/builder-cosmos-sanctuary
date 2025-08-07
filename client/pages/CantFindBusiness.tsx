@@ -154,7 +154,7 @@ export default function CantFindBusiness() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild>
-                  <Link to="/business">Continue Browsing</Link>
+                  <Link to="/browse">Continue Browsing</Link>
                 </Button>
                 <Button variant="outline" asChild>
                   <Link to="/">Return Home</Link>
@@ -418,7 +418,7 @@ export default function CantFindBusiness() {
                   are verified and have excellent success records.
                 </p>
                 <Button variant="outline" asChild>
-                  <Link to="/business">View Top Rated</Link>
+                  <Link to="/browse">View Top Rated</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -436,7 +436,7 @@ export default function CantFindBusiness() {
                   Filter by visa type and destination country.
                 </p>
                 <Button variant="outline" asChild>
-                  <Link to="/business">Browse Services</Link>
+                  <Link to="/browse">Browse Services</Link>
                 </Button>
               </CardContent>
             </Card>

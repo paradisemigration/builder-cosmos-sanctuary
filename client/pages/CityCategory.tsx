@@ -516,7 +516,7 @@ export default function CityCategory() {
               Home
             </Link>
             <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
-            <Link to="/business" className="hover:text-blue-600">
+            <Link to="/browse" className="hover:text-blue-600">
               Browse
             </Link>
             <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
