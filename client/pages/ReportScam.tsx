@@ -163,7 +163,7 @@ export default function ReportScam() {
     return `reviews/${formatForUrl(location)}/${formatForUrl(companyName)}`;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;

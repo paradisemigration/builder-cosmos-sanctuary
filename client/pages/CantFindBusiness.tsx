@@ -43,7 +43,7 @@ export default function CantFindBusiness() {
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
