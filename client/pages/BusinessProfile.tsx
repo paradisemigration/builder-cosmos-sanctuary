@@ -107,7 +107,7 @@ export default function BusinessProfile() {
         if (businessId) {
           foundBusiness =
             businesses.find(
-                (b) => b.id === businessId || b.googlePlaceId === businessId,
+              (b) => b.id === businessId || b.googlePlaceId === businessId,
             ) || null;
         }
         // Handle new URL structure (/:city/:companyName)
