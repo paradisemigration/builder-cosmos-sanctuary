@@ -105,13 +105,24 @@ export function saveApiUrl(url: string): void {
  */
 export async function testBackendConnection(): Promise<boolean> {
   try {
-    const response = await fetch("/api/ultra-fast-sync/stats", {
+    const response = await fetch("/api/health", {
       method: "HEAD",
     });
-    return response.ok || response.status === 404; // 404 is fine - server responding
+    return response.ok; // Only OK responses indicate backend is available
   } catch {
     return false;
   }
+}
+
+/**
+ * Check if backend is available (cached check)
+ */
+let backendAvailable: boolean | null = null;
+export async function isBackendAvailable(): Promise<boolean> {
+  if (backendAvailable === null) {
+    backendAvailable = await testBackendConnection();
+  }
+  return backendAvailable;
 }
 
 /**
