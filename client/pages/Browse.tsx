@@ -202,7 +202,6 @@ import {
   sampleBusinesses,
   type Business,
 } from "@/lib/data";
-import { useBusinessData } from "@/hooks/useBusinessData";
 import { BusinessFilters } from "@/lib/api";
 
 interface FilterState {
