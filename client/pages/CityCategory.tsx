@@ -1680,65 +1680,103 @@ export default function CityCategory() {
 
         // PHASE 0: Get ALL businesses from main city and order by category relevance
         console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
-        try {
-          const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500&country=${encodeURIComponent(country)}`;
-          console.log(`Fetching all businesses from ${cityName}: ${allCityUrl}`);
 
-          const allCityResponse = await robustFetch(allCityUrl, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
+        // Try multiple API endpoints to get city businesses
+        const apiEndpoints = [
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000&country=${encodeURIComponent(country)}`,
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`,
+          `/api/scraped-businesses?city=${encodeURIComponent(cityName)}`,
+          `/api/businesses/city/${encodeURIComponent(cityName)}?limit=1000`,
+          `/api/businesses?city=${encodeURIComponent(cityName)}&limit=1000`,
+        ];
+
+        let allCityResult = null;
+        let successfulEndpoint = null;
+
+        for (const endpoint of apiEndpoints) {
+          try {
+            console.log(`🔍 Trying endpoint: ${endpoint}`);
+
+            const response = await Promise.race([
+              robustFetch(endpoint, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+              }),
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), 5000)
+              )
+            ]);
+
+            console.log(`Response status: ${response.status} ${response.statusText}`);
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log(`Response data:`, result);
+
+              if (result && result.businesses && result.businesses.length > 0) {
+                allCityResult = result;
+                successfulEndpoint = endpoint;
+                console.log(`✅ SUCCESS with endpoint: ${endpoint} - Found ${result.businesses.length} businesses`);
+                break;
+              } else if (result && result.success === false) {
+                console.log(`❌ API returned success=false for ${endpoint}`);
+              } else {
+                console.log(`❌ No businesses in response from ${endpoint}`);
+              }
+            } else {
+              console.log(`❌ HTTP error ${response.status} for ${endpoint}`);
+            }
+          } catch (error) {
+            console.log(`❌ Error with endpoint ${endpoint}:`, error.message);
+          }
+        }
+
+        if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
+          console.log(`✅ Successfully fetched ${allCityResult.businesses.length} businesses from ${cityName} using: ${successfulEndpoint}`);
+
+          // Sort businesses by category relevance
+          const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+          console.log(`Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
+
+          const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
+            const aCategory = (a.category || '').toLowerCase();
+            const aName = (a.name || '').toLowerCase();
+            const aDesc = (a.description || '').toLowerCase();
+
+            const bCategory = (b.category || '').toLowerCase();
+            const bName = (b.name || '').toLowerCase();
+            const bDesc = (b.description || '').toLowerCase();
+
+            // Calculate relevance score
+            const aScore = categoryKeywords.reduce((score, keyword) => {
+              if (aCategory.includes(keyword)) score += 10;
+              if (aName.includes(keyword)) score += 5;
+              if (aDesc.includes(keyword)) score += 2;
+              return score;
+            }, 0);
+
+            const bScore = categoryKeywords.reduce((score, keyword) => {
+              if (bCategory.includes(keyword)) score += 10;
+              if (bName.includes(keyword)) score += 5;
+              if (bDesc.includes(keyword)) score += 2;
+              return score;
+            }, 0);
+
+            return bScore - aScore; // Higher score first
           });
 
-          const allCityResult = await allCityResponse.json();
+          console.log(`✅ Ordered ${sortedBusinesses.length} businesses by relevance to "${categoryName}"`);
 
-          if (allCityResult && allCityResult.success && allCityResult.businesses && allCityResult.businesses.length > 0) {
-            console.log(`✅ Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
+          accumulatedBusinesses = sortedBusinesses.map(business => ({
+            ...business,
+            isNearbyData: false, // These are from main city
+            originalRequestedCity: cityName,
+          }));
 
-            // Sort businesses by category relevance
-            const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
-            console.log(`Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
-
-            const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
-              const aCategory = (a.category || '').toLowerCase();
-              const aName = (a.name || '').toLowerCase();
-              const aDesc = (a.description || '').toLowerCase();
-
-              const bCategory = (b.category || '').toLowerCase();
-              const bName = (b.name || '').toLowerCase();
-              const bDesc = (b.description || '').toLowerCase();
-
-              // Calculate relevance score
-              const aScore = categoryKeywords.reduce((score, keyword) => {
-                if (aCategory.includes(keyword)) score += 10;
-                if (aName.includes(keyword)) score += 5;
-                if (aDesc.includes(keyword)) score += 2;
-                return score;
-              }, 0);
-
-              const bScore = categoryKeywords.reduce((score, keyword) => {
-                if (bCategory.includes(keyword)) score += 10;
-                if (bName.includes(keyword)) score += 5;
-                if (bDesc.includes(keyword)) score += 2;
-                return score;
-              }, 0);
-
-              return bScore - aScore; // Higher score first
-            });
-
-            console.log(`✅ Ordered ${sortedBusinesses.length} businesses by relevance to "${categoryName}"`);
-
-            accumulatedBusinesses = sortedBusinesses.map(business => ({
-              ...business,
-              isNearbyData: false, // These are from main city
-              originalRequestedCity: cityName,
-            }));
-
-            console.log(`Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
-          } else {
-            console.log(`❌ No businesses found in main city ${cityName}`);
-          }
-        } catch (error) {
-          console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
+          console.log(`✅ Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
+        } else {
+          console.log(`❌ No businesses found in main city ${cityName} from any API endpoint`);
+          console.log(`Tried ${apiEndpoints.length} different endpoints`);
         }
 
         // Continue with nearby cities only if we have less than 30 businesses OR no businesses at all
