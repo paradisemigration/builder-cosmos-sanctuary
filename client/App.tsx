@@ -168,7 +168,10 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/browse" element={<Browse />} />
-                  <Route path="/business" element={<Navigate to="/browse" replace />} />
+                  <Route
+                    path="/business"
+                    element={<Navigate to="/browse" replace />}
+                  />
                   <Route path="/business/:id" element={<BusinessProfile />} />
                   <Route path="/add-business" element={<AddBusiness />} />
                   <Route path="/login" element={<Login />} />
