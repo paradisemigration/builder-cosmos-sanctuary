@@ -1769,6 +1769,12 @@ export default function CityCategory() {
             total: accumulatedBusinesses.length,
             source: "main_city_all",
           };
+
+          // Immediately set the category businesses so they display
+          setCategoryBusinesses(accumulatedBusinesses);
+          setCategoryDataLoaded(true);
+          setLoading(false);
+          console.log(`✅ Immediately displaying ${accumulatedBusinesses.length} businesses from ${cityName}`);
         }
 
         // Continue with nearby cities only if we have less than 100 businesses OR no businesses at all
