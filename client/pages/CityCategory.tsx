@@ -1669,24 +1669,95 @@ export default function CityCategory() {
           categorySlug,
         );
 
-        if (
-          !result ||
-          !result.success ||
-          !result.businesses ||
-          result.businesses.length === 0
-        ) {
-          console.log(
-            "No data from API for main city, trying nearby cities with real API calls",
-          );
+        // Always try to get ALL businesses from main city first, then add nearby cities
+        console.log(
+          "Getting all businesses from main city ordered by category relevance, then adding nearby cities",
+        );
 
-          const nearbyCities = getNearByCities(cityName, country, userLocation);
+        const nearbyCities = getNearByCities(cityName, country, userLocation);
+        let accumulatedBusinesses = [];
+        let sourceCities = [];
+
+        // PHASE 0: Get ALL businesses from main city and order by category relevance
+        console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
+        try {
+          const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500&country=${encodeURIComponent(country)}`;
+          console.log(`Fetching all businesses from ${cityName}: ${allCityUrl}`);
+
+          const allCityResponse = await robustFetch(allCityUrl, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const allCityResult = await allCityResponse.json();
+
+          if (allCityResult && allCityResult.success && allCityResult.businesses && allCityResult.businesses.length > 0) {
+            console.log(`✅ Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
+
+            // Sort businesses by category relevance
+            const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+            console.log(`Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
+
+            const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
+              const aCategory = (a.category || '').toLowerCase();
+              const aName = (a.name || '').toLowerCase();
+              const aDesc = (a.description || '').toLowerCase();
+
+              const bCategory = (b.category || '').toLowerCase();
+              const bName = (b.name || '').toLowerCase();
+              const bDesc = (b.description || '').toLowerCase();
+
+              // Calculate relevance score
+              const aScore = categoryKeywords.reduce((score, keyword) => {
+                if (aCategory.includes(keyword)) score += 10;
+                if (aName.includes(keyword)) score += 5;
+                if (aDesc.includes(keyword)) score += 2;
+                return score;
+              }, 0);
+
+              const bScore = categoryKeywords.reduce((score, keyword) => {
+                if (bCategory.includes(keyword)) score += 10;
+                if (bName.includes(keyword)) score += 5;
+                if (bDesc.includes(keyword)) score += 2;
+                return score;
+              }, 0);
+
+              return bScore - aScore; // Higher score first
+            });
+
+            console.log(`✅ Ordered ${sortedBusinesses.length} businesses by relevance to "${categoryName}"`);
+
+            accumulatedBusinesses = sortedBusinesses.map(business => ({
+              ...business,
+              isNearbyData: false, // These are from main city
+              originalRequestedCity: cityName,
+            }));
+
+            console.log(`Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
+
+            // Set result immediately with main city businesses
+            result = {
+              success: true,
+              businesses: accumulatedBusinesses,
+              total: accumulatedBusinesses.length,
+              source: "main_city_all",
+            };
+          } else {
+            console.log(`❌ No businesses found in main city ${cityName}`);
+          }
+        } catch (error) {
+          console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
+        }
+
+        // Continue with nearby cities only if we have less than 30 businesses OR no businesses at all
+        if (accumulatedBusinesses.length < 30) {
+          console.log(
+            `Only ${accumulatedBusinesses.length} businesses from main city, adding from nearby cities`,
+          );
 
           console.log(
             `Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
           );
-
-          let accumulatedBusinesses = [];
-          let sourceCities = [];
 
           // PHASE 1: Fast parallel search for category matches from nearby cities
           console.log(
