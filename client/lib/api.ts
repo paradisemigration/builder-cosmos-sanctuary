@@ -185,9 +185,8 @@ class APIClient {
             }
           };
         }
-      } catch (error) {
-        console.warn("⚠️ Real API failed, using sample data fallback:", error);
-      }
+    } catch (error) {
+      console.warn("⚠️ Real API failed, using sample data fallback:", error);
     }
 
     // Fallback to sample data when API fails or returns insufficient data
