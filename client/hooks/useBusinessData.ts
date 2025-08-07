@@ -39,6 +39,14 @@ export function useBusinessData(
 
         const response = await BusinessAPI.getBusinesses(filters);
 
+        console.log("🔍 useBusinessData API Response:", {
+          success: response.success,
+          dataCount: response.data?.length,
+          totalRecords: response.pagination?.totalRecords,
+          hostname: window.location.hostname,
+          filters: filters
+        });
+
         if (response.success) {
           if (resetData) {
             setBusinesses(response.data);
