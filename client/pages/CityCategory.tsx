@@ -1682,22 +1682,25 @@ export default function CityCategory() {
         console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
 
         try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
+          console.log(`🚀 PHASE 0: Starting API call for ${cityName}`);
 
           const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
-          console.log(`Fetching all businesses: ${allCityUrl}`);
+          console.log(`📡 API URL: ${allCityUrl}`);
+          console.log(`🔧 Encoded city name: ${encodeURIComponent(cityName)}`);
 
           const allCityResponse = await robustFetch(allCityUrl, {
-            signal: controller.signal,
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
           });
-          clearTimeout(timeoutId);
 
-          console.log(`Response status: ${allCityResponse.status}`);
+          console.log(`📊 Response status: ${allCityResponse.status} ${allCityResponse.statusText}`);
+          console.log(`📊 Response headers:`, Object.fromEntries(allCityResponse.headers.entries()));
 
           if (allCityResponse.ok) {
             const allCityResult = await allCityResponse.json();
-            console.log(`Raw API response:`, allCityResult);
+            console.log(`📦 Raw API response:`, allCityResult);
+            console.log(`📦 Response type:`, typeof allCityResult);
+            console.log(`📦 Response keys:`, Object.keys(allCityResult || {}));
 
             if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
               console.log(`✅ Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
@@ -1823,7 +1826,7 @@ export default function CityCategory() {
                 nearbyResult.businesses.length > 0
               ) {
                 console.log(
-                  `✅ Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
+                  `��� Found ${nearbyResult.businesses.length} businesses in ${nearbyCity}`,
                 );
 
                 return {
