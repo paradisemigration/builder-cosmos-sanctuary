@@ -354,6 +354,18 @@ export const apiClient = new APIClient();
 export { apiClient as BusinessAPI }; // Backward compatibility alias
 
 // Export types
+export interface BusinessFilters {
+  search?: string;
+  category?: string;
+  location?: string;
+  city?: string;
+  verified?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: "rating" | "name" | "date" | "reviews";
+  sortOrder?: "asc" | "desc";
+}
+
 export interface UploadResponse {
   success: boolean;
   data:
