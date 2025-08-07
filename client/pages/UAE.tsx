@@ -30,14 +30,14 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 export default function UAE() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef(null);
+  const suggestionsRef = useRef(null);
   const navigate = useNavigate();
 
   // Use geolocation hook for UAE (will likely not detect UAE location, but we'll handle it)
