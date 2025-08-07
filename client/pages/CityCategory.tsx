@@ -275,16 +275,17 @@ export default function CityCategory() {
 
             try {
               console.log(`🔍 Searching in ${nearbyCity}...`);
-              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+              const nearbyUrl = `/api/businesses?city=${encodeURIComponent(
                 nearbyCity,
               )}&limit=200`;
               const nearbyResponse = await fetch(nearbyUrl);
 
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
-                if (nearbyResult.success && nearbyResult.businesses) {
+                const businesses = nearbyResult.businesses || nearbyResult.data;
+                if (nearbyResult.success && businesses) {
                   const needed = MINIMUM_RESULTS - allBusinesses.length;
-                  const toAdd = nearbyResult.businesses
+                  const toAdd = businesses
                     .slice(0, needed)
                     .map((business: any) => ({
                       ...business,
