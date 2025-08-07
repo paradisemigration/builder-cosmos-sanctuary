@@ -134,22 +134,25 @@ class APIClient {
       // Apply basic filtering to sample data
       if (params.search) {
         const searchTerm = params.search.toLowerCase();
-        filteredBusinesses = filteredBusinesses.filter(business =>
-          business.name?.toLowerCase().includes(searchTerm) ||
-          business.category?.toLowerCase().includes(searchTerm) ||
-          business.description?.toLowerCase().includes(searchTerm)
+        filteredBusinesses = filteredBusinesses.filter(
+          (business) =>
+            business.name?.toLowerCase().includes(searchTerm) ||
+            business.category?.toLowerCase().includes(searchTerm) ||
+            business.description?.toLowerCase().includes(searchTerm),
         );
       }
 
       if (params.category) {
-        filteredBusinesses = filteredBusinesses.filter(business =>
-          business.category?.toLowerCase().includes(params.category!.toLowerCase())
+        filteredBusinesses = filteredBusinesses.filter((business) =>
+          business.category
+            ?.toLowerCase()
+            .includes(params.category!.toLowerCase()),
         );
       }
 
       if (params.city) {
-        filteredBusinesses = filteredBusinesses.filter(business =>
-          business.city?.toLowerCase().includes(params.city!.toLowerCase())
+        filteredBusinesses = filteredBusinesses.filter((business) =>
+          business.city?.toLowerCase().includes(params.city!.toLowerCase()),
         );
       }
 
@@ -166,7 +169,8 @@ class APIClient {
           ...business,
           id: business.id || `sample-${index}`,
           isVerified: true,
-          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
           rating: business.rating || Math.random() * 2 + 3,
         })),
         pagination: {
@@ -279,14 +283,17 @@ class APIClient {
   async getFeaturedBusinesses() {
     if (isFrontendOnlyDeployment()) {
       console.log("Frontend-only deployment: returning featured sample data");
-      const featuredBusinesses = sampleBusinesses.slice(0, 6).map((business, index) => ({
-        ...business,
-        id: business.id || `featured-${index}`,
-        isVerified: true,
-        isFeatured: true,
-        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 10,
-        rating: business.rating || Math.random() * 1.5 + 3.5, // 3.5-5 star rating for featured
-      }));
+      const featuredBusinesses = sampleBusinesses
+        .slice(0, 6)
+        .map((business, index) => ({
+          ...business,
+          id: business.id || `featured-${index}`,
+          isVerified: true,
+          isFeatured: true,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 10,
+          rating: business.rating || Math.random() * 1.5 + 3.5, // 3.5-5 star rating for featured
+        }));
 
       return {
         success: true,
@@ -304,7 +311,8 @@ class APIClient {
   async getBusinessById(id: string) {
     if (isFrontendOnlyDeployment()) {
       console.log("Frontend-only deployment: returning sample business by ID");
-      const business = sampleBusinesses.find(b => b.id === id) || sampleBusinesses[0];
+      const business =
+        sampleBusinesses.find((b) => b.id === id) || sampleBusinesses[0];
 
       return {
         success: true,
@@ -312,7 +320,8 @@ class APIClient {
           ...business,
           id: business.id || id,
           isVerified: true,
-          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
           rating: business.rating || Math.random() * 2 + 3,
         },
       };
