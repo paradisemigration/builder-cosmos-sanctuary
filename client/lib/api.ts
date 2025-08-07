@@ -168,9 +168,16 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // ALWAYS try the real API first - user has 1500+ businesses in database
-    console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
-    try {
+    // Check if we're in local development with port issues
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    if (isLocalDev) {
+      console.log("🔧 Local development mode - using sample data due to port conflicts");
+      console.log("⚠️ Deploy backend to access your real 1500+ businesses");
+    } else {
+      // Try the real API on production/deployment
+      console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
+      try {
       const queryParams = new URLSearchParams();
       if (params.page) queryParams.set("page", params.page.toString());
       if (params.limit) queryParams.set("limit", params.limit.toString());
