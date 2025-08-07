@@ -162,7 +162,7 @@ export default function CityCategory() {
     async function fetchBusinesses() {
       try {
         console.log(`🎯 FETCHING MINIMUM 75 BUSINESSES for ${cityName} + ${categoryName}`);
-        
+
         let allBusinesses: Business[] = [];
         const MINIMUM_RESULTS = 75;
 
@@ -170,7 +170,7 @@ export default function CityCategory() {
         try {
           const exactUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=500`;
           console.log(`📡 Exact search: ${exactUrl}`);
-          
+
           const exactResponse = await fetch(exactUrl);
           if (exactResponse.ok) {
             const exactResult = await exactResponse.json();
@@ -190,11 +190,11 @@ export default function CityCategory() {
         // Step 2: If not enough, get all city businesses and sort by relevance
         if (allBusinesses.length < MINIMUM_RESULTS) {
           console.log(`📊 Need more businesses. Getting all from ${cityName}...`);
-          
+
           try {
             const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500`;
             const allCityResponse = await fetch(allCityUrl);
-            
+
             if (allCityResponse.ok) {
               const allCityResult = await allCityResponse.json();
               if (allCityResult.success && allCityResult.businesses) {
@@ -218,11 +218,11 @@ export default function CityCategory() {
 
                 // Add businesses that aren't already included
                 sortedByRelevance.forEach((business: any) => {
-                  const exists = allBusinesses.some(existing => 
-                    existing.id === business.id || 
+                  const exists = allBusinesses.some(existing =>
+                    existing.id === business.id ||
                     (existing.name === business.name && existing.address === business.address)
                   );
-                  
+
                   if (!exists && allBusinesses.length < MINIMUM_RESULTS) {
                     allBusinesses.push({
                       ...business,
@@ -243,8 +243,8 @@ export default function CityCategory() {
         // Step 3: If still not enough, get from nearby cities
         if (allBusinesses.length < MINIMUM_RESULTS) {
           console.log(`🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`);
-          
-          const nearbycities = [
+
+          const nearbyCities = [
             "Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad",
             "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal", "Visakhapatnam"
           ];
@@ -257,7 +257,7 @@ export default function CityCategory() {
               console.log(`🔍 Searching in ${nearbyCity}...`);
               const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=200`;
               const nearbyResponse = await fetch(nearbyUrl);
-              
+
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
                 if (nearbyResult.success && nearbyResult.businesses) {
@@ -296,7 +296,7 @@ export default function CityCategory() {
           const originalLength = allBusinesses.length;
           const needed = MINIMUM_RESULTS - allBusinesses.length;
           const toDuplicate = Math.min(needed, originalLength);
-          
+
           const duplicates = allBusinesses.slice(0, toDuplicate).map((business, index) => ({
             ...business,
             id: `${business.id}-dup-${index}`,
@@ -304,7 +304,7 @@ export default function CityCategory() {
             isDuplicate: true,
             sourceType: "duplicate_fill"
           }));
-          
+
           allBusinesses.push(...duplicates);
           console.log(`🔄 Added ${duplicates.length} duplicates. Total: ${allBusinesses.length}`);
         }
@@ -333,8 +333,8 @@ export default function CityCategory() {
 
     // Remove duplicates
     const uniqueBusinesses = combinedBusinesses.filter((business, index, self) =>
-      index === self.findIndex((b) => 
-        b.id === business.id || 
+      index === self.findIndex((b) =>
+        b.id === business.id ||
         (b.name === business.name && b.address === business.address)
       )
     );
@@ -397,7 +397,7 @@ export default function CityCategory() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Navigation />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -445,7 +445,7 @@ export default function CityCategory() {
                 />
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px]">
@@ -482,8 +482,8 @@ export default function CityCategory() {
 
         {/* Business Grid */}
         <div className={`grid gap-6 ${
-          viewMode === "grid" 
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+          viewMode === "grid"
+            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             : "grid-cols-1"
         }`}>
           {filteredBusinesses.map((business, index) => (
