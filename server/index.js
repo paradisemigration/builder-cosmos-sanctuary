@@ -52,14 +52,10 @@ export default initializeAPI;
 // Start the API server for local development only
 if (process.env.NODE_ENV !== "production") {
   initializeAPI().then((app) => {
-    const preferredPort = process.env.PORT || 3001;
-    const server = app.listen(0, () => {
-      const actualPort = server.address().port;
+    const port = process.env.PORT || 9876;
+    app.listen(port, () => {
       console.log("✅ API server started");
-      console.log(`🌐 API Base URL: http://localhost:${actualPort}`);
-      console.log(
-        `📌 Preferred port was ${preferredPort}, using ${actualPort}`,
-      );
+      console.log(`🌐 API Base URL: http://localhost:${port}`);
       console.log(
         "📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions",
       );
