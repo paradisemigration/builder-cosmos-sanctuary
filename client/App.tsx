@@ -1,32 +1,14 @@
 import React, { useEffect } from "react";
 import "./global.css";
 
-// Simple routing without React Router to eliminate all errors
-const SimpleRouter = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
-};
-
-const SimpleRoute = ({ path, element }: { path: string; element: React.ReactNode }) => {
-  const currentPath = window.location.pathname;
-  const isMatch = path === "*" || currentPath === path ||
-    (path.includes(":") && new RegExp(path.replace(/:[^/]+/g, "[^/]+")).test(currentPath));
-  return isMatch ? <>{element}</> : null;
-};
-
-// Create location object
-const useLocation = () => ({ pathname: window.location.pathname });
-
-// Simple navigation component
-const Navigate = ({ to, replace }: { to: string; replace?: boolean }) => {
-  React.useEffect(() => {
-    if (replace) {
-      window.history.replaceState(null, '', to);
-    } else {
-      window.location.href = to;
-    }
-  }, [to, replace]);
-  return null;
-};
+// Import React Router properly
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
