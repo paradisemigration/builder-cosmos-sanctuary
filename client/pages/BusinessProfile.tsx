@@ -101,7 +101,7 @@ export default function BusinessProfile() {
           isVerified: business.isVerified || true,
         }));
 
-          let foundBusiness = null;
+        let foundBusiness = null;
 
         // Handle ID from URL params or query parameter (most reliable)
         if (businessId) {
