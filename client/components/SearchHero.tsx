@@ -23,9 +23,7 @@ import {
   sampleBusinesses,
 } from "@/lib/data";
 
-interface SearchHeroProps {
-  onSearch?: (query: string, category?: string, location?: string) => void;
-}
+
 
 export function SearchHero({ onSearch }: SearchHeroProps) {
   const [searchQuery, setSearchQuery] = useState("");

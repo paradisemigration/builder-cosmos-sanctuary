@@ -1,31 +1,6 @@
 import { useState } from "react";
 
-interface DebugInfo {
-  categoryBusinesses: number;
-  cityBusinesses: number;
-  totalBusinesses: number;
-  apiCalls: Array<{
-    url: string;
-    status: string;
-    count: number;
-    timestamp: string;
-  }>;
-  metaData: {
-    title: string;
-    description: string;
-    keywords: string;
-  };
-  searchParams: {
-    city: string;
-    category: string;
-    cityName: string;
-    categoryName: string;
-  };
-}
 
-interface DebugPopupProps {
-  debugInfo: DebugInfo;
-}
 
 export function DebugPopup({ debugInfo }: DebugPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
