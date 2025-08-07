@@ -43,6 +43,7 @@ import {
 } from "@/lib/data";
 import { allCategories, allIndianCities } from "@/lib/all-categories";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useFeaturedBusinesses, useBusinessStats } from "@/hooks/useBusinessData";
 import { generateHomeMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function Index() {
