@@ -9,16 +9,8 @@ import {
 } from "react-router-dom";
 import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
-// NUCLEAR APPROACH: COMPLETE REQUEST INTERCEPTOR + SERVICE WORKER
-(() => {
-  const hostname = window.location.hostname;
-  console.log(`🚨 NUCLEAR INTERCEPTOR: hostname = ${hostname}`);
-  console.log(
-    `🚨 NUCLEAR INTERCEPTOR: Blocking ALL external requests to prevent 404s`,
-  );
-
-  // SERVICE WORKER DISABLED FOR DEBUGGING
-  console.log("🔇 SERVICE WORKER: Disabled to prevent syntax errors");
+// SIMPLIFIED APPROACH - NO COMPLEX INTERCEPTORS
+console.log("App starting with simplified configuration");
 
   // ALWAYS install on production (any non-localhost domain)
   if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
