@@ -1681,22 +1681,54 @@ export default function CityCategory() {
         // PHASE 0: Get ALL businesses from main city and order by category relevance
         console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
 
-        try {
-          console.log(`🚀 PHASE 0: Starting API call for ${cityName}`);
+        // Try multiple city name variations since database might store them differently
+        const cityVariations = [
+          cityName,                    // "Vadodara"
+          cityName.toLowerCase(),      // "vadodara"
+          cityName.toUpperCase(),      // "VADODARA"
+          city,                        // URL param as-is ("vadodara")
+          city.charAt(0).toUpperCase() + city.slice(1) // "Vadodara"
+        ];
 
-          const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=1000`;
-          console.log(`📡 API URL: ${allCityUrl}`);
-          console.log(`🔧 Encoded city name: ${encodeURIComponent(cityName)}`);
+        let allCityResult = null;
+        let successfulCityName = "";
 
-          const allCityResponse = await robustFetch(allCityUrl, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
+        for (const cityVariation of cityVariations) {
+          try {
+            console.log(`🚀 PHASE 0: Trying city variation: "${cityVariation}"`);
 
-          console.log(`📊 Response status: ${allCityResponse.status} ${allCityResponse.statusText}`);
-          console.log(`📊 Response headers:`, Object.fromEntries(allCityResponse.headers.entries()));
+            const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityVariation)}&limit=1000`;
+            console.log(`📡 API URL: ${allCityUrl}`);
 
-          if (allCityResponse.ok) {
+            const allCityResponse = await robustFetch(allCityUrl, {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            });
+
+            console.log(`📊 Response status: ${allCityResponse.status} ${allCityResponse.statusText}`);
+
+            if (allCityResponse.ok) {
+              const tempResult = await allCityResponse.json();
+              console.log(`📦 Response for "${cityVariation}":`, tempResult);
+
+              if (tempResult && tempResult.businesses && tempResult.businesses.length > 0) {
+                console.log(`✅ SUCCESS: Found ${tempResult.businesses.length} businesses for "${cityVariation}"`);
+                allCityResult = tempResult;
+                successfulCityName = cityVariation;
+                break; // Found data, stop trying variations
+              } else {
+                console.log(`❌ No businesses found for "${cityVariation}"`);
+              }
+            } else {
+              console.log(`❌ HTTP error ${allCityResponse.status} for "${cityVariation}"`);
+            }
+          } catch (variationError) {
+            console.error(`❌ Error trying "${cityVariation}":`, variationError);
+          }
+        }
+
+        // Process the successful result
+        if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
             const allCityResult = await allCityResponse.json();
             console.log(`📦 Raw API response:`, allCityResult);
             console.log(`📦 Response type:`, typeof allCityResult);
