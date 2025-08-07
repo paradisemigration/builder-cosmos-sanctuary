@@ -273,8 +273,29 @@ export default function Browse() {
     }
     setError(null);
 
+    // Check if this is a frontend-only deployment first
+    if (isFrontendOnlyDeployment() && page === 1 && !append) {
+      console.log("📱 Frontend-only deployment detected, using sample data");
+      const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
+        ...business,
+        id: business.id || `sample-${index}`,
+        isVerified: true,
+        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+        rating: business.rating || Math.random() * 2 + 3, // 3-5 star rating
+      }));
+
+      setScrapedBusinesses(fallbackBusinesses);
+      setTotalCount(fallbackBusinesses.length);
+      setHasMore(false);
+      setCurrentPage(page);
+      setError(null);
+      setLoading(false);
+      setLoadingMore(false);
+      return;
+    }
+
     try {
-      // Build API request
+      // Build API request for deployments with backend
       const params = new URLSearchParams({
         page: page.toString(),
         limit: pageSize.toString(),
@@ -283,12 +304,6 @@ export default function Browse() {
 
       const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
       console.log("🚀 Fetching businesses from API:", apiUrl);
-      console.log("🔍 Environment check:", {
-        hostname: window.location.hostname,
-        isFrontendOnly: isFrontendOnlyDeployment(),
-        apiBaseUrl: getApiBaseUrl(),
-        fullApiUrl: apiUrl,
-      });
 
       const response = await robustFetch(apiUrl);
 
