@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { sampleBusinesses, type Business } from "@/lib/data";
+import { sampleBusinesses, Business } from "@/lib/data";
 import {
   allCities,
   getCategoryBySlug,
