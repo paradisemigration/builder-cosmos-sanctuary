@@ -139,7 +139,7 @@ class APIClient {
 
     // ALWAYS try the real API first - user has 1500+ businesses in database
     console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
-      try {
+    try {
         const queryParams = new URLSearchParams();
         if (params.page) queryParams.set("page", params.page.toString());
         if (params.limit) queryParams.set("limit", params.limit.toString());
