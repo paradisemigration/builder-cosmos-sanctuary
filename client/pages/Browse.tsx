@@ -264,8 +264,17 @@ export default function Browse() {
     append = false,
     filters = {},
   ) => {
+    // Set loading states
+    if (page === 1) {
+      setLoading(true);
+      setCurrentPage(1);
+    } else {
+      setLoadingMore(true);
+    }
+    setError(null);
+
     try {
-      // First try to hit the API directly
+      // Build API request
       const params = new URLSearchParams({
         page: page.toString(),
         limit: pageSize.toString(),
@@ -273,7 +282,12 @@ export default function Browse() {
       });
 
       const apiUrl = getApiUrl(`/api/scraped-businesses?${params}`);
-      console.log("🚀 Attempting to fetch from API:", apiUrl);
+      console.log("🚀 Fetching businesses from API:", apiUrl);
+      console.log("🔍 Environment check:", {
+        hostname: window.location.hostname,
+        isFrontendOnly: isFrontendOnlyDeployment(),
+        apiBaseUrl: getApiBaseUrl(),
+      });
 
       const response = await robustFetch(apiUrl);
 
