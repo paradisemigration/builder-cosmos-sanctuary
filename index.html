@@ -474,11 +474,11 @@
 
       // Render with error handling
       try {
-        console.log("🎯 Mounting React app...");
+        console.log("🎯 Mounting React app with Router...");
         const root = createRoot(document.getElementById("root"));
-        root.render(React.createElement(HomePage));
+        root.render(React.createElement(App));
         console.log(
-          "✅ Step 1 Complete: Basic React app working without 404 errors",
+          "✅ Step 2 Complete: React Router working - Navigation added successfully",
         );
       } catch (error) {
         console.error("❌ React mounting error:", error);
