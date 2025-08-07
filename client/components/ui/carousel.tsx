@@ -20,10 +20,7 @@ function useCarousel() {
   return context;
 }
 
-const Carousel = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CarouselProps
->(
+const Carousel = React.forwardRef(
   (
     {
       orientation = "horizontal",
