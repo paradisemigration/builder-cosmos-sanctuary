@@ -143,7 +143,7 @@ const App = () => {
                 path="/category/:category"
                 element={<CategoryLocationPage />}
               />
-                    <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <SiteFooter />
             <GlobalDebugPopup />
