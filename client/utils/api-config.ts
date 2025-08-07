@@ -3,12 +3,49 @@
  * For same domain deployment - frontend and backend on same server
  */
 
+interface ApiConfig {
+  baseUrl: string;
+  isConfigured: boolean;
+  isLocal: boolean;
+}
+
+/**
+ * Get the base API URL
+ */
+export function getApiBaseUrl(): string {
+  // Check for override in localStorage first
+  const override = localStorage.getItem("VITE_API_URL_OVERRIDE");
+  if (override) {
+    return override;
+  }
+
+  // Check environment variable
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl;
+  }
+
+  // For production deployments, return empty string to indicate no backend
+  if (isFrontendOnlyDeployment()) {
+    return "";
+  }
+
+  // For local development, assume backend is on same domain
+  return "";
+}
+
 /**
  * Build API URL from endpoint (relative URLs for same domain)
  */
 export function getApiUrl(endpoint: string): string {
-  // For same domain deployment, just return the endpoint as-is
-  return endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const baseUrl = getApiBaseUrl();
+
+  if (!baseUrl) {
+    // For same domain deployment, just return the endpoint as-is
+    return endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  }
+
+  return `${baseUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
 }
 
 /**
