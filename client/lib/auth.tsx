@@ -32,14 +32,14 @@ const DEMO_USERS = [
     name: "John Doe",
     email: "user@demo.com",
     password: "password123",
-    role: "user" as const,
+    role: "user",
   },
   {
     id: "2",
     name: "Business Owner",
     email: "business@demo.com",
     password: "business123",
-    role: "business_owner" as const,
+    role: "business_owner",
     businessId: "1",
   },
   {
@@ -47,7 +47,7 @@ const DEMO_USERS = [
     name: "Admin User",
     email: "admin@demo.com",
     password: "admin123",
-    role: "admin" as const,
+    role: "admin",
   },
 ];
 

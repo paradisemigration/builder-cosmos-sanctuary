@@ -940,19 +940,19 @@ export default function AddBusiness() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                       {
-                        type: "logo" as const,
+                        type: "logo",
                         title: "Business Logo",
                         icon: <Building className="w-8 h-8" />,
                         current: logo,
                       },
                       {
-                        type: "cover" as const,
+                        type: "cover",
                         title: "Cover Image",
                         icon: <Camera className="w-8 h-8" />,
                         current: coverImage,
                       },
                       {
-                        type: "gallery" as const,
+                        type: "gallery",
                         title: "Gallery Images",
                         icon: <Upload className="w-8 h-8" />,
                         current: galleryImages.length > 0,
@@ -1003,7 +1003,7 @@ export default function AddBusiness() {
                                 className="rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50"
                               >
                                 <span>
-                                  📁 Choose{" "}
+                                  ���� Choose{" "}
                                   {upload.type === "gallery" ? "Files" : "File"}
                                 </span>
                               </Button>
