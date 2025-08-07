@@ -1133,7 +1133,9 @@ app.get("/api/scraped-businesses", async (req, res) => {
     if (result.businesses.length > 0) {
       console.log(`🔍 First 3 businesses:`);
       result.businesses.slice(0, 3).forEach((b, i) => {
-        console.log(`  ${i+1}. ${b.name} (City: "${b.city}", Scraped: "${b.scrapedCity}")`);
+        console.log(
+          `  ${i + 1}. ${b.name} (City: "${b.city}", Scraped: "${b.scrapedCity}")`,
+        );
       });
     }
 
