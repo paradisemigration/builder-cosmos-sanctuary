@@ -69,10 +69,7 @@ const App = () => {
           <BrowserRouter>
             <ScrollToTop />
             <Navigation />
-            {(() => {
-              try {
-                return (
-                  <Routes>
+            <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/browse" element={<Browse />} />
               <Route
