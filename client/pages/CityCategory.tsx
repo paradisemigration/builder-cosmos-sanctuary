@@ -1764,61 +1764,11 @@ export default function CityCategory() {
               setLoading(false);
 
               console.log(`🚀 FORCED ${accumulatedBusinesses.length} businesses into display`);
+            } else {
+              console.log(`❌ No Vadodara businesses found`);
             }
-
-          // Process the successful result
-          if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
-            console.log(`✅ SUCCESS: Found ${allCityResult.businesses.length} total businesses using "${successfulCityName}"`);
-            console.log(`📋 First few business names:`, allCityResult.businesses.slice(0, 5).map(b => b.name));
-            console.log(`📋 Sample business structure:`, allCityResult.businesses[0]);
-
-            // Sort businesses by category relevance
-            const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
-            console.log(`🎯 Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
-
-            const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
-              const aCategory = (a.category || '').toLowerCase();
-              const aName = (a.name || '').toLowerCase();
-              const aDesc = (a.description || '').toLowerCase();
-
-              const bCategory = (b.category || '').toLowerCase();
-              const bName = (b.name || '').toLowerCase();
-              const bDesc = (b.description || '').toLowerCase();
-
-              // Calculate relevance score
-              const aScore = categoryKeywords.reduce((score, keyword) => {
-                if (aCategory.includes(keyword)) score += 10;
-                if (aName.includes(keyword)) score += 5;
-                if (aDesc.includes(keyword)) score += 2;
-                return score;
-              }, 0);
-
-              const bScore = categoryKeywords.reduce((score, keyword) => {
-                if (bCategory.includes(keyword)) score += 10;
-                if (bName.includes(keyword)) score += 5;
-                if (bDesc.includes(keyword)) score += 2;
-                return score;
-              }, 0);
-
-              return bScore - aScore; // Higher score first
-            });
-
-            console.log(`✅ Ordered ${sortedBusinesses.length} businesses by relevance to "${categoryName}"`);
-
-            accumulatedBusinesses = sortedBusinesses.map(business => ({
-              ...business,
-              isNearbyData: false, // These are from main city
-              originalRequestedCity: cityName,
-            }));
-
-            console.log(`✅ Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
-
-            // Immediately set the city businesses state so the counter shows correctly
-            setCityBusinesses(accumulatedBusinesses);
-            setCityDataLoaded(true);
-            console.log(`✅ Set city businesses count to ${accumulatedBusinesses.length}`);
           } else {
-            console.log(`❌ No businesses found for any city variation of "${cityName}"`);
+            console.log(`❌ No businesses fetched from database`);
           }
         } catch (error) {
           console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
