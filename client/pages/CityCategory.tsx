@@ -1814,8 +1814,9 @@ export default function CityCategory() {
             `Region cities priority order: ${nearbyCities.join(" -> ")}`,
           );
 
-          // Parallel API calls for faster loading - limit to top 4 cities for speed
-          const topCities = nearbyCities.slice(0, 4);
+          // SYSTEMATIC SEARCH: Process cities in batches until we reach 75 minimum
+          let currentBatch = 0;
+          const batchSize = 3;
           const apiPromises = topCities.map(async (nearbyCity) => {
             try {
               // Quick search with exact category name first
