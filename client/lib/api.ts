@@ -129,77 +129,8 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called");
 
-    // Check if this is a frontend-only deployment (fly.dev, vercel.app, etc.)
-    const hostname = window.location.hostname;
-    const isFrontendOnly = hostname.includes("fly.dev") ||
-                          hostname.includes("vercel.app") ||
-                          hostname.includes("netlify.app") ||
-                          hostname.includes("github.io");
-
-    if (isFrontendOnly) {
-      console.log("📱 Frontend-only deployment detected, using sample data immediately");
-
-      // Apply filtering to sample data
-      let filteredBusinesses = [...sampleBusinesses];
-
-      if (params.search) {
-        const searchTerm = params.search.toLowerCase();
-        filteredBusinesses = filteredBusinesses.filter(
-          (business) =>
-            business.name?.toLowerCase().includes(searchTerm) ||
-            business.description?.toLowerCase().includes(searchTerm) ||
-            business.services?.some(service =>
-              service.toLowerCase().includes(searchTerm)
-            )
-        );
-      }
-
-      if (params.category && params.category !== "all") {
-        filteredBusinesses = filteredBusinesses.filter((business) =>
-          business.category?.toLowerCase().includes(params.category!.toLowerCase())
-        );
-      }
-
-      if (params.city && params.city !== "all") {
-        filteredBusinesses = filteredBusinesses.filter((business) =>
-          business.city?.toLowerCase().includes(params.city!.toLowerCase())
-        );
-      }
-
-      // Pagination for sample data
-      const page = params.page || 1;
-      const limit = params.limit || 20;
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
-
-      console.log("📊 Sample data prepared:", {
-        totalFiltered: filteredBusinesses.length,
-        pageSize: paginatedBusinesses.length,
-        page: page
-      });
-
-      return {
-        success: true,
-        data: paginatedBusinesses.map((business, index) => ({
-          ...business,
-          id: business.id || `sample-${startIndex + index}`,
-          isVerified: true,
-          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
-          rating: business.rating || Math.random() * 2 + 3,
-        })),
-        pagination: {
-          page: page,
-          totalPages: Math.ceil(filteredBusinesses.length / limit),
-          totalRecords: filteredBusinesses.length,
-          hasNext: endIndex < filteredBusinesses.length,
-          hasPrev: page > 1,
-        }
-      };
-    }
-
-    // For localhost and deployments with backend, try the real API
-    console.log("🚀 Attempting real API call for backend deployment");
+    // ALWAYS try the real API first, regardless of hostname
+    console.log("🚀 Attempting real API call to backend");
     try {
       const queryParams = new URLSearchParams();
       if (params.page) queryParams.set("page", params.page.toString());
@@ -225,43 +156,88 @@ class APIClient {
         const businesses = response.businesses || response.data || [];
         const total = response.totalRecords || response.total || businesses.length;
 
-        console.log("✅ Backend API success:", {
+        console.log("✅ Backend API success - REAL DATA FROM DATABASE:", {
           businessCount: businesses.length,
-          totalInDB: total
+          totalInDB: total,
+          hostname: window.location.hostname
         });
 
-        return {
-          success: true,
-          data: businesses,
-          pagination: response.pagination || {
-            page: params.page || 1,
-            totalPages: Math.ceil(total / (params.limit || 20)),
-            totalRecords: total,
-            hasNext: businesses.length === (params.limit || 20),
-            hasPrev: (params.page || 1) > 1,
-          }
-        };
+        // If we get real data from the API, return it
+        if (total > 100) { // Only return if we have substantial data (not just sample)
+          return {
+            success: true,
+            data: businesses,
+            pagination: response.pagination || {
+              page: params.page || 1,
+              totalPages: Math.ceil(total / (params.limit || 20)),
+              totalRecords: total,
+              hasNext: businesses.length === (params.limit || 20),
+              hasPrev: (params.page || 1) > 1,
+            }
+          };
+        }
       }
     } catch (error) {
-      console.warn("⚠️ Backend API failed, falling back to sample data:", error);
+      console.warn("⚠️ Backend API failed, will use sample data:", error);
     }
 
-    // Final fallback to sample data
-    console.log("📋 Using sample data as final fallback");
+    // Fallback to sample data only if API fails or has insufficient data
+    console.log("📋 Using sample data as fallback - applying filters");
+
+    // Apply filtering to sample data
+    let filteredBusinesses = [...sampleBusinesses];
+
+    if (params.search) {
+      const searchTerm = params.search.toLowerCase();
+      filteredBusinesses = filteredBusinesses.filter(
+        (business) =>
+          business.name?.toLowerCase().includes(searchTerm) ||
+          business.description?.toLowerCase().includes(searchTerm) ||
+          business.services?.some(service =>
+            service.toLowerCase().includes(searchTerm)
+          )
+      );
+    }
+
+    if (params.category && params.category !== "all") {
+      filteredBusinesses = filteredBusinesses.filter((business) =>
+        business.category?.toLowerCase().includes(params.category!.toLowerCase())
+      );
+    }
+
+    if (params.city && params.city !== "all") {
+      filteredBusinesses = filteredBusinesses.filter((business) =>
+        business.city?.toLowerCase().includes(params.city!.toLowerCase())
+      );
+    }
+
+    // Pagination for sample data
     const page = params.page || 1;
     const limit = params.limit || 20;
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
-    const paginatedBusinesses = sampleBusinesses.slice(startIndex, endIndex);
+    const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
+
+    console.log("📊 Sample data prepared:", {
+      totalFiltered: filteredBusinesses.length,
+      pageSize: paginatedBusinesses.length,
+      page: page
+    });
 
     return {
       success: true,
-      data: paginatedBusinesses,
+      data: paginatedBusinesses.map((business, index) => ({
+        ...business,
+        id: business.id || `sample-${startIndex + index}`,
+        isVerified: true,
+        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+        rating: business.rating || Math.random() * 2 + 3,
+      })),
       pagination: {
         page: page,
-        totalPages: Math.ceil(sampleBusinesses.length / limit),
-        totalRecords: sampleBusinesses.length,
-        hasNext: endIndex < sampleBusinesses.length,
+        totalPages: Math.ceil(filteredBusinesses.length / limit),
+        totalRecords: filteredBusinesses.length,
+        hasNext: endIndex < filteredBusinesses.length,
         hasPrev: page > 1,
       }
     };
