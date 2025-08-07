@@ -84,7 +84,7 @@ export default function BusinessProfile() {
       const result = await response.json();
 
       if (result.success) {
-          const businesses = (result.businesses || []).map((business) => ({
+        const businesses = (result.businesses || []).map((business) => ({
           ...business,
           id:
             business.googlePlaceId || business.id || Date.now() + Math.random(),
