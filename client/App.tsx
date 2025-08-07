@@ -1,25 +1,19 @@
 import React, { useEffect } from "react";
 import "./global.css";
 
-// Import React Router with debugging
-let ReactRouterModule;
-try {
-  ReactRouterModule = require("react-router-dom");
-} catch (e) {
-  console.error("React Router import error:", e);
-}
+// Import React Router components directly
+import * as RouterModule from "react-router-dom";
 
-// Use explicit imports with fallbacks
-const BrowserRouter = ReactRouterModule?.BrowserRouter ||
-  (() => ({ children }: any) => React.createElement('div', null, children));
-const Routes = ReactRouterModule?.Routes ||
-  (() => ({ children }: any) => React.createElement('div', null, children));
-const Route = ReactRouterModule?.Route ||
-  (() => (props: any) => React.createElement('div', null, 'Route'));
-const Navigate = ReactRouterModule?.Navigate ||
-  (() => (props: any) => React.createElement('div', null, 'Navigate'));
-const useLocation = ReactRouterModule?.useLocation ||
-  (() => ({ pathname: '/' }));
+// Debug logging
+console.log("Router module:", RouterModule);
+console.log("Routes component:", RouterModule.Routes);
+
+// Extract components with fallbacks
+const BrowserRouter = RouterModule.BrowserRouter;
+const Routes = RouterModule.Routes;
+const Route = RouterModule.Route;
+const Navigate = RouterModule.Navigate;
+const useLocation = RouterModule.useLocation;
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
