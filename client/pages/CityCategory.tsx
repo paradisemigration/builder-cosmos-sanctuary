@@ -1734,14 +1734,6 @@ export default function CityCategory() {
             }));
 
             console.log(`Added ${accumulatedBusinesses.length} businesses from main city ${cityName}`);
-
-            // Set result immediately with main city businesses
-            result = {
-              success: true,
-              businesses: accumulatedBusinesses,
-              total: accumulatedBusinesses.length,
-              source: "main_city_all",
-            };
           } else {
             console.log(`❌ No businesses found in main city ${cityName}`);
           }
