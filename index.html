@@ -4,175 +4,287 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VisaConsult India - Immigration Services</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
   </head>
   <body>
     <div id="root">
-      <div style="padding: 20px; text-align: center;">
+      <div style="padding: 20px; text-align: center">
         <h1>Loading React App...</h1>
         <p>Building gradually to avoid 404 errors</p>
       </div>
     </div>
-    
+
     <script type="module">
       console.log("🚀 Step 1: Basic React without external dependencies");
-      
+
       // Import React from CDN to avoid build complexity
-      import React from 'https://esm.sh/react@18';
-      import { createRoot } from 'https://esm.sh/react-dom@18/client';
-      
+      import React from "https://esm.sh/react@18";
+      import { createRoot } from "https://esm.sh/react-dom@18/client";
+
       // Simple homepage component - no API calls, no routing, no external deps
       function HomePage() {
-        return React.createElement('div', {
-          style: { 
-            padding: '20px', 
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            lineHeight: '1.6'
-          }
-        }, [
-          // Header
-          React.createElement('header', {
-            key: 'header',
-            style: { 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              padding: '40px 20px',
-              borderRadius: '12px',
-              marginBottom: '30px',
-              textAlign: 'center'
-            }
-          }, [
-            React.createElement('h1', { 
-              key: 'title',
-              style: { margin: '0 0 10px 0', fontSize: '2.5rem' }
-            }, '🏠 VisaConsult India'),
-            React.createElement('p', {
-              key: 'subtitle', 
-              style: { margin: '0', fontSize: '1.2rem', opacity: '0.9' }
-            }, 'Your Trusted Immigration & Visa Services Partner')
-          ]),
-          
-          // Status Card
-          React.createElement('div', {
-            key: 'status',
-            style: { 
-              background: '#f0f9ff', 
-              border: '2px solid #0ea5e9',
-              borderRadius: '12px',
-              padding: '20px',
-              marginBottom: '30px'
-            }
-          }, [
-            React.createElement('h3', { 
-              key: 'status-title',
-              style: { color: '#0369a1', margin: '0 0 10px 0' }
-            }, '✅ System Status'),
-            React.createElement('p', { 
-              key: 'status-desc',
-              style: { margin: '0', color: '#0c4a6e' }
-            }, 'React app loaded successfully - No 404 errors - Building gradually')
-          ]),
-          
-          // Services Grid
-          React.createElement('div', {
-            key: 'services',
-            style: { 
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '20px',
-              marginBottom: '30px'
-            }
-          }, [
-            // India Services
-            React.createElement('div', {
-              key: 'india',
-              style: {
-                background: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '25px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }
-            }, [
-              React.createElement('h3', { 
-                key: 'india-title',
-                style: { color: '#1f2937', margin: '0 0 15px 0' }
-              }, '🇮🇳 India Visa Services'),
-              React.createElement('ul', { 
-                key: 'india-list',
-                style: { margin: '0', paddingLeft: '20px', color: '#4b5563' }
-              }, [
-                React.createElement('li', { key: 'i1' }, 'Tourist Visa Assistance'),
-                React.createElement('li', { key: 'i2' }, 'Business Visa Processing'),
-                React.createElement('li', { key: 'i3' }, 'Work Permit Support'),
-                React.createElement('li', { key: 'i4' }, 'Student Visa Guidance')
-              ])
-            ]),
-            
-            // UAE Services
-            React.createElement('div', {
-              key: 'uae',
-              style: {
-                background: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '25px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }
-            }, [
-              React.createElement('h3', { 
-                key: 'uae-title',
-                style: { color: '#1f2937', margin: '0 0 15px 0' }
-              }, '🇦🇪 UAE Immigration'),
-              React.createElement('ul', { 
-                key: 'uae-list',
-                style: { margin: '0', paddingLeft: '20px', color: '#4b5563' }
-              }, [
-                React.createElement('li', { key: 'u1' }, 'Dubai Visa Processing'),
-                React.createElement('li', { key: 'u2' }, 'Abu Dhabi Immigration'),
-                React.createElement('li', { key: 'u3' }, 'Employment Visa'),
-                React.createElement('li', { key: 'u4' }, 'Family Visa Support')
-              ])
-            ])
-          ]),
-          
-          // Footer
-          React.createElement('footer', {
-            key: 'footer',
+        return React.createElement(
+          "div",
+          {
             style: {
-              background: '#f8fafc',
-              padding: '20px',
-              borderRadius: '12px',
-              textAlign: 'center',
-              color: '#64748b'
-            }
-          }, [
-            React.createElement('p', { 
-              key: 'footer-text',
-              style: { margin: '0' }
-            }, '© 2024 VisaConsult India - Step 1: Basic React Loaded Successfully')
-          ])
-        ]);
+              padding: "20px",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              maxWidth: "1200px",
+              margin: "0 auto",
+              lineHeight: "1.6",
+            },
+          },
+          [
+            // Header
+            React.createElement(
+              "header",
+              {
+                key: "header",
+                style: {
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                  padding: "40px 20px",
+                  borderRadius: "12px",
+                  marginBottom: "30px",
+                  textAlign: "center",
+                },
+              },
+              [
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    style: { margin: "0 0 10px 0", fontSize: "2.5rem" },
+                  },
+                  "🏠 VisaConsult India",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "subtitle",
+                    style: { margin: "0", fontSize: "1.2rem", opacity: "0.9" },
+                  },
+                  "Your Trusted Immigration & Visa Services Partner",
+                ),
+              ],
+            ),
+
+            // Status Card
+            React.createElement(
+              "div",
+              {
+                key: "status",
+                style: {
+                  background: "#f0f9ff",
+                  border: "2px solid #0ea5e9",
+                  borderRadius: "12px",
+                  padding: "20px",
+                  marginBottom: "30px",
+                },
+              },
+              [
+                React.createElement(
+                  "h3",
+                  {
+                    key: "status-title",
+                    style: { color: "#0369a1", margin: "0 0 10px 0" },
+                  },
+                  "✅ System Status",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "status-desc",
+                    style: { margin: "0", color: "#0c4a6e" },
+                  },
+                  "React app loaded successfully - No 404 errors - Building gradually",
+                ),
+              ],
+            ),
+
+            // Services Grid
+            React.createElement(
+              "div",
+              {
+                key: "services",
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                  gap: "20px",
+                  marginBottom: "30px",
+                },
+              },
+              [
+                // India Services
+                React.createElement(
+                  "div",
+                  {
+                    key: "india",
+                    style: {
+                      background: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "12px",
+                      padding: "25px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    },
+                  },
+                  [
+                    React.createElement(
+                      "h3",
+                      {
+                        key: "india-title",
+                        style: { color: "#1f2937", margin: "0 0 15px 0" },
+                      },
+                      "🇮🇳 India Visa Services",
+                    ),
+                    React.createElement(
+                      "ul",
+                      {
+                        key: "india-list",
+                        style: {
+                          margin: "0",
+                          paddingLeft: "20px",
+                          color: "#4b5563",
+                        },
+                      },
+                      [
+                        React.createElement(
+                          "li",
+                          { key: "i1" },
+                          "Tourist Visa Assistance",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "i2" },
+                          "Business Visa Processing",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "i3" },
+                          "Work Permit Support",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "i4" },
+                          "Student Visa Guidance",
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                // UAE Services
+                React.createElement(
+                  "div",
+                  {
+                    key: "uae",
+                    style: {
+                      background: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "12px",
+                      padding: "25px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    },
+                  },
+                  [
+                    React.createElement(
+                      "h3",
+                      {
+                        key: "uae-title",
+                        style: { color: "#1f2937", margin: "0 0 15px 0" },
+                      },
+                      "🇦🇪 UAE Immigration",
+                    ),
+                    React.createElement(
+                      "ul",
+                      {
+                        key: "uae-list",
+                        style: {
+                          margin: "0",
+                          paddingLeft: "20px",
+                          color: "#4b5563",
+                        },
+                      },
+                      [
+                        React.createElement(
+                          "li",
+                          { key: "u1" },
+                          "Dubai Visa Processing",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "u2" },
+                          "Abu Dhabi Immigration",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "u3" },
+                          "Employment Visa",
+                        ),
+                        React.createElement(
+                          "li",
+                          { key: "u4" },
+                          "Family Visa Support",
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            // Footer
+            React.createElement(
+              "footer",
+              {
+                key: "footer",
+                style: {
+                  background: "#f8fafc",
+                  padding: "20px",
+                  borderRadius: "12px",
+                  textAlign: "center",
+                  color: "#64748b",
+                },
+              },
+              [
+                React.createElement(
+                  "p",
+                  {
+                    key: "footer-text",
+                    style: { margin: "0" },
+                  },
+                  "© 2024 VisaConsult India - Step 1: Basic React Loaded Successfully",
+                ),
+              ],
+            ),
+          ],
+        );
       }
-      
+
       // Render with error handling
       try {
         console.log("🎯 Mounting React app...");
-        const root = createRoot(document.getElementById('root'));
+        const root = createRoot(document.getElementById("root"));
         root.render(React.createElement(HomePage));
-        console.log("✅ Step 1 Complete: Basic React app working without 404 errors");
+        console.log(
+          "✅ Step 1 Complete: Basic React app working without 404 errors",
+        );
       } catch (error) {
         console.error("❌ React mounting error:", error);
-        document.getElementById('root').innerHTML = 
+        document.getElementById("root").innerHTML =
           '<div style="color: red; padding: 20px; text-align: center;">' +
-          '<h2>React Error</h2>' +
-          '<p>' + error.message + '</p>' +
-          '<p>Will debug this step before proceeding...</p>' +
-          '</div>';
+          "<h2>React Error</h2>" +
+          "<p>" +
+          error.message +
+          "</p>" +
+          "<p>Will debug this step before proceeding...</p>" +
+          "</div>";
       }
     </script>
   </body>
