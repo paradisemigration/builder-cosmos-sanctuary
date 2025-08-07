@@ -12,6 +12,7 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "@/lib/auth";
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
