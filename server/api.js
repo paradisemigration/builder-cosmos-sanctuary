@@ -347,6 +347,98 @@ app.get("/api/businesses/:id", async (req, res) => {
   }
 });
 
+// Get featured businesses
+app.get("/api/businesses/featured", async (req, res) => {
+  try {
+    const { limit = 6 } = req.query;
+
+    // Get featured businesses from database
+    const result = await sqliteDatabase.getBusinesses({
+      limit: parseInt(limit),
+      featured: true,
+    });
+
+    // If no featured businesses found in database, use sample featured businesses
+    if (!result.businesses || result.businesses.length === 0) {
+      console.warn("⚠️ No featured businesses found in database, using sample data");
+
+      const featuredSamples = sampleBusinesses
+        .filter(b => b.isFeatured)
+        .slice(0, parseInt(limit));
+
+      return res.json({
+        success: true,
+        data: featuredSamples,
+        source: "sample_data",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: result.businesses,
+      source: "database",
+      total: result.total,
+    });
+  } catch (error) {
+    console.error("Error fetching featured businesses:", error);
+
+    // Fallback to sample featured businesses
+    const featuredSamples = sampleBusinesses
+      .filter(b => b.isFeatured)
+      .slice(0, parseInt(req.query.limit) || 6);
+
+    res.json({
+      success: true,
+      data: featuredSamples,
+      source: "fallback_sample_data",
+      error: "Database error, using fallback data",
+    });
+  }
+});
+
+// Get business statistics
+app.get("/api/businesses/stats", async (req, res) => {
+  try {
+    const stats = await sqliteDatabase.getStatistics();
+
+    if (!stats) {
+      // Fallback stats
+      return res.json({
+        success: true,
+        data: {
+          totalBusinesses: sampleBusinesses.length,
+          totalReviews: 0,
+          citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
+          totalGooglePlaces: 0,
+          averageRating: 4.5,
+        },
+        source: "fallback",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: stats,
+      source: "database",
+    });
+  } catch (error) {
+    console.error("Error fetching business stats:", error);
+
+    res.json({
+      success: true,
+      data: {
+        totalBusinesses: sampleBusinesses.length,
+        totalReviews: 0,
+        citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
+        totalGooglePlaces: 0,
+        averageRating: 4.5,
+      },
+      source: "fallback_error",
+      error: "Database error, using fallback stats",
+    });
+  }
+});
+
 // Update business
 app.put(
   "/api/businesses/:id",
