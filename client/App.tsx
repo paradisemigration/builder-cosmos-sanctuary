@@ -83,7 +83,7 @@ const App = () => {
                   <Route
                     path="/admin"
                     element={
-                      <ProtectedRoute requireRole="admin">
+                      <ProtectedRoute>
                         <AdminPanel />
                       </ProtectedRoute>
                     }
@@ -91,7 +91,7 @@ const App = () => {
                   <Route
                     path="/admin/status"
                     element={
-                      <ProtectedRoute requireRole="admin">
+                      <ProtectedRoute>
                         <AdminStatus />
                       </ProtectedRoute>
                     }
@@ -99,7 +99,7 @@ const App = () => {
                   <Route
                     path="/admin/bulk-upload"
                     element={
-                      <ProtectedRoute requireRole="admin">
+                      <ProtectedRoute>
                         <AdminBulkUpload />
                       </ProtectedRoute>
                     }
