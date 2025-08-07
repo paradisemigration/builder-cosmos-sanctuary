@@ -30,7 +30,7 @@ interface GlobalDebugInfo {
 
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<GlobalDebugInfo>({
+  const [debugInfo, setDebugInfo] = useState({
     currentPage: "",
     timestamp: "",
     userAgent: "",
@@ -313,7 +313,7 @@ export function GlobalDebugPopup() {
 
               {/* Local Storage Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">💾 Storage</h3>
+                <h3 className="font-semibold mb-2 text-gray-800">�� Storage</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm">
                   <div>
                     <span className="font-medium">Local Storage Items:</span>{" "}
