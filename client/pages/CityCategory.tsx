@@ -192,7 +192,7 @@ export default function CityCategory() {
                 const categoryKeywords = categoryName
                   .toLowerCase()
                   .split(/[\s-]+/);
-                const sortedByRelevance = allCityResult.businesses.sort(
+                const sortedByRelevance = businesses.sort(
                   (a: any, b: any) => {
                     const aScore = categoryKeywords.reduce((score, keyword) => {
                       if ((a.category || "").toLowerCase().includes(keyword))
@@ -233,7 +233,7 @@ export default function CityCategory() {
                 });
 
                 console.log(
-                  `📊 CITY SORTED: Now have ${allBusinesses.length} businesses`,
+                  `�� CITY SORTED: Now have ${allBusinesses.length} businesses`,
                 );
               }
             }
