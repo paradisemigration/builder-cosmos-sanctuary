@@ -17,22 +17,8 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
     `🚨 NUCLEAR INTERCEPTOR: Blocking ALL external requests to prevent 404s`,
   );
 
-  // REGISTER SERVICE WORKER IMMEDIATELY FOR MAXIMUM BLOCKING
-  if ("serviceWorker" in navigator && !hostname.includes("localhost")) {
-    console.log("🚨 REGISTERING AGGRESSIVE SERVICE WORKER");
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((registration) => {
-        console.log("🚨 SW: Registered successfully");
-        // Force immediate activation
-        if (registration.waiting) {
-          registration.waiting.postMessage({ type: "SKIP_WAITING" });
-        }
-      })
-      .catch((error) => {
-        console.error("🚨 SW: Registration failed:", error);
-      });
-  }
+  // SERVICE WORKER DISABLED FOR DEBUGGING
+  console.log("🔇 SERVICE WORKER: Disabled to prevent syntax errors");
 
   // ALWAYS install on production (any non-localhost domain)
   if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
