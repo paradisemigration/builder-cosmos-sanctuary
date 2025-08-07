@@ -27,7 +27,71 @@
       import { createRoot } from "https://esm.sh/react-dom@18/client";
       import { BrowserRouter, Routes, Route, Link, useLocation } from "https://esm.sh/react-router-dom@6";
 
-      // Simple homepage component - no API calls, no routing, no external deps
+      // Navigation Component
+      function Navigation() {
+        return React.createElement("nav", {
+          style: {
+            background: "white",
+            borderBottom: "1px solid #e5e7eb",
+            padding: "1rem 0",
+            marginBottom: "20px",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+          }
+        }, [
+          React.createElement("div", {
+            key: "nav-container",
+            style: {
+              maxWidth: "1200px",
+              margin: "0 auto",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 20px"
+            }
+          }, [
+            // Logo
+            React.createElement(Link, {
+              key: "logo",
+              to: "/",
+              style: {
+                textDecoration: "none",
+                color: "#1f2937",
+                fontSize: "1.5rem",
+                fontWeight: "bold"
+              }
+            }, "🏠 VisaConsult India"),
+
+            // Navigation Links
+            React.createElement("div", {
+              key: "nav-links",
+              style: { display: "flex", gap: "2rem" }
+            }, [
+              React.createElement(Link, {
+                key: "home",
+                to: "/",
+                style: { textDecoration: "none", color: "#4b5563", fontWeight: "500" }
+              }, "Home"),
+              React.createElement(Link, {
+                key: "browse",
+                to: "/browse",
+                style: { textDecoration: "none", color: "#4b5563", fontWeight: "500" }
+              }, "Browse"),
+              React.createElement(Link, {
+                key: "about",
+                to: "/about",
+                style: { textDecoration: "none", color: "#4b5563", fontWeight: "500" }
+              }, "About"),
+              React.createElement(Link, {
+                key: "contact",
+                to: "/contact",
+                style: { textDecoration: "none", color: "#4b5563", fontWeight: "500" }
+              }, "Contact")
+            ])
+          ])
+        ]);
+      }
+
+      // Homepage Component
       function HomePage() {
         return React.createElement(
           "div",
