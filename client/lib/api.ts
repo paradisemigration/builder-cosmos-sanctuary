@@ -328,23 +328,11 @@ class APIClient {
 
   // Get business statistics
   async getBusinessStats() {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: any;
-      }>("/api/businesses/stats");
-    } catch (error) {
-      console.warn("Business stats API failed, using fallback");
-      return {
-        success: true,
-        data: {
-          totalBusinesses: sampleBusinesses.length,
-          totalReviews: sampleBusinesses.length * 15,
-          citiesCount: new Set(sampleBusinesses.map((b) => b.city)).size,
-          averageRating: 4.5,
-        },
-      };
-    }
+    console.log("📊 Fetching real business statistics from 1500+ database");
+    return await this.request<{
+      success: boolean;
+      data: any;
+    }>("/api/businesses/stats");
   }
 }
 
