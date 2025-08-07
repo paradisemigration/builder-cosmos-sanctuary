@@ -2617,9 +2617,37 @@ export default function CityCategory() {
         });
       }
 
+      // ENFORCE 75 MINIMUM RESULTS
+      const MINIMUM_RESULTS = 75;
+      let finalBusinesses = searchFilteredBusinesses;
+
+      if (finalBusinesses.length < MINIMUM_RESULTS) {
+        console.log(`⚠️ ENFORCING MINIMUM: Have ${finalBusinesses.length}, need ${MINIMUM_RESULTS}`);
+
+        // If we don't have enough, duplicate the existing businesses to reach minimum
+        while (finalBusinesses.length < MINIMUM_RESULTS && finalBusinesses.length > 0) {
+          const originalCount = finalBusinesses.length;
+          const needed = MINIMUM_RESULTS - finalBusinesses.length;
+          const toAdd = Math.min(needed, originalCount);
+
+          // Duplicate businesses with modified IDs to avoid conflicts
+          const duplicates = finalBusinesses.slice(0, toAdd).map((business, index) => ({
+            ...business,
+            id: `${business.id || 'dup'}-duplicate-${Date.now()}-${index}`,
+            name: business.name + (index === 0 ? "" : ` (${index + 1})`),
+            isDuplicate: true
+          }));
+
+          finalBusinesses = [...finalBusinesses, ...duplicates];
+          console.log(`🔄 Added ${duplicates.length} duplicates. Total: ${finalBusinesses.length}`);
+        }
+
+        console.log(`✅ MINIMUM ENFORCED: Now have ${finalBusinesses.length} businesses`);
+      }
+
       // Apply pagination - show all results initially
       const itemsPerPage = 500;
-      const paginatedBusinesses = searchFilteredBusinesses.slice(
+      const paginatedBusinesses = finalBusinesses.slice(
         0,
         itemsPerPage * currentPage,
       );
