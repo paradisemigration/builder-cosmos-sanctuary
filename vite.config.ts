@@ -29,7 +29,7 @@ export default defineConfig({
     target: "es2020",
     legalComments: "none",
     logOverride: { "this-is-undefined-in-esm": "silent" },
-    loader: "jsx",
+    loader: "tsx",
     jsx: "automatic",
   },
 });
