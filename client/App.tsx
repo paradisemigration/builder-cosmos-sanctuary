@@ -89,11 +89,10 @@ const App = () => {
       <AuthProvider>
         <TooltipProvider>
           <Toaster />
-          <BrowserRouter>
+          <SimpleRouter>
             <ScrollToTop />
             <Navigation />
-            {typeof Routes !== "undefined" ? (
-              <Routes>
+            <div>
                 <Route path="/" element={<Index />} />
                 <Route path="/browse" element={<Browse />} />
                 <Route
