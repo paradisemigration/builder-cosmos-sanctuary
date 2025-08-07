@@ -589,14 +589,15 @@ export default function CityBusinessListing() {
           id: business.id || `sample-${cityName}-${index}`,
           city: cityName,
           isVerified: true,
-          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
           rating: business.rating || Math.random() * 2 + 3,
         }));
 
         if (resetList) {
           setBusinesses(cityBusinesses);
         } else {
-          setBusinesses(prev => [...prev, ...cityBusinesses]);
+          setBusinesses((prev) => [...prev, ...cityBusinesses]);
         }
         setLoading(false);
         setLoadingMore(false);
