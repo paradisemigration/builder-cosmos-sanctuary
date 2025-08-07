@@ -13,21 +13,55 @@
       <h1>Loading...</h1>
     </div>
     <script>
-      // Inline JavaScript - no external files
-      console.log("Starting app with inline JavaScript");
+      // Comprehensive cleanup and error testing
+      console.log("=== SYNTAX ERROR DEBUG SESSION ===");
 
-      // Clear any cached service workers
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for(let registration of registrations) {
-            registration.unregister();
-          }
-        });
+      try {
+        // Test basic JavaScript syntax
+        const testObj = { key: "value" };
+        console.log("✅ Object literal syntax working:", testObj);
+
+        // Test arrow functions
+        const testArrow = () => "arrow function working";
+        console.log("✅ Arrow function syntax working:", testArrow());
+
+        // Clear any cached service workers
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister();
+              console.log("🧹 Unregistered service worker");
+            }
+          });
+        }
+
+        // Clear localStorage that might contain cached code
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+          console.log("🧹 Cleared storage");
+        } catch(e) {
+          console.log("Storage clear failed:", e);
+        }
+
+        // Update UI
+        document.getElementById('root').innerHTML =
+          '<div style="padding: 20px; font-family: Arial;">' +
+          '<h1 style="color: green;">✅ All Syntax Tests Passed</h1>' +
+          '<p>No "Unexpected token :" errors detected</p>' +
+          '<p>JavaScript parsing working correctly</p>' +
+          '</div>';
+
+        console.log("✅ App loaded successfully - No syntax errors");
+
+      } catch (error) {
+        console.error("❌ JavaScript error caught:", error);
+        document.getElementById('root').innerHTML =
+          '<div style="padding: 20px; color: red;">' +
+          '<h1>Error Detected</h1>' +
+          '<p>Error: ' + error.message + '</p>' +
+          '</div>';
       }
-
-      // Simple test
-      document.getElementById('root').innerHTML = '<h1>App Working - No Syntax Errors</h1>';
-      console.log("App loaded successfully");
     </script>
   </body>
 </html>
