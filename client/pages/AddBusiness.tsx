@@ -39,8 +39,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { businessCategories, indianCities, sampleBusinesses } from "@/lib/data";
 
-
-
 export default function AddBusiness() {
   const [searchParams] = useSearchParams();
   const location = useLocation();

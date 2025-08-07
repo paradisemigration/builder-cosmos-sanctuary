@@ -13,8 +13,6 @@ export interface User {
   providerId?: string; // OAuth provider user ID
 }
 
-
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Demo users - In production, this would be handled by a backend

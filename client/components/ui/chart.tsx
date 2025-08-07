@@ -16,8 +16,6 @@ export type ChartConfig = {
   );
 };
 
-
-
 const ChartContext = React.createContext(null);
 
 function useChart() {

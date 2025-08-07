@@ -20,8 +20,6 @@ import {
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 
-
-
 export default function ReportScam() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);

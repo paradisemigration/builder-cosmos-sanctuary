@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-
-
 export function DebugPopup({ debugInfo }: DebugPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
 

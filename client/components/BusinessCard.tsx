@@ -18,8 +18,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Business } from "@/lib/data";
 
-
-
 export function BusinessCard({ business, className = "" }: BusinessCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imageError, setImageError] = useState(false);

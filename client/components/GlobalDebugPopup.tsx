@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-
-
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [debugInfo, setDebugInfo] = useState({

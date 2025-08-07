@@ -3,8 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Loader2 } from "lucide-react";
 
-
-
 export function ProtectedRoute({
   children,
   requireRole,

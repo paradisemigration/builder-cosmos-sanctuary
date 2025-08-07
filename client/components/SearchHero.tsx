@@ -23,8 +23,6 @@ import {
   sampleBusinesses,
 } from "@/lib/data";
 
-
-
 export function SearchHero({ onSearch }: SearchHeroProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");

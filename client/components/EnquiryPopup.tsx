@@ -18,8 +18,6 @@ import {
   allCategories,
 } from "@/lib/all-categories";
 
-
-
 // Simplified categories as requested
 const simplifiedCategories = [
   { slug: "visit-visa", name: "Visit Visa" },
@@ -388,7 +386,6 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 }
 
 // Floating Call-to-Action Button Component
-
 
 export function FloatingCTA({ onClick }: FloatingCTAProps) {
   return (
