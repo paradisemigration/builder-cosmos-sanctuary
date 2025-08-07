@@ -103,25 +103,21 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
       }
     };
 
-    // 4. PREVENT ANY NAVIGATION TO EXTERNAL DOMAINS
-    const originalAssign = window.location.assign;
-    const originalReplace = window.location.replace;
+    // 4. INTERCEPT LINK CLICKS TO PREVENT EXTERNAL NAVIGATION
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const link = target.closest('a');
 
-    window.location.assign = function(url: string) {
-      if (url.includes('://') && !url.includes(hostname)) {
-        console.error(`🚨 BLOCKED NAVIGATION: ${url}`);
-        return;
+      if (link && link.href) {
+        const url = link.href;
+        if (url.includes('://') && !url.includes(hostname)) {
+          console.error(`🚨 BLOCKED LINK CLICK: ${url}`);
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
       }
-      return originalAssign.call(this, url);
-    };
-
-    window.location.replace = function(url: string) {
-      if (url.includes('://') && !url.includes(hostname)) {
-        console.error(`🚨 BLOCKED REPLACE: ${url}`);
-        return;
-      }
-      return originalReplace.call(this, url);
-    };
+    }, true);
 
     console.log("🚨 NUCLEAR INTERCEPTOR: ALL BLOCKS INSTALLED");
   }
