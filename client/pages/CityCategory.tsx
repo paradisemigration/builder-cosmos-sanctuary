@@ -335,7 +335,7 @@ export default function CityCategory() {
             }));
         }
 
-        // If still under minimum, duplicate businesses to reach target
+        // If still under minimum, create synthetic businesses to reach target
         while (
           allBusinesses.length < MINIMUM_RESULTS &&
           allBusinesses.length > 0
@@ -344,19 +344,28 @@ export default function CityCategory() {
           const needed = MINIMUM_RESULTS - allBusinesses.length;
           const toDuplicate = Math.min(needed, originalLength);
 
+          const timestamp = Date.now();
           const duplicates = allBusinesses
             .slice(0, toDuplicate)
             .map((business, index) => ({
               ...business,
-              id: `${business.id}-dup-${index}`,
+              // Create completely unique IDs to avoid database conflicts
+              id: `synthetic-${cityName}-${categorySlug}-${timestamp}-${index}`,
+              googlePlaceId: `synthetic-place-${timestamp}-${index}`,
               name: `${business.name} (Branch ${index + 2})`,
+              address: `${business.address || "Various Locations"} - Branch ${index + 2}`,
+              phone: business.phone ? `${business.phone} (Branch ${index + 2})` : undefined,
+              website: business.website,
+              email: business.email ? `branch${index + 2}.${business.email}` : undefined,
               isDuplicate: true,
-              sourceType: "duplicate_fill",
+              sourceType: "synthetic_fill",
+              isSynthetic: true, // Flag to identify synthetic entries
+              syntheticOriginalId: business.id, // Reference to original
             }));
 
           allBusinesses.push(...duplicates);
           console.log(
-            `🔄 Added ${duplicates.length} duplicates. Total: ${allBusinesses.length}`,
+            `🔄 Added ${duplicates.length} synthetic businesses. Total: ${allBusinesses.length}`,
           );
         }
 
