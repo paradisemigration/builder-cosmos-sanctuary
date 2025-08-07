@@ -2046,21 +2046,33 @@ export default function CityCategory() {
               isNearbyData = true;
               nearbyCity = sourceCities.join(", ");
             }
-          } else if (uniqueBusinesses.length > 0) {
-            // We have nearby city results - merge with main city businesses if any
-            const allBusinesses = [...accumulatedBusinesses];
+          } else if (accumulatedBusinesses.length > 0) {
+            // We have businesses from main city and/or nearby cities
+            // Final deduplication of all accumulated businesses
+            const finalBusinesses = [];
+            const finalSeenIds = new Set();
+
+            accumulatedBusinesses.forEach((business) => {
+              const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+              if (!finalSeenIds.has(businessId)) {
+                finalSeenIds.add(businessId);
+                finalBusinesses.push(business);
+              }
+            });
 
             result = {
               success: true,
-              businesses: allBusinesses,
-              total: allBusinesses.length,
-              source: accumulatedBusinesses.length > uniqueBusinesses.length ? "main_city_plus_nearby" : "nearby_cities_api",
+              businesses: finalBusinesses,
+              total: finalBusinesses.length,
+              source: finalBusinesses.some(b => !b.isNearbyData) ? "main_city_plus_nearby" : "nearby_cities_only",
             };
 
             if (sourceCities.length > 0) {
               isNearbyData = true;
               nearbyCity = sourceCities.join(", ");
             }
+
+            console.log(`✅ Final result: ${finalBusinesses.length} businesses total`);
           }
         }
 
