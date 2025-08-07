@@ -731,7 +731,7 @@ export default function Index() {
                       }}
                       onLoad={(e) => {
                         // Reset fallback flag on successful load
-                        delete (e.target as HTMLImageElement).dataset
+                        delete e.target.dataset
                           .fallbackAttempted;
                       }}
                     />
