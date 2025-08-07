@@ -23,9 +23,14 @@ window.fetch = async (...args) => {
   return originalFetch(...args);
 };
 
-// 2. Override XMLHttpRequest
+// 2. Override XMLHttpRequest with proper state handling
 const OriginalXHR = window.XMLHttpRequest;
 window.XMLHttpRequest = class extends OriginalXHR {
+  constructor() {
+    super();
+    this._blocked = false;
+  }
+
   open(...args) {
     const url = args[1] && args[1].toString ? args[1].toString() : "";
     if (
@@ -33,14 +38,37 @@ window.XMLHttpRequest = class extends OriginalXHR {
       (url.includes("://") && !url.includes(hostname))
     ) {
       console.error("🚨 XHR BLOCKED:", url);
+      this._blocked = true;
+
+      // Call super.open first to set proper state
+      super.open("GET", "data:application/json,{}", true);
+
+      // Set up mock response
       setTimeout(() => {
-        Object.defineProperty(this, "status", { value: 200 });
-        Object.defineProperty(this, "responseText", { value: "{}" });
+        Object.defineProperty(this, "status", { value: 200, configurable: true });
+        Object.defineProperty(this, "statusText", { value: "OK", configurable: true });
+        Object.defineProperty(this, "responseText", { value: "{}", configurable: true });
+        Object.defineProperty(this, "readyState", { value: 4, configurable: true });
+        if (this.onreadystatechange) this.onreadystatechange();
         if (this.onload) this.onload(new Event("load"));
       }, 0);
       return;
     }
     return super.open(...args);
+  }
+
+  send(...args) {
+    if (this._blocked) {
+      return; // Don't actually send blocked requests
+    }
+    return super.send(...args);
+  }
+
+  setRequestHeader(...args) {
+    if (this._blocked) {
+      return; // Ignore headers for blocked requests
+    }
+    return super.setRequestHeader(...args);
   }
 };
 
