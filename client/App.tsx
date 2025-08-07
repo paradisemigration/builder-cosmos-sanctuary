@@ -7,11 +7,6 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { isFrontendOnlyDeployment } from "@/utils/api-config";
-import { setupSEOCrawling } from "@/lib/sitemap-generator";
-
-// SIMPLIFIED APPROACH - NO COMPLEX INTERCEPTORS
-console.log("App starting with simplified configuration");
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
@@ -76,7 +71,6 @@ function ProtectedRoute({
 }) {
   return <>{children}</>;
 }
-// All original functionality restored
 
 // Import the original auth but with proper error handling
 import { AuthProvider as OriginalAuthProvider } from "@/lib/auth";
@@ -114,94 +108,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => {
-  // DISABLED: All SEO and external validations to prevent 404s
-  useEffect(() => {
-    console.log("🔇 ALL EXTERNAL REQUESTS DISABLED - NO SEO SETUP");
-
-    // Remove any existing meta tags that might trigger external requests
-    const metaTags = document.querySelectorAll(
-      'meta[content*="verification"], meta[name*="google"], meta[name*="bing"], meta[name*="msvalidate"]',
-    );
-    metaTags.forEach((tag) => tag.remove());
-
-    // Remove any canonical links that might trigger requests
-    const canonicalLinks = document.querySelectorAll('link[rel="canonical"]');
-    canonicalLinks.forEach((link) => link.remove());
-
-    console.log("🔇 REMOVED ALL EXTERNAL META TAGS AND LINKS");
-  }, []);
-
-  // Global fetch interceptor to prevent 404 errors - immediate setup
-  useEffect(() => {
-    const hostname = window.location.hostname;
-    console.log(`🔍 Current hostname: ${hostname}`);
-    console.log(
-      `🔍 Is frontend-only deployment: ${isFrontendOnlyDeployment()}`,
-    );
-    console.log("🚀 Setting up AGGRESSIVE global fetch interceptor");
-
-    const originalFetch = window.fetch;
-
-    // Override fetch immediately and aggressively
-    window.fetch = async (
-      url: string | URL | Request,
-      options?: RequestInit,
-    ) => {
-      const urlString = typeof url === "string" ? url : url.toString();
-
-      // Log ALL fetch calls for debugging
-      console.log(`🌐 Fetch call detected: ${urlString}`);
-
-      // Intercept ALL API calls on production domains (anything not localhost)
-      if (urlString.includes("/api/")) {
-        console.log(`🛡️ API call intercepted: ${urlString}`);
-
-        // Block API calls on ANY production domain
-        if (
-          !hostname.includes("localhost") &&
-          !hostname.includes("127.0.0.1")
-        ) {
-          console.log(
-            `❌ BLOCKING API call on production domain: ${urlString}`,
-          );
-
-          // Return immediate mock response to prevent 404
-          return Promise.resolve(
-            new Response(
-              JSON.stringify({
-                success: false,
-                message: "API blocked in production - using fallback data",
-                data: [],
-                businesses: [],
-                total: 0,
-              }),
-              {
-                status: 200,
-                statusText: "OK",
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-Intercepted": "true",
-                },
-              },
-            ),
-          );
-        }
-      }
-
-      // For non-API requests or localhost, use original fetch
-      console.log(`✅ Allowing fetch to: ${urlString}`);
-      return originalFetch(url, options);
-    };
-
-    console.log("✅ Fetch interceptor installed successfully");
-
-    // Cleanup: restore original fetch when component unmounts
-    return () => {
-      console.log("🧹 Cleaning up fetch interceptor");
-      window.fetch = originalFetch;
-    };
-  }, []);
-
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
@@ -213,86 +119,16 @@ const App = () => {
               <ScrollToTop />
               <Navigation />
               <Routes>
-                {/* Public Routes */}
                 <Route path="/" element={<Index />} />
-                <Route path="/uae" element={<UAE />} />
-
-                {/* UAE-specific routes */}
-                <Route
-                  path="/uae/category/:category"
-                  element={<CategoryPage />}
-                />
-                <Route
-                  path="/uae/business/:city"
-                  element={<CityBusinessListing />}
-                />
-                <Route
-                  path="/uae/business/:city/:category"
-                  element={<CityRouteHandler />}
-                />
-
-                <Route path="/business" element={<Browse />} />
-                {/* Redirect /browse to /business for backward compatibility */}
                 <Route path="/browse" element={<Browse />} />
-                <Route path="/list-business" element={<ListBusiness />} />
-                <Route path="/plans" element={<ListingPlans />} />
+                <Route path="/business/:id" element={<BusinessProfile />} />
                 <Route path="/add-business" element={<AddBusiness />} />
                 <Route path="/login" element={<Login />} />
-
-                {/* City-specific business listing routes */}
-                <Route
-                  path="/business/:city"
-                  element={<CityBusinessListing />}
-                />
-
-                {/* Legacy business profile route for backward compatibility */}
-                <Route path="/business/:id" element={<BusinessProfile />} />
-
-                {/* Smart route handler for categories vs business profiles */}
-                <Route
-                  path="/business/:city/:category"
-                  element={<CityRouteHandler />}
-                />
-
-                {/* SEO-friendly category and location routes */}
-                <Route path="/category/:category" element={<CategoryPage />} />
-                <Route
-                  path="/location/:location"
-                  element={<CategoryLocationPage />}
-                />
-
-                {/* Protected Routes - Require Authentication */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute requireRole="business_owner">
-                      <BusinessDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-
-                {/* Admin Only Routes */}
                 <Route
                   path="/admin"
                   element={
                     <ProtectedRoute requireRole="admin">
                       <AdminPanel />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/bulk-upload"
-                  element={
-                    <ProtectedRoute requireRole="admin">
-                      <AdminBulkUpload />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/business/:id/edit"
-                  element={
-                    <ProtectedRoute requireRole="admin">
-                      <EditBusiness />
                     </ProtectedRoute>
                   }
                 />
@@ -304,56 +140,54 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-
-                {/* Business Owner Edit Route */}
                 <Route
-                  path="/business/:id/edit"
+                  path="/admin/bulk-upload"
                   element={
-                    <ProtectedRoute requireRole="business_owner">
-                      <EditBusiness />
+                    <ProtectedRoute requireRole="admin">
+                      <AdminBulkUpload />
                     </ProtectedRoute>
                   }
                 />
-
-                {/* Static Pages */}
+                <Route path="/business/:id/edit" element={<EditBusiness />} />
+                <Route path="/dashboard" element={<BusinessDashboard />} />
+                <Route path="/plans" element={<ListingPlans />} />
+                <Route path="/list-business" element={<ListBusiness />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route
                   path="/cant-find-business"
                   element={<CantFindBusiness />}
                 />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-
-                {/* Browse All Pages */}
-                <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/all-categories" element={<AllCategories />} />
                 <Route
                   path="/all-cities-categories"
                   element={<AllCitiesCategories />}
                 />
-                <Route path="/all-categories" element={<AllCategories />} />
                 <Route path="/main-pages" element={<MainPages />} />
+                <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/uae" element={<UAE />} />
                 <Route
-                  path="/help"
-                  element={
-                    <div className="min-h-screen bg-gray-50 pt-24 px-4">
-                      <div className="container mx-auto max-w-4xl">
-                        <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                          Help Center
-                        </h1>
-                        <div className="bg-white rounded-lg p-8 shadow-sm">
-                          <p className="text-lg text-gray-700 mb-4">
-                            Find answers to frequently asked questions and get
-                            support.
-                          </p>
-                          <p className="text-gray-600">Coming soon...</p>
-                        </div>
-                      </div>
-                    </div>
-                  }
+                  path="/uae/:city"
+                  element={<CityRouteHandler country="uae" />}
                 />
-
-                {/* Catch-all route - must be last */}
+                <Route
+                  path="/uae/:city/:category"
+                  element={<CityRouteHandler country="uae" />}
+                />
+                <Route
+                  path="/business/:city"
+                  element={<CityRouteHandler country="india" />}
+                />
+                <Route
+                  path="/business/:city/:category"
+                  element={<CityRouteHandler country="india" />}
+                />
+                <Route
+                  path="/category/:category"
+                  element={<CategoryLocationPage />}
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <SiteFooter />
