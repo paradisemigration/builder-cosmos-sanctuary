@@ -29,14 +29,12 @@ export default function AdminPanel() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [stats, setStats] = useState<any>(null);
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [stats, setStats] = useState(null);
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [backupLoading, setBackupLoading] = useState(false);
-  const [backupHistory, setBackupHistory] = useState<any[]>([]);
-  const [backendAvailable, setBackendAvailable] = useState<boolean | null>(
-    null,
-  );
+  const [backupHistory, setBackupHistory] = useState([]);
+  const [backendAvailable, setBackendAvailable] = useState(null);
 
   // Detect if we're in a local development environment
   const isLocalDevelopment =
