@@ -354,26 +354,27 @@ export default function Index() {
     },
   ];
 
+  // Dynamic stats data from API or fallback
   const statsData = [
     {
       label: "Verified Consultants",
-      value: "8,500+",
+      value: stats?.totalBusinesses ? `${stats.totalBusinesses.toLocaleString()}+` : "1,500+",
       icon: <Shield className="h-8 w-8" />,
     },
     {
-      label: "Successful Applications",
-      value: "75,000+",
+      label: "Customer Reviews",
+      value: stats?.totalReviews ? `${stats.totalReviews.toLocaleString()}+` : "10,000+",
       icon: <CheckCircle className="h-8 w-8" />,
     },
     {
-      label: "Countries Covered",
-      value: "50+",
-      icon: <Globe className="h-8 w-8" />,
+      label: "Cities Covered",
+      value: stats?.citiesCount ? `${stats.citiesCount}+` : "100+",
+      icon: <MapPin className="h-8 w-8" />,
     },
     {
-      label: "Cities in India",
-      value: "100+",
-      icon: <MapPin className="h-8 w-8" />,
+      label: "Google Places",
+      value: stats?.totalGooglePlaces ? `${stats.totalGooglePlaces.toLocaleString()}+` : "1,200+",
+      icon: <Globe className="h-8 w-8" />,
     },
   ];
 
