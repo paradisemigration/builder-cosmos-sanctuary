@@ -23,9 +23,10 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
       options?: RequestInit,
     ) => {
       const urlString = typeof url === "string" ? url : url.toString();
+      console.log(`🌍 ALL FETCH: ${urlString}`);
 
       if (urlString.includes("/api/")) {
-        console.log(`🚨 IMMEDIATE BLOCK: ${urlString}`);
+        console.error(`🚨 IMMEDIATE BLOCK: ${urlString}`);
         return Promise.resolve(
           new Response(
             JSON.stringify({
