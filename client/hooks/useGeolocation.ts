@@ -6,10 +6,12 @@ async function robustFetch(
   options?: RequestInit,
 ): Promise<Response> {
   console.log("🚨 GEOLOCATION BLOCKED: External API call prevented");
-  return Promise.resolve(new Response('{"blocked":true}', {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' }
-  }));
+  return Promise.resolve(
+    new Response('{"blocked":true}', {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
 }
 
 interface LocationData {
@@ -33,14 +35,14 @@ export function useGeolocation(): GeolocationResult {
   return {
     location: {
       city: "Dubai",
-      country: "United Arab Emirates", 
+      country: "United Arab Emirates",
       countryCode: "AE",
       region: "Dubai",
       latitude: 25.2048,
-      longitude: 55.2708
+      longitude: 55.2708,
     },
     isLoading: false,
     error: null,
-    hasPermission: true
+    hasPermission: true,
   };
 }
