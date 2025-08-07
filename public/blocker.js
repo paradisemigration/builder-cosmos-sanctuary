@@ -21,65 +21,51 @@ window.fetch = function() {
   return originalFetch.apply(window, args);
 };
 
-// 2. Override XMLHttpRequest with proper state handling
-const OriginalXHR = window.XMLHttpRequest;
-window.XMLHttpRequest = class extends OriginalXHR {
-  constructor() {
-    super();
-    this._blocked = false;
-  }
+// 2. Override XMLHttpRequest with ES5 syntax
+var OriginalXHR = window.XMLHttpRequest;
+window.XMLHttpRequest = function() {
+  var xhr = new OriginalXHR();
+  var blocked = false;
 
-  open(...args) {
-    const url = args[1] && args[1].toString ? args[1].toString() : "";
-    if (
-      url.includes("/api/") ||
-      (url.includes("://") && !url.includes(hostname))
-    ) {
-      console.error("🚨 XHR BLOCKED:", url);
-      this._blocked = true;
+  var originalOpen = xhr.open;
+  xhr.open = function(method, url) {
+    var urlStr = url && url.toString ? url.toString() : "";
 
-      // Call super.open first to set proper state
-      super.open("GET", "data:application/json,{}", true);
+    if (urlStr.indexOf("/api/") !== -1 || (urlStr.indexOf("://") !== -1 && urlStr.indexOf(hostname) === -1)) {
+      console.error("XHR BLOCKED:", urlStr);
+      blocked = true;
 
-      // Set up mock response
-      setTimeout(() => {
-        Object.defineProperty(this, "status", {
-          value: 200,
-          configurable: true,
-        });
-        Object.defineProperty(this, "statusText", {
-          value: "OK",
-          configurable: true,
-        });
-        Object.defineProperty(this, "responseText", {
-          value: "{}",
-          configurable: true,
-        });
-        Object.defineProperty(this, "readyState", {
-          value: 4,
-          configurable: true,
-        });
-        if (this.onreadystatechange) this.onreadystatechange();
-        if (this.onload) this.onload(new Event("load"));
+      // Mock successful response
+      setTimeout(function() {
+        try {
+          Object.defineProperty(xhr, "status", { value: 200, configurable: true });
+          Object.defineProperty(xhr, "responseText", { value: "{}", configurable: true });
+          Object.defineProperty(xhr, "readyState", { value: 4, configurable: true });
+          if (xhr.onreadystatechange) xhr.onreadystatechange();
+          if (xhr.onload) xhr.onload({ type: "load" });
+        } catch(e) {
+          console.warn("XHR mock setup error:", e);
+        }
       }, 0);
       return;
     }
-    return super.open(...args);
-  }
 
-  send(...args) {
-    if (this._blocked) {
-      return; // Don't actually send blocked requests
-    }
-    return super.send(...args);
-  }
+    return originalOpen.apply(xhr, arguments);
+  };
 
-  setRequestHeader(...args) {
-    if (this._blocked) {
-      return; // Ignore headers for blocked requests
-    }
-    return super.setRequestHeader(...args);
-  }
+  var originalSend = xhr.send;
+  xhr.send = function() {
+    if (blocked) return;
+    return originalSend.apply(xhr, arguments);
+  };
+
+  var originalSetRequestHeader = xhr.setRequestHeader;
+  xhr.setRequestHeader = function() {
+    if (blocked) return;
+    return originalSetRequestHeader.apply(xhr, arguments);
+  };
+
+  return xhr;
 };
 
 // 3. Block all error events
