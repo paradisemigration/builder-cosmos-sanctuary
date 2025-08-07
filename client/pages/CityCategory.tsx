@@ -1999,7 +1999,7 @@ export default function CityCategory() {
                       const text = `${business.name} ${business.category} ${business.description}`.toLowerCase();
                       return text.includes("visa") || text.includes("immigration") || text.includes("consultant");
                     },
-                  ).slice(0, 10); // Limit to 10 per city for speed
+                  ); // Show all businesses, no limit
 
                   return {
                     city: nearbyCity,
