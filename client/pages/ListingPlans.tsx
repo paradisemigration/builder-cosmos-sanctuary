@@ -155,7 +155,7 @@ export default function ListingPlans() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [billingCycle, setBillingCycle] = useState("monthly");
 
-  const getPrice = (plan: (typeof plans)[0]) => {
+  const getPrice = (plan) => {
     if (plan.price === 0) return "Free";
 
     const price = billingCycle === "yearly" ? plan.price * 10 : plan.price;
