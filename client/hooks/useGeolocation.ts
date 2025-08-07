@@ -157,12 +157,7 @@ export function useGeolocation(): GeolocationResult {
     isLoading: false,
     error: null,
     hasPermission: true
-  };
-
-  const getLocationFromCoords = async (
-    latitude: number,
-    longitude: number,
-  ): Promise<LocationData | null> => {
+}
     try {
       // Using OpenStreetMap Nominatim API for reverse geocoding (free and no API key required)
       const response = await robustFetch(
