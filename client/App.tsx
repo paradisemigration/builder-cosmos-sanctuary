@@ -154,7 +154,7 @@ const App = () => {
           <GlobalDebugPopup />
         </BrowserRouter>
       </TooltipProvider>
-      </SimpleAuthProvider>
+      </AuthProvider>
     </HelmetProvider>
   );
 };
