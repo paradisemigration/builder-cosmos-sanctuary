@@ -116,51 +116,64 @@ const App = () => {
     setupSEOCrawling();
   }, []);
 
-  // Global fetch interceptor to prevent 404 errors in frontend-only deployments
+  // Global fetch interceptor to prevent 404 errors - immediate setup
   useEffect(() => {
-    console.log("Setting up global fetch interceptor");
+    const hostname = window.location.hostname;
+    console.log(`🔍 Current hostname: ${hostname}`);
+    console.log(`🔍 Is frontend-only deployment: ${isFrontendOnlyDeployment()}`);
+    console.log("🚀 Setting up AGGRESSIVE global fetch interceptor");
 
     const originalFetch = window.fetch;
+
+    // Override fetch immediately and aggressively
     window.fetch = async (
       url: string | URL | Request,
       options?: RequestInit,
     ) => {
       const urlString = typeof url === "string" ? url : url.toString();
 
-      // Intercept API calls and return mock responses for ANY deployment that doesn't have a backend
-      if (urlString.includes("/api/") && !urlString.includes("placeholder")) {
-        console.log(
-          `Intercepted API call: ${urlString} - checking if frontend-only`,
-        );
+      // Log ALL fetch calls for debugging
+      console.log(`🌐 Fetch call detected: ${urlString}`);
 
-        // Always intercept API calls if we detect it's frontend-only OR if it's not localhost
-        if (
-          isFrontendOnlyDeployment() ||
-          !window.location.hostname.includes("localhost")
-        ) {
-          console.log(`Returning mock response for: ${urlString}`);
+      // Intercept ALL API calls on production domains (anything not localhost)
+      if (urlString.includes("/api/")) {
+        console.log(`🛡️ API call intercepted: ${urlString}`);
 
-          // Return a mock response to prevent 404 errors
-          return new Response(
+        // Block API calls on ANY production domain
+        if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
+          console.log(`❌ BLOCKING API call on production domain: ${urlString}`);
+
+          // Return immediate mock response to prevent 404
+          return Promise.resolve(new Response(
             JSON.stringify({
               success: false,
-              message: "API not available in frontend-only deployment",
+              message: "API blocked in production - using fallback data",
               data: [],
+              businesses: [],
+              total: 0
             }),
             {
               status: 200,
-              headers: { "Content-Type": "application/json" },
+              statusText: "OK",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Intercepted": "true"
+              },
             },
-          );
+          ));
         }
       }
 
-      // For non-API requests, use original fetch
+      // For non-API requests or localhost, use original fetch
+      console.log(`✅ Allowing fetch to: ${urlString}`);
       return originalFetch(url, options);
     };
 
+    console.log("✅ Fetch interceptor installed successfully");
+
     // Cleanup: restore original fetch when component unmounts
     return () => {
+      console.log("🧹 Cleaning up fetch interceptor");
       window.fetch = originalFetch;
     };
   }, []);
