@@ -581,6 +581,30 @@ export default function CityBusinessListing() {
 
       console.log(`Fetching businesses for city: "${cityName}", page: ${page}`);
 
+      // Check if this is a frontend-only deployment
+      if (isFrontendOnlyDeployment() && page === 1) {
+        console.log("Frontend-only deployment detected, using sample data");
+        const cityBusinesses = sampleBusinesses.map((business, index) => ({
+          ...business,
+          id: business.id || `sample-${cityName}-${index}`,
+          city: cityName,
+          isVerified: true,
+          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3,
+        }));
+
+        if (resetList) {
+          setBusinesses(cityBusinesses);
+        } else {
+          setBusinesses(prev => [...prev, ...cityBusinesses]);
+        }
+        setLoading(false);
+        setLoadingMore(false);
+        setHasMore(false);
+        setError(null);
+        return;
+      }
+
       // Check if API is available
       let apiAvailable = false;
       try {
