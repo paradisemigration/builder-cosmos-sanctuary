@@ -165,7 +165,7 @@ class APIClient {
         // Handle different response formats from your backend
         const businesses = response.businesses || response.data || [];
         const total = response.totalRecords || response.total || businesses.length;
-        
+
         console.log("📊 REAL DATA EXTRACTED:", {
           businessCount: businesses.length,
           totalInDB: total,
@@ -194,7 +194,7 @@ class APIClient {
       }
     } catch (error) {
       console.error("❌ REAL API COMPLETELY FAILED:", error);
-      
+
       // Only use sample data as absolute last resort
       console.warn("📋 EMERGENCY FALLBACK: Using sample data because API failed");
       const page = params.page || 1;
@@ -348,6 +348,7 @@ class APIClient {
 const apiClient = new APIClient();
 
 export default apiClient;
+export { apiClient }; // Named export
 export { apiClient as BusinessAPI }; // Backward compatibility alias
 
 // Export types
