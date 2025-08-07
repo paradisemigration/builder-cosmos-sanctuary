@@ -3,25 +3,14 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
 import {
   Search,
-  Filter,
-  MapPin,
-  Star,
-  ChevronDown,
   Grid,
   List,
-  SortAsc,
-  Users,
-  Building,
-  TrendingUp,
-  ArrowLeft,
-  Briefcase,
-  GraduationCap,
+  ChevronDown,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { BusinessCard } from "@/components/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -32,17 +21,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import {
   sampleBusinesses,
-  businessCategories,
   type Business,
 } from "@/lib/data";
 import {
   allCities,
-  allCategories,
-  completeCategoryMapping,
   getCategoryBySlug,
   getCitySlug,
-  uaeCities,
-  allIndianCities,
 } from "@/lib/all-categories";
 import {
   generateCityCategoryMeta,
@@ -51,7 +35,6 @@ import {
   setBreadcrumbStructuredData,
   setCityServiceStructuredData,
 } from "@/lib/meta-utils";
-import { DebugPopup } from "@/components/DebugPopup";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
@@ -64,7 +47,7 @@ export default function CityCategory() {
     city &&
     [
       "dubai",
-      "abu-dhabi",
+      "abu-dhabi", 
       "sharjah",
       "ajman",
       "ras-al-khaimah",
@@ -74,7 +57,6 @@ export default function CityCategory() {
   const country = isUAERoute || isUAECity ? "uae" : "india";
 
   const [categoryBusinesses, setCategoryBusinesses] = useState<Business[]>([]);
-  const [cityBusinesses, setCityBusinesses] = useState<Business[]>([]);
   const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -83,7 +65,6 @@ export default function CityCategory() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("rating");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [totalAvailableBusinesses, setTotalAvailableBusinesses] = useState(0);
   const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
 
   // Convert URL params to proper names
@@ -106,7 +87,6 @@ export default function CityCategory() {
 
     // Reset all states
     setCategoryBusinesses([]);
-    setCityBusinesses([]);
     setFilteredBusinesses([]);
 
     // Validate city exists
@@ -170,7 +150,9 @@ export default function CityCategory() {
 
         // Step 1: Try to get exact city + category match
         try {
-          const exactUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=500`;
+          const exactUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+            cityName,
+          )}&category=${encodeURIComponent(categoryName)}&limit=500`;
           console.log(`📡 Exact search: ${exactUrl}`);
 
           const exactResponse = await fetch(exactUrl);
@@ -202,7 +184,9 @@ export default function CityCategory() {
           );
 
           try {
-            const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500`;
+            const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+              cityName,
+            )}&limit=500`;
             const allCityResponse = await fetch(allCityUrl);
 
             if (allCityResponse.ok) {
@@ -214,21 +198,31 @@ export default function CityCategory() {
                   .split(/[\s-]+/);
                 const sortedByRelevance = allCityResult.businesses.sort(
                   (a: any, b: any) => {
-                    const aScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((a.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((a.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                    const aScore = categoryKeywords.reduce(
+                      (score, keyword) => {
+                        if (
+                          (a.category || "").toLowerCase().includes(keyword)
+                        )
+                          score += 10;
+                        if ((a.name || "").toLowerCase().includes(keyword))
+                          score += 5;
+                        return score;
+                      },
+                      0,
+                    );
 
-                    const bScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((b.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((b.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                    const bScore = categoryKeywords.reduce(
+                      (score, keyword) => {
+                        if (
+                          (b.category || "").toLowerCase().includes(keyword)
+                        )
+                          score += 10;
+                        if ((b.name || "").toLowerCase().includes(keyword))
+                          score += 5;
+                        return score;
+                      },
+                      0,
+                    );
 
                     return bScore - aScore;
                   },
@@ -265,7 +259,9 @@ export default function CityCategory() {
         // Step 3: If still not enough, get from nearby cities
         if (allBusinesses.length < MINIMUM_RESULTS) {
           console.log(
-            `🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`,
+            `🌍 EXPANDING SEARCH: Need ${
+              MINIMUM_RESULTS - allBusinesses.length
+            } more businesses`,
           );
 
           const nearbyCities = [
@@ -293,7 +289,9 @@ export default function CityCategory() {
 
             try {
               console.log(`🔍 Searching in ${nearbyCity}...`);
-              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=200`;
+              const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+                nearbyCity,
+              )}&limit=200`;
               const nearbyResponse = await fetch(nearbyUrl);
 
               if (nearbyResponse.ok) {
@@ -358,7 +356,9 @@ export default function CityCategory() {
               id: `synthetic-${cityName}-${categorySlug}-${timestamp}-${index}`,
               googlePlaceId: `synthetic-place-${timestamp}-${index}`,
               name: `${business.name} (Branch ${index + 2})`,
-              address: `${business.address || "Various Locations"} - Branch ${index + 2}`,
+              address: `${
+                business.address || "Various Locations"
+              } - Branch ${index + 2}`,
               phone: business.phone
                 ? `${business.phone} (Branch ${index + 2})`
                 : undefined,
@@ -384,9 +384,7 @@ export default function CityCategory() {
 
         // Set all the states
         setCategoryBusinesses(allBusinesses);
-        setCityBusinesses(allBusinesses);
         setFilteredBusinesses(allBusinesses);
-        setTotalAvailableBusinesses(allBusinesses.length);
         setLoading(false);
       } catch (error) {
         console.error("❌ FETCH ERROR:", error);
@@ -397,31 +395,29 @@ export default function CityCategory() {
 
   // Handle search and filtering
   useEffect(() => {
-    if (!categoryBusinesses.length && !cityBusinesses.length) return;
+    if (!categoryBusinesses.length) return;
 
-    let combinedBusinesses = [...categoryBusinesses, ...cityBusinesses];
+    let businesses = [...categoryBusinesses];
 
     // Remove duplicates (but keep synthetic businesses as they are intentionally created)
-    const uniqueBusinesses = combinedBusinesses.filter(
-      (business, index, self) => {
-        // Always keep synthetic/emergency businesses as they have unique IDs
-        if (business.isSynthetic || business.isEmergencySample) {
-          return true;
-        }
+    const uniqueBusinesses = businesses.filter((business, index, self) => {
+      // Always keep synthetic/emergency businesses as they have unique IDs
+      if (business.isSynthetic || business.isEmergencySample) {
+        return true;
+      }
 
-        // For real businesses, check for duplicates
-        return (
-          index ===
-          self.findIndex(
-            (b) =>
-              !b.isSynthetic &&
-              !b.isEmergencySample &&
-              (b.id === business.id ||
-                (b.name === business.name && b.address === business.address)),
-          )
-        );
-      },
-    );
+      // For real businesses, check for duplicates
+      return (
+        index ===
+        self.findIndex(
+          (b) =>
+            !b.isSynthetic &&
+            !b.isEmergencySample &&
+            (b.id === business.id ||
+              (b.name === business.name && b.address === business.address)),
+        )
+      );
+    });
 
     // Apply search filter
     let searchFilteredBusinesses = uniqueBusinesses;
@@ -464,7 +460,7 @@ export default function CityCategory() {
     setHasMoreData(
       searchFilteredBusinesses.length > paginatedBusinesses.length,
     );
-  }, [categoryBusinesses, cityBusinesses, searchQuery, sortBy, currentPage]);
+  }, [categoryBusinesses, searchQuery, sortBy, currentPage]);
 
   const loadMoreBusinesses = () => {
     if (hasMoreData && !loadingMore) {
