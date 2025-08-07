@@ -384,6 +384,16 @@ export default function Browse() {
           };
         });
 
+        console.log("✅ Final mapped businesses:", {
+          count: mappedBusinesses.length,
+          totalCount: result.total || mappedBusinesses.length,
+          firstMapped: mappedBusinesses[0] ? {
+            id: mappedBusinesses[0].id,
+            name: mappedBusinesses[0].name,
+            city: mappedBusinesses[0].city
+          } : "None"
+        });
+
         if (append) {
           setScrapedBusinesses((prev) => [...prev, ...mappedBusinesses]);
         } else {
@@ -396,6 +406,7 @@ export default function Browse() {
         setError(null);
         setLoading(false);
         setLoadingMore(false);
+        console.log("🎉 Successfully loaded businesses from API!");
         return;
         } else {
           console.warn("⚠️ API returned success but no businesses:", result);
