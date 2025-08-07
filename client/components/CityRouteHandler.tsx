@@ -1,6 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { allCategorySlugs } from "@/lib/all-categories";
 import CityCategory from "@/pages/CityCategory";
+import CityBusinessListing from "@/pages/CityBusinessListing";
 import BusinessProfile from "@/pages/BusinessProfile";
 
 // Category aliases for common URL variations
@@ -21,12 +22,15 @@ const categoryAliases = {
   "student-services": "student-visa-services",
 };
 
-export default function CityRouteHandler() {
+export default function CityRouteHandler({ country = "india" }) {
   const { city, category } = useParams();
 
-  // If no category is provided, this shouldn't happen
+  console.log("🏙️ CityRouteHandler:", { city, category, country });
+
+  // If no category is provided, show city business listing
   if (!category) {
-    return <Navigate to="/browse" replace />;
+    console.log("📍 Showing city business listing for:", city);
+    return <CityBusinessListing />;
   }
 
   // Check if the parameter is a known category slug or has an alias
@@ -40,12 +44,17 @@ export default function CityRouteHandler() {
   if (isCategory) {
     // Redirect to the correct category slug if we used an alias
     if (actualCategory !== category) {
-      return <Navigate to={`/business/${city}/${actualCategory}`} replace />;
+      const redirectPath = country === "uae"
+        ? `/uae/${city}/${actualCategory}`
+        : `/business/${city}/${actualCategory}`;
+      return <Navigate to={redirectPath} replace />;
     }
-    // Show category page
+    // Show category page for city + category
+    console.log("🏷️ Showing city category page for:", { city, category: actualCategory });
     return <CityCategory />;
   } else {
-    // Show business profile (treating category as companyName)
+    // This might be a business name or ID, show business profile
+    console.log("🏢 Showing business profile for:", category);
     return <BusinessProfile />;
   }
 }
