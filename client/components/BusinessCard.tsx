@@ -182,7 +182,7 @@ export function BusinessCard({ business, className = "" }: BusinessCardProps) {
       business.name === "Delhi Global Visa Consultants",
   });
 
-  const handleShare = (e: React.MouseEvent) => {
+  const handleShare = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
