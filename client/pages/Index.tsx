@@ -188,7 +188,7 @@ export default function Index() {
     setShowSuggestions(false);
   };
 
-  const handleCategorySelect = (category: any) => {
+  const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setSearchQuery(category.name);
     setShowSuggestions(false);
