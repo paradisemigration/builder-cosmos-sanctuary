@@ -64,6 +64,16 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => {
+  // Safety check for React Router
+  if (!Routes || !Route || !BrowserRouter) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>Loading React Router...</h1>
+        <p>If this persists, please refresh the page.</p>
+      </div>
+    );
+  }
+
   return (
     <HelmetProvider>
       <AuthProvider>
