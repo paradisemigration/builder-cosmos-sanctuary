@@ -1729,34 +1729,28 @@ export default function CityCategory() {
 
         // Process the successful result
         if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
-            const allCityResult = await allCityResponse.json();
-            console.log(`📦 Raw API response:`, allCityResult);
-            console.log(`📦 Response type:`, typeof allCityResult);
-            console.log(`📦 Response keys:`, Object.keys(allCityResult || {}));
+          console.log(`✅ SUCCESS: Found ${allCityResult.businesses.length} total businesses using "${successfulCityName}"`);
+          console.log(`📋 First few business names:`, allCityResult.businesses.slice(0, 5).map(b => b.name));
+          console.log(`📋 Sample business structure:`, allCityResult.businesses[0]);
 
-            if (allCityResult && allCityResult.businesses && allCityResult.businesses.length > 0) {
-              console.log(`✅ SUCCESS: Found ${allCityResult.businesses.length} total businesses in ${cityName}`);
-              console.log(`📋 First few business names:`, allCityResult.businesses.slice(0, 5).map(b => b.name));
-              console.log(`📋 Sample business structure:`, allCityResult.businesses[0]);
+          // Sort businesses by category relevance
+          const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+          console.log(`🎯 Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
 
-              // Sort businesses by category relevance
-              const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
-              console.log(`🎯 Sorting by relevance to keywords: ${categoryKeywords.join(', ')}`);
+          const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
+            const aCategory = (a.category || '').toLowerCase();
+            const aName = (a.name || '').toLowerCase();
+            const aDesc = (a.description || '').toLowerCase();
 
-              const sortedBusinesses = allCityResult.businesses.sort((a, b) => {
-                const aCategory = (a.category || '').toLowerCase();
-                const aName = (a.name || '').toLowerCase();
-                const aDesc = (a.description || '').toLowerCase();
+            const bCategory = (b.category || '').toLowerCase();
+            const bName = (b.name || '').toLowerCase();
+            const bDesc = (b.description || '').toLowerCase();
 
-                const bCategory = (b.category || '').toLowerCase();
-                const bName = (b.name || '').toLowerCase();
-                const bDesc = (b.description || '').toLowerCase();
-
-                // Calculate relevance score
-                const aScore = categoryKeywords.reduce((score, keyword) => {
-                  if (aCategory.includes(keyword)) score += 10;
-                  if (aName.includes(keyword)) score += 5;
-                  if (aDesc.includes(keyword)) score += 2;
+            // Calculate relevance score
+            const aScore = categoryKeywords.reduce((score, keyword) => {
+              if (aCategory.includes(keyword)) score += 10;
+              if (aName.includes(keyword)) score += 5;
+              if (aDesc.includes(keyword)) score += 2;
                   return score;
                 }, 0);
 
