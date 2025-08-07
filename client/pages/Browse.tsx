@@ -363,7 +363,8 @@ export default function Browse() {
         // Always use API data if available, even if it's empty (don't fall back to sample)
         if (apiBusinesses.length >= 0) { // Changed from > 0 to >= 0
         // Map the businesses to ensure proper ID field and data structure
-        const mappedBusinesses = result.businesses.map((business: any) => {
+        const mappedBusinesses = apiBusinesses.map((business: any) => {
+          console.log("🔄 Mapping business:", business.name, "from city:", business.city || business.scrapedCity);
           const finalReviewCount =
             business.reviews?.length || business.reviewCount || 0;
           console.log(
