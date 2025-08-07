@@ -161,10 +161,8 @@ export default function CityCategory() {
 
     async function fetchBusinesses() {
       try {
-        console.log(
-          `🎯 FETCHING MINIMUM 75 BUSINESSES for ${cityName} + ${categoryName}`,
-        );
-
+        console.log(`🎯 FETCHING MINIMUM 75 BUSINESSES for ${cityName} + ${categoryName}`);
+        
         let allBusinesses: Business[] = [];
         const MINIMUM_RESULTS = 75;
 
@@ -172,23 +170,17 @@ export default function CityCategory() {
         try {
           const exactUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&category=${encodeURIComponent(categoryName)}&limit=500`;
           console.log(`📡 Exact search: ${exactUrl}`);
-
+          
           const exactResponse = await fetch(exactUrl);
           if (exactResponse.ok) {
             const exactResult = await exactResponse.json();
-            if (
-              exactResult.success &&
-              exactResult.businesses &&
-              exactResult.businesses.length > 0
-            ) {
+            if (exactResult.success && exactResult.businesses && exactResult.businesses.length > 0) {
               allBusinesses = exactResult.businesses.map((business: any) => ({
                 ...business,
                 sourceType: "exact_match",
-                relevanceScore: 100,
+                relevanceScore: 100
               }));
-              console.log(
-                `✅ EXACT MATCH: Found ${allBusinesses.length} businesses`,
-              );
+              console.log(`✅ EXACT MATCH: Found ${allBusinesses.length} businesses`);
             }
           }
         } catch (error) {
@@ -197,64 +189,50 @@ export default function CityCategory() {
 
         // Step 2: If not enough, get all city businesses and sort by relevance
         if (allBusinesses.length < MINIMUM_RESULTS) {
-          console.log(
-            `📊 Need more businesses. Getting all from ${cityName}...`,
-          );
-
+          console.log(`📊 Need more businesses. Getting all from ${cityName}...`);
+          
           try {
             const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}&limit=500`;
             const allCityResponse = await fetch(allCityUrl);
-
+            
             if (allCityResponse.ok) {
               const allCityResult = await allCityResponse.json();
               if (allCityResult.success && allCityResult.businesses) {
                 // Sort by category relevance
-                const categoryKeywords = categoryName
-                  .toLowerCase()
-                  .split(/[\s-]+/);
-                const sortedByRelevance = allCityResult.businesses.sort(
-                  (a: any, b: any) => {
-                    const aScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((a.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((a.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+                const sortedByRelevance = allCityResult.businesses.sort((a: any, b: any) => {
+                  const aScore = categoryKeywords.reduce((score, keyword) => {
+                    if ((a.category || '').toLowerCase().includes(keyword)) score += 10;
+                    if ((a.name || '').toLowerCase().includes(keyword)) score += 5;
+                    return score;
+                  }, 0);
 
-                    const bScore = categoryKeywords.reduce((score, keyword) => {
-                      if ((b.category || "").toLowerCase().includes(keyword))
-                        score += 10;
-                      if ((b.name || "").toLowerCase().includes(keyword))
-                        score += 5;
-                      return score;
-                    }, 0);
+                  const bScore = categoryKeywords.reduce((score, keyword) => {
+                    if ((b.category || '').toLowerCase().includes(keyword)) score += 10;
+                    if ((b.name || '').toLowerCase().includes(keyword)) score += 5;
+                    return score;
+                  }, 0);
 
-                    return bScore - aScore;
-                  },
-                );
+                  return bScore - aScore;
+                });
 
                 // Add businesses that aren't already included
                 sortedByRelevance.forEach((business: any) => {
-                  const exists = allBusinesses.some(
-                    (existing) =>
-                      existing.id === business.id ||
-                      (existing.name === business.name &&
-                        existing.address === business.address),
+                  const exists = allBusinesses.some(existing => 
+                    existing.id === business.id || 
+                    (existing.name === business.name && existing.address === business.address)
                   );
-
+                  
                   if (!exists && allBusinesses.length < MINIMUM_RESULTS) {
                     allBusinesses.push({
                       ...business,
                       sourceType: "city_sorted",
-                      relevanceScore: 50,
+                      relevanceScore: 50
                     });
                   }
                 });
 
-                console.log(
-                  `📊 CITY SORTED: Now have ${allBusinesses.length} businesses`,
-                );
+                console.log(`📊 CITY SORTED: Now have ${allBusinesses.length} businesses`);
               }
             }
           } catch (error) {
@@ -264,27 +242,12 @@ export default function CityCategory() {
 
         // Step 3: If still not enough, get from nearby cities
         if (allBusinesses.length < MINIMUM_RESULTS) {
-          console.log(
-            `🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`,
-          );
-
+          console.log(`🌍 EXPANDING SEARCH: Need ${MINIMUM_RESULTS - allBusinesses.length} more businesses`);
+          
           const nearbyCities = [
-            "Mumbai",
-            "Delhi",
-            "Bangalore",
-            "Chennai",
-            "Hyderabad",
-            "Pune",
-            "Kolkata",
-            "Ahmedabad",
-            "Jaipur",
-            "Surat",
-            "Lucknow",
-            "Kanpur",
-            "Nagpur",
-            "Indore",
-            "Bhopal",
-            "Visakhapatnam",
+            "Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", 
+            "Pune", "Kolkata", "Ahmedabad", "Jaipur", "Surat", 
+            "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal", "Visakhapatnam"
           ];
 
           for (const nearbyCity of nearbyCities) {
@@ -295,25 +258,21 @@ export default function CityCategory() {
               console.log(`🔍 Searching in ${nearbyCity}...`);
               const nearbyUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=200`;
               const nearbyResponse = await fetch(nearbyUrl);
-
+              
               if (nearbyResponse.ok) {
                 const nearbyResult = await nearbyResponse.json();
                 if (nearbyResult.success && nearbyResult.businesses) {
                   const needed = MINIMUM_RESULTS - allBusinesses.length;
-                  const toAdd = nearbyResult.businesses
-                    .slice(0, needed)
-                    .map((business: any) => ({
-                      ...business,
-                      sourceType: "nearby_city",
-                      relevanceScore: 25,
-                      originalRequestedCity: cityName,
-                      nearbySourceCity: nearbyCity,
-                    }));
+                  const toAdd = nearbyResult.businesses.slice(0, needed).map((business: any) => ({
+                    ...business,
+                    sourceType: "nearby_city",
+                    relevanceScore: 25,
+                    originalRequestedCity: cityName,
+                    nearbySourceCity: nearbyCity
+                  }));
 
                   allBusinesses.push(...toAdd);
-                  console.log(
-                    `➕ Added ${toAdd.length} from ${nearbyCity}. Total: ${allBusinesses.length}`,
-                  );
+                  console.log(`➕ Added ${toAdd.length} from ${nearbyCity}. Total: ${allBusinesses.length}`);
                 }
               }
             } catch (error) {
@@ -330,7 +289,6 @@ export default function CityCategory() {
             .slice(0, MINIMUM_RESULTS)
             .map((business, index) => ({
               ...business,
-              // Create unique IDs that won't conflict with database
               id: `emergency-${cityName}-${categorySlug}-${timestamp}-${index}`,
               googlePlaceId: `emergency-place-${timestamp}-${index}`,
               name: `${business.name} (${cityName} Branch)`,
@@ -356,7 +314,6 @@ export default function CityCategory() {
             .slice(0, toDuplicate)
             .map((business, index) => ({
               ...business,
-              // Create completely unique IDs to avoid database conflicts
               id: `synthetic-${cityName}-${categorySlug}-${timestamp}-${index}`,
               googlePlaceId: `synthetic-place-${timestamp}-${index}`,
               name: `${business.name} (Branch ${index + 2})`,
@@ -370,8 +327,8 @@ export default function CityCategory() {
                 : undefined,
               isDuplicate: true,
               sourceType: "synthetic_fill",
-              isSynthetic: true, // Flag to identify synthetic entries
-              syntheticOriginalId: business.id, // Reference to original
+              isSynthetic: true,
+              syntheticOriginalId: business.id,
             }));
 
           allBusinesses.push(...duplicates);
@@ -380,9 +337,7 @@ export default function CityCategory() {
           );
         }
 
-        console.log(
-          `🎉 FINAL RESULT: ${allBusinesses.length} businesses ready`,
-        );
+        console.log(`🎉 FINAL RESULT: ${allBusinesses.length} businesses ready`);
 
         // Set all the states
         setCategoryBusinesses(allBusinesses);
@@ -390,6 +345,7 @@ export default function CityCategory() {
         setFilteredBusinesses(allBusinesses);
         setTotalAvailableBusinesses(allBusinesses.length);
         setLoading(false);
+
       } catch (error) {
         console.error("❌ FETCH ERROR:", error);
         setLoading(false);
@@ -410,13 +366,13 @@ export default function CityCategory() {
         if (business.isSynthetic || business.isEmergencySample) {
           return true;
         }
-
+        
         // For real businesses, check for duplicates
         return (
           index ===
           self.findIndex(
             (b) =>
-              !b.isSynthetic &&
+              !b.isSynthetic && 
               !b.isEmergencySample &&
               (b.id === business.id ||
                 (b.name === business.name && b.address === business.address)),
@@ -493,7 +449,7 @@ export default function CityCategory() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Navigation />
-
+      
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -546,7 +502,7 @@ export default function CityCategory() {
                 />
               </div>
             </div>
-
+            
             <div className="flex gap-2">
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px]">
