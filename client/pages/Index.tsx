@@ -51,11 +51,11 @@ export default function Index() {
   const [selectedCity, setSelectedCity] = useState("");
   const [activeService, setActiveService] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef(null);
+  const suggestionsRef = useRef(null);
   const navigate = useNavigate();
 
   // Use API hooks
