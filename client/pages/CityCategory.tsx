@@ -27,6 +27,7 @@ import {
   setBreadcrumbStructuredData,
   setCityServiceStructuredData,
 } from "@/lib/meta-utils";
+import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
 export default function CityCategory() {
   const { city, category } = useParams<{ city: string; category: string }>();
@@ -304,7 +305,7 @@ export default function CityCategory() {
 
         // Ensure we always have at least some businesses to show
         if (allBusinesses.length === 0) {
-          console.log(`🚨 EMERGENCY: Using sample data`);
+          console.log(`�� EMERGENCY: Using sample data`);
           const timestamp = Date.now();
           allBusinesses = sampleBusinesses
             .slice(0, MINIMUM_RESULTS)
