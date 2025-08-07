@@ -359,10 +359,10 @@ export default function Login() {
                               id="remember"
                               checked={loginData.rememberMe}
                               onCheckedChange={(checked) =>
-                                  setLoginData((prev) => ({
-                                    ...prev,
-                                    rememberMe: checked,
-                                  }))
+                                setLoginData((prev) => ({
+                                  ...prev,
+                                  rememberMe: checked,
+                                }))
                               }
                             />
                             <Label
