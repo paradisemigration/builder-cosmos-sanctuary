@@ -242,6 +242,7 @@ const App = () => {
         </AuthProvider>
       </QueryClientProvider>
     </HelmetProvider>
+    </ErrorBoundary>
   );
 };
 
