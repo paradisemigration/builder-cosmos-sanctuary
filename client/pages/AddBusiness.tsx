@@ -65,11 +65,12 @@ export default function AddBusiness() {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Detect if this is UAE or India based on URL or referrer
-  const isUAE = location.pathname.includes('/uae') ||
-               document.referrer.includes('/uae') ||
-               location.search.includes('country=uae');
-  const country = isUAE ? 'UAE' : 'India';
-  const countryFlag = isUAE ? '🇦🇪' : '🇮🇳';
+  const isUAE =
+    location.pathname.includes("/uae") ||
+    document.referrer.includes("/uae") ||
+    location.search.includes("country=uae");
+  const country = isUAE ? "UAE" : "India";
+  const countryFlag = isUAE ? "🇦🇪" : "🇮🇳";
 
   // Get selected plan from URL parameters
   const selectedPlan = searchParams.get("plan") || "free";
@@ -349,7 +350,7 @@ export default function AddBusiness() {
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
               <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
               <span className="text-white/90 font-medium">
-                {countryFlag} Join {isUAE ? '50+' : '500+'} Trusted Businesses
+                {countryFlag} Join {isUAE ? "50+" : "500+"} Trusted Businesses
               </span>
               <Award className="w-5 h-5 text-green-400" />
             </div>
@@ -363,9 +364,9 @@ export default function AddBusiness() {
               on {country}'s #1 Platform
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-              {countryFlag} Join {country}'s most trusted directory of immigration and visa
-              services. Reach thousands of customers and grow your business with
-              verified credibility.
+              {countryFlag} Join {country}'s most trusted directory of
+              immigration and visa services. Reach thousands of customers and
+              grow your business with verified credibility.
             </p>
 
             {/* Stats Row */}
