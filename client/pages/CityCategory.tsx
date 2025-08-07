@@ -179,14 +179,15 @@ export default function CityCategory() {
           );
 
           try {
-            const allCityUrl = `/api/scraped-businesses?city=${encodeURIComponent(
+            const allCityUrl = `/api/businesses?city=${encodeURIComponent(
               cityName,
             )}&limit=500`;
             const allCityResponse = await fetch(allCityUrl);
 
             if (allCityResponse.ok) {
               const allCityResult = await allCityResponse.json();
-              if (allCityResult.success && allCityResult.businesses) {
+              const businesses = allCityResult.businesses || allCityResult.data;
+              if (allCityResult.success && businesses) {
                 // Sort by category relevance
                 const categoryKeywords = categoryName
                   .toLowerCase()
