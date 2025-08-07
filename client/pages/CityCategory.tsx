@@ -1682,13 +1682,44 @@ export default function CityCategory() {
         console.log(`=== PHASE 0: Getting ALL businesses from ${cityName} ===`);
 
         try {
+          // First, let's see what cities are actually in the database
+          console.log(`🔍 DEBUGGING: Checking what cities exist in database...`);
+          try {
+            const debugResponse = await robustFetch('/api/scraped-businesses?limit=20', {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            });
+            if (debugResponse.ok) {
+              const debugResult = await debugResponse.json();
+              if (debugResult.businesses && debugResult.businesses.length > 0) {
+                const uniqueCities = [...new Set(debugResult.businesses.map(b => b.city || b.scrapedCity).filter(Boolean))];
+                console.log(`🔍 Cities found in database:`, uniqueCities);
+                console.log(`🔍 Looking for: "${cityName}" (from URL: "${city}")`);
+
+                // Check if any of these cities match our target
+                const possibleMatches = uniqueCities.filter(dbCity =>
+                  dbCity.toLowerCase().includes(cityName.toLowerCase()) ||
+                  cityName.toLowerCase().includes(dbCity.toLowerCase()) ||
+                  dbCity.toLowerCase().includes(city.toLowerCase()) ||
+                  city.toLowerCase().includes(dbCity.toLowerCase())
+                );
+                console.log(`🔍 Possible city matches:`, possibleMatches);
+              }
+            }
+          } catch (debugError) {
+            console.log(`🔍 Debug query failed:`, debugError);
+          }
+
           // Try multiple city name variations since database might store them differently
           const cityVariations = [
             cityName,                    // "Vadodara"
             cityName.toLowerCase(),      // "vadodara"
             cityName.toUpperCase(),      // "VADODARA"
             city,                        // URL param as-is ("vadodara")
-            city.charAt(0).toUpperCase() + city.slice(1) // "Vadodara"
+            city.charAt(0).toUpperCase() + city.slice(1), // "Vadodara"
+            "Baroda",                    // Alternative name for Vadodara
+            "baroda",                    // Alternative name lowercase
+            "BARODA"                     // Alternative name uppercase
           ];
 
           let allCityResult = null;
