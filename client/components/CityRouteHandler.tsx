@@ -22,7 +22,7 @@ const categoryAliases: Record<string, string> = {
 };
 
 export default function CityRouteHandler() {
-  const { city, category } = useParams<{ city: string; category: string }>();
+  const { city, category } = useParams();
 
   // If no category is provided, this shouldn't happen
   if (!category) {

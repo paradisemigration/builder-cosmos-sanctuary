@@ -50,7 +50,7 @@ import {
 import { SEOHead, generateCategorySEO } from "@/components/SEOHead";
 
 export default function CategoryPage() {
-  const { category } = useParams<{ category: string }>();
+  const { category } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 

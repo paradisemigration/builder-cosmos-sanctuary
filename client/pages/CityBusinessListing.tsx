@@ -488,7 +488,7 @@ const getCityFAQs = (cityName: string) => {
 };
 
 export default function CityBusinessListing() {
-  const { city } = useParams<{ city: string }>();
+  const { city } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -1241,7 +1241,7 @@ export default function CityBusinessListing() {
                       </Button>
                     )}
                     <Button asChild>
-                      <Link to="/browse">Browse All Cities</Link>
+                      <Link to="/business">Browse All Cities</Link>
                     </Button>
                   </div>
                 </div>

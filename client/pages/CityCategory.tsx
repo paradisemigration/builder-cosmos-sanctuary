@@ -30,7 +30,7 @@ import {
 import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
 export default function CityCategory() {
-  const { city, category } = useParams<{ city: string; category: string }>();
+  const { city, category } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 

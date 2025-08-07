@@ -51,11 +51,7 @@ import { toast } from "sonner";
 export default function BusinessProfile() {
   console.log("🔍 BusinessProfile component mounted!");
 
-  const { city, companyName, id } = useParams<{
-    city?: string;
-    companyName?: string;
-    id?: string;
-  }>();
+  const { city, companyName, id } = useParams();
   const navigate = useNavigate();
 
   // Also check for ID in query parameters
