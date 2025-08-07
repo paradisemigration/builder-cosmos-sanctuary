@@ -20,26 +20,7 @@ import {
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 
-interface FormData {
-  companyName: string;
-  location: string;
-  contactNumber: string;
-  emailId: string;
-  scamDescription: string;
-  paymentReceipt: File | null;
-  agreement: File | null;
-  companyPicture: File | null;
-}
 
-interface FormErrors {
-  companyName?: string;
-  location?: string;
-  contactNumber?: string;
-  emailId?: string;
-  scamDescription?: string;
-  paymentReceipt?: string;
-  agreement?: string;
-}
 
 export default function ReportScam() {
   const navigate = useNavigate();
