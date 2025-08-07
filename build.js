@@ -53,12 +53,16 @@ try {
     const dbPath = path.join(__dirname, "server", "visaconsult.db");
     if (fs.existsSync(dbPath)) {
       const stats = fs.statSync(dbPath);
-      console.log(`✅ Database found: ${(stats.size / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `✅ Database found: ${(stats.size / 1024 / 1024).toFixed(2)}MB`,
+      );
     } else {
       console.log("⚠️ Database not found - will use sample data");
     }
 
-    console.log("🎉 Build completed successfully - Full React app with 1500+ business listings ready");
+    console.log(
+      "🎉 Build completed successfully - Full React app with 1500+ business listings ready",
+    );
   } else {
     throw new Error("Build directory not found");
   }

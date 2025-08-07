@@ -260,7 +260,10 @@ app.get("/api/businesses", async (req, res) => {
       // Pagination for sample data
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + parseInt(limit);
-      const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
+      const paginatedBusinesses = filteredBusinesses.slice(
+        startIndex,
+        endIndex,
+      );
 
       return res.json({
         success: true,
@@ -317,7 +320,9 @@ app.get("/api/businesses/:id", async (req, res) => {
 
     if (!business) {
       // Fallback to sample businesses
-      const sampleBusiness = sampleBusinesses.find((b) => b.id === req.params.id);
+      const sampleBusiness = sampleBusinesses.find(
+        (b) => b.id === req.params.id,
+      );
 
       if (!sampleBusiness) {
         return res.status(404).json({
@@ -360,10 +365,12 @@ app.get("/api/businesses/featured", async (req, res) => {
 
     // If no featured businesses found in database, use sample featured businesses
     if (!result.businesses || result.businesses.length === 0) {
-      console.warn("⚠️ No featured businesses found in database, using sample data");
+      console.warn(
+        "⚠️ No featured businesses found in database, using sample data",
+      );
 
       const featuredSamples = sampleBusinesses
-        .filter(b => b.isFeatured)
+        .filter((b) => b.isFeatured)
         .slice(0, parseInt(limit));
 
       return res.json({
@@ -384,7 +391,7 @@ app.get("/api/businesses/featured", async (req, res) => {
 
     // Fallback to sample featured businesses
     const featuredSamples = sampleBusinesses
-      .filter(b => b.isFeatured)
+      .filter((b) => b.isFeatured)
       .slice(0, parseInt(req.query.limit) || 6);
 
     res.json({
@@ -408,7 +415,7 @@ app.get("/api/businesses/stats", async (req, res) => {
         data: {
           totalBusinesses: sampleBusinesses.length,
           totalReviews: 0,
-          citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
+          citiesCount: new Set(sampleBusinesses.map((b) => b.city)).size,
           totalGooglePlaces: 0,
           averageRating: 4.5,
         },
@@ -429,7 +436,7 @@ app.get("/api/businesses/stats", async (req, res) => {
       data: {
         totalBusinesses: sampleBusinesses.length,
         totalReviews: 0,
-        citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
+        citiesCount: new Set(sampleBusinesses.map((b) => b.city)).size,
         totalGooglePlaces: 0,
         averageRating: 4.5,
       },

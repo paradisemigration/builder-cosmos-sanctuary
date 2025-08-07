@@ -37,13 +37,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
 import { EnquiryPopup, FloatingCTA } from "@/components/EnquiryPopup";
-import {
-  businessCategories,
-  type Business,
-} from "@/lib/data";
+import { businessCategories, type Business } from "@/lib/data";
 import { allCategories, allIndianCities } from "@/lib/all-categories";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import { useFeaturedBusinesses, useBusinessStats } from "@/hooks/useBusinessData";
+import {
+  useFeaturedBusinesses,
+  useBusinessStats,
+} from "@/hooks/useBusinessData";
 import { generateHomeMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function Index() {
@@ -358,12 +358,16 @@ export default function Index() {
   const statsData = [
     {
       label: "Verified Consultants",
-      value: stats?.totalBusinesses ? `${stats.totalBusinesses.toLocaleString()}+` : "1,500+",
+      value: stats?.totalBusinesses
+        ? `${stats.totalBusinesses.toLocaleString()}+`
+        : "1,500+",
       icon: <Shield className="h-8 w-8" />,
     },
     {
       label: "Customer Reviews",
-      value: stats?.totalReviews ? `${stats.totalReviews.toLocaleString()}+` : "10,000+",
+      value: stats?.totalReviews
+        ? `${stats.totalReviews.toLocaleString()}+`
+        : "10,000+",
       icon: <CheckCircle className="h-8 w-8" />,
     },
     {
@@ -373,7 +377,9 @@ export default function Index() {
     },
     {
       label: "Google Places",
-      value: stats?.totalGooglePlaces ? `${stats.totalGooglePlaces.toLocaleString()}+` : "1,200+",
+      value: stats?.totalGooglePlaces
+        ? `${stats.totalGooglePlaces.toLocaleString()}+`
+        : "1,200+",
       icon: <Globe className="h-8 w-8" />,
     },
   ];
@@ -614,61 +620,61 @@ export default function Index() {
               Comprehensive Visa Services
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
-              Expert assistance for all types of visa applications with
-              highest success rates
+              Expert assistance for all types of visa applications with highest
+              success rates
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-6xl mx-auto">
-              {visaServices.map((service, index) => (
-                <Card
-                  key={index}
-                  className={`group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white ${
-                    activeService === index
-                      ? "ring-2 ring-blue-500 shadow-xl"
-                      : ""
-                  }`}
-                >
-                  <CardHeader className="pb-4">
-                    <div
-                      className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      {service.icon}
-                    </div>
-                    <CardTitle className="text-xl font-bold mb-2">
-                      {service.type}
-                    </CardTitle>
-                    <Badge variant="outline" className="w-fit">
-                      {service.count} Experts
-                    </Badge>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-                    <div className="space-y-2 mb-4">
-                      {service.features.map((feature, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center text-sm text-gray-600"
-                        >
-                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {service.countries.map((country) => (
-                        <Badge
-                          key={country}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {country}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            {visaServices.map((service, index) => (
+              <Card
+                key={index}
+                className={`group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white ${
+                  activeService === index
+                    ? "ring-2 ring-blue-500 shadow-xl"
+                    : ""
+                }`}
+              >
+                <CardHeader className="pb-4">
+                  <div
+                    className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    {service.icon}
+                  </div>
+                  <CardTitle className="text-xl font-bold mb-2">
+                    {service.type}
+                  </CardTitle>
+                  <Badge variant="outline" className="w-fit">
+                    {service.count} Experts
+                  </Badge>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">{service.description}</p>
+                  <div className="space-y-2 mb-4">
+                    {service.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center text-sm text-gray-600"
+                      >
+                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {service.countries.map((country) => (
+                      <Badge
+                        key={country}
+                        variant="secondary"
+                        className="text-xs"
+                      >
+                        {country}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
