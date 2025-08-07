@@ -7,6 +7,7 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
+import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
 // Component to handle scroll to top on route changes
 function ScrollToTop() {
