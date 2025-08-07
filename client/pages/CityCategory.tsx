@@ -2531,8 +2531,8 @@ export default function CityCategory() {
         });
       }
 
-      // Apply pagination - show first 25 results initially
-      const itemsPerPage = 25;
+      // Apply pagination - show all results initially
+      const itemsPerPage = 500;
       const paginatedBusinesses = searchFilteredBusinesses.slice(
         0,
         itemsPerPage * currentPage,
