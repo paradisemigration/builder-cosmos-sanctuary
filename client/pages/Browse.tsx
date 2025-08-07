@@ -281,6 +281,11 @@ export default function Browse() {
       });
 
       const response = await robustFetch(`/api/scraped-businesses?${params}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
