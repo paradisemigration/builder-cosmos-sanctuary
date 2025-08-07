@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { allCategorySlugs } from "@/lib/all-categories";
-import CityCategory from "@/pages/CityCategory";
-import CityBusinessListing from "@/pages/CityBusinessListing";
+import CityCategory from "@/pages/CityCategoryNew";
+import CityBusinessListing from "@/pages/CityBusinessListingNew";
 import BusinessProfile from "@/pages/BusinessProfile";
 
 // Category aliases for common URL variations
