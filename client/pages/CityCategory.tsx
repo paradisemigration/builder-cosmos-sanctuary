@@ -1779,8 +1779,8 @@ export default function CityCategory() {
           console.log(`Tried ${apiEndpoints.length} different endpoints`);
         }
 
-        // Continue with nearby cities only if we have less than 30 businesses OR no businesses at all
-        if (accumulatedBusinesses.length < 30) {
+        // Continue with nearby cities only if we have less than 100 businesses OR no businesses at all
+        if (accumulatedBusinesses.length < 100) {
           console.log(
             `Only ${accumulatedBusinesses.length} businesses from main city, adding from nearby cities`,
           );
