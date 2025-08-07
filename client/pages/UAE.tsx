@@ -212,7 +212,7 @@ export default function UAE() {
 
   // Close suggestions when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event) {
       if (
         suggestionsRef.current &&
         !suggestionsRef.current.contains(event.target as Node) &&
@@ -276,7 +276,7 @@ export default function UAE() {
     }
   };
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
 

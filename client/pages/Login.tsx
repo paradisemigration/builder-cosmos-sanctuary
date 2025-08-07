@@ -105,7 +105,7 @@ export default function Login() {
     }
   }, [isAuthenticated, user, navigate, location.state]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setLoginError("");
@@ -122,7 +122,7 @@ export default function Login() {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (registerData.password !== registerData.confirmPassword) {
       toast.error("Passwords don't match!");

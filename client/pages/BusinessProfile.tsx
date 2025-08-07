@@ -207,7 +207,7 @@ export default function BusinessProfile() {
       ? business.gallery
       : [business.coverImage || "/api/placeholder/800/400"];
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e) => {
     e.preventDefault();
     toast.success("Message sent successfully! We'll get back to you soon.");
     setShowContactForm(false);
