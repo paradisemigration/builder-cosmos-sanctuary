@@ -1794,10 +1794,12 @@ export default function CityCategory() {
           console.log(`✅ Immediately displaying ${accumulatedBusinesses.length} businesses from ${cityName}`);
         }
 
-        // Continue with nearby cities only if we have less than 100 businesses OR no businesses at all
-        if (accumulatedBusinesses.length < 100) {
+        // MINIMUM 75 RESULTS STRATEGY: Continue if we have less than 75 businesses
+        const MINIMUM_RESULTS = 75;
+
+        if (accumulatedBusinesses.length < MINIMUM_RESULTS) {
           console.log(
-            `Only ${accumulatedBusinesses.length} businesses from main city, adding from nearby cities`,
+            `Only ${accumulatedBusinesses.length} businesses from main city, need ${MINIMUM_RESULTS - accumulatedBusinesses.length} more. Expanding search...`,
           );
 
           console.log(
