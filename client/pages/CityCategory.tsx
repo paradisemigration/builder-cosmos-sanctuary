@@ -1754,13 +1754,57 @@ export default function CityCategory() {
               console.log(`✅ Set city businesses count to ${accumulatedBusinesses.length}`);
             } else {
               console.log(`❌ API returned empty or invalid data for ${cityName}`);
-              console.log(`Response structure:`, Object.keys(allCityResult || {}));
+              console.log(`🔍 Response structure:`, Object.keys(allCityResult || {}));
+              console.log(`🔍 Businesses array:`, allCityResult?.businesses);
+              console.log(`🔍 Businesses length:`, allCityResult?.businesses?.length);
+              console.log(`🔍 Success flag:`, allCityResult?.success);
             }
           } else {
             console.log(`❌ HTTP error ${allCityResponse.status} ${allCityResponse.statusText}`);
+            const errorText = await allCityResponse.text();
+            console.log(`🔍 Error response text:`, errorText);
           }
         } catch (error) {
           console.error(`❌ Error fetching all businesses from ${cityName}:`, error);
+          console.error(`🔍 Error details:`, error.message, error.stack);
+
+          // Try alternative API endpoint as fallback
+          try {
+            console.log(`🔄 Trying alternative API endpoint...`);
+            const fallbackUrl = `/api/scraped-businesses?city=${encodeURIComponent(cityName)}`;
+            console.log(`📡 Fallback URL: ${fallbackUrl}`);
+
+            const fallbackResponse = await robustFetch(fallbackUrl, {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            });
+
+            if (fallbackResponse.ok) {
+              const fallbackResult = await fallbackResponse.json();
+              console.log(`📦 Fallback API response:`, fallbackResult);
+
+              if (fallbackResult && fallbackResult.businesses && fallbackResult.businesses.length > 0) {
+                console.log(`✅ FALLBACK SUCCESS: Found ${fallbackResult.businesses.length} businesses`);
+
+                accumulatedBusinesses = fallbackResult.businesses.map(business => ({
+                  ...business,
+                  isNearbyData: false,
+                  originalRequestedCity: cityName,
+                }));
+
+                // Set states immediately
+                setCategoryBusinesses(accumulatedBusinesses);
+                setCityBusinesses(accumulatedBusinesses);
+                setCategoryDataLoaded(true);
+                setCityDataLoaded(true);
+                setLoading(false);
+
+                console.log(`✅ FALLBACK: Set ${accumulatedBusinesses.length} businesses from fallback API`);
+              }
+            }
+          } catch (fallbackError) {
+            console.error(`❌ Fallback API also failed:`, fallbackError);
+          }
         }
 
         // If we got businesses from main city, skip the original failed result check
