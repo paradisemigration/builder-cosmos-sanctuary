@@ -1118,13 +1118,24 @@ app.get("/api/scraped-businesses", async (req, res) => {
   try {
     const result = await sqliteDatabase.getBusinesses(req.query);
 
-    // Add debug logging
+    // Add detailed debug logging
     console.log(
-      `API Request: page=${req.query.page || 1}, limit=${req.query.limit || 1000}`,
+      `🔍 API Request: page=${req.query.page || 1}, limit=${req.query.limit || 1000}`,
     );
+    console.log(`🔍 Query parameters:`, req.query);
+    console.log(`🔍 City filter: "${req.query.city}"`);
+    console.log(`🔍 Category filter: "${req.query.category}"`);
     console.log(
-      `Database returned: ${result.businesses.length} businesses, total: ${result.total}`,
+      `🔍 Database returned: ${result.businesses.length} businesses, total: ${result.total}`,
     );
+
+    // Log first few business names and cities if any found
+    if (result.businesses.length > 0) {
+      console.log(`🔍 First 3 businesses:`);
+      result.businesses.slice(0, 3).forEach((b, i) => {
+        console.log(`  ${i+1}. ${b.name} (City: "${b.city}", Scraped: "${b.scrapedCity}")`);
+      });
+    }
 
     res.json({
       success: true,
