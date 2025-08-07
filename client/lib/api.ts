@@ -125,18 +125,63 @@ class APIClient {
       search?: string;
     } = {},
   ) {
-    // Check if this is a frontend-only deployment
-    if (isFrontendOnlyDeployment()) {
-      console.log("Frontend-only deployment detected, returning sample data");
+    console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-      let filteredBusinesses = [...sampleBusinesses];
+    // Always try the real API first, regardless of deployment type
+    try {
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.set("page", params.page.toString());
+      if (params.limit) queryParams.set("limit", params.limit.toString());
+      if (params.city) queryParams.set("city", params.city);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.search) queryParams.set("search", params.search);
 
-      // Apply basic filtering to sample data
-      if (params.search) {
-        const searchTerm = params.search.toLowerCase();
-        filteredBusinesses = filteredBusinesses.filter(
-          (business) =>
-            business.name?.toLowerCase().includes(searchTerm) ||
+      const response = await this.request<{
+        success: boolean;
+        data: Business[];
+        pagination: any;
+        total: number;
+        businesses: Business[];
+      }>(`/api/businesses?${queryParams}`);
+
+      console.log("✅ Real API response:", {
+        success: response.success,
+        dataLength: response.data?.length || 0,
+        businessesLength: response.businesses?.length || 0,
+        total: response.total
+      });
+
+      // Handle both response formats (data or businesses array)
+      const businesses = response.businesses || response.data || [];
+
+      if (response.success && businesses.length > 0) {
+        return {
+          success: true,
+          data: businesses,
+          pagination: response.pagination || {
+            page: params.page || 1,
+            limit: params.limit || 20,
+            total: response.total || businesses.length,
+            totalPages: Math.ceil((response.total || businesses.length) / (params.limit || 20))
+          }
+        };
+      }
+
+      console.warn("⚠️ API returned success but no businesses, falling back to sample data");
+    } catch (error) {
+      console.warn("⚠️ Real API failed, falling back to sample data:", error);
+    }
+
+    // Only fall back to sample data if API completely fails
+    console.log("📋 Using sample data as fallback");
+    let filteredBusinesses = [...sampleBusinesses];
+
+    // Apply basic filtering to sample data
+    if (params.search) {
+      const searchTerm = params.search.toLowerCase();
+      filteredBusinesses = filteredBusinesses.filter(
+        (business) =>
+          business.name?.toLowerCase().includes(searchTerm) ||
             business.category?.toLowerCase().includes(searchTerm) ||
             business.description?.toLowerCase().includes(searchTerm),
         );
