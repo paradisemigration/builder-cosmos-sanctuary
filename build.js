@@ -38,11 +38,23 @@ for (const possibleSource of possibleSources) {
 const destFile = path.join(distDir, "index.html");
 console.log("Will copy to:", destFile);
 
-if (fs.existsSync(sourceFile)) {
+if (sourceFile && fs.existsSync(sourceFile)) {
   fs.copyFileSync(sourceFile, destFile);
   console.log("✅ Copied index.html to dist/index.html");
 } else {
-  console.error("❌ Source index.html not found at:", sourceFile);
+  console.error("❌ Source index.html not found in any of the expected locations:");
+  possibleSources.forEach(source => console.error("  - " + source));
+
+  // List all files in current directory for debugging
+  console.log("📁 Current working directory:", process.cwd());
+  console.log("📁 Build script directory:", __dirname);
+  try {
+    const files = fs.readdirSync(process.cwd());
+    console.log("📁 Files in working directory:", files.slice(0, 10));
+  } catch (e) {
+    console.log("Could not list working directory files");
+  }
+
   process.exit(1);
 }
 
