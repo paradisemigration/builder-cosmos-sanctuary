@@ -325,13 +325,20 @@ export default function CityCategory() {
         // Ensure we always have at least some businesses to show
         if (allBusinesses.length === 0) {
           console.log(`🚨 EMERGENCY: Using sample data`);
+          const timestamp = Date.now();
           allBusinesses = sampleBusinesses
             .slice(0, MINIMUM_RESULTS)
             .map((business, index) => ({
               ...business,
-              sourceType: "sample_emergency",
+              // Create unique IDs that won't conflict with database
+              id: `emergency-${cityName}-${categorySlug}-${timestamp}-${index}`,
+              googlePlaceId: `emergency-place-${timestamp}-${index}`,
+              name: `${business.name} (${cityName} Branch)`,
+              address: `${business.address}, ${cityName}`,
+              city: cityName,
+              sourceType: "emergency_sample",
               relevanceScore: 10,
-              id: `emergency-${index}`,
+              isEmergencySample: true,
             }));
         }
 
