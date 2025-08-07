@@ -39,22 +39,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { businessCategories, indianCities, sampleBusinesses } from "@/lib/data";
 
-interface BusinessFormData {
-  name: string;
-  category: string;
-  description: string;
-  services: string[];
-  address: string;
-  zone: string;
-  phone: string;
-  whatsapp: string;
-  email: string;
-  website: string;
-  licenseNo: string;
-  ownerName: string;
-  ownerEmail: string;
-  ownerPhone: string;
-}
+
 
 export default function AddBusiness() {
   const [searchParams] = useSearchParams();

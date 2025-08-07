@@ -18,11 +18,7 @@ import {
   allCategories,
 } from "@/lib/all-categories";
 
-interface EnquiryPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit?: (data: any) => void;
-}
+
 
 // Simplified categories as requested
 const simplifiedCategories = [
