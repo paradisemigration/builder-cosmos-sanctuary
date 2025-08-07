@@ -26,8 +26,8 @@ export default defineConfig({
     },
   },
   esbuild: {
-    target: 'es2020',
-    legalComments: 'none',
-    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+    target: "es2020",
+    legalComments: "none",
+    logOverride: { "this-is-undefined-in-esm": "silent" },
   },
 });
