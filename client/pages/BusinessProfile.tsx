@@ -241,7 +241,7 @@ export default function BusinessProfile() {
     Sunday: "Closed",
   };
 
-  const generateSlug = (name: string) => {
+  const generateSlug = (name) => {
     return name
       .toLowerCase()
       .replace(/\s+/g, "-")
