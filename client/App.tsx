@@ -118,21 +118,24 @@ const App = () => {
 
   // Global fetch interceptor to prevent 404 errors in frontend-only deployments
   useEffect(() => {
-    if (isFrontendOnlyDeployment()) {
-      console.log("Frontend-only deployment detected - intercepting API calls");
+    console.log("Setting up global fetch interceptor");
 
-      const originalFetch = window.fetch;
-      window.fetch = async (
-        url: string | URL | Request,
-        options?: RequestInit,
-      ) => {
-        const urlString = typeof url === "string" ? url : url.toString();
+    const originalFetch = window.fetch;
+    window.fetch = async (
+      url: string | URL | Request,
+      options?: RequestInit,
+    ) => {
+      const urlString = typeof url === "string" ? url : url.toString();
 
-        // Intercept API calls and return mock responses
-        if (urlString.includes("/api/")) {
-          console.log(
-            `Intercepted API call: ${urlString} - returning mock response`,
-          );
+      // Intercept API calls and return mock responses for ANY deployment that doesn't have a backend
+      if (urlString.includes("/api/") && !urlString.includes("placeholder")) {
+        console.log(
+          `Intercepted API call: ${urlString} - checking if frontend-only`,
+        );
+
+        // Always intercept API calls if we detect it's frontend-only OR if it's not localhost
+        if (isFrontendOnlyDeployment() || (!window.location.hostname.includes("localhost"))) {
+          console.log(`Returning mock response for: ${urlString}`);
 
           // Return a mock response to prevent 404 errors
           return new Response(
@@ -147,16 +150,16 @@ const App = () => {
             },
           );
         }
+      }
 
-        // For non-API requests, use original fetch
-        return originalFetch(url, options);
-      };
+      // For non-API requests, use original fetch
+      return originalFetch(url, options);
+    };
 
-      // Cleanup: restore original fetch when component unmounts
-      return () => {
-        window.fetch = originalFetch;
-      };
-    }
+    // Cleanup: restore original fetch when component unmounts
+    return () => {
+      window.fetch = originalFetch;
+    };
   }, []);
 
   return (
