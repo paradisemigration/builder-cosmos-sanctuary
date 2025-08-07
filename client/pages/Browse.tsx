@@ -287,6 +287,7 @@ export default function Browse() {
         hostname: window.location.hostname,
         isFrontendOnly: isFrontendOnlyDeployment(),
         apiBaseUrl: getApiBaseUrl(),
+        fullApiUrl: apiUrl,
       });
 
       const response = await robustFetch(apiUrl);
