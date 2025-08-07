@@ -7,7 +7,7 @@ const hostname = window.location.hostname;
 // 1. Override fetch globally
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
-  const url = args[0]?.toString() || '';
+  const url = (args[0] && args[0].toString) ? args[0].toString() : '';
   if (url.includes('/api/') || (url.includes('://') && !url.includes(hostname))) {
     console.error('🚨 GLOBAL BLOCKED:', url);
     return Promise.resolve(new Response('{"blocked":true}', {
@@ -37,16 +37,16 @@ window.XMLHttpRequest = class extends OriginalXHR {
 };
 
 // 3. Block all error events
-window.addEventListener('error', (e) => { 
-  console.warn('🔇 GLOBAL ERROR BLOCKED:', e.message); 
-  e.preventDefault(); 
-  return false; 
+window.addEventListener('error', (e) => {
+  console.warn('🔇 GLOBAL ERROR BLOCKED:', e.message);
+  e.preventDefault();
+  return false;
 }, true);
 
-window.addEventListener('unhandledrejection', (e) => { 
-  console.warn('🔇 GLOBAL REJECTION BLOCKED'); 
-  e.preventDefault(); 
-  return false; 
+window.addEventListener('unhandledrejection', (e) => {
+  console.warn('🔇 GLOBAL REJECTION BLOCKED');
+  e.preventDefault();
+  return false;
 });
 
 console.log('🚨 IMMEDIATE GLOBAL BLOCKER: Total lockdown complete');
