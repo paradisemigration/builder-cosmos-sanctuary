@@ -117,7 +117,7 @@ export default function BusinessProfile() {
 
           // First try exact match
           foundBusiness = businesses.find(
-            (b: any) =>
+            (b) =>
               b.name.toLowerCase() === searchName.toLowerCase() &&
               (b.city.toLowerCase() === searchCity.toLowerCase() ||
                 b.scrapedCity?.toLowerCase() === searchCity.toLowerCase()),
@@ -126,7 +126,7 @@ export default function BusinessProfile() {
           // If no exact match, try partial match
           if (!foundBusiness) {
             foundBusiness = businesses.find(
-              (b: any) =>
+              (b) =>
                 b.name.toLowerCase().includes(searchName.toLowerCase()) &&
                 (b.city.toLowerCase().includes(searchCity.toLowerCase()) ||
                   b.scrapedCity
