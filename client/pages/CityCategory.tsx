@@ -1803,15 +1803,15 @@ export default function CityCategory() {
           );
 
           console.log(
-            `Trying nearby cities for ${cityName}: ${nearbyCities.join(", ")}`,
+            `Expanding search for ${cityName}: ${nearbyCities.join(", ")}`,
           );
 
-          // PHASE 1: Fast parallel search for category matches from nearby cities
+          // PHASE 1: Same region search (prioritize category relevance)
           console.log(
-            "=== PHASE 1: Fast parallel search from nearby cities ===",
+            `=== PHASE 1: SAME REGION SEARCH (need ${MINIMUM_RESULTS - accumulatedBusinesses.length} more) ===`,
           );
           console.log(
-            `Nearby cities priority order: ${nearbyCities.join(" -> ")}`,
+            `Region cities priority order: ${nearbyCities.join(" -> ")}`,
           );
 
           // Parallel API calls for faster loading - limit to top 4 cities for speed
