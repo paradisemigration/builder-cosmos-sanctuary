@@ -74,7 +74,7 @@ export default function Browse() {
   };
 
   // Handle filter changes
-  const handleCategoryChange = (value: string) => {
+  const handleCategoryChange = (value) => {
     setSelectedCategory(value);
   };
 
