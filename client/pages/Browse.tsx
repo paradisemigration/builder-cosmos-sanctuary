@@ -69,7 +69,7 @@ export default function Browse() {
   }, [searchQuery, selectedCategory, selectedCity, setSearchParams]);
 
   // Handle search
-  const handleSearch = (value: string) => {
+  const handleSearch = (value) => {
     setSearchQuery(value);
   };
 
