@@ -47,12 +47,12 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   // City autocomplete states
   const [cityQuery, setCityQuery] = useState("");
   const [showCitySuggestions, setShowCitySuggestions] = useState(false);
-  const [filteredCities, setFilteredCities] = useState<string[]>([]);
-  const cityInputRef = useRef<HTMLInputElement>(null);
-  const citySuggestionsRef = useRef<HTMLDivElement>(null);
+  const [filteredCities, setFilteredCities] = useState([]);
+  const cityInputRef = useRef(null);
+  const citySuggestionsRef = useRef(null);
 
   // Form validation
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState({});
 
   // Generate dynamic title based on current page
   const getPopupTitle = () => {
@@ -84,7 +84,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   };
 
   // Handle city input change and filtering
-  const handleCityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCityInputChange = (e) => {
     const value = e.target.value;
     setCityQuery(value);
     setFormData((prev) => ({ ...prev, city: value }));
@@ -105,7 +105,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
   };
 
   // Handle city selection from suggestions
-  const handleCitySelect = (city: string) => {
+  const handleCitySelect = (city) => {
     setCityQuery(city);
     setFormData((prev) => ({ ...prev, city }));
     setShowCitySuggestions(false);
@@ -128,7 +128,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
