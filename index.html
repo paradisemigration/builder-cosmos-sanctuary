@@ -332,6 +332,146 @@
         );
       }
 
+      // Browse Page Component
+      function BrowsePage() {
+        return React.createElement("div", {
+          style: {
+            padding: "20px",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            maxWidth: "1200px",
+            margin: "0 auto"
+          }
+        }, [
+          React.createElement("h1", {
+            key: "title",
+            style: { color: "#1f2937", marginBottom: "20px" }
+          }, "🔍 Browse Immigration Consultants"),
+
+          React.createElement("div", {
+            key: "content",
+            style: {
+              background: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "12px",
+              padding: "30px"
+            }
+          }, [
+            React.createElement("h3", { key: "subtitle" }, "Find Trusted Visa Consultants"),
+            React.createElement("p", { key: "desc" }, "Browse our directory of verified immigration consultants across India and UAE."),
+            React.createElement("div", {
+              key: "placeholder",
+              style: {
+                background: "#f9fafb",
+                border: "2px dashed #d1d5db",
+                borderRadius: "8px",
+                padding: "40px",
+                textAlign: "center",
+                margin: "20px 0"
+              }
+            }, [
+              React.createElement("p", { key: "coming-soon" }, "📋 Business listings coming in Step 3...")
+            ])
+          ])
+        ]);
+      }
+
+      // About Page Component
+      function AboutPage() {
+        return React.createElement("div", {
+          style: {
+            padding: "20px",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            maxWidth: "1200px",
+            margin: "0 auto"
+          }
+        }, [
+          React.createElement("h1", {
+            key: "title",
+            style: { color: "#1f2937", marginBottom: "20px" }
+          }, "ℹ️ About VisaConsult India"),
+
+          React.createElement("div", {
+            key: "content",
+            style: {
+              background: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "12px",
+              padding: "30px"
+            }
+          }, [
+            React.createElement("h3", { key: "subtitle" }, "Your Trusted Immigration Partner"),
+            React.createElement("p", { key: "desc1" }, "VisaConsult India is the leading platform connecting individuals with certified immigration consultants across India and UAE."),
+            React.createElement("p", { key: "desc2" }, "We help you navigate the complex world of visas, work permits, and immigration processes with confidence.")
+          ])
+        ]);
+      }
+
+      // Contact Page Component
+      function ContactPage() {
+        return React.createElement("div", {
+          style: {
+            padding: "20px",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            maxWidth: "1200px",
+            margin: "0 auto"
+          }
+        }, [
+          React.createElement("h1", {
+            key: "title",
+            style: { color: "#1f2937", marginBottom: "20px" }
+          }, "📞 Contact Us"),
+
+          React.createElement("div", {
+            key: "content",
+            style: {
+              background: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "12px",
+              padding: "30px"
+            }
+          }, [
+            React.createElement("h3", { key: "subtitle" }, "Get in Touch"),
+            React.createElement("p", { key: "desc" }, "Have questions about immigration services? We're here to help you connect with the right consultants."),
+            React.createElement("div", {
+              key: "contact-info",
+              style: { marginTop: "20px" }
+            }, [
+              React.createElement("p", { key: "email" }, "📧 Email: support@visaconsult.in"),
+              React.createElement("p", { key: "phone" }, "📱 Phone: +91-XXXX-XXXXX")
+            ])
+          ])
+        ]);
+      }
+
+      // Main App Component with Router
+      function App() {
+        return React.createElement(BrowserRouter, null, [
+          React.createElement(Navigation, { key: "nav" }),
+          React.createElement(Routes, { key: "routes" }, [
+            React.createElement(Route, {
+              key: "home",
+              path: "/",
+              element: React.createElement(HomePage)
+            }),
+            React.createElement(Route, {
+              key: "browse",
+              path: "/browse",
+              element: React.createElement(BrowsePage)
+            }),
+            React.createElement(Route, {
+              key: "about",
+              path: "/about",
+              element: React.createElement(AboutPage)
+            }),
+            React.createElement(Route, {
+              key: "contact",
+              path: "/contact",
+              element: React.createElement(ContactPage)
+            })
+          ])
+        ]);
+      }
+
       // Render with error handling
       try {
         console.log("🎯 Mounting React app...");
