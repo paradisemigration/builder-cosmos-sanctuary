@@ -151,7 +151,7 @@ export function useGeolocation(): GeolocationResult {
     countryCode: "AE",
     region: "Dubai",
     latitude: 25.2048,
-    longitude: 55.2708,
+    longitude: 55.2708
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
