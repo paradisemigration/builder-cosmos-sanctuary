@@ -32,7 +32,7 @@ export default function CategoryLocationPage() {
   const [sortBy, setSortBy] = useState("rating");
 
   // Convert URL slugs back to display names
-  const getDisplayName = (slug: string, type: "location" | "category") => {
+  const getDisplayName = (slug, type) => {
     if (type === "location") {
       // Check Indian cities
       const cityMatch = indianCities.find(
