@@ -12,11 +12,12 @@ if (!fs.existsSync(distDir)) {
   console.log('✅ Created dist directory');
 }
 
-// Copy index.html to dist (index.html is in root directory)
+// Copy index.html to dist (index.html is in project root, one level up from code directory)
 const sourceFile = path.join(__dirname, '..', 'index.html');
 const destFile = path.join(distDir, 'index.html');
 
 console.log('Looking for index.html at:', sourceFile);
+console.log('Will copy to:', destFile);
 
 if (fs.existsSync(sourceFile)) {
   fs.copyFileSync(sourceFile, destFile);
