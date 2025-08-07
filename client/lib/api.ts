@@ -166,86 +166,53 @@ class APIClient {
       search?: string;
     } = {},
   ) {
-    console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
+    console.log("🎯 CONNECTING TO REAL DATABASE - Looking for 1500+ businesses");
 
-    // Check deployment type to avoid API calls on frontend-only deployments
-    const hostname = window.location.hostname;
-    console.log(`🔍 Checking deployment type (hostname: ${hostname})`);
+    try {
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.set("page", params.page.toString());
+      if (params.limit) queryParams.set("limit", params.limit.toString());
+      if (params.city) queryParams.set("city", params.city);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.search) queryParams.set("search", params.search);
 
-    // Frontend-only deployments (no backend server)
-    const isFrontendOnly =
-      hostname.includes("fly.dev") ||
-      hostname.includes("netlify.app") ||
-      hostname === "localhost" ||
-      hostname === "127.0.0.1";
+      const apiUrl = `/api/businesses?${queryParams}`;
+      console.log("🚀 Connecting to real database API:", apiUrl);
 
-    if (isFrontendOnly && !hostname.includes("vercel.app")) {
-      console.log("🚫 Frontend-only deployment detected - using sample data");
-      console.log(
-        "📝 Your 1500+ businesses are on your local development server",
-      );
-      console.log("🚀 Deploy backend to access real business database");
-    } else {
-      // Try real API for deployments with backend (like Vercel with API functions)
-      console.log("🎯 ATTEMPTING TO CONNECT TO REAL DATABASE");
-      console.log("🚀 Looking for your 1500+ business listings...");
+      const response = await this.request<{
+        success: boolean;
+        data: Business[];
+        pagination: any;
+        total: number;
+        businesses: Business[];
+        totalRecords: number;
+        source?: string;
+      }>(apiUrl);
 
-      try {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.set("page", params.page.toString());
-        if (params.limit) queryParams.set("limit", params.limit.toString());
-        if (params.city) queryParams.set("city", params.city);
-        if (params.category) queryParams.set("category", params.category);
-        if (params.search) queryParams.set("search", params.search);
+      const businesses = response.businesses || response.data || [];
+      const total = response.totalRecords || response.total || businesses.length;
 
-        const apiUrl = `/api/businesses?${queryParams}`;
-        console.log("🚀 Trying real API:", apiUrl);
+      console.log("✅ REAL DATABASE CONNECTION SUCCESS:", {
+        success: response.success,
+        businessCount: businesses.length,
+        totalInDB: total,
+        firstBusiness: businesses[0]?.name,
+      });
 
-        const response = await this.request<{
-          success: boolean;
-          data: Business[];
-          pagination: any;
-          total: number;
-          businesses: Business[];
-          totalRecords: number;
-          source?: string;
-        }>(apiUrl);
-
-        const businesses = response.businesses || response.data || [];
-        const total =
-          response.totalRecords || response.total || businesses.length;
-
-        console.log("✅ REAL API SUCCESS:", {
-          success: response.success,
-          businessCount: businesses.length,
-          totalInDB: total,
-          hostname: window.location.hostname,
-          firstBusiness: businesses[0]?.name,
-        });
-
-        // If we get substantial real data, return it
-        if (response.success && total > 50) {
-          return {
-            success: true,
-            data: businesses,
-            pagination: response.pagination || {
-              page: params.page || 1,
-              totalPages: Math.ceil(total / (params.limit || 20)),
-              totalRecords: total,
-              hasNext: businesses.length === (params.limit || 20),
-              hasPrev: (params.page || 1) > 1,
-            },
-          };
-        }
-      } catch (error) {
-        console.error(
-          "❌ Backend not deployed - your 1500+ businesses are on local server only:",
-          error,
-        );
-        console.log(
-          "📋 Using sample data until backend with real database is deployed",
-        );
-      }
+      return {
+        success: true,
+        data: businesses,
+        pagination: response.pagination || {
+          page: params.page || 1,
+          totalPages: Math.ceil(total / (params.limit || 20)),
+          totalRecords: total,
+          hasNext: businesses.length === (params.limit || 20),
+          hasPrev: (params.page || 1) > 1,
+        },
+      };
+    } catch (error) {
+      console.error("❌ Failed to connect to real database:", error);
+      throw error;
     }
 
     // Temporary fallback while backend with 1500+ businesses is not deployed
