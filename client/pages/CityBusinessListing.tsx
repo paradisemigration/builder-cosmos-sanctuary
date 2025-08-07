@@ -494,7 +494,7 @@ export default function CityBusinessListing() {
 
   // Global error handler for unhandled promise rejections
   useEffect(() => {
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+    const handleUnhandledRejection = (event) => {
       console.error(
         "Unhandled promise rejection in CityBusinessListing:",
         event.reason,

@@ -63,7 +63,7 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -265,7 +265,7 @@ export default function Contact() {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link to="/browse">
+                    <Link to="/business">
                       <User className="h-4 w-4 mr-2" />
                       Find Consultants
                     </Link>
