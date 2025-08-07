@@ -215,50 +215,99 @@ app.post(
 );
 
 // Get all businesses
-app.get("/api/businesses", (req, res) => {
-  const { page = 1, limit = 20, city, category, search } = req.query;
+app.get("/api/businesses", async (req, res) => {
+  try {
+    const { page = 1, limit = 20, city, category, search } = req.query;
 
-  let filteredBusinesses = [...businesses];
+    // Prepare filters for database query
+    const filters = {};
+    if (city) filters.city = city;
+    if (category) filters.category = category;
+    if (search) filters.search = search;
 
-  // Filter by city
-  if (city) {
-    filteredBusinesses = filteredBusinesses.filter((b) =>
-      b.city.toLowerCase().includes(city.toLowerCase()),
-    );
+    // Get businesses from SQLite database
+    const result = await sqliteDatabase.getBusinesses({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      ...filters,
+    });
+
+    // If no businesses found in database, use sample data as fallback
+    if (!result.businesses || result.businesses.length === 0) {
+      console.warn("⚠️ No businesses found in database, using sample data");
+
+      let filteredBusinesses = [...sampleBusinesses];
+
+      // Apply filters to sample data
+      if (city) {
+        filteredBusinesses = filteredBusinesses.filter((b) =>
+          b.city.toLowerCase().includes(city.toLowerCase()),
+        );
+      }
+      if (category) {
+        filteredBusinesses = filteredBusinesses.filter((b) =>
+          b.category.toLowerCase().includes(category.toLowerCase()),
+        );
+      }
+      if (search) {
+        filteredBusinesses = filteredBusinesses.filter(
+          (b) =>
+            b.name.toLowerCase().includes(search.toLowerCase()) ||
+            b.description.toLowerCase().includes(search.toLowerCase()),
+        );
+      }
+
+      // Pagination for sample data
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + parseInt(limit);
+      const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
+
+      return res.json({
+        success: true,
+        data: paginatedBusinesses,
+        pagination: {
+          current: parseInt(page),
+          total: Math.ceil(filteredBusinesses.length / limit),
+          totalRecords: filteredBusinesses.length,
+          hasNext: endIndex < filteredBusinesses.length,
+          hasPrev: startIndex > 0,
+        },
+        source: "sample_data",
+      });
+    }
+
+    // Return database results
+    res.json({
+      success: true,
+      data: result.businesses,
+      pagination: {
+        current: parseInt(page),
+        total: Math.ceil(result.total / limit),
+        totalRecords: result.total,
+        hasNext: parseInt(page) * parseInt(limit) < result.total,
+        hasPrev: parseInt(page) > 1,
+      },
+      source: "database",
+      totalInDatabase: result.total,
+    });
+  } catch (error) {
+    console.error("Error fetching businesses:", error);
+
+    // Fallback to sample businesses on error
+    res.json({
+      success: true,
+      data: sampleBusinesses.slice(0, parseInt(req.query.limit) || 20),
+      pagination: {
+        current: 1,
+        total: 1,
+        totalRecords: sampleBusinesses.length,
+        hasNext: false,
+        hasPrev: false,
+      },
+      source: "fallback_sample_data",
+      error: "Database error, using fallback data",
+    });
   }
-
-  // Filter by category
-  if (category) {
-    filteredBusinesses = filteredBusinesses.filter((b) =>
-      b.category.toLowerCase().includes(category.toLowerCase()),
-    );
-  }
-
-  // Search functionality
-  if (search) {
-    filteredBusinesses = filteredBusinesses.filter(
-      (b) =>
-        b.name.toLowerCase().includes(search.toLowerCase()) ||
-        b.description.toLowerCase().includes(search.toLowerCase()),
-    );
-  }
-
-  // Pagination
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + parseInt(limit);
-  const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
-
-  res.json({
-    success: true,
-    data: paginatedBusinesses,
-    pagination: {
-      current: parseInt(page),
-      total: Math.ceil(filteredBusinesses.length / limit),
-      totalRecords: filteredBusinesses.length,
-      hasNext: endIndex < filteredBusinesses.length,
-      hasPrev: startIndex > 0,
-    },
-  });
 });
 
 // Get single business
