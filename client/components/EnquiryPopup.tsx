@@ -155,7 +155,7 @@ export function EnquiryPopup({ isOpen, onClose, onSubmit }: EnquiryPopupProps) {
 
   // Close suggestions when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event) => {
       if (
         citySuggestionsRef.current &&
         !citySuggestionsRef.current.contains(event.target as Node) &&
