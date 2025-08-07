@@ -6,9 +6,9 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
 // Detect third-party interference (FullStory, etc.)
 const hasThirdPartyInterference = () => {
   try {
-    return (
-      !!(window as any).FS ||
-      !!(window as any)._fs_loaded ||
+      return (
+        !!window.FS ||
+        !!window._fs_loaded ||
       document.querySelector('script[src*="fullstory"]')
     );
   } catch {
