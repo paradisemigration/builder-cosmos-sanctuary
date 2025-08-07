@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VisaConsult India</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
   </head>
   <body>
     <div id="root">
@@ -12,7 +15,7 @@
     <script>
       // Inline JavaScript - no external files
       console.log("Starting app with inline JavaScript");
-      
+
       // Clear any cached service workers
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -21,7 +24,7 @@
           }
         });
       }
-      
+
       // Simple test
       document.getElementById('root').innerHTML = '<h1>App Working - No Syntax Errors</h1>';
       console.log("App loaded successfully");
