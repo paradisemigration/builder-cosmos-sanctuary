@@ -26,7 +26,7 @@ export default function CityRouteHandler() {
 
   // If no category is provided, this shouldn't happen
   if (!category) {
-    return <Navigate to="/business" replace />;
+    return <Navigate to="/browse" replace />;
   }
 
   // Check if the parameter is a known category slug or has an alias
