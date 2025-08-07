@@ -125,6 +125,60 @@ class APIClient {
       search?: string;
     } = {},
   ) {
+    // Check if this is a frontend-only deployment
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment detected, returning sample data");
+
+      let filteredBusinesses = [...sampleBusinesses];
+
+      // Apply basic filtering to sample data
+      if (params.search) {
+        const searchTerm = params.search.toLowerCase();
+        filteredBusinesses = filteredBusinesses.filter(business =>
+          business.name?.toLowerCase().includes(searchTerm) ||
+          business.category?.toLowerCase().includes(searchTerm) ||
+          business.description?.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      if (params.category) {
+        filteredBusinesses = filteredBusinesses.filter(business =>
+          business.category?.toLowerCase().includes(params.category!.toLowerCase())
+        );
+      }
+
+      if (params.city) {
+        filteredBusinesses = filteredBusinesses.filter(business =>
+          business.city?.toLowerCase().includes(params.city!.toLowerCase())
+        );
+      }
+
+      // Apply pagination
+      const page = params.page || 1;
+      const limit = params.limit || 20;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedData = filteredBusinesses.slice(startIndex, endIndex);
+
+      return {
+        success: true,
+        data: paginatedData.map((business, index) => ({
+          ...business,
+          id: business.id || `sample-${index}`,
+          isVerified: true,
+          reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3,
+        })),
+        pagination: {
+          current: page,
+          total: Math.ceil(filteredBusinesses.length / limit),
+          totalRecords: filteredBusinesses.length,
+          hasNext: endIndex < filteredBusinesses.length,
+          hasPrev: page > 1,
+        },
+      };
+    }
+
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined) {
