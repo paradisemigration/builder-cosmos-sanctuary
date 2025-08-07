@@ -13,15 +13,7 @@ export interface User {
   providerId?: string; // OAuth provider user ID
 }
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  loginWithGoogle: () => Promise<boolean>;
-  loginWithFacebook: () => Promise<boolean>;
-  logout: () => void;
-  isLoading: boolean;
-}
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

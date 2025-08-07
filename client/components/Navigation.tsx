@@ -4,9 +4,7 @@ import { Menu, X, Globe, Search, User, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 
-interface NavigationProps {
-  className?: string;
-}
+
 
 export function Navigation({ className = "" }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
