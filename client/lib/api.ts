@@ -168,23 +168,12 @@ class APIClient {
   ) {
     console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // Check for environments without backend server
+    // ALWAYS try the real API first - user has 1500+ businesses
     const hostname = window.location.hostname;
-    const hasNoBackend =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app");
+    console.log(`🎯 ATTEMPTING TO CONNECT TO REAL DATABASE (hostname: ${hostname})`);
+    console.log("🚀 Looking for your 1500+ business listings...");
 
-    if (hasNoBackend) {
-      console.log("🔧 Frontend-only deployment detected - using sample data");
-      console.log("⚠️ Deploy backend to access your real 1500+ businesses");
-      console.log(`📡 Current hostname: ${hostname}`);
-    } else {
-      // Try the real API only on deployments with backend
-      console.log("🎯 CONNECTING TO REAL DATABASE WITH 1500+ BUSINESSES");
-      try {
+    try {
         const queryParams = new URLSearchParams();
         if (params.page) queryParams.set("page", params.page.toString());
         if (params.limit) queryParams.set("limit", params.limit.toString());
