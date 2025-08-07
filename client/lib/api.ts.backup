@@ -1,7 +1,8 @@
 // API client for backend communication
 import { sampleBusinesses, type Business } from "@/lib/data";
+import { isFrontendOnlyDeployment } from "@/utils/api-config";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 class APIClient {
   private baseURL: string;
@@ -15,7 +16,7 @@ class APIClient {
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
-    const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+    const url = `${this.baseURL}${endpoint}`;
 
     const response = await fetch(url, {
       headers: {
@@ -41,8 +42,7 @@ class APIClient {
     formData.append("image", file);
     if (folder) formData.append("folder", folder);
 
-    const url = this.baseURL ? `${this.baseURL}/api/upload/single` : `/api/upload/single`;
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseURL}/api/upload/single`, {
       method: "POST",
       body: formData,
     });
@@ -63,8 +63,7 @@ class APIClient {
     files.forEach((file) => formData.append("images", file));
     if (folder) formData.append("folder", folder);
 
-    const url = this.baseURL ? `${this.baseURL}/api/upload/multiple` : `/api/upload/multiple`;
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseURL}/api/upload/multiple`, {
       method: "POST",
       body: formData,
     });
@@ -101,23 +100,22 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const url = this.baseURL ? `${this.baseURL}/api/businesses` : `/api/businesses`;
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseURL}/api/businesses`, {
       method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        message: "Creation failed",
+        message: "Failed to create business",
       }));
-      throw new Error(error.message || "Creation failed");
+      throw new Error(error.message || "Failed to create business");
     }
 
     return response.json();
   }
 
-  // Get businesses with pagination and filters - FIXED TO USE REAL API
+  // Get businesses with pagination and filters
   async getBusinesses(
     params: {
       page?: number;
@@ -127,10 +125,9 @@ class APIClient {
       search?: string;
     } = {},
   ) {
-    console.log("🚀 BusinessAPI.getBusinesses - FORCING REAL API CALL");
-    console.log("📋 Request params:", params);
+    console.log("🚀 BusinessAPI.getBusinesses called with params:", params);
 
-    // ALWAYS try the real API first - ignore all frontend-only detection
+    // Always try the real API first, regardless of deployment type
     try {
       const queryParams = new URLSearchParams();
       if (params.page) queryParams.set("page", params.page.toString());
@@ -139,102 +136,125 @@ class APIClient {
       if (params.category) queryParams.set("category", params.category);
       if (params.search) queryParams.set("search", params.search);
 
-      const apiUrl = `/api/businesses?${queryParams}`;
-      console.log("🚀 Calling real API:", apiUrl);
-
       const response = await this.request<{
         success: boolean;
         data: Business[];
         pagination: any;
         total: number;
         businesses: Business[];
-        totalRecords: number;
-        source?: string;
-      }>(apiUrl);
+      }>(`/api/businesses?${queryParams}`);
 
-      console.log("✅ REAL API RESPONSE:", {
+      console.log("✅ Real API response:", {
         success: response.success,
         dataLength: response.data?.length || 0,
         businessesLength: response.businesses?.length || 0,
-        total: response.total,
-        totalRecords: response.totalRecords,
-        source: response.source
+        total: response.total
       });
 
-      if (response.success) {
-        // Handle different response formats from your backend
-        const businesses = response.businesses || response.data || [];
-        const total = response.totalRecords || response.total || businesses.length;
-        
-        console.log("📊 REAL DATA EXTRACTED:", {
-          businessCount: businesses.length,
-          totalInDB: total,
-          firstBusiness: businesses[0] ? {
-            id: businesses[0].id,
-            name: businesses[0].name,
-            city: businesses[0].city
-          } : "None"
-        });
+      // Handle both response formats (data or businesses array)
+      const businesses = response.businesses || response.data || [];
 
-        // Format response to match expected structure
+      if (response.success && businesses.length > 0) {
         return {
           success: true,
           data: businesses,
           pagination: response.pagination || {
             page: params.page || 1,
-            totalPages: Math.ceil(total / (params.limit || 20)),
-            totalRecords: total,
-            hasNext: businesses.length === (params.limit || 20),
-            hasPrev: (params.page || 1) > 1,
+            limit: params.limit || 20,
+            total: response.total || businesses.length,
+            totalPages: Math.ceil((response.total || businesses.length) / (params.limit || 20))
           }
         };
-      } else {
-        console.error("❌ API returned success=false:", response);
-        throw new Error("API returned unsuccessful response");
       }
+
+      console.warn("⚠️ API returned success but no businesses, falling back to sample data");
     } catch (error) {
-      console.error("❌ REAL API COMPLETELY FAILED:", error);
-      
-      // Only use sample data as absolute last resort
-      console.warn("📋 EMERGENCY FALLBACK: Using sample data because API failed");
+      console.warn("⚠️ Real API failed, falling back to sample data:", error);
+    }
+
+    // Only fall back to sample data if API completely fails
+    console.log("📋 Using sample data as fallback");
+    let filteredBusinesses = [...sampleBusinesses];
+
+    // Apply basic filtering to sample data
+    if (params.search) {
+      const searchTerm = params.search.toLowerCase();
+      filteredBusinesses = filteredBusinesses.filter(
+        (business) =>
+          business.name?.toLowerCase().includes(searchTerm) ||
+            business.category?.toLowerCase().includes(searchTerm) ||
+            business.description?.toLowerCase().includes(searchTerm),
+        );
+      }
+
+      if (params.category) {
+        filteredBusinesses = filteredBusinesses.filter((business) =>
+          business.category
+            ?.toLowerCase()
+            .includes(params.category!.toLowerCase()),
+        );
+      }
+
+      if (params.city) {
+        filteredBusinesses = filteredBusinesses.filter((business) =>
+          business.city?.toLowerCase().includes(params.city!.toLowerCase()),
+        );
+      }
+
+      // Apply pagination
       const page = params.page || 1;
       const limit = params.limit || 20;
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
-      const paginatedBusinesses = sampleBusinesses.slice(startIndex, endIndex);
+      const paginatedData = filteredBusinesses.slice(startIndex, endIndex);
 
       return {
         success: true,
-        data: paginatedBusinesses,
+        data: paginatedData.map((business, index) => ({
+          ...business,
+          id: business.id || `sample-${index}`,
+          isVerified: true,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3,
+        })),
         pagination: {
-          page: page,
-          totalPages: Math.ceil(sampleBusinesses.length / limit),
-          totalRecords: sampleBusinesses.length,
-          hasNext: endIndex < sampleBusinesses.length,
+          current: page,
+          total: Math.ceil(filteredBusinesses.length / limit),
+          totalRecords: filteredBusinesses.length,
+          hasNext: endIndex < filteredBusinesses.length,
           hasPrev: page > 1,
-        }
+        },
       };
     }
+
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const endpoint = `/api/scraped-businesses${queryParams.toString() ? `?${queryParams}` : ""}`;
+    return this.request<{
+      success: boolean;
+      data: any[];
+      pagination: {
+        current: number;
+        total: number;
+        totalRecords: number;
+        hasNext: boolean;
+        hasPrev: boolean;
+      };
+    }>(endpoint);
   }
 
   // Get single business
-  async getBusinessById(id: string) {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: Business;
-      }>(`/api/businesses/${id}`);
-    } catch (error) {
-      // Fallback to sample business
-      const sampleBusiness = sampleBusinesses.find(b => b.id === id);
-      if (sampleBusiness) {
-        return {
-          success: true,
-          data: sampleBusiness
-        };
-      }
-      throw error;
-    }
+  async getBusiness(id: string) {
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>(`/api/businesses/${id}`);
   }
 
   // Update business
@@ -260,17 +280,16 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const url = this.baseURL ? `${this.baseURL}/api/businesses/${id}` : `/api/businesses/${id}`;
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseURL}/api/businesses/${id}`, {
       method: "PUT",
       body: formData,
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        message: "Update failed",
+        message: "Failed to update business",
       }));
-      throw new Error(error.message || "Update failed");
+      throw new Error(error.message || "Failed to update business");
     }
 
     return response.json();
@@ -307,47 +326,85 @@ class APIClient {
 
   // Get featured businesses
   async getFeaturedBusinesses() {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: Business[];
-      }>("/api/businesses/featured");
-    } catch (error) {
-      console.warn("Featured businesses API failed, using sample data");
-      const featuredBusinesses = sampleBusinesses.filter(b => b.isFeatured).slice(0, 6);
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning featured sample data");
+      const featuredBusinesses = sampleBusinesses
+        .slice(0, 6)
+        .map((business, index) => ({
+          ...business,
+          id: business.id || `featured-${index}`,
+          isVerified: true,
+          isFeatured: true,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 10,
+          rating: business.rating || Math.random() * 1.5 + 3.5, // 3.5-5 star rating for featured
+        }));
+
       return {
         success: true,
         data: featuredBusinesses,
       };
     }
+
+    return this.request<{
+      success: boolean;
+      data: any[];
+    }>("/api/businesses/featured");
+  }
+
+  // Get business by ID
+  async getBusinessById(id: string) {
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning sample business by ID");
+      const business =
+        sampleBusinesses.find((b) => b.id === id) || sampleBusinesses[0];
+
+      return {
+        success: true,
+        data: {
+          ...business,
+          id: business.id || id,
+          isVerified: true,
+          reviewCount:
+            business.reviewCount || Math.floor(Math.random() * 50) + 1,
+          rating: business.rating || Math.random() * 2 + 3,
+        },
+      };
+    }
+
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>(`/api/businesses/${id}`);
   }
 
   // Get business statistics
   async getBusinessStats() {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: any;
-      }>("/api/businesses/stats");
-    } catch (error) {
-      console.warn("Business stats API failed, using fallback");
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment: returning sample stats");
+
       return {
         success: true,
         data: {
           totalBusinesses: sampleBusinesses.length,
+          totalCities: 50,
+          totalCategories: 25,
+          verifiedBusinesses: Math.floor(sampleBusinesses.length * 0.8),
+          avgRating: 4.2,
           totalReviews: sampleBusinesses.length * 15,
-          citiesCount: new Set(sampleBusinesses.map(b => b.city)).size,
-          averageRating: 4.5
         },
       };
     }
+
+    return this.request<{
+      success: boolean;
+      data: any;
+    }>("/api/businesses/stats");
   }
 }
 
-// Create global instance
-const apiClient = new APIClient();
-
-export default apiClient;
+// Export singleton instance
+export const apiClient = new APIClient();
 export { apiClient as BusinessAPI }; // Backward compatibility alias
 
 // Export types
@@ -369,16 +426,22 @@ export interface UploadResponse {
     | {
         fileName: string;
         publicUrl: string;
-        originalName: string;
         size: number;
+        mimetype: string;
       }
     | {
-        files: {
-          fileName: string;
-          publicUrl: string;
-          originalName: string;
-          size: number;
-        }[];
-      };
-  message?: string;
+        fileName: string;
+        publicUrl: string;
+        size: number;
+        mimetype: string;
+      }[];
+  message: string;
 }
+
+export interface BusinessResponse {
+  success: boolean;
+  data: any;
+  message: string;
+}
+
+export default apiClient;
