@@ -361,9 +361,13 @@ export default function CityCategory() {
               googlePlaceId: `synthetic-place-${timestamp}-${index}`,
               name: `${business.name} (Branch ${index + 2})`,
               address: `${business.address || "Various Locations"} - Branch ${index + 2}`,
-              phone: business.phone ? `${business.phone} (Branch ${index + 2})` : undefined,
+              phone: business.phone
+                ? `${business.phone} (Branch ${index + 2})`
+                : undefined,
               website: business.website,
-              email: business.email ? `branch${index + 2}.${business.email}` : undefined,
+              email: business.email
+                ? `branch${index + 2}.${business.email}`
+                : undefined,
               isDuplicate: true,
               sourceType: "synthetic_fill",
               isSynthetic: true, // Flag to identify synthetic entries
@@ -408,14 +412,16 @@ export default function CityCategory() {
         }
 
         // For real businesses, check for duplicates
-        return index ===
+        return (
+          index ===
           self.findIndex(
             (b) =>
               !b.isSynthetic &&
               !b.isEmergencySample &&
               (b.id === business.id ||
                 (b.name === business.name && b.address === business.address)),
-          );
+          )
+        );
       },
     );
 

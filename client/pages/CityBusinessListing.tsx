@@ -252,77 +252,100 @@ const getRegionCities = (cityName: string, country: string): string[] => {
   // Define region/state mappings for India
   const regionMapping: Record<string, string[]> = {
     // Uttar Pradesh cities
-    "saharanpur": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Allahabad", "Meerut", "Ghaziabad", "Noida"],
-    "lucknow": ["Kanpur", "Agra", "Varanasi", "Allahabad", "Meerut", "Saharanpur"],
-    "kanpur": ["Lucknow", "Agra", "Varanasi", "Allahabad", "Saharanpur"],
-    "agra": ["Lucknow", "Kanpur", "Varanasi", "Allahabad", "Saharanpur"],
-    "varanasi": ["Lucknow", "Kanpur", "Agra", "Allahabad", "Saharanpur"],
-    "allahabad": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Saharanpur"],
-    "meerut": ["Ghaziabad", "Noida", "Delhi", "Saharanpur", "Lucknow"],
+    saharanpur: [
+      "Lucknow",
+      "Kanpur",
+      "Agra",
+      "Varanasi",
+      "Allahabad",
+      "Meerut",
+      "Ghaziabad",
+      "Noida",
+    ],
+    lucknow: [
+      "Kanpur",
+      "Agra",
+      "Varanasi",
+      "Allahabad",
+      "Meerut",
+      "Saharanpur",
+    ],
+    kanpur: ["Lucknow", "Agra", "Varanasi", "Allahabad", "Saharanpur"],
+    agra: ["Lucknow", "Kanpur", "Varanasi", "Allahabad", "Saharanpur"],
+    varanasi: ["Lucknow", "Kanpur", "Agra", "Allahabad", "Saharanpur"],
+    allahabad: ["Lucknow", "Kanpur", "Agra", "Varanasi", "Saharanpur"],
+    meerut: ["Ghaziabad", "Noida", "Delhi", "Saharanpur", "Lucknow"],
 
     // Gujarat cities
-    "vadodara": ["Ahmedabad", "Surat", "Rajkot", "Gandhinagar", "Bharuch", "Anand"],
-    "ahmedabad": ["Vadodara", "Surat", "Rajkot", "Gandhinagar"],
-    "surat": ["Vadodara", "Ahmedabad", "Rajkot", "Bharuch"],
-    "rajkot": ["Vadodara", "Ahmedabad", "Surat", "Jamnagar"],
+    vadodara: [
+      "Ahmedabad",
+      "Surat",
+      "Rajkot",
+      "Gandhinagar",
+      "Bharuch",
+      "Anand",
+    ],
+    ahmedabad: ["Vadodara", "Surat", "Rajkot", "Gandhinagar"],
+    surat: ["Vadodara", "Ahmedabad", "Rajkot", "Bharuch"],
+    rajkot: ["Vadodara", "Ahmedabad", "Surat", "Jamnagar"],
 
     // Maharashtra cities
-    "pune": ["Mumbai", "Nashik", "Aurangabad", "Solapur", "Kolhapur", "Satara"],
-    "mumbai": ["Pune", "Nashik", "Aurangabad", "Thane", "Navi Mumbai"],
-    "nashik": ["Pune", "Mumbai", "Aurangabad", "Ahmednagar"],
-    "aurangabad": ["Pune", "Mumbai", "Nashik", "Ahmednagar"],
+    pune: ["Mumbai", "Nashik", "Aurangabad", "Solapur", "Kolhapur", "Satara"],
+    mumbai: ["Pune", "Nashik", "Aurangabad", "Thane", "Navi Mumbai"],
+    nashik: ["Pune", "Mumbai", "Aurangabad", "Ahmednagar"],
+    aurangabad: ["Pune", "Mumbai", "Nashik", "Ahmednagar"],
 
     // Delhi NCR
-    "delhi": ["Gurgaon", "Noida", "Ghaziabad", "Faridabad", "Greater Noida"],
-    "gurgaon": ["Delhi", "Noida", "Ghaziabad", "Faridabad"],
-    "noida": ["Delhi", "Gurgaon", "Ghaziabad", "Greater Noida"],
-    "ghaziabad": ["Delhi", "Noida", "Meerut", "Faridabad"],
+    delhi: ["Gurgaon", "Noida", "Ghaziabad", "Faridabad", "Greater Noida"],
+    gurgaon: ["Delhi", "Noida", "Ghaziabad", "Faridabad"],
+    noida: ["Delhi", "Gurgaon", "Ghaziabad", "Greater Noida"],
+    ghaziabad: ["Delhi", "Noida", "Meerut", "Faridabad"],
 
     // Karnataka cities
-    "bangalore": ["Mysore", "Mangalore", "Hubli", "Belgaum", "Bellary"],
-    "mysore": ["Bangalore", "Mangalore", "Hubli"],
+    bangalore: ["Mysore", "Mangalore", "Hubli", "Belgaum", "Bellary"],
+    mysore: ["Bangalore", "Mangalore", "Hubli"],
 
     // Tamil Nadu cities
-    "chennai": ["Coimbatore", "Madurai", "Salem", "Tirupur", "Erode"],
-    "coimbatore": ["Chennai", "Madurai", "Salem", "Tirupur", "Erode"],
-    "madurai": ["Chennai", "Coimbatore", "Salem", "Tirupur"],
+    chennai: ["Coimbatore", "Madurai", "Salem", "Tirupur", "Erode"],
+    coimbatore: ["Chennai", "Madurai", "Salem", "Tirupur", "Erode"],
+    madurai: ["Chennai", "Coimbatore", "Salem", "Tirupur"],
 
     // West Bengal cities
-    "kolkata": ["Howrah", "Durgapur", "Asansol", "Siliguri"],
-    "howrah": ["Kolkata", "Durgapur", "Asansol"],
+    kolkata: ["Howrah", "Durgapur", "Asansol", "Siliguri"],
+    howrah: ["Kolkata", "Durgapur", "Asansol"],
 
     // Rajasthan cities
-    "jaipur": ["Jodhpur", "Udaipur", "Ajmer", "Kota", "Bikaner"],
-    "jodhpur": ["Jaipur", "Udaipur", "Ajmer", "Bikaner"],
-    "udaipur": ["Jaipur", "Jodhpur", "Ajmer"],
+    jaipur: ["Jodhpur", "Udaipur", "Ajmer", "Kota", "Bikaner"],
+    jodhpur: ["Jaipur", "Udaipur", "Ajmer", "Bikaner"],
+    udaipur: ["Jaipur", "Jodhpur", "Ajmer"],
 
     // Madhya Pradesh cities
-    "indore": ["Bhopal", "Gwalior", "Jabalpur", "Ujjain"],
-    "bhopal": ["Indore", "Gwalior", "Jabalpur"],
+    indore: ["Bhopal", "Gwalior", "Jabalpur", "Ujjain"],
+    bhopal: ["Indore", "Gwalior", "Jabalpur"],
 
     // Punjab cities
-    "chandigarh": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
-    "ludhiana": ["Chandigarh", "Amritsar", "Jalandhar"],
+    chandigarh: ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
+    ludhiana: ["Chandigarh", "Amritsar", "Jalandhar"],
 
     // Kerala cities
-    "kochi": ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Kollam"],
-    "thiruvananthapuram": ["Kochi", "Kozhikode", "Thrissur"],
+    kochi: ["Thiruvananthapuram", "Kozhikode", "Thrissur", "Kollam"],
+    thiruvananthapuram: ["Kochi", "Kozhikode", "Thrissur"],
 
     // Telangana/Andhra Pradesh
-    "hyderabad": ["Secunderabad", "Warangal", "Nizamabad", "Vijayawada"],
-    "vijayawada": ["Hyderabad", "Visakhapatnam", "Guntur"],
-    "visakhapatnam": ["Vijayawada", "Hyderabad", "Guntur"],
+    hyderabad: ["Secunderabad", "Warangal", "Nizamabad", "Vijayawada"],
+    vijayawada: ["Hyderabad", "Visakhapatnam", "Guntur"],
+    visakhapatnam: ["Vijayawada", "Hyderabad", "Guntur"],
   };
 
   // For UAE cities, same emirate cities
   if (country === "uae") {
     const uaeRegionMapping: Record<string, string[]> = {
-      "dubai": ["Sharjah", "Ajman"], // Same region emirates
+      dubai: ["Sharjah", "Ajman"], // Same region emirates
       "abu dhabi": [], // Abu Dhabi standalone as per requirement
-      "sharjah": ["Dubai", "Ajman", "Ras Al Khaimah"],
-      "ajman": ["Sharjah", "Dubai", "Ras Al Khaimah"],
+      sharjah: ["Dubai", "Ajman", "Ras Al Khaimah"],
+      ajman: ["Sharjah", "Dubai", "Ras Al Khaimah"],
       "ras al khaimah": ["Sharjah", "Ajman", "Fujairah"],
-      "fujairah": ["Ras Al Khaimah", "Sharjah"],
+      fujairah: ["Ras Al Khaimah", "Sharjah"],
       "umm al quwain": ["Sharjah", "Ajman", "Ras Al Khaimah"],
     };
 
@@ -350,7 +373,16 @@ const getNearByCities = (cityName: string, country: string): string[] => {
   if (country === "uae") {
     return ["Dubai", "Sharjah"]; // Removed Abu Dhabi as it should be standalone
   } else {
-    return ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"];
+    return [
+      "Delhi",
+      "Mumbai",
+      "Bangalore",
+      "Chennai",
+      "Hyderabad",
+      "Pune",
+      "Kolkata",
+      "Ahmedabad",
+    ];
   }
 };
 
@@ -597,7 +629,9 @@ export default function CityBusinessListing() {
         // PHASE 1: Check same region/state cities first
         const regionCities = getRegionCities(cityName, country);
         if (regionCities.length > 0) {
-          console.log(`📍 PHASE 1: Checking same region cities: ${regionCities.join(', ')}`);
+          console.log(
+            `📍 PHASE 1: Checking same region cities: ${regionCities.join(", ")}`,
+          );
 
           for (const regionCity of regionCities) {
             try {
@@ -623,7 +657,10 @@ export default function CityBusinessListing() {
                 }
               }
             } catch (regionError) {
-              console.log(`❌ Failed to fetch from region city ${regionCity}:`, regionError);
+              console.log(
+                `❌ Failed to fetch from region city ${regionCity}:`,
+                regionError,
+              );
             }
           }
         }
