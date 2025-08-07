@@ -18,22 +18,27 @@ import { isFrontendOnlyDeployment } from "@/utils/api-config";
     console.log("🚨 IMMEDIATE INTERCEPTOR: Installing immediate API blocker");
 
     const originalFetch = window.fetch;
-    window.fetch = async (url: string | URL | Request, options?: RequestInit) => {
+    window.fetch = async (
+      url: string | URL | Request,
+      options?: RequestInit,
+    ) => {
       const urlString = typeof url === "string" ? url : url.toString();
 
       if (urlString.includes("/api/")) {
         console.log(`🚨 IMMEDIATE BLOCK: ${urlString}`);
-        return Promise.resolve(new Response(
-          JSON.stringify({
-            success: false,
-            message: "API blocked - immediate interceptor",
-            data: [],
-          }),
-          {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-          }
-        ));
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              success: false,
+              message: "API blocked - immediate interceptor",
+              data: [],
+            }),
+            {
+              status: 200,
+              headers: { "Content-Type": "application/json" },
+            },
+          ),
+        );
       }
 
       return originalFetch(url, options);
@@ -154,7 +159,9 @@ const App = () => {
   useEffect(() => {
     const hostname = window.location.hostname;
     console.log(`🔍 Current hostname: ${hostname}`);
-    console.log(`🔍 Is frontend-only deployment: ${isFrontendOnlyDeployment()}`);
+    console.log(
+      `🔍 Is frontend-only deployment: ${isFrontendOnlyDeployment()}`,
+    );
     console.log("🚀 Setting up AGGRESSIVE global fetch interceptor");
 
     const originalFetch = window.fetch;
@@ -174,27 +181,34 @@ const App = () => {
         console.log(`🛡️ API call intercepted: ${urlString}`);
 
         // Block API calls on ANY production domain
-        if (!hostname.includes("localhost") && !hostname.includes("127.0.0.1")) {
-          console.log(`❌ BLOCKING API call on production domain: ${urlString}`);
+        if (
+          !hostname.includes("localhost") &&
+          !hostname.includes("127.0.0.1")
+        ) {
+          console.log(
+            `❌ BLOCKING API call on production domain: ${urlString}`,
+          );
 
           // Return immediate mock response to prevent 404
-          return Promise.resolve(new Response(
-            JSON.stringify({
-              success: false,
-              message: "API blocked in production - using fallback data",
-              data: [],
-              businesses: [],
-              total: 0
-            }),
-            {
-              status: 200,
-              statusText: "OK",
-              headers: {
-                "Content-Type": "application/json",
-                "X-Intercepted": "true"
+          return Promise.resolve(
+            new Response(
+              JSON.stringify({
+                success: false,
+                message: "API blocked in production - using fallback data",
+                data: [],
+                businesses: [],
+                total: 0,
+              }),
+              {
+                status: 200,
+                statusText: "OK",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Intercepted": "true",
+                },
               },
-            },
-          ));
+            ),
+          );
         }
       }
 
