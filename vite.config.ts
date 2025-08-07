@@ -7,31 +7,18 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
-    middlewareMode: false,
+    proxy: {
+      "/api": {
+        target: "http://localhost:9876",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: "dist/spa",
     minify: false,
   },
-  plugins: [
-    react(),
-    {
-      name: "api-server",
-      configureServer(server) {
-        server.middlewares.use("/api", async (req, res, next) => {
-          try {
-            // Import the API server
-            const { default: apiApp } = await import("./server/api.js");
-            apiApp(req, res, next);
-          } catch (error) {
-            console.error("API Error:", error);
-            res.statusCode = 500;
-            res.end(JSON.stringify({ error: "Internal Server Error" }));
-          }
-        });
-      },
-    },
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
