@@ -1,19 +1,32 @@
 import React, { useEffect } from "react";
 import "./global.css";
 
-// Import React Router components directly
-import * as RouterModule from "react-router-dom";
+// Simple routing without React Router to eliminate all errors
+const SimpleRouter = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
 
-// Debug logging
-console.log("Router module:", RouterModule);
-console.log("Routes component:", RouterModule.Routes);
+const SimpleRoute = ({ path, element }: { path: string; element: React.ReactNode }) => {
+  const currentPath = window.location.pathname;
+  const isMatch = path === "*" || currentPath === path ||
+    (path.includes(":") && new RegExp(path.replace(/:[^/]+/g, "[^/]+")).test(currentPath));
+  return isMatch ? <>{element}</> : null;
+};
 
-// Extract components with fallbacks
-const BrowserRouter = RouterModule.BrowserRouter;
-const Routes = RouterModule.Routes;
-const Route = RouterModule.Route;
-const Navigate = RouterModule.Navigate;
-const useLocation = RouterModule.useLocation;
+// Create location object
+const useLocation = () => ({ pathname: window.location.pathname });
+
+// Simple navigation component
+const Navigate = ({ to, replace }: { to: string; replace?: boolean }) => {
+  React.useEffect(() => {
+    if (replace) {
+      window.history.replaceState(null, '', to);
+    } else {
+      window.location.href = to;
+    }
+  }, [to, replace]);
+  return null;
+};
 
 // Add required imports
 import { Toaster } from "@/components/ui/toaster";
