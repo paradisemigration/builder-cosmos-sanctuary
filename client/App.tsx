@@ -1,7 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import "./global.css";
 
-// Traditional React Router imports
+// Use React.lazy to avoid compilation issues
+const RouterComponents = lazy(() =>
+  import("react-router-dom").then(module => ({
+    default: {
+      BrowserRouter: module.BrowserRouter,
+      Routes: module.Routes,
+      Route: module.Route,
+      useLocation: module.useLocation,
+      Navigate: module.Navigate,
+    }
+  }))
+);
+
+// Also import directly as fallback
 import {
   BrowserRouter,
   Routes,
