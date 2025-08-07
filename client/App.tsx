@@ -116,6 +116,44 @@ const App = () => {
     setupSEOCrawling();
   }, []);
 
+  // Global fetch interceptor to prevent 404 errors in frontend-only deployments
+  useEffect(() => {
+    if (isFrontendOnlyDeployment()) {
+      console.log("Frontend-only deployment detected - intercepting API calls");
+
+      const originalFetch = window.fetch;
+      window.fetch = async (url: string | URL | Request, options?: RequestInit) => {
+        const urlString = typeof url === 'string' ? url : url.toString();
+
+        // Intercept API calls and return mock responses
+        if (urlString.includes('/api/')) {
+          console.log(`Intercepted API call: ${urlString} - returning mock response`);
+
+          // Return a mock response to prevent 404 errors
+          return new Response(
+            JSON.stringify({
+              success: false,
+              message: "API not available in frontend-only deployment",
+              data: []
+            }),
+            {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        }
+
+        // For non-API requests, use original fetch
+        return originalFetch(url, options);
+      };
+
+      // Cleanup: restore original fetch when component unmounts
+      return () => {
+        window.fetch = originalFetch;
+      };
+    }
+  }, []);
+
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
