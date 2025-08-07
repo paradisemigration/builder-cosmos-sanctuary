@@ -66,7 +66,7 @@ export default function BusinessProfile() {
     queryId,
     businessId,
   });
-  const [business, setBusiness] = useState<Business | null>(null);
+  const [business, setBusiness] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showContactForm, setShowContactForm] = useState(false);

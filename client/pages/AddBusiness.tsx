@@ -60,9 +60,9 @@ export default function AddBusiness() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
-  const [visibleSections, setVisibleSections] = useState<string[]>([]);
+  const [visibleSections, setVisibleSections] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const observerRef = useRef(null);
 
   // Detect if this is UAE or India based on URL or referrer
   const isUAE =
@@ -76,7 +76,7 @@ export default function AddBusiness() {
   const selectedPlan = searchParams.get("plan") || "free";
   const selectedBilling = searchParams.get("billing") || "monthly";
 
-  const [formData, setFormData] = useState<BusinessFormData>({
+  const [formData, setFormData] = useState({
     name: "",
     category: "",
     description: "",
@@ -93,18 +93,16 @@ export default function AddBusiness() {
     ownerPhone: "",
   });
 
-  const [logo, setLogo] = useState<File | null>(null);
-  const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<File[]>([]);
+  const [logo, setLogo] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
   const [newService, setNewService] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   // Business name search state
   const [businessSearchQuery, setBusinessSearchQuery] = useState("");
   const [showBusinessSuggestions, setShowBusinessSuggestions] = useState(false);
-  const [businessSuggestions, setBusinessSuggestions] = useState<
-    typeof sampleBusinesses
-  >([]);
+  const [businessSuggestions, setBusinessSuggestions] = useState([]);
   const [businessNameVerified, setBusinessNameVerified] = useState(false);
   const [existingBusiness, setExistingBusiness] = useState<any>(null);
 
