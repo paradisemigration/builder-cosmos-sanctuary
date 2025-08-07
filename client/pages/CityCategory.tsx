@@ -1838,44 +1838,97 @@ export default function CityCategory() {
                     console.log(`✅ EXACT MATCH: ${categoryResult.businesses.length} businesses in ${nearbyCity}`);
                     return {
                       city: nearbyCity,
-                  businesses: nearbyResult.businesses.map((business) => ({
-                    ...business,
-                    isNearbyData: true,
-                    originalRequestedCity: cityName,
-                    nearbySourceCity: nearbyCity,
-                  })),
-                };
-              } else {
-                console.log(`❌ No businesses in ${nearbyCity}`);
+                      businesses: categoryResult.businesses.map((business) => ({
+                        ...business,
+                        isNearbyData: true,
+                        originalRequestedCity: cityName,
+                        nearbySourceCity: nearbyCity,
+                        sourceType: "exact_category",
+                        relevanceScore: 100
+                      })),
+                    };
+                  }
+                }
+
+                // STEP 2: If no category match, get all businesses and sort by relevance
+                console.log(`🔄 FALLBACK: Getting all businesses from ${nearbyCity}`);
+                const allUrl = `/api/scraped-businesses?city=${encodeURIComponent(nearbyCity)}&limit=500`;
+
+                const allResponse = await Promise.race([
+                  robustFetch(allUrl),
+                  new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000))
+                ]);
+
+                if (allResponse.ok) {
+                  const allResult = await allResponse.json();
+                  if (allResult.success && allResult.businesses && allResult.businesses.length > 0) {
+                    // Sort by category relevance
+                    const categoryKeywords = categoryName.toLowerCase().split(/[\s-]+/);
+                    const sortedByRelevance = allResult.businesses.sort((a, b) => {
+                      const aScore = categoryKeywords.reduce((score, keyword) => {
+                        if ((a.category || '').toLowerCase().includes(keyword)) score += 10;
+                        if ((a.name || '').toLowerCase().includes(keyword)) score += 5;
+                        return score;
+                      }, 0);
+
+                      const bScore = categoryKeywords.reduce((score, keyword) => {
+                        if ((b.category || '').toLowerCase().includes(keyword)) score += 10;
+                        if ((b.name || '').toLowerCase().includes(keyword)) score += 5;
+                        return score;
+                      }, 0);
+
+                      return bScore - aScore;
+                    });
+
+                    console.log(`📊 SORTED: ${sortedByRelevance.length} businesses by relevance in ${nearbyCity}`);
+                    return {
+                      city: nearbyCity,
+                      businesses: sortedByRelevance.map((business, index) => ({
+                        ...business,
+                        isNearbyData: true,
+                        originalRequestedCity: cityName,
+                        nearbySourceCity: nearbyCity,
+                        sourceType: "city_sorted",
+                        relevanceScore: 50 - index
+                      })),
+                    };
+                  }
+                }
+
+                return { city: nearbyCity, businesses: [] };
+              } catch (error) {
+                console.log(`❌ Error for ${nearbyCity}:`, error.message);
                 return { city: nearbyCity, businesses: [] };
               }
-            } catch (error) {
-              console.log(`❌ Error/timeout for ${nearbyCity}`);
-              return { city: nearbyCity, businesses: [] };
-            }
-          });
+            });
 
-          // Wait for all parallel searches (max 3 seconds each)
-          const cityResults = await Promise.allSettled(apiPromises);
+            // Wait for batch results
+            const batchResults = await Promise.allSettled(batchPromises);
+            let batchBusinessesAdded = 0;
 
-          cityResults.forEach((result, index) => {
-            if (result.status === 'fulfilled' && result.value.businesses.length > 0) {
-              const { city, businesses } = result.value;
+            batchResults.forEach((result) => {
+              if (result.status === 'fulfilled' && result.value.businesses.length > 0) {
+                const { city, businesses } = result.value;
+                console.log(`📥 Processing ${businesses.length} businesses from ${city}`);
 
-              // Add unique businesses only
-              businesses.forEach(business => {
-                const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
-                const isDuplicate = accumulatedBusinesses.some(existing => {
-                  const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
-                  return existingId === businessId ||
-                         (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
-                          existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim());
+                // Add unique businesses with deduplication
+                businesses.forEach(business => {
+                  // Stop adding if we've reached our target
+                  if (accumulatedBusinesses.length >= MINIMUM_RESULTS) return;
+
+                  const businessId = business.id || business.googlePlaceId || `${business.name}-${business.address}`;
+                  const isDuplicate = accumulatedBusinesses.some(existing => {
+                    const existingId = existing.id || existing.googlePlaceId || `${existing.name}-${existing.address}`;
+                    return existingId === businessId ||
+                           (existing.name?.toLowerCase().trim() === business.name?.toLowerCase().trim() &&
+                            existing.city?.toLowerCase().trim() === business.city?.toLowerCase().trim());
+                  });
+
+                  if (!isDuplicate) {
+                    accumulatedBusinesses.push(business);
+                    batchBusinessesAdded++;
+                  }
                 });
-
-                if (!isDuplicate) {
-                  accumulatedBusinesses.push(business);
-                }
-              });
 
               sourceCities.push(city);
               console.log(`✅ Added ${businesses.length} businesses from ${city}`);
