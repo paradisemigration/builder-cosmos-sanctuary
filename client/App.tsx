@@ -51,6 +51,7 @@ import {
   Route,
   Link,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 
 // Component to handle scroll to top on route changes
