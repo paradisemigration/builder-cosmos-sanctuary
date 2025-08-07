@@ -1775,23 +1775,63 @@ export default function CityCategory() {
           console.error(`🔍 Error details:`, error.message, error.stack);
         }
 
-        // If we got businesses from main city, skip the original failed result check
-        if (accumulatedBusinesses.length > 0) {
-          console.log(`✅ Using ${accumulatedBusinesses.length} businesses from main city (Phase 0)`);
+        // FINAL CHECK: Ensure we have at least 75 results
+        const MINIMUM_RESULTS = 75;
+        console.log(`\n🎯 FINAL CHECK: Have ${accumulatedBusinesses.length}/${MINIMUM_RESULTS} businesses`);
 
-          // Create a successful result from main city businesses
+        if (accumulatedBusinesses.length < MINIMUM_RESULTS) {
+          console.log(`⚠️ INSUFFICIENT RESULTS: Need ${MINIMUM_RESULTS - accumulatedBusinesses.length} more businesses`);
+
+          // Emergency: Get businesses from any nearby cities to reach minimum
+          const emergencyCities = nearbyCities.slice(0, 10); // Try up to 10 cities
+
+          for (const emergencyCity of emergencyCities) {
+            if (accumulatedBusinesses.length >= MINIMUM_RESULTS) break;
+
+            try {
+              console.log(`🚨 EMERGENCY: Getting businesses from ${emergencyCity}`);
+              const emergencyUrl = `/api/scraped-businesses?city=${encodeURIComponent(emergencyCity)}&limit=500`;
+              const emergencyResponse = await robustFetch(emergencyUrl);
+
+              if (emergencyResponse.ok) {
+                const emergencyResult = await emergencyResponse.json();
+                if (emergencyResult.success && emergencyResult.businesses) {
+                  const needed = MINIMUM_RESULTS - accumulatedBusinesses.length;
+                  const newBusinesses = emergencyResult.businesses.slice(0, needed).map(business => ({
+                    ...business,
+                    isNearbyData: true,
+                    originalRequestedCity: cityName,
+                    nearbySourceCity: emergencyCity,
+                    sourceType: "emergency_fill"
+                  }));
+
+                  accumulatedBusinesses.push(...newBusinesses);
+                  console.log(`🚨 EMERGENCY: Added ${newBusinesses.length} from ${emergencyCity}. Total: ${accumulatedBusinesses.length}`);
+                }
+              }
+            } catch (emergencyError) {
+              console.log(`❌ Emergency fetch failed for ${emergencyCity}`);
+            }
+          }
+        }
+
+        // If we got businesses from main city or emergency fill, proceed
+        if (accumulatedBusinesses.length > 0) {
+          console.log(`✅ FINAL COUNT: ${accumulatedBusinesses.length} businesses ready for display`);
+
+          // Create a successful result
           result = {
             success: true,
             businesses: accumulatedBusinesses,
             total: accumulatedBusinesses.length,
-            source: "main_city_all",
+            source: accumulatedBusinesses.length >= MINIMUM_RESULTS ? "sufficient" : "emergency_fill",
           };
 
           // Immediately set the category businesses so they display
           setCategoryBusinesses(accumulatedBusinesses);
           setCategoryDataLoaded(true);
           setLoading(false);
-          console.log(`✅ Immediately displaying ${accumulatedBusinesses.length} businesses from ${cityName}`);
+          console.log(`✅ Displaying ${accumulatedBusinesses.length} businesses (target: ${MINIMUM_RESULTS})`);
         }
 
         // MINIMUM 75 RESULTS STRATEGY: Continue if we have less than 75 businesses
