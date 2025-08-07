@@ -17,22 +17,30 @@ class APIClient {
   ): Promise<T> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
 
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      ...options,
-    });
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers,
+        },
+        ...options,
+      });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        message: "Request failed",
-      }));
-      throw new Error(error.message || `HTTP ${response.status}`);
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({
+          message: "Request failed",
+        }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      // Handle fetch errors (network issues, CORS, etc.)
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        throw new Error("Network error: Unable to connect to server");
+      }
+      throw error;
     }
-
-    return response.json();
   }
 
   // Upload single image
