@@ -42,7 +42,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import CantFindBusiness from "./pages/CantFindBusiness";
 import CategoryLocationPage from "./pages/CategoryLocationPage";
-import CityBusinessListing from "./pages/CityBusinessListing";
+import CityBusinessListing from "./pages/CityBusinessListingNew";
 import CityCategory from "./pages/CityCategory";
 import CityRouteHandler from "./components/CityRouteHandler";
 import AdminBulkUpload from "./pages/AdminBulkUpload";
