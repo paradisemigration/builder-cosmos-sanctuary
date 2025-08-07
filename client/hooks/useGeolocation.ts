@@ -217,12 +217,3 @@ export function useGeolocation(): GeolocationResult {
   useEffect(() => {
     console.log("🔇 GEOLOCATION: Using mock location data - no external calls");
     // Location is already set in useState with mock data
-  }, []);
-
-  return {
-    location,
-    isLoading,
-    error,
-    hasPermission,
-  };
-}
