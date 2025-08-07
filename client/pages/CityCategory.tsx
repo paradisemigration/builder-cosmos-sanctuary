@@ -57,7 +57,7 @@ export default function CityCategory() {
   const [hasMoreData, setHasMoreData] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("rating");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState("grid");
   const [showEnquiryPopup, setShowEnquiryPopup] = useState(false);
 
   // Convert URL params to proper names
