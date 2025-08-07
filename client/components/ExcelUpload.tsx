@@ -19,8 +19,6 @@ import {
   ExcelBusinessRow,
 } from "@/lib/excel-template";
 
-
-
 export function ExcelUpload({
   onDataProcessed,
   maxFileSize = 10,
