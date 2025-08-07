@@ -4,7 +4,7 @@ import CityCategory from "@/pages/CityCategory";
 import BusinessProfile from "@/pages/BusinessProfile";
 
 // Category aliases for common URL variations
-const categoryAliases: Record<string, string> = {
+const categoryAliases = {
   "study-abroad": "study-abroad-consultants",
   immigration: "immigration-consultants",
   visa: "visa-consultants",
