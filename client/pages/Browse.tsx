@@ -265,6 +265,25 @@ export default function Browse() {
     append = false,
     filters = {},
   ) => {
+    // Check if this is a frontend-only deployment
+    if (isFrontendOnlyDeployment() && page === 1 && !append) {
+      console.log("Frontend-only deployment detected, using sample data");
+      const fallbackBusinesses = sampleBusinesses.map((business, index) => ({
+        ...business,
+        id: business.id || `sample-${index}`,
+        isVerified: true,
+        reviewCount: business.reviewCount || Math.floor(Math.random() * 50) + 1,
+        rating: business.rating || (Math.random() * 2 + 3), // 3-5 star rating
+      }));
+
+      setScrapedBusinesses(fallbackBusinesses);
+      setTotalCount(fallbackBusinesses.length);
+      setHasMore(false);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     try {
       if (page === 1) {
         setLoading(true);
