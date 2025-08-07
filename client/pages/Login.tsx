@@ -149,7 +149,7 @@ export default function Login() {
     }
   };
 
-  const handleSocialLogin = async (provider: string) => {
+  const handleSocialLogin = async (provider) => {
     try {
       let success = false;
       if (provider === "Google") {
