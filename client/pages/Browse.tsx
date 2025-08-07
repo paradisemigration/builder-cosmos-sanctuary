@@ -303,7 +303,16 @@ export default function Browse() {
         total: result.total
       });
 
-      if (result.success && result.businesses && result.businesses.length > 0) {
+      if (result.success) {
+        console.log("📊 API returned success:", {
+          businessCount: result.businesses?.length || 0,
+          total: result.total,
+          hasBusinesses: !!result.businesses,
+          isArray: Array.isArray(result.businesses),
+          firstBusiness: result.businesses?.[0]?.name || "None"
+        });
+
+        if (result.businesses && result.businesses.length > 0) {
         // Map the businesses to ensure proper ID field and data structure
         const mappedBusinesses = result.businesses.map((business: any) => {
           const finalReviewCount =
