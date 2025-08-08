@@ -19,6 +19,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -151,19 +152,17 @@ const successStories = [
 
 export default function ListingPlans() {
   const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
-    "monthly",
-  );
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [billingCycle, setBillingCycle] = useState("monthly");
 
-  const getPrice = (plan: (typeof plans)[0]) => {
+  const getPrice = (plan) => {
     if (plan.price === 0) return "Free";
 
     const price = billingCycle === "yearly" ? plan.price * 10 : plan.price;
     return `₹${price.toLocaleString()}`;
   };
 
-  const handleSelectPlan = (planId: string) => {
+  const handleSelectPlan = (planId) => {
     setSelectedPlan(planId);
     // Redirect to add-business page with selected plan
     navigate(`/add-business?plan=${planId}&billing=${billingCycle}`);
@@ -171,6 +170,12 @@ export default function ListingPlans() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+      <SEOHead
+        title="Business Listing Plans - VisaConsult India | Grow Your Visa Consultancy"
+        description="Choose the perfect listing plan for your visa consultancy business. Free, Premium and Business Pro packages available. Increase visibility, get more clients and grow your immigration practice in India."
+        keywords="visa consultant listing plans, immigration business packages, visa consultancy marketing, business listing pricing, visa consultant advertising India"
+        canonical="/plans"
+      />
       <Navigation />
 
       {/* Hero Section */}

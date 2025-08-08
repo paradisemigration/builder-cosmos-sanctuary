@@ -4,14 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 
-interface ImageUploadProps {
-  onUpload: (urls: string[]) => void;
-  multiple?: boolean;
-  maxFiles?: number;
-  existingImages?: string[];
-  folder?: string;
-}
-
 export function ImageUpload({
   onUpload,
   multiple = false,
@@ -21,8 +13,8 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [images, setImages] = useState<string[]>(existingImages);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [images, setImages] = useState(existingImages);
+  const fileInputRef = useRef(null);
 
   const handleFiles = async (files: FileList) => {
     if (files.length === 0) return;
@@ -129,7 +121,7 @@ export function ImageUpload({
     }
   };
 
-  const handleDrag = (e: React.DragEvent) => {
+  const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -139,7 +131,7 @@ export function ImageUpload({
     }
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -149,7 +141,7 @@ export function ImageUpload({
     }
   };
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInput = (e) => {
     if (e.target.files) {
       handleFiles(e.target.files);
     }

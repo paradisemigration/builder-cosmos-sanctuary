@@ -26,8 +26,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Navigation } from "@/components/Navigation";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { SEOHead } from "@/components/SEOHead";
 
 // Social Icons
 const GoogleIcon = () => (
@@ -105,7 +105,7 @@ export default function Login() {
     }
   }, [isAuthenticated, user, navigate, location.state]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setLoginError("");
@@ -122,7 +122,7 @@ export default function Login() {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (registerData.password !== registerData.confirmPassword) {
       toast.error("Passwords don't match!");
@@ -149,7 +149,7 @@ export default function Login() {
     }
   };
 
-  const handleSocialLogin = async (provider: string) => {
+  const handleSocialLogin = async (provider) => {
     try {
       let success = false;
       if (provider === "Google") {
@@ -168,111 +168,37 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <Navigation />
+      <SEOHead
+        title="Login - VisaConsult India | Access Your Account"
+        description="Login to your VisaConsult India account to access verified visa consultants, manage your profile, and track your applications. Secure login with social media options."
+        keywords="login, visa consultants, account access, secure login, VisaConsult India"
+        canonical="/login"
+      />
 
-      <div className="relative min-h-screen pt-20">
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            {/* Left Side - Brand & Features */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+      <div className="relative min-h-screen pt-24">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-center">
+            <div className="w-full max-w-lg">
+              {/* Header Section */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Trusted by 125,000+ Users
                 </div>
-
-                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                   Welcome to
                   <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     VisaConsult India
                   </span>
                 </h1>
-
-                <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
+                <p className="text-lg text-gray-600 max-w-md mx-auto">
                   Connect with India's most trusted visa consultants and
-                  immigration experts. Get your visa approved faster with our
-                  verified professionals.
+                  immigration experts.
                 </p>
               </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl mb-3 mx-auto">
-                    <Building className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="text-2xl font-bold text-gray-900">8,500+</div>
-                  <div className="text-sm text-gray-600">
-                    Verified Consultants
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3 mx-auto">
-                    <Users className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div className="text-2xl font-bold text-gray-900">125K+</div>
-                  <div className="text-sm text-gray-600">Happy Customers</div>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-xl mb-3 mx-auto">
-                    <Star className="w-6 h-6 text-yellow-600" />
-                  </div>
-                  <div className="text-2xl font-bold text-gray-900">4.8/5</div>
-                  <div className="text-sm text-gray-600">Average Rating</div>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Why Choose Us?
-                </h3>
-                <div className="space-y-3">
-                  {[
-                    "Verified and licensed consultants",
-                    "Real reviews from actual customers",
-                    "Compare services and pricing",
-                    "Free consultation booking",
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Countries */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                <div className="flex items-center space-x-3 mb-4">
-                  <Globe className="w-5 h-5 text-blue-600" />
-                  <span className="font-semibold text-gray-900">
-                    Popular Destinations
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "USA",
-                    "Canada",
-                    "UK",
-                    "Australia",
-                    "Germany",
-                    "New Zealand",
-                  ].map((country) => (
-                    <span
-                      key={country}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-                    >
-                      {country}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side - Login Form */}
-            <div className="lg:pl-8">
-              <Card className="w-full max-w-md mx-auto shadow-2xl border-0 bg-white/80 backdrop-blur-xl">
+              {/* Login Form Card */}
+              <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-xl">
                 <div className="p-8">
                   {/* Demo Credentials */}
                   <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
@@ -281,19 +207,19 @@ export default function Login() {
                       Demo Credentials
                     </h4>
                     <div className="space-y-2 text-sm text-blue-800">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span>User:</span>
                         <code className="text-xs bg-blue-100 px-2 py-1 rounded">
                           user@demo.com / password123
                         </code>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span>Business:</span>
                         <code className="text-xs bg-blue-100 px-2 py-1 rounded">
                           business@demo.com / business123
                         </code>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span>Admin:</span>
                         <code className="text-xs bg-blue-100 px-2 py-1 rounded">
                           admin@demo.com / admin123
@@ -435,7 +361,7 @@ export default function Login() {
                               onCheckedChange={(checked) =>
                                 setLoginData((prev) => ({
                                   ...prev,
-                                  rememberMe: checked as boolean,
+                                  rememberMe: checked,
                                 }))
                               }
                             />
@@ -644,7 +570,7 @@ export default function Login() {
                             onCheckedChange={(checked) =>
                               setRegisterData((prev) => ({
                                 ...prev,
-                                agreeToTerms: checked as boolean,
+                                agreeToTerms: checked,
                               }))
                             }
                             className="mt-1"
@@ -691,6 +617,33 @@ export default function Login() {
                   </div>
                 </div>
               </Card>
+
+              {/* Feature highlights below the form */}
+              <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+                <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
+                  <Building className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                  <div className="text-sm font-semibold text-gray-900">
+                    8,500+
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Verified Consultants
+                  </div>
+                </div>
+                <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
+                  <Users className="w-6 h-6 text-green-600 mx-auto mb-2" />
+                  <div className="text-sm font-semibold text-gray-900">
+                    125K+
+                  </div>
+                  <div className="text-xs text-gray-600">Happy Customers</div>
+                </div>
+                <div className="p-4 bg-white/60 rounded-lg backdrop-blur-sm">
+                  <Star className="w-6 h-6 text-yellow-600 mx-auto mb-2" />
+                  <div className="text-sm font-semibold text-gray-900">
+                    4.8/5
+                  </div>
+                  <div className="text-xs text-gray-600">Average Rating</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

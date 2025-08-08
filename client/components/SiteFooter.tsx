@@ -1,15 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MapPin, Building, Mail, Phone, Globe } from "lucide-react";
 import {
   allCities,
   allIndianCities,
+  uaeCities,
   allCategories,
 } from "@/lib/all-categories";
 
 export function SiteFooter() {
-  // Get top cities for the footer
-  const topCities = allIndianCities.slice(0, 24);
+  const location = useLocation();
+  const isUAEPage = location.pathname.startsWith("/uae");
+
+  // Get top cities for the footer based on current page
+  const topCities = isUAEPage
+    ? uaeCities.slice(0, 12)
+    : allIndianCities.slice(0, 24);
   const categoryList = allCategories;
+  const websiteName = isUAEPage ? "VisaConsult UAE" : "VisaConsult India";
+  const country = isUAEPage ? "UAE" : "India";
+  const totalCities = isUAEPage ? uaeCities.length : allCities.length;
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -18,16 +27,29 @@ export function SiteFooter() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
+<<<<<<< HEAD
               <div className="text-2xl font-bold text-white">TheVisaBay</div>
               <div className="text-xs text-blue-400 font-medium">.com</div>
+=======
+              <div className="text-2xl font-bold text-white">VisaConsult</div>
+              <div className="text-xs text-blue-400 font-medium">
+                {country.toUpperCase()}
+              </div>
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
             </div>
             <p className="text-gray-400 mb-4 text-sm">
-              India's trusted platform for finding verified visa and immigration
-              consultants. Connect with expert consultants across{" "}
-              {allCities.length} cities and {categoryList.length} service
-              categories.
+              {country}'s trusted platform for finding verified visa and
+              immigration consultants. Connect with expert consultants across{" "}
+              {totalCities} cities and {categoryList.length} service categories.
             </p>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col space-y-3 mb-4">
+              <Link
+                to="/about"
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm">About Us</span>
+              </Link>
               <Link
                 to="/contact"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
@@ -36,11 +58,11 @@ export function SiteFooter() {
                 <span className="text-sm">Contact Us</span>
               </Link>
               <Link
-                to="/about"
+                to="/plans"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
-                <Globe className="w-4 h-4" />
-                <span className="text-sm">About</span>
+                <Building className="w-4 h-4" />
+                <span className="text-sm">Pricing Plans</span>
               </Link>
             </div>
           </div>
@@ -49,13 +71,17 @@ export function SiteFooter() {
           <div className="lg:col-span-1">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-blue-400" />
-              Top Cities
+              Top {isUAEPage ? "Emirates" : "Cities"}
             </h3>
             <div className="grid grid-cols-2 gap-1">
               {topCities.map((city) => (
                 <Link
                   key={city}
-                  to={`/business/${city.toLowerCase().replace(/\s+/g, "-")}`}
+                  to={
+                    isUAEPage
+                      ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}`
+                      : `/business/${city.toLowerCase().replace(/\s+/g, "-")}`
+                  }
                   className="text-sm text-gray-400 hover:text-white transition-colors py-1"
                 >
                   {city}
@@ -63,10 +89,10 @@ export function SiteFooter() {
               ))}
             </div>
             <Link
-              to="/all-cities-categories"
+              to={isUAEPage ? "/uae" : "/all-cities-categories"}
               className="inline-block mt-3 text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
-              View all {allCities.length} cities →
+              View all {totalCities} {isUAEPage ? "Emirates" : "cities"} →
             </Link>
           </div>
 
@@ -95,13 +121,16 @@ export function SiteFooter() {
               Popular Searches
             </h3>
             <div className="space-y-1">
-              {/* Generate popular combinations */}
-              {["Delhi", "Mumbai", "Bangalore", "Chennai"].map((city) => (
+              {/* Generate popular combinations based on current page */}
+              {(isUAEPage
+                ? ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"]
+                : ["Delhi", "Mumbai", "Bangalore", "Chennai"]
+              ).map((city) => (
                 <div key={city}>
                   {[
                     "immigration-consultants",
                     "visa-consultants",
-                    "study-abroad-consultant",
+                    "study-abroad-consultants",
                   ].map((categorySlug) => {
                     const category = categoryList.find(
                       (c) => c.slug === categorySlug,
@@ -109,7 +138,11 @@ export function SiteFooter() {
                     return category ? (
                       <Link
                         key={`${city}-${categorySlug}`}
-                        to={`/business/${city.toLowerCase()}/${categorySlug}`}
+                        to={
+                          isUAEPage
+                            ? `/uae/business/${city.toLowerCase().replace(/\s+/g, "-")}/${categorySlug}`
+                            : `/business/${city.toLowerCase()}/${categorySlug}`
+                        }
                         className="block text-sm text-gray-400 hover:text-white transition-colors py-1"
                       >
                         {category.name} in {city}
@@ -132,7 +165,11 @@ export function SiteFooter() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400">
+<<<<<<< HEAD
               <span>© 2024 TheVisaBay.com. All rights reserved.</span>
+=======
+              <span>© 2024 {websiteName}. All rights reserved.</span>
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
             </div>
             <div className="flex items-center space-x-6 text-sm">
               <Link
@@ -165,17 +202,22 @@ export function SiteFooter() {
           {/* SEO Text Block */}
           <div className="mt-6 text-xs text-gray-500 leading-relaxed">
             <p>
+<<<<<<< HEAD
               TheVisaBay.com is the leading platform connecting individuals with
               verified visa and immigration consultants across{" "}
               {allCities.length} major cities in India and UAE. Our
+=======
+              {websiteName} is the leading platform connecting individuals with
+              verified visa and immigration consultants across {totalCities}{" "}
+              major {isUAEPage ? "Emirates in UAE" : "cities in India"}. Our
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
               comprehensive directory includes specialists in{" "}
               {categoryList.length} service categories including immigration
               consulting, student visa services, work permit assistance, and
-              study abroad guidance. Whether you're looking for consultants in
-              metros like Delhi, Mumbai, Bangalore, and Chennai, or
-              international cities like Dubai and Abu Dhabi, our platform helps
-              you find trusted professionals for all your visa and immigration
-              needs.
+              study abroad guidance.{" "}
+              {isUAEPage
+                ? "Whether you're looking for consultants in Dubai, Abu Dhabi, Sharjah, or any other Emirates, our platform helps you find trusted professionals for all your visa and immigration needs."
+                : "Whether you're looking for consultants in metros like Delhi, Mumbai, Bangalore, and Chennai, or smaller cities across India, our platform helps you find trusted professionals for all your visa and immigration needs."}
             </p>
           </div>
         </div>

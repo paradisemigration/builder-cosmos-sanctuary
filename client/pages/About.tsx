@@ -20,9 +20,12 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { generateAboutMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function About() {
   useEffect(() => {
+<<<<<<< HEAD
     document.title =
       "About Us - TheVisaBay.com | India's Leading Visa Consultant Directory";
 
@@ -33,6 +36,15 @@ export default function About() {
         "Learn about TheVisaBay.com - India's most trusted platform connecting visa applicants with verified immigration consultants. Our mission, values, and commitment to your visa journey.",
       );
     }
+=======
+    const aboutPageMeta = generateAboutMeta();
+    setPageMeta(aboutPageMeta);
+
+    setSEOLinks({
+      canonical: "/about",
+      alternate: ["/about"],
+    });
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
   }, []);
 
   const stats = [
@@ -160,7 +172,7 @@ export default function About() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg">
-                  <Link to="/business">Find Consultants</Link>
+                  <Link to="/browse">Find Consultants</Link>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
                   <Link to="/plans">List Your Business</Link>
@@ -367,7 +379,7 @@ export default function About() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700" asChild>
-              <Link to="/business">Find Consultants</Link>
+              <Link to="/browse">Find Consultants</Link>
             </Button>
             <Button
               variant="outline"
@@ -387,6 +399,9 @@ export default function About() {
           <p>&copy; 2024 VisaConsult India. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Debug Page Info */}
+      <DebugPageInfo />
     </div>
   );
 }

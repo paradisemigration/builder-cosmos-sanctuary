@@ -45,17 +45,13 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { type Business } from "@/lib/data";
+import { Business } from "@/lib/data";
 import { toast } from "sonner";
 
 export default function BusinessProfile() {
   console.log("🔍 BusinessProfile component mounted!");
 
-  const { city, companyName, id } = useParams<{
-    city?: string;
-    companyName?: string;
-    id?: string;
-  }>();
+  const { city, companyName, id } = useParams();
   const navigate = useNavigate();
 
   // Also check for ID in query parameters
@@ -70,7 +66,7 @@ export default function BusinessProfile() {
     queryId,
     businessId,
   });
-  const [business, setBusiness] = useState<Business | null>(null);
+  const [business, setBusiness] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -88,7 +84,7 @@ export default function BusinessProfile() {
       const result = await response.json();
 
       if (result.success) {
-        const businesses = (result.businesses || []).map((business: any) => ({
+        const businesses = (result.businesses || []).map((business) => ({
           ...business,
           id:
             business.googlePlaceId || business.id || Date.now() + Math.random(),
@@ -105,13 +101,13 @@ export default function BusinessProfile() {
           isVerified: business.isVerified || true,
         }));
 
-        let foundBusiness: Business | null = null;
+        let foundBusiness = null;
 
         // Handle ID from URL params or query parameter (most reliable)
         if (businessId) {
           foundBusiness =
             businesses.find(
-              (b: any) => b.id === businessId || b.googlePlaceId === businessId,
+              (b) => b.id === businessId || b.googlePlaceId === businessId,
             ) || null;
         }
         // Handle new URL structure (/:city/:companyName)
@@ -121,7 +117,7 @@ export default function BusinessProfile() {
 
           // First try exact match
           foundBusiness = businesses.find(
-            (b: any) =>
+            (b) =>
               b.name.toLowerCase() === searchName.toLowerCase() &&
               (b.city.toLowerCase() === searchCity.toLowerCase() ||
                 b.scrapedCity?.toLowerCase() === searchCity.toLowerCase()),
@@ -130,7 +126,7 @@ export default function BusinessProfile() {
           // If no exact match, try partial match
           if (!foundBusiness) {
             foundBusiness = businesses.find(
-              (b: any) =>
+              (b) =>
                 b.name.toLowerCase().includes(searchName.toLowerCase()) &&
                 (b.city.toLowerCase().includes(searchCity.toLowerCase()) ||
                   b.scrapedCity
@@ -198,7 +194,7 @@ export default function BusinessProfile() {
               The business you're looking for doesn't exist or has been moved.
             </p>
             <Button asChild>
-              <Link to="/business">Browse All Consultants</Link>
+              <Link to="/browse">Browse All Consultants</Link>
             </Button>
           </div>
         </div>
@@ -211,7 +207,7 @@ export default function BusinessProfile() {
       ? business.gallery
       : [business.coverImage || "/api/placeholder/800/400"];
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e) => {
     e.preventDefault();
     toast.success("Message sent successfully! We'll get back to you soon.");
     setShowContactForm(false);
@@ -245,7 +241,7 @@ export default function BusinessProfile() {
     Sunday: "Closed",
   };
 
-  const generateSlug = (name: string) => {
+  const generateSlug = (name) => {
     return name
       .toLowerCase()
       .replace(/\s+/g, "-")

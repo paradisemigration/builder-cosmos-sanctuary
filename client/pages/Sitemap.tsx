@@ -41,7 +41,7 @@ export default function Sitemap() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState("grid");
 
   // Generate sitemap URLs for SEO
   const sitemapURLs = useMemo(() => generateSitemapURLs(), []);

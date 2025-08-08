@@ -65,7 +65,7 @@ export default function ScamReview() {
                 The scam report you're looking for doesn't exist or hasn't been
                 published yet.
               </p>
-              <Link to="/business">
+              <Link to="/browse">
                 <Button className="bg-gradient-to-r from-orange-600 to-purple-600 hover:from-orange-700 hover:to-purple-700 text-white">
                   <ArrowLeft className="w-4 w-4 mr-2" />
                   Back to Browse
@@ -106,7 +106,7 @@ export default function ScamReview() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}
           <div className="mb-6">
-            <Link to="/business">
+            <Link to="/browse">
               <Button
                 variant="outline"
                 className="border-orange-300 text-orange-600 hover:bg-orange-50"
@@ -269,7 +269,7 @@ export default function ScamReview() {
                   Browse verified and trusted immigration service providers in
                   your area.
                 </p>
-                <Link to="/business">
+                <Link to="/browse">
                   <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
                     <Shield className="w-4 h-4 mr-2" />
                     Browse Trusted Companies

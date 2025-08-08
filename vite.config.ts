@@ -9,13 +9,14 @@ export default defineConfig({
     port: 8080,
     proxy: {
       "/api": {
-        target: "http://localhost:3001",
+        target: "http://localhost:3011",
         changeOrigin: true,
       },
     },
   },
   build: {
-    outDir: "dist/spa",
+    outDir: "dist",
+    minify: false,
   },
   plugins: [react()],
   resolve: {
@@ -23,5 +24,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
     },
+  },
+  esbuild: {
+    target: "es2020",
+    legalComments: "none",
+    logOverride: { "this-is-undefined-in-esm": "silent" },
+    loader: "tsx",
+    jsx: "automatic",
   },
 });

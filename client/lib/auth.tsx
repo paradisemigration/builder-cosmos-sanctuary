@@ -13,16 +13,6 @@ export interface User {
   providerId?: string; // OAuth provider user ID
 }
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  loginWithGoogle: () => Promise<boolean>;
-  loginWithFacebook: () => Promise<boolean>;
-  logout: () => void;
-  isLoading: boolean;
-}
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Demo users - In production, this would be handled by a backend
@@ -32,14 +22,14 @@ const DEMO_USERS = [
     name: "John Doe",
     email: "user@demo.com",
     password: "password123",
-    role: "user" as const,
+    role: "user",
   },
   {
     id: "2",
     name: "Business Owner",
     email: "business@demo.com",
     password: "business123",
-    role: "business_owner" as const,
+    role: "business_owner",
     businessId: "1",
   },
   {
@@ -47,12 +37,12 @@ const DEMO_USERS = [
     name: "Admin User",
     email: "admin@demo.com",
     password: "admin123",
-    role: "admin" as const,
+    role: "admin",
   },
 ];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

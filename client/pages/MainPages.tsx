@@ -317,7 +317,7 @@ export default function MainPages() {
 
                   {/* Quick Actions */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <Link to="/business" className="group">
+                    <Link to="/browse" className="group">
                       <Card className="hover:shadow-lg transition-all duration-200 border-2 hover:border-green-300 bg-gradient-to-br from-green-50 to-green-100">
                         <CardContent className="p-6 text-center">
                           <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">

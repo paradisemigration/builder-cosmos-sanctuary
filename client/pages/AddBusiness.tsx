@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { SEOHead } from "@/components/SEOHead";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,35 +39,27 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { businessCategories, indianCities, sampleBusinesses } from "@/lib/data";
 
-interface BusinessFormData {
-  name: string;
-  category: string;
-  description: string;
-  services: string[];
-  address: string;
-  zone: string;
-  phone: string;
-  whatsapp: string;
-  email: string;
-  website: string;
-  licenseNo: string;
-  ownerName: string;
-  ownerEmail: string;
-  ownerPhone: string;
-}
-
 export default function AddBusiness() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
-  const [visibleSections, setVisibleSections] = useState<string[]>([]);
+  const [visibleSections, setVisibleSections] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const observerRef = useRef(null);
+
+  // Detect if this is UAE or India based on URL or referrer
+  const isUAE =
+    location.pathname.includes("/uae") ||
+    document.referrer.includes("/uae") ||
+    location.search.includes("country=uae");
+  const country = isUAE ? "UAE" : "India";
+  const countryFlag = isUAE ? "🇦🇪" : "🇮🇳";
 
   // Get selected plan from URL parameters
   const selectedPlan = searchParams.get("plan") || "free";
   const selectedBilling = searchParams.get("billing") || "monthly";
 
-  const [formData, setFormData] = useState<BusinessFormData>({
+  const [formData, setFormData] = useState({
     name: "",
     category: "",
     description: "",
@@ -82,18 +76,16 @@ export default function AddBusiness() {
     ownerPhone: "",
   });
 
-  const [logo, setLogo] = useState<File | null>(null);
-  const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<File[]>([]);
+  const [logo, setLogo] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
   const [newService, setNewService] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   // Business name search state
   const [businessSearchQuery, setBusinessSearchQuery] = useState("");
   const [showBusinessSuggestions, setShowBusinessSuggestions] = useState(false);
-  const [businessSuggestions, setBusinessSuggestions] = useState<
-    typeof sampleBusinesses
-  >([]);
+  const [businessSuggestions, setBusinessSuggestions] = useState([]);
   const [businessNameVerified, setBusinessNameVerified] = useState(false);
   const [existingBusiness, setExistingBusiness] = useState<any>(null);
 
@@ -130,12 +122,12 @@ export default function AddBusiness() {
     };
   }, []);
 
-  const updateFormData = (field: keyof BusinessFormData, value: string) => {
+  const updateFormData = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   // Business name search handlers
-  const handleBusinessSearchChange = (value: string) => {
+  const handleBusinessSearchChange = (value) => {
     setBusinessSearchQuery(value);
     setBusinessNameVerified(false);
     setExistingBusiness(null);
@@ -155,7 +147,7 @@ export default function AddBusiness() {
     }
   };
 
-  const handleBusinessSelection = (business: any) => {
+  const handleBusinessSelection = (business) => {
     setBusinessSearchQuery(business.name);
     setExistingBusiness(business);
     setShowBusinessSuggestions(false);
@@ -191,14 +183,14 @@ export default function AddBusiness() {
     }
   };
 
-  const removeService = (service: string) => {
+  const removeService = (service) => {
     setFormData((prev) => ({
       ...prev,
       services: prev.services.filter((s) => s !== service),
     }));
   };
 
-  const handleFileUpload = (file: File, type: "logo" | "cover" | "gallery") => {
+  const handleFileUpload = (file, type) => {
     if (type === "logo") {
       setLogo(file);
     } else if (type === "cover") {
@@ -208,7 +200,7 @@ export default function AddBusiness() {
     }
   };
 
-  const removeGalleryImage = (index: number) => {
+  const removeGalleryImage = (index) => {
     setGalleryImages((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -281,6 +273,13 @@ export default function AddBusiness() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
+      <SEOHead
+        title={`List Your Business - ${country}'s #1 Immigration Platform | Get More Clients`}
+        description={`Join ${country}'s leading immigration and visa consultancy directory. Get more clients, increase visibility, and grow your business with verified listings.`}
+        keywords={`list business ${country.toLowerCase()}, immigration consultancy directory, visa consultant listing, business advertising ${country.toLowerCase()}`}
+        canonical="/add-business"
+      />
+
       {/* Navigation */}
       <Navigation />
 
@@ -332,7 +331,7 @@ export default function AddBusiness() {
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
               <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
               <span className="text-white/90 font-medium">
-                Join 50+ Trusted Businesses
+                {countryFlag} Join {isUAE ? "50+" : "500+"} Trusted Businesses
               </span>
               <Award className="w-5 h-5 text-green-400" />
             </div>
@@ -343,12 +342,12 @@ export default function AddBusiness() {
                 Business
               </span>
               <br />
-              on Dubai's #1 Platform
+              on {country}'s #1 Platform
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-              �� Join Dubai's most trusted directory of immigration and visa
-              services. Reach thousands of customers and grow your business with
-              verified credibility.
+              {countryFlag} Join {country}'s most trusted directory of
+              immigration and visa services. Reach thousands of customers and
+              grow your business with verified credibility.
             </p>
 
             {/* Stats Row */}
@@ -398,7 +397,7 @@ export default function AddBusiness() {
                 variant="outline"
                 className="px-8 py-4 text-lg font-semibold rounded-2xl border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
               >
-                📞 Get Help
+                ���� Get Help
               </Button>
             </div>
           </div>
@@ -923,19 +922,19 @@ export default function AddBusiness() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                       {
-                        type: "logo" as const,
+                        type: "logo",
                         title: "Business Logo",
                         icon: <Building className="w-8 h-8" />,
                         current: logo,
                       },
                       {
-                        type: "cover" as const,
+                        type: "cover",
                         title: "Cover Image",
                         icon: <Camera className="w-8 h-8" />,
                         current: coverImage,
                       },
                       {
-                        type: "gallery" as const,
+                        type: "gallery",
                         title: "Gallery Images",
                         icon: <Upload className="w-8 h-8" />,
                         current: galleryImages.length > 0,
@@ -986,7 +985,7 @@ export default function AddBusiness() {
                                 className="rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50"
                               >
                                 <span>
-                                  📁 Choose{" "}
+                                  ���� Choose{" "}
                                   {upload.type === "gallery" ? "Files" : "File"}
                                 </span>
                               </Button>

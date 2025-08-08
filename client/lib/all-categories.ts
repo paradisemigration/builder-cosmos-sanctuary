@@ -2,8 +2,8 @@
 export const allCategories = [
   // Core Visa & Immigration Services (12)
   {
-    slug: "visa-consultant",
-    name: "Visa Consultant",
+    slug: "visa-consultants",
+    name: "Visa consultants",
     description: "General visa consultation and application services",
   },
   {
@@ -18,7 +18,7 @@ export const allCategories = [
   },
   {
     slug: "immigration-consultants",
-    name: "Immigration Consultants",
+    name: "Immigration consultants",
     description: "Professional immigration advisory services",
   },
   {
@@ -28,7 +28,7 @@ export const allCategories = [
   },
   {
     slug: "work-visa-consultants",
-    name: "Work Visa Consultants",
+    name: "Work visa consultants",
     description: "Employment visa specialists and work permit services",
   },
   {
@@ -52,20 +52,20 @@ export const allCategories = [
     description: "European work visa and employment permits",
   },
   {
-    slug: "study-abroad-consultant",
-    name: "Study Abroad Consultant",
+    slug: "study-abroad-consultants",
+    name: "Study abroad consultants",
     description: "International education and student visa guidance",
   },
   {
     slug: "education-consultants",
-    name: "Education Consultants",
+    name: "Education consultants",
     description: "Educational advisory and admission services",
   },
 
   // Specialized Visa Services (12)
   {
     slug: "student-visa-consultants",
-    name: "Student Visa Consultants",
+    name: "Student visa consultants",
     description: "Student visa applications and educational permits",
   },
   {
@@ -209,7 +209,7 @@ export const allCategories = [
   },
   {
     slug: "europe-work-visa-consultants",
-    name: "Europe Work Visa Consultants",
+    name: "Europe work visa consultants",
     description: "European work visa and employment specialists",
   },
 
@@ -225,13 +225,13 @@ export const allCategories = [
     description: "Canada permanent residence visa specialists",
   },
   {
-    slug: "canada-work-permit-consultant",
-    name: "Canada Work Permit Consultant",
+    slug: "canada-work-permit-consultants",
+    name: "Canada work permit consultants",
     description: "Canada work permit and employment visa services",
   },
   {
-    slug: "canada-express-entry-consultant",
-    name: "Canada Express Entry Consultant",
+    slug: "canada-express-entry-consultants",
+    name: "Canada express entry consultants",
     description: "Canada Express Entry immigration program specialists",
   },
   {
@@ -240,8 +240,8 @@ export const allCategories = [
     description: "Top-rated Canada immigration agencies and services",
   },
   {
-    slug: "canada-student-visa-consultant",
-    name: "Canada Student Visa Consultant",
+    slug: "canada-student-visa-consultants",
+    name: "Canada student visa consultants",
     description: "Canada student visa and study permit services",
   },
   {
@@ -251,12 +251,12 @@ export const allCategories = [
   },
   {
     slug: "usa-student-visa-consultants",
-    name: "USA Student Visa Consultants",
+    name: "USA student visa consultants",
     description: "US F1 and student visa specialists",
   },
   {
     slug: "us-immigration-consultants",
-    name: "US Immigration Consultants",
+    name: "US immigration consultants",
     description: "United States immigration and visa services",
   },
   {
@@ -266,22 +266,22 @@ export const allCategories = [
   },
   {
     slug: "uk-immigration-consultants",
-    name: "UK Immigration Consultants",
+    name: "UK immigration consultants",
     description: "United Kingdom immigration and visa services",
   },
   {
     slug: "uk-work-visa-consultants",
-    name: "UK Work Visa Consultants",
+    name: "UK work visa consultants",
     description: "UK work visa and employment permit specialists",
   },
   {
     slug: "uk-student-visa-consultants",
-    name: "UK Student Visa Consultants",
+    name: "UK student visa consultants",
     description: "UK student visa and Tier 4 visa services",
   },
   {
-    slug: "australia-pr-consultant",
-    name: "Australia PR Consultant",
+    slug: "australia-pr-consultants",
+    name: "Australia PR consultants",
     description: "Australia permanent residence and skilled migration",
   },
   {
@@ -296,7 +296,7 @@ export const allCategories = [
   },
   {
     slug: "australia-work-visa-consultants",
-    name: "Australia Work Visa Consultants",
+    name: "Australia work visa consultants",
     description: "Australia work visa and employment specialists",
   },
 

@@ -1,6 +1,12 @@
 // API client for backend communication
+import { Business } from "@/lib/data";
+import {
+  getBusinesses as getClientBusinesses,
+  getBusinessStats as getClientStats,
+  getFeaturedBusinesses as getClientFeatured,
+} from "@/lib/business-data";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 class APIClient {
   private baseURL: string;
@@ -9,29 +15,62 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  // Generic request method
+  // Generic request method using XMLHttpRequest to bypass FullStory interference
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
 
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      ...options,
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const method = options.method || "GET";
+
+      xhr.open(method, url);
+
+      // Set headers
+      xhr.setRequestHeader("Content-Type", "application/json");
+      if (options.headers) {
+        Object.entries(options.headers).forEach(([key, value]) => {
+          xhr.setRequestHeader(key, value as string);
+        });
+      }
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const response = JSON.parse(xhr.responseText);
+              resolve(response);
+            } catch (error) {
+              reject(new Error("Invalid JSON response"));
+            }
+          } else if (xhr.status === 0) {
+            // HTTP 0 means no backend server - this is expected on frontend-only deployments
+            reject(new Error("No backend server available"));
+          } else {
+            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+          }
+        }
+      };
+
+      xhr.onerror = function () {
+        reject(new Error("Network error - no backend server"));
+      };
+
+      xhr.ontimeout = function () {
+        reject(new Error("Request timeout"));
+      };
+
+      xhr.timeout = 10000; // 10 second timeout
+
+      // Send request
+      if (options.body) {
+        xhr.send(options.body as string);
+      } else {
+        xhr.send();
+      }
     });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        message: "Request failed",
-      }));
-      throw new Error(error.message || `HTTP ${response.status}`);
-    }
-
-    return response.json();
   }
 
   // Upload single image
@@ -40,7 +79,10 @@ class APIClient {
     formData.append("image", file);
     if (folder) formData.append("folder", folder);
 
-    const response = await fetch(`${this.baseURL}/api/upload/single`, {
+    const url = this.baseURL
+      ? `${this.baseURL}/api/upload/single`
+      : `/api/upload/single`;
+    const response = await fetch(url, {
       method: "POST",
       body: formData,
     });
@@ -61,7 +103,10 @@ class APIClient {
     files.forEach((file) => formData.append("images", file));
     if (folder) formData.append("folder", folder);
 
-    const response = await fetch(`${this.baseURL}/api/upload/multiple`, {
+    const url = this.baseURL
+      ? `${this.baseURL}/api/upload/multiple`
+      : `/api/upload/multiple`;
+    const response = await fetch(url, {
       method: "POST",
       body: formData,
     });
@@ -98,58 +143,101 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const response = await fetch(`${this.baseURL}/api/businesses`, {
+    const url = this.baseURL
+      ? `${this.baseURL}/api/businesses`
+      : `/api/businesses`;
+    const response = await fetch(url, {
       method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        message: "Failed to create business",
+        message: "Creation failed",
       }));
-      throw new Error(error.message || "Failed to create business");
+      throw new Error(error.message || "Creation failed");
     }
 
     return response.json();
   }
 
   // Get businesses with pagination and filters
-  async getBusinesses(
-    params: {
-      page?: number;
-      limit?: number;
-      city?: string;
-      category?: string;
-      search?: string;
-    } = {},
-  ) {
-    const queryParams = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined) {
-        queryParams.append(key, value.toString());
+  async getBusinesses(params = {}) {
+    console.log(
+      "🎯 Fetching businesses - trying backend first, falling back to client data",
+    );
+    console.log("📊 Request params:", params);
+
+    // Try backend first
+    try {
+      const queryParams = new URLSearchParams();
+      if (params.page) queryParams.set("page", params.page.toString());
+      if (params.limit) queryParams.set("limit", params.limit.toString());
+      if (params.city) queryParams.set("city", params.city);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.search) queryParams.set("search", params.search);
+
+      const apiUrl = `/api/scraped-businesses?${queryParams}`;
+
+      const response = await this.request(apiUrl);
+
+      // If backend returns good data, use it
+      if (response.success && response.data && response.data.length > 0) {
+        console.log("✅ Using backend data:", {
+          businessCount: response.data.length,
+          source: response.source,
+        });
+
+        return {
+          success: true,
+          data: response.data,
+          pagination: response.pagination || {
+            page: params.page || 1,
+            totalPages: 1,
+            totalRecords: response.data.length,
+            hasNext: false,
+            hasPrev: false,
+          },
+        };
       }
+    } catch (error) {
+      console.log(
+        "⚠️ Backend unavailable, using client-side data:",
+        error.message,
+      );
+    }
+
+    // Use client-side data as reliable fallback
+    console.log("🎯 Using client-side business data (1500+ businesses)");
+    const result = getClientBusinesses(params);
+
+    console.log("✅ Client-side data loaded:", {
+      businessCount: result.data.length,
+      totalRecords: result.pagination.totalRecords,
+      source: result.source,
     });
 
-    const endpoint = `/api/scraped-businesses${queryParams.toString() ? `?${queryParams}` : ""}`;
-    return this.request<{
-      success: boolean;
-      data: any[];
-      pagination: {
-        current: number;
-        total: number;
-        totalRecords: number;
-        hasNext: boolean;
-        hasPrev: boolean;
-      };
-    }>(endpoint);
+    return result;
   }
 
   // Get single business
-  async getBusiness(id: string) {
-    return this.request<{
-      success: boolean;
-      data: any;
-    }>(`/api/businesses/${id}`);
+  async getBusinessById(id: string) {
+    try {
+      return await this.request<{
+        success: boolean;
+        data: Business;
+      }>(`/api/businesses/${id}`);
+    } catch (error) {
+      // Fallback to sample business
+      const sampleBusiness = sampleBusinesses.find((b) => b.id === id);
+      if (sampleBusiness) {
+        return {
+          success: true,
+          data: sampleBusiness,
+        };
+      }
+      throw error;
+    }
   }
 
   // Update business
@@ -175,16 +263,19 @@ class APIClient {
       files.gallery.forEach((file) => formData.append("gallery", file));
     }
 
-    const response = await fetch(`${this.baseURL}/api/businesses/${id}`, {
+    const url = this.baseURL
+      ? `${this.baseURL}/api/businesses/${id}`
+      : `/api/businesses/${id}`;
+    const response = await fetch(url, {
       method: "PUT",
       body: formData,
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        message: "Failed to update business",
+        message: "Update failed",
       }));
-      throw new Error(error.message || "Failed to update business");
+      throw new Error(error.message || "Update failed");
     }
 
     return response.json();
@@ -218,35 +309,87 @@ class APIClient {
       timestamp: string;
     }>("/api/health");
   }
+
+  // Get featured businesses
+  async getFeaturedBusinesses() {
+    console.log("⭐ Fetching featured businesses");
+    try {
+      const response = await this.request("/api/businesses/featured");
+      if (response.success && response.data && response.data.length > 0) {
+        console.log("✅ Using backend featured businesses");
+        return response;
+      }
+    } catch (error) {
+      console.log(
+        "⚠️ Backend featured businesses unavailable, using client-side data",
+      );
+    }
+
+    // Use client-side featured businesses
+    const featured = getClientFeatured();
+    console.log(
+      "✅ Client-side featured businesses loaded:",
+      featured.data.length,
+    );
+    return featured;
+  }
+
+  // Get business statistics
+  async getBusinessStats() {
+    console.log("📊 Fetching business statistics");
+    try {
+      const response = await this.request("/api/businesses/stats");
+      if (response.success && response.data) {
+        console.log("✅ Using backend stats");
+        return response;
+      }
+    } catch (error) {
+      console.log("⚠️ Backend stats unavailable, using client-side stats");
+    }
+
+    // Use client-side stats
+    const stats = getClientStats();
+    console.log("✅ Client-side stats loaded:", stats.data);
+    return stats;
+  }
 }
 
-// Export singleton instance
-export const apiClient = new APIClient();
+// Create global instance
+const apiClient = new APIClient();
+
+export default apiClient;
+export { apiClient }; // Named export
 export { apiClient as BusinessAPI }; // Backward compatibility alias
 
 // Export types
+export interface BusinessFilters {
+  search?: string;
+  category?: string;
+  location?: string;
+  city?: string;
+  verified?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: "rating" | "name" | "date" | "reviews";
+  sortOrder?: "asc" | "desc";
+}
+
 export interface UploadResponse {
   success: boolean;
   data:
     | {
         fileName: string;
         publicUrl: string;
+        originalName: string;
         size: number;
-        mimetype: string;
       }
     | {
-        fileName: string;
-        publicUrl: string;
-        size: number;
-        mimetype: string;
-      }[];
-  message: string;
+        files: {
+          fileName: string;
+          publicUrl: string;
+          originalName: string;
+          size: number;
+        }[];
+      };
+  message?: string;
 }
-
-export interface BusinessResponse {
-  success: boolean;
-  data: any;
-  message: string;
-}
-
-export default apiClient;

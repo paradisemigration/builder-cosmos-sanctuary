@@ -1,21 +1,31 @@
 import React, { useEffect } from "react";
 import "./global.css";
+
+// Import React Router properly
 import {
   BrowserRouter,
   Routes,
   Route,
-  Link,
   useLocation,
+  Navigate,
 } from "react-router-dom";
-import { setupSEOCrawling } from "@/lib/sitemap-generator";
 
-// Add required UI providers
+// Add required imports
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "@/lib/auth";
 
-const queryClient = new QueryClient();
+// Component to handle scroll to top on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 // Import all original pages
 import Index from "./pages/Index";
@@ -32,7 +42,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import CantFindBusiness from "./pages/CantFindBusiness";
 import CategoryLocationPage from "./pages/CategoryLocationPage";
-import CityBusinessListing from "./pages/CityBusinessListing";
+import CityBusinessListing from "./pages/CityBusinessListingNew";
 import CityCategory from "./pages/CityCategory";
 import CityRouteHandler from "./components/CityRouteHandler";
 import AdminBulkUpload from "./pages/AdminBulkUpload";
@@ -45,19 +55,16 @@ import AllCitiesCategories from "./pages/AllCitiesCategories";
 import AllCategories from "./pages/AllCategories";
 import MainPages from "./pages/MainPages";
 import CategoryPage from "./pages/CategoryPage";
+import UAE from "./pages/UAE";
 import { SiteFooter } from "./components/SiteFooter";
+import { Navigation } from "./components/Navigation";
 import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 
-// Simple ProtectedRoute component to avoid auth issues
-function ProtectedRoute({
-  children,
-  requireRole,
-}: {
-  children: React.ReactNode;
-  requireRole?: string;
-}) {
+// Simple components to avoid complex dependencies
+function ProtectedRoute({ children }) {
   return <>{children}</>;
 }
+<<<<<<< HEAD
 // All original functionality restored
 
 // Simple Navigation Component
@@ -157,142 +164,92 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }
 }
+=======
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 
 const App = () => {
-  // Initialize SEO crawling setup
-  useEffect(() => {
-    setupSEOCrawling();
-  }, []);
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <HelmetProvider>
       <AuthProvider>
         <TooltipProvider>
           <Toaster />
-          <Sonner />
           <BrowserRouter>
-            <SimpleNavigation />
+            <ScrollToTop />
+            <Navigation />
             <Routes>
-              {/* Public Routes */}
               <Route path="/" element={<Index />} />
-              <Route path="/business" element={<Browse />} />
-              <Route path="/list-business" element={<ListBusiness />} />
-              <Route path="/plans" element={<ListingPlans />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route
+                path="/business"
+                element={<Navigate to="/browse" replace />}
+              />
+              <Route path="/business/:id" element={<BusinessProfile />} />
               <Route path="/add-business" element={<AddBusiness />} />
               <Route path="/login" element={<Login />} />
-
-              {/* City-specific business listing routes */}
-              <Route path="/business/:city" element={<CityBusinessListing />} />
-
-              {/* Legacy business profile route for backward compatibility */}
-              <Route path="/business/:id" element={<BusinessProfile />} />
-
-              {/* Smart route handler for categories vs business profiles */}
-              <Route
-                path="/business/:city/:category"
-                element={<CityRouteHandler />}
-              />
-
-              {/* SEO-friendly category and location routes */}
-              <Route path="/category/:category" element={<CategoryPage />} />
-              <Route
-                path="/location/:location"
-                element={<CategoryLocationPage />}
-              />
-
-              {/* Protected Routes - Require Authentication */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute requireRole="business_owner">
-                    <BusinessDashboard />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Admin Only Routes */}
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute requireRole="admin">
+                  <ProtectedRoute>
                     <AdminPanel />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/bulk-upload"
-                element={
-                  <ProtectedRoute requireRole="admin">
-                    <AdminBulkUpload />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/business/:id/edit"
-                element={
-                  <ProtectedRoute requireRole="admin">
-                    <EditBusiness />
                   </ProtectedRoute>
                 }
               />
               <Route
                 path="/admin/status"
                 element={
-                  <ProtectedRoute requireRole="admin">
+                  <ProtectedRoute>
                     <AdminStatus />
                   </ProtectedRoute>
                 }
               />
-
-              {/* Business Owner Edit Route */}
               <Route
-                path="/business/:id/edit"
+                path="/admin/bulk-upload"
                 element={
-                  <ProtectedRoute requireRole="business_owner">
-                    <EditBusiness />
+                  <ProtectedRoute>
+                    <AdminBulkUpload />
                   </ProtectedRoute>
                 }
               />
-
-              {/* Static Pages */}
+              <Route path="/business/:id/edit" element={<EditBusiness />} />
+              <Route path="/dashboard" element={<BusinessDashboard />} />
+              <Route path="/plans" element={<ListingPlans />} />
+              <Route path="/list-business" element={<ListBusiness />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route
                 path="/cant-find-business"
                 element={<CantFindBusiness />}
               />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-
-              {/* Browse All Pages */}
-              <Route path="/sitemap" element={<Sitemap />} />
+              <Route path="/all-categories" element={<AllCategories />} />
               <Route
                 path="/all-cities-categories"
                 element={<AllCitiesCategories />}
               />
-              <Route path="/all-categories" element={<AllCategories />} />
               <Route path="/main-pages" element={<MainPages />} />
+              <Route path="/sitemap" element={<Sitemap />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/uae" element={<UAE />} />
               <Route
-                path="/help"
-                element={
-                  <div className="min-h-screen bg-gray-50 pt-24 px-4">
-                    <div className="container mx-auto max-w-4xl">
-                      <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                        Help Center
-                      </h1>
-                      <div className="bg-white rounded-lg p-8 shadow-sm">
-                        <p className="text-lg text-gray-700 mb-4">
-                          Find answers to frequently asked questions and get
-                          support.
-                        </p>
-                        <p className="text-gray-600">Coming soon...</p>
-                      </div>
-                    </div>
-                  </div>
-                }
+                path="/uae/:city"
+                element={<CityRouteHandler country="uae" />}
               />
-
-              {/* Catch-all route - must be last */}
+              <Route
+                path="/uae/:city/:category"
+                element={<CityRouteHandler country="uae" />}
+              />
+              <Route
+                path="/business/:city"
+                element={<CityRouteHandler country="india" />}
+              />
+              <Route
+                path="/business/:city/:category"
+                element={<CityRouteHandler country="india" />}
+              />
+              <Route
+                path="/category/:category"
+                element={<CategoryLocationPage />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <SiteFooter />
@@ -300,7 +257,7 @@ const App = () => {
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
-    </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+<<<<<<< HEAD
 interface GlobalDebugInfo {
   currentPage: string;
   timestamp: string;
@@ -37,9 +38,11 @@ interface GlobalDebugInfo {
   }>;
 }
 
+=======
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<GlobalDebugInfo>({
+  const [debugInfo, setDebugInfo] = useState({
     currentPage: "",
     timestamp: "",
     userAgent: "",
@@ -300,6 +303,7 @@ export function GlobalDebugPopup() {
   return (
     <>
       {/* Always visible test indicator */}
+<<<<<<< HEAD
       <div
         className="fixed top-2 right-2 bg-green-500 text-white px-3 py-2 text-xs rounded shadow-lg z-[9999] max-w-lg"
         style={{
@@ -331,6 +335,8 @@ export function GlobalDebugPopup() {
           META: {debugInfo.metaData.allMetaTags.length} tags
         </div>
       </div>
+=======
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 
       {!isOpen ? (
         <button

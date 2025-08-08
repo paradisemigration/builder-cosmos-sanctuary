@@ -1,35 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { BusinessAPI, BusinessFilters } from "@/lib/api";
+import { BusinessAPI } from "@/lib/api";
 import { Business } from "@/lib/data";
 
-interface UseBusinessDataResult {
-  businesses: Business[];
-  loading: boolean;
-  error: string | null;
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  } | null;
-  refetch: () => Promise<void>;
-  loadMore: () => Promise<void>;
-  hasMore: boolean;
-}
-
-export function useBusinessData(
-  filters: BusinessFilters = {},
-  autoFetch: boolean = true,
-): UseBusinessDataResult {
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+export function useBusinessData(filters = {}, autoFetch = true) {
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<{
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  } | null>(null);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState(null);
 
   const fetchBusinesses = useCallback(
     async (resetData: boolean = true) => {
@@ -38,6 +15,14 @@ export function useBusinessData(
         setError(null);
 
         const response = await BusinessAPI.getBusinesses(filters);
+
+        console.log("🔍 useBusinessData API Response:", {
+          success: response.success,
+          dataCount: response.data?.length,
+          totalRecords: response.pagination?.totalRecords,
+          hostname: window.location.hostname,
+          filters: filters,
+        });
 
         if (response.success) {
           if (resetData) {
@@ -104,9 +89,9 @@ export function useBusinessData(
 
 // Hook for featured businesses
 export function useFeaturedBusinesses() {
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const fetchFeatured = useCallback(async () => {
     try {
@@ -180,9 +165,9 @@ export function useBusiness(id: string) {
 
 // Hook for business statistics
 export function useBusinessStats() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const fetchStats = useCallback(async () => {
     try {

@@ -20,32 +20,11 @@ import {
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 
-interface FormData {
-  companyName: string;
-  location: string;
-  contactNumber: string;
-  emailId: string;
-  scamDescription: string;
-  paymentReceipt: File | null;
-  agreement: File | null;
-  companyPicture: File | null;
-}
-
-interface FormErrors {
-  companyName?: string;
-  location?: string;
-  contactNumber?: string;
-  emailId?: string;
-  scamDescription?: string;
-  paymentReceipt?: string;
-  agreement?: string;
-}
-
 export default function ReportScam() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     companyName: "",
     location: "",
     contactNumber: "",
@@ -55,12 +34,12 @@ export default function ReportScam() {
     agreement: null,
     companyPicture: null,
   });
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState({});
   const [wordCount, setWordCount] = useState(0);
 
-  const paymentReceiptRef = useRef<HTMLInputElement>(null);
-  const agreementRef = useRef<HTMLInputElement>(null);
-  const companyPictureRef = useRef<HTMLInputElement>(null);
+  const paymentReceiptRef = useRef(null);
+  const agreementRef = useRef(null);
+  const companyPictureRef = useRef(null);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -103,7 +82,7 @@ export default function ReportScam() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     if (field === "scamDescription") {
@@ -163,7 +142,7 @@ export default function ReportScam() {
     return `reviews/${formatForUrl(location)}/${formatForUrl(companyName)}`;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;

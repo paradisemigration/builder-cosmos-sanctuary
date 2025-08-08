@@ -26,6 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DebugPageInfo } from "@/components/DebugPageInfo";
+import { SEOHead } from "@/components/SEOHead";
+import {
+  generateContactMeta,
+  setPageMeta,
+  setSEOLinks,
+} from "@/lib/meta-utils";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -40,6 +47,7 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
+<<<<<<< HEAD
     document.title = "Contact Us - TheVisaBay.com | Get Help & Support";
 
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -49,16 +57,25 @@ export default function Contact() {
         "Contact TheVisaBay.com for support, inquiries, or business partnerships. Get help finding visa consultants or listing your business. 24/7 customer support available.",
       );
     }
+=======
+    const contactPageMeta = generateContactMeta();
+    setPageMeta(contactPageMeta);
+
+    setSEOLinks({
+      canonical: "/contact",
+      alternate: ["/contact"],
+    });
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
   }, []);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -169,6 +186,12 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        title="Contact Us - VisaConsult India | Get Expert Immigration Help"
+        description="Contact VisaConsult India for expert immigration assistance. Get help with visa applications, study abroad, work permits and more. Phone, email and live chat support available."
+        keywords="contact visa consultants, immigration help, visa assistance India, immigration consultation, visa experts contact"
+        canonical="/contact"
+      />
       <Navigation />
 
       {/* Header Section */}
@@ -512,6 +535,9 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Debug Page Info */}
+      <DebugPageInfo />
     </div>
   );
 }

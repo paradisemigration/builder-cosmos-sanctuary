@@ -4,15 +4,14 @@ import { Menu, X, Globe, Search, User, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 
-interface NavigationProps {
-  className?: string;
-}
-
 export function Navigation({ className = "" }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+
+  // Check if current page is UAE related
+  const isUAEPage = location.pathname.startsWith("/uae");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +53,11 @@ export function Navigation({ className = "" }: NavigationProps) {
                     TheVisaBay
                   </h1>
                   <p className="text-xs text-blue-600 font-medium -mt-1">
+<<<<<<< HEAD
                     .com
+=======
+                    {isUAEPage ? "UAE" : "INDIA"}
+>>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
                   </p>
                 </div>
               </div>
@@ -76,14 +79,25 @@ export function Navigation({ className = "" }: NavigationProps) {
               </Link>
 
               <Link
-                to="/business"
+                to="/browse"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isCurrentPage("/business")
+                  isCurrentPage("/browse")
                     ? "bg-blue-100 text-blue-700"
                     : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                 }`}
               >
                 Find Consultants
+              </Link>
+
+              <Link
+                to="/uae"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                  isCurrentPage("/uae")
+                    ? "bg-red-100 text-red-700"
+                    : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                }`}
+              >
+                🇦🇪 UAE
               </Link>
 
               {/* Browse Dropdown */}
@@ -157,28 +171,6 @@ export function Navigation({ className = "" }: NavigationProps) {
                 Pricing
               </Link>
 
-              <Link
-                to="/about"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isCurrentPage("/about")
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                About
-              </Link>
-
-              <Link
-                to="/contact"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isCurrentPage("/contact")
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                Contact
-              </Link>
-
               {/* Admin Panel Link - Only for Admin Users */}
               {isAuthenticated && user?.role === "admin" && (
                 <Link
@@ -199,33 +191,36 @@ export function Navigation({ className = "" }: NavigationProps) {
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               {isAuthenticated ? (
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-700">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <span className="text-sm text-gray-700 hidden lg:block">
                     Welcome, {user?.name}
                   </span>
                   {user?.role === "business_owner" && (
                     <Link to="/dashboard">
                       <Button variant="outline" size="sm">
                         <Settings className="h-4 w-4 mr-1" />
-                        Dashboard
+                        <span className="hidden lg:inline">Dashboard</span>
                       </Button>
                     </Link>
                   )}
                   <Button variant="outline" size="sm" onClick={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-1" />
-                    Sign Out
+                    <span className="hidden lg:inline">Sign Out</span>
                   </Button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-3">
-                  <Link to="/login">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <Link to="/login" className="hidden lg:block">
                     <Button variant="outline" size="sm">
                       <User className="h-4 w-4 mr-1" />
                       Sign In
                     </Button>
                   </Link>
                   <Link to="/list-business">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 lg:px-4 py-2 text-sm whitespace-nowrap shadow-md"
+                    >
                       List Your Business
                     </Button>
                   </Link>
@@ -235,7 +230,15 @@ export function Navigation({ className = "" }: NavigationProps) {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <Link to="/list-business" className="lg:hidden">
+              <Button
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-2 text-xs whitespace-nowrap"
+              >
+                List Business
+              </Button>
+            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
@@ -279,6 +282,18 @@ export function Navigation({ className = "" }: NavigationProps) {
             </Link>
 
             <Link
+              to="/uae"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                isCurrentPage("/uae")
+                  ? "bg-red-100 text-red-700"
+                  : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              🇦🇪 UAE
+            </Link>
+
+            <Link
               to="/plans"
               className={`block px-3 py-2 rounded-md text-base font-medium ${
                 isCurrentPage("/plans")
@@ -288,30 +303,6 @@ export function Navigation({ className = "" }: NavigationProps) {
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
-            </Link>
-
-            <Link
-              to="/about"
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isCurrentPage("/about")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-
-            <Link
-              to="/contact"
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isCurrentPage("/contact")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact
             </Link>
 
             {/* Admin Panel Link - Only for Admin Users */}

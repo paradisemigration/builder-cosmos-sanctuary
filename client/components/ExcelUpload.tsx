@@ -16,13 +16,8 @@ import {
   excelTemplate,
   validateExcelRow,
   sampleExcelData,
-  type ExcelBusinessRow,
+  ExcelBusinessRow,
 } from "@/lib/excel-template";
-
-interface ExcelUploadProps {
-  onDataProcessed: (businesses: ExcelBusinessRow[]) => void;
-  maxFileSize?: number; // in MB
-}
 
 export function ExcelUpload({
   onDataProcessed,
@@ -44,7 +39,7 @@ export function ExcelUpload({
     const sampleRow = sampleExcelData[0];
     const sampleValues = excelTemplate.headers
       .map((h) => {
-        const value = sampleRow[h.key as keyof ExcelBusinessRow];
+        const value = sampleRow[h.key];
         return value !== undefined ? String(value) : "";
       })
       .join("\t");
@@ -86,7 +81,7 @@ export function ExcelUpload({
   };
 
   // Drag and drop handlers
-  const handleDrag = useCallback((e: React.DragEvent) => {
+  const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -96,7 +91,7 @@ export function ExcelUpload({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -150,7 +145,7 @@ export function ExcelUpload({
 
         const validation = validateExcelRow(rowData, i - 1);
         if (validation.valid) {
-          validRows.push(rowData as ExcelBusinessRow);
+          validRows.push(rowData);
         } else {
           errorRows.push({ row: i, errors: validation.errors });
         }

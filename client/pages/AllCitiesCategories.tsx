@@ -166,7 +166,7 @@ export default function AllCitiesCategories() {
                     Popular Cities
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                    {popularCities.map((city) => (
+                    {(popularCities || []).map((city) => (
                       <Link
                         key={city}
                         to={getCityUrl(city)}
@@ -180,7 +180,8 @@ export default function AllCitiesCategories() {
                             {city}
                           </h4>
                           <p className="text-sm text-gray-600 mt-1">
-                            {Object.keys(categoryMapping).length} categories
+                            {Object.keys(completeCategoryMapping || {}).length}{" "}
+                            categories
                           </p>
                         </div>
                       </Link>
@@ -199,7 +200,7 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {filteredCities.map((city) => (
+                {(filteredCities || []).map((city) => (
                   <Link
                     key={city}
                     to={getCityUrl(city)}
@@ -214,7 +215,8 @@ export default function AllCitiesCategories() {
                           {city}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {Object.keys(categoryMapping).length} categories
+                          {Object.keys(completeCategoryMapping || {}).length}{" "}
+                          categories
                         </p>
                       </div>
                     </div>
@@ -247,9 +249,9 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCategories.map(([slug, name]) => (
+                {(filteredCategories || []).map((category) => (
                   <Card
-                    key={slug}
+                    key={category.slug}
                     className="hover:shadow-lg transition-all duration-200 group border-2 hover:border-purple-300"
                   >
                     <CardHeader className="pb-3">
@@ -259,10 +261,10 @@ export default function AllCitiesCategories() {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-lg group-hover:text-purple-600 transition-colors">
-                            {name}
+                            {category.name}
                           </CardTitle>
                           <p className="text-sm text-gray-500 mt-1">
-                            Available in {indianCities.length} cities
+                            Available in {allIndianCities.length} cities
                           </p>
                         </div>
                       </div>
@@ -271,7 +273,7 @@ export default function AllCitiesCategories() {
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
-                          <span>{indianCities.length} cities</span>
+                          <span>{allIndianCities.length} cities</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Building className="w-4 h-4" />
@@ -281,11 +283,11 @@ export default function AllCitiesCategories() {
 
                       <div className="space-y-2">
                         <Link
-                          to={getCategoryUrl(slug)}
+                          to={getCategoryUrl(category.slug)}
                           className="block w-full"
                         >
                           <Button className="w-full" variant="outline">
-                            View All {name}
+                            View All {category.name}
                           </Button>
                         </Link>
 
@@ -293,17 +295,19 @@ export default function AllCitiesCategories() {
                         <div className="text-xs text-gray-500">
                           <p className="mb-1">Popular in:</p>
                           <div className="flex flex-wrap gap-1">
-                            {popularCities.slice(0, 3).map((city, index) => (
-                              <Link
-                                key={city}
-                                to={getCityCategoryUrl(city, slug)}
-                                className="px-2 py-1 bg-gray-100 rounded text-blue-600 hover:bg-blue-50 transition-colors"
-                              >
-                                {city}
-                              </Link>
-                            ))}
+                            {(popularCities || [])
+                              .slice(0, 3)
+                              .map((city, index) => (
+                                <Link
+                                  key={city}
+                                  to={getCityCategoryUrl(city, category.slug)}
+                                  className="px-2 py-1 bg-gray-100 rounded text-blue-600 hover:bg-blue-50 transition-colors"
+                                >
+                                  {city}
+                                </Link>
+                              ))}
                             <span className="px-2 py-1 text-gray-400">
-                              +{indianCities.length - 3} more
+                              +{allIndianCities.length - 3} more
                             </span>
                           </div>
                         </div>
@@ -338,7 +342,7 @@ export default function AllCitiesCategories() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {popularCities.slice(0, 12).map((city) => (
+                {(popularCities || []).slice(0, 12).map((city) => (
                   <Card
                     key={city}
                     className="hover:shadow-lg transition-shadow duration-200"
@@ -353,7 +357,7 @@ export default function AllCitiesCategories() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(categoryMapping)
+                        {Object.entries(completeCategoryMapping || {})
                           .slice(0, 4)
                           .map(([slug, name]) => (
                             <Link
@@ -375,7 +379,8 @@ export default function AllCitiesCategories() {
                           to={getCityUrl(city)}
                           className="block text-center text-sm text-blue-600 hover:underline pt-2"
                         >
-                          View all {Object.keys(categoryMapping).length}{" "}
+                          View all{" "}
+                          {Object.keys(completeCategoryMapping || {}).length}{" "}
                           categories →
                         </Link>
                       </div>
