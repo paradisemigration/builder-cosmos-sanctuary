@@ -12,8 +12,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Copy database file
-COPY server/visaconsult.db ./dist/server/
+# Copy database files (any .db files found)
+COPY server/*.db ./dist/server/ 2>/dev/null || echo "No .db files found"
 COPY server/database.sqlite.js ./dist/server/
 
 # Expose port
