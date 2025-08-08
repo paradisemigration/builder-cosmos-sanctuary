@@ -280,15 +280,21 @@ class APIClient {
           source: response.source,
         });
 
+        // Calculate pagination info
+        const currentPage = params.page || 1;
+        const limit = params.limit || 25;
+        const totalRecords = response.total || response.businesses.length;
+        const totalPages = Math.ceil(totalRecords / limit);
+
         return {
           success: true,
           data: response.businesses, // Map 'businesses' to 'data' for frontend compatibility
           pagination: response.pagination || {
-            page: params.page || 1,
-            totalPages: Math.ceil(response.total / (params.limit || 25)),
-            totalRecords: response.total || response.businesses.length,
-            hasNext: false,
-            hasPrev: false,
+            page: currentPage,
+            totalPages: totalPages,
+            totalRecords: totalRecords,
+            hasNext: currentPage < totalPages,
+            hasPrev: currentPage > 1,
           },
         };
       }
