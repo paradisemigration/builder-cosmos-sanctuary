@@ -7,11 +7,7 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      // Fix for cloud deployment WebSocket connections
-      clientPort: process.env.NODE_ENV === 'production' ? 443 : 8080,
-      host: process.env.NODE_ENV === 'production' ? undefined : 'localhost'
-    },
+    hmr: false, // Disable HMR for cloud deployment
     proxy: {
       "/api": {
         target: process.env.NODE_ENV === 'production' ? "http://localhost:3011" : "http://localhost:3011",
