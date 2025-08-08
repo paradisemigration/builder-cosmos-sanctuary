@@ -318,25 +318,21 @@ class APIClient {
 
   // Get business statistics
   async getBusinessStats() {
-    console.log("📊 Fetching business statistics from Express backend");
+    console.log("📊 Fetching business statistics");
     try {
       const response = await this.request("/api/businesses/stats");
-      console.log("📊 Stats API Response:", response);
-      return response;
+      if (response.success && response.data) {
+        console.log("✅ Using backend stats");
+        return response;
+      }
     } catch (error) {
-      console.error("��� Stats API Failed:", error);
-      // Return fallback stats
-      return {
-        success: true,
-        data: {
-          totalBusinesses: 3,
-          totalReviews: 45,
-          citiesCount: 3,
-          averageRating: 4.5,
-        },
-        source: "fallback"
-      };
+      console.log("⚠️ Backend stats unavailable, using client-side stats");
     }
+
+    // Use client-side stats
+    const stats = getClientStats();
+    console.log("✅ Client-side stats loaded:", stats.data);
+    return stats;
   }
 }
 
