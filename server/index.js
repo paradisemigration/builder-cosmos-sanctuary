@@ -61,12 +61,14 @@ if (process.env.NODE_ENV !== "production") {
           console.log("��� API server started");
           console.log(`🌐 API Base URL: http://localhost:${attemptPort}`);
           console.log(`📊 Database ready to serve 1500+ businesses`);
-          console.log("📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions");
+          console.log(
+            "📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions",
+          );
           resolve(attemptPort);
         });
 
-        server.on('error', (err) => {
-          if (err.code === 'EADDRINUSE') {
+        server.on("error", (err) => {
+          if (err.code === "EADDRINUSE") {
             reject(new Error(`Port ${attemptPort} is in use`));
           } else {
             reject(err);
@@ -81,7 +83,9 @@ if (process.env.NODE_ENV !== "production") {
         const currentPort = basePort + i;
         const usedPort = await tryStartServer(currentPort);
         if (usedPort !== basePort) {
-          console.log(`⚠️ Original port ${basePort} was busy, using port ${usedPort}`);
+          console.log(
+            `⚠️ Original port ${basePort} was busy, using port ${usedPort}`,
+          );
         }
         break;
       } catch (error) {
@@ -89,7 +93,9 @@ if (process.env.NODE_ENV !== "production") {
           console.error("❌ Could not find available port after 10 attempts");
           process.exit(1);
         }
-        console.log(`🔄 Port ${basePort + i} in use, trying ${basePort + i + 1}...`);
+        console.log(
+          `🔄 Port ${basePort + i} in use, trying ${basePort + i + 1}...`,
+        );
       }
     }
   });
