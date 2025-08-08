@@ -60,18 +60,8 @@ export default function AdminPanel() {
 
   // Load real data from API
   const loadDashboardData = async (forceRefresh = false) => {
-    // Safety check for frontend-only platforms
-    const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app")
-    ) {
-      console.log("Frontend-only platform detected, skipping dashboard load");
-      setBackendAvailable(false);
-      setLoading(false);
-      return;
-    }
+    // Note: Fly.io runs full-stack apps with backend, not frontend-only
+    // Only skip for actual frontend-only platforms like Netlify/Vercel static deployments
 
     // If backend is unavailable and not forcing refresh, skip
     if (backendAvailable === false && !forceRefresh) {
