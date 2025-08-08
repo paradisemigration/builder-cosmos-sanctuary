@@ -120,7 +120,7 @@ export function SiteFooter() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400">
-              <span>© 2024 VisaConsult India. All rights reserved.</span>
+              <span>© 2024 TheVisaBay.com. All rights reserved.</span>
             </div>
             <div className="flex items-center space-x-6 text-sm">
               <Link
