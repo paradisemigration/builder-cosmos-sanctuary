@@ -1,6 +1,7 @@
 # 🌐 DNS Records for Your Custom Domain
 
 ## For Your Existing Working App
+
 **App URL**: `https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/`
 
 ## DNS Records to Add at Your Domain Registrar
@@ -8,6 +9,7 @@
 ### Option 1: CNAME Method (Recommended - Easier)
 
 **For Root Domain (yourdomain.com):**
+
 ```
 Type: CNAME
 Name: @ (or leave empty)
@@ -16,6 +18,7 @@ TTL: 300 (5 minutes)
 ```
 
 **For WWW Subdomain:**
+
 ```
 Type: CNAME
 Name: www
@@ -26,18 +29,20 @@ TTL: 300 (5 minutes)
 ### Option 2: A Record Method (If CNAME doesn't work for root)
 
 First, get the IP addresses by running:
+
 ```bash
 nslookup a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev
 ```
 
 **Typical Fly.io IP addresses (verify with nslookup):**
+
 ```
 Type: A
 Name: @ (or leave empty)
 Value: 66.241.124.44
 TTL: 300
 
-Type: A  
+Type: A
 Name: @
 Value: 66.241.125.44
 TTL: 300
@@ -49,6 +54,7 @@ TTL: 300
 ```
 
 **For WWW:**
+
 ```
 Type: CNAME
 Name: www
@@ -71,16 +77,19 @@ flyctl certs create www.yourdomain.com --app a4b9f79f9f7045e490b1cf64b782d096-a1
 ## Domain Registrar Instructions
 
 ### Cloudflare
+
 1. Go to DNS → Records
 2. Add CNAME record: `@` → `a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 3. Add CNAME record: `www` → `a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 
 ### GoDaddy
+
 1. Go to DNS Management
 2. Add CNAME: Name=`@`, Value=`a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 3. Add CNAME: Name=`www`, Value=`a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 
 ### Namecheap
+
 1. Go to Advanced DNS
 2. Add CNAME: Host=`@`, Value=`a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 3. Add CNAME: Host=`www`, Value=`a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
