@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-<<<<<<< HEAD
 interface GlobalDebugInfo {
   currentPage: string;
   timestamp: string;
@@ -38,11 +37,9 @@ interface GlobalDebugInfo {
   }>;
 }
 
-=======
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 export function GlobalDebugPopup() {
   const [isOpen, setIsOpen] = useState(false);
-  const [debugInfo, setDebugInfo] = useState({
+  const [debugInfo, setDebugInfo] = useState<GlobalDebugInfo>({
     currentPage: "",
     timestamp: "",
     userAgent: "",
@@ -303,7 +300,6 @@ export function GlobalDebugPopup() {
   return (
     <>
       {/* Always visible test indicator */}
-<<<<<<< HEAD
       <div
         className="fixed top-2 right-2 bg-green-500 text-white px-3 py-2 text-xs rounded shadow-lg z-[9999] max-w-lg"
         style={{
@@ -317,8 +313,8 @@ export function GlobalDebugPopup() {
           DEBUG: {location.pathname}
         </div>
         <div className="text-white break-words">
-          📊 {debugInfo.statistics.totalBusinesses.toLocaleString()} Businesses
-          | {debugInfo.statistics.totalCities} Cities |{" "}
+          📊 {debugInfo.statistics.totalBusinesses.toLocaleString()} Businesses |{" "}
+          {debugInfo.statistics.totalCities} Cities |{" "}
           {debugInfo.statistics.totalCategories} Categories
           {debugInfo.statistics.lastUpdated.includes("fallback")
             ? " (cached)"
@@ -328,15 +324,14 @@ export function GlobalDebugPopup() {
           T: {debugInfo.metaData.title}
         </div>
         <div className="text-white break-words">
-          D: {debugInfo.metaData.description.substring(0, 80)}
+          D:{" "}
+          {debugInfo.metaData.description.substring(0, 80)}
           {debugInfo.metaData.description.length > 80 ? "..." : ""}
         </div>
         <div className="text-yellow-200 font-bold">
           META: {debugInfo.metaData.allMetaTags.length} tags
         </div>
       </div>
-=======
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 
       {!isOpen ? (
         <button
@@ -400,9 +395,7 @@ export function GlobalDebugPopup() {
                       <div className="text-2xl font-bold text-orange-600">
                         {debugInfo.statistics.totalImages.toLocaleString()}
                       </div>
-                      <div className="text-xs text-orange-600">
-                        Total Images
-                      </div>
+                      <div className="text-xs text-orange-600">Total Images</div>
                     </div>
                     <div className="text-center p-2 bg-white rounded border">
                       <div className="text-2xl font-bold text-red-600">
@@ -427,13 +420,11 @@ export function GlobalDebugPopup() {
                         }
                       >
                         {debugInfo.statistics.lastUpdated.includes("fallback")
-                          ? "��️ "
+                          ? "⚠️ "
                           : ""}
                         Last updated: {debugInfo.statistics.lastUpdated}
                       </div>
-                      {debugInfo.statistics.lastUpdated.includes(
-                        "fallback",
-                      ) && (
+                      {debugInfo.statistics.lastUpdated.includes("fallback") && (
                         <div className="text-xs text-orange-500 mt-1">
                           Using cached data - API temporarily unavailable
                         </div>
@@ -574,7 +565,7 @@ export function GlobalDebugPopup() {
 
               {/* Local Storage Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">�� Storage</h3>
+                <h3 className="font-semibold mb-2 text-gray-800">💾 Storage</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm">
                   <div>
                     <span className="font-medium">Local Storage Items:</span>{" "}
@@ -651,7 +642,9 @@ export function GlobalDebugPopup() {
                         const message = results
                           .map(
                             (r) =>
-                              `${r.endpoint}: ${r.ok ? "✅ OK" : "❌ FAILED"} (${r.status})`,
+                              `${r.endpoint}: ${r.ok ? "✅ OK" : "❌ FAILED"} (${
+                                r.status
+                              })`,
                           )
                           .join("\n");
                         alert(`API Connectivity Test:\n\n${message}`);
