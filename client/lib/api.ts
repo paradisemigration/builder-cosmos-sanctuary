@@ -29,7 +29,49 @@ class APIClient {
 
     console.log(`🔗 API Request: ${options.method || 'GET'} ${url}`);
 
-    // Try fetch first, fallback to XMLHttpRequest if FullStory interferes
+    // Use XMLHttpRequest directly for cloud deployments to avoid FullStory interference
+    if (isCloudDeployment()) {
+      console.log(`☁️ Cloud deployment detected, using XMLHttpRequest`);
+
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(options.method || 'GET', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        if (options.headers) {
+          Object.entries(options.headers).forEach(([key, value]) => {
+            xhr.setRequestHeader(key, value as string);
+          });
+        }
+
+        xhr.onload = function() {
+          console.log(`📡 XHR Response: ${xhr.status} for ${endpoint}`);
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              console.log(`✅ XHR Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
+              resolve(data);
+            } catch (parseError) {
+              reject(new Error(`Invalid JSON response: ${parseError.message}`));
+            }
+          } else {
+            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error - XHR failed'));
+        xhr.ontimeout = () => reject(new Error('Request timeout'));
+        xhr.timeout = 15000; // 15 second timeout for cloud
+
+        if (options.body) {
+          xhr.send(options.body as string);
+        } else {
+          xhr.send();
+        }
+      });
+    }
+
+    // Try fetch first for local development, fallback to XMLHttpRequest if FullStory interferes
     try {
       // Store original fetch to bypass FullStory interception
       const originalFetch = window.fetch;
