@@ -216,8 +216,7 @@ export function GooglePlacesScraper() {
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io");
 
     // If this is a frontend-only deployment, immediately mark as unavailable

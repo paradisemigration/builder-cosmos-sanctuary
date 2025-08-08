@@ -66,8 +66,7 @@ export function ManualImageUpload() {
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io");
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -93,8 +92,7 @@ export function ManualImageUpload() {
       const hostname = window.location.hostname;
       const isFrontendOnlyDeployment =
         hostname.includes("fly.dev") ||
-        hostname.includes("vercel.app") ||
-        hostname.includes("netlify.app") ||
+        
         hostname.includes("github.io");
 
       // Check for API URL configuration
