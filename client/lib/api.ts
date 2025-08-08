@@ -1,5 +1,6 @@
 // API client for backend communication
 import { Business } from "@/lib/data";
+import { getBusinesses as getClientBusinesses, getBusinessStats as getClientStats, getFeaturedBusinesses as getClientFeatured } from "@/lib/business-data";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
