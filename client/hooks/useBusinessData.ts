@@ -25,14 +25,20 @@ export function useBusinessData(filters = {}, autoFetch = true) {
         });
 
         if (response.success) {
-          if (resetData) {
-            setBusinesses(response.data);
-          } else {
-            // Append for pagination
-            setBusinesses((prev) => [...prev, ...response.data]);
-          }
-          setPagination(response.pagination || null);
+        console.log("📊 useBusinessData Response:", {
+          dataLength: response.data?.length,
+          pagination: response.pagination,
+          hasMoreCalculated: response.pagination && response.pagination.page < response.pagination.totalPages
+        });
+
+        if (resetData) {
+          setBusinesses(response.data);
         } else {
+          // Append for pagination
+          setBusinesses((prev) => [...prev, ...response.data]);
+        }
+        setPagination(response.pagination || null);
+      } else {
           setError(response.message || "Failed to fetch businesses");
         }
       } catch (err) {
