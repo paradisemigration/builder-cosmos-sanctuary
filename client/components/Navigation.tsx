@@ -4,6 +4,10 @@ import { Menu, X, Globe, Search, User, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 
+interface NavigationProps {
+  className?: string;
+}
+
 export function Navigation({ className = "" }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -53,11 +57,7 @@ export function Navigation({ className = "" }: NavigationProps) {
                     TheVisaBay
                   </h1>
                   <p className="text-xs text-blue-600 font-medium -mt-1">
-<<<<<<< HEAD
-                    .com
-=======
                     {isUAEPage ? "UAE" : "INDIA"}
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
                   </p>
                 </div>
               </div>
