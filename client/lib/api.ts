@@ -303,17 +303,21 @@ class APIClient {
 
   // Get featured businesses
   async getFeaturedBusinesses() {
-    console.log("⭐ Fetching featured businesses from real database");
+    console.log("⭐ Fetching featured businesses");
+    try {
+      const response = await this.request("/api/businesses/featured");
+      if (response.success && response.data && response.data.length > 0) {
+        console.log("✅ Using backend featured businesses");
+        return response;
+      }
+    } catch (error) {
+      console.log("⚠️ Backend featured businesses unavailable, using client-side data");
+    }
 
-    // Get regular businesses and mark top ones as featured
-    const response = await this.getBusinesses({ limit: 6 });
-    return {
-      success: true,
-      data: response.data.map((business) => ({
-        ...business,
-        isFeatured: true,
-      })),
-    };
+    // Use client-side featured businesses
+    const featured = getClientFeatured();
+    console.log("✅ Client-side featured businesses loaded:", featured.data.length);
+    return featured;
   }
 
   // Get business statistics
