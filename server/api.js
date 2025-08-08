@@ -476,7 +476,6 @@ app.get("/api/businesses/:id", async (req, res) => {
   }
 });
 
-
 // Update business
 app.put(
   "/api/businesses/:id",
