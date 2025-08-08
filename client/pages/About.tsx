@@ -113,7 +113,7 @@ export default function About() {
       <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            About VisaConsult India
+            About TheVisaBay.com
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto opacity-90">
             India's most trusted platform connecting visa applicants with
