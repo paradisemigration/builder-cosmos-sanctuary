@@ -27,15 +27,10 @@ export function SiteFooter() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-<<<<<<< HEAD
-              <div className="text-2xl font-bold text-white">TheVisaBay</div>
-              <div className="text-xs text-blue-400 font-medium">.com</div>
-=======
               <div className="text-2xl font-bold text-white">VisaConsult</div>
               <div className="text-xs text-blue-400 font-medium">
                 {country.toUpperCase()}
               </div>
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
             </div>
             <p className="text-gray-400 mb-4 text-sm">
               {country}'s trusted platform for finding verified visa and
@@ -165,11 +160,7 @@ export function SiteFooter() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400">
-<<<<<<< HEAD
-              <span>© 2024 TheVisaBay.com. All rights reserved.</span>
-=======
               <span>© 2024 {websiteName}. All rights reserved.</span>
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
             </div>
             <div className="flex items-center space-x-6 text-sm">
               <Link
@@ -202,15 +193,9 @@ export function SiteFooter() {
           {/* SEO Text Block */}
           <div className="mt-6 text-xs text-gray-500 leading-relaxed">
             <p>
-<<<<<<< HEAD
-              TheVisaBay.com is the leading platform connecting individuals with
-              verified visa and immigration consultants across{" "}
-              {allCities.length} major cities in India and UAE. Our
-=======
               {websiteName} is the leading platform connecting individuals with
               verified visa and immigration consultants across {totalCities}{" "}
               major {isUAEPage ? "Emirates in UAE" : "cities in India"}. Our
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
               comprehensive directory includes specialists in{" "}
               {categoryList.length} service categories including immigration
               consulting, student visa services, work permit assistance, and
