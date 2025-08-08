@@ -44,11 +44,12 @@ export default function AdminPanel() {
   // Check if backend API is available
   const checkBackendHealth = async () => {
     try {
-      const response = await fetch("/api/ultra-fast-sync/stats", {
-        method: "HEAD",
+      const response = await fetch("/api/health", {
+        method: "GET",
       });
-      const available = response.ok || response.status === 404;
+      const available = response.ok;
       setBackendAvailable(available);
+      console.log("Backend health check:", available ? "✅ Connected" : "❌ Failed");
       return available;
     } catch (error) {
       console.log("Backend health check failed:", error.message);
