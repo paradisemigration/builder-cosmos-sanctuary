@@ -184,9 +184,9 @@ export function GlobalDebugPopup() {
         title="Click red bug button for detailed popup"
       >
         <div className="text-yellow-200 font-bold mb-1">DEBUG: {location.pathname}</div>
+        <div className="text-white break-words">📊 {debugInfo.statistics.totalBusinesses.toLocaleString()} Businesses | {debugInfo.statistics.totalCities} Cities | {debugInfo.statistics.totalCategories} Categories</div>
         <div className="text-white break-words">T: {debugInfo.metaData.title}</div>
-        <div className="text-white break-words">D: {debugInfo.metaData.description.substring(0, 100)}{debugInfo.metaData.description.length > 100 ? '...' : ''}</div>
-        <div className="text-white break-words">K: {debugInfo.metaData.keywords}</div>
+        <div className="text-white break-words">D: {debugInfo.metaData.description.substring(0, 80)}{debugInfo.metaData.description.length > 80 ? '...' : ''}</div>
         <div className="text-yellow-200 font-bold">META: {debugInfo.metaData.allMetaTags.length} tags</div>
       </div>
       
