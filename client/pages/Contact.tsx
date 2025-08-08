@@ -40,13 +40,13 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    document.title = "Contact Us - VisaConsult India | Get Help & Support";
+    document.title = "Contact Us - TheVisaBay.com | Get Help & Support";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
         "content",
-        "Contact VisaConsult India for support, inquiries, or business partnerships. Get help finding visa consultants or listing your business. 24/7 customer support available.",
+        "Contact TheVisaBay.com for support, inquiries, or business partnerships. Get help finding visa consultants or listing your business. 24/7 customer support available.",
       );
     }
   }, []);
