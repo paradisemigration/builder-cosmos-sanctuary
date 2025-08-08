@@ -66,6 +66,38 @@ export function GlobalDebugPopup() {
   
   const location = useLocation();
 
+  // Function to test API connectivity
+  const testApiConnectivity = async () => {
+    const endpoints = [
+      '/api/scraping/stats',
+      '/api/city-category-stats',
+      '/api/health'
+    ];
+
+    const results = [];
+
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint, { method: 'GET' });
+        results.push({
+          endpoint,
+          status: response.status,
+          ok: response.ok,
+          statusText: response.statusText
+        });
+      } catch (error) {
+        results.push({
+          endpoint,
+          status: 'ERROR',
+          ok: false,
+          error: error.message
+        });
+      }
+    }
+
+    return results;
+  };
+
   // Function to fetch database statistics with fallback
   const fetchStatistics = async () => {
     // Fallback data based on server logs
@@ -294,7 +326,7 @@ export function GlobalDebugPopup() {
                   {debugInfo.statistics.lastUpdated && (
                     <div className="mt-2 text-xs text-center">
                       <div className={debugInfo.statistics.lastUpdated.includes('fallback') ? 'text-orange-600' : 'text-gray-500'}>
-                        {debugInfo.statistics.lastUpdated.includes('fallback') ? '⚠️ ' : ''}
+                        {debugInfo.statistics.lastUpdated.includes('fallback') ? '��️ ' : ''}
                         Last updated: {debugInfo.statistics.lastUpdated}
                       </div>
                       {debugInfo.statistics.lastUpdated.includes('fallback') && (
