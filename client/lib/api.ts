@@ -4,6 +4,15 @@ import { Business } from "@/lib/data";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
+// Detect cloud deployment environments
+const isCloudDeployment = () => {
+  const hostname = window.location.hostname;
+  return hostname.includes('fly.dev') ||
+         hostname.includes('vercel.app') ||
+         hostname.includes('netlify.app') ||
+         hostname.includes('thevisabay.com');
+};
+
 class APIClient {
   private baseURL: string;
 
