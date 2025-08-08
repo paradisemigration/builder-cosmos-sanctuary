@@ -1,10 +1,12 @@
 # 🔧 Fix Fly.io Volume Capacity Issue
 
 ## Error
+
 ❌ **Issue**: No capacity available in bom (Mumbai) region  
 ✅ **Solution**: Use alternative region or retry
 
 ## Solution 1: Use Singapore Region (Recommended)
+
 Your fly.toml is configured for Singapore, let's stick with that:
 
 ```bash
@@ -13,6 +15,7 @@ flyctl volumes create thevisabay_data --region sin --size 3 --app thevisabay
 ```
 
 ## Solution 2: Try Alternative Regions
+
 If Singapore is also full, try these regions:
 
 ```bash
@@ -27,12 +30,13 @@ flyctl volumes create thevisabay_data --region syd --size 3 --app thevisabay
 ```
 
 ## Solution 3: Skip Volume Creation (Temporary)
+
 For quick deployment without persistent storage:
 
 ```bash
 # Comment out volume mount in fly.toml temporarily
 # [[mounts]]
-# source = "thevisabay_data" 
+# source = "thevisabay_data"
 # destination = "/data"
 
 # Then deploy
@@ -40,6 +44,7 @@ flyctl deploy --app thevisabay
 ```
 
 ## Solution 4: Wait and Retry
+
 Capacity issues are often temporary:
 
 ```bash
@@ -48,6 +53,7 @@ flyctl volumes create thevisabay_data --region sin --size 3 --app thevisabay
 ```
 
 ## Complete Deploy Commands
+
 ```bash
 # 1. Create app (if not done)
 flyctl apps create thevisabay --org personal
