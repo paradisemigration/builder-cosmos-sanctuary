@@ -913,7 +913,7 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-white text-lg font-semibold mb-4">
-                VisaConsult India
+                TheVisaBay.com
               </h3>
               <p className="text-sm opacity-80">
                 India's most trusted platform for finding verified visa
