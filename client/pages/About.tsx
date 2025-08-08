@@ -25,18 +25,6 @@ import { generateAboutMeta, setPageMeta, setSEOLinks } from "@/lib/meta-utils";
 
 export default function About() {
   useEffect(() => {
-<<<<<<< HEAD
-    document.title =
-      "About Us - TheVisaBay.com | India's Leading Visa Consultant Directory";
-
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Learn about TheVisaBay.com - India's most trusted platform connecting visa applicants with verified immigration consultants. Our mission, values, and commitment to your visa journey.",
-      );
-    }
-=======
     const aboutPageMeta = generateAboutMeta();
     setPageMeta(aboutPageMeta);
 
@@ -44,7 +32,6 @@ export default function About() {
       canonical: "/about",
       alternate: ["/about"],
     });
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
   }, []);
 
   const stats = [
