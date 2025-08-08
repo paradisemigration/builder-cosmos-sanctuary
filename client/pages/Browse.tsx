@@ -253,20 +253,14 @@ export default function Browse() {
               ))}
             </div>
 
-            {/* Load More Button - Force show for debugging */}
-            <div className="mt-8 text-center">
-              <div className="text-sm text-gray-600 mb-2">
-                Debug: hasMore={hasMore ? 'true' : 'false'},
-                businesses={businesses.length},
-                page={pagination?.page},
-                totalPages={pagination?.totalPages}
-              </div>
-              {(hasMore || businesses.length >= 25) && (
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="mt-8 text-center">
                 <Button
                   onClick={loadMore}
                   disabled={loading}
                   size="lg"
-                  className="px-8"
+                  className="px-8 transition-all duration-200"
                 >
                   {loading ? (
                     <>
@@ -277,8 +271,8 @@ export default function Browse() {
                     "Load More Businesses"
                   )}
                 </Button>
-              )}
-            </div>
+              </div>
+            )}
           </>
         )}
 
