@@ -1,28 +1,54 @@
 #!/bin/bash
 
-echo "🚀 Starting deployment process..."
+# TheVisaBay.com Production Deployment Script
+set -e
 
-# Install dependencies
+echo "🚀 Starting TheVisaBay.com deployment..."
+
+# Step 1: Clean previous builds
+echo "🧹 Cleaning previous builds..."
+rm -rf dist/
+rm -rf node_modules/.cache/
+
+# Step 2: Install dependencies
 echo "📦 Installing dependencies..."
-npm install
+npm ci --production=false
 
-# Build the project
-echo "🔨 Building the project..."
-npm run build
+# Step 3: Build the application
+echo "🏗️  Building client..."
+npm run build:client
 
-# Check if build was successful
-if [ $? -eq 0 ]; then
-    echo "✅ Build successful!"
-    echo "📁 Built files are in the 'dist/spa' directory"
-    echo "🌐 You can now upload these files to your hosting provider"
-    echo ""
-    echo "📋 Next steps:"
-    echo "1. Upload the contents of 'dist/spa' to your web server"
-    echo "2. Configure your domain to point to the uploaded files"
-    echo "3. Ensure your web server supports client-side routing"
-    echo ""
-    echo "🎉 Your Dubai Immigration website is ready for production!"
-else
-    echo "❌ Build failed. Please check the errors above."
-    exit 1
+echo "🏗️  Building server..."
+npm run build:server
+
+# Step 4: Copy database and assets
+echo "📄 Copying database..."
+npm run copy:database
+
+# Step 5: Create health check endpoint
+echo "❤️  Setting up health check..."
+cat > dist/server/health.js << 'EOF'
+export const healthCheck = (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'TheVisaBay.com',
+    version: process.env.npm_package_version || '1.0.0'
+  });
+};
+EOF
+
+# Step 6: Verify build
+echo "✅ Verifying build..."
+if [ ! -d "dist/spa" ] || [ ! -d "dist/server" ]; then
+  echo "❌ Build verification failed!"
+  exit 1
 fi
+
+echo "✅ Build completed successfully!"
+echo "📊 Build summary:"
+echo "   - Client build: $(du -sh dist/spa 2>/dev/null || echo 'N/A')"
+echo "   - Server build: $(du -sh dist/server 2>/dev/null || echo 'N/A')"
+echo "   - Database: $(ls -lh dist/server/*.db 2>/dev/null || echo 'No database found')"
+
+echo "🎉 Ready for deployment to thevisabay.com!"
