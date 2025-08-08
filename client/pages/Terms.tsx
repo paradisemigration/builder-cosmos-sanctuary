@@ -16,7 +16,7 @@ import {
 
 export default function Terms() {
   useEffect(() => {
-    document.title = "Terms of Service - VisaConsult India";
+    document.title = "Terms of Service - TheVisaBay.com";
     window.scrollTo(0, 0);
   }, []);
 
@@ -62,10 +62,10 @@ export default function Terms() {
             </CardHeader>
             <CardContent>
               <p className="text-orange-700 text-sm">
-                By accessing and using VisaConsult India, you agree to be bound
+                By accessing and using TheVisaBay.com, you agree to be bound
                 by these Terms of Service. If you do not agree to these terms,
                 please do not use our services. These terms constitute a legal
-                agreement between you and VisaConsult India.
+                agreement between you and TheVisaBay.com.
               </p>
             </CardContent>
           </Card>
@@ -79,7 +79,7 @@ export default function Terms() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 mb-4">
-                  By accessing, browsing, or using the VisaConsult India
+                  By accessing, browsing, or using the TheVisaBay.com
                   platform ("Service"), you acknowledge that you have read,
                   understood, and agree to be bound by these Terms of Service
                   ("Terms") and our Privacy Policy.
@@ -99,7 +99,7 @@ export default function Terms() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 mb-4">
-                  VisaConsult India is an online platform that:
+                  TheVisaBay.com is an online platform that:
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
                   <li>
@@ -296,7 +296,7 @@ export default function Terms() {
                   </h4>
                   <p className="text-gray-700">
                     Payment for consultation services is between clients and
-                    consultants directly. VisaConsult India does not process
+                    consultants directly. TheVisaBay.com does not process
                     these payments or guarantee service delivery.
                   </p>
                 </div>
@@ -365,7 +365,7 @@ export default function Terms() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 mb-4">
-                  To the maximum extent permitted by law, VisaConsult India
+                  To the maximum extent permitted by law, TheVisaBay.com
                   shall not be liable for:
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
@@ -393,7 +393,7 @@ export default function Terms() {
                 <p className="text-gray-700 mb-4">
                   The Service and its content, including but not limited to
                   text, graphics, logos, and software, are owned by or licensed
-                  to VisaConsult India and protected by intellectual property
+                  to TheVisaBay.com and protected by intellectual property
                   laws.
                 </p>
                 <p className="text-gray-700">
@@ -510,7 +510,7 @@ export default function Terms() {
                       Address
                     </div>
                     <div className="text-blue-700">
-                      VisaConsult India
+                      TheVisaBay.com
                       <br />
                       Legal Department
                       <br />
