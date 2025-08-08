@@ -66,6 +66,40 @@ export function GlobalDebugPopup() {
   
   const location = useLocation();
 
+  // Function to fetch database statistics
+  const fetchStatistics = async () => {
+    try {
+      const [statsResponse, cityStatsResponse] = await Promise.all([
+        fetch('/api/scraping/stats'),
+        fetch('/api/city-category-stats')
+      ]);
+
+      const stats = await statsResponse.json();
+      const cityStats = await cityStatsResponse.json();
+
+      return {
+        totalBusinesses: stats.totalBusinesses || 0,
+        totalCities: cityStats.totalCities || 0,
+        totalCategories: cityStats.totalCategories || 0,
+        totalImages: stats.totalImages || 0,
+        totalReviews: stats.totalReviews || 0,
+        averageRating: stats.averageRating || 0,
+        lastUpdated: stats.lastUpdated || "",
+      };
+    } catch (error) {
+      console.error('Error fetching statistics:', error);
+      return {
+        totalBusinesses: 0,
+        totalCities: 0,
+        totalCategories: 0,
+        totalImages: 0,
+        totalReviews: 0,
+        averageRating: 0,
+        lastUpdated: "",
+      };
+    }
+  };
+
   // Function to extract meta data from document head
   const extractMetaData = () => {
     const title = document.title || 'No title found';
