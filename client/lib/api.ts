@@ -11,62 +11,39 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  // Generic request method using XMLHttpRequest to bypass FullStory interference
+  // Generic request method using fetch with proper error handling
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
 
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      const method = options.method || "GET";
+    console.log(`🔗 API Request: ${options.method || 'GET'} ${url}`);
 
-      xhr.open(method, url);
+    try {
+      const response = await fetch(url, {
+        method: options.method || 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        ...options,
+      });
 
-      // Set headers
-      xhr.setRequestHeader("Content-Type", "application/json");
-      if (options.headers) {
-        Object.entries(options.headers).forEach(([key, value]) => {
-          xhr.setRequestHeader(key, value as string);
-        });
+      console.log(`📡 API Response: ${response.status} for ${endpoint}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              const response = JSON.parse(xhr.responseText);
-              resolve(response);
-            } catch (error) {
-              reject(new Error("Invalid JSON response"));
-            }
-          } else if (xhr.status === 0) {
-            // HTTP 0 means no backend server - this is expected on frontend-only deployments
-            reject(new Error("No backend server available"));
-          } else {
-            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
-          }
-        }
-      };
+      const data = await response.json();
+      console.log(`✅ API Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
 
-      xhr.onerror = function () {
-        reject(new Error("Network error - no backend server"));
-      };
-
-      xhr.ontimeout = function () {
-        reject(new Error("Request timeout"));
-      };
-
-      xhr.timeout = 10000; // 10 second timeout
-
-      // Send request
-      if (options.body) {
-        xhr.send(options.body as string);
-      } else {
-        xhr.send();
-      }
-    });
+      return data;
+    } catch (error) {
+      console.error(`❌ API Error for ${endpoint}:`, error.message);
+      throw error;
+    }
   }
 
   // Upload single image
