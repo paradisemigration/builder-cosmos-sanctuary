@@ -292,8 +292,16 @@ export function GlobalDebugPopup() {
                     </div>
                   </div>
                   {debugInfo.statistics.lastUpdated && (
-                    <div className="mt-2 text-xs text-gray-500 text-center">
-                      Last updated: {debugInfo.statistics.lastUpdated}
+                    <div className="mt-2 text-xs text-center">
+                      <div className={debugInfo.statistics.lastUpdated.includes('fallback') ? 'text-orange-600' : 'text-gray-500'}>
+                        {debugInfo.statistics.lastUpdated.includes('fallback') ? '⚠️ ' : ''}
+                        Last updated: {debugInfo.statistics.lastUpdated}
+                      </div>
+                      {debugInfo.statistics.lastUpdated.includes('fallback') && (
+                        <div className="text-xs text-orange-500 mt-1">
+                          Using cached data - API temporarily unavailable
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
