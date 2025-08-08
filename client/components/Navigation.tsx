@@ -51,10 +51,10 @@ export function Navigation({ className = "" }: NavigationProps) {
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">
-                    VisaConsult
+                    TheVisaBay
                   </h1>
                   <p className="text-xs text-blue-600 font-medium -mt-1">
-                    INDIA
+                    .com
                   </p>
                 </div>
               </div>
