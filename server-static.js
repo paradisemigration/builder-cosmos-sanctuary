@@ -31,9 +31,7 @@ app.use(express.json());
 app.use('/api', createProxyMiddleware({
   target: 'http://localhost:3011',
   changeOrigin: true,
-  pathRewrite: {
-    '^/api': '/api', // Keep the /api prefix
-  },
+  logLevel: 'debug',
   onError: (err, req, res) => {
     console.error('Proxy error:', err);
     res.status(500).json({ 
