@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,26 +26,35 @@ app.use(cors({
 // Parse JSON bodies
 app.use(express.json());
 
-// API proxy to backend using proper proxy middleware
-app.use('/api', createProxyMiddleware({
-  target: 'http://localhost:3011',
-  changeOrigin: true,
-  logLevel: 'debug',
-  onError: (err, req, res) => {
-    console.error('Proxy error:', err);
+// Manual API proxy to backend
+app.use('/api/*', async (req, res) => {
+  try {
+    const apiUrl = `http://localhost:3011${req.originalUrl}`;
+    console.log(`🔄 Proxying ${req.method} ${req.originalUrl} to ${apiUrl}`);
+    
+    const response = await fetch(apiUrl, {
+      method: req.method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...req.headers
+      },
+      body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined
+    });
+    
+    const data = await response.json();
+    console.log(`✅ Backend responded with ${response.status} for ${req.originalUrl}`);
+    
+    res.status(response.status).json(data);
+  } catch (error) {
+    console.error(`❌ Proxy error for ${req.originalUrl}:`, error.message);
     res.status(500).json({ 
       success: false, 
       error: 'Backend connection failed',
-      details: err.message 
+      details: error.message,
+      endpoint: req.originalUrl
     });
-  },
-  onProxyReq: (proxyReq, req, res) => {
-    console.log(`🔄 Proxying ${req.method} ${req.url} to backend`);
-  },
-  onProxyRes: (proxyRes, req, res) => {
-    console.log(`✅ Backend responded with ${proxyRes.statusCode} for ${req.url}`);
   }
-}));
+});
 
 // Serve static files from dist
 app.use(express.static(path.join(__dirname, 'dist')));
