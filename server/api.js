@@ -476,66 +476,6 @@ app.get("/api/businesses/:id", async (req, res) => {
   }
 });
 
-// Get featured businesses
-app.get("/api/businesses/featured", async (req, res) => {
-  try {
-    const { limit = 6 } = req.query;
-
-    // Get top-rated businesses from database as featured
-    const result = await sqliteDatabase.getBusinesses({
-      limit: parseInt(limit),
-    });
-
-    // If database has businesses, use top-rated ones as featured
-    if (result.businesses && result.businesses.length > 0) {
-      // Sort by rating and review count to get best businesses
-      const featuredBusinesses = result.businesses
-        .sort((a, b) => {
-          if (b.rating === a.rating) {
-            return b.reviewCount - a.reviewCount;
-          }
-          return b.rating - a.rating;
-        })
-        .slice(0, parseInt(limit));
-
-      return res.json({
-        success: true,
-        data: featuredBusinesses,
-        source: "database_top_rated",
-        total: featuredBusinesses.length,
-      });
-    }
-
-    // Fallback to sample featured businesses
-    console.warn(
-      "⚠️ No businesses found in database, using sample featured data",
-    );
-
-    const featuredSamples = sampleBusinesses
-      .filter((b) => b.isFeatured)
-      .slice(0, parseInt(limit));
-
-    res.json({
-      success: true,
-      data: featuredSamples,
-      source: "sample_data",
-    });
-  } catch (error) {
-    console.error("Error fetching featured businesses:", error);
-
-    // Fallback to sample featured businesses
-    const featuredSamples = sampleBusinesses
-      .filter((b) => b.isFeatured)
-      .slice(0, parseInt(req.query.limit) || 6);
-
-    res.json({
-      success: true,
-      data: featuredSamples,
-      source: "fallback_sample_data",
-      error: "Database error, using fallback data",
-    });
-  }
-});
 
 // Update business
 app.put(
