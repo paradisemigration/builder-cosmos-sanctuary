@@ -319,18 +319,20 @@ class APIClient {
         return response;
       }
     } catch (error) {
-      console.log(
-        "⚠️ Backend featured businesses unavailable, using client-side data",
-      );
+      console.error("❌ Backend featured businesses unavailable:", error.message);
+      return {
+        success: false,
+        data: [],
+        error: "Backend connection failed - no dummy data served"
+      };
     }
 
-    // Use client-side featured businesses
-    const featured = getClientFeatured();
-    console.log(
-      "✅ Client-side featured businesses loaded:",
-      featured.data.length,
-    );
-    return featured;
+    // No fallback - if we reach here, force error
+    return {
+      success: false,
+      data: [],
+      error: "API response was invalid"
+    };
   }
 
   // Get business statistics
