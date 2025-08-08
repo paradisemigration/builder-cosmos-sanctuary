@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "dev": "npm run dev:client",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:client\"",
     "dev:client": "vite",
     "dev:api": "node server/index.js",
     "build": "npm run build:client && npm run build:server && npm run copy:database",
