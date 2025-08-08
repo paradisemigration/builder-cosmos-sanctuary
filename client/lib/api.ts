@@ -273,20 +273,20 @@ class APIClient {
 
       const response = await this.request(apiUrl);
 
-      // If backend returns good data, use it
-      if (response.success && response.data && response.data.length > 0) {
+      // If backend returns good data, use it (backend returns 'businesses' not 'data')
+      if (response.success && response.businesses && response.businesses.length > 0) {
         console.log("✅ Using backend data:", {
-          businessCount: response.data.length,
+          businessCount: response.businesses.length,
           source: response.source,
         });
 
         return {
           success: true,
-          data: response.data,
+          data: response.businesses, // Map 'businesses' to 'data' for frontend compatibility
           pagination: response.pagination || {
             page: params.page || 1,
-            totalPages: 1,
-            totalRecords: response.data.length,
+            totalPages: Math.ceil(response.total / (params.limit || 25)),
+            totalRecords: response.total || response.businesses.length,
             hasNext: false,
             hasPrev: false,
           },
