@@ -33,7 +33,7 @@ if (missingEnvVars.length > 0) {
   // Continue without throwing error to allow development
 }
 
-// Import and export the API app for Vercel deployment
+// Initialize the API app
 let apiApp;
 const initializeAPI = async () => {
   if (!apiApp) {
@@ -43,10 +43,7 @@ const initializeAPI = async () => {
   return apiApp;
 };
 
-// Named export for Vercel
-export const createServer = initializeAPI;
-
-// Default export for compatibility
+// Default export
 export default initializeAPI;
 
 // Start the API server for local development only
