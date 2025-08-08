@@ -170,8 +170,7 @@ export function GooglePlacesScraper() {
     // Immediate detection for known production environments
     const isKnownProduction =
       window.location.hostname.includes("fly.dev") ||
-      window.location.hostname.includes("vercel.app") ||
-      window.location.hostname.includes("netlify.app");
+      false;
     const apiUrl = import.meta.env.VITE_API_URL;
 
     if (isKnownProduction && (!apiUrl || apiUrl.trim() === "")) {

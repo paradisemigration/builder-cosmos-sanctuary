@@ -494,8 +494,7 @@ export function UltraFastS3SyncEnhanced() {
     const hostname = window.location.hostname;
     if (
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io")
     ) {
       console.log(
