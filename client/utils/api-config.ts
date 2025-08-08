@@ -72,8 +72,6 @@ export function isFrontendOnlyDeployment(): boolean {
   // Known frontend-only platforms
   if (
     hostname.includes("fly.dev") ||
-    hostname.includes("vercel.app") ||
-    hostname.includes("netlify.app") ||
     hostname.includes("github.io")
   ) {
     return true;
