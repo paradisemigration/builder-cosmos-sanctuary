@@ -313,8 +313,8 @@ export function GlobalDebugPopup() {
           DEBUG: {location.pathname}
         </div>
         <div className="text-white break-words">
-          📊 {debugInfo.statistics.totalBusinesses.toLocaleString()} Businesses |{" "}
-          {debugInfo.statistics.totalCities} Cities |{" "}
+          📊 {debugInfo.statistics.totalBusinesses.toLocaleString()} Businesses
+          | {debugInfo.statistics.totalCities} Cities |{" "}
           {debugInfo.statistics.totalCategories} Categories
           {debugInfo.statistics.lastUpdated.includes("fallback")
             ? " (cached)"
@@ -324,8 +324,7 @@ export function GlobalDebugPopup() {
           T: {debugInfo.metaData.title}
         </div>
         <div className="text-white break-words">
-          D:{" "}
-          {debugInfo.metaData.description.substring(0, 80)}
+          D: {debugInfo.metaData.description.substring(0, 80)}
           {debugInfo.metaData.description.length > 80 ? "..." : ""}
         </div>
         <div className="text-yellow-200 font-bold">
@@ -395,7 +394,9 @@ export function GlobalDebugPopup() {
                       <div className="text-2xl font-bold text-orange-600">
                         {debugInfo.statistics.totalImages.toLocaleString()}
                       </div>
-                      <div className="text-xs text-orange-600">Total Images</div>
+                      <div className="text-xs text-orange-600">
+                        Total Images
+                      </div>
                     </div>
                     <div className="text-center p-2 bg-white rounded border">
                       <div className="text-2xl font-bold text-red-600">
@@ -424,7 +425,9 @@ export function GlobalDebugPopup() {
                           : ""}
                         Last updated: {debugInfo.statistics.lastUpdated}
                       </div>
-                      {debugInfo.statistics.lastUpdated.includes("fallback") && (
+                      {debugInfo.statistics.lastUpdated.includes(
+                        "fallback",
+                      ) && (
                         <div className="text-xs text-orange-500 mt-1">
                           Using cached data - API temporarily unavailable
                         </div>
