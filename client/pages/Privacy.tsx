@@ -15,7 +15,7 @@ import {
 
 export default function Privacy() {
   useEffect(() => {
-    document.title = "Privacy Policy - VisaConsult India";
+    document.title = "Privacy Policy - TheVisaBay.com";
     window.scrollTo(0, 0);
   }, []);
 
@@ -415,7 +415,7 @@ export default function Privacy() {
                       Address
                     </div>
                     <div className="text-blue-700">
-                      VisaConsult India
+                      TheVisaBay.com
                       <br />
                       Privacy Officer
                       <br />
