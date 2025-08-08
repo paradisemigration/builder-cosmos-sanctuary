@@ -493,6 +493,21 @@ export function GlobalDebugPopup() {
                   >
                     🔄 Reload Page
                   </button>
+                  <button
+                    className="px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                    onClick={async () => {
+                      try {
+                        const results = await testApiConnectivity();
+                        console.log('API Connectivity Test Results:', results);
+                        const message = results.map(r => `${r.endpoint}: ${r.ok ? '✅ OK' : '❌ FAILED'} (${r.status})`).join('\n');
+                        alert(`API Connectivity Test:\n\n${message}`);
+                      } catch (error) {
+                        alert(`API Test Failed: ${error.message}`);
+                      }
+                    }}
+                  >
+                    🧪 Test APIs
+                  </button>
                 </div>
               </div>
             </div>
