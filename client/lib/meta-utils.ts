@@ -38,7 +38,7 @@ export function generateCityCategoryMeta(
   const categorySpecificInfo = getCategorySpecificContent(categoryName);
 
   return {
-    title: `Top ${categoryName} In ${cityName} ${country} - VisaConsult India`,
+    title: `Top ${categoryName} In ${cityName} ${country} - TheVisaBay.com`,
     description: `Find the best ${categoryName.toLowerCase()} in ${cityName}, ${country}. ${categorySpecificInfo.description} Compare verified consultants, read authentic reviews, and get expert guidance. Professional ${categoryName.toLowerCase()} services with proven success rates in ${cityName}.`,
     keywords: `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categorySpecificInfo.keywords}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, best ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, top ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categoryName.toLowerCase()} near me, ${categoryName.toLowerCase()} ${country}`,
     robots:
