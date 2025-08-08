@@ -80,23 +80,7 @@ export default function Index() {
 
   // Set homepage SEO meta data
   useEffect(() => {
-<<<<<<< HEAD
-    const homePageMeta = {
-      title:
-        "TheVisaBay.com - Find Top Rated Visa Consultants & Immigration Experts",
-      description:
-        "Find trusted visa consultants and immigration experts across India and UAE. Compare services, read authentic reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications. Professional visa consultation with proven success rates.",
-      keywords:
-        "visa consultants, immigration consultants, study abroad consultants, work permit agents, tourist visa services, immigration lawyers, pr consultants, visa agents, visa processing, visa services, immigration services, best visa consultants, top immigration experts, visa consultation, visa guidance",
-      robots:
-        "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-      author: "TheVisaBay.com",
-      viewport: "width=device-width, initial-scale=1.0",
-    };
-
-=======
     const homePageMeta = generateHomeMeta();
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
     setPageMeta(homePageMeta);
 
     setSEOLinks({
@@ -162,14 +146,8 @@ export default function Index() {
     };
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    document.title =
-      "TheVisaBay.com - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services";
-=======
   // Combined loading state
   const loading = featuredLoading || statsLoading;
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 
   // Auto-rotate service highlights
   useEffect(() => {
@@ -244,7 +222,7 @@ export default function Index() {
         "https://cdn.pixabay.com/photo/2020/02/02/17/24/delhi-4813618_1280.jpg",
       fallback:
         "https://images.pexels.com/photos/789750/pexels-photo-789750.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
-      flag: "🇮����",
+      flag: "🇮🇳",
       description: "India Gate & Red Fort",
       color: "#3B82F6",
     },
@@ -299,7 +277,7 @@ export default function Index() {
         "https://cdn.pixabay.com/photo/2020/02/06/06/09/architecture-4823769_1280.jpg",
       fallback:
         "https://images.pexels.com/photos/1007425/pexels-photo-1007425.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop",
-      flag: "🇮🇳",
+      flag: "��🇳",
       description: "Cultural Capital",
       color: "#EF4444",
     },
@@ -597,259 +575,9 @@ export default function Index() {
                     className="cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-colors"
                     onClick={() => setSearchQuery(tag)}
                   >
-<<<<<<< HEAD
-                    🏛️ Delhi
-                  </Link>
-                  <Link
-                    to="/business/mumbai"
-                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                  >
-                    🌆 Mumbai
-                  </Link>
-                  <Link
-                    to="/business/bangalore"
-                    className="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
-                  >
-                    🌿 Bangalore
-                  </Link>
-                  <Link
-                    to="/business/chennai"
-                    className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
-                  >
-                    🏖️ Chennai
-                  </Link>
-                  <Link
-                    to="/business/hyderabad"
-                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
-                  >
-                    💎 Hyderabad
-                  </Link>
-                  <Link
-                    to="/business/kolkata"
-                    className="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
-                  >
-                    🎭 Kolkata
-                  </Link>
-                  <Link
-                    to="/business/pune"
-                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
-                  >
-                    🎓 Pune
-                  </Link>
-                  <Link
-                    to="/business/ahmedabad"
-                    className="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
-                  >
-                    🏺 Ahmedabad
-                  </Link>
-                  <Link
-                    to="/business/jaipur"
-                    className="px-3 py-2 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
-                  >
-                    🏰 Jaipur
-                  </Link>
-                  <Link
-                    to="/business/lucknow"
-                    className="px-3 py-2 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
-                  >
-                    🕌 Lucknow
-                  </Link>
-                  <Link
-                    to="/business/indore"
-                    className="px-3 py-2 bg-lime-100 text-lime-700 rounded hover:bg-lime-200 transition-colors text-center"
-                  >
-                    🌾 Indore
-                  </Link>
-                  <Link
-                    to="/business/chandigarh"
-                    className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
-                  >
-                    🌹 Chandigarh
-                  </Link>
-                  <Link
-                    to="/business/gurgaon"
-                    className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
-                  >
-                    🏙️ Gurgaon
-                  </Link>
-                  <Link
-                    to="/business/noida"
-                    className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
-                  >
-                    🏢 Noida
-                  </Link>
-                  <Link
-                    to="/business/dehradun"
-                    className="px-3 py-2 bg-sky-100 text-sky-700 rounded hover:bg-sky-200 transition-colors text-center"
-                  >
-                    ⛰️ Dehradun
-                  </Link>
-                  <Link
-                    to="/business/kochi"
-                    className="px-3 py-2 bg-violet-100 text-violet-700 rounded hover:bg-violet-200 transition-colors text-center"
-                  >
-                    🏝️ Kochi
-                  </Link>
-                </div>
-              </div>
-
-              {/* Sample Business Pages */}
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-yellow-700 mb-2">
-                  Sample Business Pages:
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-                  <Link
-                    to="/business/1"
-                    className="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 transition-colors text-center"
-                  >
-                    🏢 Business (Legacy)
-                  </Link>
-                  <Link
-                    to="/business/delhi/delhi-global-visa-consultants"
-                    className="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors text-center"
-                  >
-                    🏢 Business (New URL)
-                  </Link>
-                  <Link
-                    to="/business/mumbai/mumbai-immigration-hub"
-                    className="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                  >
-                    🏢 Mumbai Business
-                  </Link>
-                </div>
-              </div>
-
-              {/* City Category Pages */}
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-yellow-700 mb-2">
-                  City Category Pages (8 Categories × 16 Cities = 128 Pages):
-                </h4>
-
-                {/* Delhi Categories */}
-                <div className="mb-3">
-                  <h5 className="text-xs text-yellow-600 mb-1">
-                    Delhi Categories:
-                  </h5>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-1 text-xs">
-                    <Link
-                      to="/business/delhi/study-abroad"
-                      className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
-                    >
-                      🎓 Study Abroad
-                    </Link>
-                    <Link
-                      to="/business/delhi/immigration-consultants"
-                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                    >
-                      ��️ Immigration
-                    </Link>
-                    <Link
-                      to="/business/delhi/visa-consultants"
-                      className="px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
-                    >
-                      📋 Visa
-                    </Link>
-                    <Link
-                      to="/business/delhi/work-permit"
-                      className="px-2 py-1 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-center"
-                    >
-                      💼 Work
-                    </Link>
-                    <Link
-                      to="/business/delhi/visa-services"
-                      className="px-2 py-1 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
-                    >
-                      🛂 Visa Svc
-                    </Link>
-                    <Link
-                      to="/business/delhi/immigration-services"
-                      className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
-                    >
-                      🏛️ Immigration Svc
-                    </Link>
-                    <Link
-                      to="/business/delhi/overseas-services"
-                      className="px-2 py-1 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
-                    >
-                      🌍 Overseas
-                    </Link>
-                    <Link
-                      to="/business/delhi/education-services"
-                      className="px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200 transition-colors text-center"
-                    >
-                      📚 Education
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Sample Categories from Other Cities */}
-                <div className="mb-3">
-                  <h5 className="text-xs text-yellow-600 mb-1">
-                    Other Cities Sample Categories:
-                  </h5>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-1 text-xs">
-                    <Link
-                      to="/business/mumbai/study-abroad"
-                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
-                    >
-                      Mumbai Study
-                    </Link>
-                    <Link
-                      to="/business/bangalore/work-permit"
-                      className="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-center"
-                    >
-                      Bangalore Work
-                    </Link>
-                    <Link
-                      to="/business/chennai/visa-consultants"
-                      className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors text-center"
-                    >
-                      Chennai Visa
-                    </Link>
-                    <Link
-                      to="/business/pune/immigration-services"
-                      className="px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors text-center"
-                    >
-                      Pune Immigration
-                    </Link>
-                    <Link
-                      to="/business/hyderabad/overseas-services"
-                      className="px-2 py-1 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 transition-colors text-center"
-                    >
-                      Hyderabad Overseas
-                    </Link>
-                    <Link
-                      to="/business/kolkata/education-services"
-                      className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors text-center"
-                    >
-                      Kolkata Education
-                    </Link>
-                    <Link
-                      to="/business/jaipur/visa-services"
-                      className="px-2 py-1 bg-rose-100 text-rose-700 rounded hover:bg-rose-200 transition-colors text-center"
-                    >
-                      Jaipur Visa Svc
-                    </Link>
-                    <Link
-                      to="/business/gurgaon/study-abroad"
-                      className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition-colors text-center"
-                    >
-                      Gurgaon Study
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-3 text-xs text-yellow-700 text-center">
-                🚀 Complete Navigation Test: 16 Cities × 8 Categories = 128
-                subcategory pages + main pages. Check browser console for debug
-                info.
-=======
                     {tag}
                   </Badge>
                 ))}
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
               </div>
             </div>
           </div>
@@ -973,30 +701,6 @@ export default function Index() {
                 to={`/business/${city.name.toLowerCase()}`}
                 className="group block"
               >
-<<<<<<< HEAD
-                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105 border border-gray-100">
-                  <div className="text-2xl mb-2">
-                    {
-                      [
-                        "🏛️",
-                        "🌆",
-                        "🏢",
-                        "🏙️",
-                        "💎",
-                        "🎯",
-                        "🏰",
-                        "🕌",
-                        "🌟",
-                        "����",
-                        "🏗️",
-                        "🚇",
-                        "🏔️",
-                        "🌴",
-                        "🎭",
-                        "💼",
-                      ][index]
-                    }
-=======
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200">
                   <div className="relative h-36 sm:h-32 overflow-hidden">
                     <img
@@ -1042,7 +746,6 @@ export default function Index() {
                         {city.count} Consultants
                       </div>
                     </div>
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
                   </div>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
@@ -1073,14 +776,6 @@ export default function Index() {
         </div>
       </section>
 
-<<<<<<< HEAD
-      {/* Why Choose Us */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose TheVisaBay.com?
-=======
       {/* Why Choose Us Section */}
       <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
@@ -1090,7 +785,6 @@ export default function Index() {
             </Badge>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               India's Most Trusted Platform
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Experience the difference with our verified experts and proven
@@ -1165,112 +859,6 @@ export default function Index() {
         </div>
       </section>
 
-<<<<<<< HEAD
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-white text-lg font-semibold mb-4">
-                TheVisaBay.com
-              </h3>
-              <p className="text-sm opacity-80">
-                India's most trusted platform for finding verified visa
-                consultants and immigration experts.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-medium mb-3">Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link to="/business" className="hover:text-white">
-                    Browse Consultants
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/plans" className="hover:text-white">
-                    Pricing Plans
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-white">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-white">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-medium mb-3">Visa Services</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    to="/business?category=Student Visa Consultants"
-                    className="hover:text-white"
-                  >
-                    Student Visa
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/business?category=Work Visa Consultants"
-                    className="hover:text-white"
-                  >
-                    Work Visa
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/business?category=Tourist Visa Services"
-                    className="hover:text-white"
-                  >
-                    Tourist Visa
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/business?category=Business Visa Services"
-                    className="hover:text-white"
-                  >
-                    Business Visa
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-medium mb-3">Support</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link to="/help" className="hover:text-white">
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/privacy" className="hover:text-white">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terms" className="hover:text-white">
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/report" className="hover:text-white">
-                    Report Issue
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm opacity-80">
-            <p>&copy; 2024 VisaConsult India. All rights reserved.</p>
-=======
       {/* CTA Section */}
       <section className="py-16 sm:py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="container mx-auto px-4 text-center">
@@ -1301,7 +889,6 @@ export default function Index() {
                 <Building className="ml-2 h-5 w-5" />
               </Button>
             </Link>
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
           </div>
         </div>
       </section>
