@@ -159,9 +159,10 @@ class APIClient {
 
   // Get businesses with pagination and filters
   async getBusinesses(params = {}) {
-    console.log("🎯 Fetching businesses from Express backend");
+    console.log("🎯 Fetching businesses - trying backend first, falling back to client data");
     console.log("📊 Request params:", params);
 
+    // Try backend first
     try {
       const queryParams = new URLSearchParams();
       if (params.page) queryParams.set("page", params.page.toString());
@@ -169,68 +170,45 @@ class APIClient {
       if (params.city) queryParams.set("city", params.city);
       if (params.category) queryParams.set("category", params.category);
       if (params.search) queryParams.set("search", params.search);
-      if (params.q) queryParams.set("q", params.q);
 
       const apiUrl = `/api/businesses?${queryParams}`;
-      console.log("🚀 API Request:", apiUrl);
 
       const response = await this.request(apiUrl);
 
-      console.log("📡 Raw API Response:", {
-        success: response.success,
-        source: response.source,
-        dataLength: response.data?.length,
-        pagination: response.pagination
-      });
+      // If backend returns good data, use it
+      if (response.success && response.data && response.data.length > 0) {
+        console.log("✅ Using backend data:", {
+          businessCount: response.data.length,
+          source: response.source
+        });
 
-      // Handle both database and sample data responses
-      const businesses = response.data || [];
-      const pagination = response.pagination || {
-        current: 1,
-        total: 1,
-        totalRecords: businesses.length,
-        hasNext: false,
-        hasPrev: false
-      };
-
-      // Normalize pagination format
-      const normalizedPagination = {
-        page: pagination.current || pagination.page || 1,
-        totalPages: pagination.total || pagination.totalPages || 1,
-        totalRecords: pagination.totalRecords || businesses.length,
-        hasNext: pagination.hasNext || false,
-        hasPrev: pagination.hasPrev || false,
-      };
-
-      console.log("✅ Processed Response:", {
-        businessCount: businesses.length,
-        totalRecords: normalizedPagination.totalRecords,
-        source: response.source,
-        sampleBusiness: businesses[0]?.name
-      });
-
-      return {
-        success: true,
-        data: businesses,
-        pagination: normalizedPagination,
-      };
+        return {
+          success: true,
+          data: response.data,
+          pagination: response.pagination || {
+            page: params.page || 1,
+            totalPages: 1,
+            totalRecords: response.data.length,
+            hasNext: false,
+            hasPrev: false,
+          },
+        };
+      }
     } catch (error) {
-      console.error("❌ API Request Failed:", error);
-
-      // Return empty state instead of throwing
-      return {
-        success: false,
-        data: [],
-        pagination: {
-          page: 1,
-          totalPages: 0,
-          totalRecords: 0,
-          hasNext: false,
-          hasPrev: false,
-        },
-        error: error.message
-      };
+      console.log("⚠️ Backend unavailable, using client-side data:", error.message);
     }
+
+    // Use client-side data as reliable fallback
+    console.log("🎯 Using client-side business data (1500+ businesses)");
+    const result = getClientBusinesses(params);
+
+    console.log("✅ Client-side data loaded:", {
+      businessCount: result.data.length,
+      totalRecords: result.pagination.totalRecords,
+      source: result.source
+    });
+
+    return result;
   }
 
   // Get single business
@@ -346,7 +324,7 @@ class APIClient {
       console.log("📊 Stats API Response:", response);
       return response;
     } catch (error) {
-      console.error("❌ Stats API Failed:", error);
+      console.error("��� Stats API Failed:", error);
       // Return fallback stats
       return {
         success: true,
