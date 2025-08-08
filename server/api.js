@@ -13,6 +13,7 @@ import database from "./database.js";
 import sqliteDatabase from "./database.sqlite.js";
 import DataMigration from "./migrate-to-sqlite.js";
 import bulkImageFetcher from "./bulk-image-fetcher.js";
+import BackupSystem from "./backup-system.js";
 
 const app = express();
 
@@ -1722,7 +1723,7 @@ app.post("/api/admin/collect-indian-cities-data", async (req, res) => {
       `📋 Categories per city: ${INDIAN_CITIES_CONFIG.categories.length}`,
     );
     console.log(
-      `🔍 Max results per search: ${INDIAN_CITIES_CONFIG.maxResultsPerSearch}`,
+      `�� Max results per search: ${INDIAN_CITIES_CONFIG.maxResultsPerSearch}`,
     );
     console.log(
       `📊 Total searches planned: ${INDIAN_CITIES_CONFIG.totalSearches}`,
