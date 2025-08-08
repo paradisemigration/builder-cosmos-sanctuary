@@ -1,6 +1,7 @@
 # Fly.io configuration for TheVisaBay.com
 app = "thevisabay-app"
 primary_region = "sin"  # Singapore region for better performance in Asia
+destination = "/data"
 
 [build]
 
