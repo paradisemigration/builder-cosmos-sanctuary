@@ -52,6 +52,15 @@ export function GlobalDebugPopup() {
       ogDescription: '',
       allMetaTags: []
     },
+    statistics: {
+      totalBusinesses: 0,
+      totalCities: 0,
+      totalCategories: 0,
+      totalImages: 0,
+      totalReviews: 0,
+      averageRating: 0,
+      lastUpdated: "",
+    },
     apiCalls: []
   });
   
