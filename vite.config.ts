@@ -44,7 +44,15 @@ export default defineConfig(({ command, mode }) => {
     optimizeDeps: {
       exclude: ['@vite/client']
     },
-    plugins: [react()],
+    plugins: [
+      react({
+        jsxRuntime: 'automatic',
+        jsxImportSource: 'react',
+        babel: {
+          plugins: isProduction ? [] : []
+        }
+      })
+    ],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./client"),
