@@ -94,10 +94,10 @@ export default function Contact() {
     {
       icon: <Mail className="h-5 w-5" />,
       title: "Email Support",
-      details: "support@visaconsultindia.com",
+      details: "support@thevisabay.com",
       description: "Response within 24 hours",
       action: "Send Email",
-      link: "mailto:support@visaconsultindia.com",
+      link: "mailto:support@thevisabay.com",
     },
     {
       icon: <MessageCircle className="h-5 w-5" />,
