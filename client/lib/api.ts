@@ -15,6 +15,7 @@ const isCloudDeployment = () => {
 
 class APIClient {
   private baseURL: string;
+  private requestCache: Map<string, Promise<any>> = new Map();
 
   constructor(baseURL: string = API_BASE_URL) {
     this.baseURL = baseURL;
