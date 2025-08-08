@@ -43,7 +43,7 @@ export function generateCityCategoryMeta(
     keywords: `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categorySpecificInfo.keywords}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, best ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, top ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, ${categoryName.toLowerCase()} near me, ${categoryName.toLowerCase()} ${country}`,
     robots:
       "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    author: "TheVisaBay.com",
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
@@ -194,7 +194,7 @@ export function generateCategoryMeta(
     keywords: `${categoryName.toLowerCase()}, best ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} india, ${categoryName.toLowerCase()} uae, visa consultants, immigration services, study abroad consultants, work permit agents, tourist visa services, pr consultants, immigration lawyers, visa processing, document attestation, embassy services, ${categoryName.toLowerCase().replace(/\s+/g, " ")}`,
     robots:
       "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    author: "TheVisaBay.com",
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
@@ -219,7 +219,7 @@ export function generateCityMeta(cityName: string): MetaData {
     keywords: `visa consultants ${cityName.toLowerCase()}, immigration consultants ${cityName.toLowerCase()}, best visa agents ${cityName.toLowerCase()}, visa services ${cityName.toLowerCase()}, study abroad consultants ${cityName.toLowerCase()}, work visa agents ${cityName.toLowerCase()}, tourist visa services ${cityName.toLowerCase()}, immigration lawyers ${cityName.toLowerCase()}, pr consultants ${cityName.toLowerCase()}, visa processing ${cityName.toLowerCase()}, document services ${cityName.toLowerCase()}, embassy services ${cityName.toLowerCase()}`,
     robots:
       "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    author: "TheVisaBay.com",
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
@@ -248,7 +248,7 @@ export function generateBusinessMeta(
     keywords: `${businessName}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, ${businessName.toLowerCase().replace(/\s+/g, " ")}, visa agents, immigration lawyers, study abroad consultants, work permit services, tourist visa, pr consultants`,
     robots:
       "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-    author: "VisaConsult India",
+    author: "TheVisaBay.com",
     viewport: "width=device-width, initial-scale=1.0",
   };
 }
