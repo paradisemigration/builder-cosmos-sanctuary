@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import archiver from 'archiver';
-import { fileURLToPath } from 'url';
-import sqliteDatabase from './database.sqlite.js';
+import fs from "fs";
+import path from "path";
+import archiver from "archiver";
+import { fileURLToPath } from "url";
+import sqliteDatabase from "./database.sqlite.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,43 +10,45 @@ const __dirname = path.dirname(__filename);
 class BackupSystem {
   constructor() {
     this.backupDate = "2025-08-08"; // As requested
-    this.backupDir = path.join(__dirname, 'backups');
-    this.currentBackupDir = path.join(this.backupDir, `backup-${this.backupDate}`);
+    this.backupDir = path.join(__dirname, "backups");
+    this.currentBackupDir = path.join(
+      this.backupDir,
+      `backup-${this.backupDate}`,
+    );
   }
 
   async createCompleteBackup() {
-    console.log('🔄 Starting complete backup process...');
-    
+    console.log("🔄 Starting complete backup process...");
+
     try {
       // Create backup directories
       await this.ensureDirectories();
-      
+
       // 1. Backup SQLite database file
       await this.backupDatabase();
-      
+
       // 2. Export all business data as JSON
       await this.exportBusinessData();
-      
+
       // 3. Export statistics and metadata
       await this.exportStatistics();
-      
+
       // 4. Backup images (if using local storage)
       await this.backupImages();
-      
+
       // 5. Export reviews separately
       await this.exportReviews();
-      
+
       // 6. Create deployment configuration backup
       await this.backupDeploymentConfig();
-      
+
       // 7. Create compressed archive
       await this.createZipArchive();
-      
-      console.log('✅ Complete backup created successfully!');
+
+      console.log("✅ Complete backup created successfully!");
       return this.getBackupSummary();
-      
     } catch (error) {
-      console.error('❌ Backup failed:', error);
+      console.error("❌ Backup failed:", error);
       throw error;
     }
   }
@@ -55,10 +57,10 @@ class BackupSystem {
     const dirs = [
       this.backupDir,
       this.currentBackupDir,
-      path.join(this.currentBackupDir, 'data'),
-      path.join(this.currentBackupDir, 'images'),
-      path.join(this.currentBackupDir, 'config'),
-      path.join(this.currentBackupDir, 'exports')
+      path.join(this.currentBackupDir, "data"),
+      path.join(this.currentBackupDir, "images"),
+      path.join(this.currentBackupDir, "config"),
+      path.join(this.currentBackupDir, "exports"),
     ];
 
     for (const dir of dirs) {
@@ -69,26 +71,34 @@ class BackupSystem {
   }
 
   async backupDatabase() {
-    console.log('📊 Backing up SQLite database...');
-    
-    const sourcePath = path.join(__dirname, 'visaconsult.db');
-    const backupPath = path.join(this.currentBackupDir, 'data', 'visaconsult.db');
-    
+    console.log("📊 Backing up SQLite database...");
+
+    const sourcePath = path.join(__dirname, "visaconsult.db");
+    const backupPath = path.join(
+      this.currentBackupDir,
+      "data",
+      "visaconsult.db",
+    );
+
     if (fs.existsSync(sourcePath)) {
       fs.copyFileSync(sourcePath, backupPath);
-      console.log('✅ Database backup completed');
+      console.log("✅ Database backup completed");
     } else {
-      console.log('⚠️  Database file not found');
+      console.log("⚠️  Database file not found");
     }
   }
 
   async exportBusinessData() {
-    console.log('🏢 Exporting business listings...');
-    
+    console.log("🏢 Exporting business listings...");
+
     try {
       const businesses = await sqliteDatabase.getAllBusinesses();
-      const exportPath = path.join(this.currentBackupDir, 'exports', 'businesses.json');
-      
+      const exportPath = path.join(
+        this.currentBackupDir,
+        "exports",
+        "businesses.json",
+      );
+
       const exportData = {
         exportDate: new Date().toISOString(),
         totalBusinesses: businesses.length,
@@ -96,71 +106,78 @@ class BackupSystem {
         metadata: {
           version: "1.0",
           source: "TheVisaBay.com",
-          backupDate: this.backupDate
-        }
+          backupDate: this.backupDate,
+        },
       };
-      
+
       fs.writeFileSync(exportPath, JSON.stringify(exportData, null, 2));
       console.log(`✅ Exported ${businesses.length} businesses`);
-      
+
       // Also create CSV export
       await this.exportBusinessesCSV(businesses);
-      
     } catch (error) {
-      console.error('Error exporting businesses:', error);
+      console.error("Error exporting businesses:", error);
     }
   }
 
   async exportBusinessesCSV(businesses) {
-    console.log('📝 Creating CSV export...');
-    
-    const csvPath = path.join(this.currentBackupDir, 'exports', 'businesses.csv');
-    let csvContent = 'ID,Name,Category,City,Address,Phone,Website,Rating,ReviewCount,Description,Services\n';
-    
-    businesses.forEach(business => {
+    console.log("📝 Creating CSV export...");
+
+    const csvPath = path.join(
+      this.currentBackupDir,
+      "exports",
+      "businesses.csv",
+    );
+    let csvContent =
+      "ID,Name,Category,City,Address,Phone,Website,Rating,ReviewCount,Description,Services\n";
+
+    businesses.forEach((business) => {
       const row = [
-        business.id || '',
-        this.escapeCsv(business.name || ''),
-        this.escapeCsv(business.category || ''),
-        this.escapeCsv(business.city || ''),
-        this.escapeCsv(business.address || ''),
-        this.escapeCsv(business.phone || ''),
-        this.escapeCsv(business.website || ''),
-        business.rating || '',
-        business.reviewCount || '',
-        this.escapeCsv(business.description || ''),
-        this.escapeCsv((business.services || []).join('; '))
-      ].join(',');
-      csvContent += row + '\n';
+        business.id || "",
+        this.escapeCsv(business.name || ""),
+        this.escapeCsv(business.category || ""),
+        this.escapeCsv(business.city || ""),
+        this.escapeCsv(business.address || ""),
+        this.escapeCsv(business.phone || ""),
+        this.escapeCsv(business.website || ""),
+        business.rating || "",
+        business.reviewCount || "",
+        this.escapeCsv(business.description || ""),
+        this.escapeCsv((business.services || []).join("; ")),
+      ].join(",");
+      csvContent += row + "\n";
     });
-    
+
     fs.writeFileSync(csvPath, csvContent);
-    console.log('✅ CSV export completed');
+    console.log("✅ CSV export completed");
   }
 
   async exportReviews() {
-    console.log('⭐ Exporting reviews...');
-    
+    console.log("⭐ Exporting reviews...");
+
     try {
       // Get all reviews from database
       const reviews = await this.getAllReviews();
-      const exportPath = path.join(this.currentBackupDir, 'exports', 'reviews.json');
-      
+      const exportPath = path.join(
+        this.currentBackupDir,
+        "exports",
+        "reviews.json",
+      );
+
       const exportData = {
         exportDate: new Date().toISOString(),
         totalReviews: reviews.length,
         reviews: reviews,
         metadata: {
           backupDate: this.backupDate,
-          source: "TheVisaBay.com"
-        }
+          source: "TheVisaBay.com",
+        },
       };
-      
+
       fs.writeFileSync(exportPath, JSON.stringify(exportData, null, 2));
       console.log(`✅ Exported ${reviews.length} reviews`);
-      
     } catch (error) {
-      console.error('Error exporting reviews:', error);
+      console.error("Error exporting reviews:", error);
     }
   }
 
@@ -175,7 +192,7 @@ class BackupSystem {
         LEFT JOIN businesses b ON r.business_id = b.id
         ORDER BY r.created_at DESC
       `;
-      
+
       sqliteDatabase.db.all(query, [], (err, rows) => {
         if (err) reject(err);
         else resolve(rows || []);
@@ -184,12 +201,12 @@ class BackupSystem {
   }
 
   async exportStatistics() {
-    console.log('📈 Exporting statistics...');
-    
+    console.log("📈 Exporting statistics...");
+
     try {
       const stats = await sqliteDatabase.getStatistics();
       const cityStats = await sqliteDatabase.getCityCategoryStats();
-      
+
       const exportData = {
         exportDate: new Date().toISOString(),
         backupDate: this.backupDate,
@@ -201,89 +218,107 @@ class BackupSystem {
           totalCategories: cityStats.totalCategories || 0,
           totalImages: stats.totalImages || 0,
           totalReviews: stats.totalReviews || 0,
-          averageRating: stats.averageRating || 0
-        }
+          averageRating: stats.averageRating || 0,
+        },
       };
-      
-      const exportPath = path.join(this.currentBackupDir, 'exports', 'statistics.json');
+
+      const exportPath = path.join(
+        this.currentBackupDir,
+        "exports",
+        "statistics.json",
+      );
       fs.writeFileSync(exportPath, JSON.stringify(exportData, null, 2));
-      console.log('✅ Statistics export completed');
-      
+      console.log("✅ Statistics export completed");
     } catch (error) {
-      console.error('Error exporting statistics:', error);
+      console.error("Error exporting statistics:", error);
     }
   }
 
   async backupImages() {
-    console.log('🖼️  Backing up images...');
-    
+    console.log("🖼️  Backing up images...");
+
     const imageSourceDirs = [
-      path.join(__dirname, '..', 'uploads'),
-      path.join(__dirname, '..', 'public', 'images'),
-      path.join(__dirname, 'images')
+      path.join(__dirname, "..", "uploads"),
+      path.join(__dirname, "..", "public", "images"),
+      path.join(__dirname, "images"),
     ];
-    
+
     let imageCount = 0;
-    
+
     for (const sourceDir of imageSourceDirs) {
       if (fs.existsSync(sourceDir)) {
-        const destDir = path.join(this.currentBackupDir, 'images', path.basename(sourceDir));
+        const destDir = path.join(
+          this.currentBackupDir,
+          "images",
+          path.basename(sourceDir),
+        );
         await this.copyDirectory(sourceDir, destDir);
-        
+
         // Count images
         const files = this.getAllFiles(destDir);
-        const images = files.filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file));
+        const images = files.filter((file) =>
+          /\.(jpg|jpeg|png|gif|webp)$/i.test(file),
+        );
         imageCount += images.length;
       }
     }
-    
+
     console.log(`✅ Backed up ${imageCount} images`);
   }
 
   async backupDeploymentConfig() {
-    console.log('⚙️  Backing up deployment configuration...');
-    
+    console.log("⚙️  Backing up deployment configuration...");
+
     const configFiles = [
-      { src: path.join(__dirname, '..', 'package.json'), dest: 'package.json' },
-      { src: path.join(__dirname, '..', 'package-lock.json'), dest: 'package-lock.json' },
-      { src: path.join(__dirname, '..', 'fly.toml'), dest: 'fly.toml' },
-      { src: path.join(__dirname, '..', '.env.example'), dest: '.env.example' },
-      { src: path.join(__dirname, '..', 'vite.config.ts'), dest: 'vite.config.ts' },
-      { src: path.join(__dirname, '..', 'README.md'), dest: 'README.md' }
+      { src: path.join(__dirname, "..", "package.json"), dest: "package.json" },
+      {
+        src: path.join(__dirname, "..", "package-lock.json"),
+        dest: "package-lock.json",
+      },
+      { src: path.join(__dirname, "..", "fly.toml"), dest: "fly.toml" },
+      { src: path.join(__dirname, "..", ".env.example"), dest: ".env.example" },
+      {
+        src: path.join(__dirname, "..", "vite.config.ts"),
+        dest: "vite.config.ts",
+      },
+      { src: path.join(__dirname, "..", "README.md"), dest: "README.md" },
     ];
-    
-    const configDir = path.join(this.currentBackupDir, 'config');
-    
+
+    const configDir = path.join(this.currentBackupDir, "config");
+
     for (const file of configFiles) {
       if (fs.existsSync(file.src)) {
         fs.copyFileSync(file.src, path.join(configDir, file.dest));
       }
     }
-    
+
     // Create deployment instructions
     const deploymentGuide = this.createDeploymentGuide();
     fs.writeFileSync(
-      path.join(configDir, 'DEPLOYMENT_GUIDE.md'), 
-      deploymentGuide
+      path.join(configDir, "DEPLOYMENT_GUIDE.md"),
+      deploymentGuide,
     );
-    
-    console.log('✅ Configuration backup completed');
+
+    console.log("✅ Configuration backup completed");
   }
 
   async createZipArchive() {
-    console.log('📦 Creating compressed archive...');
-    
-    const archivePath = path.join(this.backupDir, `thevisabay-backup-${this.backupDate}.zip`);
+    console.log("📦 Creating compressed archive...");
+
+    const archivePath = path.join(
+      this.backupDir,
+      `thevisabay-backup-${this.backupDate}.zip`,
+    );
     const output = fs.createWriteStream(archivePath);
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    
+    const archive = archiver("zip", { zlib: { level: 9 } });
+
     return new Promise((resolve, reject) => {
-      output.on('close', () => {
+      output.on("close", () => {
         console.log(`✅ Archive created: ${archive.pointer()} bytes`);
         resolve(archivePath);
       });
-      
-      archive.on('error', reject);
+
+      archive.on("error", reject);
       archive.pipe(output);
       archive.directory(this.currentBackupDir, false);
       archive.finalize();
@@ -349,24 +384,27 @@ Generated: ${new Date().toISOString()}
     const stats = {
       backupDate: this.backupDate,
       backupLocation: this.currentBackupDir,
-      archiveLocation: path.join(this.backupDir, `thevisabay-backup-${this.backupDate}.zip`),
+      archiveLocation: path.join(
+        this.backupDir,
+        `thevisabay-backup-${this.backupDate}.zip`,
+      ),
       components: [
-        'SQLite Database (visaconsult.db)',
-        'Business Listings (JSON + CSV)',
-        'Reviews Data',
-        'Statistics & Analytics',
-        'Images & Media Files',
-        'Deployment Configuration',
-        'Restoration Guide'
-      ]
+        "SQLite Database (visaconsult.db)",
+        "Business Listings (JSON + CSV)",
+        "Reviews Data",
+        "Statistics & Analytics",
+        "Images & Media Files",
+        "Deployment Configuration",
+        "Restoration Guide",
+      ],
     };
-    
+
     return stats;
   }
 
   // Utility functions
   escapeCsv(str) {
-    if (str && str.includes(',')) {
+    if (str && str.includes(",")) {
       return `"${str.replace(/"/g, '""')}"`;
     }
     return str;
@@ -376,12 +414,12 @@ Generated: ${new Date().toISOString()}
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest, { recursive: true });
     }
-    
+
     const items = fs.readdirSync(src);
     for (const item of items) {
       const srcPath = path.join(src, item);
       const destPath = path.join(dest, item);
-      
+
       if (fs.statSync(srcPath).isDirectory()) {
         this.copyDirectory(srcPath, destPath);
       } else {

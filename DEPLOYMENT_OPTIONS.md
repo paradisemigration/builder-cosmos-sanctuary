@@ -1,9 +1,11 @@
 # 🚀 TheVisaBay.com Deployment Guide
-*For project with 1,572 businesses, 7,707 reviews, 1,926 images*
+
+_For project with 1,572 businesses, 7,707 reviews, 1,926 images_
 
 ## 📊 **Current Data Size**
+
 - **Businesses:** 1,572
-- **Cities:** 19  
+- **Cities:** 19
 - **Categories:** ~48
 - **Images:** 1,926
 - **Reviews:** 7,707
@@ -16,6 +18,7 @@
 ## 🏆 **Recommended Deployment Platforms**
 
 ### 1. **Fly.dev** ⭐ (Current - Best Choice)
+
 ```bash
 # Cost: $15-30/month
 # Perfect for your data size
@@ -25,6 +28,7 @@ fly deploy
 ```
 
 **✅ Pros:**
+
 - Already configured and working
 - Excellent SQLite support with volumes
 - Global edge deployment (fast worldwide)
@@ -33,6 +37,7 @@ fly deploy
 - Handles your image storage well
 
 **💰 Cost Breakdown:**
+
 - App: $10/month (shared-cpu-1x)
 - Volume: $2/month (2GB)
 - Bandwidth: $3-15/month
@@ -41,6 +46,7 @@ fly deploy
 ---
 
 ### 2. **Railway** 🚄 (Great Alternative)
+
 ```bash
 npm install -g @railway/cli
 railway login
@@ -48,6 +54,7 @@ railway deploy
 ```
 
 **✅ Pros:**
+
 - Extremely simple deployment
 - Built-in PostgreSQL (better than SQLite for your size)
 - Automatic SSL, monitoring
@@ -55,6 +62,7 @@ railway deploy
 - $5 hobby plan covers your needs
 
 **Migration Needed:**
+
 - Convert SQLite → PostgreSQL
 - Modify database queries
 - Update connection strings
@@ -64,6 +72,7 @@ railway deploy
 ---
 
 ### 3. **Vercel + PlanetScale** ⚡ (Most Scalable)
+
 ```bash
 # Frontend on Vercel (free)
 # Database on PlanetScale
@@ -74,6 +83,7 @@ vercel
 ```
 
 **✅ Pros:**
+
 - Vercel frontend: FREE
 - PlanetScale database: FREE (up to 1GB)
 - Global CDN included
@@ -81,6 +91,7 @@ vercel
 - Perfect for your data size
 
 **Setup Required:**
+
 - Convert SQLite → MySQL
 - Setup PlanetScale database
 - Configure serverless functions
@@ -90,12 +101,14 @@ vercel
 ---
 
 ### 4. **DigitalOcean App Platform** 🌊
+
 ```bash
 # Simple deployment via GitHub
 # Managed database included
 ```
 
 **✅ Pros:**
+
 - Predictable pricing: $12/month
 - Managed PostgreSQL included
 - Built-in CDN
@@ -108,6 +121,7 @@ vercel
 ## 🛠 **Quick Migration Commands**
 
 ### For Current Fly.dev Setup:
+
 ```bash
 # Just redeploy with more resources
 fly scale memory 1024
@@ -115,6 +129,7 @@ fly volumes extend data 5 # Increase to 5GB
 ```
 
 ### For Railway Migration:
+
 ```bash
 # 1. Export data from SQLite
 node scripts/export-to-sql.js
@@ -130,6 +145,7 @@ railway run node scripts/import-data.js
 ```
 
 ### For Vercel + PlanetScale:
+
 ```bash
 # 1. Setup PlanetScale
 pscale auth login
@@ -148,6 +164,7 @@ vercel --prod
 ## 📦 **Backup & Restore Process**
 
 ### Create Complete Backup:
+
 ```bash
 # Run the backup script
 node scripts/create-backup.js
@@ -159,6 +176,7 @@ node scripts/create-backup.js
 ```
 
 ### Restore on New Platform:
+
 ```bash
 # 1. Download backup ZIP
 # 2. Extract files
@@ -193,6 +211,7 @@ SESSION_SECRET=your_secret_here
 For your data size (1,572 businesses):
 
 1. **Database Indexing:**
+
    ```sql
    CREATE INDEX idx_city ON businesses(city);
    CREATE INDEX idx_category ON businesses(category);
@@ -200,6 +219,7 @@ For your data size (1,572 businesses):
    ```
 
 2. **Image Optimization:**
+
    - Use WebP format
    - Implement lazy loading
    - Consider CDN (Cloudinary/AWS CloudFront)
@@ -216,17 +236,20 @@ For your data size (1,572 businesses):
 Based on your current setup and data size:
 
 **🏆 BEST CHOICE: Stick with Fly.dev**
+
 - Already working perfectly
 - Just increase volume size to 5GB
 - Add Redis for caching
 - Estimated cost: $20-35/month
 
 **🥈 ALTERNATIVE: Railway**
+
 - If you want simpler management
 - Better database (PostgreSQL)
 - Slightly more expensive but easier
 
 **Commands to optimize current Fly.dev:**
+
 ```bash
 fly scale memory 1024
 fly volumes extend data 5

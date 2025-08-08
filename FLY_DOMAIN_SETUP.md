@@ -1,6 +1,7 @@
 # 🚀 Fly.dev Custom Domain Setup for TheVisaBay.com
 
 ## 📋 **Current Status**
+
 - ✅ Already deployed on Fly.dev
 - 🔗 Current URL: `https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 - 🎯 Goal: Deploy on your custom domain (e.g., `thevisabay.com`)
@@ -35,6 +36,7 @@ cd /path/to/thevisabay-project
 ## 🌐 **Step 4: Add Your Custom Domain**
 
 ### Option A: Add Domain to Existing App
+
 ```bash
 # Get your current app name
 fly apps list
@@ -48,6 +50,7 @@ fly certs list
 ```
 
 ### Option B: Create New App with Custom Name
+
 ```bash
 # Create new app with better name
 fly apps create thevisabay --org personal
@@ -116,7 +119,7 @@ At your domain registrar (GoDaddy, Namecheap, Cloudflare, etc.), add these DNS r
 A     thevisabay.com      →  149.248.161.93  (Fly.dev IPv4)
 A     www.thevisabay.com  →  149.248.161.93
 
-# AAAA Records (IPv6) 
+# AAAA Records (IPv6)
 AAAA  thevisabay.com      →  2a09:8280:1::1:1  (Fly.dev IPv6)
 AAAA  www.thevisabay.com  →  2a09:8280:1::1:1
 
@@ -172,6 +175,7 @@ openssl s_client -connect thevisabay.com:443 -servername thevisabay.com
 ## 🔧 **Advanced Configuration**
 
 ### Set Environment Variables:
+
 ```bash
 fly secrets set GOOGLE_PLACES_API_KEY="your-api-key"
 fly secrets set DATABASE_PATH="/app/data/visaconsult.db"
@@ -179,6 +183,7 @@ fly secrets set NODE_ENV="production"
 ```
 
 ### Scale Resources:
+
 ```bash
 # Scale up for production
 fly scale count 2
@@ -187,6 +192,7 @@ fly scale vm shared-cpu-2x
 ```
 
 ### Create Volume for Database:
+
 ```bash
 fly volumes create data --size 5 --region iad
 ```
@@ -196,6 +202,7 @@ fly volumes create data --size 5 --region iad
 ## 🛠 **Troubleshooting**
 
 ### Certificate Issues:
+
 ```bash
 # Remove and re-add certificate
 fly certs remove thevisabay.com
@@ -207,6 +214,7 @@ dig www.thevisabay.com
 ```
 
 ### App Issues:
+
 ```bash
 # Check app logs
 fly logs
@@ -219,6 +227,7 @@ fly restart
 ```
 
 ### DNS Issues:
+
 - Wait 24-48 hours for DNS propagation
 - Use online DNS checker tools
 - Verify records with your domain provider
@@ -228,17 +237,20 @@ fly restart
 ## 📱 **Domain Provider Specific Guides**
 
 ### GoDaddy:
+
 1. Go to DNS Management
 2. Add A record: `@` → `149.248.161.93`
 3. Add A record: `www` → `149.248.161.93`
 
 ### Cloudflare:
+
 1. Go to DNS section
 2. Add A record: `thevisabay.com` → `149.248.161.93`
 3. Add CNAME: `www` → `thevisabay.com`
 4. Set SSL to "Full"
 
 ### Namecheap:
+
 1. Go to Advanced DNS
 2. Add A record: `@` → `149.248.161.93`
 3. Add A record: `www` → `149.248.161.93`
@@ -262,8 +274,9 @@ fly restart
 ## 🎯 **Expected Results**
 
 After setup completion:
+
 - ✅ `https://thevisabay.com` → Your website
-- ✅ `https://www.thevisabay.com` → Your website  
+- ✅ `https://www.thevisabay.com` → Your website
 - ✅ SSL certificates automatically managed
 - ✅ Global CDN through Fly.dev
 - ✅ Same performance as current deployment

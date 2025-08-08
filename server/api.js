@@ -1542,14 +1542,14 @@ app.get("/api/admin/backup/history", async (req, res) => {
 // Create complete backup with all data (August 8, 2025)
 app.post("/api/admin/create-complete-backup", async (req, res) => {
   try {
-    console.log('🔄 Starting comprehensive backup process...');
+    console.log("🔄 Starting comprehensive backup process...");
 
     const backupSystem = new BackupSystem();
     const result = await backupSystem.createCompleteBackup();
 
     res.json({
       success: true,
-      message: 'Complete backup created successfully',
+      message: "Complete backup created successfully",
       backup: result,
       timestamp: new Date().toISOString(),
       dataIncluded: {
@@ -1559,16 +1559,15 @@ app.post("/api/admin/create-complete-backup", async (req, res) => {
         cities: "19 cities",
         categories: "~48 categories",
         database: "Complete SQLite database",
-        config: "Deployment configuration"
-      }
+        config: "Deployment configuration",
+      },
     });
-
   } catch (error) {
-    console.error('❌ Backup creation failed:', error);
+    console.error("❌ Backup creation failed:", error);
     res.status(500).json({
       success: false,
-      message: 'Backup creation failed',
-      error: error.message
+      message: "Backup creation failed",
+      error: error.message,
     });
   }
 });
@@ -1577,22 +1576,22 @@ app.post("/api/admin/create-complete-backup", async (req, res) => {
 app.get("/api/admin/download-backup/:filename", (req, res) => {
   try {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'backups', filename);
+    const filePath = path.join(__dirname, "backups", filename);
 
     if (fs.existsSync(filePath)) {
       res.download(filePath, filename);
     } else {
       res.status(404).json({
         success: false,
-        error: 'Backup file not found',
-        filename: filename
+        error: "Backup file not found",
+        filename: filename,
       });
     }
   } catch (error) {
-    console.error('Download error:', error);
+    console.error("Download error:", error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1600,19 +1599,20 @@ app.get("/api/admin/download-backup/:filename", (req, res) => {
 // List all available backups
 app.get("/api/admin/list-backups", (req, res) => {
   try {
-    const backupsDir = path.join(__dirname, 'backups');
+    const backupsDir = path.join(__dirname, "backups");
 
     if (!fs.existsSync(backupsDir)) {
       return res.json({
         success: true,
         backups: [],
-        message: "No backups directory found"
+        message: "No backups directory found",
       });
     }
 
-    const files = fs.readdirSync(backupsDir)
-      .filter(file => file.endsWith('.zip'))
-      .map(file => {
+    const files = fs
+      .readdirSync(backupsDir)
+      .filter((file) => file.endsWith(".zip"))
+      .map((file) => {
         const filePath = path.join(backupsDir, file);
         const stats = fs.statSync(filePath);
         return {
@@ -1621,7 +1621,7 @@ app.get("/api/admin/list-backups", (req, res) => {
           sizeFormatted: `${(stats.size / 1024 / 1024).toFixed(2)} MB`,
           created: stats.birthtime,
           modified: stats.mtime,
-          downloadUrl: `/api/admin/download-backup/${file}`
+          downloadUrl: `/api/admin/download-backup/${file}`,
         };
       })
       .sort((a, b) => b.created - a.created);
@@ -1629,14 +1629,13 @@ app.get("/api/admin/list-backups", (req, res) => {
     res.json({
       success: true,
       backups: files,
-      total: files.length
+      total: files.length,
     });
-
   } catch (error) {
-    console.error('List backups error:', error);
+    console.error("List backups error:", error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1656,18 +1655,17 @@ app.get("/api/admin/backup-status", async (req, res) => {
         totalImages: stats.totalImages || 0,
         totalReviews: stats.totalReviews || 0,
         averageRating: stats.averageRating || 0,
-        lastUpdated: stats.lastUpdated
+        lastUpdated: stats.lastUpdated,
       },
       backupReady: true,
       recommendedBackupDate: "2025-08-08",
-      estimatedBackupSize: "500MB - 1GB"
+      estimatedBackupSize: "500MB - 1GB",
     });
-
   } catch (error) {
-    console.error('Backup status error:', error);
+    console.error("Backup status error:", error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

@@ -3,6 +3,7 @@
 ## 📦 **Step 1: Create Backup (CRITICAL - Do This First!)**
 
 ### Option A: Via API (Recommended)
+
 ```bash
 # From your current Fly.dev deployment
 curl -X POST https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/api/admin/create-complete-backup
@@ -12,6 +13,7 @@ curl https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/
 ```
 
 ### Option B: Via Script
+
 ```bash
 # Run the backup script
 node backup-now.js
@@ -21,6 +23,7 @@ node backup-now.js
 ```
 
 ### Option C: Manual Database Backup
+
 ```bash
 # Copy the database file
 cp server/visaconsult.db ./backup-$(date +%Y-%m-%d)-visaconsult.db
@@ -34,6 +37,7 @@ tar -czf thevisabay-source-$(date +%Y-%m-%d).tar.gz . --exclude=node_modules --e
 ## ���� **Step 2: Deployment Options**
 
 ### **Current Status:**
+
 - ✅ Already deployed on Fly.dev
 - 🔗 Current URL: `https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev`
 - 📊 Data: 1,572 businesses, 7,707 reviews, 1,926 images
@@ -44,12 +48,14 @@ tar -czf thevisabay-source-$(date +%Y-%m-%d).tar.gz . --exclude=node_modules --e
 ## 🛠 **Deployment Method 1: Update Current Fly.dev**
 
 ### 1. Install Fly CLI:
+
 ```bash
 curl -L https://fly.io/install.sh | sh
 fly auth login
 ```
 
 ### 2. Connect to Existing App:
+
 ```bash
 # Find your app
 fly apps list
@@ -59,6 +65,7 @@ fly status
 ```
 
 ### 3. Deploy Updates:
+
 ```bash
 # Deploy latest changes
 fly deploy
@@ -73,6 +80,7 @@ fly scale count 2
 ## 🌐 **Deployment Method 2: Fresh Deployment with Custom Domain**
 
 ### 1. Create New App:
+
 ```bash
 # Create new app with better name
 fly apps create thevisabay --org personal
@@ -81,6 +89,7 @@ fly apps create thevisabay --org personal
 ```
 
 ### 2. Set Environment Variables:
+
 ```bash
 fly secrets set GOOGLE_PLACES_API_KEY="your-api-key"
 fly secrets set DATABASE_PATH="/app/data/visaconsult.db"
@@ -88,16 +97,19 @@ fly secrets set NODE_ENV="production"
 ```
 
 ### 3. Create Volume for Database:
+
 ```bash
 fly volumes create data --size 5 --region iad
 ```
 
 ### 4. Deploy:
+
 ```bash
 fly deploy
 ```
 
 ### 5. Add Custom Domain:
+
 ```bash
 fly certs add thevisabay.com
 fly certs add www.thevisabay.com
@@ -108,6 +120,7 @@ fly certs add www.thevisabay.com
 ## 🔧 **Deployment Method 3: Alternative Platforms**
 
 ### **Railway (Easiest Alternative):**
+
 ```bash
 # Install Railway CLI
 npm install -g @railway/cli
@@ -120,6 +133,7 @@ railway deploy
 ```
 
 ### **Vercel + PlanetScale (Most Scalable):**
+
 ```bash
 # Frontend on Vercel
 npm install -g vercel
@@ -132,6 +146,7 @@ pscale database create thevisabay
 ```
 
 ### **DigitalOcean App Platform:**
+
 - Connect GitHub repo: `paradisemigration/builder-cosmos-sanctuary`
 - Add managed PostgreSQL database
 - Deploy via UI
@@ -184,6 +199,7 @@ primary_region = "iad"
 ### **For Your Current Setup:**
 
 **✅ BEST OPTION: Update Current Fly.dev**
+
 1. **Create backup** (via API or script)
 2. **Scale current app** (`fly scale memory 1024`)
 3. **Add custom domain** (`fly certs add yourdomain.com`)
@@ -198,11 +214,13 @@ primary_region = "iad"
 ## 🔄 **Step-by-Step Deployment Commands**
 
 ### **Right Now - Create Backup:**
+
 ```bash
 curl -X POST https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/api/admin/create-complete-backup
 ```
 
 ### **Then Deploy:**
+
 ```bash
 # Install Fly CLI
 curl -L https://fly.io/install.sh | sh
@@ -221,6 +239,7 @@ fly certs add yourdomain.com
 ## 🛡️ **Backup Verification**
 
 ### **Check Your Data:**
+
 ```bash
 # Verify business count
 curl https://your-app.fly.dev/api/scraping/stats
@@ -233,6 +252,7 @@ curl https://your-app.fly.dev/api/admin/backup-status
 ```
 
 ### **Expected Results:**
+
 - ✅ **1,572 businesses** preserved
 - ✅ **7,707 reviews** intact
 - ✅ **1,926 images** available
@@ -244,6 +264,7 @@ curl https://your-app.fly.dev/api/admin/backup-status
 ## ⚡ **Emergency Rollback Plan**
 
 If deployment fails:
+
 ```bash
 # Rollback to previous version
 fly releases
@@ -262,6 +283,7 @@ fly deploy --image flyio/thevisabay:v123
 ## 🎯 **I Cannot Deploy Directly, But I Can Guide You**
 
 While I cannot access your Fly.dev account or deploy for you, I can:
+
 - ✅ **Create deployment scripts and configs**
 - ✅ **Provide exact commands to run**
 - ✅ **Help troubleshoot any issues**
