@@ -315,7 +315,7 @@ class APIClient {
     try {
       const response = await this.request("/api/businesses/featured");
       if (response.success && response.data && response.data.length > 0) {
-        console.log("✅ Using backend featured businesses");
+        console.log("�� Using backend featured businesses");
         return response;
       }
     } catch (error) {
@@ -345,13 +345,32 @@ class APIClient {
         return response;
       }
     } catch (error) {
-      console.log("⚠️ Backend stats unavailable, using client-side stats");
+      console.error("❌ Backend stats unavailable:", error.message);
+      return {
+        success: false,
+        data: {
+          totalBusinesses: 0,
+          totalReviews: 0,
+          totalImages: 0,
+          citiesCount: 0,
+          averageRating: 0,
+        },
+        error: "Backend connection failed - no dummy data served"
+      };
     }
 
-    // Use client-side stats
-    const stats = getClientStats();
-    console.log("✅ Client-side stats loaded:", stats.data);
-    return stats;
+    // No fallback - if we reach here, force error
+    return {
+      success: false,
+      data: {
+        totalBusinesses: 0,
+        totalReviews: 0,
+        totalImages: 0,
+        citiesCount: 0,
+        averageRating: 0,
+      },
+      error: "API response was invalid"
+    };
   }
 }
 
