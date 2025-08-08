@@ -127,7 +127,7 @@ export default function Index() {
 
   useEffect(() => {
     document.title =
-      "VisaConsult India - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services";
+      "TheVisaBay.com - Find Trusted Visa Consultants | Student, Work & Tourist Visa Services";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -503,7 +503,7 @@ export default function Index() {
                       to="/business/delhi/immigration-consultants"
                       className="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-center"
                     >
-                      ⚖️ Immigration
+                      ��️ Immigration
                     </Link>
                     <Link
                       to="/business/delhi/visa-consultants"
@@ -820,7 +820,7 @@ export default function Index() {
                         "🏰",
                         "🕌",
                         "🌟",
-                        "🌸",
+                        "����",
                         "🏗️",
                         "🚇",
                         "🏔️",
