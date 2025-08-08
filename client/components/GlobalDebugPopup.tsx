@@ -216,6 +216,44 @@ export function GlobalDebugPopup() {
             </div>
             
             <div className="p-4 space-y-4">
+              {/* Database Statistics */}
+              <div>
+                <h3 className="font-semibold mb-2 text-gray-800">📊 Database Statistics</h3>
+                <div className="bg-blue-50 p-3 rounded border">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-blue-600">{debugInfo.statistics.totalBusinesses.toLocaleString()}</div>
+                      <div className="text-xs text-blue-600">Total Businesses</div>
+                    </div>
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-green-600">{debugInfo.statistics.totalCities}</div>
+                      <div className="text-xs text-green-600">Total Cities</div>
+                    </div>
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-purple-600">{debugInfo.statistics.totalCategories}</div>
+                      <div className="text-xs text-purple-600">Total Categories</div>
+                    </div>
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-orange-600">{debugInfo.statistics.totalImages.toLocaleString()}</div>
+                      <div className="text-xs text-orange-600">Total Images</div>
+                    </div>
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-red-600">{debugInfo.statistics.totalReviews.toLocaleString()}</div>
+                      <div className="text-xs text-red-600">Total Reviews</div>
+                    </div>
+                    <div className="text-center p-2 bg-white rounded border">
+                      <div className="text-2xl font-bold text-indigo-600">{debugInfo.statistics.averageRating.toFixed(1)}</div>
+                      <div className="text-xs text-indigo-600">Avg Rating</div>
+                    </div>
+                  </div>
+                  {debugInfo.statistics.lastUpdated && (
+                    <div className="mt-2 text-xs text-gray-500 text-center">
+                      Last updated: {debugInfo.statistics.lastUpdated}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Meta Data Info */}
               <div>
                 <h3 className="font-semibold mb-2 text-gray-800">📍 Page Meta Data</h3>
@@ -310,7 +348,7 @@ export function GlobalDebugPopup() {
 
               {/* Local Storage Info */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-800">💾 Storage</h3>
+                <h3 className="font-semibold mb-2 text-gray-800">�� Storage</h3>
                 <div className="bg-gray-50 p-3 rounded border text-sm">
                   <div><span className="font-medium">Local Storage Items:</span> {localStorage.length}</div>
                   <div><span className="font-medium">Session Storage Items:</span> {sessionStorage.length}</div>
