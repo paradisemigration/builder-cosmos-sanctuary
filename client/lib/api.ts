@@ -201,23 +201,22 @@ class APIClient {
         };
       }
     } catch (error) {
-      console.log(
-        "⚠️ Backend unavailable, using client-side data:",
-        error.message,
-      );
+      console.error("❌ Backend completely unavailable:", error.message);
+      return {
+        success: false,
+        data: [],
+        pagination: { page: 1, totalPages: 0, totalRecords: 0, hasNext: false, hasPrev: false },
+        error: "Backend connection failed - no dummy data served"
+      };
     }
 
-    // Use client-side data as reliable fallback
-    console.log("🎯 Using client-side business data (1500+ businesses)");
-    const result = getClientBusinesses(params);
-
-    console.log("✅ Client-side data loaded:", {
-      businessCount: result.data.length,
-      totalRecords: result.pagination.totalRecords,
-      source: result.source,
-    });
-
-    return result;
+    // No fallback - if we reach here, force error
+    return {
+      success: false,
+      data: [],
+      pagination: { page: 1, totalPages: 0, totalRecords: 0, hasNext: false, hasPrev: false },
+      error: "API response was invalid"
+    };
   }
 
   // Get single business
