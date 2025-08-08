@@ -34,6 +34,17 @@ app.use(
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    service: "TheVisaBay.com",
+    uptime: process.uptime(),
+    version: process.env.npm_package_version || "1.0.0",
+  });
+});
+
 // Mount Ultra-Fast S3 Sync routes
 app.use("/api/ultra-fast-sync", ultraFastSyncRouter);
 
