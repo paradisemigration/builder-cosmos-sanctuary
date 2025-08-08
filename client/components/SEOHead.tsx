@@ -1,5 +1,17 @@
 import { Helmet } from "react-helmet-async";
 
+interface SEOHeadProps {
+  title: string;
+  description: string;
+  keywords?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  structuredData?: object;
+  country?: "india" | "uae";
+}
+
 export const SEOHead = ({
   title,
   description,
