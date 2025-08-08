@@ -306,22 +306,10 @@ class APIClient {
 
   // Get single business
   async getBusinessById(id: string) {
-    try {
-      return await this.request<{
-        success: boolean;
-        data: Business;
-      }>(`/api/businesses/${id}`);
-    } catch (error) {
-      // Fallback to sample business
-      const sampleBusiness = sampleBusinesses.find((b) => b.id === id);
-      if (sampleBusiness) {
-        return {
-          success: true,
-          data: sampleBusiness,
-        };
-      }
-      throw error;
-    }
+    return await this.request<{
+      success: boolean;
+      data: Business;
+    }>(`/api/businesses/${id}`);
   }
 
   // Update business
