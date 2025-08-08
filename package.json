@@ -26,7 +26,9 @@
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
     "backup": "node scripts/create-backup.js",
-    "backup:create": "node scripts/create-backup.js"
+    "backup:create": "node scripts/create-backup.js",
+    "check-db": "node check-database.js",
+    "dev:full": "concurrently \"npm run dev:api\" \"npm run dev:client\""
   },
   "dependencies": {
     "@google-cloud/storage": "^7.13.0",
