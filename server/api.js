@@ -332,6 +332,50 @@ app.get("/api/businesses", async (req, res) => {
   }
 });
 
+// Get business statistics (MUST be before /:id route)
+app.get("/api/businesses/stats", async (req, res) => {
+  try {
+    console.log("📊 Business stats requested");
+    const stats = await sqliteDatabase.getStatistics();
+
+    console.log("📊 SQLite stats:", stats);
+
+    if (stats && stats.totalBusinesses > 0) {
+      res.json({
+        success: true,
+        data: {
+          totalBusinesses: stats.totalBusinesses,
+          totalReviews: stats.totalReviews,
+          totalImages: stats.totalImages,
+          citiesCount: stats.citiesCount,
+          totalGooglePlaces: stats.totalGooglePlaces,
+          averageRating: stats.averageRating,
+        },
+        source: "database",
+      });
+    } else {
+      throw new Error("No stats found in database");
+    }
+  } catch (error) {
+    console.error("❌ Error fetching business stats:", error);
+
+    // Return real fallback from sample data
+    res.json({
+      success: true,
+      data: {
+        totalBusinesses: sampleBusinesses.length,
+        totalReviews: 0,
+        totalImages: 0,
+        citiesCount: new Set(sampleBusinesses.map((b) => b.city)).size,
+        totalGooglePlaces: 0,
+        averageRating: 4.5,
+      },
+      source: "fallback_error",
+      error: "Database error, using fallback stats",
+    });
+  }
+});
+
 // Get single business
 app.get("/api/businesses/:id", async (req, res) => {
   try {
@@ -1924,7 +1968,7 @@ app.post("/api/admin/collect-abu-dhabi-data", async (req, res) => {
       .scrapeBusinesses(abuDhabiConfig)
       .then((result) => {
         console.log("✅ Abu Dhabi data collection completed!");
-        console.log(`📊 Final Results:`);
+        console.log(`�� Final Results:`);
         console.log(
           `   • Total businesses collected: ${result.totalBusinesses}`,
         );
