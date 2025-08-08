@@ -1,0 +1,76 @@
+#!/bin/bash
+
+echo "🚀 TheVisaBay.com - Immediate Deployment Actions"
+echo "================================================"
+
+echo "📦 STEP 1: CREATE BACKUP (CRITICAL!)"
+echo "Run this command RIGHT NOW:"
+echo ""
+echo "curl -X POST https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/api/admin/create-complete-backup"
+echo ""
+echo "✅ This will backup:"
+echo "  • 1,572 business listings"
+echo "  • 7,707 reviews"
+echo "  • 1,926 images"
+echo "  • Complete database"
+echo "  • All configuration"
+
+echo ""
+echo "🚀 STEP 2: DEPLOY TO FLY.DEV"
+echo "After backup completes, run these commands:"
+echo ""
+
+echo "# Install Fly CLI (if not installed)"
+echo "curl -L https://fly.io/install.sh | sh"
+echo ""
+
+echo "# Login to Fly.dev"
+echo "fly auth login"
+echo ""
+
+echo "# Check current app status"
+echo "fly status"
+echo ""
+
+echo "# Scale up resources for production"
+echo "fly scale memory 1024"
+echo "fly scale count 2"
+echo ""
+
+echo "# Deploy latest changes"
+echo "fly deploy"
+echo ""
+
+echo "# Add custom domain (optional - replace with your domain)"
+echo "fly certs add thevisabay.com"
+echo "fly certs add www.thevisabay.com"
+echo ""
+
+echo "🔍 STEP 3: VERIFY DEPLOYMENT"
+echo "After deployment, test these URLs:"
+echo ""
+echo "# Check API health"
+echo "curl https://your-new-app.fly.dev/api/stats"
+echo ""
+echo "# Test business data"
+echo "curl https://your-new-app.fly.dev/api/scraping/stats"
+echo ""
+
+echo "✅ YOUR DATA IS PROTECTED!"
+echo "Current data that will be preserved:"
+echo "  📈 1,572 businesses"
+echo "  ⭐ 7,707 reviews"
+echo "  🖼️ 1,926 images"
+echo "  🏙️ 19 cities"
+echo "  📂 ~48 categories"
+echo "  📊 4.74 average rating"
+
+echo ""
+echo "🎯 SUPPORT:"
+echo "If you need help, check these files:"
+echo "  • DEPLOY_WITH_BACKUP.md (detailed guide)"
+echo "  • FLY_DOMAIN_SETUP.md (custom domain setup)"
+echo "  • DEBUG_FIXES_SUMMARY.md (troubleshooting)"
+
+echo ""
+echo "⚡ START WITH BACKUP COMMAND ABOVE! ⚡"
