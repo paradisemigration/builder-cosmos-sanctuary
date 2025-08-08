@@ -49,7 +49,10 @@ export default function AdminPanel() {
       });
       const available = response.ok;
       setBackendAvailable(available);
-      console.log("Backend health check:", available ? "✅ Connected" : "❌ Failed");
+      console.log(
+        "Backend health check:",
+        available ? "✅ Connected" : "❌ Failed",
+      );
       return available;
     } catch (error) {
       console.log("Backend health check failed:", error.message);
@@ -329,7 +332,8 @@ export default function AdminPanel() {
 
   // Auto-grant admin access on cloud deployment for immediate troubleshooting
   const hostname = window.location.hostname;
-  const isCloudDeployment = hostname.includes('fly.dev') || hostname.includes('thevisabay.com');
+  const isCloudDeployment =
+    hostname.includes("fly.dev") || hostname.includes("thevisabay.com");
 
   if (!isCloudDeployment && (!user || user.role !== "admin")) {
     return (
@@ -439,7 +443,8 @@ export default function AdminPanel() {
                     SUCCESS: All your data is safe and intact!
                   </span>
                   <span className="text-green-700 ml-2">
-                    Database contains 1,572 businesses, 7,707 reviews, and 1,926 images.
+                    Database contains 1,572 businesses, 7,707 reviews, and 1,926
+                    images.
                   </span>
                 </div>
               </div>
@@ -487,7 +492,9 @@ export default function AdminPanel() {
                         <p className="text-2xl font-bold text-gray-900">
                           {loading
                             ? "1,572"
-                            : stats?.totalBusinesses || businesses.length || 1572}
+                            : stats?.totalBusinesses ||
+                              businesses.length ||
+                              1572}
                         </p>
                       </div>
                     </div>

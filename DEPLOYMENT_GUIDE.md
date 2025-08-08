@@ -217,16 +217,19 @@ git push origin v1.0.0
 ### Common Issues
 
 1. **Domain not resolving**
+
    - Check DNS propagation: https://dnschecker.org
    - Verify A/AAAA records point to Fly.io IPs
 
 2. **SSL Certificate issues**
+
    ```bash
    fly certs show thevisabay.com
    # If "failed", check DNS and wait 24-48 hours
    ```
 
 3. **App not starting**
+
    ```bash
    fly logs
    # Check for missing environment variables or build issues

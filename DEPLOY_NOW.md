@@ -7,11 +7,12 @@
 ✅ **Dockerfile**: Optimized for production  
 ✅ **Build Scripts**: Package.json has `deploy:fly` command  
 ✅ **Storage**: Persistent volume configured  
-✅ **Environment**: Production settings ready  
+✅ **Environment**: Production settings ready
 
 ## Quick Deploy Commands
 
 ### Option 1: Automated Deploy (Recommended)
+
 ```bash
 # Go to your project directory
 cd code
@@ -21,6 +22,7 @@ npm run deploy:fly
 ```
 
 ### Option 2: Manual Step-by-Step
+
 ```bash
 # 1. Install Fly CLI (if needed)
 curl -L https://fly.io/install.sh | sh
@@ -37,6 +39,7 @@ flyctl deploy --app thevisabay
 ```
 
 ## App Details
+
 - **Name**: thevisabay
 - **Region**: Singapore (sin)
 - **Memory**: 1GB
@@ -60,6 +63,7 @@ flyctl deploy --app thevisabay
 - All business data preserved
 
 ## Need Help?
+
 - Check deployment status: `flyctl status --app thevisabay`
 - View logs: `flyctl logs --app thevisabay`
 - Open app: `flyctl open --app thevisabay`

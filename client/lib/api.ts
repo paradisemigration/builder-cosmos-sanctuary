@@ -7,10 +7,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 // Detect cloud deployment environments
 const isCloudDeployment = () => {
   const hostname = window.location.hostname;
-  return hostname.includes('fly.dev') ||
-         hostname.includes('vercel.app') ||
-         hostname.includes('netlify.app') ||
-         hostname.includes('thevisabay.com');
+  return (
+    hostname.includes("fly.dev") ||
+    hostname.includes("vercel.app") ||
+    hostname.includes("netlify.app") ||
+    hostname.includes("thevisabay.com")
+  );
 };
 
 class APIClient {
@@ -27,7 +29,7 @@ class APIClient {
     options: RequestInit = {},
   ): Promise<T> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-    const cacheKey = `${options.method || 'GET'}:${url}`;
+    const cacheKey = `${options.method || "GET"}:${url}`;
 
     // Check if request is already in progress
     if (this.requestCache.has(cacheKey)) {
@@ -35,7 +37,7 @@ class APIClient {
       return this.requestCache.get(cacheKey);
     }
 
-    console.log(`🔗 API Request: ${options.method || 'GET'} ${url}`);
+    console.log(`🔗 API Request: ${options.method || "GET"} ${url}`);
 
     // Create and cache the request promise
     const requestPromise = this.executeRequest<T>(url, endpoint, options);
@@ -49,16 +51,19 @@ class APIClient {
     return requestPromise;
   }
 
-  private async executeRequest<T>(url: string, endpoint: string, options: RequestInit): Promise<T> {
-
+  private async executeRequest<T>(
+    url: string,
+    endpoint: string,
+    options: RequestInit,
+  ): Promise<T> {
     // Use XMLHttpRequest directly for cloud deployments to avoid FullStory interference
     if (isCloudDeployment()) {
       console.log(`☁️ Cloud deployment detected, using XMLHttpRequest`);
 
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open(options.method || 'GET', url);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.open(options.method || "GET", url);
+        xhr.setRequestHeader("Content-Type", "application/json");
 
         if (options.headers) {
           Object.entries(options.headers).forEach(([key, value]) => {
@@ -66,12 +71,15 @@ class APIClient {
           });
         }
 
-        xhr.onload = function() {
+        xhr.onload = function () {
           console.log(`📡 XHR Response: ${xhr.status} for ${endpoint}`);
           if (xhr.status >= 200 && xhr.status < 300) {
             try {
               const data = JSON.parse(xhr.responseText);
-              console.log(`✅ XHR Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
+              console.log(
+                `✅ XHR Success: ${endpoint}`,
+                data.success ? "SUCCESS" : "FAILED",
+              );
               resolve(data);
             } catch (parseError) {
               reject(new Error(`Invalid JSON response: ${parseError.message}`));
@@ -81,8 +89,8 @@ class APIClient {
           }
         };
 
-        xhr.onerror = () => reject(new Error('Network error - XHR failed'));
-        xhr.ontimeout = () => reject(new Error('Request timeout'));
+        xhr.onerror = () => reject(new Error("Network error - XHR failed"));
+        xhr.ontimeout = () => reject(new Error("Request timeout"));
         xhr.timeout = 30000; // 30 second timeout for cloud environments
 
         if (options.body) {
@@ -101,21 +109,24 @@ class APIClient {
 
       try {
         response = await originalFetch(url, {
-          method: options.method || 'GET',
+          method: options.method || "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             ...options.headers,
           },
           ...options,
         });
       } catch (fetchError) {
-        console.warn(`🔄 Fetch failed, trying XMLHttpRequest fallback:`, fetchError.message);
+        console.warn(
+          `🔄 Fetch failed, trying XMLHttpRequest fallback:`,
+          fetchError.message,
+        );
 
         // Fallback to XMLHttpRequest to bypass FullStory
         return new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
-          xhr.open(options.method || 'GET', url);
-          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.open(options.method || "GET", url);
+          xhr.setRequestHeader("Content-Type", "application/json");
 
           if (options.headers) {
             Object.entries(options.headers).forEach(([key, value]) => {
@@ -123,22 +134,27 @@ class APIClient {
             });
           }
 
-          xhr.onload = function() {
+          xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status < 300) {
               try {
                 const data = JSON.parse(xhr.responseText);
-                console.log(`✅ XHR Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
+                console.log(
+                  `✅ XHR Success: ${endpoint}`,
+                  data.success ? "SUCCESS" : "FAILED",
+                );
                 resolve(data);
               } catch (parseError) {
-                reject(new Error(`Invalid JSON response: ${parseError.message}`));
+                reject(
+                  new Error(`Invalid JSON response: ${parseError.message}`),
+                );
               }
             } else {
               reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
             }
           };
 
-          xhr.onerror = () => reject(new Error('Network error'));
-          xhr.ontimeout = () => reject(new Error('Request timeout'));
+          xhr.onerror = () => reject(new Error("Network error"));
+          xhr.ontimeout = () => reject(new Error("Request timeout"));
           xhr.timeout = 10000;
 
           if (options.body) {
@@ -156,7 +172,10 @@ class APIClient {
       }
 
       const data = await response.json();
-      console.log(`✅ API Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
+      console.log(
+        `✅ API Success: ${endpoint}`,
+        data.success ? "SUCCESS" : "FAILED",
+      );
 
       return data;
     } catch (error) {
@@ -274,7 +293,11 @@ class APIClient {
       const response = await this.request(apiUrl);
 
       // If backend returns good data, use it (backend returns 'businesses' not 'data')
-      if (response.success && response.businesses && response.businesses.length > 0) {
+      if (
+        response.success &&
+        response.businesses &&
+        response.businesses.length > 0
+      ) {
         console.log("✅ Using backend data:", {
           businessCount: response.businesses.length,
           source: response.source,
@@ -303,9 +326,15 @@ class APIClient {
       return {
         success: false,
         data: [],
-        pagination: { page: 1, totalPages: 0, totalRecords: 0, hasNext: false, hasPrev: false },
+        pagination: {
+          page: 1,
+          totalPages: 0,
+          totalRecords: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
         error: `Backend connection failed: ${error.message}`,
-        showRetry: true
+        showRetry: true,
       };
     }
   }
@@ -398,12 +427,15 @@ class APIClient {
         return response;
       }
     } catch (error) {
-      console.error("❌ Backend featured businesses unavailable:", error.message);
+      console.error(
+        "❌ Backend featured businesses unavailable:",
+        error.message,
+      );
       return {
         success: false,
         data: [],
         error: `Backend connection failed: ${error.message}`,
-        showRetry: true
+        showRetry: true,
       };
     }
   }
@@ -429,7 +461,7 @@ class APIClient {
           averageRating: 0,
         },
         error: `Backend connection failed: ${error.message}`,
-        showRetry: true
+        showRetry: true,
       };
     }
   }

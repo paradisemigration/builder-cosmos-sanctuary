@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       // Auto-login admin user on cloud deployments for demo purposes
       const hostname = window.location.hostname;
-      if (hostname.includes('fly.dev') || hostname.includes('thevisabay.com')) {
+      if (hostname.includes("fly.dev") || hostname.includes("thevisabay.com")) {
         const adminUser = {
           id: "3",
           name: "Admin User",

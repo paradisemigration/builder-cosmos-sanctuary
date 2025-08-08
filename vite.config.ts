@@ -4,8 +4,9 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const isProduction = mode === 'production' || process.env.NODE_ENV === 'production';
-  
+  const isProduction =
+    mode === "production" || process.env.NODE_ENV === "production";
+
   return {
     server: {
       host: "::",
@@ -18,7 +19,7 @@ export default defineConfig(({ command, mode }) => {
           target: "http://localhost:3011",
           changeOrigin: true,
           secure: false,
-          ws: false
+          ws: false,
         },
       },
     },
@@ -39,19 +40,21 @@ export default defineConfig(({ command, mode }) => {
     },
     define: {
       // Completely disable Vite client in production
-      'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+      "process.env.NODE_ENV": JSON.stringify(
+        isProduction ? "production" : "development",
+      ),
     },
     optimizeDeps: {
-      exclude: ['@vite/client']
+      exclude: ["@vite/client"],
     },
     plugins: [
       react({
-        jsxRuntime: 'automatic',
-        jsxImportSource: 'react',
+        jsxRuntime: "automatic",
+        jsxImportSource: "react",
         babel: {
-          plugins: isProduction ? [] : []
-        }
-      })
+          plugins: isProduction ? [] : [],
+        },
+      }),
     ],
     resolve: {
       alias: {

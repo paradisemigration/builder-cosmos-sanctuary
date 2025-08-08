@@ -80,7 +80,10 @@ const App = () => {
               element={<Navigate to="/browse" replace />}
             />
             <Route path="/business/:id" element={<BusinessProfile />} />
-            <Route path="/business/:city/:companyName" element={<BusinessProfile />} />
+            <Route
+              path="/business/:city/:companyName"
+              element={<BusinessProfile />}
+            />
             <Route path="/add-business" element={<AddBusiness />} />
             <Route path="/login" element={<Login />} />
             <Route
