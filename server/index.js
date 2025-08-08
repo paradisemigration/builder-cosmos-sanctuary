@@ -52,7 +52,7 @@ export default initializeAPI;
 // Start the API server for local development only
 if (process.env.NODE_ENV !== "production") {
   initializeAPI().then((app) => {
-    const port = process.env.PORT || 45123;
+    const port = process.env.PORT || 3001;
     app.listen(port, () => {
       console.log("✅ API server started");
       console.log(`🌐 API Base URL: http://localhost:${port}`);
