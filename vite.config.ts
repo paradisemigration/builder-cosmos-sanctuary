@@ -14,7 +14,7 @@ export default defineConfig({
     },
     proxy: {
       "/api": {
-        target: process.env.NODE_ENV === 'production' ? "http://localhost:3010" : "http://localhost:3010",
+        target: process.env.NODE_ENV === 'production' ? "http://localhost:3011" : "http://localhost:3011",
         changeOrigin: true,
         secure: false,
         ws: true
