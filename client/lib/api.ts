@@ -289,16 +289,10 @@ class APIClient {
       return {
         success: false,
         data: [],
-        error: "Backend connection failed - no dummy data served"
+        error: `Backend connection failed: ${error.message}`,
+        showRetry: true
       };
     }
-
-    // No fallback - if we reach here, force error
-    return {
-      success: false,
-      data: [],
-      error: "API response was invalid"
-    };
   }
 
   // Get business statistics
