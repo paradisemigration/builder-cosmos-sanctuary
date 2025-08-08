@@ -243,7 +243,7 @@ export function generateBusinessMeta(
   const country = isUAE ? "UAE" : "India";
 
   return {
-    title: `${businessName} - ${categoryName} In ${cityName} | VisaConsult India`,
+    title: `${businessName} - ${categoryName} In ${cityName} | TheVisaBay.com`,
     description: `${businessName} is a trusted ${categoryName.toLowerCase()} in ${cityName}, ${country}. Read authentic reviews, check ratings, and get expert visa consultation services. Professional immigration guidance for study abroad, work permits, tourist visas, family visas, and permanent residence. Contact ${businessName} for reliable visa services.`,
     keywords: `${businessName}, ${categoryName.toLowerCase()} ${cityName.toLowerCase()}, visa consultants ${cityName.toLowerCase()}, immigration services ${cityName.toLowerCase()}, ${businessName.toLowerCase().replace(/\s+/g, " ")}, visa agents, immigration lawyers, study abroad consultants, work permit services, tourist visa, pr consultants`,
     robots:
