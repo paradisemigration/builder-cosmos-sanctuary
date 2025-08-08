@@ -51,15 +51,45 @@ export default initializeAPI;
 
 // Start the API server for local development only
 if (process.env.NODE_ENV !== "production") {
-  initializeAPI().then((app) => {
-    const port = process.env.PORT || 3001;
-    app.listen(port, () => {
-      console.log("✅ API server started");
-      console.log(`🌐 API Base URL: http://localhost:${port}`);
-      console.log(`📊 Database ready to serve 1500+ businesses`);
-      console.log(
-        "📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions",
-      );
-    });
+  initializeAPI().then(async (app) => {
+    let port = process.env.PORT || 45123;
+
+    // Function to try starting server on a port
+    const tryStartServer = (attemptPort) => {
+      return new Promise((resolve, reject) => {
+        const server = app.listen(attemptPort, () => {
+          console.log("✅ API server started");
+          console.log(`🌐 API Base URL: http://localhost:${attemptPort}`);
+          console.log(`📊 Database ready to serve 1500+ businesses`);
+          console.log("📝 See GOOGLE_CLOUD_SETUP.md for configuration instructions");
+          resolve(attemptPort);
+        });
+
+        server.on('error', (err) => {
+          if (err.code === 'EADDRINUSE') {
+            reject(new Error(`Port ${attemptPort} is in use`));
+          } else {
+            reject(err);
+          }
+        });
+      });
+    };
+
+    // Try ports starting from the configured port
+    for (let i = 0; i < 10; i++) {
+      try {
+        const usedPort = await tryStartServer(port + i);
+        if (usedPort !== port) {
+          console.log(`⚠️ Original port ${port} was busy, using port ${usedPort}`);
+        }
+        break;
+      } catch (error) {
+        if (i === 9) {
+          console.error("❌ Could not find available port after 10 attempts");
+          process.exit(1);
+        }
+        console.log(`🔄 Port ${port + i} in use, trying ${port + i + 1}...`);
+      }
+    }
   });
 }
