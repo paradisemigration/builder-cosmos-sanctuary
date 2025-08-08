@@ -43,7 +43,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8082;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Static server running on port ${PORT}`);
   console.log(`🌐 Serving static files from dist/`);
