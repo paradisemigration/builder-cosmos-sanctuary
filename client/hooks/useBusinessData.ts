@@ -92,9 +92,9 @@ export function useBusinessData(
 
 // Hook for featured businesses
 export function useFeaturedBusinesses() {
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const fetchFeatured = useCallback(async () => {
     try {
