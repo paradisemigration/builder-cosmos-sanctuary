@@ -55,8 +55,8 @@ export default defineConfig(({ command, mode }) => {
       target: "es2020",
       legalComments: "none",
       logOverride: { "this-is-undefined-in-esm": "silent" },
-      loader: "tsx",
       jsx: "automatic",
+      jsxDev: false,
     },
   };
 });
