@@ -315,22 +315,10 @@ class APIClient {
           citiesCount: 0,
           averageRating: 0,
         },
-        error: "Backend connection failed - no dummy data served"
+        error: `Backend connection failed: ${error.message}`,
+        showRetry: true
       };
     }
-
-    // No fallback - if we reach here, force error
-    return {
-      success: false,
-      data: {
-        totalBusinesses: 0,
-        totalReviews: 0,
-        totalImages: 0,
-        citiesCount: 0,
-        averageRating: 0,
-      },
-      error: "API response was invalid"
-    };
   }
 }
 
