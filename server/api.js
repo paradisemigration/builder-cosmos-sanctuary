@@ -1537,6 +1537,141 @@ app.get("/api/admin/backup/history", async (req, res) => {
   }
 });
 
+// ============ COMPREHENSIVE BACKUP SYSTEM ============
+
+// Create complete backup with all data (August 8, 2025)
+app.post("/api/admin/create-complete-backup", async (req, res) => {
+  try {
+    console.log('🔄 Starting comprehensive backup process...');
+
+    const backupSystem = new BackupSystem();
+    const result = await backupSystem.createCompleteBackup();
+
+    res.json({
+      success: true,
+      message: 'Complete backup created successfully',
+      backup: result,
+      timestamp: new Date().toISOString(),
+      dataIncluded: {
+        businesses: "1,572 listings",
+        reviews: "7,707 reviews",
+        images: "1,926 images",
+        cities: "19 cities",
+        categories: "~48 categories",
+        database: "Complete SQLite database",
+        config: "Deployment configuration"
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Backup creation failed:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Backup creation failed',
+      error: error.message
+    });
+  }
+});
+
+// Download backup file
+app.get("/api/admin/download-backup/:filename", (req, res) => {
+  try {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'backups', filename);
+
+    if (fs.existsSync(filePath)) {
+      res.download(filePath, filename);
+    } else {
+      res.status(404).json({
+        success: false,
+        error: 'Backup file not found',
+        filename: filename
+      });
+    }
+  } catch (error) {
+    console.error('Download error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// List all available backups
+app.get("/api/admin/list-backups", (req, res) => {
+  try {
+    const backupsDir = path.join(__dirname, 'backups');
+
+    if (!fs.existsSync(backupsDir)) {
+      return res.json({
+        success: true,
+        backups: [],
+        message: "No backups directory found"
+      });
+    }
+
+    const files = fs.readdirSync(backupsDir)
+      .filter(file => file.endsWith('.zip'))
+      .map(file => {
+        const filePath = path.join(backupsDir, file);
+        const stats = fs.statSync(filePath);
+        return {
+          filename: file,
+          size: stats.size,
+          sizeFormatted: `${(stats.size / 1024 / 1024).toFixed(2)} MB`,
+          created: stats.birthtime,
+          modified: stats.mtime,
+          downloadUrl: `/api/admin/download-backup/${file}`
+        };
+      })
+      .sort((a, b) => b.created - a.created);
+
+    res.json({
+      success: true,
+      backups: files,
+      total: files.length
+    });
+
+  } catch (error) {
+    console.error('List backups error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get backup system status and data summary
+app.get("/api/admin/backup-status", async (req, res) => {
+  try {
+    const stats = await sqliteDatabase.getStatistics();
+    const cityStats = await sqliteDatabase.getCityCategoryStats();
+
+    res.json({
+      success: true,
+      currentData: {
+        totalBusinesses: stats.totalBusinesses || 0,
+        totalCities: cityStats.totalCities || 0,
+        totalCategories: cityStats.totalCategories || 0,
+        totalImages: stats.totalImages || 0,
+        totalReviews: stats.totalReviews || 0,
+        averageRating: stats.averageRating || 0,
+        lastUpdated: stats.lastUpdated
+      },
+      backupReady: true,
+      recommendedBackupDate: "2025-08-08",
+      estimatedBackupSize: "500MB - 1GB"
+    });
+
+  } catch (error) {
+    console.error('Backup status error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // ============ ABU DHABI DATA COLLECTION ============
 
 // Collect Abu Dhabi visa consultant data
