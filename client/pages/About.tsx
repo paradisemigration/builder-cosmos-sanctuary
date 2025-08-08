@@ -24,13 +24,13 @@ import { Badge } from "@/components/ui/badge";
 export default function About() {
   useEffect(() => {
     document.title =
-      "About Us - VisaConsult India | India's Leading Visa Consultant Directory";
+      "About Us - TheVisaBay.com | India's Leading Visa Consultant Directory";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
         "content",
-        "Learn about VisaConsult India - India's most trusted platform connecting visa applicants with verified immigration consultants. Our mission, values, and commitment to your visa journey.",
+        "Learn about TheVisaBay.com - India's most trusted platform connecting visa applicants with verified immigration consultants. Our mission, values, and commitment to your visa journey.",
       );
     }
   }, []);
