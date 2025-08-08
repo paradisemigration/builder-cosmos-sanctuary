@@ -169,8 +169,7 @@ export function GooglePlacesScraper() {
   useEffect(() => {
     // Immediate detection for known production environments
     const isKnownProduction =
-      window.location.hostname.includes("fly.dev") ||
-      false;
+      window.location.hostname.includes("fly.dev") || false;
     const apiUrl = import.meta.env.VITE_API_URL;
 
     if (isKnownProduction && (!apiUrl || apiUrl.trim() === "")) {
@@ -215,9 +214,7 @@ export function GooglePlacesScraper() {
     // Detect frontend-only deployments
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io");
+      hostname.includes("fly.dev") || hostname.includes("github.io");
 
     // If this is a frontend-only deployment, immediately mark as unavailable
     if (isFrontendOnlyDeployment) {

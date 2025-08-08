@@ -7,10 +7,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 // Detect cloud deployment environments
 const isCloudDeployment = () => {
   const hostname = window.location.hostname;
-  return (
-    hostname.includes("fly.dev") ||
-    hostname.includes("thevisabay.com")
-  );
+  return hostname.includes("fly.dev") || hostname.includes("thevisabay.com");
 };
 
 class APIClient {

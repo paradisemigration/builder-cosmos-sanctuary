@@ -65,9 +65,7 @@ export function ManualImageUpload() {
   const isKnownFrontendOnly = () => {
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io");
+      hostname.includes("fly.dev") || hostname.includes("github.io");
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
@@ -91,9 +89,7 @@ export function ManualImageUpload() {
       // Detect frontend-only deployments
       const hostname = window.location.hostname;
       const isFrontendOnlyDeployment =
-        hostname.includes("fly.dev") ||
-        
-        hostname.includes("github.io");
+        hostname.includes("fly.dev") || hostname.includes("github.io");
 
       // Check for API URL configuration
       const apiUrl = import.meta.env.VITE_API_URL;

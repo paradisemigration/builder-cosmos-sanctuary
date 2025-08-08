@@ -78,9 +78,7 @@ export function UltraFastS3Sync() {
   const isKnownFrontendOnly = () => {
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io");
+      hostname.includes("fly.dev") || hostname.includes("github.io");
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const hasApiOverride = localStorage.getItem("VITE_API_URL_OVERRIDE");
@@ -93,11 +91,7 @@ export function UltraFastS3Sync() {
     try {
       // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
       const hostname = window.location.hostname;
-      if (
-        hostname.includes("fly.dev") ||
-        
-        hostname.includes("github.io")
-      ) {
+      if (hostname.includes("fly.dev") || hostname.includes("github.io")) {
         console.log(
           "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected, no fetch calls",
         );
@@ -150,11 +144,7 @@ export function UltraFastS3Sync() {
   const loadSyncStats = async () => {
     // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
     const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io")
-    ) {
+    if (hostname.includes("fly.dev") || hostname.includes("github.io")) {
       console.log(
         "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected, no stats load",
       );
@@ -358,11 +348,7 @@ export function UltraFastS3Sync() {
   useEffect(() => {
     // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
     const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io")
-    ) {
+    if (hostname.includes("fly.dev") || hostname.includes("github.io")) {
       console.log(
         "🚫 UltraFastS3Sync: ABSOLUTE SAFETY - Frontend-only platform detected in useEffect",
       );

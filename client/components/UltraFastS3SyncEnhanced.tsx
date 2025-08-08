@@ -492,11 +492,7 @@ export function UltraFastS3SyncEnhanced() {
   useEffect(() => {
     // ABSOLUTE SAFETY CHECK - prevent ANY calls on known frontend-only platforms
     const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      
-      hostname.includes("github.io")
-    ) {
+    if (hostname.includes("fly.dev") || hostname.includes("github.io")) {
       console.log(
         "🚫 UltraFastS3SyncEnhanced: ABSOLUTE SAFETY - Frontend-only platform detected in useEffect",
       );

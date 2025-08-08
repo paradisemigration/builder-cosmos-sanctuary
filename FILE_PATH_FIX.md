@@ -1,10 +1,12 @@
 # 🔧 Fix Database File Path Issue
 
 ## Error Resolved
+
 ❌ **Error**: `/server/database.sqlite.js not found`  
 ✅ **Fix**: Let build process handle file copying automatically
 
 ## Root Cause
+
 The Dockerfile was trying to manually copy `server/database.sqlite.js` but Docker couldn't find it in the build context, even though the file exists.
 
 ## Solution: Ultra-Simple Dockerfile
@@ -39,6 +41,7 @@ CMD ["npm", "start"]
 ## Deploy Commands
 
 ### Option 1: Use Ultra-Simple Dockerfile
+
 ```bash
 mv Dockerfile Dockerfile.old
 mv Dockerfile.ultra-simple Dockerfile
@@ -46,7 +49,9 @@ flyctl deploy --app thevisabay-app
 ```
 
 ### Option 2: Deploy Without Volume
+
 If still having issues, edit `fly.toml`:
+
 ```toml
 # Comment out volume mount temporarily
 # [[mounts]]
@@ -55,18 +60,22 @@ If still having issues, edit `fly.toml`:
 ```
 
 Then deploy:
+
 ```bash
 flyctl deploy --app thevisabay-app
 ```
 
 ## Why This Works
+
 - ✅ No manual file copying that can fail
 - ✅ Lets `npm run build` handle all file management
 - ✅ Uses the build script from package.json
 - ✅ Minimal dependencies for faster builds
 
 ## Check Your Build Script
+
 Make sure your `package.json` has the correct build command:
+
 ```json
 {
   "scripts": {

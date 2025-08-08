@@ -70,10 +70,7 @@ export function isFrontendOnlyDeployment(): boolean {
   const hostname = window.location.hostname;
 
   // Known frontend-only platforms
-  if (
-    hostname.includes("fly.dev") ||
-    hostname.includes("github.io")
-  ) {
+  if (hostname.includes("fly.dev") || hostname.includes("github.io")) {
     return true;
   }
 
