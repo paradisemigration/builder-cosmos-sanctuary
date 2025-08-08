@@ -5,12 +5,14 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const isProduction = mode === 'production' || process.env.NODE_ENV === 'production';
-
+  
   return {
     server: {
       host: "::",
       port: 8080,
-      hmr: false, // Disable HMR completely for cloud deployment
+      hmr: false, // Completely disable HMR
+      open: false,
+      cors: true,
       proxy: {
         "/api": {
           target: "http://localhost:3011",
@@ -20,14 +22,27 @@ export default defineConfig(({ command, mode }) => {
         },
       },
     },
+    preview: {
+      host: "::",
+      port: 8080,
+      cors: true,
+    },
     build: {
       outDir: "dist",
       minify: false,
+      sourcemap: false,
       rollupOptions: {
         output: {
           manualChunks: undefined,
         },
       },
+    },
+    define: {
+      // Completely disable Vite client in production
+      'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+    },
+    optimizeDeps: {
+      exclude: ['@vite/client']
     },
     plugins: [react()],
     resolve: {
