@@ -153,7 +153,7 @@ export function SiteFooter() {
           {/* SEO Text Block */}
           <div className="mt-6 text-xs text-gray-500 leading-relaxed">
             <p>
-              VisaConsult India is the leading platform connecting individuals with verified visa and immigration consultants
+              TheVisaBay.com is the leading platform connecting individuals with verified visa and immigration consultants
               across {allCities.length} major cities in India and UAE. Our comprehensive directory includes specialists in {categoryList.length} service
               categories including immigration consulting, student visa services, work permit assistance, and study abroad guidance.
               Whether you're looking for consultants in metros like Delhi, Mumbai, Bangalore, and Chennai, or international cities like Dubai and Abu Dhabi,
