@@ -27,8 +27,29 @@ class APIClient {
     options: RequestInit = {},
   ): Promise<T> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+    const cacheKey = `${options.method || 'GET'}:${url}`;
+
+    // Check if request is already in progress
+    if (this.requestCache.has(cacheKey)) {
+      console.log(`🔄 Using cached request for ${endpoint}`);
+      return this.requestCache.get(cacheKey);
+    }
 
     console.log(`🔗 API Request: ${options.method || 'GET'} ${url}`);
+
+    // Create and cache the request promise
+    const requestPromise = this.executeRequest<T>(url, endpoint, options);
+    this.requestCache.set(cacheKey, requestPromise);
+
+    // Remove from cache after completion (success or failure)
+    requestPromise.finally(() => {
+      this.requestCache.delete(cacheKey);
+    });
+
+    return requestPromise;
+  }
+
+  private async executeRequest<T>(url: string, endpoint: string, options: RequestInit): Promise<T> {
 
     // Use XMLHttpRequest directly for cloud deployments to avoid FullStory interference
     if (isCloudDeployment()) {
