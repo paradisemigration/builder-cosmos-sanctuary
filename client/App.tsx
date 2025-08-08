@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./global.css";
 
 // Import React Router properly
@@ -64,108 +64,6 @@ import { GlobalDebugPopup } from "./components/GlobalDebugPopup";
 function ProtectedRoute({ children }) {
   return <>{children}</>;
 }
-<<<<<<< HEAD
-// All original functionality restored
-
-// Simple Navigation Component
-function SimpleNavigation() {
-  const location = useLocation();
-
-  const isCurrentPage = (path: string) => location.pathname === path;
-
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-xl font-bold text-gray-900">TheVisaBay</div>
-            <div className="text-xs text-blue-600 font-medium">.com</div>
-          </Link>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/about")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/contact")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Contact
-            </Link>
-            <Link
-              to="/admin"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isCurrentPage("/admin")
-                  ? "bg-purple-100 text-purple-700"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              Admin Panel
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-// Import the original auth but with proper error handling
-import { AuthProvider as OriginalAuthProvider } from "@/lib/auth";
-
-// Wrapper to handle any auth errors gracefully
-function AuthProvider({ children }: { children: React.ReactNode }) {
-  try {
-    return <OriginalAuthProvider>{children}</OriginalAuthProvider>;
-  } catch (error) {
-    console.warn("Auth provider error, using fallback:", error);
-    // Fallback: simple context for development
-    const fallbackUser = {
-      id: "1",
-      name: "Admin",
-      email: "admin@demo.com",
-      role: "admin" as const,
-    };
-    const fallbackAuth = {
-      user: fallbackUser,
-      isAuthenticated: true,
-      login: async () => true,
-      loginWithGoogle: async () => true,
-      loginWithFacebook: async () => true,
-      logout: () => {},
-      isLoading: false,
-    };
-
-    const FallbackAuthContext = React.createContext(fallbackAuth);
-    return (
-      <FallbackAuthContext.Provider value={fallbackAuth}>
-        {children}
-      </FallbackAuthContext.Provider>
-    );
-  }
-}
-=======
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
 
 const App = () => {
   return (
@@ -210,46 +108,46 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/business/:id/edit" element={<EditBusiness />} />
-              <Route path="/dashboard" element={<BusinessDashboard />} />
+              <Route
+                path="/edit-business/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditBusiness />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/business-dashboard"
+                element={
+                  <ProtectedRoute>
+                    <BusinessDashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/plans" element={<ListingPlans />} />
               <Route path="/list-business" element={<ListBusiness />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route
-                path="/cant-find-business"
-                element={<CantFindBusiness />}
-              />
-              <Route path="/all-categories" element={<AllCategories />} />
-              <Route
-                path="/all-cities-categories"
-                element={<AllCitiesCategories />}
-              />
-              <Route path="/main-pages" element={<MainPages />} />
-              <Route path="/sitemap" element={<Sitemap />} />
+              <Route path="/cant-find-business" element={<CantFindBusiness />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/sitemap" element={<Sitemap />} />
               <Route path="/uae" element={<UAE />} />
-              <Route
-                path="/uae/:city"
-                element={<CityRouteHandler country="uae" />}
-              />
-              <Route
-                path="/uae/:city/:category"
-                element={<CityRouteHandler country="uae" />}
-              />
-              <Route
-                path="/business/:city"
-                element={<CityRouteHandler country="india" />}
-              />
-              <Route
-                path="/business/:city/:category"
-                element={<CityRouteHandler country="india" />}
-              />
-              <Route
-                path="/category/:category"
-                element={<CategoryLocationPage />}
-              />
+              
+              {/* City and Category Routes */}
+              <Route path="/all-cities-categories" element={<AllCitiesCategories />} />
+              <Route path="/all-categories" element={<AllCategories />} />
+              <Route path="/categories" element={<AllCategories />} />
+              <Route path="/category/:category" element={<CategoryPage />} />
+              <Route path="/city/:city" element={<CityBusinessListing />} />
+              <Route path="/city/:city/:category" element={<CityCategory />} />
+              <Route path="/:location/:category" element={<CategoryLocationPage />} />
+              <Route path="/main/:page" element={<MainPages />} />
+              
+              {/* City Route Handler for dynamic city routes */}
+              <Route path="/:city" element={<CityRouteHandler />} />
+              
+              {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
             <SiteFooter />
