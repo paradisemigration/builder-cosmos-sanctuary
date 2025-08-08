@@ -276,16 +276,8 @@ export default function AdminPanel() {
   };
 
   const loadBackupHistory = async () => {
-    const hostname = window.location.hostname;
-    if (
-      hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app")
-    ) {
-      console.log("Frontend-only platform detected, skipping backup history");
-      setBackendAvailable(false);
-      return;
-    }
+    // Note: Fly.io runs full-stack apps with backend, not frontend-only
+    // Only skip for actual frontend-only platforms
 
     if (backendAvailable === false) {
       console.log("Backend unavailable - skipping backup history load");
