@@ -482,7 +482,7 @@ function setWebsiteStructuredData(): void {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "VisaConsult India",
+    name: "TheVisaBay.com",
     url: window.location.origin,
     description:
       "Find top-rated visa consultants and immigration experts across India and UAE. Compare services, read reviews, and get expert guidance for study abroad, work permits, tourist visas, and permanent residence applications.",
@@ -496,7 +496,7 @@ function setWebsiteStructuredData(): void {
     },
     publisher: {
       "@type": "Organization",
-      name: "VisaConsult India",
+      name: "TheVisaBay.com",
       url: window.location.origin,
     },
   };
@@ -566,7 +566,7 @@ export function setCityServiceStructuredData(
     description: categoryDescription,
     provider: {
       "@type": "Organization",
-      name: "VisaConsult India",
+      name: "TheVisaBay.com",
       url: window.location.origin,
     },
     areaServed: {
