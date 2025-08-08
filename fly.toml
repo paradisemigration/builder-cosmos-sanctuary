@@ -1,7 +1,6 @@
 # Fly.io configuration for TheVisaBay.com
-app = "thevisabay-app"
+app = "thevisabay"
 primary_region = "sin"  # Singapore region for better performance in Asia
-destination = "/data"
 
 [build]
 
@@ -36,9 +35,9 @@ destination = "/data"
   cpus = 1
   memory_mb = 1024
 
-[[mounts]]
-  source = "thevisabay_data"
-  destination = "/data"
+# [[mounts]]
+# source = "thevisabay_data"
+# destination = "/data"
 
 # Custom domain configuration
 [[services]]
