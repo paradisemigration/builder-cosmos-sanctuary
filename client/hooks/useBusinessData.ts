@@ -16,20 +16,8 @@ export function useBusinessData(filters = {}, autoFetch = true) {
 
         const response = await BusinessAPI.getBusinesses(filters);
 
-        console.log("🔍 useBusinessData API Response:", {
-          success: response.success,
-          dataCount: response.data?.length,
-          totalRecords: response.pagination?.totalRecords,
-          hostname: window.location.hostname,
-          filters: filters,
-        });
 
         if (response.success) {
-        console.log("📊 useBusinessData Response:", {
-          dataLength: response.data?.length,
-          pagination: response.pagination,
-          hasMoreCalculated: response.pagination && response.pagination.page < response.pagination.totalPages
-        });
 
         if (resetData) {
           setBusinesses(response.data);
