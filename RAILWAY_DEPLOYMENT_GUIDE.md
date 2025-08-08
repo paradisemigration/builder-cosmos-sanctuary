@@ -1,13 +1,15 @@
 # 🚂 Railway Deployment Guide - Step by Step
 
 ## Prerequisites
+
 ✅ **GitHub Repository**: `paradisemigration/builder-cosmos-sanctuary` (Connected)  
 ✅ **Working App**: Your app runs perfectly locally  
-✅ **Database**: SQLite with 1,572+ businesses ready  
+✅ **Database**: SQLite with 1,572+ businesses ready
 
 ## Step 1: Create Railway Account & Connect GitHub
 
 ### 1.1 Sign Up for Railway
+
 1. Go to **https://railway.app**
 2. Click **"Login"** in top right
 3. Choose **"Login with GitHub"**
@@ -15,12 +17,14 @@
 5. You'll be redirected to Railway dashboard
 
 ### 1.2 Create New Project
+
 1. Click **"New Project"** on Railway dashboard
 2. Select **"Deploy from GitHub repo"**
 3. Choose **"paradisemigration/builder-cosmos-sanctuary"**
 4. Click **"Deploy Now"**
 
 Railway will automatically:
+
 - ✅ Detect it's a Node.js project
 - ✅ Run `npm install`
 - ✅ Start the build process
@@ -28,6 +32,7 @@ Railway will automatically:
 ## Step 2: Configure Project Settings
 
 ### 2.1 Project Configuration
+
 After deployment starts, click on your project to configure:
 
 1. **Service Name**: Change to "thevisabay-app"
@@ -36,13 +41,16 @@ After deployment starts, click on your project to configure:
 4. **Start Command**: `npm start`
 
 ### 2.2 Port Configuration
+
 Railway will automatically detect port 8080 from your app, but verify:
+
 - Go to **Settings** → **Environment**
 - Ensure `PORT` is set to `8080` (should be automatic)
 
 ## Step 3: Environment Variables Setup
 
 ### 3.1 Add Required Environment Variables
+
 Go to **Variables** tab and add these:
 
 ```
@@ -56,6 +64,7 @@ GOOGLE_PLACES_API_KEY=AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8
 ```
 
 ### 3.2 How to Add Variables
+
 1. Click **"New Variable"**
 2. Enter **Key**: `NODE_ENV`
 3. Enter **Value**: `production`
@@ -65,6 +74,7 @@ GOOGLE_PLACES_API_KEY=AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8
 ## Step 4: Monitor Deployment
 
 ### 4.1 Check Build Logs
+
 1. Go to **"Deployments"** tab
 2. Click on the latest deployment
 3. Watch the build logs in real-time
@@ -74,6 +84,7 @@ GOOGLE_PLACES_API_KEY=AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8
    - ✅ Service starting successfully
 
 ### 4.2 Expected Build Process
+
 ```
 ✅ Installing dependencies...
 ✅ Building React frontend...
@@ -86,12 +97,15 @@ GOOGLE_PLACES_API_KEY=AIzaSyCLdVuLJI-sCmDe8dcQ5i8R_3rxWTzmxl8
 ## Step 5: Get Your Railway URL
 
 ### 5.1 Access Your App
+
 1. Go to **"Settings"** → **"Environment"**
 2. Copy the **"Public URL"** (something like `https://your-app-name.railway.app`)
 3. Click the URL to test your deployment
 
 ### 5.2 Verify Features
+
 Test these on your Railway deployment:
+
 - ✅ Homepage loads with 1,572+ consultants
 - ✅ Search functionality works
 - ✅ Browse page shows businesses
@@ -101,25 +115,30 @@ Test these on your Railway deployment:
 ## Step 6: Configure Custom Domain
 
 ### 6.1 Add Custom Domain in Railway
+
 1. Go to **"Settings"** → **"Domains"**
 2. Click **"Custom Domain"**
 3. Enter your domain: `thevisabay.com`
 4. Click **"Add Domain"**
 
 Railway will provide DNS records like:
+
 ```
 Type: CNAME
 Name: @
 Value: your-app-name.railway.app
 
-Type: CNAME  
+Type: CNAME
 Name: www
 Value: your-app-name.railway.app
 ```
 
 ### 6.2 Configure DNS at Your Registrar
+
 Add these records at your domain registrar:
+
 1. **Root domain (thevisabay.com)**:
+
    - Type: CNAME
    - Name: @ (or leave empty)
    - Value: `your-app-name.railway.app`
@@ -130,12 +149,15 @@ Add these records at your domain registrar:
    - Value: `your-app-name.railway.app`
 
 ### 6.3 SSL Certificate
+
 Railway automatically provides SSL certificates - no manual setup needed!
 
 ## Step 7: Final Verification
 
 ### 7.1 Test Everything
+
 After DNS propagation (5-60 minutes):
+
 1. Visit `https://thevisabay.com`
 2. Visit `https://www.thevisabay.com`
 3. Test all major features
@@ -143,7 +165,9 @@ After DNS propagation (5-60 minutes):
 5. Verify admin panel access
 
 ### 7.2 Monitor Performance
+
 Railway dashboard provides:
+
 - ✅ Real-time metrics
 - ✅ Build/deployment logs
 - ✅ Resource usage
@@ -152,7 +176,9 @@ Railway dashboard provides:
 ## Common Issues & Solutions
 
 ### Issue 1: Build Fails
+
 **Solution**: Check that `package.json` has correct scripts:
+
 ```json
 {
   "scripts": {
@@ -163,9 +189,11 @@ Railway dashboard provides:
 ```
 
 ### Issue 2: Database Not Found
+
 **Solution**: Ensure `server/visaconsult.db` is in your repository and `copy:database` script works.
 
 ### Issue 3: Environment Variables Not Working
+
 **Solution**: Double-check all variables are added correctly in Railway dashboard.
 
 ## Why Railway is Perfect for Your App
