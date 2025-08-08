@@ -1,10 +1,6 @@
-// API client for backend communication
+// API client for backend communication - NO DUMMY DATA FALLBACKS
 import { Business } from "@/lib/data";
-import {
-  getBusinesses as getClientBusinesses,
-  getBusinessStats as getClientStats,
-  getFeaturedBusinesses as getClientFeatured,
-} from "@/lib/business-data";
+// Removed dummy data imports to force real API usage
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
@@ -315,7 +311,7 @@ class APIClient {
     try {
       const response = await this.request("/api/businesses/featured");
       if (response.success && response.data && response.data.length > 0) {
-        console.log("�� Using backend featured businesses");
+        console.log("✅ Using backend featured businesses");
         return response;
       }
     } catch (error) {
