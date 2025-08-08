@@ -150,8 +150,9 @@ export function GlobalDebugPopup() {
 
   useEffect(() => {
     // Wait a bit for meta tags to be set by page components
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const metaData = extractMetaData();
+      const statistics = await fetchStatistics();
 
       setDebugInfo({
         currentPage: location.pathname,
@@ -162,11 +163,13 @@ export function GlobalDebugPopup() {
           height: window.innerHeight
         },
         metaData,
+        statistics,
         apiCalls: []
       });
 
       console.log("GlobalDebugPopup loaded on:", location.pathname);
       console.log("Meta data extracted:", metaData);
+      console.log("Statistics fetched:", statistics);
     }, 500); // Increased delay to ensure meta tags are set
 
     return () => clearTimeout(timer);
