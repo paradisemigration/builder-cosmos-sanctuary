@@ -157,18 +157,9 @@ class APIClient {
   }
 
   // Get businesses with pagination and filters
-  async getBusinesses(
-    params: {
-      page?: number;
-      limit?: number;
-      city?: string;
-      category?: string;
-      search?: string;
-    } = {},
-  ) {
-    console.log(
-      "🎯 CONNECTING TO REAL DATABASE - Looking for 1500+ businesses",
-    );
+  async getBusinesses(params = {}) {
+    console.log("🎯 Fetching businesses from Express backend");
+    console.log("📊 Request params:", params);
 
     try {
       const queryParams = new URLSearchParams();
@@ -177,45 +168,67 @@ class APIClient {
       if (params.city) queryParams.set("city", params.city);
       if (params.category) queryParams.set("category", params.category);
       if (params.search) queryParams.set("search", params.search);
+      if (params.q) queryParams.set("q", params.q);
 
       const apiUrl = `/api/businesses?${queryParams}`;
-      console.log("🚀 Connecting to real database API:", apiUrl);
+      console.log("🚀 API Request:", apiUrl);
 
-      const response = await this.request<{
-        success: boolean;
-        data: Business[];
-        pagination: any;
-        total: number;
-        businesses: Business[];
-        totalRecords: number;
-        source?: string;
-      }>(apiUrl);
+      const response = await this.request(apiUrl);
 
-      const businesses = response.businesses || response.data || [];
-      const total =
-        response.totalRecords || response.total || businesses.length;
-
-      console.log("✅ REAL DATABASE CONNECTION SUCCESS:", {
+      console.log("📡 Raw API Response:", {
         success: response.success,
+        source: response.source,
+        dataLength: response.data?.length,
+        pagination: response.pagination
+      });
+
+      // Handle both database and sample data responses
+      const businesses = response.data || [];
+      const pagination = response.pagination || {
+        current: 1,
+        total: 1,
+        totalRecords: businesses.length,
+        hasNext: false,
+        hasPrev: false
+      };
+
+      // Normalize pagination format
+      const normalizedPagination = {
+        page: pagination.current || pagination.page || 1,
+        totalPages: pagination.total || pagination.totalPages || 1,
+        totalRecords: pagination.totalRecords || businesses.length,
+        hasNext: pagination.hasNext || false,
+        hasPrev: pagination.hasPrev || false,
+      };
+
+      console.log("✅ Processed Response:", {
         businessCount: businesses.length,
-        totalInDB: total,
-        firstBusiness: businesses[0]?.name,
+        totalRecords: normalizedPagination.totalRecords,
+        source: response.source,
+        sampleBusiness: businesses[0]?.name
       });
 
       return {
         success: true,
         data: businesses,
-        pagination: response.pagination || {
-          page: params.page || 1,
-          totalPages: Math.ceil(total / (params.limit || 20)),
-          totalRecords: total,
-          hasNext: businesses.length === (params.limit || 20),
-          hasPrev: (params.page || 1) > 1,
-        },
+        pagination: normalizedPagination,
       };
     } catch (error) {
-      console.error("❌ Failed to connect to real database:", error);
-      throw error;
+      console.error("❌ API Request Failed:", error);
+
+      // Return empty state instead of throwing
+      return {
+        success: false,
+        data: [],
+        pagination: {
+          page: 1,
+          totalPages: 0,
+          totalRecords: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+        error: error.message
+      };
     }
   }
 
