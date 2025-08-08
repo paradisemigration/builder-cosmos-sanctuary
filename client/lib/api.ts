@@ -177,7 +177,7 @@ class APIClient {
       if (params.category) queryParams.set("category", params.category);
       if (params.search) queryParams.set("search", params.search);
 
-      const apiUrl = `/api/businesses?${queryParams}`;
+      const apiUrl = `/api/scraped-businesses?${queryParams}`;
 
       const response = await this.request(apiUrl);
 
