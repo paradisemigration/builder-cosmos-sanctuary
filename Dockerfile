@@ -1,15 +1,23 @@
 FROM node:18-alpine
 
-# Install Python and build dependencies for native modules
-RUN apk add --no-cache python3 make g++ sqlite
+# Install all required dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    sqlite \
+    sqlite-dev \
+    libc6-compat \
+    vips-dev
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with verbose logging
-RUN npm ci --verbose
+# Clear npm cache and install dependencies
+RUN npm cache clean --force
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
@@ -21,9 +29,6 @@ RUN npm run build
 RUN mkdir -p ./dist/server/
 RUN if [ -f "server/visaconsult.db" ]; then cp server/visaconsult.db ./dist/server/; fi
 RUN cp server/database.sqlite.js ./dist/server/
-
-# Clean up build dependencies but keep production packages
-RUN npm prune --production
 
 # Expose port
 EXPOSE 8080
