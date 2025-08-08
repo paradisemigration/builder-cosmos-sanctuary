@@ -66,8 +66,7 @@ function ProtectedRoute({ children }) {
 
 const App = () => {
   return (
-    <HelmetProvider>
-      <AuthProvider>
+    <AuthProvider>
         <TooltipProvider>
           <Toaster />
           <BrowserRouter>
@@ -154,7 +153,6 @@ const App = () => {
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
-    </HelmetProvider>
   );
 };
 
