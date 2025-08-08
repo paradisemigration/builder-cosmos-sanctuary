@@ -1,12 +1,15 @@
 FROM node:18-alpine
 
+# Install Python and build dependencies for native modules
+RUN apk add --no-cache python3 make g++ sqlite
+
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm ci
+# Install dependencies with verbose logging
+RUN npm ci --verbose
 
 # Copy source code
 COPY . .
@@ -14,15 +17,13 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Create dist/server directory if it doesn't exist
+# Ensure database and required files are in place
 RUN mkdir -p ./dist/server/
-
-# Copy database files to the correct location
-RUN cp server/visaconsult.db ./dist/server/ || echo "Database file will be created"
+RUN if [ -f "server/visaconsult.db" ]; then cp server/visaconsult.db ./dist/server/; fi
 RUN cp server/database.sqlite.js ./dist/server/
 
-# Install only production dependencies
-RUN npm ci --only=production
+# Clean up build dependencies but keep production packages
+RUN npm prune --production
 
 # Expose port
 EXPOSE 8080
