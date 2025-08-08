@@ -214,7 +214,7 @@ export function generateCityMeta(cityName: string): MetaData {
   const country = isUAE ? "UAE" : "India";
 
   return {
-    title: `Top 10 Visa Consultants In ${cityName} - VisaConsult India`,
+    title: `Top 10 Visa Consultants In ${cityName} - TheVisaBay.com`,
     description: `Find the top 10 visa consultants in ${cityName}, ${country}. Compare ratings, reviews, and services of verified immigration experts. Professional guidance for student visa, work visa, tourist visa, business visa, family visa, and permanent residence applications. Trusted consultants with proven success rates.`,
     keywords: `visa consultants ${cityName.toLowerCase()}, immigration consultants ${cityName.toLowerCase()}, best visa agents ${cityName.toLowerCase()}, visa services ${cityName.toLowerCase()}, study abroad consultants ${cityName.toLowerCase()}, work visa agents ${cityName.toLowerCase()}, tourist visa services ${cityName.toLowerCase()}, immigration lawyers ${cityName.toLowerCase()}, pr consultants ${cityName.toLowerCase()}, visa processing ${cityName.toLowerCase()}, document services ${cityName.toLowerCase()}, embassy services ${cityName.toLowerCase()}`,
     robots:
