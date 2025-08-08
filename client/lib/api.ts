@@ -61,7 +61,7 @@ class APIClient {
 
         xhr.onerror = () => reject(new Error('Network error - XHR failed'));
         xhr.ontimeout = () => reject(new Error('Request timeout'));
-        xhr.timeout = 15000; // 15 second timeout for cloud
+        xhr.timeout = 30000; // 30 second timeout for cloud environments
 
         if (options.body) {
           xhr.send(options.body as string);
