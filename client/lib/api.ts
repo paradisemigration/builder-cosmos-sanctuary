@@ -11,7 +11,7 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  // Generic request method using fetch with proper error handling
+  // FullStory-resistant fetch implementation using XMLHttpRequest as fallback
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
@@ -20,15 +20,61 @@ class APIClient {
 
     console.log(`🔗 API Request: ${options.method || 'GET'} ${url}`);
 
+    // Try fetch first, fallback to XMLHttpRequest if FullStory interferes
     try {
-      const response = await fetch(url, {
-        method: options.method || 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-        ...options,
-      });
+      // Store original fetch to bypass FullStory interception
+      const originalFetch = window.fetch;
+      let response;
+
+      try {
+        response = await originalFetch(url, {
+          method: options.method || 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
+          ...options,
+        });
+      } catch (fetchError) {
+        console.warn(`🔄 Fetch failed, trying XMLHttpRequest fallback:`, fetchError.message);
+
+        // Fallback to XMLHttpRequest to bypass FullStory
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open(options.method || 'GET', url);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+          if (options.headers) {
+            Object.entries(options.headers).forEach(([key, value]) => {
+              xhr.setRequestHeader(key, value as string);
+            });
+          }
+
+          xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const data = JSON.parse(xhr.responseText);
+                console.log(`✅ XHR Success: ${endpoint}`, data.success ? 'SUCCESS' : 'FAILED');
+                resolve(data);
+              } catch (parseError) {
+                reject(new Error(`Invalid JSON response: ${parseError.message}`));
+              }
+            } else {
+              reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+            }
+          };
+
+          xhr.onerror = () => reject(new Error('Network error'));
+          xhr.ontimeout = () => reject(new Error('Request timeout'));
+          xhr.timeout = 10000;
+
+          if (options.body) {
+            xhr.send(options.body as string);
+          } else {
+            xhr.send();
+          }
+        });
+      }
 
       console.log(`📡 API Response: ${response.status} for ${endpoint}`);
 
