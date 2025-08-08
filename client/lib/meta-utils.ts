@@ -189,7 +189,7 @@ export function generateCategoryMeta(
   categoryDescription: string,
 ): MetaData {
   return {
-    title: `Best ${categoryName} In India & UAE - VisaConsult India`,
+    title: `Best ${categoryName} In India & UAE - TheVisaBay.com`,
     description: `Find the best ${categoryName.toLowerCase()} across India and UAE. Compare top-rated ${categoryName.toLowerCase()} in 100+ cities. ${categoryDescription} Professional visa consultation, immigration guidance, study abroad services, work permit assistance, and document support. Verified consultants with proven track record.`,
     keywords: `${categoryName.toLowerCase()}, best ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} india, ${categoryName.toLowerCase()} uae, visa consultants, immigration services, study abroad consultants, work permit agents, tourist visa services, pr consultants, immigration lawyers, visa processing, document attestation, embassy services, ${categoryName.toLowerCase().replace(/\s+/g, " ")}`,
     robots:
