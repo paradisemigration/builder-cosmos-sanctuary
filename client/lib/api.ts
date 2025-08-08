@@ -9,8 +9,6 @@ const isCloudDeployment = () => {
   const hostname = window.location.hostname;
   return (
     hostname.includes("fly.dev") ||
-    hostname.includes("vercel.app") ||
-    hostname.includes("netlify.app") ||
     hostname.includes("thevisabay.com")
   );
 };
