@@ -386,17 +386,19 @@ export function GlobalDebugPopup() {
                   </button>
                   <button
                     className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
-                    onClick={() => {
+                    onClick={async () => {
                       const newMetaData = extractMetaData();
+                      const newStatistics = await fetchStatistics();
                       setDebugInfo(prev => ({
                         ...prev,
                         metaData: newMetaData,
+                        statistics: newStatistics,
                         timestamp: new Date().toLocaleString()
                       }));
-                      alert("Meta data refreshed!");
+                      alert("Meta data and statistics refreshed!");
                     }}
                   >
-                    🔄 Refresh Meta
+                    🔄 Refresh Data
                   </button>
                   <button
                     className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
