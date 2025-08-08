@@ -47,7 +47,6 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-<<<<<<< HEAD
     document.title = "Contact Us - TheVisaBay.com | Get Help & Support";
 
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -57,15 +56,6 @@ export default function Contact() {
         "Contact TheVisaBay.com for support, inquiries, or business partnerships. Get help finding visa consultants or listing your business. 24/7 customer support available.",
       );
     }
-=======
-    const contactPageMeta = generateContactMeta();
-    setPageMeta(contactPageMeta);
-
-    setSEOLinks({
-      canonical: "/contact",
-      alternate: ["/contact"],
-    });
->>>>>>> 060f04127058a42f6cdc25ceba3986b54e79bace
   }, []);
 
   const handleInputChange = (field, value) => {
