@@ -854,7 +854,7 @@ export default function Index() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose VisaConsult India?
+              Why Choose TheVisaBay.com?
             </h2>
             <p className="text-lg opacity-90 max-w-2xl mx-auto">
               We're committed to connecting you with the most reliable visa
