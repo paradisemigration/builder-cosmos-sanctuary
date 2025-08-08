@@ -20,7 +20,9 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "backup": "node scripts/create-backup.js",
+    "backup:create": "node scripts/create-backup.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.13.0",
