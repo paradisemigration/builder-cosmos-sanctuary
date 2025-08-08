@@ -174,22 +174,15 @@ class APIClient {
         };
       }
     } catch (error) {
-      console.error("❌ Backend completely unavailable:", error.message);
+      console.error("❌ Backend unavailable for businesses:", error.message);
       return {
         success: false,
         data: [],
         pagination: { page: 1, totalPages: 0, totalRecords: 0, hasNext: false, hasPrev: false },
-        error: "Backend connection failed - no dummy data served"
+        error: `Backend connection failed: ${error.message}`,
+        showRetry: true
       };
     }
-
-    // No fallback - if we reach here, force error
-    return {
-      success: false,
-      data: [],
-      pagination: { page: 1, totalPages: 0, totalRecords: 0, hasNext: false, hasPrev: false },
-      error: "API response was invalid"
-    };
   }
 
   // Get single business
