@@ -3,36 +3,126 @@
 
 export function generateBusinessData() {
   const indianCities = [
-    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune",
-    "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Patna",
-    "Indore", "Thane", "Bhopal", "Visakhapatnam", "Vadodara", "Firozabad",
-    "Ludhiana", "Rajkot", "Agra", "Siliguri", "Nashik", "Faridabad", "Patiala",
-    "Ghaziabad", "Kalyan", "Dombivli", "Howrah", "Ranchi", "Barrackpore",
-    "Kharagpur", "Durgapur", "Asansol", "Rourkela", "Nanded", "Kolhapur",
-    "Ajmer", "Akola", "Gulbarga", "Jamnagar", "Ujjain", "Loni", "Sikar",
-    "Jhansi", "Ulhasnagar", "Jammu", "Sangli", "Amritsar", "Allahabad", "Bareilly"
+    "Mumbai",
+    "Delhi",
+    "Bangalore",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+    "Pune",
+    "Ahmedabad",
+    "Jaipur",
+    "Surat",
+    "Lucknow",
+    "Kanpur",
+    "Nagpur",
+    "Patna",
+    "Indore",
+    "Thane",
+    "Bhopal",
+    "Visakhapatnam",
+    "Vadodara",
+    "Firozabad",
+    "Ludhiana",
+    "Rajkot",
+    "Agra",
+    "Siliguri",
+    "Nashik",
+    "Faridabad",
+    "Patiala",
+    "Ghaziabad",
+    "Kalyan",
+    "Dombivli",
+    "Howrah",
+    "Ranchi",
+    "Barrackpore",
+    "Kharagpur",
+    "Durgapur",
+    "Asansol",
+    "Rourkela",
+    "Nanded",
+    "Kolhapur",
+    "Ajmer",
+    "Akola",
+    "Gulbarga",
+    "Jamnagar",
+    "Ujjain",
+    "Loni",
+    "Sikar",
+    "Jhansi",
+    "Ulhasnagar",
+    "Jammu",
+    "Sangli",
+    "Amritsar",
+    "Allahabad",
+    "Bareilly",
   ];
 
   const categories = [
-    "immigration-consultants", "study-abroad-consultants", "visa-consultants",
-    "work-visa-consultants", "tourist-visa-services", "student-visa-consultants",
-    "visit-visa-specialists", "business-visa-services", "express-visa-services",
-    "pr-citizenship-services", "overseas-education", "education-consultants"
+    "immigration-consultants",
+    "study-abroad-consultants",
+    "visa-consultants",
+    "work-visa-consultants",
+    "tourist-visa-services",
+    "student-visa-consultants",
+    "visit-visa-specialists",
+    "business-visa-services",
+    "express-visa-services",
+    "pr-citizenship-services",
+    "overseas-education",
+    "education-consultants",
   ];
 
   const companyPrefixes = [
-    "Global", "Prime", "Elite", "Expert", "Professional", "Trusted", "Reliable",
-    "Premium", "Superior", "Excellence", "Success", "Secure", "Swift", "Smart",
-    "Royal", "Imperial", "International", "Universal", "Platinum", "Diamond",
-    "Apex", "Crown", "Golden", "Silver", "Mega", "Ultra", "Super", "Pioneer"
+    "Global",
+    "Prime",
+    "Elite",
+    "Expert",
+    "Professional",
+    "Trusted",
+    "Reliable",
+    "Premium",
+    "Superior",
+    "Excellence",
+    "Success",
+    "Secure",
+    "Swift",
+    "Smart",
+    "Royal",
+    "Imperial",
+    "International",
+    "Universal",
+    "Platinum",
+    "Diamond",
+    "Apex",
+    "Crown",
+    "Golden",
+    "Silver",
+    "Mega",
+    "Ultra",
+    "Super",
+    "Pioneer",
   ];
 
   const companySuffixes = [
-    "Immigration Services", "Visa Consultancy", "Global Solutions", "Consulting",
-    "Immigration Experts", "Visa Services", "International Consultants",
-    "Migration Services", "Overseas Consultancy", "Visa Solutions", "Immigration Hub",
-    "Global Consultants", "Visa Experts", "International Services", "Migration Experts",
-    "Education Consultants", "Study Abroad Services", "Career Consultants"
+    "Immigration Services",
+    "Visa Consultancy",
+    "Global Solutions",
+    "Consulting",
+    "Immigration Experts",
+    "Visa Services",
+    "International Consultants",
+    "Migration Services",
+    "Overseas Consultancy",
+    "Visa Solutions",
+    "Immigration Hub",
+    "Global Consultants",
+    "Visa Experts",
+    "International Services",
+    "Migration Experts",
+    "Education Consultants",
+    "Study Abroad Services",
+    "Career Consultants",
   ];
 
   const businesses = [];
@@ -55,7 +145,7 @@ export function generateBusinessData() {
         "Application Processing",
         "Interview Preparation",
         "Visa Application Review",
-        "Legal Compliance Check"
+        "Legal Compliance Check",
       ],
       address: `${Math.floor(Math.random() * 999) + 1}, Business District, ${city}`,
       city,
@@ -78,9 +168,26 @@ export function generateBusinessData() {
       ownerName: `${["Rajesh", "Priya", "Amit", "Sunita", "Vikash", "Meera", "Ravi", "Kavita"][i % 8]} ${["Sharma", "Patel", "Kumar", "Singh", "Gupta", "Agarwal", "Jain", "Shah"][i % 8]}`,
       successRate: Math.floor(Math.random() * 25) + 75, // 75-100%
       experience: Math.floor(Math.random() * 15) + 3, // 3-18 years
-      languages: ["Hindi", "English", ["Gujarati", "Marathi", "Tamil", "Telugu", "Bengali", "Punjabi", "Kannada"][i % 7]],
+      languages: [
+        "Hindi",
+        "English",
+        [
+          "Gujarati",
+          "Marathi",
+          "Tamil",
+          "Telugu",
+          "Bengali",
+          "Punjabi",
+          "Kannada",
+        ][i % 7],
+      ],
       establishedYear: 2024 - Math.floor(Math.random() * 18) - 3, // 2003-2021
-      specializations: [category.replace("-", " "), "Family Visa", "Student Visa", "Work Permit"],
+      specializations: [
+        category.replace("-", " "),
+        "Family Visa",
+        "Student Visa",
+        "Work Permit",
+      ],
       clientsServed: Math.floor(Math.random() * 4500) + 1000, // 1000-5500 clients
     });
   }
@@ -120,8 +227,10 @@ export function getBusinesses(filters = {}) {
     filteredBusinesses = filteredBusinesses.filter((business) => {
       const businessCategory = business.category?.toLowerCase();
       const searchCategory = filters.category.toLowerCase();
-      return businessCategory?.includes(searchCategory) ||
-             businessCategory === searchCategory;
+      return (
+        businessCategory?.includes(searchCategory) ||
+        businessCategory === searchCategory
+      );
     });
   }
 
@@ -129,9 +238,11 @@ export function getBusinesses(filters = {}) {
     filteredBusinesses = filteredBusinesses.filter((business) => {
       const businessCity = business.city?.toLowerCase();
       const searchCity = filters.city.toLowerCase().replace(/-/g, " ");
-      return businessCity?.includes(searchCity) ||
-             businessCity === searchCity ||
-             businessCity?.replace(/\s+/g, "") === searchCity.replace(/\s+/g, "");
+      return (
+        businessCity?.includes(searchCity) ||
+        businessCity === searchCity ||
+        businessCity?.replace(/\s+/g, "") === searchCity.replace(/\s+/g, "")
+      );
     });
   }
 
@@ -154,14 +265,14 @@ export function getBusinesses(filters = {}) {
       hasNext: endIndex < totalBusinesses,
       hasPrev: page > 1,
     },
-    source: "client-side-data"
+    source: "client-side-data",
   };
 }
 
 export function getBusinessStats() {
   const businesses = getAllBusinesses();
-  const cities = new Set(businesses.map(b => b.city));
-  const categories = new Set(businesses.map(b => b.category));
+  const cities = new Set(businesses.map((b) => b.city));
+  const categories = new Set(businesses.map((b) => b.category));
 
   return {
     success: true,
@@ -171,22 +282,22 @@ export function getBusinessStats() {
       citiesCount: cities.size,
       categoriesCount: categories.size,
       averageRating: 4.3,
-      verifiedBusinesses: businesses.filter(b => b.isVerified).length,
+      verifiedBusinesses: businesses.filter((b) => b.isVerified).length,
     },
-    source: "client-side-data"
+    source: "client-side-data",
   };
 }
 
 export function getFeaturedBusinesses() {
   const businesses = getAllBusinesses();
   const featured = businesses
-    .filter(b => b.isFeatured)
+    .filter((b) => b.isFeatured)
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 6);
 
   return {
     success: true,
     data: featured,
-    source: "client-side-data"
+    source: "client-side-data",
   };
 }

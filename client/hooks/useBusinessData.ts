@@ -2,10 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { BusinessAPI } from "@/lib/api";
 import { Business } from "@/lib/data";
 
-export function useBusinessData(
-  filters = {},
-  autoFetch = true,
-) {
+export function useBusinessData(filters = {}, autoFetch = true) {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

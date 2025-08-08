@@ -1,6 +1,10 @@
 // API client for backend communication
 import { Business } from "@/lib/data";
-import { getBusinesses as getClientBusinesses, getBusinessStats as getClientStats, getFeaturedBusinesses as getClientFeatured } from "@/lib/business-data";
+import {
+  getBusinesses as getClientBusinesses,
+  getBusinessStats as getClientStats,
+  getFeaturedBusinesses as getClientFeatured,
+} from "@/lib/business-data";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
@@ -159,7 +163,9 @@ class APIClient {
 
   // Get businesses with pagination and filters
   async getBusinesses(params = {}) {
-    console.log("🎯 Fetching businesses - trying backend first, falling back to client data");
+    console.log(
+      "🎯 Fetching businesses - trying backend first, falling back to client data",
+    );
     console.log("📊 Request params:", params);
 
     // Try backend first
@@ -179,7 +185,7 @@ class APIClient {
       if (response.success && response.data && response.data.length > 0) {
         console.log("✅ Using backend data:", {
           businessCount: response.data.length,
-          source: response.source
+          source: response.source,
         });
 
         return {
@@ -195,7 +201,10 @@ class APIClient {
         };
       }
     } catch (error) {
-      console.log("⚠️ Backend unavailable, using client-side data:", error.message);
+      console.log(
+        "⚠️ Backend unavailable, using client-side data:",
+        error.message,
+      );
     }
 
     // Use client-side data as reliable fallback
@@ -205,7 +214,7 @@ class APIClient {
     console.log("✅ Client-side data loaded:", {
       businessCount: result.data.length,
       totalRecords: result.pagination.totalRecords,
-      source: result.source
+      source: result.source,
     });
 
     return result;
@@ -311,12 +320,17 @@ class APIClient {
         return response;
       }
     } catch (error) {
-      console.log("⚠️ Backend featured businesses unavailable, using client-side data");
+      console.log(
+        "⚠️ Backend featured businesses unavailable, using client-side data",
+      );
     }
 
     // Use client-side featured businesses
     const featured = getClientFeatured();
-    console.log("✅ Client-side featured businesses loaded:", featured.data.length);
+    console.log(
+      "✅ Client-side featured businesses loaded:",
+      featured.data.length,
+    );
     return featured;
   }
 
