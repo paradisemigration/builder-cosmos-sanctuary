@@ -168,9 +168,9 @@ export function useBusiness(id: string) {
 
 // Hook for business statistics
 export function useBusinessStats() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const fetchStats = useCallback(async () => {
     try {
