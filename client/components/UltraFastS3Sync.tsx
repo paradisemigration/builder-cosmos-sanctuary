@@ -79,8 +79,7 @@ export function UltraFastS3Sync() {
     const hostname = window.location.hostname;
     const isFrontendOnlyDeployment =
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io");
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -96,8 +95,7 @@ export function UltraFastS3Sync() {
       const hostname = window.location.hostname;
       if (
         hostname.includes("fly.dev") ||
-        hostname.includes("vercel.app") ||
-        hostname.includes("netlify.app") ||
+        
         hostname.includes("github.io")
       ) {
         console.log(
@@ -154,8 +152,7 @@ export function UltraFastS3Sync() {
     const hostname = window.location.hostname;
     if (
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io")
     ) {
       console.log(
@@ -363,8 +360,7 @@ export function UltraFastS3Sync() {
     const hostname = window.location.hostname;
     if (
       hostname.includes("fly.dev") ||
-      hostname.includes("vercel.app") ||
-      hostname.includes("netlify.app") ||
+      
       hostname.includes("github.io")
     ) {
       console.log(
