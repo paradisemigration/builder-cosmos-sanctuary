@@ -33,6 +33,7 @@ export default defineConfig(({ command, mode }) => {
       minify: false,
       sourcemap: false,
       rollupOptions: {
+        external: [/^server\//],
         output: {
           manualChunks: undefined,
         },
