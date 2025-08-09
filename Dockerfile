@@ -6,16 +6,13 @@ COPY package*.json ./
 
 RUN apk add --no-cache python3 make g++ \
     && npm install -g npm@latest --unsafe-perm=true --allow-root \
+    && npm install --legacy-peer-deps \
     && apk del python3 make g++
-
-RUN npm install --only=production --legacy-peer-deps
 
 COPY . .
 
 RUN npm run build:client
-
-RUN mkdir -p dist/server
-RUN cp server/*.db dist/server/ 2>/dev/null || echo "No database files found"
+RUN npm run copy:database
 
 EXPOSE 8080
 
