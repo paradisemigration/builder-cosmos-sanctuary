@@ -1,16 +1,20 @@
 # Find Your Real App Name
 
 ## The Issue
+
 Your app is working at: https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/
 But you can't deploy to `a4b9f79f9f7045e490b1cf64b782d096` because that's not the app name.
 
 ## Step 1: Find Your Actual App Name
+
 ```bash
 fly apps list
 ```
+
 This will show your real app names. Look for one that might be related to your working URL.
 
 ## Step 2: Use Your Existing Working App
+
 Once you find the real app name, use that instead:
 
 ```bash
@@ -29,6 +33,7 @@ fly ips list --app REAL_APP_NAME
 ```
 
 ## Alternative: Skip Deployment Entirely
+
 Your app is already perfect! Instead of fighting deploy errors:
 
 1. ✅ Your app works: https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/
@@ -38,9 +43,10 @@ Your app is already perfect! Instead of fighting deploy errors:
 Just point your domain DNS directly to the working app and add AWS secrets to the real app name.
 
 ## Your Working App Has:
+
 - ✅ All 1,572 consultants loaded perfectly
 - ✅ Search functionality working
-- ✅ Browse page working  
+- ✅ Browse page working
 - ✅ Admin panel accessible
 - ✅ All features operational
 - ❌ Only image uploads need AWS secrets
