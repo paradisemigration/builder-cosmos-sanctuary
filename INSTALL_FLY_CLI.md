@@ -1,6 +1,7 @@
 # Install Fly CLI in Codespace
 
 ## Method 1: Direct Installation
+
 ```bash
 # Download and install Fly CLI
 curl -L https://fly.io/install.sh | sh
@@ -14,6 +15,7 @@ fly --version
 ```
 
 ## Method 2: If Method 1 Fails
+
 ```bash
 # Download binary directly
 wget -O fly.tar.gz https://github.com/superfly/flyctl/releases/latest/download/flyctl_Linux_x86_64.tar.gz
@@ -27,6 +29,7 @@ fly --version
 ```
 
 ## Method 3: Using Package Manager
+
 ```bash
 # Install via snap (if available)
 sudo snap install flyctl
@@ -36,6 +39,7 @@ curl -L https://fly.io/install.sh | sh
 ```
 
 ## After Installation
+
 ```bash
 # Login to Fly.io
 fly auth login
@@ -45,11 +49,13 @@ fly apps list
 ```
 
 ## Next Steps After Installation
+
 Once Fly CLI is installed, continue with:
 
 1. **Login**: `fly auth login`
 2. **Find app name**: `fly apps list`
-3. **Add AWS secrets**: 
+3. **Add AWS secrets**:
+
 ```bash
 fly secrets set AWS_ACCESS_KEY_ID=AKIAZ6UGK7KX2BFFZHGO --app YOUR_APP_NAME
 fly secrets set AWS_SECRET_ACCESS_KEY=yWGu4E12n/OtJXk3zn4YTdMMGV24A3teg1hkZVpn --app YOUR_APP_NAME
