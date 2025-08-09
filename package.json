@@ -17,7 +17,7 @@
     "preview": "concurrently \"npm run dev:api\" \"vite preview\"",
     "prod": "concurrently \"npm run dev:api\" \"npm run serve:static\"",
     "serve:static": "node server-static.js",
-    "build": "npm run build:client && npm run copy:database",
+    "build": "vite build && npm run copy:database",
     "build:client": "vite build",
     "copy:database": "cp server/visaconsult.db dist/server/ 2>/dev/null || cp server/*.db dist/server/ 2>/dev/null || echo 'No database files found'",
     "start": "node dist/server/node-build.mjs",
