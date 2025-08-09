@@ -31,6 +31,7 @@ app.use(
       "http://localhost:5173",
       "https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev",
       "https://thevisabay.com",
+      "https://www.thevisabay.com",
       /^https:\/\/.*\.fly\.dev$/,
     ],
     credentials: true,
