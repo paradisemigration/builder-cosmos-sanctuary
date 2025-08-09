@@ -1,33 +1,29 @@
-FROM node:20-alpine
+FROM node:20-bullseye
 
 WORKDIR /app
 
-# Install Python3, pip, and build tools needed for native modules
-RUN apk add --no-cache python3 py3-pip make g++ gcc libc6-compat \
-    && pip3 install --upgrade pip setuptools wheel
-
-# Copy package files first for better caching
+# Copy package.json and package-lock.json first for caching
 COPY package*.json ./
 
-# Install only production dependencies, ignoring peer dependency conflicts
-RUN npm install --legacy-peer-deps --only=production
+# Install dependencies, skipping dev dependencies
+RUN npm install --production --legacy-peer-deps
 
-# Copy all source code
+# Copy all source files
 COPY . .
 
-# Build the client application
+# Build client app
 RUN npm run build:client
 
-# Prepare server dist folder and copy any database files if present
-RUN mkdir -p dist/server \
-    && cp server/*.db dist/server/ 2>/dev/null || echo "No database files found"
+# Copy database or other assets if any
+RUN mkdir -p dist/server
+RUN cp server/*.db dist/server/ 2>/dev/null || echo "No database files found"
 
-# Expose the port your app runs on
+# Expose port
 EXPOSE 8080
 
-# Set environment variables for production
+# Set environment variables
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# Start the production server
+# Start the server
 CMD ["npm", "run", "prod"]
