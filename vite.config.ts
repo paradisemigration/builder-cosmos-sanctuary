@@ -8,10 +8,11 @@ export default defineConfig(({ command, mode }) => {
     mode === "production" || process.env.NODE_ENV === "production";
 
   return {
+    root: "./client",
     server: {
       host: "::",
       port: 8080,
-      hmr: false, // Completely disable HMR
+      hmr: false,
       open: false,
       cors: true,
       proxy: {
@@ -29,18 +30,12 @@ export default defineConfig(({ command, mode }) => {
       cors: true,
     },
     build: {
-      outDir: "dist",
+      outDir: "../dist",
+      emptyOutDir: true,
       minify: false,
       sourcemap: false,
-      rollupOptions: {
-        external: [/^server\//],
-        output: {
-          manualChunks: undefined,
-        },
-      },
     },
     define: {
-      // Completely disable Vite client in production
       "process.env.NODE_ENV": JSON.stringify(
         isProduction ? "production" : "development",
       ),
@@ -52,9 +47,6 @@ export default defineConfig(({ command, mode }) => {
       react({
         jsxRuntime: "automatic",
         jsxImportSource: "react",
-        babel: {
-          plugins: isProduction ? [] : [],
-        },
       }),
     ],
     resolve: {
@@ -66,7 +58,6 @@ export default defineConfig(({ command, mode }) => {
     esbuild: {
       target: "es2020",
       legalComments: "none",
-      logOverride: { "this-is-undefined-in-esm": "silent" },
       jsx: "automatic",
       jsxDev: false,
     },
