@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN apk add --no-cache python3 make g++ \
-    && npm install -g npm@latest --unsafe-perm=true --allow-root \
-    && npm install --legacy-peer-deps \
-    && apk del python3 make g++
+RUN apk update && apk add --no-cache python3 make g++
+
+RUN npm install --legacy-peer-deps --unsafe-perm
+
+RUN apk del python3 make g++
 
 COPY . .
 
