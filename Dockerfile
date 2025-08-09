@@ -1,27 +1,32 @@
-FROM node:20.6.1-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache python3 make g++
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 py3-distutils make g++ gcc libc6-compat
 
+# Copy package files first for better caching
 COPY package*.json ./
 
-# Upgrade npm to latest compatible with Node 20, no force needed here
-RUN npm install -g npm@11.5.2 --unsafe-perm=true --allow-root
+# Install dependencies
+RUN npm install --legacy-peer-deps --only=production
 
-# Install dependencies with legacy-peer-deps to avoid conflicts
-RUN npm install --legacy-peer-deps
-
-RUN apk del python3 make g++
-
+# Copy source code
 COPY . .
 
+# Build the client application
 RUN npm run build:client
-RUN npm run copy:database
 
+# Create necessary directories and copy database
+RUN mkdir -p dist/server
+RUN cp server/*.db dist/server/ 2>/dev/null || echo "No database files found"
+
+# Expose the port
 EXPOSE 8080
 
+# Set environment variables
 ENV NODE_ENV=production
 ENV PORT=8080
 
+# Start the production server
 CMD ["npm", "run", "prod"]
