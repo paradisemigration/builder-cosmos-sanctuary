@@ -2,7 +2,7 @@
 app = "thevisabay"
 primary_region = "sin"  # Singapore region for better performance in Asia
 
-[build]
+# Build section removed - let Fly auto-detect NodeJS app
 
 [env]
   NODE_ENV = "production"
