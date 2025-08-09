@@ -3,7 +3,6 @@ app = "thevisabay"
 primary_region = "sin"  # Singapore region for better performance in Asia
 
 [build]
-  buildpacks = ["heroku/nodejs"]
 
 [env]
   NODE_ENV = "production"
