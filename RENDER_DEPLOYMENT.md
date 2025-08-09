@@ -32,6 +32,7 @@ The Rollup error is caused by missing server build config. Update package.json:
 ## Custom Domain Setup
 
 After deployment:
+
 1. Go to Settings → Custom Domains
 2. Add: `thevisabay.com` and `www.thevisabay.com`
 3. Update DNS records at your domain provider:
