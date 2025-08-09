@@ -2,13 +2,15 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install build dependencies for native modules
-RUN apk add --no-cache python3 py3-setuptools py3-pip make g++ gcc libc6-compat
+# Install build dependencies (python3, dev headers, build tools)
+RUN apk add --no-cache python3 python3-dev build-base libc6-compat
 
-# Copy package files first for better caching
+# Install distutils for Python3 manually
+RUN python3 -m ensurepip \
+    && python3 -m pip install --upgrade pip setuptools wheel
+
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install --legacy-peer-deps --only=production
 
 # Copy source code
