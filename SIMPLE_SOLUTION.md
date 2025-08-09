@@ -1,6 +1,7 @@
 # ✅ SIMPLE SOLUTION - Your App is Already Working!
 
 ## Current Status
+
 Your app is **ALREADY DEPLOYED** and working perfectly at:
 **https://a4b9f79f9f7045e490b1cf64b782d096-a17cadd7e83c497ba4098bf4e.fly.dev/**
 
@@ -28,6 +29,7 @@ fly certs create www.thevisabay.com --app YOUR_APP_NAME
 ```
 
 ## DNS Records
+
 ```
 A record: @ → 66.241.125.44
 A record: www → 66.241.125.44
