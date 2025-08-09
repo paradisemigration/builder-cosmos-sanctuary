@@ -43,7 +43,9 @@
     "node-fetch": "^3.3.2",
     "sqlite3": "^5.1.7",
     "uuid": "^11.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "vite": "^6.2.2",
+    "@vitejs/plugin-react-swc": "^3.5.0"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
