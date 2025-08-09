@@ -14,7 +14,7 @@ Type: CNAME
 Name: www
 Value: your-app-name.onrender.com
 
-Type: CNAME  
+Type: CNAME
 Name: @
 Value: your-app-name.onrender.com
 ```
