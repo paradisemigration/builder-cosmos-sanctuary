@@ -1,9 +1,11 @@
 # Render Build Fix for Vite
 
 ## Problem
+
 `vite: not found` - Render doesn't install devDependencies by default
 
 ## Solution
+
 Update Render build settings:
 
 **Build Command**: `npm install --include=dev && npm run build`
@@ -22,6 +24,7 @@ NODE_ENV=production
 ```
 
 ## Alternative Fix
+
 Move vite to dependencies instead of devDependencies in package.json
 
 The `--include=dev` flag ensures vite and other build tools are installed during deployment.
