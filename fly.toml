@@ -1,14 +1,6 @@
+# Fly.io configuration for TheVisaBay.com
 app = "thevisabay"
 primary_region = "sin"  # Singapore region for better performance in Asia
-
-<<<<<<< HEAD
-# Build section removed - let Fly auto-detect NodeJS app
-=======
-[build]
-  # You can specify builder or buildpacks here if needed, e.g.:
-  # builder = "paketobuildpacks/builder:base"
-  # buildpacks = ["gcr.io/paketo-buildpacks/nodejs"]
->>>>>>> 5a382efb11015f4a11f41d82095b33a9852184b5
 
 [env]
   NODE_ENV = "production"
@@ -22,7 +14,7 @@ primary_region = "sin"  # Singapore region for better performance in Asia
   min_machines_running = 1
   processes = ["app"]
 
-  [[http_service.checks]]
+[[http_service.checks]]
   interval = "15s"
   grace_period = "5s"
   method = "GET"
@@ -31,7 +23,7 @@ primary_region = "sin"  # Singapore region for better performance in Asia
   timeout = "10s"
   tls_skip_verify = false
 
-  [http_service.concurrency]
+[http_service.concurrency]
   type = "connections"
   hard_limit = 25
   soft_limit = 20
@@ -45,3 +37,5 @@ primary_region = "sin"  # Singapore region for better performance in Asia
 # [[mounts]]
 # source = "thevisabay_data"
 # destination = "/data"
+
+# Simplified configuration for NodeJS deployment
