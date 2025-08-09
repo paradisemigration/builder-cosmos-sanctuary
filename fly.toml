@@ -1,43 +1,32 @@
-# Fly.io configuration for TheVisaBay.com
 app = "thevisabay"
-primary_region = "sin"  # Singapore region for better performance in Asia
+primary_region = "sin"  # Singapore region, good for Asia users
 
 [build]
+  # Use Dockerfile for building the app (default behavior)
+  # If you want to specify a builder, you can do so here, but Dockerfile is preferred.
 
 [env]
   NODE_ENV = "production"
   PORT = "8080"
 
-[http_service]
+[[services]]
   internal_port = 8080
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 1
-  processes = ["app"]
+  protocol = "tcp"
 
-[[http_service.checks]]
-  interval = "15s"
-  grace_period = "5s"
-  method = "GET"
-  path = "/api/health"
-  protocol = "http"
-  timeout = "10s"
-  tls_skip_verify = false
+  [services.concurrency]
+    type = "connections"
+    soft_limit = 20
+    hard_limit = 25
 
-[http_service.concurrency]
-  type = "connections"
-  hard_limit = 25
-  soft_limit = 20
+  [[services.ports]]
+    port = 80
 
-[[vm]]
-  cpu_kind = "shared"
-  cpus = 1
-  memory_mb = 1024
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
 
-# Volumes disabled - app works without persistent storage
-# [[mounts]]
-# source = "thevisabay_data"
-# destination = "/data"
-
-# Simplified configuration for NodeJS deployment
+  [[services.tcp_checks]]
+    interval = 15000
+    timeout = 2000
+    grace_period = "5s"
+    restart_limit = 6
