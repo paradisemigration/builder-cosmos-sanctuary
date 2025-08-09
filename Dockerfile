@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN apk update && apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++
 
-RUN npm install --legacy-peer-deps --unsafe-perm
+# Don't upgrade npm, just install dependencies
+RUN npm install --legacy-peer-deps
 
 RUN apk del python3 make g++
 
