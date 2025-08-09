@@ -1,6 +1,7 @@
 # 🚂 Railway Issue & Better Solutions
 
 ## Issue Analysis
+
 ❌ **Railway Problem**: Native SQLite dependencies (`better-sqlite3`, `sqlite3`) require Python + build tools  
 ❌ **Error**: `gyp ERR! find Python - Python is not in PATH`  
 ✅ **Your App**: Already working perfectly on Fly.io with all features!
@@ -8,6 +9,7 @@
 ## 🎯 Recommended Solutions
 
 ### Option 1: Use Your Working Fly.io App + Custom Domain (Easiest)
+
 Your app is already perfect! Just add your custom domain:
 
 ```bash
@@ -25,6 +27,7 @@ fly certs create www.thevisabay.com --app [YOUR_ACTUAL_APP_NAME]
 ```
 
 ### Option 2: Render.com (Better than Railway for SQLite)
+
 Render has better native dependency support:
 
 1. **Go to**: https://render.com
@@ -36,6 +39,7 @@ Render has better native dependency support:
 7. **Custom Domain**: Easy setup in Render settings
 
 ### Option 3: DigitalOcean App Platform
+
 Similar to Render but with different pricing:
 
 1. **Go to**: https://cloud.digitalocean.com/apps
@@ -60,6 +64,7 @@ Similar to Render but with different pricing:
 **Skip Railway** - Use your working Fly.io app + custom domain!
 
 **Why this is best:**
+
 1. **Zero risk** - App already works perfectly
 2. **No deployment issues** - Avoid all build problems
 3. **Same result** - thevisabay.com will work
@@ -77,7 +82,7 @@ fly certs create www.thevisabay.com --app YOUR_APP_NAME
 
 # Step 3: Add DNS records at your domain registrar
 # Type: A, Name: @, Value: 66.241.124.44
-# Type: A, Name: @, Value: 66.241.125.44  
+# Type: A, Name: @, Value: 66.241.125.44
 # Type: CNAME, Name: www, Value: thevisabay.com
 
 # Step 4: Wait 10-60 minutes for DNS propagation
