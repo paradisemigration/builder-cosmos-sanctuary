@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install build dependencies for native modules
-RUN apk add --no-cache python3 py3-distutils make g++ gcc libc6-compat
+RUN apk add --no-cache python3 py3-setuptools py3-pip make g++ gcc libc6-compat
 
 # Copy package files first for better caching
 COPY package*.json ./
